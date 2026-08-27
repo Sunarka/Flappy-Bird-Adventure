@@ -7146,23 +7146,56 @@
     if(document.hidden && (state === State.PLAYING || state === State.READY)) pause();
   });
 
+  function _showErrBanner(msg) {
+    if(!document._gameErrDiv) {
+      const d = document.createElement('div');
+      d.id = '_gameErrDiv';
+      d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(180,0,0,0.95);color:#fff;font:bold 11px monospace;padding:8px 10px;z-index:99999;word-break:break-all;white-space:pre-wrap;max-height:120px;overflow:auto';
+      document.body.appendChild(d);
+      document._gameErrDiv = d;
+    }
+    document._gameErrDiv.textContent = msg;
+  }
+
   function loop(t) {
     const dt = Math.min(.033, (t - last) / 1000 || 0);
     last = t;
-    update(dt);
-    render();
+    try {
+      update(dt);
+    } catch(err) {
+      _showErrBanner('⚠ UPDATE ERROR: ' + err.message + '\n' + (err.stack || '').split('\n').slice(0,3).join('\n'));
+      console.error('Update error:', err);
+    }
+    try {
+      render();
+    } catch(err) {
+      _showErrBanner('⚠ RENDER ERROR: ' + err.message + '\n' + (err.stack || '').split('\n').slice(0,3).join('\n'));
+      console.error('Render error:', err);
+    }
     requestAnimationFrame(loop);
   }
 
-  setMode('classic', true);
-  syncSettings();
-  syncGPProfileUI();
-  syncLeaderboardFromFirebase();
-  updateCoins();
-  renderShop();
-  reset();
-  setState(State.MENU);
-  updateScore();
-  updateMusicUI();
-  requestAnimationFrame(loop);
+  // Global uncaught error handler to catch init failures
+  window.addEventListener('error', function(e) {
+    _showErrBanner('⚠ JS ERROR: ' + e.message + '\n  at ' + (e.filename || '') + ':' + e.lineno);
+  });
+
+  try {
+    setMode('classic', true);
+    syncSettings();
+    syncGPProfileUI();
+    syncLeaderboardFromFirebase();
+    updateCoins();
+    renderShop();
+    reset();
+    setState(State.MENU);
+    updateScore();
+    updateMusicUI();
+    requestAnimationFrame(loop);
+  } catch(initErr) {
+    _showErrBanner('⚠ INIT ERROR: ' + initErr.message + '\n' + (initErr.stack || '').split('\n').slice(0,4).join('\n'));
+    console.error('Init error:', initErr);
+    // Coba tetap jalankan loop agar canvas tidak blank
+    requestAnimationFrame(loop);
+  }
 })();
