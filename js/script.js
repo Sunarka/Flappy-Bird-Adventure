@@ -34,6 +34,7 @@
     gpRankedBest:$('gpRankedBest'), gpAuthActionBtn:$('gpAuthActionBtn'), gpSwitchAccountBtn:$('gpSwitchAccountBtn'),
     googleSignInPrompt:$('googleSignInPrompt'), googleProfileCard:$('googleProfileCard'),
     googleSignInBtn:$('googleSignInBtn'), googleSignInBtnText:$('googleSignInBtnText'),
+    guestSignInBtn:$('guestSignInBtn'),
     gpUserEmail:$('gpUserEmail'), gpSignOutBtn:$('gpSignOutBtn'),
     rankedModal:$('rankedModal'), championCanvas:$('championCanvas'), championGamerTag:$('championGamerTag'),
     championScore:$('championScore'), championTier:$('championTier'), championLoadoutTags:$('championLoadoutTags'),
@@ -7170,8 +7171,10 @@
         syncGPProfileUI();
       }
     } catch(err) {
-      console.warn('[Google Sign-In notice]:', err.message);
-      if(err.code !== 'auth/popup-closed-by-user') {
+      console.warn('[Google Sign-In notice]:', err.code, err.message);
+      if(err.code === 'auth/configuration-not-found') {
+        alert('Pemberitahuan Firebase Auth:\n\nGoogle Sign-In belum diaktifkan di Firebase Console untuk proyek ini.\n\nCara mengaktifkan:\n1. Buka console.firebase.google.com\n2. Buka menu Authentication > Sign-in method\n3. Klik "Google", lalu pilih Enable/Aktifkan dan Simpan.\n\nTips: Anda juga bisa menggunakan tombol "MASUK SEBAGAI TAMU" untuk langsung bermain sekarang!');
+      } else if(err.code !== 'auth/popup-closed-by-user') {
         alert('Info Google Login: ' + (err.message || 'Gagal terhubung ke akun Google. Pastikan internet aktif.'));
       }
     } finally {
@@ -7182,6 +7185,19 @@
   bindClick(el.googleSignInBtn, () => {
     audio.click();
     performGoogleSignIn();
+  });
+
+  bindClick(el.guestSignInBtn, () => {
+    audio.click();
+    gpProfile.isLoggedIn = true;
+    gpProfile.isGoogle = false;
+    gpProfile.email = 'Mode Tamu (Lokal)';
+    if(!gpProfile.gamerTag || gpProfile.gamerTag === 'SkyPlayer') {
+      gpProfile.gamerTag = 'Player-' + Math.floor(100 + Math.random() * 900);
+    }
+    saveGPProfile();
+    audio.win();
+    syncGPProfileUI();
   });
 
   bindClick(el.gpSignOutBtn, async () => {

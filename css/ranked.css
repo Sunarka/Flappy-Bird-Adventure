@@ -348,6 +348,34 @@
   flex-shrink: 0;
 }
 
+.gp-divider {
+  display: flex;
+  align-items: center;
+  margin: 12px 0;
+  width: 100%;
+}
+
+.gp-divider::before, .gp-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.gp-divider span {
+  padding: 0 8px;
+  font: 900 9.5px 'Trebuchet MS', Arial, sans-serif;
+  color: #94a3b8;
+  letter-spacing: 0.8px;
+}
+
+.gp-guest-btn {
+  width: 100% !important;
+  min-height: 38px !important;
+  padding: 8px 12px !important;
+  font: 900 11px/1 'Trebuchet MS', Arial, sans-serif !important;
+  letter-spacing: 0.5px !important;
+}
+
 .gp-buttons {
   display: flex;
   flex-direction: column;
