@@ -4790,100 +4790,104 @@
 
   function render() {
     ctx.save();
-    if(shake > 0) {
-      ctx.translate((Math.random() - .5) * 8, (Math.random() - .5) * 8);
-      shake -= 1 / 60;
-    }
-    const bg = backgrounds[progress.selectedBackground] || backgrounds.sky;
-    const sky = ctx.createLinearGradient(0, 0, 0, H);
-    sky.addColorStop(0, bg.top);
-    sky.addColorStop(1, bg.bottom);
-    ctx.fillStyle = sky;
-    ctx.fillRect(0, 0, W, H);
-
-    // Multi-layer Volumetric Fluffy Clouds with Realistic Parallax
-    const bgW = W + 240;
-    // Layer 1: Awan Tinggi (Halus & Bergerak Lambat)
-    drawFluffyCloud(((cloudX * 0.35 + 20) % bgW) - 120, 68, 0.65, 0.48);
-    drawFluffyCloud(((cloudX * 0.35 + 195) % bgW) - 120, 96, 0.55, 0.42);
-
-    // Layer 2: Awan Utama (Puffy Cumulus dengan Shading & Highlight Lembut)
-    drawFluffyCloud(((cloudX * 0.75 + 0) % bgW) - 120, 118, 0.95, 0.88);
-    drawFluffyCloud(((cloudX * 0.75 + 175) % bgW) - 120, 178, 0.82, 0.84);
-
-    // Layer 3: Awan Rendah / Kabut Melayang (Parallax Cepat)
-    drawFluffyCloud(((cloudX * 1.1 + 85) % bgW) - 120, 235, 0.7, 0.38);
-
-    drawHills();
-
-    // Draw Supersonic Speedlines when Rocket or Dash is Active
-    drawSupersonicSpeedlines();
-
-    // Draw Holy Angel Golden Light Beam
-    drawHolyAura();
-
-    // Draw Shadow Spirits Void Vortex
-    drawShadowVortex();
-
-    // Draw Storm Clouds & Lightning
-    for(const c of stormClouds) drawStormCloud(c);
-
-    // Draw Obstacles
-    for(const p of pipes) drawPipe(p);
-    for(const coin of coins) drawCoin(coin);
-    for(const p of powerups) drawPowerup(p);
-    for(const flyer of flyers) drawFlyer(flyer);
-    for(const e of enemies) {
-      if(e.type === 'bird') drawEnemyBird(e);
-      else if(e.type === 'bee_swarm') drawBeeSwarm(e);
-    }
-
-    // Draw Shockwaves
-    drawShockwaves();
-
-    // Draw Phoenix Dragon Flames Stream (Massive Fire Effects)
-    drawPhoenixFlames();
-
-    // Draw Laser Beams (Cyber Drones)
-    drawLaserBeams();
-
-    // Draw Aura & Visual Particles
-    for(const q of particles) drawAuraParticle(q);
-    ctx.globalAlpha = 1;
-
-    // Slow Time Screen Overlay (Frosty edges)
-    if(activePowerups.slow > 0) {
-      const frost = ctx.createRadialGradient(W / 2, H / 2, 100, W / 2, H / 2, 320);
-      frost.addColorStop(0, 'rgba(103, 232, 249, 0)');
-      frost.addColorStop(1, 'rgba(103, 232, 249, 0.22)');
-      ctx.fillStyle = frost;
+    try {
+      if(shake > 0) {
+        ctx.translate((Math.random() - .5) * 8, (Math.random() - .5) * 8);
+        shake -= 1 / 60;
+      }
+      const bg = backgrounds[progress.selectedBackground] || backgrounds.sky;
+      const sky = ctx.createLinearGradient(0, 0, 0, H);
+      sky.addColorStop(0, bg.top);
+      sky.addColorStop(1, bg.bottom);
+      ctx.fillStyle = sky;
       ctx.fillRect(0, 0, W, H);
+
+      // Multi-layer Volumetric Fluffy Clouds with Realistic Parallax
+      const bgW = W + 240;
+      // Layer 1: Awan Tinggi (Halus & Bergerak Lambat)
+      drawFluffyCloud(((cloudX * 0.35 + 20) % bgW) - 120, 68, 0.65, 0.48);
+      drawFluffyCloud(((cloudX * 0.35 + 195) % bgW) - 120, 96, 0.55, 0.42);
+
+      // Layer 2: Awan Utama (Puffy Cumulus dengan Shading & Highlight Lembut)
+      drawFluffyCloud(((cloudX * 0.75 + 0) % bgW) - 120, 118, 0.95, 0.88);
+      drawFluffyCloud(((cloudX * 0.75 + 175) % bgW) - 120, 178, 0.82, 0.84);
+
+      // Layer 3: Awan Rendah / Kabut Melayang (Parallax Cepat)
+      drawFluffyCloud(((cloudX * 1.1 + 85) % bgW) - 120, 235, 0.7, 0.38);
+
+      drawHills();
+
+      // Draw Supersonic Speedlines when Rocket or Dash is Active
+      drawSupersonicSpeedlines();
+
+      // Draw Holy Angel Golden Light Beam
+      drawHolyAura();
+
+      // Draw Shadow Spirits Void Vortex
+      drawShadowVortex();
+
+      // Draw Storm Clouds & Lightning
+      for(const c of stormClouds) drawStormCloud(c);
+
+      // Draw Obstacles
+      for(const p of pipes) drawPipe(p);
+      for(const coin of coins) drawCoin(coin);
+      for(const p of powerups) drawPowerup(p);
+      for(const flyer of flyers) drawFlyer(flyer);
+      for(const e of enemies) {
+        if(e.type === 'bird') drawEnemyBird(e);
+        else if(e.type === 'bee_swarm') drawBeeSwarm(e);
+      }
+
+      // Draw Shockwaves
+      drawShockwaves();
+
+      // Draw Phoenix Dragon Flames Stream (Massive Fire Effects)
+      drawPhoenixFlames();
+
+      // Draw Laser Beams (Cyber Drones)
+      drawLaserBeams();
+
+      // Draw Aura & Visual Particles
+      for(const q of particles) drawAuraParticle(q);
+      ctx.globalAlpha = 1;
+
+      // Slow Time Screen Overlay (Frosty edges)
+      if(activePowerups.slow > 0) {
+        const frost = ctx.createRadialGradient(W / 2, H / 2, 100, W / 2, H / 2, 320);
+        frost.addColorStop(0, 'rgba(103, 232, 249, 0)');
+        frost.addColorStop(1, 'rgba(103, 232, 249, 0.22)');
+        ctx.fillStyle = frost;
+        ctx.fillRect(0, 0, W, H);
+      }
+
+      drawGround();
+
+      // Draw Dash Afterimages
+      for(const img of dashAfterimages) {
+        renderCustomBird(ctx, {
+          x: img.x, y: img.y, angle: img.angle, wing: img.wing,
+          skinId: progress.selected || 'classic',
+          hatId: progress.selectedHat || 'none',
+          outfitId: progress.selectedOutfit || 'none',
+          opacity: img.alpha * 0.55
+        });
+      }
+
+      drawBird();
+
+      // Draw 2 Baby Guardian Birds (Pip & Peep)
+      for(const baby of babyBirds) {
+        drawBabyBird(baby);
+      }
+
+      // Draw Floating Splash Text Badges above Bird and Ground
+      drawFloatingTexts();
+    } catch(err) {
+      console.error('Render error:', err);
+    } finally {
+      ctx.restore();
     }
-
-    drawGround();
-
-    // Draw Dash Afterimages
-    for(const img of dashAfterimages) {
-      renderCustomBird(ctx, {
-        x: img.x, y: img.y, angle: img.angle, wing: img.wing,
-        skinId: progress.selected || 'classic',
-        hatId: progress.selectedHat || 'none',
-        outfitId: progress.selectedOutfit || 'none',
-        opacity: img.alpha * 0.55
-      });
-    }
-
-    drawBird();
-
-    // Draw 2 Baby Guardian Birds (Pip & Peep)
-    for(const baby of babyBirds) {
-      drawBabyBird(baby);
-    }
-
-    // Draw Floating Splash Text Badges above Bird and Ground
-    drawFloatingTexts();
-
-    ctx.restore();
   }
 
   // Volumetric Fluffy Cloud with Soft Sunlight Highlights & Atmospheric Shading
