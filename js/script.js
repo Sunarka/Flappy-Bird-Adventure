@@ -2328,9 +2328,10 @@
   }
 
   function showModal(modal) {
+    if(!el.layer) return;
     el.layer.classList.remove('hidden');
-    [el.how, el.settings, el.shop, el.paused, el.over, el.googlePlayModal, el.rankedModal].forEach(x => {
-      if(x) x.classList.add('hidden');
+    el.layer.querySelectorAll('.modal').forEach(x => {
+      x.classList.add('hidden');
     });
     if(modal) modal.classList.remove('hidden');
   }
@@ -2338,7 +2339,12 @@
     audio.stopPreview();
     stopShopShowcase();
     stopChampionSpotlight();
-    el.layer.classList.add('hidden');
+    if(el.layer) {
+      el.layer.classList.add('hidden');
+      el.layer.querySelectorAll('.modal').forEach(x => {
+        x.classList.add('hidden');
+      });
+    }
   }
   function setState(next) {
     state = next;
@@ -2405,8 +2411,7 @@
       el.reviveConfirmBtn.style.opacity = progress.coins >= cost ? '1' : '0.55';
     }
 
-    el.layer.classList.remove('hidden');
-    el.reviveModal.classList.remove('hidden');
+    showModal(el.reviveModal);
 
     reviveSecondsLeft = 5;
     if(el.reviveCountdownText) el.reviveCountdownText.textContent = '5';
@@ -2456,9 +2461,8 @@
     updateCoins();
     persistProgress();
 
-    // Close revive modal
-    el.reviveModal.classList.add('hidden');
-    el.layer.classList.add('hidden');
+    // Close revive modal completely
+    closeModal();
 
     // Restore Lives: Ranked mode -> 3 lives, Classic mode -> 1 life
     lives = currentMode === 'ranked' ? 3 : 1;
@@ -2519,7 +2523,7 @@
   function giveUpRevive() {
     clearInterval(reviveTimerInterval);
     reviveTimerInterval = null;
-    el.reviveModal.classList.add('hidden');
+    closeModal();
     endGame();
   }
 
@@ -2635,7 +2639,7 @@
 
   function goReady() { audio.click(); closeModal(); reset(); setState(State.READY); }
   function flap() {
-    if(state === State.MENU || state === State.OVER || state === State.PAUSED) return;
+    if(state === State.MENU || state === State.OVER || state === State.PAUSED || state === State.REVIVING) return;
     if(state === State.READY) {
       started = true;
       setState(State.PLAYING);
