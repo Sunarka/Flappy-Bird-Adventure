@@ -8,7 +8,7 @@
     menu:$('menu'), ready:$('ready'), layer:$('modalLayer'), hud:$('hud'), score:$('score'), pop:$('scorePop'),
     best:$('menuBest'), sound:$('soundBtn'), musicBtn:$('musicBtn'), pause:$('pauseBtn'), how:$('howModal'),
     settings:$('settingsModal'), shop:$('shopModal'), paused:$('pauseModal'), over:$('overModal'),
-    finalScore:$('finalScore'), finalBest:$('finalBest'), newBest:$('newBest'), medal:$('medal'),
+    finalScore:$('finalScore'), finalBest:$('finalBest'), newBest:$('newBest'),
     coinHud:$('coinHud'), coinCount:$('coinCount'), shopCoins:$('shopCoins'), shopTabs:$('shopTabs'),
     skinList:$('skinList'), powerupHud:$('powerupHud'), livesHud:$('livesHud'), soundToggle:$('soundToggle'), musicToggle:$('musicToggle'),
     difficultyBtn:$('difficultyBtn'), difficultyValue:$('difficultyValue'), difficultyMenu:$('difficultyMenu'),
@@ -6493,7 +6493,6 @@
     el.finalBest.textContent = best;
     const nb = score >= best && score > 0;
     el.newBest.classList.toggle('hidden', !nb);
-    el.medal.className = 'medal ' + (score >= 100 ? 'diamond' : score >= 50 ? 'gold' : score >= 25 ? 'silver' : score >= 10 ? 'bronze' : '');
     showModal(el.over);
   }
   function pause() {
