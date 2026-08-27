@@ -689,8 +689,8 @@
       }
     },
 
-    // Dedicated Lobby Theme Music: "A World Beyond - Ghibli Melodic" (8-BIT CHIPTUNE EDITION)
-    // 8-bit NES/GameBoy style: Ceria, candu, bersemangat terbang di langit, lalu mengalir ke slow waltz emosional khas Ghibli
+    // Dedicated Lobby Theme Music: "A World Beyond - Ghibli Melodic" (Soft Relaxing Music Box & Acoustic Piano)
+    // Suara lembut, menenangkan, hangat, dan sangat nyaman didengar (Zero distorsi / tidak bising)
     lobbyMusic() {
       if(!settings.music) return;
       if(this.currentMusicType === 'lobby' && this.musicTimer) return;
@@ -699,110 +699,77 @@
       let step = 0;
       this.init();
 
-      // Melodi Utama 8-Bit "A World Beyond" (Ghibli Melodic)
-      // 0-31: Happy Upbeat 8-bit Chiptune Flying Adventure
-      // 32-63: Bouncy 8-Bit Fast Arpeggio Sky Waltz
-      // 64-95: Emotive Nostalgic 8-Bit Slow Ghibli Melody (Joe Hisaishi style)
-      // 96-111: Ascending Chiptune Cascade Transition back to Main Theme
-      const melody8Bit = [
-        // [0-15] 8-Bit Intro Cerah & Semangat
-        587, 659, 740, 880, 1175, 880, 740, 659,
-        587, 740, 880, 988, 880, 740, 659, 587,
-        // [16-31] 8-Bit Joyful Flight Motif
-        494, 587, 740, 880, 988, 1175, 1319, 1175,
-        988, 880, 740, 880, 1175, 0, 880, 0,
-        // [32-47] Bouncy 8-Bit Rapid Arpeggio Run
-        1175, 1319, 1480, 1319, 1175, 880, 740, 880,
-        988, 1175, 1319, 1175, 988, 740, 659, 740,
-        // [48-63] Spirited 8-Bit Sky Dance
-        880, 988, 1175, 1480, 1760, 1480, 1319, 1175,
-        988, 1175, 1319, 1175, 988, 880, 740, 0,
-        // [64-79] Bagian Slow Emosional / 8-Bit Melodic Ghibli Valley
-        740, 0, 880, 0, 988, 0, 880, 0,
-        740, 0, 659, 0, 587, 0, 494, 0,
-        // [80-95] Nostalgic 8-Bit Chiptune Harmony
-        587, 0, 740, 0, 880, 0, 659, 0,
-        587, 0, 494, 0, 440, 0, 0, 0,
-        // [96-111] 8-Bit Soaring Scale Run Climax
-        494, 587, 740, 880, 988, 1175, 1319, 1480,
-        1760, 1480, 1319, 1175, 988, 880, 659, 0
+      // Melodi Lembut "A World Beyond" (Ghibli Music Box & Acoustic Style)
+      const ghibliLead = [
+        587, 0, 659, 740, 880, 0, 740, 659,
+        587, 0, 740, 880, 988, 0, 880, 0,
+        494, 0, 587, 740, 880, 0, 988, 1175,
+        880, 0, 740, 0, 587, 0, 0, 0,
+        // Bagian Refrain Hangat & Melankolis Ghibli
+        740, 0, 880, 0, 988, 0, 1175, 0,
+        988, 0, 880, 0, 740, 0, 659, 0,
+        587, 0, 659, 0, 740, 0, 880, 0,
+        659, 0, 587, 0, 494, 0, 0, 0,
+        // Alunan Damai & Penutup Lembut
+        494, 0, 587, 0, 740, 0, 880, 0,
+        988, 0, 880, 0, 740, 0, 659, 0,
+        587, 0, 740, 0, 880, 0, 1175, 0,
+        880, 0, 740, 0, 587, 0, 0, 0
       ];
 
-      // Channel 2: 8-Bit Counter-Harmony & Echo Arpeggio
-      const harmony8Bit = [
-        0, 0, 440, 0, 587, 0, 440, 0, 370, 0, 440, 0, 587, 0, 440, 0,
-        294, 0, 370, 0, 440, 0, 587, 0, 440, 0, 370, 0, 587, 0, 0, 0,
-        587, 740, 880, 740, 587, 440, 370, 440, 494, 587, 740, 587, 494, 370, 330, 370,
-        440, 494, 587, 740, 880, 740, 659, 587, 494, 587, 659, 587, 494, 440, 370, 0,
-        370, 0, 440, 0, 494, 0, 440, 0, 370, 0, 330, 0, 294, 0, 247, 0,
-        294, 0, 370, 0, 440, 0, 330, 0, 294, 0, 247, 0, 220, 0, 0, 0,
-        247, 294, 370, 440, 494, 587, 659, 740, 880, 740, 659, 587, 494, 440, 330, 0
+      // Akord Piano Lembut Ghibli (Dmaj7 - Gmaj7 - F#m7 - Bm7 - Em7 - A7)
+      const ghibliChords = [
+        [294, 370, 440, 554], // Dmaj7
+        [392, 494, 587, 740], // Gmaj7
+        [370, 440, 554, 659], // F#m7
+        [247, 294, 370, 440], // Bm7
+        [330, 392, 494, 587], // Em7
+        [220, 277, 330, 440], // A7
+        [294, 370, 440, 554], // Dmaj7
+        [294, 440, 587, 0]    // D
       ];
 
-      // Channel 3: 8-Bit NES Triangle Bassline
-      const bass8Bit = [
-        // Happy Phase: Bouncing 8-Bit Bass
-        147, 294, 147, 294, 196, 392, 196, 392,
-        123, 247, 123, 247, 220, 440, 220, 0,
-        147, 294, 147, 294, 196, 392, 196, 392,
-        123, 247, 123, 247, 147, 220, 147, 0,
-        147, 294, 147, 294, 196, 392, 196, 392,
-        123, 247, 123, 247, 220, 440, 220, 0,
-        147, 294, 147, 294, 196, 392, 196, 392,
-        123, 247, 123, 247, 147, 220, 147, 0,
-        // Slow Emotional Ghibli Phase: Sustained Deep Triangle Waves
-        123, 0, 123, 0, 196, 0, 196, 0,
-        147, 0, 147, 0, 220, 0, 220, 0,
-        123, 0, 123, 0, 196, 0, 196, 0,
-        147, 0, 220, 0, 147, 0, 0, 0,
-        123, 147, 196, 220, 247, 294, 370, 440,
-        294, 247, 220, 196, 147, 123, 98, 0
+      // Bass Akustik / Cello Hangat
+      const ghibliBass = [
+        147, 196, 185, 123, 165, 110, 147, 147,
+        196, 185, 123, 165, 110, 147, 196, 147
       ];
 
       this.musicTimer = setInterval(() => {
         if(state !== State.MENU) return;
-        const totalSteps = melody8Bit.length;
+        const totalSteps = ghibliLead.length;
         const curStep = step % totalSteps;
-        const isSlowPhase = curStep >= 64 && curStep < 96;
 
-        const leadNote = melody8Bit[curStep];
-        const harmNote = harmony8Bit[curStep];
-        const bassNote = bass8Bit[Math.floor(curStep / (isSlowPhase ? 2 : 1)) % bass8Bit.length];
+        const leadNote = ghibliLead[curStep];
+        const chordIndex = Math.floor(curStep / 6) % ghibliChords.length;
+        const chord = ghibliChords[chordIndex];
+        const bassNote = ghibliBass[Math.floor(curStep / 3) % ghibliBass.length];
 
-        if(isSlowPhase) {
-          // 8-Bit Slow Phase: Sweet Expressive Chiptune Lead + Soft Triangle Bass
-          if(leadNote) {
-            this.playTone(leadNote, 0.28, 'square', 0.024, 0);
-            this.playTone(leadNote * 0.5, 0.22, 'triangle', 0.02, 0);
-          }
-          if(harmNote && curStep % 2 === 0) {
-            this.playTone(harmNote, 0.24, 'square', 0.012, 0);
-          }
-          if(bassNote && curStep % 2 === 0) {
-            this.playTone(bassNote, 0.42, 'triangle', 0.038, 0);
-          }
-        } else {
-          // 8-Bit Upbeat Phase: Bouncy NES Square Wave Lead + Chiptune Arp + Bouncing Triangle Bass
-          if(leadNote) {
-            this.playTone(leadNote, 0.11, 'square', 0.028, curStep % 4 === 0 ? 10 : 0);
-          }
-          if(harmNote) {
-            this.playTone(harmNote, 0.08, 'square', 0.012, 0);
-          }
-          if(bassNote) {
-            this.playTone(bassNote, 0.16, 'triangle', 0.032, 0);
-          }
-          // 8-Bit Chiptune Noise / Hi-Hat Percussion Click
-          if(curStep % 4 === 2) {
-            this.playTone(1760, 0.03, 'square', 0.008, -300);
-          }
-          if(curStep % 8 === 4) {
-            this.playTone(260, 0.05, 'triangle', 0.016, -100);
-          }
+        // 1. Melodi Utama: Kotak Musik / Seruling Lembut (Sine & Triangle Halus)
+        if(leadNote) {
+          this.playTone(leadNote, 0.45, 'sine', 0.032, 0);
+          this.playTone(leadNote * 0.5, 0.35, 'triangle', 0.015, 0);
+        }
+
+        // 2. Akord Piano Hangat pada Ketukan Awal
+        if(curStep % 6 === 0 && chord) {
+          chord.forEach(freq => {
+            if(freq) this.playTone(freq, 0.65, 'sine', 0.012, 0);
+          });
+        }
+
+        // 3. Bass Cello Hangat & Lembut
+        if(curStep % 3 === 0 && bassNote) {
+          this.playTone(bassNote, 0.7, 'sine', 0.035, 0);
+        }
+
+        // 4. Sentuhan Nada Gemerlap Lembut (Sparkle Bell)
+        if(curStep % 12 === 6) {
+          this.playTone(1760, 0.3, 'sine', 0.008, 0);
         }
 
         step++;
-      }, 130);
+      }, 260);
     },
 
     // In-Game Gameplay Soundtracks (Selected in Shop)
