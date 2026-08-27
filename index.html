@@ -245,8 +245,11 @@
   <!-- Background music: drop an MP3 at assets/happy.mp3 or update the src to your file -->
   <audio id="bgMusic" loop preload="auto">
     <source src="assets/happy.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
   </audio>
+  <!-- Firebase App & Firestore Web SDK (Compat version for pure vanilla client) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
   <script src="js/script.js"></script>
 </body>
 </html>

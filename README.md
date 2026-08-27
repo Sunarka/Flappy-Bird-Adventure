@@ -1,31 +1,54 @@
 # Flappy Bird — Sky Challenge
 
-Game Canvas vanilla HTML5, CSS3, dan JavaScript dengan sistem Power-Up, Enemy Progression, Audio Synthesizer, serta Shop Kosmetik.
+Game Canvas vanilla HTML5, CSS3, dan JavaScript dengan sistem Online Global Leaderboard (Firebase Cloud Firestore), Active Dash Skill, Power-Up, Enemy Progression, Audio Synthesizer, serta Shop Kosmetik.
 
 ## 📁 Struktur Direktori
 
 ```text
 flappy bird/
-├── assets/             # Folder aset gambar (logo.png) dan audio (happy.mp3)
-│   └── logo.png
+├── assets/             # Folder aset SVG, gambar, dan audio
 ├── css/                # File stylesheet styling tampilan & UI modal
 │   ├── style.css
 │   ├── shop.css
 │   ├── store.css
 │   ├── shop-extra.css
 │   ├── mode-picker.css
+│   ├── ranked.css
 │   └── modern-icons.css
-├── js/                 # Logika permainan & audio engine
+├── js/                 # Logika permainan, audio engine & Firebase
+│   ├── firebase-config.js
 │   └── script.js
 ├── index.html          # Halaman utama game
 └── README.md           # Dokumentasi proyek
 ```
 
 ## 🎮 Fitur Utama
-- **Sistem Power-Up**: Shield 🛡️, Coin Magnet 🧲, Slow Time ❄️, Invincible Star ⭐.
-- **Sistem Enemy Progresif**: Enemy Bird 👿 (skor 5+), Bee Swarm 🐝 (skor 15+), Storm Cloud ☁️⚡ (skor 30+), All Enemies Active & Speed Boost (skor 50+).
-- **Shop Lengkap**: Bird Skins, Tail Auras, Hats, Outfits/Capes, Pipes, Backgrounds, Music Tracks.
-- **Synthesizer Web Audio API**: Efek suara dan musik loop chiptune retro dinamis.
+- **⚡ Active Forward Dash Skill**: Skill aktif bawaan dengan cooldown radial 4.5s di pojok kiri bawah (tombol touch & shortcut `Shift` / `D` / `F` / `X`). Memberikan dorongan kecepatan +320 burst, kebal rintangan, bayangan afterimages, dan shockwave.
+- **🔥 Firebase Firestore Online Leaderboard**: Peringkat global real-time dengan profil pemain, badge tier (Grandmaster, Master, Diamond, dll), loadout custom, dan Top #1 Champion Golden Spotlight.
+- **🛡️ Sistem Power-Up**: Shield 🛡️, Dual Shield, Coin Magnet 🧲, Slow Time ❄️, Invincible Star ⭐, NOS Rocket Turbo 🚀.
+- **👿 Sistem Enemy Progresif**: Enemy Bird 👿, Bee Swarm 🐝, Storm Cloud ☁️⚡, Speed Scaling dinamis.
+- **🛍️ Shop Kosmetik**: 10 Bird Skins (dengan jingle kematian unik), 10 Tail Auras, 18 Topi (Hats), 16 Pakaian/Sayap (Outfits), 6 Pipe Skins, 7 Backgrounds, 6 Music Tracks.
+- **🎵 Synthesizer Web Audio API**: Full polyphonic multi-track compositions & audio SFX retro.
+
+## 🔥 Cara Konfigurasi Firebase Firestore (Opsional)
+Game sudah siap dimainkan dengan offline fallback otomatis. Untuk menghubungkan dengan database Firebase Anda sendiri:
+1. Buat project di [Firebase Console](https://console.firebase.google.com/).
+2. Aktifkan **Firestore Database** (mode Production atau Test).
+3. Buka **Project Settings > General > Your Apps > Web (</>)** dan salin `firebaseConfig`.
+4. Buka file `js/firebase-config.js` dan tempelkan `firebaseConfig` Anda.
+5. (Opsional) Di tab **Firestore > Rules**, atur aturan keamanan:
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /flappy_leaderboard/{docId} {
+      allow read: if true;
+      allow write: if request.resource.data.score is number && request.resource.data.name is string;
+    }
+  }
+}
+```
 
 ## 🚀 Cara Menjalankan
-Buka `index.html` langsung di browser modern (Chrome, Edge, Firefox, Safari). Tekan **Play**, lalu klik/tap, `Space`, atau `Arrow Up` untuk terbang. Tekan `P` atau `Esc` untuk pause.
+Buka `index.html` langsung di browser atau akses live demo di GitHub Pages:
+👉 **https://sunarka.github.io/Flappy-Bird-Adventure/**

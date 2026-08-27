@@ -1251,6 +1251,9 @@
   function saveGPProfile() {
     storage.set('skyFlappyGPProfile', gpProfile);
     syncGPProfileUI();
+    if(rankedBest > 0 && typeof submitRankedScore === 'function') {
+      submitRankedScore(rankedBest);
+    }
   }
 
   function syncGPProfileUI() {
@@ -1258,7 +1261,7 @@
     el.gpAvatar.textContent = gpProfile.avatar;
     el.gpGamerTagInput.value = gpProfile.gamerTag;
     el.gpRankedBest.textContent = rankedBest;
-    el.gpOnlineStatus.textContent = gpProfile.isLoggedIn ? '[ONLINE CONNECTED]' : '[OFFLINE DISCONNECTED]';
+    el.gpOnlineStatus.textContent = gpProfile.isLoggedIn ? '[ONLINE CONNECTED (FIREBASE)]' : '[OFFLINE DISCONNECTED]';
     el.gpOnlineStatus.className = 'gp-status ' + (gpProfile.isLoggedIn ? 'online' : 'offline');
     el.gpAuthActionBtn.textContent = gpProfile.isLoggedIn ? 'SIMPAN & CONNECT' : 'CONNECT GOOGLE PLAY';
     
@@ -1419,6 +1422,7 @@
     let existingIndex = leaderboardData.findIndex(p => p.isUser || p.name === gpProfile.gamerTag);
     const userEntry = {
       isUser: true,
+      id: gpProfile.id || gpProfile.gamerTag,
       name: gpProfile.gamerTag,
       score: Math.max(s, rankedBest),
       tier: tier.name,
@@ -1446,6 +1450,75 @@
     leaderboardData.forEach((p, i) => p.rank = i + 1);
 
     storage.set('skyFlappyLeaderboard', leaderboardData);
+
+    // Kirim Skor Tertinggi ke Firebase Firestore Global Leaderboard
+    if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.submitScore === 'function') {
+      window.FirebaseLeaderboard.submitScore(userEntry);
+    }
+  }
+
+  // Sinkronisasi Real-time Global Leaderboard dari Firebase Firestore
+  function syncLeaderboardFromFirebase() {
+    if(!window.FirebaseLeaderboard || typeof window.FirebaseLeaderboard.listenToLeaderboard !== 'function') return;
+
+    window.FirebaseLeaderboard.listenToLeaderboard(remoteScores => {
+      if(Array.isArray(remoteScores) && remoteScores.length > 0) {
+        const merged = [];
+        const seen = new Set();
+
+        // 1. Masukkan pemain dari Firebase
+        remoteScores.forEach(r => {
+          if(r && r.name) {
+            const isMe = gpProfile && (r.name === gpProfile.gamerTag || r.id === gpProfile.id);
+            seen.add(r.name);
+            merged.push({
+              ...r,
+              isUser: isMe
+            });
+          }
+        });
+
+        // 2. Tambahkan entri pemain jika sudah pernah skor tapi belum masuk query
+        if(gpProfile && gpProfile.gamerTag && rankedBest > 0 && !seen.has(gpProfile.gamerTag)) {
+          seen.add(gpProfile.gamerTag);
+          merged.push({
+            isUser: true,
+            id: gpProfile.id || gpProfile.gamerTag,
+            name: gpProfile.gamerTag,
+            score: rankedBest,
+            tier: getRankTier(rankedBest).name,
+            avatar: gpProfile.avatar,
+            loadout: {
+              bird: progress.selected || 'classic',
+              aura: progress.selectedAura || 'default',
+              hat: progress.selectedHat || 'none',
+              outfit: progress.selectedOutfit || 'none',
+              pipe: progress.selectedPipe || 'green',
+              background: progress.selectedBackground || 'sky'
+            }
+          });
+        }
+
+        // 3. Tambahkan default bot/hall of fame jika daftar masih sedikit (< 7 pemain)
+        defaultLeaderboard.forEach(d => {
+          if(!seen.has(d.name) && merged.length < 12) {
+            seen.add(d.name);
+            merged.push(d);
+          }
+        });
+
+        leaderboardData = sanitizeLeaderboard(merged);
+        leaderboardData.sort((a, b) => b.score - a.score);
+        leaderboardData.forEach((p, i) => p.rank = i + 1);
+
+        storage.set('skyFlappyLeaderboard', leaderboardData);
+
+        if(el.rankedModal && !el.rankedModal.classList.contains('hidden')) {
+          renderLeaderboardList();
+          startChampionSpotlight(selectedSpotlightPlayer || leaderboardData[0]);
+        }
+      }
+    });
   }
 
   function setMode(mode, silent = false) {
@@ -5228,6 +5301,7 @@
   setMode('classic', true);
   syncSettings();
   syncGPProfileUI();
+  syncLeaderboardFromFirebase();
   updateCoins();
   renderShop();
   reset();
