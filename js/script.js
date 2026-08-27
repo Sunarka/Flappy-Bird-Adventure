@@ -4826,11 +4826,14 @@
     ctx.shadowColor = 'transparent';
 
     ctx.save();
+    let _step = 'init';
     try {
+      _step = 'shake';
       if(shake > 0) {
         ctx.translate((Math.random() - .5) * 8, (Math.random() - .5) * 8);
         shake -= 1 / 60;
       }
+      _step = 'sky';
       const bg = backgrounds[progress.selectedBackground] || backgrounds.sky;
       const sky = ctx.createLinearGradient(0, 0, 0, H);
       sky.addColorStop(0, bg.top);
@@ -4838,57 +4841,58 @@
       ctx.fillStyle = sky;
       ctx.fillRect(0, 0, W, H);
 
+      _step = 'clouds';
       // Multi-layer Volumetric Fluffy Clouds with Realistic Parallax
       const bgW = W + 240;
-      // Layer 1: Awan Tinggi (Halus & Bergerak Lambat)
       drawFluffyCloud(((cloudX * 0.35 + 20) % bgW) - 120, 68, 0.65, 0.48);
       drawFluffyCloud(((cloudX * 0.35 + 195) % bgW) - 120, 96, 0.55, 0.42);
-
-      // Layer 2: Awan Utama (Puffy Cumulus dengan Shading & Highlight Lembut)
       drawFluffyCloud(((cloudX * 0.75 + 0) % bgW) - 120, 118, 0.95, 0.88);
       drawFluffyCloud(((cloudX * 0.75 + 175) % bgW) - 120, 178, 0.82, 0.84);
-
-      // Layer 3: Awan Rendah / Kabut Melayang (Parallax Cepat)
       drawFluffyCloud(((cloudX * 1.1 + 85) % bgW) - 120, 235, 0.7, 0.38);
 
+      _step = 'hills';
       drawHills();
 
-      // Draw Supersonic Speedlines when Rocket or Dash is Active
+      _step = 'speedlines';
       drawSupersonicSpeedlines();
 
-      // Draw Holy Angel Golden Light Beam
+      _step = 'holyAura';
       drawHolyAura();
 
-      // Draw Shadow Spirits Void Vortex
+      _step = 'shadowVortex';
       drawShadowVortex();
 
-      // Draw Storm Clouds & Lightning
+      _step = 'stormClouds';
       for(const c of stormClouds) drawStormCloud(c);
 
-      // Draw Obstacles
+      _step = 'pipes';
       for(const p of pipes) drawPipe(p);
+      _step = 'coins';
       for(const coin of coins) drawCoin(coin);
+      _step = 'powerups';
       for(const p of powerups) drawPowerup(p);
+      _step = 'flyers';
       for(const flyer of flyers) drawFlyer(flyer);
+      _step = 'enemies';
       for(const e of enemies) {
         if(e.type === 'bird') drawEnemyBird(e);
         else if(e.type === 'bee_swarm') drawBeeSwarm(e);
       }
 
-      // Draw Shockwaves
+      _step = 'shockwaves';
       drawShockwaves();
 
-      // Draw Phoenix Dragon Flames Stream (Massive Fire Effects)
+      _step = 'phoenixFlames';
       drawPhoenixFlames();
 
-      // Draw Laser Beams (Cyber Drones)
+      _step = 'laserBeams';
       drawLaserBeams();
 
-      // Draw Aura & Visual Particles
+      _step = 'particles';
       for(const q of particles) drawAuraParticle(q);
       ctx.globalAlpha = 1;
 
-      // Slow Time Screen Overlay (Frosty edges)
+      _step = 'slowOverlay';
       if(activePowerups.slow > 0) {
         const frost = ctx.createRadialGradient(W / 2, H / 2, 100, W / 2, H / 2, 320);
         frost.addColorStop(0, 'rgba(103, 232, 249, 0)');
@@ -4897,9 +4901,10 @@
         ctx.fillRect(0, 0, W, H);
       }
 
+      _step = 'ground';
       drawGround();
 
-      // Draw Dash Afterimages
+      _step = 'afterimages';
       for(const img of dashAfterimages) {
         renderCustomBird(ctx, {
           x: img.x, y: img.y, angle: img.angle, wing: img.wing,
@@ -4910,29 +4915,30 @@
         });
       }
 
+      _step = 'drawBird';
       drawBird();
 
-      // Draw 2 Baby Guardian Birds (Pip & Peep)
+      _step = 'babyBirds';
       for(const baby of babyBirds) {
         drawBabyBird(baby);
       }
 
-      // Draw Floating Splash Text Badges above Bird and Ground
+      _step = 'floatingTexts';
       drawFloatingTexts();
     } catch(err) {
-      // Tampilkan error di DOM juga agar mudah dilihat user saat debugging
-      if(!document._renderErrShown) {
-        document._renderErrShown = true;
+      // Tampilkan error step + pesan ke layar
+      const msg = `⚠ [${_step}] ${err.message || err}`;
+      console.error('Render error at step', _step, ':', err);
+      if(!document._renderErrDiv) {
         const dbg = document.createElement('div');
-        dbg.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(220,0,0,0.85);color:#fff;font:12px monospace;padding:6px 10px;z-index:99999;word-break:break-all';
-        dbg.textContent = '⚠ Render Error: ' + err.message;
+        dbg.id = '_renderErrDiv';
+        dbg.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(180,0,0,0.92);color:#fff;font:bold 11px monospace;padding:7px 10px;z-index:99999;word-break:break-all;white-space:pre-wrap';
         document.body.appendChild(dbg);
-        setTimeout(() => { dbg.remove(); document._renderErrShown = false; }, 5000);
+        document._renderErrDiv = dbg;
       }
-      console.error('Render error:', err);
+      document._renderErrDiv.textContent = msg;
     } finally {
       ctx.restore();
-      // Pastikan state bersih setelah setiap frame
       ctx.globalAlpha = 1;
     }
   }
