@@ -29,13 +29,14 @@
     shopCanvas:$('shopCanvas'), showcaseLabel:$('showcaseLabel'), tabPrev:$('tabPrev'), tabNext:$('tabNext'),
     modeClassicBtn:$('modeClassicBtn'), modeRankedBtn:$('modeRankedBtn'), modeBestLabel:$('modeBestLabel'),
     playBtn:$('playBtn'), rankedLeaderboardBtn:$('rankedLeaderboardBtn'), googlePlayBtn:$('googlePlayBtn'),
-    googlePlayModal:$('googlePlayModal'), gpOnlineStatus:$('gpOnlineStatus'), gpAvatar:$('gpAvatar'),
-    gpChangeAvatarBtn:$('gpChangeAvatarBtn'), gpGamerTagInput:$('gpGamerTagInput'), gpTierBadge:$('gpTierBadge'),
+    googlePlayModal:$('googlePlayModal'), gpOnlineStatus:$('gpOnlineStatus'), gpAvatarWrap:$('gpAvatarWrap'), gpAvatar:$('gpAvatar'),
+    gpChangeAvatarBtn:$('gpChangeAvatarBtn'), gpGamerTagInput:$('gpGamerTagInput'), gpNameCostHint:$('gpNameCostHint'), gpTierBadge:$('gpTierBadge'),
     gpRankedBest:$('gpRankedBest'), gpAuthActionBtn:$('gpAuthActionBtn'), gpSwitchAccountBtn:$('gpSwitchAccountBtn'),
     googleSignInPrompt:$('googleSignInPrompt'), googleProfileCard:$('googleProfileCard'),
     googleSignInBtn:$('googleSignInBtn'), googleSignInBtnText:$('googleSignInBtnText'),
     guestSignInBtn:$('guestSignInBtn'),
     gpUserEmail:$('gpUserEmail'), gpSignOutBtn:$('gpSignOutBtn'),
+    avatarPickerModal:$('avatarPickerModal'), avatarPickerGrid:$('avatarPickerGrid'),
     rankedModal:$('rankedModal'), championCanvas:$('championCanvas'), championGamerTag:$('championGamerTag'),
     championScore:$('championScore'), championTier:$('championTier'), championLoadoutTags:$('championLoadoutTags'),
     spotlightTitle:$('spotlightTitle'), leaderboardList:$('leaderboardList'), playRankedFromModalBtn:$('playRankedFromModalBtn'),
@@ -1669,19 +1670,332 @@
   // ==========================================
   // GOOGLE SIGN-IN & RANKED LEADERBOARD AUTH
   // ==========================================
+  const cuteAvatarsCatalog = [
+    {
+      id: 'chick_yellow',
+      name: 'PIPI CHICK',
+      color: '#fef08a',
+      bg: 'linear-gradient(135deg, #fef08a 0%, #facc15 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <circle cx="24" cy="25" r="18" fill="#facc15"/>
+        <circle cx="22" cy="7" r="4.5" fill="#f87171"/>
+        <circle cx="27" cy="8.5" r="4" fill="#ef4444"/>
+        <circle cx="17" cy="22" r="3.8" fill="#1e293b"/>
+        <circle cx="18.2" cy="20.8" r="1.4" fill="#ffffff"/>
+        <circle cx="31" cy="22" r="3.8" fill="#1e293b"/>
+        <circle cx="32.2" cy="20.8" r="1.4" fill="#ffffff"/>
+        <ellipse cx="12" cy="27" rx="3.5" ry="2.2" fill="#f87171" opacity="0.6"/>
+        <ellipse cx="36" cy="27" rx="3.5" ry="2.2" fill="#f87171" opacity="0.6"/>
+        <polygon points="24,23 20,29 28,29" fill="#f97316"/>
+        <polygon points="24,31 21,29 27,29" fill="#ea580c"/>
+      </svg>`
+    },
+    {
+      id: 'pink_sakura',
+      name: 'SAKURA BIRD',
+      color: '#f472b6',
+      bg: 'linear-gradient(135deg, #fbcfe8 0%, #f472b6 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <circle cx="24" cy="25" r="18" fill="#f472b6"/>
+        <circle cx="12" cy="11" r="3.5" fill="#ffffff"/>
+        <circle cx="9" cy="14" r="3.5" fill="#ffffff"/>
+        <circle cx="15" cy="14" r="3.5" fill="#ffffff"/>
+        <circle cx="12" cy="17" r="3.5" fill="#ffffff"/>
+        <circle cx="12" cy="14" r="2.5" fill="#fbbf24"/>
+        <circle cx="17" cy="23" r="3.8" fill="#1e293b"/>
+        <circle cx="18.2" cy="21.5" r="1.4" fill="#ffffff"/>
+        <circle cx="31" cy="23" r="3.8" fill="#1e293b"/>
+        <circle cx="32.2" cy="21.5" r="1.4" fill="#ffffff"/>
+        <ellipse cx="12" cy="28" rx="3.8" ry="2.2" fill="#fb7185" opacity="0.75"/>
+        <ellipse cx="36" cy="28" rx="3.8" ry="2.2" fill="#fb7185" opacity="0.75"/>
+        <polygon points="24,24 20,29.5 28,29.5" fill="#fb923c"/>
+      </svg>`
+    },
+    {
+      id: 'penguin_tux',
+      name: 'POM PENGUIN',
+      color: '#38bdf8',
+      bg: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <circle cx="24" cy="25" r="18" fill="#1e293b"/>
+        <ellipse cx="24" cy="29" rx="12" ry="13.5" fill="#ffffff"/>
+        <path d="M 9 20 A 15 15 0 0 1 39 20" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="9" cy="22" r="5" fill="#0284c7"/>
+        <circle cx="39" cy="22" r="5" fill="#0284c7"/>
+        <circle cx="18" cy="23" r="3.2" fill="#0f172a"/>
+        <circle cx="19" cy="22" r="1.2" fill="#ffffff"/>
+        <circle cx="30" cy="23" r="3.2" fill="#0f172a"/>
+        <circle cx="31" cy="22" r="1.2" fill="#ffffff"/>
+        <polygon points="24,25 20.5,29.5 27.5,29.5" fill="#f97316"/>
+        <circle cx="14" cy="28" r="2.5" fill="#f87171" opacity="0.5"/>
+        <circle cx="34" cy="28" r="2.5" fill="#f87171" opacity="0.5"/>
+      </svg>`
+    },
+    {
+      id: 'panda_bamboo',
+      name: 'PANDA FLAP',
+      color: '#10b981',
+      bg: 'linear-gradient(135deg, #a7f3d0 0%, #10b981 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <circle cx="11" cy="11" r="6" fill="#1e293b"/>
+        <circle cx="37" cy="11" r="6" fill="#1e293b"/>
+        <circle cx="24" cy="26" r="17" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+        <ellipse cx="16" cy="23" rx="5" ry="4.2" fill="#1e293b" transform="rotate(-15 16 23)"/>
+        <ellipse cx="32" cy="23" rx="5" ry="4.2" fill="#1e293b" transform="rotate(15 32 23)"/>
+        <circle cx="16.5" cy="22.5" r="2.2" fill="#ffffff"/>
+        <circle cx="31.5" cy="22.5" r="2.2" fill="#ffffff"/>
+        <polygon points="24,26 21.5,30 26.5,30" fill="#f97316"/>
+        <circle cx="11" cy="30" r="3" fill="#fca5a5" opacity="0.7"/>
+        <circle cx="37" cy="30" r="3" fill="#fca5a5" opacity="0.7"/>
+      </svg>`
+    },
+    {
+      id: 'cat_neko',
+      name: 'NEKO KITTY',
+      color: '#fb923c',
+      bg: 'linear-gradient(135deg, #ffedd5 0%, #fb923c 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <polygon points="8,19 14,7 21,14" fill="#f97316"/>
+        <polygon points="10,18 14,10 19,14" fill="#fecdd3"/>
+        <polygon points="40,19 34,7 27,14" fill="#f97316"/>
+        <polygon points="38,18 34,10 29,14" fill="#fecdd3"/>
+        <circle cx="24" cy="26" r="17" fill="#fed7aa"/>
+        <circle cx="17" cy="23" r="3.5" fill="#1e293b"/>
+        <circle cx="18" cy="22" r="1.3" fill="#ffffff"/>
+        <circle cx="31" cy="23" r="3.5" fill="#1e293b"/>
+        <circle cx="32" cy="22" r="1.3" fill="#ffffff"/>
+        <line x1="6" y1="26" x2="13" y2="27" stroke="#ea580c" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="6" y1="30" x2="13" y2="29" stroke="#ea580c" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="42" y1="26" x2="35" y2="27" stroke="#ea580c" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="42" y1="30" x2="35" y2="29" stroke="#ea580c" stroke-width="1.5" stroke-linecap="round"/>
+        <polygon points="24,26 21,30.5 27,30.5" fill="#ea580c"/>
+      </svg>`
+    },
+    {
+      id: 'bunny_fluff',
+      name: 'USAGI BUNNY',
+      color: '#f43f5e',
+      bg: 'linear-gradient(135deg, #ffe4e6 0%, #f43f5e 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <ellipse cx="16" cy="11" rx="4.5" ry="10" fill="#ffffff" stroke="#fbcfe8" stroke-width="1.2"/>
+        <ellipse cx="16" cy="11" rx="2.5" ry="7" fill="#fecdd3"/>
+        <ellipse cx="32" cy="11" rx="4.5" ry="10" fill="#ffffff" stroke="#fbcfe8" stroke-width="1.2"/>
+        <ellipse cx="32" cy="11" rx="2.5" ry="7" fill="#fecdd3"/>
+        <circle cx="24" cy="27" r="16.5" fill="#ffffff" stroke="#fbcfe8" stroke-width="1.2"/>
+        <circle cx="17" cy="25" r="3.5" fill="#be123c"/>
+        <circle cx="18" cy="24" r="1.3" fill="#ffffff"/>
+        <circle cx="31" cy="25" r="3.5" fill="#be123c"/>
+        <circle cx="32" cy="24" r="1.3" fill="#ffffff"/>
+        <ellipse cx="11" cy="30" rx="3.5" ry="2" fill="#fda4af"/>
+        <ellipse cx="37" cy="30" rx="3.5" ry="2" fill="#fda4af"/>
+        <polygon points="24,27 21.5,31 26.5,31" fill="#fb7185"/>
+      </svg>`
+    },
+    {
+      id: 'fox_kitsune',
+      name: 'KITSUNE FOX',
+      color: '#ea580c',
+      bg: 'linear-gradient(135deg, #ffedd5 0%, #ea580c 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <polygon points="8,16 15,4 21,15" fill="#ea580c"/>
+        <polygon points="10,16 15,7 19,15" fill="#1e293b"/>
+        <polygon points="40,16 33,4 27,15" fill="#ea580c"/>
+        <polygon points="38,16 33,7 29,15" fill="#1e293b"/>
+        <circle cx="24" cy="26" r="17" fill="#ea580c"/>
+        <path d="M 10 26 C 14 36 24 38 24 38 C 24 38 34 36 38 26 Z" fill="#ffffff"/>
+        <circle cx="17" cy="24" r="3.2" fill="#1e293b"/>
+        <circle cx="18" cy="23" r="1.2" fill="#ffffff"/>
+        <circle cx="31" cy="24" r="3.2" fill="#1e293b"/>
+        <circle cx="32" cy="23" r="1.2" fill="#ffffff"/>
+        <polygon points="24,26 21,30.5 27,30.5" fill="#1e293b"/>
+      </svg>`
+    },
+    {
+      id: 'dragon_pyro',
+      name: 'BABY DRAGON',
+      color: '#22c55e',
+      bg: 'linear-gradient(135deg, #bbf7d0 0%, #16a34a 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <polygon points="14,14 11,4 19,10" fill="#facc15"/>
+        <polygon points="34,14 37,4 29,10" fill="#facc15"/>
+        <circle cx="24" cy="26" r="17" fill="#22c55e"/>
+        <polygon points="24,5 21,11 27,11" fill="#f97316"/>
+        <circle cx="17" cy="24" r="4" fill="#0f172a"/>
+        <circle cx="18.5" cy="22.5" r="1.6" fill="#fef08a"/>
+        <circle cx="31" cy="24" r="4" fill="#0f172a"/>
+        <circle cx="32.5" cy="22.5" r="1.6" fill="#fef08a"/>
+        <polygon points="24,25 20,30 28,30" fill="#eab308"/>
+        <circle cx="12" cy="30" r="2.5" fill="#fed7aa" opacity="0.6"/>
+        <circle cx="36" cy="30" r="2.5" fill="#fed7aa" opacity="0.6"/>
+      </svg>`
+    },
+    {
+      id: 'owl_scholar',
+      name: 'STARRY OWL',
+      color: '#6366f1',
+      bg: 'linear-gradient(135deg, #c7d2fe 0%, #4f46e5 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <polygon points="10,14 12,6 18,12" fill="#4338ca"/>
+        <polygon points="38,14 36,6 30,12" fill="#4338ca"/>
+        <circle cx="24" cy="26" r="17" fill="#6366f1"/>
+        <circle cx="17" cy="23" r="6.5" fill="#ffffff"/>
+        <circle cx="17" cy="23" r="4.2" fill="#1e1b4b"/>
+        <circle cx="18.5" cy="21.5" r="1.6" fill="#ffffff"/>
+        <circle cx="31" cy="23" r="6.5" fill="#ffffff"/>
+        <circle cx="31" cy="23" r="4.2" fill="#1e1b4b"/>
+        <circle cx="32.5" cy="21.5" r="1.6" fill="#ffffff"/>
+        <polygon points="24,25 21,30.5 27,30.5" fill="#f59e0b"/>
+      </svg>`
+    },
+    {
+      id: 'froggy_kero',
+      name: 'KERO FROGGY',
+      color: '#84cc16',
+      bg: 'linear-gradient(135deg, #d9f99d 0%, #65a30d 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <circle cx="15" cy="14" r="6.5" fill="#84cc16"/>
+        <circle cx="15" cy="14" r="4" fill="#ffffff"/>
+        <circle cx="15" cy="14" r="2.5" fill="#1e293b"/>
+        <circle cx="33" cy="14" r="6.5" fill="#84cc16"/>
+        <circle cx="33" cy="14" r="4" fill="#ffffff"/>
+        <circle cx="33" cy="14" r="2.5" fill="#1e293b"/>
+        <circle cx="24" cy="27" r="16" fill="#84cc16"/>
+        <ellipse cx="11" cy="29" rx="3.5" ry="2.2" fill="#f472b6" opacity="0.8"/>
+        <ellipse cx="37" cy="29" rx="3.5" ry="2.2" fill="#f472b6" opacity="0.8"/>
+        <polygon points="24,25 21,29.5 27,29.5" fill="#facc15"/>
+      </svg>`
+    },
+    {
+      id: 'astro_space',
+      name: 'ASTRO KOSMO',
+      color: '#38bdf8',
+      bg: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <circle cx="24" cy="24" r="18" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+        <circle cx="24" cy="24" r="14" fill="#0284c7"/>
+        <path d="M 13 18 A 12 12 0 0 1 31 13" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+        <circle cx="24" cy="26" r="9" fill="#facc15"/>
+        <circle cx="21" cy="24" r="1.8" fill="#0f172a"/>
+        <circle cx="27" cy="24" r="1.8" fill="#0f172a"/>
+        <polygon points="24,26 22,29 26,29" fill="#f97316"/>
+      </svg>`
+    },
+    {
+      id: 'robo_mecha',
+      name: 'CYBER BOT',
+      color: '#06b6d4',
+      bg: 'linear-gradient(135deg, #164e63 0%, #0891b2 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <line x1="24" y1="4" x2="24" y2="10" stroke="#06b6d4" stroke-width="2"/>
+        <circle cx="24" cy="4" r="2.5" fill="#f43f5e"/>
+        <rect x="8" y="10" width="32" height="30" rx="8" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
+        <rect x="13" y="17" width="22" height="9" rx="4.5" fill="#06b6d4"/>
+        <circle cx="18" cy="21.5" r="2" fill="#ffffff"/>
+        <circle cx="30" cy="21.5" r="2" fill="#ffffff"/>
+        <polygon points="24,29 20,34 28,34" fill="#fbbf24"/>
+      </svg>`
+    },
+    {
+      id: 'ghost_spook',
+      name: 'BOO GHOSTY',
+      color: '#c084fc',
+      bg: 'linear-gradient(135deg, #f3e8ff 0%, #a855f7 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <path d="M 10 26 C 10 14 38 14 38 26 C 38 38 34 42 30 38 C 26 34 22 34 18 38 C 14 42 10 38 10 26 Z" fill="#ffffff" stroke="#c084fc" stroke-width="1.8"/>
+        <path d="M 16 23 Q 19 19 22 23" fill="none" stroke="#6b21a8" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M 26 23 Q 29 19 32 23" fill="none" stroke="#6b21a8" stroke-width="2.5" stroke-linecap="round"/>
+        <ellipse cx="14" cy="27" rx="3" ry="1.8" fill="#f472b6" opacity="0.8"/>
+        <ellipse cx="34" cy="27" rx="3" ry="1.8" fill="#f472b6" opacity="0.8"/>
+        <ellipse cx="24" cy="27" rx="2" ry="2.8" fill="#f43f5e"/>
+      </svg>`
+    },
+    {
+      id: 'king_royal',
+      name: 'KING FLAPPY',
+      color: '#eab308',
+      bg: 'linear-gradient(135deg, #fef08a 0%, #ca8a04 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <polygon points="12,14 14,5 19,10 24,3 29,10 34,5 36,14" fill="#fbbf24" stroke="#d97706" stroke-width="1.2"/>
+        <circle cx="24" cy="26" r="17" fill="#facc15"/>
+        <circle cx="17" cy="24" r="3.5" fill="#1e293b"/>
+        <circle cx="18" cy="23" r="1.3" fill="#ffffff"/>
+        <circle cx="31" cy="24" r="3.5" fill="#1e293b"/>
+        <circle cx="32" cy="23" r="1.3" fill="#ffffff"/>
+        <polygon points="24,25 20.5,30 27.5,30" fill="#ea580c"/>
+      </svg>`
+    },
+    {
+      id: 'ninja_shadow',
+      name: 'SHINOBI NINJA',
+      color: '#64748b',
+      bg: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <circle cx="24" cy="25" r="18" fill="#0f172a"/>
+        <rect x="6" y="15" width="36" height="8" rx="2" fill="#dc2626"/>
+        <polygon points="38,19 46,14 44,22" fill="#dc2626"/>
+        <ellipse cx="24" cy="25" rx="13" ry="5.5" fill="#fed7aa"/>
+        <circle cx="18" cy="25" r="2.8" fill="#0f172a"/>
+        <circle cx="19" cy="24" r="1" fill="#ffffff"/>
+        <circle cx="30" cy="25" r="2.8" fill="#0f172a"/>
+        <circle cx="31" cy="24" r="1" fill="#ffffff"/>
+        <polygon points="24,27 22,30 26,30" fill="#ea580c"/>
+      </svg>`
+    },
+    {
+      id: 'phoenix_blaze',
+      name: 'SOLAR PHOENIX',
+      color: '#f97316',
+      bg: 'linear-gradient(135deg, #fed7aa 0%, #ea580c 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <polygon points="24,2 18,12 24,9 30,12" fill="#ef4444"/>
+        <polygon points="24,5 20,12 24,10 28,12" fill="#facc15"/>
+        <circle cx="24" cy="26" r="17" fill="#f97316"/>
+        <circle cx="17" cy="23" r="3.8" fill="#450a0a"/>
+        <circle cx="18.5" cy="21.5" r="1.5" fill="#fef08a"/>
+        <circle cx="31" cy="23" r="3.8" fill="#450a0a"/>
+        <circle cx="32.5" cy="21.5" r="1.5" fill="#fef08a"/>
+        <polygon points="24,25 20,31 28,31" fill="#facc15"/>
+      </svg>`
+    }
+  ];
+
+  function getCuteAvatarSvg(avatarId, size = 48) {
+    const found = cuteAvatarsCatalog.find(a => a.id === avatarId);
+    if(found) return found.render(size);
+    // Legacy fallback mapping
+    const legacyMap = {
+      'P1': 'chick_yellow', 'ACE': 'pink_sakura', 'PRO': 'penguin_tux', 'TOP': 'king_royal',
+      'SKY': 'blue_sky', 'MAX': 'phoenix_blaze', 'VIP': 'cat_neko', 'NEO': 'robo_mecha',
+      'AIR': 'astro_space', 'RAY': 'dragon_pyro', 'FOX': 'fox_kitsune', 'BOT': 'robo_mecha'
+    };
+    if(avatarId && legacyMap[avatarId]) {
+      return getCuteAvatarSvg(legacyMap[avatarId], size);
+    }
+    return cuteAvatarsCatalog[0].render(size);
+  }
+
   let gpProfile = storage.get('skyFlappyGPProfile', {
     isLoggedIn: false,
     isGoogle: false,
     email: '',
     googleUid: null,
     gamerTag: 'SkyPlayer',
-    avatar: 'P1',
+    avatar: 'chick_yellow',
+    nameChangesDone: 0,
     level: 1,
     id: 'G-' + Math.floor(1000000 + Math.random() * 9000000),
     isOnline: true
   });
 
-  const availableAvatars = ['P1', 'ACE', 'PRO', 'TOP', 'SKY', 'MAX', 'VIP', 'NEO', 'AIR', 'RAY', 'FOX', 'BOT'];
+  // Normalisasi avatar jika masih format lama
+  if(!cuteAvatarsCatalog.some(a => a.id === gpProfile.avatar)) {
+    const legacyMap = {
+      'P1': 'chick_yellow', 'ACE': 'pink_sakura', 'PRO': 'penguin_tux', 'TOP': 'king_royal',
+      'SKY': 'chick_yellow', 'MAX': 'phoenix_blaze', 'VIP': 'cat_neko', 'NEO': 'robo_mecha',
+      'AIR': 'astro_space', 'RAY': 'dragon_pyro', 'FOX': 'fox_kitsune', 'BOT': 'robo_mecha'
+    };
+    gpProfile.avatar = legacyMap[gpProfile.avatar] || 'chick_yellow';
+  }
 
   function saveGPProfile() {
     storage.set('skyFlappyGPProfile', gpProfile);
@@ -1689,6 +2003,36 @@
     if(rankedBest > 0 && typeof submitRankedScore === 'function') {
       submitRankedScore(rankedBest);
     }
+  }
+
+  function renderAvatarPickerGrid() {
+    if(!el.avatarPickerGrid) return;
+    let html = '';
+    cuteAvatarsCatalog.forEach(a => {
+      const isSelected = (gpProfile.avatar || cuteAvatarsCatalog[0].id) === a.id;
+      html += `
+        <div class="avatar-card${isSelected ? ' selected' : ''}" data-avatar-id="${a.id}">
+          <div class="avatar-card-icon" style="background:${a.bg}">${a.render(44)}</div>
+          <div class="avatar-card-name">${a.name}</div>
+          ${isSelected ? '<span class="avatar-card-check">DIPAKAI</span>' : ''}
+        </div>
+      `;
+    });
+    el.avatarPickerGrid.innerHTML = html;
+
+    el.avatarPickerGrid.querySelectorAll('.avatar-card').forEach(card => {
+      card.addEventListener('click', () => {
+        audio.click();
+        const avId = card.getAttribute('data-avatar-id');
+        if(avId) {
+          gpProfile.avatar = avId;
+          saveGPProfile();
+          renderAvatarPickerGrid();
+          closeModal();
+          showModal(el.googlePlayModal);
+        }
+      });
+    });
   }
 
   function syncGPProfileUI() {
@@ -1699,11 +2043,22 @@
     if(el.googleProfileCard) el.googleProfileCard.classList.toggle('hidden', !isLogged);
     if(el.gpSignOutBtn) el.gpSignOutBtn.classList.toggle('hidden', !isLogged);
 
-    if(el.gpAvatar) el.gpAvatar.textContent = gpProfile.avatar || 'P1';
+    if(el.gpAvatar) {
+      el.gpAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 52);
+    }
     if(el.gpGamerTagInput) el.gpGamerTagInput.value = gpProfile.gamerTag || 'SkyPlayer';
     if(el.gpUserEmail) el.gpUserEmail.textContent = gpProfile.email || 'Akun Google Terhubung';
     if(el.gpRankedBest) el.gpRankedBest.textContent = rankedBest;
     
+    if(el.gpNameCostHint) {
+      const changes = gpProfile.nameChangesDone || 0;
+      if(changes === 0) {
+        el.gpNameCostHint.innerHTML = `<span class="free-badge">1x Ganti Nama: GRATIS</span>`;
+      } else {
+        el.gpNameCostHint.innerHTML = `<span class="coin-badge">Biaya Ganti Nama: <b>50 Koin</b></span>`;
+      }
+    }
+
     if(el.gpOnlineStatus) {
       el.gpOnlineStatus.textContent = isLogged ? `TERHUBUNG: ${gpProfile.email || gpProfile.gamerTag}` : 'BELUM LOGIN (AKUN GOOGLE)';
       el.gpOnlineStatus.className = 'gp-status ' + (isLogged ? 'online' : 'offline');
@@ -2257,7 +2612,7 @@
         rankHtml += `
           <div class="lb-row${userClass}">
             <span class="lb-rank ${rankClass}">${rankBadge}</span>
-            <span class="lb-player"><b class="lb-av-badge">${p.avatar || 'P1'}</b> ${p.name}</span>
+            <span class="lb-player"><span class="lb-av-circle">${getCuteAvatarSvg(p.avatar, 24)}</span> ${p.name}</span>
             <span class="lb-tier" style="color: ${playerTier.color}">
               <span class="tier-icon-inline">${playerTier.iconSvg}</span>
               ${playerTier.name}
@@ -2326,6 +2681,24 @@
     }
   }
 
+  function sanitizeLeaderboard(list) {
+    if(!Array.isArray(list)) return [];
+    return list.map(item => {
+      const p = item || {};
+      const score = Math.max(0, parseInt(p.score, 10) || 0);
+      const name = (p.name && typeof p.name === 'string') ? p.name.slice(0, 16) : 'Player';
+      return {
+        id: p.id || name,
+        name: name,
+        score: score,
+        tier: getRankTier(score).name,
+        avatar: p.avatar || 'chick_yellow',
+        isUser: !!p.isUser,
+        loadout: p.loadout || {}
+      };
+    });
+  }
+
   function renderLeaderboardList() {
     if(!el.leaderboardList) return;
     leaderboardData = sanitizeLeaderboard(leaderboardData);
@@ -2346,7 +2719,7 @@
       html += `
         <div class="lb-row${activeClass}${userClass}" data-player-name="${p.name}">
           <span class="lb-rank ${rankClass}">${rankBadge}</span>
-          <span class="lb-player"><b class="lb-av-badge">${p.avatar || 'P1'}</b> ${p.name}</span>
+          <span class="lb-player"><span class="lb-av-circle">${getCuteAvatarSvg(p.avatar, 24)}</span> ${p.name}</span>
           <span class="lb-tier" style="color: ${playerTier.color}">
             <span class="tier-icon-inline">${playerTier.iconSvg}</span>
             ${playerTier.name}
@@ -7141,13 +7514,14 @@
   });
 
   // Google Play / Google Sign-In Modal Actions
-  bindClick(el.gpChangeAvatarBtn, () => {
+  function openAvatarPicker() {
     audio.click();
-    const curIdx = availableAvatars.indexOf(gpProfile.avatar);
-    const nextIdx = (curIdx + 1) % availableAvatars.length;
-    gpProfile.avatar = availableAvatars[nextIdx];
-    saveGPProfile();
-  });
+    renderAvatarPickerGrid();
+    showModal(el.avatarPickerModal);
+  }
+
+  bindClick(el.gpChangeAvatarBtn, openAvatarPicker);
+  bindClick(el.gpAvatarWrap, openAvatarPicker);
 
   async function performGoogleSignIn() {
     if(el.googleSignInBtnText) el.googleSignInBtnText.textContent = 'MENGHUBUNGKAN...';
@@ -7222,11 +7596,50 @@
       performGoogleSignIn();
       return;
     }
-    const val = el.gpGamerTagInput ? el.gpGamerTagInput.value.trim() : '';
-    if(val) gpProfile.gamerTag = val;
-    saveGPProfile();
-    audio.win();
-    closeModal();
+    const newName = el.gpGamerTagInput ? el.gpGamerTagInput.value.trim() : '';
+    if(!newName) {
+      alert('Nama gamer tidak boleh kosong!');
+      return;
+    }
+
+    const oldName = gpProfile.gamerTag || 'SkyPlayer';
+    if(newName !== oldName) {
+      const changes = gpProfile.nameChangesDone || 0;
+      if(changes === 0) {
+        // 1x Ganti nama FREE
+        gpProfile.gamerTag = newName;
+        gpProfile.nameChangesDone = 1;
+        saveGPProfile();
+        audio.win();
+        alert('Nama gamer Anda berhasil diubah menjadi "' + newName + '" (GRATIS)!');
+        closeModal();
+      } else {
+        // Ganti nama bayar 50 Koin
+        const cost = 50;
+        if(progress.coins < cost) {
+          audio.hit();
+          alert('Koin tidak cukup untuk ganti nama!\n\nBiaya: ' + cost + ' Koin\nSaldo Anda: ' + progress.coins + ' Koin.\n\nKumpulkan koin dengan bermain game!');
+          if(el.gpGamerTagInput) el.gpGamerTagInput.value = oldName;
+          return;
+        }
+
+        const ok = confirm('Ganti nama menjadi "' + newName + '" seharga ' + cost + ' Koin?\n\nSaldo Anda: ' + progress.coins + ' Koin');
+        if(!ok) return;
+
+        progress.coins -= cost;
+        gpProfile.gamerTag = newName;
+        gpProfile.nameChangesDone = changes + 1;
+        updateCoins();
+        persistProgress();
+        saveGPProfile();
+        audio.win();
+        alert('Nama gamer berhasil diubah menjadi "' + newName + '"! (-' + cost + ' Koin)');
+        closeModal();
+      }
+    } else {
+      saveGPProfile();
+      closeModal();
+    }
   });
 
   // Auto-listen to Firebase Auth state on load

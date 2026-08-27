@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#77cef2">
   <title>Flappy Bird - Sky Challenge</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=4.2">
-  <link rel="stylesheet" href="css/modern-icons.css?v=4.2">
-  <link rel="stylesheet" href="css/shop.css?v=4.2">
-  <link rel="stylesheet" href="css/shop-extra.css?v=4.2">
-  <link rel="stylesheet" href="css/mode-picker.css?v=4.2">
-  <link rel="stylesheet" href="css/store.css?v=4.2">
-  <link rel="stylesheet" href="css/ranked.css?v=4.2">
+  <link rel="stylesheet" href="css/style.css?v=4.4">
+  <link rel="stylesheet" href="css/modern-icons.css?v=4.4">
+  <link rel="stylesheet" href="css/shop.css?v=4.4">
+  <link rel="stylesheet" href="css/shop-extra.css?v=4.4">
+  <link rel="stylesheet" href="css/mode-picker.css?v=4.4">
+  <link rel="stylesheet" href="css/store.css?v=4.4">
+  <link rel="stylesheet" href="css/ranked.css?v=4.4">
 </head>
 <body>
   <main class="game-shell" aria-label="Flappy Bird Sky Challenge">
@@ -262,14 +262,15 @@
 
         <!-- Google User Profile Card (When Logged In) -->
         <div id="googleProfileCard" class="gp-profile-card">
-          <div class="gp-avatar-wrap">
-            <div class="gp-avatar" id="gpAvatar"><svg viewBox="0 0 24 24" width="26" height="26" fill="#ffffff"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+          <div class="gp-avatar-wrap" id="gpAvatarWrap" role="button" tabindex="0" title="Klik untuk memilih foto profil imut">
+            <div class="gp-avatar" id="gpAvatar"></div>
             <button class="gp-avatar-edit-btn" id="gpChangeAvatarBtn" type="button" title="Ganti Avatar"><svg viewBox="0 0 24 24" width="11" height="11"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#ffffff"/></svg></button>
           </div>
           <div class="gp-info">
             <div class="gp-gamertag-row">
               <input type="text" id="gpGamerTagInput" maxlength="16" placeholder="Nama Gamer" value="SkyPlayer">
             </div>
+            <div class="gp-name-cost-hint" id="gpNameCostHint">1x Ganti Nama: GRATIS</div>
             <div class="gp-id" id="gpUserEmail">user@gmail.com</div>
             <div class="gp-stats-row">
               <span>Tier: <b id="gpTierBadge" class="tier-badge gold">BRONZE</b></span>
@@ -282,6 +283,19 @@
           <button class="primary gp-btn" id="gpAuthActionBtn" type="button">SIMPAN & MAINKAN RANK</button>
           <button class="secondary" id="gpSignOutBtn" type="button">KELUAR / GANTI AKUN</button>
         </div>
+      </section>
+
+      <!-- AVATAR PICKER MODAL (PILIH PP KARAKTER IMUT) -->
+      <section id="avatarPickerModal" class="modal avatar-picker-modal hidden" role="dialog" aria-modal="true">
+        <button class="close" data-close>×</button>
+        <div class="avatar-picker-header">
+          <h2>PILIH PP KARAKTER IMUT</h2>
+          <p>Pilih foto profil favoritmu untuk tampil di Leaderboard!</p>
+        </div>
+        <div class="avatar-picker-grid" id="avatarPickerGrid">
+          <!-- 16 Cute SVG Character Avatars dynamically populated in script.js -->
+        </div>
+        <button class="primary" data-close type="button">SELESAI</button>
       </section>
 
       <!-- Ranked Leaderboard & Top 1 Champion Portrait Showcase Modal -->
@@ -470,7 +484,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=4.2"></script>
-  <script src="js/script.js?v=4.2"></script>
+  <script src="js/firebase-config.js?v=4.4"></script>
+  <script src="js/script.js?v=4.4"></script>
 </body>
 </html>
