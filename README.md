@@ -23,7 +23,8 @@ flappy bird/
 ```
 
 ## 🎮 Fitur Utama
-- **⚡ Active Forward Dash Skill**: Skill aktif bawaan dengan cooldown radial 4.5s di pojok kiri bawah (tombol touch & shortcut `Shift` / `D` / `F` / `X`). Memberikan dorongan kecepatan +320 burst, kebal rintangan, bayangan afterimages, dan shockwave.
+- **🐣 2 Anak Burung Pelindung Imut (Baby Guardian Birds)**: 2 anak burung mungil menggemaskan (*Pip* si pita merah muda & *Peep* si bunga sakura) yang selalu terbang mengawal induknya (permanen selamanya). Ketika ada musuh mendekat (*Enemy Bird*, *Bee Swarm*, *Flyer*, atau *Storm Cloud*), anak burung akan meluncur 1 per 1 dengan kecepatan tinggi menghancurkan musuh, meledakkannya dengan partikel sparkle ceria + menambah poin skor, lalu salto dan kembali ke samping induk!
+- **⚡ Active Forward Dash Skill**: Skill aktif bawaan dengan cooldown radial 4.5s di pojok kiri bawah (tombol jumbo touch & shortcut `Shift` / `D` / `F` / `X`). Memberikan dorongan kecepatan +320 burst, kebal rintangan, bayangan afterimages, dan shockwave.
 - **🔥 Firebase Firestore Online Leaderboard**: Peringkat global real-time dengan profil pemain, badge tier (Grandmaster, Master, Diamond, dll), loadout custom, dan Top #1 Champion Golden Spotlight.
 - **🛡️ Sistem Power-Up**: Shield 🛡️, Dual Shield, Coin Magnet 🧲, Slow Time ❄️, Invincible Star ⭐, NOS Rocket Turbo 🚀.
 - **👿 Sistem Enemy Progresif**: Enemy Bird 👿, Bee Swarm 🐝, Storm Cloud ☁️⚡, Speed Scaling dinamis.

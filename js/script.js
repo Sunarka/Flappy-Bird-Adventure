@@ -182,6 +182,56 @@
   let dashCooldown = 0, dashTimer = 0, dashAfterimages = [];
   const DASH_COOLDOWN_MAX = 4.5;
 
+  // 2 Anak Burung Pelindung Imut (Baby Guardian Birds)
+  const babyBirds = [
+    {
+      id: 0,
+      name: 'Pip',
+      x: 82, y: 262,
+      r: 9,
+      wing: 0,
+      angle: 0,
+      state: 'follow', // 'follow' | 'intercept' | 'return'
+      targetEnemy: null,
+      color: '#fef08a', // Canary Pastel Yellow
+      wingColor: '#fde047',
+      blushColor: '#fda4af',
+      accessory: 'ribbon',
+      flipAngle: 0
+    },
+    {
+      id: 1,
+      name: 'Peep',
+      x: 78, y: 298,
+      r: 8.5,
+      wing: 0,
+      angle: 0,
+      state: 'follow', // 'follow' | 'intercept' | 'return'
+      targetEnemy: null,
+      color: '#bae6fd', // Sky Pastel Cyan
+      wingColor: '#7dd3fc',
+      blushColor: '#fda4af',
+      accessory: 'flower',
+      flipAngle: 0
+    }
+  ];
+
+  function resetBabyBirds() {
+    babyBirds[0].x = bird.x - 22;
+    babyBirds[0].y = bird.y - 18;
+    babyBirds[0].state = 'follow';
+    babyBirds[0].targetEnemy = null;
+    babyBirds[0].angle = 0;
+    babyBirds[0].flipAngle = 0;
+
+    babyBirds[1].x = bird.x - 26;
+    babyBirds[1].y = bird.y + 18;
+    babyBirds[1].state = 'follow';
+    babyBirds[1].targetEnemy = null;
+    babyBirds[1].angle = 0;
+    babyBirds[1].flipAngle = 0;
+  }
+
   // Active power-up states
   const activePowerups = { shield: false, magnet: 0, slow: 0, star: 0, rocket: 0 };
   const bird = { x:104, y:280, vy:0, r:16, wing:0, angle:0, dead:false };
@@ -345,6 +395,17 @@
       if(!settings.sound) return;
       this.playTone(1046, 0.08, 'triangle', 0.035, 100);
       setTimeout(() => this.playTone(1568, 0.1, 'sine', 0.03, 50), 35);
+    },
+    babyChirp() {
+      if(!settings.sound) return;
+      this.playTone(1568, 0.08, 'sine', 0.045, 300);
+      setTimeout(() => this.playTone(2093, 0.1, 'triangle', 0.04, 200), 35);
+    },
+    babyAttack() {
+      if(!settings.sound) return;
+      this.playTone(880, 0.06, 'sawtooth', 0.055, 400);
+      this.playTone(1760, 0.12, 'sine', 0.045, -200);
+      setTimeout(() => this.playTone(1320, 0.1, 'triangle', 0.04, 150), 30);
     },
 
     // Distinct Death Jingles per Bird Skin (Sesuai dengan Karakter & Tema Burung)
@@ -1780,6 +1841,7 @@
     groundX = 0; shake = 0; started = false; lastGapY = 300;
     el.over.classList.remove('visible');
     Object.assign(bird, { x:104, y:285, vy:0, wing:0, angle:0, dead:false });
+    resetBabyBirds();
     updateScore();
     updatePowerupHUD();
     updateDashUI();
@@ -2371,12 +2433,24 @@
     if(state === State.READY) {
       bird.y = 285 + Math.sin(performance.now() / 250) * 7;
       bird.wing = .1;
+      babyBirds[0].x = bird.x - 22;
+      babyBirds[0].y = bird.y - 18 + Math.sin(performance.now() / 220) * 4;
+      babyBirds[0].wing += dt * 20;
+      babyBirds[1].x = bird.x - 26;
+      babyBirds[1].y = bird.y + 18 + Math.sin(performance.now() / 240 + Math.PI) * 4;
+      babyBirds[1].wing += dt * 20;
       return;
     }
     if(state === State.OVER) {
       bird.vy = Math.min(420, bird.vy + 850 * dt);
       bird.y += bird.vy * dt;
       bird.angle = Math.min(1.6, bird.angle + 3 * dt);
+      babyBirds[0].x += (bird.x - 22 - babyBirds[0].x) * 8 * dt;
+      babyBirds[0].y += (bird.y - 18 - babyBirds[0].y) * 8 * dt;
+      babyBirds[0].angle = bird.angle * 0.7;
+      babyBirds[1].x += (bird.x - 26 - babyBirds[1].x) * 8 * dt;
+      babyBirds[1].y += (bird.y + 18 - babyBirds[1].y) * 8 * dt;
+      babyBirds[1].angle = bird.angle * 0.7;
       overTimer -= dt;
       if(overTimer <= 0 && !el.over.classList.contains('visible')) showOver();
       return;
@@ -2481,6 +2555,9 @@
 
     // Spawn Hazards & Enemies (Randomized, unpredictable, non-sequential)
     updateHazardSpawning(dt, slowFactor);
+
+    // Update 2 Anak Burung Pelindung (Baby Guardian Combat AI)
+    updateBabyBirds(dt, speed, slowFactor);
 
     // Update Pipes & Rocket/Dash Smasher
     for(const p of pipes) {
@@ -3131,6 +3208,264 @@
     }
   }
 
+  // Update & Combat AI untuk 2 Anak Burung Pelindung Imut (Baby Guardian Birds)
+  function updateBabyBirds(dt, speed, slowFactor) {
+    const now = performance.now();
+
+    // 1. Kumpulkan musuh yang mendekat di area bahaya (Enemies, Flyers, Storm Clouds)
+    const activeTargets = [];
+    for(const e of enemies) {
+      if(!e.dead && e.x > bird.x - 25 && e.x < bird.x + 230) {
+        activeTargets.push(e);
+      }
+    }
+    for(const f of flyers) {
+      if(!f.dead && f.x > bird.x - 25 && f.x < bird.x + 230) {
+        activeTargets.push(f);
+      }
+    }
+    for(const c of stormClouds) {
+      if((c.phase === 'warn' || c.phase === 'strike') && c.targetX > bird.x - 25 && c.targetX < bird.x + 220) {
+        activeTargets.push({
+          x: c.targetX,
+          y: c.y + 15,
+          r: 20,
+          isStormCloud: true,
+          cloudRef: c
+        });
+      }
+    }
+
+    // Urutkan musuh terdekat ke posisi burung induk
+    activeTargets.sort((a, b) => (a.x - bird.x) - (b.x - bird.x));
+
+    // 2. Jika ada musuh mendekat, tugaskan 1 anak burung yang idle untuk maju menyerang
+    for(const target of activeTargets) {
+      const isAlreadyTargeted = babyBirds.some(b => b.targetEnemy === target);
+      if(!isAlreadyTargeted) {
+        const availableBaby = babyBirds.find(b => b.state === 'follow');
+        if(availableBaby) {
+          availableBaby.state = 'intercept';
+          availableBaby.targetEnemy = target;
+          audio.babyChirp();
+          makeParticles(availableBaby.x, availableBaby.y, 8, availableBaby.color);
+        }
+      }
+    }
+
+    // 3. Update animasi & pergerakan tiap anak burung
+    babyBirds.forEach((b, idx) => {
+      b.wing += dt * 26;
+
+      if(b.state === 'follow') {
+        const tOffset = idx === 0 ? 0 : Math.PI;
+        const fx = bird.x - 22 - (idx * 4) + Math.cos(now / 280 + tOffset) * 7;
+        const fy = idx === 0
+          ? bird.y - 18 + Math.sin(now / 220) * 6
+          : bird.y + 18 + Math.sin(now / 240 + Math.PI) * 6;
+
+        b.x += (fx - b.x) * 12 * dt;
+        b.y += (fy - b.y) * 12 * dt;
+        b.angle = Math.max(-0.25, Math.min(0.25, (fy - b.y) * 0.05));
+        b.flipAngle = 0;
+
+        if(Math.random() < 0.08) {
+          particles.push({
+            x: b.x - 8,
+            y: b.y + (Math.random() - 0.5) * 4,
+            vx: -50 - Math.random() * 20,
+            vy: (Math.random() - 0.5) * 15,
+            life: 0.35, maxLife: 0.35,
+            color: b.color,
+            size: 2 + Math.random() * 2,
+            type: 'sparkle'
+          });
+        }
+      } else if(b.state === 'intercept') {
+        const target = b.targetEnemy;
+        if(!target || target.dead || target.x < -30) {
+          b.state = 'return';
+          b.targetEnemy = null;
+          return;
+        }
+
+        const targetX = target.x;
+        const targetY = target.y;
+        const dx = targetX - b.x;
+        const dy = targetY - b.y;
+        const dist = Math.hypot(dx, dy);
+
+        b.angle = Math.atan2(dy, dx);
+        b.flipAngle += dt * 18;
+
+        const attackSpeed = 580;
+        b.x += (dx / Math.max(1, dist)) * attackSpeed * dt;
+        b.y += (dy / Math.max(1, dist)) * attackSpeed * dt;
+
+        // Jejak dash anak burung
+        particles.push({
+          x: b.x - 6,
+          y: b.y + (Math.random() - 0.5) * 4,
+          vx: -120 - Math.random() * 40,
+          vy: (Math.random() - 0.5) * 30,
+          life: 0.22, maxLife: 0.22,
+          color: Math.random() < 0.5 ? '#fde047' : b.color,
+          size: 2.5 + Math.random() * 2.5,
+          type: 'sparkle'
+        });
+
+        // Tabrakan dan hancurkan musuh
+        const hitDist = b.r + (target.r || 15) + 6;
+        if(dist <= hitDist) {
+          if(target.isStormCloud && target.cloudRef) {
+            target.cloudRef.phase = 'fade';
+            target.cloudRef.timer = 0.1;
+          } else {
+            target.dead = true;
+          }
+
+          audio.babyAttack();
+          shake = 0.18;
+          makeParticles(targetX, targetY, 20, '#fde047');
+          makeParticles(targetX, targetY, 14, b.color);
+          addScore();
+
+          shockwaves.push({
+            x: targetX, y: targetY, r: 6, maxR: 48,
+            color: b.color,
+            life: 0.35, maxLife: 0.35
+          });
+
+          floatingTexts.push({
+            x: targetX, y: targetY - 16,
+            text: 'POW! +1',
+            color: '#fef08a',
+            vy: -65,
+            life: 0.75, maxLife: 0.75
+          });
+
+          b.state = 'return';
+          b.targetEnemy = null;
+        }
+      } else if(b.state === 'return') {
+        const tOffset = idx === 0 ? 0 : Math.PI;
+        const fx = bird.x - 22 - (idx * 4) + Math.cos(now / 280 + tOffset) * 7;
+        const fy = idx === 0
+          ? bird.y - 18 + Math.sin(now / 220) * 6
+          : bird.y + 18 + Math.sin(now / 240 + Math.PI) * 6;
+
+        const dx = fx - b.x;
+        const dy = fy - b.y;
+        const dist = Math.hypot(dx, dy);
+
+        b.angle = Math.atan2(dy, dx);
+        b.flipAngle += dt * 10;
+
+        const returnSpeed = 440;
+        b.x += (dx / Math.max(1, dist)) * returnSpeed * dt;
+        b.y += (dy / Math.max(1, dist)) * returnSpeed * dt;
+
+        if(dist < 18) {
+          b.state = 'follow';
+          b.angle = 0;
+          b.flipAngle = 0;
+        }
+      }
+    });
+  }
+
+  // Render Anak Burung Super Lucu (Chibi Guardian Bird)
+  function drawBabyBird(b) {
+    ctx.save();
+    ctx.translate(b.x, b.y);
+    ctx.rotate(b.angle + (b.state === 'intercept' ? b.flipAngle : 0));
+
+    // Pendaran Aura Lembut
+    ctx.shadowColor = b.color;
+    ctx.shadowBlur = b.state === 'intercept' ? 14 : 7;
+
+    // Tubuh Bulat Mungil Pastel
+    const bodyGrad = ctx.createRadialGradient(-2, -2, 2, 0, 0, b.r);
+    bodyGrad.addColorStop(0, '#ffffff');
+    bodyGrad.addColorStop(0.35, b.color);
+    bodyGrad.addColorStop(1, b.wingColor);
+
+    ctx.fillStyle = bodyGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, b.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Pipi Merona Merah Muda (Blushing Cheeks)
+    ctx.fillStyle = b.blushColor || '#fda4af';
+    ctx.beginPath();
+    ctx.arc(3.2, 3.0, 2.2, 0, Math.PI * 2);
+    ctx.arc(-2.5, 3.0, 2.0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Sayap Mungil Mengepak Cepat
+    const flap = Math.sin(b.wing) * 0.55;
+    ctx.save();
+    ctx.translate(-4, 1);
+    ctx.rotate(flap);
+    ctx.fillStyle = b.wingColor;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 5.5, 3.5, -0.2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Paruh Mungil Oranye
+    ctx.fillStyle = '#f97316';
+    ctx.beginPath();
+    ctx.moveTo(b.r - 2, -1.5);
+    ctx.lineTo(b.r + 4.5, 0.5);
+    ctx.lineTo(b.r - 2, 2.5);
+    ctx.closePath();
+    ctx.fill();
+
+    // Mata Boba Besar Berkilau (Sparkly Anime Eyes)
+    ctx.fillStyle = '#0f172a';
+    ctx.beginPath();
+    ctx.arc(3, -2.5, 3.2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Kilau Cahaya di Mata
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(4.0, -3.5, 1.4, 0, Math.PI * 2);
+    ctx.arc(2.0, -1.5, 0.8, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Aksesori Kepala Imut
+    if(b.accessory === 'ribbon') {
+      // Pita Merah Muda Cantik (Pip)
+      ctx.fillStyle = '#f472b6';
+      ctx.beginPath();
+      ctx.moveTo(-1, -b.r); ctx.lineTo(-5, -b.r - 4); ctx.lineTo(-1, -b.r - 2); ctx.closePath();
+      ctx.moveTo(-1, -b.r); ctx.lineTo(3, -b.r - 4); ctx.lineTo(-1, -b.r - 2); ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#fbcfe8';
+      ctx.beginPath();
+      ctx.arc(-1, -b.r - 1.5, 1.4, 0, Math.PI * 2);
+      ctx.fill();
+    } else if(b.accessory === 'flower') {
+      // Bunga Sakura Mini (Peep)
+      ctx.fillStyle = '#f472b6';
+      for(let a = 0; a < 5; a++) {
+        const rad = (a * Math.PI * 2) / 5;
+        ctx.beginPath();
+        ctx.arc(-1 + Math.cos(rad) * 2.4, -b.r - 2.2 + Math.sin(rad) * 2.4, 1.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = '#fef08a';
+      ctx.beginPath();
+      ctx.arc(-1, -b.r - 2.2, 1.1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
   function drawSupersonicSpeedlines() {
     if(activePowerups.rocket <= 0 && dashTimer <= 0) return;
     ctx.save();
@@ -3223,6 +3558,11 @@
     }
 
     drawBird();
+
+    // Draw 2 Baby Guardian Birds (Pip & Peep)
+    for(const baby of babyBirds) {
+      drawBabyBird(baby);
+    }
 
     // Draw Floating Splash Text Badges above Bird and Ground
     drawFloatingTexts();
