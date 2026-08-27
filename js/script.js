@@ -2717,7 +2717,7 @@
     for(const flyer of flyers) {
       flyer.x -= (speed * flyer.speed + 45 * slowFactor) * dt;
       flyer.wing += dt * 12;
-      if(Math.hypot(bird.x - flyer.x, bird.y - flyer.y) < bird.r * .72 + flyer.r * .72) {
+      if(!flyer.dead && Math.hypot(bird.x - flyer.x, bird.y - flyer.y) < bird.r * .72 + flyer.r * .72) {
         handleHit(flyer);
       }
     }
@@ -2743,7 +2743,7 @@
         e.y = Math.max(75, Math.min(H - GROUND - 45, e.y + Math.sin(e.wobble) * 28 * dt));
       }
 
-      if(Math.hypot(bird.x - e.x, bird.y - e.y) < bird.r * .72 + e.r * .72) {
+      if(!e.dead && Math.hypot(bird.x - e.x, bird.y - e.y) < bird.r * .72 + e.r * .72) {
         handleHit(e);
       }
     }
@@ -3387,6 +3387,28 @@
 
     // 3. Update animasi & pergerakan tiap anak burung
     babyBirds.forEach((b, idx) => {
+      if(b.state === 'dead') {
+        b.respawnTimer = Math.max(0, (b.respawnTimer || 0) - dt);
+        if(b.respawnTimer <= 0) {
+          b.state = 'follow';
+          b.x = bird.x - 22 - (idx * 4);
+          b.y = idx === 0 ? bird.y - 18 : bird.y + 18;
+          b.angle = 0;
+          b.flipAngle = 0;
+          audio.babyChirp();
+          makeParticles(b.x, b.y, 16, b.color);
+          floatingTexts.push({
+            x: bird.x,
+            y: bird.y - 25,
+            text: '🐣 ' + b.name + ' HATCHED!',
+            color: b.color,
+            vy: -60,
+            life: 0.8, maxLife: 0.8
+          });
+        }
+        return;
+      }
+
       b.wing += dt * 26;
 
       if(b.state === 'follow') {
@@ -3451,32 +3473,36 @@
         if(dist <= hitDist) {
           if(target.isStormCloud && target.cloudRef) {
             target.cloudRef.phase = 'fade';
-            target.cloudRef.timer = 0.1;
+            target.cloudRef.timer = 0.05;
           } else {
             target.dead = true;
+            target.x = -999;
           }
 
           audio.babyAttack();
-          shake = 0.18;
-          makeParticles(targetX, targetY, 20, '#fde047');
-          makeParticles(targetX, targetY, 14, b.color);
+          shake = 0.22;
+          makeParticles(targetX, targetY, 24, '#fde047');
+          makeParticles(targetX, targetY, 20, b.color);
+          makeParticles(targetX, targetY, 12, '#ffffff');
           addScore();
 
           shockwaves.push({
-            x: targetX, y: targetY, r: 6, maxR: 48,
+            x: targetX, y: targetY, r: 6, maxR: 52,
             color: b.color,
-            life: 0.35, maxLife: 0.35
+            life: 0.38, maxLife: 0.38
           });
 
           floatingTexts.push({
             x: targetX, y: targetY - 16,
-            text: 'POW! +1',
-            color: '#fef08a',
-            vy: -65,
-            life: 0.75, maxLife: 0.75
+            text: '💥 ' + b.name + ' SMASH! +1',
+            color: b.color,
+            vy: -70,
+            life: 0.85, maxLife: 0.85
           });
 
-          b.state = 'return';
+          // Anak burung sekali nabrak musuh LANGSUNG MATI & respawn setelah 6 detik!
+          b.state = 'dead';
+          b.respawnTimer = 6.0;
           b.targetEnemy = null;
         }
       } else if(b.state === 'return') {
@@ -3508,6 +3534,7 @@
 
   // Render Anak Burung Super Lucu (Chibi Guardian Bird)
   function drawBabyBird(b, targetCtx = ctx) {
+    if(b.state === 'dead') return;
     targetCtx.save();
     targetCtx.translate(b.x, b.y);
     targetCtx.rotate(b.angle + (b.state === 'intercept' ? b.flipAngle : 0));
