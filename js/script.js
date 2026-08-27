@@ -428,10 +428,35 @@
 
   // Audio Engine with Full Synthesizer
   const audio = {
-    ctx:null, musicTimer:null, deathTimer:null,
+    ctx:null, musicTimer:null, deathTimer:null, currentAudioElem:null,
     init() {
       if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
       if(this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
+    },
+    playAudioFile(filename, loop = true, volume = 0.45) {
+      this.stopFileMusic();
+      try {
+        const aud = new Audio('audio/' + filename);
+        aud.loop = loop;
+        aud.volume = volume;
+        this.currentAudioElem = aud;
+        const p = aud.play();
+        if(p && typeof p.catch === 'function') {
+          p.catch(() => {});
+        }
+        return aud;
+      } catch(e) {
+        return null;
+      }
+    },
+    stopFileMusic() {
+      if(this.currentAudioElem) {
+        try {
+          this.currentAudioElem.pause();
+          this.currentAudioElem.currentTime = 0;
+        } catch(e) {}
+        this.currentAudioElem = null;
+      }
     },
     tone(freq, dur=.1, type='sine', volume=.05, slide=0) {
       if(!settings.sound) return;
