@@ -7172,7 +7172,10 @@
       }
     } catch(err) {
       console.warn('[Google Sign-In notice]:', err.code, err.message);
-      if(err.code === 'auth/configuration-not-found') {
+      if(err.code === 'auth/unauthorized-domain') {
+        const currentDomain = window.location.hostname || '127.0.0.1';
+        alert('Domain Belum Diizinkan di Firebase (auth/unauthorized-domain):\n\nDomain "' + currentDomain + '" belum terdaftar di Authorized Domains Firebase.\n\nCara Menambahkan Domain (Hanya 1 Menit):\n1. Buka console.firebase.google.com\n2. Pilih Authentication > tab Settings (Pengaturan)\n3. Di bagian "Authorized domains", klik "Add domain" (Tambah domain)\n4. Masukkan: ' + currentDomain + ' (dan sunarka.github.io)\n5. Klik Simpan!\n\nTips: Anda juga bisa klik "MASUK SEBAGAI TAMU" untuk langsung bermain sekarang!');
+      } else if(err.code === 'auth/configuration-not-found') {
         alert('Pemberitahuan Firebase Auth:\n\nGoogle Sign-In belum diaktifkan di Firebase Console untuk proyek ini.\n\nCara mengaktifkan:\n1. Buka console.firebase.google.com\n2. Buka menu Authentication > Sign-in method\n3. Klik "Google", lalu pilih Enable/Aktifkan dan Simpan.\n\nTips: Anda juga bisa menggunakan tombol "MASUK SEBAGAI TAMU" untuk langsung bermain sekarang!');
       } else if(err.code !== 'auth/popup-closed-by-user') {
         alert('Info Google Login: ' + (err.message || 'Gagal terhubung ke akun Google. Pastikan internet aktif.'));
