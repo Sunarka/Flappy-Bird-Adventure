@@ -2136,7 +2136,7 @@
     el.modeClassicBtn.classList.toggle('active', mode === 'classic');
     el.modeRankedBtn.classList.toggle('active', mode === 'ranked');
     el.playBtn.textContent = mode === 'ranked' ? 'PLAY RANKED (EXTREME)' : 'PLAY CLASSIC';
-    el.modeBestLabel.textContent = mode === 'ranked' ? 'RANKED BEST' : 'CLASSIC BEST';
+    if(el.modeBestLabel) el.modeBestLabel.textContent = mode === 'ranked' ? 'RANKED BEST' : 'CLASSIC BEST';
     
     // Tampilkan tombol Leaderboard & Google Play HANYA di mode Ranked, sembunyikan sepenuhnya di Mode Classic!
     if(el.rankedLeaderboardBtn) {
@@ -2878,7 +2878,7 @@
   function updateScore() {
     el.score.textContent = score;
     best = currentMode === 'ranked' ? rankedBest : classicBest;
-    el.best.textContent = best;
+    if(el.best) el.best.textContent = best;
     if(el.modeBestLabel) {
       el.modeBestLabel.textContent = currentMode === 'ranked' ? 'RANKED BEST' : 'CLASSIC BEST';
     }
