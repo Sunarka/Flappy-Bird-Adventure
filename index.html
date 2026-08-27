@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#77cef2">
   <title>Flappy Bird - Sky Challenge</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=2.6">
-  <link rel="stylesheet" href="css/modern-icons.css?v=2.6">
-  <link rel="stylesheet" href="css/shop.css?v=2.6">
-  <link rel="stylesheet" href="css/shop-extra.css?v=2.6">
-  <link rel="stylesheet" href="css/mode-picker.css?v=2.6">
-  <link rel="stylesheet" href="css/store.css?v=2.6">
-  <link rel="stylesheet" href="css/ranked.css?v=2.6">
+  <link rel="stylesheet" href="css/style.css?v=3.0">
+  <link rel="stylesheet" href="css/modern-icons.css?v=3.0">
+  <link rel="stylesheet" href="css/shop.css?v=3.0">
+  <link rel="stylesheet" href="css/shop-extra.css?v=3.0">
+  <link rel="stylesheet" href="css/mode-picker.css?v=3.0">
+  <link rel="stylesheet" href="css/store.css?v=3.0">
+  <link rel="stylesheet" href="css/ranked.css?v=3.0">
 </head>
 <body>
   <main class="game-shell" aria-label="Flappy Bird Sky Challenge">
@@ -406,10 +406,27 @@
   <audio id="bgMusic" loop preload="auto">
     <source src="assets/happy.mp3" type="audio/mpeg">
   </audio>
+  <!-- Early global error catcher - runs BEFORE any game script -->
+  <script>
+    window._earlyErrors = [];
+    window.onerror = function(msg, src, line, col, err) {
+      window._earlyErrors.push({msg, src, line, col});
+      var d = document.getElementById('_earlyErrBanner');
+      if(!d) {
+        d = document.createElement('div');
+        d.id = '_earlyErrBanner';
+        d.style.cssText = 'position:fixed;top:0;left:0;right:0;background:rgba(180,0,0,0.97);color:#fff;font:bold 12px monospace;padding:10px;z-index:999999;word-break:break-all;white-space:pre-wrap;max-height:40vh;overflow:auto';
+        document.body.appendChild(d);
+      }
+      var shortSrc = (src || '').replace(/.*\//, '');
+      d.textContent += '⚠ JS ERROR [' + shortSrc + ':' + line + ']: ' + msg + '\n';
+      return false;
+    };
+  </script>
   <!-- Firebase App & Firestore Web SDK (Compat version for pure vanilla client) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=2.6"></script>
-  <script src="js/script.js?v=2.6"></script>
+  <script src="js/firebase-config.js?v=3.0"></script>
+  <script src="js/script.js?v=3.0"></script>
 </body>
 </html>
