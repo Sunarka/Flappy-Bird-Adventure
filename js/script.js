@@ -23,6 +23,11 @@
     spotlightTitle:$('spotlightTitle'), leaderboardList:$('leaderboardList'), playRankedFromModalBtn:$('playRankedFromModalBtn'),
     lbTabsBar:$('lbTabsBar'), lbTabGlobalBtn:$('lbTabGlobalBtn'), lbTabTiersBtn:$('lbTabTiersBtn'),
     lbGlobalView:$('lbGlobalView'), lbTiersView:$('lbTiersView'), myRankCard:$('myRankCard'), tiersGuideList:$('tiersGuideList'),
+    menuRankedCard:$('menuRankedCard'), menuRankIcon:$('menuRankIcon'), menuRankTitle:$('menuRankTitle'),
+    menuRankSub:$('menuRankSub'), menuRankCurPts:$('menuRankCurPts'), menuRankTargetPts:$('menuRankTargetPts'),
+    menuRankFill:$('menuRankFill'), rankTierHud:$('rankTierHud'),
+    overRankCard:$('overRankCard'), overRankIcon:$('overRankIcon'), overRankTitle:$('overRankTitle'),
+    overRankDesc:$('overRankDesc'), overRankFill:$('overRankFill'),
     dashBtn:$('dashBtn'), dashRingProgress:$('dashRingProgress'), dashCooldownText:$('dashCooldownText'),
     reviveModal:$('reviveModal'), reviveTimerRing:$('reviveTimerRing'), reviveCountdownText:$('reviveCountdownText'),
     reviveCostLabel:$('reviveCostLabel'), reviveConfirmBtn:$('reviveConfirmBtn'), reviveGiveUpBtn:$('reviveGiveUpBtn')
@@ -1925,6 +1930,33 @@
     });
   }
 
+  function updateMenuRankedUI() {
+    if(!el.menuRankedCard) return;
+    const isRanked = currentMode === 'ranked';
+    el.menuRankedCard.classList.toggle('hidden', !isRanked);
+    if(!isRanked) return;
+
+    const tier = getRankTier(rankedBest);
+    if(el.menuRankIcon) el.menuRankIcon.innerHTML = tier.iconSvg;
+    if(el.menuRankTitle) {
+      el.menuRankTitle.textContent = tier.name + ' TIER';
+      el.menuRankTitle.style.color = tier.color;
+    }
+    if(el.menuRankSub) {
+      el.menuRankSub.innerHTML = `Ranked Best: <b>${rankedBest} pts</b>`;
+    }
+    if(el.menuRankCurPts && el.menuRankTargetPts && el.menuRankFill) {
+      if(tier.nextTier) {
+        el.menuRankCurPts.textContent = `${tier.score} / ${tier.nextTier.minScore} PTS`;
+        el.menuRankTargetPts.textContent = `${tier.pointsToNext} Poin lagi ke ${tier.nextTier.name}!`;
+      } else {
+        el.menuRankCurPts.textContent = `${tier.score} PTS`;
+        el.menuRankTargetPts.textContent = `👑 MAX SUPREME TIER!`;
+      }
+      el.menuRankFill.style.width = `${tier.progressPercent}%`;
+    }
+  }
+
   function setMode(mode, silent = false) {
     currentMode = mode;
     if(!silent) audio.click();
@@ -1943,6 +1975,7 @@
       el.googlePlayBtn.style.display = mode === 'ranked' ? 'block' : 'none';
     }
 
+    updateMenuRankedUI();
     updateScore();
     syncSettings();
   }
@@ -2232,12 +2265,19 @@
     el.hud.classList.toggle('hidden', next === State.MENU);
     if(currentMode === 'ranked') {
       el.coinHud.innerHTML = 'RANKED MATCH <b>EXTREME</b>';
+      if(el.rankTierHud) {
+        const tier = getRankTier(rankedBest);
+        el.rankTierHud.innerHTML = `<span class="tier-hud-icon">${tier.iconSvg}</span> <span>${tier.name}</span>`;
+        el.rankTierHud.classList.remove('hidden');
+      }
     } else {
       el.coinHud.innerHTML = 'COINS <b>' + progress.coins + '</b>';
+      if(el.rankTierHud) el.rankTierHud.classList.add('hidden');
     }
     el.pause.style.display = (next === State.PLAYING || next === State.READY) ? 'block' : 'none';
     el.sound.style.display = (next === State.MENU || next === State.PLAYING || next === State.READY) ? 'block' : 'none';
     updateDashUI();
+    updateMenuRankedUI();
   }
   function updateLivesHUD() {
     if(!el.livesHud) return;
@@ -2577,6 +2617,7 @@
     if(el.modeBestLabel) {
       el.modeBestLabel.textContent = currentMode === 'ranked' ? 'RANKED BEST' : 'CLASSIC BEST';
     }
+    updateMenuRankedUI();
   }
   function addScore() {
     score++;
@@ -6671,6 +6712,31 @@
     el.finalBest.textContent = best;
     const nb = score >= best && score > 0;
     el.newBest.classList.toggle('hidden', !nb);
+
+    if(currentMode === 'ranked') {
+      const tier = getRankTier(rankedBest);
+      if(el.overRankCard) {
+        el.overRankCard.classList.remove('hidden');
+        if(el.overRankIcon) el.overRankIcon.innerHTML = tier.iconSvg;
+        if(el.overRankTitle) {
+          el.overRankTitle.textContent = tier.name + ' TIER';
+          el.overRankTitle.style.color = tier.color;
+        }
+        if(el.overRankDesc) {
+          if(tier.nextTier) {
+            el.overRankDesc.textContent = `${tier.pointsToNext} Poin lagi ke ${tier.nextTier.name} (${tier.score}/${tier.nextTier.minScore} pts)`;
+          } else {
+            el.overRankDesc.textContent = `👑 MAX SUPREME TIER! (${tier.score} pts)`;
+          }
+        }
+        if(el.overRankFill) {
+          el.overRankFill.style.width = `${tier.progressPercent}%`;
+        }
+      }
+    } else {
+      if(el.overRankCard) el.overRankCard.classList.add('hidden');
+    }
+
     showModal(el.over);
   }
   function pause() {
