@@ -264,17 +264,17 @@
         <button class="close" data-close>×</button>
         <h2>RANKED LEADERBOARD</h2>
 
-        <!-- Two Leaderboard Tabs: TOP GLOBAL vs TIER LIGA SAYA -->
+        <!-- Two Leaderboard Tabs: TOP 10 POIN vs TOP 10 RANK -->
         <div class="lb-tabs-bar" id="lbTabsBar">
           <button id="lbTabGlobalBtn" class="lb-tab-btn active" type="button">
-            <span>🏆 TOP GLOBAL</span>
+            <span>🏆 TOP 10 POIN TERTINGGI</span>
           </button>
           <button id="lbTabTiersBtn" class="lb-tab-btn" type="button">
-            <span>🎖️ TIER LIGA SAYA</span>
+            <span>👑 TOP 10 RANK TERTINGGI</span>
           </button>
         </div>
 
-        <!-- TAB 1: GLOBAL LEADERBOARD VIEW -->
+        <!-- TAB 1: TOP 10 POIN TERTINGGI VIEW -->
         <div id="lbGlobalView" class="lb-tab-content active">
           <!-- TOP 1 CHAMPION GOLDEN PORTRAIT SPOTLIGHT -->
           <div class="champion-spotlight" id="championSpotlight">
@@ -304,7 +304,7 @@
             </div>
           </div>
 
-          <!-- LEADERBOARD RANKINGS LIST -->
+          <!-- LEADERBOARD TOP 10 POIN LIST -->
           <div class="leaderboard-container">
             <div class="lb-header">
               <span>RANK</span>
@@ -313,16 +313,29 @@
               <span>SCORE</span>
             </div>
             <div class="leaderboard-list" id="leaderboardList">
-              <!-- Dynamic Player Entries Generated in script.js -->
+              <!-- Top 10 Points Dynamic Player Entries Generated in script.js -->
             </div>
           </div>
         </div>
 
-        <!-- TAB 2: MY TIER & RANK PROGRESSION VIEW -->
+        <!-- TAB 2: TOP 10 RANK TERTINGGI VIEW -->
         <div id="lbTiersView" class="lb-tab-content hidden">
           <!-- My Personal Rank Progression Card -->
           <div class="my-rank-card" id="myRankCard">
             <!-- Injected via JavaScript with big Rank SVG, progress bar, points to rank up -->
+          </div>
+
+          <!-- LEADERBOARD TOP 10 RANK TERTINGGI LIST -->
+          <div class="leaderboard-container rank-lb-container">
+            <div class="lb-header">
+              <span>RANK</span>
+              <span>PLAYER</span>
+              <span>TIER</span>
+              <span>SCORE</span>
+            </div>
+            <div class="leaderboard-list" id="leaderboardRankList">
+              <!-- Top 10 Highest Rank Tiers Players Generated in script.js -->
+            </div>
           </div>
 
           <!-- All Tiers Progression Guide -->

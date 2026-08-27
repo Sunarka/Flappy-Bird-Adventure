@@ -659,6 +659,29 @@
   min-height: 0;
 }
 
+#lbTiersView {
+  overflow-y: auto;
+  padding-right: 2px;
+  gap: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #38bdf8 rgba(15, 23, 42, 0.5);
+}
+
+#lbTiersView::-webkit-scrollbar {
+  width: 5px;
+}
+#lbTiersView::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #38bdf8, #2563eb);
+  border-radius: 99px;
+}
+
+.rank-lb-container {
+  min-height: 120px;
+  max-height: 160px;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+
 /* --- Personal Rank Progression Card --- */
 .my-rank-card {
   display: flex;
@@ -666,9 +689,10 @@
   background: linear-gradient(180deg, rgba(30, 27, 75, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
   border: 1.5px solid rgba(56, 189, 248, 0.5);
   border-radius: 12px;
-  padding: 10px 12px;
-  margin-bottom: 8px;
+  padding: 8px 10px;
+  margin-bottom: 4px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
 }
 
 .rank-card-top {
@@ -759,15 +783,16 @@
 /* --- Tiers Guide Ladder List --- */
 .tiers-guide-container {
   flex: 1 1 auto;
-  min-height: 130px;
-  max-height: 200px;
+  min-height: 100px;
+  max-height: 130px;
   display: flex;
   flex-direction: column;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 10px;
   padding: 4px 6px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  flex-shrink: 0;
 }
 
 .tiers-guide-header {

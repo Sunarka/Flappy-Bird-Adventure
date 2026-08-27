@@ -22,7 +22,8 @@
     championScore:$('championScore'), championTier:$('championTier'), championLoadoutTags:$('championLoadoutTags'),
     spotlightTitle:$('spotlightTitle'), leaderboardList:$('leaderboardList'), playRankedFromModalBtn:$('playRankedFromModalBtn'),
     lbTabsBar:$('lbTabsBar'), lbTabGlobalBtn:$('lbTabGlobalBtn'), lbTabTiersBtn:$('lbTabTiersBtn'),
-    lbGlobalView:$('lbGlobalView'), lbTiersView:$('lbTiersView'), myRankCard:$('myRankCard'), tiersGuideList:$('tiersGuideList'),
+    lbGlobalView:$('lbGlobalView'), lbTiersView:$('lbTiersView'), myRankCard:$('myRankCard'),
+    leaderboardRankList:$('leaderboardRankList'), tiersGuideList:$('tiersGuideList'),
     menuRankedCard:$('menuRankedCard'), menuRankIcon:$('menuRankIcon'), menuRankTitle:$('menuRankTitle'),
     menuRankSub:$('menuRankSub'), menuRankCurPts:$('menuRankCurPts'), menuRankTargetPts:$('menuRankTargetPts'),
     menuRankFill:$('menuRankFill'), rankTierHud:$('rankTierHud'),
@@ -2093,7 +2094,41 @@
       </div>
     `;
 
-    // 2. Render All Tiers Division Ladder Guide
+    // 2. Render Top 10 Highest Rank Tiers Leaderboard
+    if(el.leaderboardRankList) {
+      leaderboardData = sanitizeLeaderboard(leaderboardData);
+      const rankSorted = [...leaderboardData].sort((a, b) => {
+        const tA = getRankTier(a.score);
+        const tB = getRankTier(b.score);
+        if(tB.minScore !== tA.minScore) return tB.minScore - tA.minScore;
+        return b.score - a.score;
+      });
+      const top10Ranks = rankSorted.slice(0, 10);
+
+      let rankHtml = '';
+      top10Ranks.forEach((p, idx) => {
+        const rankNum = idx + 1;
+        const rankClass = rankNum === 1 ? 'gold' : rankNum === 2 ? 'silver' : rankNum === 3 ? 'bronze' : '';
+        const rankBadge = rankNum === 1 ? '#1' : rankNum === 2 ? '#2' : rankNum === 3 ? '#3' : `#${rankNum}`;
+        const userClass = p.isUser ? ' user-row' : '';
+        const playerTier = getRankTier(p.score);
+
+        rankHtml += `
+          <div class="lb-row${userClass}">
+            <span class="lb-rank ${rankClass}">${rankBadge}</span>
+            <span class="lb-player"><b class="lb-av-badge">${p.avatar || 'P1'}</b> ${p.name}</span>
+            <span class="lb-tier" style="color: ${playerTier.color}">
+              <span class="tier-icon-inline">${playerTier.iconSvg}</span>
+              ${playerTier.name}
+            </span>
+            <span class="lb-score">${p.score}</span>
+          </div>
+        `;
+      });
+      el.leaderboardRankList.innerHTML = rankHtml;
+    }
+
+    // 3. Render All Tiers Division Ladder Guide
     let ladderHtml = '';
     rankTiers.forEach(t => {
       const isCurrent = t.id === tier.id;
@@ -2120,8 +2155,10 @@
     leaderboardData.sort((a, b) => b.score - a.score);
     leaderboardData.forEach((p, i) => p.rank = i + 1);
 
+    const top10Points = leaderboardData.slice(0, 10);
+
     let html = '';
-    leaderboardData.forEach(p => {
+    top10Points.forEach(p => {
       const isTop1 = p.rank === 1;
       const rankClass = isTop1 ? 'gold' : p.rank === 2 ? 'silver' : p.rank === 3 ? 'bronze' : '';
       const rankBadge = isTop1 ? '#1' : p.rank === 2 ? '#2' : p.rank === 3 ? '#3' : `#${p.rank}`;
