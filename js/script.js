@@ -820,13 +820,33 @@
     // In-Game Gameplay Soundtracks (Selected in Shop)
     gameMusic() {
       if(!settings.music) return;
-      if(this.currentMusicType === 'game' && this.musicTimer) return;
+      if(this.currentMusicType === 'game' && (this.musicTimer || this.currentAudioElem)) return;
       this.stopMusic();
       this.currentMusicType = 'game';
       const trackId = progress.selectedMusic || 'happy';
-      let step = 0;
       this.init();
 
+      const animeAudioMap = {
+        'gurenge': 'gurenge.wav',
+        'blue_bird': 'blue_bird.wav',
+        'we_are': 'we_are.wav',
+        'sparkle': 'sparkle.wav'
+      };
+
+      if(animeAudioMap[trackId]) {
+        const aud = this.playAudioFile(animeAudioMap[trackId], true, 0.45);
+        if(aud) {
+          aud.onerror = () => {
+            this.playSynthGameMusic(trackId);
+          };
+          return;
+        }
+      }
+      this.playSynthGameMusic(trackId);
+    },
+
+    playSynthGameMusic(trackId) {
+      let step = 0;
       if(trackId === 'happy') {
         // Happy Vibe In-Game Melody
         const melody = [
@@ -924,49 +944,55 @@
           step++;
         }, 135);
       } else if(trackId === 'gurenge') {
-        // Gurenge (Demon Slayer): J-Rock Driving Drums & Melodic Lead
+        // Gurenge (Demon Slayer LiSA): Authentic Chorus Melody
         const melody = [
-          622, 698, 784, 932, 1047, 932, 784, 698, 622, 587, 523, 622, 784, 932, 1047, 1175,
-          1047, 932, 784, 622, 698, 784, 698, 622, 523, 622, 698, 784, 932, 1047, 1175, 1245
+          370, 0, 415, 0, 466, 0, 554, 554, 494, 0, 466, 0, 415, 0, 370, 0,
+          415, 0, 466, 0, 554, 0, 622, 622, 554, 0, 466, 0, 415, 415, 370, 0,
+          370, 0, 415, 0, 466, 0, 554, 554, 494, 0, 466, 0, 415, 0, 370, 0,
+          466, 0, 554, 0, 622, 0, 740, 740, 622, 0, 554, 0, 622, 0, 0, 0
         ];
-        const bass = [131, 131, 156, 156, 175, 175, 196, 196, 104, 104, 117, 117, 131, 131, 156, 196];
+        const bass = [92, 92, 110, 110, 123, 123, 138, 138, 92, 92, 110, 110, 123, 123, 138, 138];
         this.musicTimer = setInterval(() => {
           if(state !== State.PLAYING && state !== State.READY) return;
-          const note = melody[step % melody.length], low = bass[step % bass.length];
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
           if(note) {
             this.playTone(note, .14, 'sawtooth', .024, 0);
             this.playTone(note * 0.5, .12, 'square', .016, 0);
           }
-          if(low) this.playTone(low, .22, 'triangle', .036, -20);
+          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .036, -20);
           if(step % 2 === 1) this.playTone(1100, .035, 'square', .012);
           if(step % 4 === 0) this.playTone(80, .08, 'sawtooth', .035, -40);
           step++;
         }, 130);
       } else if(trackId === 'blue_bird') {
-        // Blue Bird (Naruto Shippuden): Soaring Melodic Lead & Upbeat Groove
+        // Blue Bird (Naruto Shippuden): Authentic Chorus Melody
         const melody = [
-          880, 1047, 1175, 1319, 1397, 1319, 1175, 1047, 880, 1047, 1175, 880, 784, 698, 784, 880,
-          1175, 1047, 880, 784, 698, 659, 587, 659, 698, 784, 880, 1047, 1175, 1319, 1175, 1047
+          440, 0, 494, 0, 523, 0, 587, 0, 659, 659, 587, 0, 523, 0, 494, 0,
+          440, 0, 494, 0, 523, 0, 440, 0, 392, 0, 349, 0, 392, 0, 440, 0,
+          587, 0, 523, 0, 440, 0, 392, 0, 349, 0, 330, 0, 294, 0, 330, 0,
+          349, 0, 392, 0, 440, 0, 523, 0, 587, 0, 659, 0, 587, 0, 523, 0
         ];
-        const bass = [147, 147, 175, 175, 220, 220, 196, 196, 131, 131, 147, 147, 175, 175, 220, 196];
+        const bass = [110, 110, 131, 131, 147, 147, 131, 131, 87, 87, 98, 98, 110, 110, 131, 131];
         this.musicTimer = setInterval(() => {
           if(state !== State.PLAYING && state !== State.READY) return;
-          const note = melody[step % melody.length], low = bass[step % bass.length];
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
           if(note) this.playTone(note, .15, 'triangle', .032, 0);
-          if(low) this.playTone(low, .18, 'sine', .035, 0);
+          if(low && step % 2 === 0) this.playTone(low, .18, 'sine', .035, 0);
           if(step % 4 === 2) this.playTone(1300, .03, 'triangle', .01);
           step++;
         }, 135);
       } else if(trackId === 'we_are') {
-        // We Are! (One Piece): Adventurous Brass Fanfare & Cheerful March
+        // We Are! (One Piece): Authentic Opening Chorus Melody
         const melody = [
-          784, 784, 880, 988, 1047, 1175, 988, 784, 659, 784, 880, 988, 880, 784, 659, 587,
-          784, 988, 1175, 1319, 1175, 988, 784, 880, 784, 880, 988, 1047, 1175, 1319, 1397, 1175
+          392, 392, 440, 0, 494, 0, 523, 0, 587, 587, 494, 0, 392, 0, 330, 0,
+          392, 0, 440, 0, 494, 0, 440, 0, 392, 0, 330, 0, 294, 0, 392, 0,
+          494, 0, 587, 0, 659, 659, 587, 0, 494, 0, 392, 0, 440, 0, 392, 0,
+          440, 0, 494, 0, 523, 0, 587, 0, 659, 0, 698, 0, 587, 0, 0, 0
         ];
-        const bass = [196, 294, 196, 294, 262, 330, 294, 220, 196, 294, 220, 294, 262, 330, 294, 196];
+        const bass = [98, 98, 131, 131, 147, 147, 131, 131, 98, 98, 110, 110, 131, 131, 147, 147];
         this.musicTimer = setInterval(() => {
           if(state !== State.PLAYING && state !== State.READY) return;
-          const note = melody[step % melody.length], low = bass[step % bass.length];
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
           if(note) {
             this.playTone(note, .16, 'sawtooth', .025, 0);
             this.playTone(note * 0.5, .16, 'triangle', .02, 0);
@@ -976,23 +1002,26 @@
           step++;
         }, 145);
       } else if(trackId === 'sparkle') {
-        // Sparkle (Your Name / RADWIMPS): Sparkling Acoustic Chords & Bell Melody
+        // Sparkle (Your Name / RADWIMPS): Authentic Celestial Piano & Bell Melody
         const chords = [
           [622, 784, 932, 1175], [698, 831, 1047, 1245], [784, 932, 1175, 1397], [932, 1175, 1397, 1568]
         ];
-        const melody = [1175, 1047, 932, 784, 698, 622, 698, 784, 932, 1047, 1175, 1397, 1175, 932];
+        const melody = [
+          587, 0, 523, 0, 466, 0, 392, 0, 349, 0, 311, 0, 349, 0, 392, 0,
+          466, 0, 523, 0, 587, 0, 698, 0, 587, 0, 466, 0, 392, 0, 0, 0
+        ];
         const bass = [78, 87, 98, 117];
         this.musicTimer = setInterval(() => {
           if(state !== State.PLAYING && state !== State.READY) return;
-          const chord = chords[Math.floor(step / 2) % chords.length];
+          const chord = chords[Math.floor(step / 4) % chords.length];
           const note = melody[step % melody.length];
-          const low = bass[Math.floor(step / 2) % bass.length];
+          const low = bass[Math.floor(step / 4) % bass.length];
           if(step % 2 === 0) {
             chord.forEach(f => this.playTone(f, .45, 'sine', .016));
             this.playTone(low * 2, .55, 'sine', .032);
           }
           if(note) this.playTone(note, .28, 'triangle', .022);
-          if(step % 3 === 0) this.playTone(note * 2, .18, 'sine', .012); // Starlight bell chime
+          if(step % 3 === 0) this.playTone(note * 2, .18, 'sine', .012);
           step++;
         }, 190);
       }
@@ -1000,11 +1029,10 @@
 
     // Master Music Director (Switch between Lobby & Game Tracks)
     music() {
-      if(!settings.music) return;
-      if(state === State.MENU) {
-        this.lobbyMusic();
-      } else if(state === State.PLAYING || state === State.READY) {
+      if(state === State.PLAYING || state === State.READY) {
         this.gameMusic();
+      } else {
+        this.lobbyMusic();
       }
     },
     previewMusic(trackId) {
@@ -1013,6 +1041,27 @@
       if(!settings.sound && !settings.music) return;
       this.init();
       this.previewTrackId = trackId;
+
+      const animeAudioMap = {
+        'gurenge': 'gurenge.wav',
+        'blue_bird': 'blue_bird.wav',
+        'we_are': 'we_are.wav',
+        'sparkle': 'sparkle.wav'
+      };
+
+      if(animeAudioMap[trackId]) {
+        const aud = this.playAudioFile(animeAudioMap[trackId], true, 0.5);
+        if(aud) {
+          aud.onerror = () => {
+            this.playSynthPreview(trackId);
+          };
+          return;
+        }
+      }
+      this.playSynthPreview(trackId);
+    },
+
+    playSynthPreview(trackId) {
       let step = 0;
 
       if(trackId === 'happy') {
@@ -1087,33 +1136,42 @@
           step++;
         }, 135);
       } else if(trackId === 'gurenge') {
-        const melody = [622, 698, 784, 932, 1047, 932, 784, 698, 622, 587, 523, 622, 784, 932, 1047, 1175];
-        const bass = [131, 131, 156, 156, 175, 175, 196, 196];
+        const melody = [
+          370, 0, 415, 0, 466, 0, 554, 554, 494, 0, 466, 0, 415, 0, 370, 0,
+          415, 0, 466, 0, 554, 0, 622, 622, 554, 0, 466, 0, 415, 415, 370, 0
+        ];
+        const bass = [92, 92, 110, 110, 123, 123, 138, 138];
         this.previewTimer = setInterval(() => {
-          const note = melody[step % melody.length], low = bass[step % bass.length];
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
           if(note) {
             this.playTone(note, .14, 'sawtooth', .032, 0);
             this.playTone(note * 0.5, .12, 'square', .022, 0);
           }
-          if(low) this.playTone(low, .22, 'triangle', .042, -20);
+          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .042, -20);
           if(step % 2 === 1) this.playTone(1100, .035, 'square', .016);
           step++;
         }, 130);
       } else if(trackId === 'blue_bird') {
-        const melody = [880, 1047, 1175, 1319, 1397, 1319, 1175, 1047, 880, 1047, 1175, 880, 784, 698, 784, 880];
-        const bass = [147, 147, 175, 175, 220, 220, 196, 196];
+        const melody = [
+          440, 0, 494, 0, 523, 0, 587, 0, 659, 659, 587, 0, 523, 0, 494, 0,
+          440, 0, 494, 0, 523, 0, 440, 0, 392, 0, 349, 0, 392, 0, 440, 0
+        ];
+        const bass = [110, 110, 131, 131, 147, 147, 131, 131];
         this.previewTimer = setInterval(() => {
-          const note = melody[step % melody.length], low = bass[step % bass.length];
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
           if(note) this.playTone(note, .15, 'triangle', .038, 0);
-          if(low) this.playTone(low, .18, 'sine', .042, 0);
+          if(low && step % 2 === 0) this.playTone(low, .18, 'sine', .042, 0);
           if(step % 4 === 2) this.playTone(1300, .03, 'triangle', .014);
           step++;
         }, 135);
       } else if(trackId === 'we_are') {
-        const melody = [784, 784, 880, 988, 1047, 1175, 988, 784, 659, 784, 880, 988, 880, 784, 659, 587];
-        const bass = [196, 294, 196, 294, 262, 330, 294, 220];
+        const melody = [
+          392, 392, 440, 0, 494, 0, 523, 0, 587, 587, 494, 0, 392, 0, 330, 0,
+          392, 0, 440, 0, 494, 0, 440, 0, 392, 0, 330, 0, 294, 0, 392, 0
+        ];
+        const bass = [98, 98, 131, 131, 147, 147, 131, 131];
         this.previewTimer = setInterval(() => {
-          const note = melody[step % melody.length], low = bass[step % bass.length];
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
           if(note) {
             this.playTone(note, .16, 'sawtooth', .032, 0);
             this.playTone(note * 0.5, .16, 'triangle', .025, 0);
@@ -1125,7 +1183,10 @@
         const chords = [
           [622, 784, 932, 1175], [698, 831, 1047, 1245], [784, 932, 1175, 1397], [932, 1175, 1397, 1568]
         ];
-        const melody = [1175, 1047, 932, 784, 698, 622, 698, 784, 932, 1047, 1175, 1397];
+        const melody = [
+          587, 0, 523, 0, 466, 0, 392, 0, 349, 0, 311, 0, 349, 0, 392, 0,
+          466, 0, 523, 0, 587, 0, 698, 0, 587, 0, 466, 0, 392, 0, 0, 0
+        ];
         const bass = [78, 87, 98, 117];
         this.previewTimer = setInterval(() => {
           const chord = chords[Math.floor(step / 2) % chords.length];
@@ -1143,12 +1204,14 @@
     },
     stopPreview() {
       clearInterval(this.previewTimer);
+      this.stopFileMusic();
       this.previewTimer = null;
       this.previewTrackId = null;
     },
     stopMusic() {
       clearInterval(this.musicTimer);
       clearInterval(this.deathTimer);
+      this.stopFileMusic();
       this.stopPreview();
       this.musicTimer = null;
       this.deathTimer = null;
