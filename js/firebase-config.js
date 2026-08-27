@@ -167,6 +167,40 @@ class FirebaseLeaderboardService {
       }
     }
   }
+
+  /**
+   * Google Sign-In via Firebase Auth Popup
+   */
+  async signInWithGoogle() {
+    if (typeof firebase === 'undefined' || !firebase.auth) {
+      throw new Error('Firebase Auth SDK belum dimuat');
+    }
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('profile');
+    provider.addScope('email');
+    provider.setCustomParameters({ prompt: 'select_account' });
+    const result = await firebase.auth().signInWithPopup(provider);
+    return result.user;
+  }
+
+  /**
+   * Sign Out from Google
+   */
+  async signOut() {
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+      await firebase.auth().signOut();
+    }
+  }
+
+  /**
+   * Listen to Auth State Changes
+   */
+  onAuthStateChanged(callback) {
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+      return firebase.auth().onAuthStateChanged(callback);
+    }
+    return () => {};
+  }
 }
 
 // Global Export

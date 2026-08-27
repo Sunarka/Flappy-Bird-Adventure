@@ -32,6 +32,9 @@
     googlePlayModal:$('googlePlayModal'), gpOnlineStatus:$('gpOnlineStatus'), gpAvatar:$('gpAvatar'),
     gpChangeAvatarBtn:$('gpChangeAvatarBtn'), gpGamerTagInput:$('gpGamerTagInput'), gpTierBadge:$('gpTierBadge'),
     gpRankedBest:$('gpRankedBest'), gpAuthActionBtn:$('gpAuthActionBtn'), gpSwitchAccountBtn:$('gpSwitchAccountBtn'),
+    googleSignInPrompt:$('googleSignInPrompt'), googleProfileCard:$('googleProfileCard'),
+    googleSignInBtn:$('googleSignInBtn'), googleSignInBtnText:$('googleSignInBtnText'),
+    gpUserEmail:$('gpUserEmail'), gpSignOutBtn:$('gpSignOutBtn'),
     rankedModal:$('rankedModal'), championCanvas:$('championCanvas'), championGamerTag:$('championGamerTag'),
     championScore:$('championScore'), championTier:$('championTier'), championLoadoutTags:$('championLoadoutTags'),
     spotlightTitle:$('spotlightTitle'), leaderboardList:$('leaderboardList'), playRankedFromModalBtn:$('playRankedFromModalBtn'),
@@ -1663,19 +1666,21 @@
   }
 
   // ==========================================
-  // GOOGLE PLAY GAMES & ONLINE LEADERBOARD
+  // GOOGLE SIGN-IN & RANKED LEADERBOARD AUTH
   // ==========================================
   let gpProfile = storage.get('skyFlappyGPProfile', {
-    isLoggedIn: true,
-    gamerTag: 'SkyHero#' + Math.floor(1000 + Math.random() * 9000),
-    avatar: 'P1',
-    level: 15,
-    id: 'GP-' + Math.floor(1000000 + Math.random() * 9000000),
+    isLoggedIn: false,
+    isGoogle: false,
+    email: '',
+    googleUid: null,
+    gamerTag: 'SkyPlayer',
+    avatar: '🐥',
+    level: 1,
+    id: 'G-' + Math.floor(1000000 + Math.random() * 9000000),
     isOnline: true
   });
 
-  const availableAvatars = ['P1', 'ACE', 'PRO', 'TOP', 'SKY', 'MAX', 'FLY', 'VIP', 'BOT', 'NEO', 'AIR', 'RAY'];
-  const randomTags = ['SkyKing', 'AeroAce', 'NovaDrift', 'CloudSurfer', 'VortexPilot', 'ThunderBird', 'SolarFlare', 'PixelKnight'];
+  const availableAvatars = ['🐥', '🦅', '🦉', '🦜', '🦚', '👑', '⚡', '🔥', '🌟', '💎', '🚀', '⭐'];
 
   function saveGPProfile() {
     storage.set('skyFlappyGPProfile', gpProfile);
@@ -1686,13 +1691,26 @@
   }
 
   function syncGPProfileUI() {
-    if(!el.gpAvatar) return;
-    el.gpAvatar.textContent = gpProfile.avatar;
-    el.gpGamerTagInput.value = gpProfile.gamerTag;
-    el.gpRankedBest.textContent = rankedBest;
-    el.gpOnlineStatus.textContent = gpProfile.isLoggedIn ? '[ONLINE CONNECTED (FIREBASE)]' : '[OFFLINE DISCONNECTED]';
-    el.gpOnlineStatus.className = 'gp-status ' + (gpProfile.isLoggedIn ? 'online' : 'offline');
-    el.gpAuthActionBtn.textContent = gpProfile.isLoggedIn ? 'SIMPAN & CONNECT' : 'CONNECT GOOGLE PLAY';
+    const isLogged = !!(gpProfile.isLoggedIn && (gpProfile.email || gpProfile.isGoogle));
+    
+    // Toggle Prompt Login vs Profile Card
+    if(el.googleSignInPrompt) el.googleSignInPrompt.classList.toggle('hidden', isLogged);
+    if(el.googleProfileCard) el.googleProfileCard.classList.toggle('hidden', !isLogged);
+    if(el.gpSignOutBtn) el.gpSignOutBtn.classList.toggle('hidden', !isLogged);
+
+    if(el.gpAvatar) el.gpAvatar.textContent = gpProfile.avatar || '🐥';
+    if(el.gpGamerTagInput) el.gpGamerTagInput.value = gpProfile.gamerTag || 'SkyPlayer';
+    if(el.gpUserEmail) el.gpUserEmail.textContent = gpProfile.email || 'Akun Google Terhubung';
+    if(el.gpRankedBest) el.gpRankedBest.textContent = rankedBest;
+    
+    if(el.gpOnlineStatus) {
+      el.gpOnlineStatus.textContent = isLogged ? `TERHUBUNG: ${gpProfile.email || gpProfile.gamerTag}` : 'BELUM LOGIN (AKUN GOOGLE)';
+      el.gpOnlineStatus.className = 'gp-status ' + (isLogged ? 'online' : 'offline');
+    }
+    
+    if(el.gpAuthActionBtn) {
+      el.gpAuthActionBtn.textContent = isLogged ? 'SIMPAN & MAINKAN RANK' : 'LOGIN GOOGLE SEKARANG';
+    }
     
     const tier = getRankTier(rankedBest);
     if(el.gpTierBadge) {
@@ -7121,7 +7139,7 @@
     goReady();
   });
 
-  // Google Play Modal Actions
+  // Google Play / Google Sign-In Modal Actions
   bindClick(el.gpChangeAvatarBtn, () => {
     audio.click();
     const curIdx = availableAvatars.indexOf(gpProfile.avatar);
@@ -7129,23 +7147,85 @@
     gpProfile.avatar = availableAvatars[nextIdx];
     saveGPProfile();
   });
-  bindClick(el.gpSwitchAccountBtn, () => {
+
+  async function performGoogleSignIn() {
+    if(el.googleSignInBtnText) el.googleSignInBtnText.textContent = 'MENGHUBUNGKAN...';
+    try {
+      if(!window.FirebaseLeaderboard || typeof window.FirebaseLeaderboard.signInWithGoogle !== 'function') {
+        throw new Error('Firebase Auth Service belum siap');
+      }
+      const user = await window.FirebaseLeaderboard.signInWithGoogle();
+      if(user) {
+        gpProfile.isLoggedIn = true;
+        gpProfile.isGoogle = true;
+        gpProfile.email = user.email || '';
+        gpProfile.googleUid = user.uid;
+        if(user.displayName) {
+          gpProfile.gamerTag = user.displayName.slice(0, 16);
+        } else if(user.email) {
+          gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
+        }
+        saveGPProfile();
+        audio.win();
+        syncGPProfileUI();
+      }
+    } catch(err) {
+      console.warn('⚠️ Google Sign-In notice:', err.message);
+      if(err.code !== 'auth/popup-closed-by-user') {
+        alert('Info Google Login: ' + (err.message || 'Gagal terhubung ke akun Google. Pastikan internet aktif.'));
+      }
+    } finally {
+      if(el.googleSignInBtnText) el.googleSignInBtnText.textContent = 'LOGIN DENGAN GOOGLE';
+    }
+  }
+
+  bindClick(el.googleSignInBtn, () => {
     audio.click();
-    const tag = randomTags[Math.floor(Math.random() * randomTags.length)];
-    const num = Math.floor(1000 + Math.random() * 9000);
-    gpProfile.gamerTag = `${tag}#${num}`;
-    gpProfile.id = 'GP-' + Math.floor(1000000 + Math.random() * 9000000);
-    saveGPProfile();
+    performGoogleSignIn();
   });
+
+  bindClick(el.gpSignOutBtn, async () => {
+    audio.click();
+    if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.signOut === 'function') {
+      try { await window.FirebaseLeaderboard.signOut(); } catch(_) {}
+    }
+    gpProfile.isLoggedIn = false;
+    gpProfile.isGoogle = false;
+    gpProfile.email = '';
+    gpProfile.googleUid = null;
+    saveGPProfile();
+    syncGPProfileUI();
+  });
+
   bindClick(el.gpAuthActionBtn, () => {
     audio.click();
+    if(!gpProfile.isLoggedIn) {
+      performGoogleSignIn();
+      return;
+    }
     const val = el.gpGamerTagInput ? el.gpGamerTagInput.value.trim() : '';
     if(val) gpProfile.gamerTag = val;
-    gpProfile.isLoggedIn = true;
     saveGPProfile();
     audio.win();
     closeModal();
   });
+
+  // Auto-listen to Firebase Auth state on load
+  if(typeof window.FirebaseLeaderboard !== 'undefined' && typeof window.FirebaseLeaderboard.onAuthStateChanged === 'function') {
+    window.FirebaseLeaderboard.onAuthStateChanged(user => {
+      if(user) {
+        gpProfile.isLoggedIn = true;
+        gpProfile.isGoogle = true;
+        gpProfile.email = user.email || '';
+        gpProfile.googleUid = user.uid;
+        if(!gpProfile.gamerTag || gpProfile.gamerTag === 'SkyPlayer') {
+          gpProfile.gamerTag = user.displayName ? user.displayName.slice(0, 16) : (user.email ? user.email.split('@')[0] : 'SkyPlayer');
+        }
+        saveGPProfile();
+      }
+      syncGPProfileUI();
+    });
+  }
 
   bindClick('howBtn', () => { audio.click(); showModal(el.how); });
   bindClick('settingsBtn', () => { audio.click(); showModal(el.settings); });
