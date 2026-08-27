@@ -1,0 +1,8 @@
+/* Extra previews for shop: pipes, backgrounds, tracks */
+.pipe-preview{display:block;width:44px;height:26px;margin:0 auto 5px;border-radius:6px;background:var(--body);position:relative;box-shadow:inset -4px -3px 0 var(--wing)}
+.pipe-preview:before{content:'';position:absolute;left:-6px;top:0;width:6px;height:100%;background:var(--cap);border-radius:4px}
+.pipe-preview:after{content:'';position:absolute;right:-6px;top:0;width:6px;height:100%;background:var(--edge);border-radius:4px}
+
+.bg-preview{display:block;width:44px;height:26px;margin:0 auto 5px;border-radius:6px;background:linear-gradient(var(--top),var(--bottom));box-shadow:inset -4px -3px 0 rgba(0,0,0,0.06)}
+
+.music-preview{display:block;width:34px;height:26px;margin:0 auto 5px;border-radius:6px;background:var(--color);box-shadow:inset -4px -3px 0 rgba(0,0,0,0.06)}

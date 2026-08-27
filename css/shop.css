@@ -1,0 +1,65 @@
+.coin-hud{margin:5px auto 0;width:max-content;padding:5px 12px;border-radius:99px;background:#173d5a99;color:#fff6bd;font-size:11px;font-weight:900;letter-spacing:1px;text-shadow:none}
+.coin-hud b,.home-wallet b,.shop-balance b{color:#ffcd35;font-size:1.25em}
+.home-wallet{margin-top:7px;padding:7px 13px;border-radius:99px;background:#ffffffb8;color:#285778;font-size:12px;font-weight:900;letter-spacing:1px}
+
+/* Shop Modal Mobile Friendly & Fixed Height with Vertical Scroll */
+.shop-modal{position:relative;padding:16px 13px 14px;width:min(340px,94vw);height:min(560px,88vh);max-height:88vh;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden}
+.shop-modal h2{margin:0 0 2px;font-size:20px}
+.shop-balance{margin:0 0 7px;font-size:11.5px;font-weight:900;color:#47728a}
+
+/* Live Showcase Mini-Stage */
+.shop-showcase{position:relative;width:100%;height:78px;border-radius:12px;overflow:hidden;border:2px solid #bce1f1;box-shadow:inset 0 2px 6px rgba(0,0,0,0.06), 0 3px 8px rgba(0,0,0,0.04);margin-bottom:7px;background:#e0f2fe;flex-shrink:0}
+.shop-showcase canvas{display:block;width:100%;height:100%}
+.showcase-label{position:absolute;top:5px;left:7px;font:900 8.5px/1 Trebuchet MS,Arial;letter-spacing:.4px;padding:3px 6px;border-radius:5px;background:rgba(15,23,42,0.7);color:#fff;backdrop-filter:blur(4px);pointer-events:none;max-width:85%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Swipeable Tab Wrapper */
+.shop-tabs-wrapper{display:flex;align-items:center;gap:3px;position:relative;margin-bottom:8px;width:100%;flex-shrink:0}
+.tab-arrow{flex-shrink:0;width:22px;height:28px;border:none;border-radius:7px;background:#e2f1f8;color:#1e4c70;font:900 15px Arial;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0}
+.tab-arrow:hover{background:#cae6f3;color:#0369a1}
+.tab-arrow:active{transform:scale(0.92)}
+
+.skin-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 10px;flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:4px 4px 18px;scrollbar-width:thin;scrollbar-color:#93c5fd transparent}
+.skin-list::-webkit-scrollbar{width:5px}
+.skin-list::-webkit-scrollbar-track{background:rgba(224,242,254,0.5);border-radius:10px}
+.skin-list::-webkit-scrollbar-thumb{background:#93c5fd;border-radius:10px}
+.skin-list::-webkit-scrollbar-button{display:none !important;width:0 !important;height:0 !important}
+
+.skin-card{padding:10px 7px 11px;border:2px solid #d4e6ed;border-radius:14px;background:#f7fcfe;color:#2a5573;font:900 10.5px Trebuchet MS,Arial;letter-spacing:.2px;cursor:pointer;display:flex;flex-direction:column;align-items:center;min-height:144px;position:relative;transition:all .15s ease;touch-action:manipulation;box-sizing:border-box}
+.skin-card:hover{border-color:#70bddc;transform:translateY(-1.5px);box-shadow:0 3px 10px rgba(0,0,0,0.08)}
+.skin-card.previewing{border-color:#0284c7;background:#f0f9ff;box-shadow:0 0 0 1.5px #0284c7, 0 3px 10px rgba(2,132,199,0.18)}
+.skin-card.selected{border-color:#f59e0b;background:#fffbeb;box-shadow:0 0 0 1.5px #f59e0b, 0 3px 10px rgba(245,158,11,0.2)}
+.skin-card.locked{opacity:.94}
+.skin-card.locked:hover{opacity:1}
+
+.skin-name{font-size:10.5px;font-weight:900;margin:4px 0 2px;color:#1e3a5f;text-align:center;line-height:1.25;white-space:normal;word-break:break-word;max-width:100%}
+.skin-desc{font-size:8.5px;font-weight:600;color:#64748b;margin:0 0 10px;text-align:center;line-height:1.25;white-space:normal;word-break:break-word;max-width:100%;flex-grow:1}
+
+.skin-preview{display:flex;align-items:center;justify-content:center;width:38px;height:38px;margin:0 auto 2px;border-radius:10px;position:relative;background:#edf5f9;box-shadow:inset 0 1px 3px rgba(0,0,0,0.06);flex-shrink:0;overflow:hidden}
+.shop-item-svg{display:block;width:30px;height:30px;transition:transform .18s ease}
+.skin-card:hover .shop-item-svg{transform:scale(1.08)}
+
+/* Override modal button inheritance with strict specificity */
+.modal .skin-cost,
+.skin-cost{display:inline-flex !important;align-items:center !important;justify-content:center !important;margin:auto auto 0 auto !important;width:calc(100% - 6px) !important;max-width:115px !important;min-height:24px !important;height:24px !important;padding:0 8px !important;font:900 9.5px/1 Trebuchet MS,Arial !important;letter-spacing:.3px !important;color:#047857 !important;background:#a7f3d0 !important;border:1px solid #6ee7b7 !important;border-radius:99px !important;box-sizing:border-box !important;flex-shrink:0 !important}
+.skin-cost.equipped{color:#047857 !important;background:#a7f3d0 !important;font-weight:900 !important}
+
+/* Action Buttons inside Card */
+.modal .skin-cost-btn,
+.skin-cost-btn{display:inline-flex !important;align-items:center !important;justify-content:center !important;gap:4px !important;margin:auto auto 0 auto !important;width:calc(100% - 6px) !important;max-width:115px !important;min-height:26px !important;height:26px !important;padding:0 8px !important;font:900 10px/1 Trebuchet MS,Arial !important;letter-spacing:.3px !important;border:none !important;border-radius:99px !important;cursor:pointer !important;transition:all .15s ease !important;box-shadow:0 2px 5px rgba(0,0,0,0.12) !important;flex-shrink:0 !important;box-sizing:border-box !important}
+.skin-cost-btn:hover{filter:brightness(1.1) !important;transform:scale(1.03) !important}
+.skin-cost-btn:active{transform:scale(0.96) !important}
+
+.modal .skin-cost-btn.use-btn,
+.skin-cost-btn.use-btn{background:linear-gradient(135deg,#0284c7,#0369a1) !important;color:#fff !important;box-shadow:0 2px 6px rgba(2,132,199,0.35) !important}
+.modal .skin-cost-btn.buy-btn,
+.skin-cost-btn.buy-btn{background:linear-gradient(135deg,#10b981,#059669) !important;color:#fff !important;box-shadow:0 2px 6px rgba(5,150,105,0.35) !important}
+.modal .skin-cost-btn.buy-btn.cant-afford,
+.skin-cost-btn.buy-btn.cant-afford{background:linear-gradient(135deg,#ef4444,#dc2626) !important;color:#fff !important;box-shadow:0 2px 6px rgba(220,38,38,0.3) !important}
+.mini-coin-svg{flex-shrink:0;vertical-align:middle}
+
+@keyframes coinShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-5px);color:#ef4444}40%,80%{transform:translateX(5px);color:#ef4444}}
+.coin-shake{animation:coinShake 0.45s ease-in-out}
+
+.shop-modal > button.primary{margin:8px auto 0;width:170px;min-height:38px;padding:9px 12px;font-size:14px;flex-shrink:0}
+
+.setting:has(select){padding-top:4px}.setting select{appearance:none;min-width:112px;padding:9px 31px 9px 12px;border:1px solid #b8d9e6;border-radius:10px;background:#f7fcff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23285578' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8'/%3E%3C/svg%3E") no-repeat right 11px center;background-size:12px 8px;box-shadow:0 2px 5px #3a75921c;color:#285778;font:900 11px Trebuchet MS,Arial;letter-spacing:.4px;cursor:pointer;outline:none}.setting select:hover{border-color:#72bdd8;background-color:#fff}.setting select:focus-visible{border-color:#3a9ac0;box-shadow:0 0 0 3px #74caed55}.setting select option{background:#fff;color:#285778;font-weight:700}

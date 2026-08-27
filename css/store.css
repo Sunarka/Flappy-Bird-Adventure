@@ -1,0 +1,13 @@
+.shop-tabs{display:flex;gap:6px;margin:0;overflow-x:auto;padding:2px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;flex:1 1 auto;scroll-behavior:smooth}
+.shop-tabs::-webkit-scrollbar{display:none}
+.shop-tabs button{flex-shrink:0;min-height:32px;padding:0 12px;border-radius:99px;background:#e7f2f6;color:#33607a;box-shadow:none;font:900 11px Trebuchet MS,Arial;letter-spacing:.3px;white-space:nowrap;transition:all .15s;touch-action:manipulation}
+.shop-tabs button:hover{background:#d5eaf2;color:#103b5f}
+.shop-tabs button.active{background:linear-gradient(135deg,#0284c7,#0369a1);color:#fff;box-shadow:0 3px 8px rgba(2,132,199,0.35)}
+.skin-card.playing-preview{border-color:#0284c7;background:#f0f9ff;box-shadow:0 0 0 1.5px #0284c7, 0 4px 12px rgba(2,132,199,0.18)}
+.skin-card.playing-preview .skin-cost{background:#0284c7;color:#fff}
+.skin-card .skin-preview.pipe-preview{background:#e0f2fe}
+.skin-card .skin-preview.bg-preview{background:#e2e8f0}
+.skin-card .skin-preview.music-preview{background:#f1f5f9}
+.skin-card .skin-preview.aura-preview{background:#f8fafc}
+.skin-card .skin-preview.hat-preview,.skin-card .skin-preview.outfit-preview,.skin-card .skin-preview.booster-preview{background:#f0f7fa}
+
