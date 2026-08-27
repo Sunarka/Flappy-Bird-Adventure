@@ -7,17 +7,17 @@
       CanvasRenderingContext2D.prototype.ellipse = function(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise) {
         this.save();
         this.translate(x, y);
-        this.rotate(rotation);
+        this.rotate(rotation || 0);
         this.scale(radiusX, radiusY);
-        this.arc(0, 0, 1, startAngle, endAngle, anticlockwise);
+        this.arc(0, 0, 1, startAngle, endAngle, anticlockwise || false);
         this.restore();
       };
     }
     if(!CanvasRenderingContext2D.prototype.roundRect) {
       CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, radii) {
-        let r = typeof radii === 'number' ? radii : (Array.isArray(radii) ? radii[0] : 0);
+        let r = typeof radii === 'number' ? radii : (Array.isArray(radii) ? (radii[0] || 0) : 0);
         r = Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2);
-        this.beginPath();
+        // TIDAK memanggil beginPath() di sini — biarkan caller yang tentukan path-nya
         this.moveTo(x + r, y);
         this.arcTo(x + w, y, x + w, y + h, r);
         this.arcTo(x + w, y + h, x, y + h, r);
@@ -4818,6 +4818,13 @@
   }
 
   function render() {
+    // Reset TOTAL context state setiap frame agar error save/restore di frame lalu tidak merusak render baru
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'transparent';
+
     ctx.save();
     try {
       if(shake > 0) {
@@ -4913,11 +4920,23 @@
       // Draw Floating Splash Text Badges above Bird and Ground
       drawFloatingTexts();
     } catch(err) {
+      // Tampilkan error di DOM juga agar mudah dilihat user saat debugging
+      if(!document._renderErrShown) {
+        document._renderErrShown = true;
+        const dbg = document.createElement('div');
+        dbg.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(220,0,0,0.85);color:#fff;font:12px monospace;padding:6px 10px;z-index:99999;word-break:break-all';
+        dbg.textContent = '⚠ Render Error: ' + err.message;
+        document.body.appendChild(dbg);
+        setTimeout(() => { dbg.remove(); document._renderErrShown = false; }, 5000);
+      }
       console.error('Render error:', err);
     } finally {
       ctx.restore();
+      // Pastikan state bersih setelah setiap frame
+      ctx.globalAlpha = 1;
     }
   }
+
 
   // Volumetric Fluffy Cloud with Soft Sunlight Highlights & Atmospheric Shading
   function drawFluffyCloud(x, y, s, alpha = 0.85) {
