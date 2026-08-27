@@ -72,7 +72,13 @@
     mecha:{ name:'MECHA CYBORG', desc:'Robot titanium & laser core (Laser SFX)', cost:0, body:'#cbd5e1', wing:'#64748b', beak:'#38bdf8', trail:'#38bdf8' },
     dragon:{ name:'FLAME DRAGON', desc:'Naga merah berapi tanduk emas (Fire SFX)', cost:0, body:'#dc2626', wing:'#991b1b', beak:'#fbbf24', trail:'#ff5400' },
     angel:{ name:'HOLY ANGEL', desc:'Burung suci sayap emas (Chime SFX)', cost:0, body:'#f8fafc', wing:'#fbbf24', beak:'#f59e0b', trail:'#fef08a' },
-    shadow:{ name:'SHADOW PHANTOM', desc:'Bayangan ungu kosmik mistis (Dark SFX)', cost:0, body:'#312e81', wing:'#4c1d95', beak:'#c084fc', trail:'#9d4edd' }
+    shadow:{ name:'SHADOW PHANTOM', desc:'Bayangan ungu kosmik mistis (Dark SFX)', cost:0, body:'#312e81', wing:'#4c1d95', beak:'#c084fc', trail:'#9d4edd' },
+    // Anime Special Bird Skins
+    goku_ssj:{ name:'SUPER SAIYAN BIRD', desc:'Burung Saiyan berambut emas & aura listrik (Ki Blast SFX)', cost:0, body:'#facc15', wing:'#eab308', beak:'#ea580c', trail:'#fef08a' },
+    tanjiro_bird:{ name:'DEMON SLAYER BIRD', desc:'Burung pemburu iblis berhaori kotak hijau (Sword SFX)', cost:0, body:'#15803d', wing:'#1e293b', beak:'#dc2626', trail:'#22c55e' },
+    naruto_bird:{ name:'SAGE SHINOBI BIRD', desc:'Burung ninja oranye jubah Sage Mode (Chakra SFX)', cost:0, body:'#ea580c', wing:'#1e293b', beak:'#facc15', trail:'#fdba74' },
+    luffy_bird:{ name:'STRAW HAT PIRATE', desc:'Burung kapten bajak laut topi jerami (Gear Bounce SFX)', cost:0, body:'#ef4444', wing:'#1d4ed8', beak:'#fbbf24', trail:'#fca5a5' },
+    gojo_bird:{ name:'HONORED ONE (GOJO)', desc:'Burung penyihir rambut perak & mata Six Eyes (Void SFX)', cost:0, body:'#f8fafc', wing:'#1e1b4b', beak:'#38bdf8', trail:'#60a5fa' }
   };
 
   // 2. Tail Aura / Jejak Ekor (Nama Lengkap) - ALL FREE FOR TESTING
@@ -88,7 +94,13 @@
     frost:{ name:'BLIZZARD FROST', desc:'Kristal es salju berkilauan', cost:0, body:'#67e8f9', wing:'#06b6d4' },
     plasma:{ name:'PLASMA SPARK', desc:'Percikan plasma listrik berenergi', cost:0, body:'#a855f7', wing:'#38bdf8' },
     sakura:{ name:'SAKURA PETALS', desc:'Kelopak sakura pink berguguran lembut', cost:0, body:'#f472b6', wing:'#fda4af' },
-    matrix:{ name:'DIGITAL MATRIX', desc:'Jejak kode biner pixel hijau neon', cost:0, body:'#22c55e', wing:'#4ade80' }
+    matrix:{ name:'DIGITAL MATRIX', desc:'Jejak kode biner pixel hijau neon', cost:0, body:'#22c55e', wing:'#4ade80' },
+    // Anime Special Auras
+    super_saiyan:{ name:'SUPER SAIYAN KI AURA', desc:'Aura api emas berkobar & percikan kilat Ki petir biru', cost:0, body:'#facc15', wing:'#38bdf8' },
+    domain_expansion:{ name:'DOMAIN INFINITY VOID', desc:'Energi kutukan ungu kosmik & orb nebula tanpa batas', cost:0, body:'#8b5cf6', wing:'#38bdf8' },
+    nine_tails_chakra:{ name:'KURAMA CHAKRA FIRE', desc:'Kobaran lidah api chakra merah rubah ekor sembilan', cost:0, body:'#ea580c', wing:'#dc2626' },
+    gear_fifth:{ name:'SUN GOD NIKA (GEAR 5)', desc:'Awan uap putih dewa matahari & drum kebebasan', cost:0, body:'#ffffff', wing:'#fef08a' },
+    black_getsuga:{ name:'BANKAI GETSUGA TENSHOU', desc:'Energi spiritual hitam pekat bertepi merah membara', cost:0, body:'#0f172a', wing:'#ef4444' }
   };
 
   // 3. Topi / Hats (Nama Lengkap) - ALL FREE FOR TESTING
@@ -111,7 +123,15 @@
     astronaut:{ name:'SPACE HELMET', desc:'Helm astronot kaca emas kosmik', cost:0 },
     ninja:{ name:'NINJA HEADBAND', desc:'Ikat kepala shinobi merah berkibar', cost:0 },
     witch:{ name:'WITCH MAGIC HAT', desc:'Topi penyihir ungu bergesper emas', cost:0 },
-    bunny:{ name:'FLUFFY BUNNY EARS', desc:'Telinga kelinci putih panjang lucu', cost:0 }
+    bunny:{ name:'FLUFFY BUNNY EARS', desc:'Telinga kelinci putih panjang lucu', cost:0 },
+    // Anime Special Hats
+    straw_hat:{ name:'MUGIWARA STRAW HAT', desc:'Topi jerami kapten bajak laut berpita merah', cost:0 },
+    shinobi_plate:{ name:'HIDDEN LEAF HEADBAND', desc:'Ikat kepala ninja Konoha berplat logam besi', cost:0 },
+    tanjiro_earrings:{ name:'HANAFUDA SUN EARRINGS', desc:'Anting hanafuda matahari & tanda lahir pembasmi iblis', cost:0 },
+    gojo_blindfold:{ name:'GOJO BLINDFOLD & HAIR', desc:'Penutup mata hitam & rambut perak tegak Gojo', cost:0 },
+    saiyan_hair:{ name:'SUPER SAIYAN SPIKY HAIR', desc:'Rambut runcing emas berkilau Super Saiyan', cost:0 },
+    hokage_hat:{ name:'HOKAGE LEADER HAT', desc:'Topi segitiga merah-putih lambang pemimpin desa', cost:0 },
+    chopper_hat:{ name:'CHOPPER DOCTOR CAP', desc:'Topi dokter pink bertanduk rusa dan silang putih', cost:0 }
   };
 
   // 4. Outfit / Dasi & Aksesori (Nama Lengkap) - ALL FREE FOR TESTING
@@ -133,7 +153,14 @@
     cyber_armor:{ name:'MECHA CHEST ARMOR', desc:'Zirah dada cyborg berinti reaktor menyala', cost:0 },
     hoodie:{ name:'URBAN STREET HOODIE', desc:'Hoodie streetwear abu-abu modern', cost:0 },
     angel_wings:{ name:'GLOWING SERAPH WINGS', desc:'Sayap malaikat bersinar terang', cost:0 },
-    royal_robe:{ name:'KING VELVET ROBE', desc:'Mantel beludru raja berbulu ermine', cost:0 }
+    royal_robe:{ name:'KING VELVET ROBE', desc:'Mantel beludru raja berbulu ermine', cost:0 },
+    // Anime Special Outfits
+    akatsuki_cloak:{ name:'AKATSUKI CLOAK', desc:'Jubah hitam berawan merah organisasi Akatsuki', cost:0 },
+    tanjiro_haori:{ name:'CHECKERED GREEN HAORI', desc:'Jubah haori kotak-kotak hijau hitam Tanjiro', cost:0 },
+    scout_cape:{ name:'SCOUT REGIMENT CLOAK', desc:'Jubah hijau Pasukan Pengintai lambang Sayap Kebebasan', cost:0 },
+    goku_gi:{ name:'TURTLE SCHOOL GI', desc:'Seragam bela diri oranye-biru lambang Kame', cost:0 },
+    luffy_vest:{ name:'RED PIRATE VEST', desc:'Rompi merah terbuka & selempang kuning bajak laut', cost:0 },
+    jujutsu_coat:{ name:'JUJUTSU SORCERER COAT', desc:'Seragam biru gelap kerah tinggi SMA Jujutsu', cost:0 }
   };
 
   // 5. Pipa / Pipes (Nama Lengkap) - ALL FREE FOR TESTING
@@ -144,7 +171,11 @@
     cyber:{ name:'GOLDEN CYBER', desc:'Pipa emas berenergi tinggi', cost:0, body:'#854d0e', wing:'#eab308', edge:'#713f12', cap:'#fde047' },
     crystal:{ name:'FROZEN ICE CRYSTAL', desc:'Pipa kristal es transparan biru', cost:0, body:'#0284c7', wing:'#38bdf8', edge:'#0369a1', cap:'#7dd3fc' },
     lava:{ name:'MAGMA VOLCANO', desc:'Pipa batu lahar panas retak membara', cost:0, body:'#450a0a', wing:'#dc2626', edge:'#1c1917', cap:'#f97316' },
-    wood:{ name:'ANCIENT BAMBOO', desc:'Pipa bambu hijau alami bercabang', cost:0, body:'#4d7c0f', wing:'#65a30d', edge:'#365314', cap:'#84cc16' }
+    wood:{ name:'ANCIENT BAMBOO', desc:'Pipa bambu hijau alami bercabang', cost:0, body:'#4d7c0f', wing:'#65a30d', edge:'#365314', cap:'#84cc16' },
+    // Anime Special Pipes
+    katana_torii:{ name:'RED TORII & KATANA', desc:'Pipa gerbang Shinto merah berkilau pedang katana', cost:0, body:'#991b1b', wing:'#ef4444', edge:'#450a0a', cap:'#facc15' },
+    bamboo_demon:{ name:'DEMON SLAYER BAMBOO', desc:'Pipa bambu hijau bertali merah Nezuko', cost:0, body:'#15803d', wing:'#4ade80', edge:'#14532d', cap:'#f472b6' },
+    chakra_scroll:{ name:'NINJUTSU GIANT SCROLL', desc:'Pipa gulungan jurus ninjutsu kayu & kertas mantra', cost:0, body:'#78350f', wing:'#d97706', edge:'#451a03', cap:'#fde047' }
   };
 
   // 6. Backgrounds (Nama Lengkap) - ALL FREE FOR TESTING
@@ -155,7 +186,11 @@
     forest:{ name:'MISTY GREEN FOREST', desc:'Hutan rimbun hijau asri', cost:0, top:'#2d6a4f', bottom:'#b7e4c7', hill:'#1b4332' },
     ocean:{ name:'DEEP OCEAN CORAL', desc:'Kedalaman laut biru & terumbu karang', cost:0, top:'#0369a1', bottom:'#0891b2', hill:'#0e7490' },
     volcano:{ name:'VOLCANIC LAVA', desc:'Kawah gunung berapi malam bara panas', cost:0, top:'#2e1065', bottom:'#7f1d1d', hill:'#450a0a' },
-    synthwave:{ name:'80S SYNTHWAVE GRID', desc:'Grid neon ungu & matahari senja retro', cost:0, top:'#3b0764', bottom:'#ec4899', hill:'#831843' }
+    synthwave:{ name:'80S SYNTHWAVE GRID', desc:'Grid neon ungu & matahari senja retro', cost:0, top:'#3b0764', bottom:'#ec4899', hill:'#831843' },
+    // Anime Special Backgrounds
+    hidden_leaf:{ name:'HIDDEN LEAF VILLAGE', desc:'Desa Konoha dengan patung monumen Hokage senja', cost:0, top:'#f97316', bottom:'#fed7aa', hill:'#15803d' },
+    wano_sakura:{ name:'WANO SAKURA FUJI', desc:'Negeri Wano berlatar Gunung Fuji & kelopak sakura', cost:0, top:'#ec4899', bottom:'#fbcfe8', hill:'#be185d' },
+    namek_green:{ name:'PLANET NAMEK SKY', desc:'Langit hijau Namek dengan matahari kembar bersinar', cost:0, top:'#059669', bottom:'#a7f3d0', hill:'#047857' }
   };
 
   // 7. Musik (Nama Lengkap) - ALL FREE FOR TESTING
@@ -165,7 +200,12 @@
     arcade:{ name:'ARCADE CHIPTUNE', desc:'Chiptune 8-bit game retro', cost:0, color:'#7c8dff' },
     chill:{ name:'CHILL LO-FI JAZZ', desc:'Lo-Fi santai sunset jazz keys', cost:0, color:'#52b788' },
     epic:{ name:'HEROIC ADVENTURE', desc:'Orkestra petualangan megah & heroik', cost:0, color:'#ef4444' },
-    cyberbeat:{ name:'CYBERPUNK BEAT', desc:'Electro synthwave tempo cepat energetik', cost:0, color:'#06b6d4' }
+    cyberbeat:{ name:'CYBERPUNK BEAT', desc:'Electro synthwave tempo cepat energetik', cost:0, color:'#06b6d4' },
+    // Anime Special Soundtracks
+    gurenge:{ name:'ANIME: GURENGE (DEMON SLAYER)', desc:'Theme song pemburu iblis melodi J-Rock energetik', cost:0, color:'#ef4444' },
+    blue_bird:{ name:'ANIME: BLUE BIRD (NARUTO)', desc:'Lagu ikonik melodi seruling & gitar bersemangat', cost:0, color:'#38bdf8' },
+    we_are:{ name:'ANIME: WE ARE! (ONE PIECE)', desc:'Melodi petualangan bajak laut riang & megah', cost:0, color:'#facc15' },
+    sparkle:{ name:'ANIME: SPARKLE (YOUR NAME)', desc:'Melodi piano emosional & lonceng bintang jatuh', cost:0, color:'#a855f7' }
   };
 
   // 8. Starter Booster Perk (Skill Langsung Aktif Saat Mulai) - ALL FREE FOR TESTING
@@ -883,6 +923,78 @@
           if(step % 4 === 0) this.playTone(70, .12, 'triangle', .04, -30);
           step++;
         }, 135);
+      } else if(trackId === 'gurenge') {
+        // Gurenge (Demon Slayer): J-Rock Driving Drums & Melodic Lead
+        const melody = [
+          622, 698, 784, 932, 1047, 932, 784, 698, 622, 587, 523, 622, 784, 932, 1047, 1175,
+          1047, 932, 784, 622, 698, 784, 698, 622, 523, 622, 698, 784, 932, 1047, 1175, 1245
+        ];
+        const bass = [131, 131, 156, 156, 175, 175, 196, 196, 104, 104, 117, 117, 131, 131, 156, 196];
+        this.musicTimer = setInterval(() => {
+          if(state !== State.PLAYING && state !== State.READY) return;
+          const note = melody[step % melody.length], low = bass[step % bass.length];
+          if(note) {
+            this.playTone(note, .14, 'sawtooth', .024, 0);
+            this.playTone(note * 0.5, .12, 'square', .016, 0);
+          }
+          if(low) this.playTone(low, .22, 'triangle', .036, -20);
+          if(step % 2 === 1) this.playTone(1100, .035, 'square', .012);
+          if(step % 4 === 0) this.playTone(80, .08, 'sawtooth', .035, -40);
+          step++;
+        }, 130);
+      } else if(trackId === 'blue_bird') {
+        // Blue Bird (Naruto Shippuden): Soaring Melodic Lead & Upbeat Groove
+        const melody = [
+          880, 1047, 1175, 1319, 1397, 1319, 1175, 1047, 880, 1047, 1175, 880, 784, 698, 784, 880,
+          1175, 1047, 880, 784, 698, 659, 587, 659, 698, 784, 880, 1047, 1175, 1319, 1175, 1047
+        ];
+        const bass = [147, 147, 175, 175, 220, 220, 196, 196, 131, 131, 147, 147, 175, 175, 220, 196];
+        this.musicTimer = setInterval(() => {
+          if(state !== State.PLAYING && state !== State.READY) return;
+          const note = melody[step % melody.length], low = bass[step % bass.length];
+          if(note) this.playTone(note, .15, 'triangle', .032, 0);
+          if(low) this.playTone(low, .18, 'sine', .035, 0);
+          if(step % 4 === 2) this.playTone(1300, .03, 'triangle', .01);
+          step++;
+        }, 135);
+      } else if(trackId === 'we_are') {
+        // We Are! (One Piece): Adventurous Brass Fanfare & Cheerful March
+        const melody = [
+          784, 784, 880, 988, 1047, 1175, 988, 784, 659, 784, 880, 988, 880, 784, 659, 587,
+          784, 988, 1175, 1319, 1175, 988, 784, 880, 784, 880, 988, 1047, 1175, 1319, 1397, 1175
+        ];
+        const bass = [196, 294, 196, 294, 262, 330, 294, 220, 196, 294, 220, 294, 262, 330, 294, 196];
+        this.musicTimer = setInterval(() => {
+          if(state !== State.PLAYING && state !== State.READY) return;
+          const note = melody[step % melody.length], low = bass[step % bass.length];
+          if(note) {
+            this.playTone(note, .16, 'sawtooth', .025, 0);
+            this.playTone(note * 0.5, .16, 'triangle', .02, 0);
+          }
+          if(low && step % 2 === 0) this.playTone(low, .26, 'sine', .038);
+          if(step % 4 === 0) this.playTone(120, .08, 'triangle', .03, -60);
+          step++;
+        }, 145);
+      } else if(trackId === 'sparkle') {
+        // Sparkle (Your Name / RADWIMPS): Sparkling Acoustic Chords & Bell Melody
+        const chords = [
+          [622, 784, 932, 1175], [698, 831, 1047, 1245], [784, 932, 1175, 1397], [932, 1175, 1397, 1568]
+        ];
+        const melody = [1175, 1047, 932, 784, 698, 622, 698, 784, 932, 1047, 1175, 1397, 1175, 932];
+        const bass = [78, 87, 98, 117];
+        this.musicTimer = setInterval(() => {
+          if(state !== State.PLAYING && state !== State.READY) return;
+          const chord = chords[Math.floor(step / 2) % chords.length];
+          const note = melody[step % melody.length];
+          const low = bass[Math.floor(step / 2) % bass.length];
+          if(step % 2 === 0) {
+            chord.forEach(f => this.playTone(f, .45, 'sine', .016));
+            this.playTone(low * 2, .55, 'sine', .032);
+          }
+          if(note) this.playTone(note, .28, 'triangle', .022);
+          if(step % 3 === 0) this.playTone(note * 2, .18, 'sine', .012); // Starlight bell chime
+          step++;
+        }, 190);
       }
     },
 
@@ -1955,6 +2067,210 @@
         <circle cx="31" cy="23" r="3.8" fill="#450a0a"/>
         <circle cx="32.5" cy="21.5" r="1.5" fill="#fef08a"/>
         <polygon points="24,25 20,31 28,31" fill="#facc15"/>
+      </svg>`
+    },
+    // ANIME SPECIAL PROFILE AVATARS
+    {
+      id: 'luffy_mugiwara',
+      name: 'LUFFY PIRATE',
+      color: '#ef4444',
+      bg: 'linear-gradient(135deg, #fee2e2 0%, #ef4444 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <!-- Straw Hat Rim -->
+        <ellipse cx="24" cy="15" rx="21" ry="6.5" fill="#facc15" stroke="#ca8a04" stroke-width="1.2"/>
+        <!-- Straw Hat Top & Red Ribbon -->
+        <path d="M 13 15 C 13 4 35 4 35 15 Z" fill="#facc15"/>
+        <path d="M 13 15 C 14 11 34 11 35 15 Z" fill="#dc2626"/>
+        <!-- Head -->
+        <circle cx="24" cy="28" r="15.5" fill="#fed7aa"/>
+        <!-- Hair -->
+        <polygon points="9,22 14,26 15,20" fill="#0f172a"/>
+        <polygon points="39,22 34,26 33,20" fill="#0f172a"/>
+        <!-- Eyes -->
+        <circle cx="17" cy="26" r="3.5" fill="#0f172a"/>
+        <circle cx="18.5" cy="24.8" r="1.4" fill="#ffffff"/>
+        <circle cx="31" cy="26" r="3.5" fill="#0f172a"/>
+        <circle cx="32.5" cy="24.8" r="1.4" fill="#ffffff"/>
+        <!-- Scar under left eye -->
+        <path d="M 14 31 L 19 31 M 16.5 29.5 L 16.5 32.5" stroke="#991b1b" stroke-width="1.2" stroke-linecap="round"/>
+        <!-- Big Joyful Grin / Beak -->
+        <path d="M 18 32 Q 24 40 30 32 Z" fill="#ffffff" stroke="#991b1b" stroke-width="1.2"/>
+        <!-- Cheeks -->
+        <ellipse cx="11" cy="30" rx="3" ry="1.8" fill="#fca5a5" opacity="0.8"/>
+        <ellipse cx="37" cy="30" rx="3" ry="1.8" fill="#fca5a5" opacity="0.8"/>
+      </svg>`
+    },
+    {
+      id: 'naruto_sage',
+      name: 'NARUTO SAGE',
+      color: '#ea580c',
+      bg: 'linear-gradient(135deg, #ffedd5 0%, #ea580c 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <!-- Spiky Blonde Hair -->
+        <polygon points="6,18 10,8 16,14 24,4 32,14 38,8 42,18" fill="#facc15"/>
+        <circle cx="24" cy="27" r="16" fill="#fed7aa"/>
+        <!-- Shinobi Headband -->
+        <rect x="8" y="14" width="32" height="7" rx="2" fill="#1e3a8a"/>
+        <rect x="15" y="15" width="18" height="5" rx="1.5" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.8"/>
+        <circle cx="24" cy="17.5" r="1.2" fill="#1e293b"/>
+        <!-- Sage Mode Orange Eye Patches -->
+        <ellipse cx="17" cy="26" rx="5.5" ry="3.5" fill="#ea580c"/>
+        <ellipse cx="31" cy="26" rx="5.5" ry="3.5" fill="#ea580c"/>
+        <!-- Sage Eyes (Toad Horizontal Slits) -->
+        <circle cx="17" cy="26" r="3.2" fill="#fef08a"/>
+        <rect x="15" y="25.4" width="4" height="1.2" rx="0.6" fill="#78350f"/>
+        <circle cx="31" cy="26" r="3.2" fill="#fef08a"/>
+        <rect x="29" y="25.4" width="4" height="1.2" rx="0.6" fill="#78350f"/>
+        <!-- Whiskers -->
+        <line x1="8" y1="28" x2="13" y2="29" stroke="#9a3412" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="8" y1="31" x2="13" y2="31" stroke="#9a3412" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="40" y1="28" x2="35" y2="29" stroke="#9a3412" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="40" y1="31" x2="35" y2="31" stroke="#9a3412" stroke-width="1.2" stroke-linecap="round"/>
+        <polygon points="24,28 21.5,32 26.5,32" fill="#ea580c"/>
+      </svg>`
+    },
+    {
+      id: 'tanjiro_slayer',
+      name: 'TANJIRO SLAYER',
+      color: '#15803d',
+      bg: 'linear-gradient(135deg, #dcfce7 0%, #15803d 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <!-- Burgundy Spiky Hair -->
+        <polygon points="8,18 12,6 18,12 24,5 30,12 36,6 40,18" fill="#881337"/>
+        <circle cx="24" cy="27" r="16" fill="#fed7aa"/>
+        <!-- Demon Slayer Forehead Flame Scar -->
+        <path d="M 12 16 Q 16 14 18 18 Q 16 22 13 20 Z" fill="#991b1b"/>
+        <!-- Hanafuda Earrings -->
+        <rect x="8" y="26" width="3.5" height="7" rx="0.5" fill="#ffffff" stroke="#991b1b" stroke-width="0.8"/>
+        <circle cx="9.75" cy="28.5" r="1" fill="#dc2626"/>
+        <rect x="36.5" y="26" width="3.5" height="7" rx="0.5" fill="#ffffff" stroke="#991b1b" stroke-width="0.8"/>
+        <circle cx="38.25" cy="28.5" r="1" fill="#dc2626"/>
+        <!-- Big Burgundy Anime Eyes -->
+        <circle cx="17" cy="26" r="3.8" fill="#881337"/>
+        <circle cx="18.5" cy="24.5" r="1.5" fill="#ffffff"/>
+        <circle cx="31" cy="26" r="3.8" fill="#881337"/>
+        <circle cx="32.5" cy="24.5" r="1.5" fill="#ffffff"/>
+        <!-- Beak -->
+        <polygon points="24,27 21,32 27,32" fill="#f97316"/>
+      </svg>`
+    },
+    {
+      id: 'nezuko_chan',
+      name: 'NEZUKO CHAN',
+      color: '#f472b6',
+      bg: 'linear-gradient(135deg, #fce7f3 0%, #f472b6 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <!-- Black Hair with Orange tips -->
+        <circle cx="24" cy="27" r="17" fill="#0f172a"/>
+        <polygon points="6,34 10,44 14,36" fill="#ea580c"/>
+        <polygon points="34,36 38,44 42,34" fill="#ea580c"/>
+        <!-- Face -->
+        <circle cx="24" cy="27" r="14.5" fill="#fff1f2"/>
+        <!-- Pink Ribbon Hairpin -->
+        <polygon points="12,12 16,16 12,20" fill="#f43f5e"/>
+        <polygon points="20,12 16,16 20,20" fill="#f43f5e"/>
+        <circle cx="16" cy="16" r="1.8" fill="#ffffff"/>
+        <!-- Sparkling Pink Eyes -->
+        <circle cx="17" cy="25" r="3.8" fill="#f43f5e"/>
+        <circle cx="18.5" cy="23.5" r="1.5" fill="#ffffff"/>
+        <circle cx="31" cy="25" r="3.8" fill="#f43f5e"/>
+        <circle cx="32.5" cy="23.5" r="1.5" fill="#ffffff"/>
+        <!-- Green Bamboo Muzzle & Red Ribbon -->
+        <line x1="13" y1="33" x2="35" y2="33" stroke="#e11d48" stroke-width="1.5"/>
+        <rect x="17" y="30" width="14" height="6.5" rx="3.2" fill="#22c55e" stroke="#15803d" stroke-width="1"/>
+        <line x1="21.5" y1="30" x2="21.5" y2="36.5" stroke="#15803d" stroke-width="1"/>
+        <line x1="26.5" y1="30" x2="26.5" y2="36.5" stroke="#15803d" stroke-width="1"/>
+      </svg>`
+    },
+    {
+      id: 'gojo_satoru',
+      name: 'GOJO SATORU',
+      color: '#38bdf8',
+      bg: 'linear-gradient(135deg, #e0f2fe 0%, #0284c7 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <!-- Upright Snow-White Hair -->
+        <polygon points="8,18 10,6 16,12 24,3 32,12 38,6 40,18" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+        <circle cx="24" cy="28" r="16" fill="#f8fafc"/>
+        <!-- Glowing Six Eyes (Celestial Infinite Blue) -->
+        <circle cx="17" cy="26" r="4.5" fill="#38bdf8"/>
+        <circle cx="17" cy="26" r="2.8" fill="#0284c7"/>
+        <circle cx="18.5" cy="24.5" r="1.5" fill="#ffffff"/>
+        <circle cx="15.5" cy="27.5" r="0.8" fill="#ffffff"/>
+        <circle cx="31" cy="26" r="4.5" fill="#38bdf8"/>
+        <circle cx="31" cy="26" r="2.8" fill="#0284c7"/>
+        <circle cx="32.5" cy="24.5" r="1.5" fill="#ffffff"/>
+        <circle cx="29.5" cy="27.5" r="0.8" fill="#ffffff"/>
+        <!-- Confident Smile / Beak -->
+        <polygon points="24,28 21.5,32 26.5,32" fill="#38bdf8"/>
+      </svg>`
+    },
+    {
+      id: 'goku_saiyan',
+      name: 'GOKU SAIYAN',
+      color: '#facc15',
+      bg: 'linear-gradient(135deg, #fef08a 0%, #ca8a04 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <!-- Huge Super Saiyan Golden Spikes -->
+        <polygon points="4,22 8,6 16,14 24,1 32,14 40,6 44,22" fill="#facc15" stroke="#eab308" stroke-width="1.5"/>
+        <polygon points="12,12 18,3 24,10 30,3 36,12" fill="#fef08a"/>
+        <circle cx="24" cy="28" r="16" fill="#fed7aa"/>
+        <!-- Determined Teal/Cyan Eyes -->
+        <polygon points="13,22 21,24 19,28 14,27" fill="#06b6d4"/>
+        <circle cx="17" cy="25.5" r="1.5" fill="#0f172a"/>
+        <circle cx="18" cy="24.5" r="0.7" fill="#ffffff"/>
+        <polygon points="35,22 27,24 29,28 34,27" fill="#06b6d4"/>
+        <circle cx="31" cy="25.5" r="1.5" fill="#0f172a"/>
+        <circle cx="32" cy="24.5" r="0.7" fill="#ffffff"/>
+        <!-- Serious Beak -->
+        <polygon points="24,28 21,33 27,33" fill="#ea580c"/>
+      </svg>`
+    },
+    {
+      id: 'levi_scout',
+      name: 'LEVI ACKERMAN',
+      color: '#334155',
+      bg: 'linear-gradient(135deg, #cbd5e1 0%, #334155 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <!-- Undercut Black Hair -->
+        <path d="M 8 20 C 8 8 40 8 40 20 L 40 25 L 34 22 L 28 26 L 24 21 L 20 26 L 14 22 L 8 25 Z" fill="#0f172a"/>
+        <circle cx="24" cy="28" r="15" fill="#f1f5f9"/>
+        <!-- Razor-sharp Stoic Anime Eyes -->
+        <path d="M 12 24 L 21 24 L 19 28 L 13 27 Z" fill="#334155"/>
+        <circle cx="17" cy="25.5" r="1.2" fill="#0f172a"/>
+        <path d="M 36 24 L 27 24 L 29 28 L 35 27 Z" fill="#334155"/>
+        <circle cx="31" cy="25.5" r="1.2" fill="#0f172a"/>
+        <!-- White Ascot Cravat -->
+        <polygon points="24,34 20,44 28,44" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8"/>
+        <!-- Beak -->
+        <polygon points="24,28 22,32 26,32" fill="#64748b"/>
+      </svg>`
+    },
+    {
+      id: 'anya_forger',
+      name: 'ANYA FORGER',
+      color: '#f472b6',
+      bg: 'linear-gradient(135deg, #fce7f3 0%, #fb7185 100%)',
+      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <!-- Bubblegum Pink Hair -->
+        <circle cx="24" cy="26" r="17" fill="#f472b6"/>
+        <polygon points="12,14 8,6 16,12" fill="#1e293b"/>
+        <polygon points="11,13 8,8 14,12" fill="#facc15"/>
+        <polygon points="36,14 40,6 32,12" fill="#1e293b"/>
+        <polygon points="37,13 40,8 34,12" fill="#facc15"/>
+        <!-- Face -->
+        <circle cx="24" cy="28" r="14" fill="#fff1f2"/>
+        <!-- Big Emerald Sparkle Eyes -->
+        <circle cx="17" cy="26" r="4.2" fill="#059669"/>
+        <circle cx="17" cy="26" r="2.8" fill="#10b981"/>
+        <circle cx="18.5" cy="24.5" r="1.5" fill="#ffffff"/>
+        <circle cx="31" cy="26" r="4.2" fill="#059669"/>
+        <circle cx="31" cy="26" r="2.8" fill="#10b981"/>
+        <circle cx="32.5" cy="24.5" r="1.5" fill="#ffffff"/>
+        <!-- Waku Waku Blush -->
+        <ellipse cx="11" cy="30" rx="3.5" ry="2" fill="#fb7185" opacity="0.8"/>
+        <ellipse cx="37" cy="30" rx="3.5" ry="2" fill="#fb7185" opacity="0.8"/>
+        <!-- Smug Cute Mouth / Beak -->
+        <path d="M 21 31 Q 24 35 27 31" fill="none" stroke="#e11d48" stroke-width="1.4" stroke-linecap="round"/>
       </svg>`
     }
   ];
@@ -3666,6 +3982,76 @@
         life, maxLife: life, color: colors[Math.floor(Math.random() * colors.length)],
         size: 2.5 + Math.random() * 2.5,
         type: 'dot'
+      });
+    } else if(auraId === 'super_saiyan') {
+      // Golden Ki Aura & Electric Sparks
+      const life = .38 + Math.random() * .22;
+      particles.push({
+        x: bx + (Math.random() - .5) * 6, y: by + (Math.random() - .5) * 6,
+        vx: -80 - Math.random() * 40, vy: -30 - Math.random() * 50,
+        life, maxLife: life, color: Math.random() < 0.6 ? '#facc15' : '#fef08a',
+        size: 5 + Math.random() * 6, rot: (Math.random() - .5) * .8,
+        type: 'flame'
+      });
+      if(Math.random() < 0.45) {
+        particles.push({
+          x: bx, y: by + (Math.random() - .5) * 6,
+          vx: -110 - Math.random() * 50, vy: (Math.random() - .5) * 60,
+          life: .22 + Math.random() * .12, maxLife: .34, color: '#38bdf8',
+          size: 3, pts: [{ dx: 0, dy: 0 }, { dx: -8, dy: 4 }, { dx: -16, dy: -4 }],
+          type: 'lightning'
+        });
+      }
+    } else if(auraId === 'domain_expansion') {
+      // Infinite Void Cosmic Purple Stardust
+      const colors = ['#8b5cf6', '#c084fc', '#38bdf8', '#ffffff', '#1e1b4b'];
+      const life = .52 + Math.random() * .25;
+      particles.push({
+        x: bx, y: by + (Math.random() - .5) * 10,
+        vx: -70 - Math.random() * 35, vy: (Math.random() - .5) * 30,
+        life, maxLife: life, color: colors[Math.floor(Math.random() * colors.length)],
+        size: 4 + Math.random() * 4, rot: Math.random() * 6, vRot: 3,
+        type: Math.random() < 0.5 ? 'planet' : 'star'
+      });
+    } else if(auraId === 'nine_tails_chakra') {
+      // Kurama Fiery Crimson Chakra Flare
+      const colors = ['#ea580c', '#dc2626', '#b91c1c', '#f97316', '#facc15'];
+      const life = .45 + Math.random() * .25;
+      particles.push({
+        x: bx + (Math.random() - .5) * 6, y: by + (Math.random() - .5) * 6,
+        vx: -85 - Math.random() * 45, vy: -35 - Math.random() * 45,
+        life, maxLife: life, color: colors[Math.floor(Math.random() * colors.length)],
+        size: 6 + Math.random() * 6, rot: (Math.random() - .5) * .8,
+        type: 'flame'
+      });
+    } else if(auraId === 'gear_fifth') {
+      // Sun God Nika Pure White Vapor Puffs & Gold Sparkles
+      const life = .55 + Math.random() * .25;
+      particles.push({
+        x: bx, y: by + (Math.random() - .5) * 8,
+        vx: -60 - Math.random() * 35, vy: -15 + (Math.random() - .5) * 30,
+        life, maxLife: life, color: '#ffffff',
+        size: 5 + Math.random() * 5,
+        type: 'bubble'
+      });
+      if(Math.random() < 0.4) {
+        particles.push({
+          x: bx, y: by,
+          vx: -75 - Math.random() * 40, vy: (Math.random() - .5) * 40,
+          life: .35, maxLife: .35, color: '#fef08a',
+          size: 3 + Math.random() * 2, type: 'sparkle'
+        });
+      }
+    } else if(auraId === 'black_getsuga') {
+      // Bankai Getsuga Pitch Black & Crimson Energy
+      const colors = ['#0f172a', '#1e293b', '#dc2626', '#ef4444', '#991b1b'];
+      const life = .35 + Math.random() * .18;
+      particles.push({
+        x: bx, y: by + (Math.random() - .5) * 8,
+        vx: -110 - Math.random() * 60, vy: (Math.random() - .5) * 50,
+        life, maxLife: life, color: colors[Math.floor(Math.random() * colors.length)],
+        size: 4 + Math.random() * 5, rot: (Math.random() - .5) * 1.2,
+        type: 'flame'
       });
     }
   }
@@ -6132,11 +6518,89 @@
       targetCtx.fill();
       targetCtx.fillStyle = '#ffffff';
       targetCtx.beginPath();
-      targetCtx.moveTo(-16, 5); targetCtx.quadraticCurveTo(0, 18, 14, 8); targetCtx.lineTo(12, 14); targetCtx.quadraticCurveTo(0, 21, -16, 10);
-      targetCtx.closePath();
-      targetCtx.fill();
       targetCtx.fillStyle = '#000000';
       [-10, -2, 6].forEach(fx => { targetCtx.fillRect(fx, 13, 2, 2.5); });
+    } else if(outfitId === 'akatsuki_cloak') {
+      // Akatsuki Black Body Cloak
+      targetCtx.fillStyle = '#0f172a';
+      targetCtx.beginPath();
+      targetCtx.ellipse(-1, 2, 18, 14, 0, 0, Math.PI * 2);
+      targetCtx.fill();
+      // Red Cloud Pattern on Body
+      targetCtx.fillStyle = '#dc2626';
+      targetCtx.beginPath();
+      targetCtx.arc(2, 6, 3.5, 0, Math.PI * 2);
+      targetCtx.arc(5.5, 5, 2.5, 0, Math.PI * 2);
+      targetCtx.arc(-1.5, 5, 2.5, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.strokeStyle = '#ffffff';
+      targetCtx.lineWidth = 0.8;
+      targetCtx.stroke();
+    } else if(outfitId === 'tanjiro_haori') {
+      // Tanjiro Green-Black Checkered Haori Body
+      targetCtx.fillStyle = '#15803d';
+      targetCtx.beginPath();
+      targetCtx.ellipse(-1, 2, 18, 14, 0, 0, Math.PI * 2);
+      targetCtx.fill();
+      // Checkered Pattern
+      targetCtx.fillStyle = '#0f172a';
+      targetCtx.fillRect(-8, -4, 6, 6);
+      targetCtx.fillRect(4, -4, 6, 6);
+      targetCtx.fillRect(-2, 2, 6, 6);
+      targetCtx.fillRect(-8, 8, 6, 6);
+      targetCtx.fillRect(4, 8, 6, 6);
+    } else if(outfitId === 'scout_cape') {
+      // Survey Corps Deep Green Cloak Body
+      targetCtx.fillStyle = '#166534';
+      targetCtx.beginPath();
+      targetCtx.ellipse(-1, 2, 18, 14, 0, 0, Math.PI * 2);
+      targetCtx.fill();
+    } else if(outfitId === 'goku_gi') {
+      // Turtle School Orange Gi Body
+      targetCtx.fillStyle = '#ea580c';
+      targetCtx.beginPath();
+      targetCtx.ellipse(-1, 2, 18, 14, 0, 0, Math.PI * 2);
+      targetCtx.fill();
+      // Blue Undershirt V-Neck & Blue Belt
+      targetCtx.fillStyle = '#1d4ed8';
+      targetCtx.beginPath();
+      targetCtx.moveTo(2, 0); targetCtx.lineTo(10, 2); targetCtx.lineTo(5, 12);
+      targetCtx.closePath();
+      targetCtx.fill();
+      targetCtx.fillRect(-12, 6, 22, 3);
+      // Kame Kanji Badge
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.beginPath();
+      targetCtx.arc(-2, 1, 3.8, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.strokeStyle = '#0f172a';
+      targetCtx.lineWidth = 0.8;
+      targetCtx.stroke();
+    } else if(outfitId === 'luffy_vest') {
+      // Luffy Red Open Vest Body
+      targetCtx.fillStyle = '#fed7aa'; // Exposed Chest
+      targetCtx.beginPath();
+      targetCtx.ellipse(-1, 2, 17, 13, 0, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.fillStyle = '#ef4444'; // Red Vest Flaps
+      targetCtx.beginPath();
+      targetCtx.ellipse(-6, 2, 10, 13, 0, 0, Math.PI * 2);
+      targetCtx.ellipse(8, 2, 6, 13, 0, 0, Math.PI * 2);
+      targetCtx.fill();
+      // Yellow Sash
+      targetCtx.fillStyle = '#facc15';
+      targetCtx.fillRect(-10, 6, 20, 3.5);
+    } else if(outfitId === 'jujutsu_coat') {
+      // Jujutsu Sorcerer Coat Body
+      targetCtx.fillStyle = '#0f172a';
+      targetCtx.beginPath();
+      targetCtx.ellipse(-1, 2, 18, 14, 0, 0, Math.PI * 2);
+      targetCtx.fill();
+      // Single Golden Jujutsu Button
+      targetCtx.fillStyle = '#fbbf24';
+      targetCtx.beginPath();
+      targetCtx.arc(4, 5, 2.2, 0, Math.PI * 2);
+      targetCtx.fill();
     }
 
     targetCtx.restore();
@@ -6212,19 +6676,18 @@
       targetCtx.closePath();
       targetCtx.fill();
 
-      // 4. Animated Gold & Navy Diagonal Pinstripes
-      targetCtx.strokeStyle = '#fde047';
-      targetCtx.lineWidth = 1.2;
-      targetCtx.beginPath();
-      targetCtx.moveTo(5.5 + tieSway * 0.25, 7.5); targetCtx.lineTo(9 + tieSway * 0.25, 9.5);
-      targetCtx.moveTo(5 + tieSway * 0.65, 12); targetCtx.lineTo(9.5 + tieSway * 0.65, 14);
-      targetCtx.stroke();
-
-      // 5. Polished Gold Tie Clip
-      targetCtx.fillStyle = '#fbbf24';
-      rrTo(targetCtx, 4.8 + tieSway * 0.35, 9.5, 5.8, 1.8, 0.6);
-      targetCtx.fillStyle = '#d97706';
-      targetCtx.fillRect(5.3 + tieSway * 0.35, 10, 1, 0.8);
+      // 4. White Polkadot Pattern
+      targetCtx.fillStyle = '#ffffff';
+      [
+        { x: 7 + tieSway * 0.3, y: 7.5 },
+        { x: 5.5 + tieSway * 0.5, y: 11 },
+        { x: 8.5 + tieSway * 0.5, y: 11 },
+        { x: 7 + tieSway * 0.8, y: 14.5 }
+      ].forEach(dot => {
+        targetCtx.beginPath();
+        targetCtx.arc(dot.x, dot.y, 0.9, 0, Math.PI * 2);
+        targetCtx.fill();
+      });
     } else if(outfitId === 'bluetie') {
       // 1. Pilot White Shirt Collar (lowered)
       targetCtx.fillStyle = '#ffffff';
@@ -7030,6 +7493,137 @@
       // Pink Headband
       targetCtx.fillStyle = '#f472b6';
       rrTo(targetCtx, 0, -16, 14, 3, 1.5);
+    } else if(hatId === 'straw_hat') {
+      // Mugiwara Straw Hat (Luffy)
+      targetCtx.fillStyle = '#facc15';
+      targetCtx.beginPath();
+      targetCtx.ellipse(7, -15, 17, 4.5, -0.05, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.strokeStyle = '#ca8a04';
+      targetCtx.lineWidth = 1;
+      targetCtx.stroke();
+      // Hat Dome
+      targetCtx.beginPath();
+      targetCtx.moveTo(0, -15);
+      targetCtx.quadraticCurveTo(7, -27, 14, -15);
+      targetCtx.fill();
+      // Red Ribbon Band
+      targetCtx.fillStyle = '#dc2626';
+      targetCtx.fillRect(1, -17.5, 12, 3);
+    } else if(hatId === 'shinobi_plate') {
+      // Hidden Leaf Shinobi Headband
+      targetCtx.fillStyle = '#1e3a8a';
+      rrTo(targetCtx, -2, -16, 18, 5.5, 1.5);
+      // Steel Plate
+      targetCtx.fillStyle = '#cbd5e1';
+      rrTo(targetCtx, 2, -15.5, 10, 4.2, 1);
+      targetCtx.strokeStyle = '#64748b';
+      targetCtx.lineWidth = 0.8;
+      targetCtx.strokeRect(2, -15.5, 10, 4.2);
+      // Leaf Etch
+      targetCtx.fillStyle = '#1e293b';
+      targetCtx.beginPath();
+      targetCtx.arc(7, -13.5, 1.2, 0, Math.PI * 2);
+      targetCtx.fill();
+    } else if(hatId === 'tanjiro_earrings') {
+      // Hanafuda Sun Earrings & Demon Slayer Mark
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.fillRect(14, -6, 3.5, 8);
+      targetCtx.strokeStyle = '#991b1b';
+      targetCtx.lineWidth = 0.7;
+      targetCtx.strokeRect(14, -6, 3.5, 8);
+      targetCtx.fillStyle = '#dc2626';
+      targetCtx.beginPath();
+      targetCtx.arc(15.75, -3.5, 1.2, 0, Math.PI * 2);
+      targetCtx.fill();
+      // Forehead Scar
+      targetCtx.fillStyle = '#991b1b';
+      targetCtx.beginPath();
+      targetCtx.moveTo(2, -14);
+      targetCtx.quadraticCurveTo(5, -17, 7, -13);
+      targetCtx.quadraticCurveTo(5, -10, 2, -14);
+      targetCtx.fill();
+    } else if(hatId === 'gojo_blindfold') {
+      // Gojo Upright Silver Hair
+      targetCtx.fillStyle = '#f8fafc';
+      targetCtx.beginPath();
+      targetCtx.moveTo(-2, -13);
+      targetCtx.lineTo(2, -26);
+      targetCtx.lineTo(6, -18);
+      targetCtx.lineTo(10, -29);
+      targetCtx.lineTo(14, -18);
+      targetCtx.lineTo(18, -25);
+      targetCtx.lineTo(18, -13);
+      targetCtx.closePath();
+      targetCtx.fill();
+      targetCtx.strokeStyle = '#cbd5e1';
+      targetCtx.lineWidth = 1;
+      targetCtx.stroke();
+      // Black Blindfold
+      targetCtx.fillStyle = '#0f172a';
+      rrTo(targetCtx, 0, -15, 17, 6, 1.5);
+    } else if(hatId === 'saiyan_hair') {
+      // Super Saiyan Spiky Golden Hair
+      targetCtx.fillStyle = '#facc15';
+      targetCtx.beginPath();
+      targetCtx.moveTo(-3, -12);
+      targetCtx.lineTo(-1, -28);
+      targetCtx.lineTo(4, -18);
+      targetCtx.lineTo(9, -34);
+      targetCtx.lineTo(14, -20);
+      targetCtx.lineTo(21, -30);
+      targetCtx.lineTo(18, -12);
+      targetCtx.closePath();
+      targetCtx.fill();
+      targetCtx.strokeStyle = '#eab308';
+      targetCtx.lineWidth = 1.2;
+      targetCtx.stroke();
+      // Inner Golden Highlight
+      targetCtx.fillStyle = '#fef08a';
+      targetCtx.beginPath();
+      targetCtx.moveTo(2, -14);
+      targetCtx.lineTo(4, -24);
+      targetCtx.lineTo(9, -30);
+      targetCtx.lineTo(13, -16);
+      targetCtx.fill();
+    } else if(hatId === 'hokage_hat') {
+      // Hokage Triangular Hat
+      targetCtx.fillStyle = '#dc2626';
+      targetCtx.beginPath();
+      targetCtx.moveTo(-3, -15);
+      targetCtx.lineTo(8, -32);
+      targetCtx.lineTo(19, -15);
+      targetCtx.closePath();
+      targetCtx.fill();
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.beginPath();
+      targetCtx.moveTo(0, -15);
+      targetCtx.lineTo(8, -30);
+      targetCtx.lineTo(16, -15);
+      targetCtx.closePath();
+      targetCtx.fill();
+      // Green Kanji Circle
+      targetCtx.fillStyle = '#16a34a';
+      targetCtx.beginPath();
+      targetCtx.arc(8, -20, 3, 0, Math.PI * 2);
+      targetCtx.fill();
+    } else if(hatId === 'chopper_hat') {
+      // Chopper Antler Hat
+      targetCtx.fillStyle = '#78350f';
+      // Left and Right Antlers
+      targetCtx.fillRect(-2, -26, 3, 10);
+      targetCtx.fillRect(-5, -24, 6, 2.5);
+      targetCtx.fillRect(15, -26, 3, 10);
+      targetCtx.fillRect(15, -24, 6, 2.5);
+      // Pink Doctor Hat Dome
+      targetCtx.fillStyle = '#f472b6';
+      targetCtx.beginPath();
+      targetCtx.ellipse(8, -19, 11, 8, 0, 0, Math.PI * 2);
+      targetCtx.fill();
+      // White Medical Cross
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.fillRect(6.5, -22, 3, 7);
+      targetCtx.fillRect(4.5, -20, 7, 3);
     }
     targetCtx.restore();
   }
