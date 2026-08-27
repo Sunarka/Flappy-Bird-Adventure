@@ -1086,6 +1086,59 @@
           if(step % 4 === 0) this.playTone(70, .12, 'triangle', .05, -30);
           step++;
         }, 135);
+      } else if(trackId === 'gurenge') {
+        const melody = [622, 698, 784, 932, 1047, 932, 784, 698, 622, 587, 523, 622, 784, 932, 1047, 1175];
+        const bass = [131, 131, 156, 156, 175, 175, 196, 196];
+        this.previewTimer = setInterval(() => {
+          const note = melody[step % melody.length], low = bass[step % bass.length];
+          if(note) {
+            this.playTone(note, .14, 'sawtooth', .032, 0);
+            this.playTone(note * 0.5, .12, 'square', .022, 0);
+          }
+          if(low) this.playTone(low, .22, 'triangle', .042, -20);
+          if(step % 2 === 1) this.playTone(1100, .035, 'square', .016);
+          step++;
+        }, 130);
+      } else if(trackId === 'blue_bird') {
+        const melody = [880, 1047, 1175, 1319, 1397, 1319, 1175, 1047, 880, 1047, 1175, 880, 784, 698, 784, 880];
+        const bass = [147, 147, 175, 175, 220, 220, 196, 196];
+        this.previewTimer = setInterval(() => {
+          const note = melody[step % melody.length], low = bass[step % bass.length];
+          if(note) this.playTone(note, .15, 'triangle', .038, 0);
+          if(low) this.playTone(low, .18, 'sine', .042, 0);
+          if(step % 4 === 2) this.playTone(1300, .03, 'triangle', .014);
+          step++;
+        }, 135);
+      } else if(trackId === 'we_are') {
+        const melody = [784, 784, 880, 988, 1047, 1175, 988, 784, 659, 784, 880, 988, 880, 784, 659, 587];
+        const bass = [196, 294, 196, 294, 262, 330, 294, 220];
+        this.previewTimer = setInterval(() => {
+          const note = melody[step % melody.length], low = bass[step % bass.length];
+          if(note) {
+            this.playTone(note, .16, 'sawtooth', .032, 0);
+            this.playTone(note * 0.5, .16, 'triangle', .025, 0);
+          }
+          if(low && step % 2 === 0) this.playTone(low, .26, 'sine', .045);
+          step++;
+        }, 145);
+      } else if(trackId === 'sparkle') {
+        const chords = [
+          [622, 784, 932, 1175], [698, 831, 1047, 1245], [784, 932, 1175, 1397], [932, 1175, 1397, 1568]
+        ];
+        const melody = [1175, 1047, 932, 784, 698, 622, 698, 784, 932, 1047, 1175, 1397];
+        const bass = [78, 87, 98, 117];
+        this.previewTimer = setInterval(() => {
+          const chord = chords[Math.floor(step / 2) % chords.length];
+          const note = melody[step % melody.length];
+          const low = bass[Math.floor(step / 2) % bass.length];
+          if(step % 2 === 0) {
+            chord.forEach(f => this.playTone(f, .45, 'sine', .022));
+            this.playTone(low * 2, .55, 'sine', .04);
+          }
+          if(note) this.playTone(note, .28, 'triangle', .028);
+          if(step % 3 === 0) this.playTone(note * 2, .18, 'sine', .016);
+          step++;
+        }, 190);
       }
     },
     stopPreview() {
@@ -1493,6 +1546,21 @@
       if(id === 'matrix') {
         return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="4" y="4" width="24" height="24" rx="4" fill="#052e16"/><text x="8" y="13" fill="#22c55e" font-family="monospace" font-size="7" font-weight="900">10</text><text x="18" y="13" fill="#4ade80" font-family="monospace" font-size="7" font-weight="900">01</text><text x="8" y="23" fill="#86efac" font-family="monospace" font-size="7" font-weight="900">11</text><text x="18" y="23" fill="#22c55e" font-family="monospace" font-size="7" font-weight="900">00</text></svg>`;
       }
+      if(id === 'super_saiyan') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><path d="M16 2 L20 12 L28 10 L22 18 L27 28 L16 23 L5 28 L10 18 L4 10 L12 12 Z" fill="#facc15" stroke="#eab308" stroke-width="1.2"/><polygon points="16,6 18,14 24,14 19,18 21,24 16,20 11,24 13,18 8,14 14,14" fill="#fef08a"/><path d="M14 8 L10 16 L15 16 L11 26 L22 14 L16 14 Z" fill="#38bdf8"/></svg>`;
+      }
+      if(id === 'domain_expansion') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="12" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.8"/><ellipse cx="16" cy="16" rx="14" ry="5" fill="none" stroke="#38bdf8" stroke-width="1.8" transform="rotate(-30 16 16)"/><circle cx="16" cy="16" r="5" fill="#7c3aed"/><circle cx="16" cy="16" r="2.5" fill="#00f5d4"/><circle cx="10" cy="10" r="1.2" fill="#fff"/><circle cx="23" cy="21" r="1" fill="#fff"/></svg>`;
+      }
+      if(id === 'nine_tails_chakra') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><path d="M16 3 Q24 8 20 18 Q27 12 25 24 Q20 30 16 25 Q12 30 7 24 Q5 12 12 18 Q8 8 16 3 Z" fill="#dc2626"/><path d="M16 9 Q21 14 18 20 Q22 17 20 24 Q16 27 14 23 Q11 26 9 22 Q11 15 14 19 Q12 12 16 9 Z" fill="#ea580c"/><circle cx="16" cy="18" r="3.5" fill="#fde047"/></svg>`;
+      }
+      if(id === 'gear_fifth') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="12" fill="#fef08a" stroke="#facc15" stroke-width="1.4"/><path d="M10 18 Q6 14 10 10 Q16 6 22 10 Q26 14 22 18 Q16 22 10 18 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/><path d="M11 16 Q16 21 21 16" fill="none" stroke="#0f172a" stroke-width="1.5" stroke-linecap="round"/><circle cx="13" cy="13" r="1.4" fill="#0f172a"/><circle cx="19" cy="13" r="1.4" fill="#0f172a"/></svg>`;
+      }
+      if(id === 'black_getsuga') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="12" fill="#450a0a"/><path d="M5 26 Q12 8 27 6 Q16 16 10 27 Z" fill="#0f172a" stroke="#ef4444" stroke-width="2"/><path d="M7 23 Q13 11 24 9 Q16 17 11 25 Z" fill="#dc2626"/></svg>`;
+      }
     }
 
     if(cat === 'hat') {
@@ -1553,6 +1621,27 @@
       if(id === 'bunny') {
         return `<svg viewBox="0 0 32 32" class="shop-item-svg"><ellipse cx="11" cy="12" rx="4" ry="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2"/><ellipse cx="11" cy="12" rx="2" ry="7" fill="#fbcfe8"/><ellipse cx="21" cy="12" rx="4" ry="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2"/><ellipse cx="21" cy="12" rx="2" ry="7" fill="#fbcfe8"/><rect x="8" y="21" width="16" height="3" rx="1.5" fill="#f472b6"/></svg>`;
       }
+      if(id === 'straw_hat') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><ellipse cx="16" cy="22" rx="14" ry="4.5" fill="#facc15" stroke="#ca8a04" stroke-width="1.2"/><path d="M9 21 Q10 10 16 10 Q22 10 23 21 Z" fill="#eab308"/><rect x="9.5" y="18" width="13" height="3" fill="#dc2626"/><ellipse cx="16" cy="10.5" rx="5" ry="1.5" fill="#fde047"/></svg>`;
+      }
+      if(id === 'shinobi_plate') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="3" y="12" width="26" height="8" rx="2" fill="#1e3a8a"/><rect x="8" y="13" width="16" height="6" rx="1.5" fill="#cbd5e1" stroke="#64748b" stroke-width="0.8"/><circle cx="16" cy="16" r="1.5" fill="#0f172a"/><circle cx="10" cy="16" r="0.6" fill="#475569"/><circle cx="22" cy="16" r="0.6" fill="#475569"/></svg>`;
+      }
+      if(id === 'tanjiro_earrings') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="10" y="6" width="12" height="20" rx="1" fill="#ffffff" stroke="#991b1b" stroke-width="1.2"/><circle cx="16" cy="12" r="3.5" fill="#dc2626"/><path d="M12 21 L16 17 L20 21" stroke="#0f172a" stroke-width="1.2" fill="none"/><line x1="16" y1="2" x2="16" y2="6" stroke="#94a3b8" stroke-width="1.4"/></svg>`;
+      }
+      if(id === 'gojo_blindfold') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><path d="M6 22 L8 8 L12 14 L16 4 L20 14 L24 8 L26 22 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/><rect x="4" y="16" width="24" height="7" rx="2" fill="#0f172a"/><circle cx="16" cy="19.5" r="2" fill="#38bdf8"/></svg>`;
+      }
+      if(id === 'saiyan_hair') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><path d="M4 24 L5 8 L10 16 L16 2 L22 16 L27 8 L28 24 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.4"/><path d="M8 22 L10 12 L13 18 L16 6 L19 18 L22 12 L24 22 Z" fill="#fef08a"/></svg>`;
+      }
+      if(id === 'hokage_hat') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><polygon points="16,4 4,24 28,24" fill="#dc2626"/><polygon points="16,6 7,24 25,24" fill="#ffffff"/><circle cx="16" cy="17" r="3" fill="#16a34a"/></svg>`;
+      }
+      if(id === 'chopper_hat') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><path d="M6 16 L4 8 L7 10 M26 16 L28 8 L25 10" stroke="#78350f" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="16" cy="18" rx="11" ry="8" fill="#f472b6"/><rect x="14.5" y="14" width="3" height="8" fill="#ffffff"/><rect x="12" y="16.5" width="8" height="3" fill="#ffffff"/></svg>`;
+      }
     }
 
     if(cat === 'outfit') {
@@ -1610,17 +1699,65 @@
       if(id === 'royal_robe') {
         return `<svg viewBox="0 0 32 32" class="shop-item-svg"><path d="M8 6 L24 6 L26 26 L6 26 Z" fill="#991b1b"/><rect x="10" y="6" width="12" height="20" fill="#f8fafc"/><circle cx="16" cy="10" r="1" fill="#000"/><circle cx="16" cy="16" r="1" fill="#000"/><circle cx="16" cy="22" r="1" fill="#000"/><rect x="7" y="6" width="18" height="4" rx="2" fill="#fbbf24"/></svg>`;
       }
+      if(id === 'akatsuki_cloak') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><path d="M8 6 L24 6 L27 26 L5 26 Z" fill="#0f172a"/><path d="M12 6 L16 12 L20 6" stroke="#dc2626" stroke-width="1.8" fill="none"/><path d="M12 18 Q16 13 20 18 Q23 18 22 21 Q19 23 14 21 Z" fill="#dc2626" stroke="#ffffff" stroke-width="0.8"/></svg>`;
+      }
+      if(id === 'tanjiro_haori') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="5" y="6" width="22" height="20" rx="3" fill="#15803d"/><rect x="5" y="6" width="6" height="6" fill="#0f172a"/><rect x="16" y="6" width="6" height="6" fill="#0f172a"/><rect x="10.5" y="12" width="6" height="6" fill="#0f172a"/><rect x="21.5" y="12" width="5.5" height="6" fill="#0f172a"/><rect x="5" y="18" width="6" height="6" fill="#0f172a"/><rect x="16" y="18" width="6" height="6" fill="#0f172a"/><path d="M11 6 L16 14 L21 6" stroke="#ffffff" stroke-width="1.6" fill="none"/></svg>`;
+      }
+      if(id === 'scout_cape') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><path d="M8 6 Q16 4 24 6 L27 26 Q16 23 5 26 Z" fill="#166534"/><path d="M13 13 L19 13 L18 18 L16 20 L14 18 Z" fill="#2563eb" stroke="#ffffff" stroke-width="0.8"/><circle cx="16" cy="8" r="2" fill="#fbbf24"/></svg>`;
+      }
+      if(id === 'goku_gi') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="6" y="6" width="20" height="20" rx="3" fill="#ea580c"/><polygon points="12,6 20,6 16,14" fill="#1d4ed8"/><rect x="6" y="18" width="20" height="3" fill="#1d4ed8"/><circle cx="12" cy="13" r="3.5" fill="#ffffff" stroke="#0f172a" stroke-width="0.8"/></svg>`;
+      }
+      if(id === 'luffy_vest') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="6" y="6" width="20" height="20" rx="3" fill="#fed7aa"/><path d="M6 6 L12 6 L10 26 L6 26 Z" fill="#ef4444"/><path d="M26 6 L20 6 L22 26 L26 26 Z" fill="#ef4444"/><rect x="6" y="18" width="20" height="3.5" fill="#facc15"/></svg>`;
+      }
+      if(id === 'jujutsu_coat') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="6" y="6" width="20" height="20" rx="3" fill="#0f172a"/><path d="M12 6 L16 11 L20 6" stroke="#38bdf8" stroke-width="1.2" fill="none"/><circle cx="16" cy="15" r="2" fill="#fbbf24"/></svg>`;
+      }
     }
 
     if(cat === 'pipe') {
+      if(id === 'katana_torii') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="4" y="6" width="24" height="4" rx="1" fill="#dc2626"/><rect x="8" y="10" width="5" height="18" fill="#b91c1c"/><rect x="19" y="10" width="5" height="18" fill="#b91c1c"/><line x1="8" y1="26" x2="24" y2="10" stroke="#cbd5e1" stroke-width="2"/><circle cx="16" cy="18" r="2" fill="#fbbf24"/></svg>`;
+      }
+      if(id === 'bamboo_demon') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="10" y="4" width="12" height="24" rx="4" fill="#16a34a"/><line x1="10" y1="12" x2="22" y2="12" stroke="#15803d" stroke-width="2"/><line x1="10" y1="20" x2="22" y2="20" stroke="#15803d" stroke-width="2"/><path d="M8 15 L24 15" stroke="#dc2626" stroke-width="2.5"/></svg>`;
+      }
+      if(id === 'chakra_scroll') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="10" y="4" width="12" height="24" rx="2" fill="#fef3c7" stroke="#78350f" stroke-width="1.2"/><rect x="7" y="2" width="18" height="4" rx="2" fill="#78350f"/><rect x="7" y="26" width="18" height="4" rx="2" fill="#78350f"/><circle cx="16" cy="16" r="3" fill="#dc2626"/></svg>`;
+      }
       return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="10" y="12" width="12" height="16" rx="2" fill="${item.body}" stroke="${item.edge||'#000'}" stroke-width="1.2"/><rect x="8" y="6" width="16" height="7" rx="2" fill="${item.cap||item.body}" stroke="${item.edge||'#000'}" stroke-width="1.2"/><line x1="12" y1="6" x2="12" y2="28" stroke="rgba(255,255,255,0.4)" stroke-width="1.6"/></svg>`;
     }
 
     if(cat === 'background') {
+      if(id === 'hidden_leaf') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="3" y="3" width="26" height="26" rx="6" fill="#f97316"/><polygon points="3,20 10,14 18,17 24,12 29,20 29,29 3,29" fill="#78350f"/><circle cx="23" cy="8" r="3" fill="#fef08a"/></svg>`;
+      }
+      if(id === 'wano_sakura') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="3" y="3" width="26" height="26" rx="6" fill="#fda4af"/><polygon points="6,24 16,10 26,24" fill="#64748b"/><polygon points="12,16 16,10 20,16" fill="#ffffff"/><circle cx="8" cy="8" r="2" fill="#f43f5e"/><circle cx="24" cy="12" r="1.5" fill="#f43f5e"/></svg>`;
+      }
+      if(id === 'namek_green') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="3" y="3" width="26" height="26" rx="6" fill="#15803d"/><path d="M3 20 Q16 15 29 20 L29 29 L3 29 Z" fill="#047857"/><circle cx="10" cy="8" r="3" fill="#a7f3d0"/><circle cx="23" cy="11" r="2.5" fill="#6ee7b7"/></svg>`;
+      }
       return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="3" y="3" width="26" height="26" rx="6" fill="${item.top}"/><path d="M3 20 Q16 12 29 20 L29 29 L3 29 Z" fill="${item.hill||item.bottom}"/><circle cx="21" cy="9" r="3" fill="#fef08a"/></svg>`;
     }
 
     if(cat === 'music') {
+      if(id === 'gurenge') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="12" fill="#dc2626"/><circle cx="16" cy="16" r="4.5" fill="#0f172a"/><circle cx="16" cy="16" r="1.5" fill="#facc15"/><path d="M12 20 L20 12 M18 10 L22 14" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+      }
+      if(id === 'blue_bird') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="12" fill="#0284c7"/><circle cx="16" cy="16" r="4.5" fill="#0f172a"/><circle cx="16" cy="16" r="1.5" fill="#ffffff"/><path d="M10 16 Q16 10 22 13 Q18 18 10 16 Z" fill="#38bdf8"/></svg>`;
+      }
+      if(id === 'we_are') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="12" fill="#eab308"/><circle cx="16" cy="16" r="4.5" fill="#0f172a"/><circle cx="16" cy="16" r="1.5" fill="#ffffff"/><ellipse cx="16" cy="17" rx="6" ry="2" fill="#facc15"/><rect x="13" y="15" width="6" height="1.5" fill="#dc2626"/></svg>`;
+      }
+      if(id === 'sparkle') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="12" fill="#7c3aed"/><circle cx="16" cy="16" r="4.5" fill="#0f172a"/><circle cx="16" cy="16" r="1.5" fill="#ffffff"/><polygon points="16,7 18,12 23,12 19,15 21,20 16,17 11,20 13,15 9,12 14,12" fill="#fef08a"/></svg>`;
+      }
       return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="12" fill="${item.color||'#3b82f6'}"/><circle cx="16" cy="16" r="4.5" fill="#1e293b"/><circle cx="16" cy="16" r="1.5" fill="#ffffff"/><path d="M14 11 L20 9 L20 18 A2 2 0 1 1 18 16 L18 12 L14 13 Z" fill="#ffffff"/></svg>`;
     }
 
@@ -7494,136 +7631,167 @@
       targetCtx.fillStyle = '#f472b6';
       rrTo(targetCtx, 0, -16, 14, 3, 1.5);
     } else if(hatId === 'straw_hat') {
-      // Mugiwara Straw Hat (Luffy)
+      // Mugiwara Straw Hat (Luffy) - High Detail & Snug Fit
+      // 1. Wide Straw Brim with Golden Hue
       targetCtx.fillStyle = '#facc15';
       targetCtx.beginPath();
-      targetCtx.ellipse(7, -15, 17, 4.5, -0.05, 0, Math.PI * 2);
+      targetCtx.ellipse(6, -12, 19, 5, -0.05, 0, Math.PI * 2);
       targetCtx.fill();
       targetCtx.strokeStyle = '#ca8a04';
-      targetCtx.lineWidth = 1;
+      targetCtx.lineWidth = 1.4;
       targetCtx.stroke();
-      // Hat Dome
+      // 2. Hat Crown Dome
       targetCtx.beginPath();
-      targetCtx.moveTo(0, -15);
-      targetCtx.quadraticCurveTo(7, -27, 14, -15);
+      targetCtx.ellipse(6, -17, 10, 8, 0, Math.PI, 0);
       targetCtx.fill();
-      // Red Ribbon Band
+      targetCtx.stroke();
+      // 3. Iconic Red Ribbon Band
       targetCtx.fillStyle = '#dc2626';
-      targetCtx.fillRect(1, -17.5, 12, 3);
+      targetCtx.beginPath();
+      targetCtx.ellipse(6, -14, 10.2, 3.2, 0, 0, Math.PI * 2);
+      targetCtx.fill();
+      // Straw highlight
+      targetCtx.fillStyle = '#fef08a';
+      targetCtx.beginPath();
+      targetCtx.ellipse(5, -20, 5, 2, -0.1, 0, Math.PI * 2);
+      targetCtx.fill();
     } else if(hatId === 'shinobi_plate') {
-      // Hidden Leaf Shinobi Headband
+      // Hidden Leaf Shinobi Headband (Konoha)
       targetCtx.fillStyle = '#1e3a8a';
-      rrTo(targetCtx, -2, -16, 18, 5.5, 1.5);
+      rrTo(targetCtx, -3, -14, 19, 6.5, 2);
       // Steel Plate
-      targetCtx.fillStyle = '#cbd5e1';
-      rrTo(targetCtx, 2, -15.5, 10, 4.2, 1);
+      targetCtx.fillStyle = '#e2e8f0';
+      rrTo(targetCtx, 1, -13.5, 11, 5.2, 1.2);
       targetCtx.strokeStyle = '#64748b';
-      targetCtx.lineWidth = 0.8;
-      targetCtx.strokeRect(2, -15.5, 10, 4.2);
-      // Leaf Etch
-      targetCtx.fillStyle = '#1e293b';
+      targetCtx.lineWidth = 1;
+      targetCtx.strokeRect(1, -13.5, 11, 5.2);
+      // 4 Corner Rivets
+      targetCtx.fillStyle = '#475569';
+      targetCtx.fillRect(2, -12.5, 1, 1);
+      targetCtx.fillRect(10, -12.5, 1, 1);
+      targetCtx.fillRect(2, -9.8, 1, 1);
+      targetCtx.fillRect(10, -9.8, 1, 1);
+      // Engraved Leaf Spiral Emblem
+      targetCtx.strokeStyle = '#0f172a';
+      targetCtx.lineWidth = 0.9;
       targetCtx.beginPath();
-      targetCtx.arc(7, -13.5, 1.2, 0, Math.PI * 2);
-      targetCtx.fill();
+      targetCtx.arc(6.5, -11, 1.5, 0, Math.PI * 1.5);
+      targetCtx.lineTo(9, -11);
+      targetCtx.stroke();
     } else if(hatId === 'tanjiro_earrings') {
-      // Hanafuda Sun Earrings & Demon Slayer Mark
+      // Hanafuda Sun Earrings & Forehead Demon Flame Scar
       targetCtx.fillStyle = '#ffffff';
-      targetCtx.fillRect(14, -6, 3.5, 8);
+      targetCtx.fillRect(15, -4, 4, 9);
       targetCtx.strokeStyle = '#991b1b';
-      targetCtx.lineWidth = 0.7;
-      targetCtx.strokeRect(14, -6, 3.5, 8);
+      targetCtx.lineWidth = 0.8;
+      targetCtx.strokeRect(15, -4, 4, 9);
       targetCtx.fillStyle = '#dc2626';
       targetCtx.beginPath();
-      targetCtx.arc(15.75, -3.5, 1.2, 0, Math.PI * 2);
+      targetCtx.arc(17, -1, 1.6, 0, Math.PI * 2);
       targetCtx.fill();
-      // Forehead Scar
-      targetCtx.fillStyle = '#991b1b';
+      targetCtx.fillStyle = '#0f172a';
+      targetCtx.fillRect(15.5, 2, 3, 1);
+      // Dangling Ring
+      targetCtx.strokeStyle = '#94a3b8';
+      targetCtx.lineWidth = 1;
       targetCtx.beginPath();
-      targetCtx.moveTo(2, -14);
-      targetCtx.quadraticCurveTo(5, -17, 7, -13);
-      targetCtx.quadraticCurveTo(5, -10, 2, -14);
-      targetCtx.fill();
+      targetCtx.arc(17, -5, 1.2, 0, Math.PI * 2);
+      targetCtx.stroke();
     } else if(hatId === 'gojo_blindfold') {
-      // Gojo Upright Silver Hair
+      // Gojo Upright Silver Hair with Shading
       targetCtx.fillStyle = '#f8fafc';
       targetCtx.beginPath();
-      targetCtx.moveTo(-2, -13);
-      targetCtx.lineTo(2, -26);
-      targetCtx.lineTo(6, -18);
-      targetCtx.lineTo(10, -29);
-      targetCtx.lineTo(14, -18);
-      targetCtx.lineTo(18, -25);
-      targetCtx.lineTo(18, -13);
+      targetCtx.moveTo(-3, -12);
+      targetCtx.lineTo(-1, -26);
+      targetCtx.lineTo(3, -18);
+      targetCtx.lineTo(7, -30);
+      targetCtx.lineTo(11, -19);
+      targetCtx.lineTo(16, -26);
+      targetCtx.lineTo(16, -12);
       targetCtx.closePath();
       targetCtx.fill();
       targetCtx.strokeStyle = '#cbd5e1';
-      targetCtx.lineWidth = 1;
+      targetCtx.lineWidth = 1.2;
       targetCtx.stroke();
-      // Black Blindfold
+      // Sleek Jet-Black Sorcerer Blindfold
       targetCtx.fillStyle = '#0f172a';
-      rrTo(targetCtx, 0, -15, 17, 6, 1.5);
+      rrTo(targetCtx, -1, -13.5, 18, 7.5, 2);
+      targetCtx.strokeStyle = '#38bdf8';
+      targetCtx.lineWidth = 0.8;
+      targetCtx.stroke();
     } else if(hatId === 'saiyan_hair') {
       // Super Saiyan Spiky Golden Hair
       targetCtx.fillStyle = '#facc15';
       targetCtx.beginPath();
-      targetCtx.moveTo(-3, -12);
-      targetCtx.lineTo(-1, -28);
-      targetCtx.lineTo(4, -18);
-      targetCtx.lineTo(9, -34);
-      targetCtx.lineTo(14, -20);
-      targetCtx.lineTo(21, -30);
-      targetCtx.lineTo(18, -12);
+      targetCtx.moveTo(-4, -10);
+      targetCtx.lineTo(-2, -29);
+      targetCtx.lineTo(3, -19);
+      targetCtx.lineTo(8, -35);
+      targetCtx.lineTo(13, -21);
+      targetCtx.lineTo(20, -31);
+      targetCtx.lineTo(17, -10);
       targetCtx.closePath();
       targetCtx.fill();
-      targetCtx.strokeStyle = '#eab308';
-      targetCtx.lineWidth = 1.2;
+      targetCtx.strokeStyle = '#ca8a04';
+      targetCtx.lineWidth = 1.4;
       targetCtx.stroke();
-      // Inner Golden Highlight
+      // Inner Golden Ki Highlight
       targetCtx.fillStyle = '#fef08a';
       targetCtx.beginPath();
-      targetCtx.moveTo(2, -14);
-      targetCtx.lineTo(4, -24);
-      targetCtx.lineTo(9, -30);
-      targetCtx.lineTo(13, -16);
+      targetCtx.moveTo(2, -12);
+      targetCtx.lineTo(4, -25);
+      targetCtx.lineTo(8, -31);
+      targetCtx.lineTo(12, -17);
       targetCtx.fill();
     } else if(hatId === 'hokage_hat') {
-      // Hokage Triangular Hat
+      // Hokage Triangular Hat with Cloth Veil
       targetCtx.fillStyle = '#dc2626';
       targetCtx.beginPath();
-      targetCtx.moveTo(-3, -15);
-      targetCtx.lineTo(8, -32);
-      targetCtx.lineTo(19, -15);
+      targetCtx.moveTo(-4, -14);
+      targetCtx.lineTo(7, -33);
+      targetCtx.lineTo(18, -14);
       targetCtx.closePath();
       targetCtx.fill();
+      // White Front Diamond Face Veil
       targetCtx.fillStyle = '#ffffff';
       targetCtx.beginPath();
-      targetCtx.moveTo(0, -15);
-      targetCtx.lineTo(8, -30);
-      targetCtx.lineTo(16, -15);
+      targetCtx.moveTo(0, -14);
+      targetCtx.lineTo(7, -30);
+      targetCtx.lineTo(14, -14);
       targetCtx.closePath();
       targetCtx.fill();
-      // Green Kanji Circle
+      // Green Kanji Fire Circle
       targetCtx.fillStyle = '#16a34a';
       targetCtx.beginPath();
-      targetCtx.arc(8, -20, 3, 0, Math.PI * 2);
+      targetCtx.arc(7, -20, 3.4, 0, Math.PI * 2);
       targetCtx.fill();
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.font = 'bold 4px sans-serif';
+      targetCtx.textAlign = 'center';
+      targetCtx.fillText('火', 7, -18.5);
     } else if(hatId === 'chopper_hat') {
-      // Chopper Antler Hat
+      // Chopper Antler Doctor Hat
       targetCtx.fillStyle = '#78350f';
-      // Left and Right Antlers
-      targetCtx.fillRect(-2, -26, 3, 10);
-      targetCtx.fillRect(-5, -24, 6, 2.5);
-      targetCtx.fillRect(15, -26, 3, 10);
-      targetCtx.fillRect(15, -24, 6, 2.5);
-      // Pink Doctor Hat Dome
+      // Left and Right Reindeer Antlers
+      targetCtx.fillRect(-2, -26, 3.2, 11);
+      targetCtx.fillRect(-5, -24, 6.5, 2.5);
+      targetCtx.fillRect(14, -26, 3.2, 11);
+      targetCtx.fillRect(14, -24, 6.5, 2.5);
+      // Soft Pink Doctor Cap Dome
       targetCtx.fillStyle = '#f472b6';
       targetCtx.beginPath();
-      targetCtx.ellipse(8, -19, 11, 8, 0, 0, Math.PI * 2);
+      targetCtx.ellipse(7.5, -18, 12, 8.5, 0, 0, Math.PI * 2);
       targetCtx.fill();
-      // White Medical Cross
+      targetCtx.strokeStyle = '#db2777';
+      targetCtx.lineWidth = 1;
+      targetCtx.stroke();
+      // Blue Hat Rim Band
+      targetCtx.fillStyle = '#38bdf8';
+      rrTo(targetCtx, -2, -14, 19, 3, 1.2);
+      // Pure White Medical Cross
       targetCtx.fillStyle = '#ffffff';
-      targetCtx.fillRect(6.5, -22, 3, 7);
-      targetCtx.fillRect(4.5, -20, 7, 3);
+      targetCtx.fillRect(6, -21, 3, 7);
+      targetCtx.fillRect(4, -19, 7, 3);
     }
     targetCtx.restore();
   }
@@ -7684,6 +7852,54 @@
     targetCtx.fill();
     targetCtx.restore();
 
+    // 8b. Hair & Head Features for Anime Birds (when not wearing full hats)
+    if(hatId === 'none') {
+      if(opt.skinId === 'gojo_bird') {
+        // Gojo Spiky Snow-White Upright Hair
+        targetCtx.fillStyle = '#ffffff';
+        targetCtx.beginPath();
+        targetCtx.moveTo(-4, -10);
+        targetCtx.lineTo(-2, -22);
+        targetCtx.lineTo(3, -15);
+        targetCtx.lineTo(7, -25);
+        targetCtx.lineTo(11, -16);
+        targetCtx.lineTo(16, -21);
+        targetCtx.lineTo(15, -10);
+        targetCtx.closePath();
+        targetCtx.fill();
+        targetCtx.strokeStyle = '#e2e8f0';
+        targetCtx.lineWidth = 0.8;
+        targetCtx.stroke();
+      } else if(opt.skinId === 'goku_ssj') {
+        // Goku Super Saiyan Golden Spikes
+        targetCtx.fillStyle = '#facc15';
+        targetCtx.beginPath();
+        targetCtx.moveTo(-6, -8);
+        targetCtx.lineTo(-4, -24);
+        targetCtx.lineTo(2, -16);
+        targetCtx.lineTo(7, -28);
+        targetCtx.lineTo(13, -17);
+        targetCtx.lineTo(18, -23);
+        targetCtx.lineTo(16, -8);
+        targetCtx.closePath();
+        targetCtx.fill();
+        targetCtx.strokeStyle = '#ca8a04';
+        targetCtx.lineWidth = 1;
+        targetCtx.stroke();
+      } else if(opt.skinId === 'naruto_bird') {
+        // Naruto Yellow Spikes & Forehead Band
+        targetCtx.fillStyle = '#fde047';
+        targetCtx.beginPath();
+        targetCtx.moveTo(-4, -10);
+        targetCtx.lineTo(0, -20);
+        targetCtx.lineTo(5, -13);
+        targetCtx.lineTo(10, -21);
+        targetCtx.lineTo(14, -10);
+        targetCtx.closePath();
+        targetCtx.fill();
+      }
+    }
+
     // 8. Beak (ALWAYS drawn above clothes so it is NEVER covered!)
     targetCtx.fillStyle = skin.beak;
     targetCtx.beginPath();
@@ -7699,19 +7915,134 @@
     targetCtx.lineTo(26, 3);
     targetCtx.stroke();
 
-    // 9. Eye (ALWAYS drawn above clothes so eye & pupil are crystal-clear!)
-    targetCtx.fillStyle = '#fff';
-    targetCtx.beginPath();
-    targetCtx.arc(6, -7, 6, 0, 7);
-    targetCtx.fill();
-    targetCtx.fillStyle = '#193550';
-    targetCtx.beginPath();
-    targetCtx.arc(8, -7, 2.4, 0, 7);
-    targetCtx.fill();
-    targetCtx.fillStyle = '#fff';
-    targetCtx.beginPath();
-    targetCtx.arc(9, -8, 1, 0, 7);
-    targetCtx.fill();
+    // 8c. Facial Marks (Scars, Whiskers)
+    if(opt.skinId === 'tanjiro_bird') {
+      // Tanjiro Crimson Demon Slayer Mark on Forehead
+      targetCtx.fillStyle = '#991b1b';
+      targetCtx.beginPath();
+      targetCtx.moveTo(2, -12); targetCtx.quadraticCurveTo(5, -16, 7, -12); targetCtx.quadraticCurveTo(4, -9, 2, -12);
+      targetCtx.fill();
+    } else if(opt.skinId === 'naruto_bird') {
+      // Naruto Fox Whiskers
+      targetCtx.strokeStyle = '#78350f';
+      targetCtx.lineWidth = 1.2;
+      targetCtx.beginPath();
+      targetCtx.moveTo(-1, 0); targetCtx.lineTo(6, 1);
+      targetCtx.moveTo(-2, 3); targetCtx.lineTo(5, 4);
+      targetCtx.moveTo(-1, 6); targetCtx.lineTo(5, 7);
+      targetCtx.stroke();
+    } else if(opt.skinId === 'luffy_bird') {
+      // Luffy Stitched Under-Eye Scar
+      targetCtx.strokeStyle = '#0f172a';
+      targetCtx.lineWidth = 1;
+      targetCtx.beginPath();
+      targetCtx.moveTo(5, -1); targetCtx.lineTo(11, 0);
+      targetCtx.moveTo(7, -3); targetCtx.lineTo(7, 2);
+      targetCtx.moveTo(9, -2.5); targetCtx.lineTo(9, 2.5);
+      targetCtx.stroke();
+    }
+
+    // 9. Eye (Special customized high-detail eyes for Anime Characters)
+    if(opt.skinId === 'gojo_bird') {
+      // SATORU GOJO'S FAMOUS CELESTIAL GLOWING SKY-BLUE SIX EYES
+      targetCtx.save();
+      targetCtx.shadowColor = '#00f5d4';
+      targetCtx.shadowBlur = 14;
+
+      // Pure Bright Sclera
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.beginPath();
+      targetCtx.arc(6, -7, 6.8, 0, Math.PI * 2);
+      targetCtx.fill();
+
+      // Outer Luminous Sky Blue Ring
+      targetCtx.fillStyle = '#38bdf8';
+      targetCtx.beginPath();
+      targetCtx.arc(7.5, -7, 5, 0, Math.PI * 2);
+      targetCtx.fill();
+
+      // Mid Vibrant Cyan Iris
+      targetCtx.fillStyle = '#06b6d4';
+      targetCtx.beginPath();
+      targetCtx.arc(7.5, -7, 3.4, 0, Math.PI * 2);
+      targetCtx.fill();
+
+      // Deep Infinite Azure Center
+      targetCtx.fillStyle = '#0284c7';
+      targetCtx.beginPath();
+      targetCtx.arc(7.5, -7, 1.8, 0, Math.PI * 2);
+      targetCtx.fill();
+
+      // Brilliant Star Diamond Glints
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.beginPath();
+      targetCtx.arc(9, -8.8, 1.6, 0, Math.PI * 2);
+      targetCtx.arc(6, -5.5, 0.9, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.restore();
+    } else if(opt.skinId === 'goku_ssj') {
+      // Super Saiyan Piercing Teal Eye
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.beginPath();
+      targetCtx.arc(6, -7, 6, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.fillStyle = '#06b6d4';
+      targetCtx.beginPath();
+      targetCtx.arc(8, -7, 3.2, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.fillStyle = '#0f172a';
+      targetCtx.beginPath();
+      targetCtx.arc(8, -7, 1.6, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.beginPath();
+      targetCtx.arc(9, -8, 1, 0, Math.PI * 2);
+      targetCtx.fill();
+    } else if(opt.skinId === 'naruto_bird') {
+      // Naruto Sage Mode Orange Surround & Slit Eye
+      targetCtx.fillStyle = '#ea580c';
+      targetCtx.beginPath();
+      targetCtx.ellipse(6, -7, 7, 5, 0, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.fillStyle = '#fef08a';
+      targetCtx.beginPath();
+      targetCtx.arc(6, -7, 4.5, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.fillStyle = '#78350f';
+      targetCtx.fillRect(4, -7.7, 5, 1.4);
+    } else if(opt.skinId === 'tanjiro_bird') {
+      // Tanjiro Deep Burgundy Slayer Eye
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.beginPath();
+      targetCtx.arc(6, -7, 6, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.fillStyle = '#991b1b';
+      targetCtx.beginPath();
+      targetCtx.arc(8, -7, 3, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.fillStyle = '#0f172a';
+      targetCtx.beginPath();
+      targetCtx.arc(8, -7, 1.5, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.beginPath();
+      targetCtx.arc(9, -8, 1, 0, Math.PI * 2);
+      targetCtx.fill();
+    } else {
+      // Classic Eye
+      targetCtx.fillStyle = '#fff';
+      targetCtx.beginPath();
+      targetCtx.arc(6, -7, 6, 0, 7);
+      targetCtx.fill();
+      targetCtx.fillStyle = '#193550';
+      targetCtx.beginPath();
+      targetCtx.arc(8, -7, 2.4, 0, 7);
+      targetCtx.fill();
+      targetCtx.fillStyle = '#fff';
+      targetCtx.beginPath();
+      targetCtx.arc(9, -8, 1, 0, 7);
+      targetCtx.fill();
+    }
 
     // 10. Hat (On top of head)
     drawHatTo(targetCtx, hatId);
