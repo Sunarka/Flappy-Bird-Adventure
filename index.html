@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#77cef2">
   <title>Flappy Bird - Sky Challenge</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=3.0">
-  <link rel="stylesheet" href="css/modern-icons.css?v=3.0">
-  <link rel="stylesheet" href="css/shop.css?v=3.0">
-  <link rel="stylesheet" href="css/shop-extra.css?v=3.0">
-  <link rel="stylesheet" href="css/mode-picker.css?v=3.0">
-  <link rel="stylesheet" href="css/store.css?v=3.0">
-  <link rel="stylesheet" href="css/ranked.css?v=3.0">
+  <link rel="stylesheet" href="css/style.css?v=3.3">
+  <link rel="stylesheet" href="css/modern-icons.css?v=3.3">
+  <link rel="stylesheet" href="css/shop.css?v=3.3">
+  <link rel="stylesheet" href="css/shop-extra.css?v=3.3">
+  <link rel="stylesheet" href="css/mode-picker.css?v=3.3">
+  <link rel="stylesheet" href="css/store.css?v=3.3">
+  <link rel="stylesheet" href="css/ranked.css?v=3.3">
 </head>
 <body>
   <main class="game-shell" aria-label="Flappy Bird Sky Challenge">
@@ -86,14 +86,15 @@
         </button>
       </div>
 
-      <!-- Menu Ranked Status Banner (Visible when Ranked mode is active) -->
-      <div class="menu-ranked-card hidden" id="menuRankedCard">
+      <!-- Menu Ranked Status Banner (Klik untuk lihat daftar tier & poin) -->
+      <div class="menu-ranked-card hidden" id="menuRankedCard" role="button" tabindex="0" title="Klik untuk melihat daftar tier & target poin">
         <div class="menu-rank-header">
           <div class="menu-rank-icon" id="menuRankIcon"></div>
           <div class="menu-rank-text">
             <div class="menu-rank-title" id="menuRankTitle">BRONZE TIER</div>
             <div class="menu-rank-sub" id="menuRankSub">Ranked Best: <b>0 pts</b></div>
           </div>
+          <span class="rank-card-tap-hint">INFO TIER ›</span>
         </div>
         <div class="menu-rank-bar-wrap">
           <div class="menu-rank-labels">
@@ -337,19 +338,29 @@
               <!-- Top 10 Highest Rank Tiers Players Generated in script.js -->
             </div>
           </div>
-
-          <!-- All Tiers Progression Guide -->
-          <div class="tiers-guide-container">
-            <div class="tiers-guide-header">
-              <span>DAFTAR TIER & TARGET POIN RANK</span>
-            </div>
-            <div class="tiers-guide-list" id="tiersGuideList">
-              <!-- Injected via JavaScript -->
-            </div>
-          </div>
         </div>
 
         <button class="primary" id="playRankedFromModalBtn" type="button">PLAY RANKED MATCH</button>
+      </section>
+
+      <!-- MODAL DAFTAR TIER & TARGET POIN (MUNCUL KETIKA KARTU RANK DIPENCET) -->
+      <section id="tierRoadmapModal" class="modal tier-roadmap-modal hidden" role="dialog" aria-modal="true">
+        <button class="close" data-close>×</button>
+        <div class="roadmap-header">
+          <span class="roadmap-icon">🏆</span>
+          <h2>DAFTAR TIER & POIN</h2>
+        </div>
+        <p class="roadmap-subtitle">Capai target poin di Mode Ranked untuk naik pangkat!</p>
+        
+        <!-- My Current Rank Banner Inside Modal -->
+        <div class="modal-my-tier-card" id="modalMyTierCard"></div>
+
+        <!-- All 7 Tiers Progression Guide List -->
+        <div class="tiers-roadmap-list" id="tiersGuideList">
+          <!-- Injected via JavaScript -->
+        </div>
+
+        <button class="primary" data-close type="button">MENGERTI</button>
       </section>
 
       <!-- REVIVE MODAL (CONTINUE RUN WITH COINS) -->
@@ -434,7 +445,7 @@
   <!-- Firebase App & Firestore Web SDK (Compat version for pure vanilla client) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=3.2"></script>
-  <script src="js/script.js?v=3.2"></script>
+  <script src="js/firebase-config.js?v=3.3"></script>
+  <script src="js/script.js?v=3.3"></script>
 </body>
 </html>

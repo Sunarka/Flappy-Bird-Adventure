@@ -47,7 +47,8 @@
     overRankDesc:$('overRankDesc'), overRankFill:$('overRankFill'),
     dashBtn:$('dashBtn'), dashRingProgress:$('dashRingProgress'), dashCooldownText:$('dashCooldownText'),
     reviveModal:$('reviveModal'), reviveTimerRing:$('reviveTimerRing'), reviveCountdownText:$('reviveCountdownText'),
-    reviveCostLabel:$('reviveCostLabel'), reviveConfirmBtn:$('reviveConfirmBtn'), reviveGiveUpBtn:$('reviveGiveUpBtn')
+    reviveCostLabel:$('reviveCostLabel'), reviveConfirmBtn:$('reviveConfirmBtn'), reviveGiveUpBtn:$('reviveGiveUpBtn'),
+    tierRoadmapModal:$('tierRoadmapModal'), modalMyTierCard:$('modalMyTierCard')
   };
   const storage = {
     get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } },
@@ -696,17 +697,33 @@
       this.init();
 
       if(trackId === 'happy') {
-        // Happy Melody: Cheerful Chiptune Swing
-        const melody = [523, 659, 784, 659, 587, 698, 880, 698, 659, 784, 1047, 784, 698, 880, 1047, 880, 523, 659, 784, 1047, 988, 880, 784, 659, 587, 698, 784, 698, 659, 587, 523, 0];
-        const bass = [131, 0, 131, 0, 147, 0, 147, 0, 165, 0, 165, 0, 147, 0, 147, 0];
+        // Happy Vibe Pop Melody: Super Catchy, Bouncy & Addictive Chiptune Pop!
+        const melody = [
+          523, 0, 659, 784, 880, 784, 659, 523,
+          587, 0, 698, 880, 1047, 880, 698, 587,
+          659, 0, 784, 988, 1047, 1175, 1047, 784,
+          880, 1047, 1319, 1175, 1047, 784, 523, 0,
+          523, 659, 784, 1047, 1319, 1047, 784, 659,
+          587, 698, 880, 1175, 1397, 1175, 880, 698,
+          659, 784, 988, 1319, 1568, 1319, 988, 784,
+          1047, 880, 784, 659, 587, 659, 523, 0
+        ];
+        const bass = [
+          131, 262, 131, 262, 147, 294, 147, 294,
+          165, 330, 165, 330, 175, 349, 196, 392,
+          131, 262, 131, 262, 147, 294, 147, 294,
+          165, 330, 165, 330, 131, 196, 131, 0
+        ];
         this.musicTimer = setInterval(() => {
-          if(state !== State.PLAYING) return;
-          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
-          if(note) this.playTone(note, .19, 'triangle', .022);
-          if(low) this.playTone(low, .32, 'sine', .028);
-          if(step % 4 === 2) this.playTone(1046, .045, 'square', .008);
+          if(state === State.PAUSED || state === State.OVER || state === State.REVIVING) return;
+          const note = melody[step % melody.length];
+          const low = bass[step % bass.length];
+          if(note) this.playTone(note, .14, 'triangle', .028);
+          if(low) this.playTone(low, .18, 'sine', .032);
+          if(step % 4 === 2) this.playTone(1200, .035, 'square', .009);
+          if(step % 8 === 4) this.playTone(240, .05, 'triangle', .02, -80);
           step++;
-        }, 180);
+        }, 135);
       } else if(trackId === 'bounce') {
         // Bounce Synthwave: 80s Disco Dance
         const melody = [659, 784, 880, 784, 659, 784, 1047, 880, 988, 880, 784, 880, 659, 784, 880, 1047, 1174, 1047, 880, 784, 659, 784, 880, 988, 1047, 880, 784, 659, 587, 659, 784, 880];
@@ -2141,26 +2158,62 @@
       });
       el.leaderboardRankList.innerHTML = rankHtml;
     }
+  }
 
-    // 3. Render All Tiers Division Ladder Guide
-    let ladderHtml = '';
-    rankTiers.forEach(t => {
-      const isCurrent = t.id === tier.id;
-      const ptsLabel = t.maxScore >= 99999 ? `${t.minScore}+ POIN` : `${t.minScore} - ${t.maxScore} POIN`;
-      ladderHtml += `
-        <div class="tier-guide-item${isCurrent ? ' current-tier' : ''}">
-          <div class="tier-guide-icon">${t.iconSvg}</div>
-          <div class="tier-guide-info">
-            <div class="tier-guide-name" style="color: ${t.color}">
-              ${t.name} TIER
-              ${isCurrent ? '<span class="tier-guide-badge-active">RANK SAYA</span>' : ''}
+  function renderTierRoadmap() {
+    const tier = getRankTier(rankedBest);
+
+    // 1. My Personal Rank Status Banner Inside Roadmap Modal
+    if(el.modalMyTierCard) {
+      const nextInfo = tier.nextTier ? `
+        <span><b>${tier.score}</b> / ${tier.nextTier.minScore} PTS</span>
+        <span style="color:#fde047">${tier.pointsToNext} Poin lagi ke ${tier.nextTier.name}!</span>
+      ` : `
+        <span><b>${tier.score}</b> PTS</span>
+        <span style="color:#fde047">👑 MAX SUPREME TIER!</span>
+      `;
+      el.modalMyTierCard.innerHTML = `
+        <div class="my-rank-card" style="margin-bottom:0;">
+          <div class="rank-card-header">
+            <div class="rank-card-badge">${tier.iconSvg}</div>
+            <div class="rank-card-info">
+              <div class="rank-card-title" style="color:${tier.color}">${tier.name} TIER</div>
+              <div class="rank-card-subtitle">Player: <b>${gpProfile.gamerTag}</b> • Ranked Best: <b>${rankedBest} pts</b></div>
             </div>
-            <div class="tier-guide-pts">Target Poin: <b>${ptsLabel}</b></div>
+          </div>
+          <div class="rank-progress-wrap">
+            <div class="rank-progress-labels">
+              ${nextInfo}
+            </div>
+            <div class="rank-progress-bar">
+              <div class="rank-progress-fill" style="width: ${tier.progressPercent}%;"></div>
+            </div>
           </div>
         </div>
       `;
-    });
-    el.tiersGuideList.innerHTML = ladderHtml;
+    }
+
+    // 2. All 7 Tiers Roadmap List with Target Points
+    if(el.tiersGuideList) {
+      let ladderHtml = '';
+      rankTiers.forEach(t => {
+        const isCurrent = t.id === tier.id;
+        const ptsLabel = t.maxScore >= 99999 ? `${t.minScore}+ POIN` : `${t.minScore} - ${t.maxScore} POIN`;
+        ladderHtml += `
+          <div class="tier-guide-item${isCurrent ? ' current-tier' : ''}">
+            <div class="tier-guide-icon">${t.iconSvg}</div>
+            <div class="tier-guide-info">
+              <div class="tier-guide-name" style="color: ${t.color}">
+                ${t.name} TIER
+                ${isCurrent ? '<span class="tier-guide-badge-active">RANK SAYA</span>' : ''}
+              </div>
+              <div class="tier-guide-pts">Target Poin: <b>${ptsLabel}</b></div>
+            </div>
+          </div>
+        `;
+      });
+      el.tiersGuideList.innerHTML = ladderHtml;
+    }
   }
 
   function renderLeaderboardList() {
@@ -2372,6 +2425,10 @@
     updateDashUI();
     updateMenuRankedUI();
     updatePowerupHUD();
+    if(settings.music && (next === State.MENU || next === State.PLAYING)) {
+      audio.music();
+      playBackgroundMusic();
+    }
   }
   function updateLivesHUD() {
     if(!el.livesHud) return;
@@ -4904,27 +4961,29 @@
       _step = 'ground';
       drawGround();
 
-      _step = 'afterimages';
-      for(const img of dashAfterimages) {
-        renderCustomBird(ctx, {
-          x: img.x, y: img.y, angle: img.angle, wing: img.wing,
-          skinId: progress.selected || 'classic',
-          hatId: progress.selectedHat || 'none',
-          outfitId: progress.selectedOutfit || 'none',
-          opacity: img.alpha * 0.55
-        });
+      if(state !== State.MENU) {
+        _step = 'afterimages';
+        for(const img of dashAfterimages) {
+          renderCustomBird(ctx, {
+            x: img.x, y: img.y, angle: img.angle, wing: img.wing,
+            skinId: progress.selected || 'classic',
+            hatId: progress.selectedHat || 'none',
+            outfitId: progress.selectedOutfit || 'none',
+            opacity: img.alpha * 0.55
+          });
+        }
+
+        _step = 'drawBird';
+        drawBird();
+
+        _step = 'babyBirds';
+        for(const baby of babyBirds) {
+          drawBabyBird(baby);
+        }
+
+        _step = 'floatingTexts';
+        drawFloatingTexts();
       }
-
-      _step = 'drawBird';
-      drawBird();
-
-      _step = 'babyBirds';
-      for(const baby of babyBirds) {
-        drawBabyBird(baby);
-      }
-
-      _step = 'floatingTexts';
-      drawFloatingTexts();
     } catch(err) {
       // Tampilkan error step + pesan ke layar
       const msg = `⚠ [${_step}] ${err.message || err}`;
@@ -6893,11 +6952,13 @@
     }
   }
   function home() {
-    audio.stopMusic();
-    stopBackgroundMusic();
     closeModal();
     reset();
     setState(State.MENU);
+    if(settings.music) {
+      audio.music();
+      playBackgroundMusic();
+    }
   }
 
   // Helper pengikat event aman (tidak akan crash bila elemen null/missing)
@@ -6909,6 +6970,21 @@
   // Mode Selection & Play Handlers
   bindClick(el.modeClassicBtn, () => setMode('classic'));
   bindClick(el.modeRankedBtn, () => setMode('ranked'));
+  bindClick(el.menuRankedCard, () => {
+    audio.click();
+    renderTierRoadmap();
+    showModal(el.tierRoadmapModal);
+  });
+  if(el.menuRankedCard) {
+    el.menuRankedCard.addEventListener('keydown', e => {
+      if(e.code === 'Enter' || e.code === 'Space') {
+        e.preventDefault();
+        audio.click();
+        renderTierRoadmap();
+        showModal(el.tierRoadmapModal);
+      }
+    });
+  }
   bindClick('playBtn', () => {
     if(currentMode === 'ranked' && !gpProfile.isLoggedIn) {
       audio.click();
