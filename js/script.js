@@ -689,8 +689,8 @@
       }
     },
 
-    // Dedicated Lobby Theme Music: "A World Beyond - Ghibli Melodic"
-    // Happy, candu, semangat terbang petualangan, lalu mengalir lembut ke bagian slow emosional khas Ghibli (Joe Hisaishi style)
+    // Dedicated Lobby Theme Music: "A World Beyond - Ghibli Melodic" (8-BIT CHIPTUNE EDITION)
+    // 8-bit NES/GameBoy style: Ceria, candu, bersemangat terbang di langit, lalu mengalir ke slow waltz emosional khas Ghibli
     lobbyMusic() {
       if(!settings.music) return;
       if(this.currentMusicType === 'lobby' && this.musicTimer) return;
@@ -699,94 +699,110 @@
       let step = 0;
       this.init();
 
-      // Struktur Lagu: 
-      // 0-31: Happy Spirited Adventure Motif (D-Major Joyful Flight)
-      // 32-63: Bouncy Flying Arpeggios (Catchy & Upbeat)
-      // 64-95: Emotive Nostalgic Slow Ghibli Valley (Gentle Melodic Lullaby)
-      // 96-111: Soaring Wind Rising Transition back to Intro
-      const lobbyMelody = [
-        // [0-15] Intro Cerah & Semangat
+      // Melodi Utama 8-Bit "A World Beyond" (Ghibli Melodic)
+      // 0-31: Happy Upbeat 8-bit Chiptune Flying Adventure
+      // 32-63: Bouncy 8-Bit Fast Arpeggio Sky Waltz
+      // 64-95: Emotive Nostalgic 8-Bit Slow Ghibli Melody (Joe Hisaishi style)
+      // 96-111: Ascending Chiptune Cascade Transition back to Main Theme
+      const melody8Bit = [
+        // [0-15] 8-Bit Intro Cerah & Semangat
         587, 659, 740, 880, 1175, 880, 740, 659,
         587, 740, 880, 988, 880, 740, 659, 587,
-        // [16-31] Flight Motif Melodic
+        // [16-31] 8-Bit Joyful Flight Motif
         494, 587, 740, 880, 988, 1175, 1319, 1175,
         988, 880, 740, 880, 1175, 0, 880, 0,
-        // [32-47] Bouncy Joyful Arpeggios
+        // [32-47] Bouncy 8-Bit Rapid Arpeggio Run
         1175, 1319, 1480, 1319, 1175, 880, 740, 880,
         988, 1175, 1319, 1175, 988, 740, 659, 740,
-        // [48-63] Spirited Sky Dance
+        // [48-63] Spirited 8-Bit Sky Dance
         880, 988, 1175, 1480, 1760, 1480, 1319, 1175,
         988, 1175, 1319, 1175, 988, 880, 740, 0,
-        // [64-79] Bagian Slow Emosional / Melodic Ghibli Valley
+        // [64-79] Bagian Slow Emosional / 8-Bit Melodic Ghibli Valley
         740, 0, 880, 0, 988, 0, 880, 0,
         740, 0, 659, 0, 587, 0, 494, 0,
-        // [80-95] Nostalgic Warm Flute & Cello Harmony
+        // [80-95] Nostalgic 8-Bit Chiptune Harmony
         587, 0, 740, 0, 880, 0, 659, 0,
         587, 0, 494, 0, 440, 0, 0, 0,
-        // [96-111] Soaring Wind Rising Crescendo
+        // [96-111] 8-Bit Soaring Scale Run Climax
         494, 587, 740, 880, 988, 1175, 1319, 1480,
         1760, 1480, 1319, 1175, 988, 880, 659, 0
       ];
 
-      const lobbyBass = [
-        // Happy Phase Bass (Bouncing Root-Fifth-Octave)
+      // Channel 2: 8-Bit Counter-Harmony & Echo Arpeggio
+      const harmony8Bit = [
+        0, 0, 440, 0, 587, 0, 440, 0, 370, 0, 440, 0, 587, 0, 440, 0,
+        294, 0, 370, 0, 440, 0, 587, 0, 440, 0, 370, 0, 587, 0, 0, 0,
+        587, 740, 880, 740, 587, 440, 370, 440, 494, 587, 740, 587, 494, 370, 330, 370,
+        440, 494, 587, 740, 880, 740, 659, 587, 494, 587, 659, 587, 494, 440, 370, 0,
+        370, 0, 440, 0, 494, 0, 440, 0, 370, 0, 330, 0, 294, 0, 247, 0,
+        294, 0, 370, 0, 440, 0, 330, 0, 294, 0, 247, 0, 220, 0, 0, 0,
+        247, 294, 370, 440, 494, 587, 659, 740, 880, 740, 659, 587, 494, 440, 330, 0
+      ];
+
+      // Channel 3: 8-Bit NES Triangle Bassline
+      const bass8Bit = [
+        // Happy Phase: Bouncing 8-Bit Bass
         147, 294, 147, 294, 196, 392, 196, 392,
         123, 247, 123, 247, 220, 440, 220, 0,
         147, 294, 147, 294, 196, 392, 196, 392,
         123, 247, 123, 247, 147, 220, 147, 0,
-        // Slow Emotional Ghibli Phase Bass (Warm Deep Cello)
+        147, 294, 147, 294, 196, 392, 196, 392,
+        123, 247, 123, 247, 220, 440, 220, 0,
+        147, 294, 147, 294, 196, 392, 196, 392,
+        123, 247, 123, 247, 147, 220, 147, 0,
+        // Slow Emotional Ghibli Phase: Sustained Deep Triangle Waves
         123, 0, 123, 0, 196, 0, 196, 0,
         147, 0, 147, 0, 220, 0, 220, 0,
         123, 0, 123, 0, 196, 0, 196, 0,
-        147, 0, 220, 0, 147, 0, 0, 0
-      ];
-
-      const ghibliChords = [
-        [587, 740, 880], [494, 587, 740], [392, 494, 587], [440, 554, 659],
-        [494, 587, 740, 880], [392, 494, 587, 740], [294, 370, 440, 587], [220, 277, 330, 440]
+        147, 0, 220, 0, 147, 0, 0, 0,
+        123, 147, 196, 220, 247, 294, 370, 440,
+        294, 247, 220, 196, 147, 123, 98, 0
       ];
 
       this.musicTimer = setInterval(() => {
         if(state !== State.MENU) return;
-        const totalSteps = lobbyMelody.length;
+        const totalSteps = melody8Bit.length;
         const curStep = step % totalSteps;
         const isSlowPhase = curStep >= 64 && curStep < 96;
 
-        const note = lobbyMelody[curStep];
-        const low = lobbyBass[Math.floor(curStep / (isSlowPhase ? 2 : 1)) % lobbyBass.length];
+        const leadNote = melody8Bit[curStep];
+        const harmNote = harmony8Bit[curStep];
+        const bassNote = bass8Bit[Math.floor(curStep / (isSlowPhase ? 2 : 1)) % bass8Bit.length];
 
         if(isSlowPhase) {
-          // Fase Slow Ghibli: Nada seruling hangat, lembut, legato, dan akord piano impian
-          if(note) {
-            this.playTone(note, 0.38, 'sine', 0.038, 0);
-            this.playTone(note * 0.5, 0.32, 'triangle', 0.022, 0);
+          // 8-Bit Slow Phase: Sweet Expressive Chiptune Lead + Soft Triangle Bass
+          if(leadNote) {
+            this.playTone(leadNote, 0.28, 'square', 0.024, 0);
+            this.playTone(leadNote * 0.5, 0.22, 'triangle', 0.02, 0);
           }
-          if(low && curStep % 2 === 0) {
-            this.playTone(low, 0.52, 'sine', 0.042, 0);
+          if(harmNote && curStep % 2 === 0) {
+            this.playTone(harmNote, 0.24, 'square', 0.012, 0);
           }
-          if(curStep % 4 === 0) {
-            const chord = ghibliChords[Math.floor((curStep - 64) / 4) % ghibliChords.length];
-            if(chord) chord.forEach(f => this.playTone(f * 0.75, 0.45, 'sine', 0.016));
+          if(bassNote && curStep % 2 === 0) {
+            this.playTone(bassNote, 0.42, 'triangle', 0.038, 0);
           }
         } else {
-          // Fase Semangat / Happy Vibe: Bouncy, riang, ceria dengan petikan arpeggio jernih
-          if(note) {
-            this.playTone(note, 0.16, 'triangle', 0.028);
-            if(curStep % 4 === 0) this.playTone(note * 1.5, 0.12, 'sine', 0.018);
+          // 8-Bit Upbeat Phase: Bouncy NES Square Wave Lead + Chiptune Arp + Bouncing Triangle Bass
+          if(leadNote) {
+            this.playTone(leadNote, 0.11, 'square', 0.028, curStep % 4 === 0 ? 10 : 0);
           }
-          if(low) {
-            this.playTone(low, 0.22, 'sine', 0.034);
+          if(harmNote) {
+            this.playTone(harmNote, 0.08, 'square', 0.012, 0);
           }
+          if(bassNote) {
+            this.playTone(bassNote, 0.16, 'triangle', 0.032, 0);
+          }
+          // 8-Bit Chiptune Noise / Hi-Hat Percussion Click
           if(curStep % 4 === 2) {
-            this.playTone(1568, 0.035, 'square', 0.008); // Cute sparkle
+            this.playTone(1760, 0.03, 'square', 0.008, -300);
           }
           if(curStep % 8 === 4) {
-            this.playTone(220, 0.06, 'triangle', 0.018, -60);
+            this.playTone(260, 0.05, 'triangle', 0.016, -100);
           }
         }
 
         step++;
-      }, 145);
+      }, 130);
     },
 
     // In-Game Gameplay Soundtracks (Selected in Shop)
