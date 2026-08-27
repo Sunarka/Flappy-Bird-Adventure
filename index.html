@@ -234,46 +234,76 @@
       <section id="rankedModal" class="modal ranked-modal hidden" role="dialog" aria-modal="true">
         <button class="close" data-close>×</button>
         <h2>RANKED LEADERBOARD</h2>
-        <div class="ranked-subtitle">HALL OF FAME & GLOBAL STANDINGS</div>
 
-        <!-- TOP 1 CHAMPION GOLDEN PORTRAIT SPOTLIGHT -->
-        <div class="champion-spotlight" id="championSpotlight">
-          <div class="portrait-frame">
-            <div class="portrait-header">
-              <span class="laurel-wreath">TOP 1</span>
-              <span class="portrait-title" id="spotlightTitle">WORLD CHAMPION</span>
-              <span class="laurel-wreath">TOP 1</span>
-            </div>
-            <!-- Portrait Canvas with Golden Border -->
-            <div class="portrait-canvas-box">
-              <div class="portrait-flash-spark" id="portraitSpark1"></div>
-              <div class="portrait-flash-spark" id="portraitSpark2"></div>
-              <canvas id="championCanvas" width="280" height="90" aria-label="Potret Burung Juara 1"></canvas>
-            </div>
-            <!-- Champion Details & Equipped Cosmetics from Shop (No Booster) -->
-            <div class="champion-meta">
-              <div class="champion-main-info">
-                <strong id="championGamerTag">SkyKing_Legend</strong>
-                <span class="champion-score">SCORE <b id="championScore">284</b></span>
+        <!-- Two Leaderboard Tabs: TOP GLOBAL vs TIER LIGA SAYA -->
+        <div class="lb-tabs-bar" id="lbTabsBar">
+          <button id="lbTabGlobalBtn" class="lb-tab-btn active" type="button">
+            <span>🏆 TOP GLOBAL</span>
+          </button>
+          <button id="lbTabTiersBtn" class="lb-tab-btn" type="button">
+            <span>🎖️ TIER LIGA SAYA</span>
+          </button>
+        </div>
+
+        <!-- TAB 1: GLOBAL LEADERBOARD VIEW -->
+        <div id="lbGlobalView" class="lb-tab-content active">
+          <!-- TOP 1 CHAMPION GOLDEN PORTRAIT SPOTLIGHT -->
+          <div class="champion-spotlight" id="championSpotlight">
+            <div class="portrait-frame">
+              <div class="portrait-header">
+                <span class="laurel-wreath">TOP 1</span>
+                <span class="portrait-title" id="spotlightTitle">WORLD CHAMPION</span>
+                <span class="laurel-wreath">TOP 1</span>
               </div>
-              <div class="champion-tier" id="championTier">GRANDMASTER TIER</div>
-              <div class="champion-loadout-tags" id="championLoadoutTags">
-                <!-- Injected via JavaScript -->
+              <!-- Portrait Canvas with Golden Border -->
+              <div class="portrait-canvas-box">
+                <div class="portrait-flash-spark" id="portraitSpark1"></div>
+                <div class="portrait-flash-spark" id="portraitSpark2"></div>
+                <canvas id="championCanvas" width="280" height="90" aria-label="Potret Burung Juara 1"></canvas>
               </div>
+              <!-- Champion Details & Equipped Cosmetics from Shop (No Booster) -->
+              <div class="champion-meta">
+                <div class="champion-main-info">
+                  <strong id="championGamerTag">SkyKing_Legend</strong>
+                  <span class="champion-score">SCORE <b id="championScore">284</b></span>
+                </div>
+                <div class="champion-tier" id="championTier">GRANDMASTER TIER</div>
+                <div class="champion-loadout-tags" id="championLoadoutTags">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LEADERBOARD RANKINGS LIST -->
+          <div class="leaderboard-container">
+            <div class="lb-header">
+              <span>RANK</span>
+              <span>PLAYER</span>
+              <span>TIER</span>
+              <span>SCORE</span>
+            </div>
+            <div class="leaderboard-list" id="leaderboardList">
+              <!-- Dynamic Player Entries Generated in script.js -->
             </div>
           </div>
         </div>
 
-        <!-- LEADERBOARD RANKINGS LIST -->
-        <div class="leaderboard-container">
-          <div class="lb-header">
-            <span>RANK</span>
-            <span>PLAYER</span>
-            <span>TIER</span>
-            <span>SCORE</span>
+        <!-- TAB 2: MY TIER & RANK PROGRESSION VIEW -->
+        <div id="lbTiersView" class="lb-tab-content hidden">
+          <!-- My Personal Rank Progression Card -->
+          <div class="my-rank-card" id="myRankCard">
+            <!-- Injected via JavaScript with big Rank SVG, progress bar, points to rank up -->
           </div>
-          <div class="leaderboard-list" id="leaderboardList">
-            <!-- Dynamic Player Entries Generated in script.js -->
+
+          <!-- All Tiers Progression Guide -->
+          <div class="tiers-guide-container">
+            <div class="tiers-guide-header">
+              <span>DAFTAR TIER & TARGET POIN RANK</span>
+            </div>
+            <div class="tiers-guide-list" id="tiersGuideList">
+              <!-- Injected via JavaScript -->
+            </div>
           </div>
         </div>
 

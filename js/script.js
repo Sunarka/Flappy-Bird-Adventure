@@ -21,6 +21,8 @@
     rankedModal:$('rankedModal'), championCanvas:$('championCanvas'), championGamerTag:$('championGamerTag'),
     championScore:$('championScore'), championTier:$('championTier'), championLoadoutTags:$('championLoadoutTags'),
     spotlightTitle:$('spotlightTitle'), leaderboardList:$('leaderboardList'), playRankedFromModalBtn:$('playRankedFromModalBtn'),
+    lbTabsBar:$('lbTabsBar'), lbTabGlobalBtn:$('lbTabGlobalBtn'), lbTabTiersBtn:$('lbTabTiersBtn'),
+    lbGlobalView:$('lbGlobalView'), lbTiersView:$('lbTiersView'), myRankCard:$('myRankCard'), tiersGuideList:$('tiersGuideList'),
     dashBtn:$('dashBtn'), dashRingProgress:$('dashRingProgress'), dashCooldownText:$('dashCooldownText'),
     reviveModal:$('reviveModal'), reviveTimerRing:$('reviveTimerRing'), reviveCountdownText:$('reviveCountdownText'),
     reviveCostLabel:$('reviveCostLabel'), reviveConfirmBtn:$('reviveConfirmBtn'), reviveGiveUpBtn:$('reviveGiveUpBtn')
@@ -1563,17 +1565,116 @@
     el.gpAuthActionBtn.textContent = gpProfile.isLoggedIn ? 'SIMPAN & CONNECT' : 'CONNECT GOOGLE PLAY';
     
     const tier = getRankTier(rankedBest);
-    el.gpTierBadge.textContent = tier.name;
+    if(el.gpTierBadge) {
+      el.gpTierBadge.innerHTML = `<span class="tier-icon-inline">${tier.iconSvg}</span> ${tier.name}`;
+      el.gpTierBadge.style.color = tier.color;
+    }
   }
 
-  function getRankTier(s) {
-    if(s >= 250) return { name: 'GRANDMASTER', color: '#facc15' };
-    if(s >= 200) return { name: 'MASTER I', color: '#38bdf8' };
-    if(s >= 150) return { name: 'DIAMOND I', color: '#818cf8' };
-    if(s >= 100) return { name: 'PLATINUM I', color: '#2dd4bf' };
-    if(s >= 50)  return { name: 'GOLD I', color: '#fde047' };
-    if(s >= 20)  return { name: 'SILVER I', color: '#cbd5e1' };
-    return { name: 'BRONZE I', color: '#f97316' };
+  // 10. Daftar Tingkatan Rank Tier & Ikon Badge Vektor Unik
+  const rankTiers = [
+    {
+      id: 'bronze',
+      name: 'BRONZE',
+      minScore: 0,
+      maxScore: 24,
+      color: '#f97316',
+      badgeBg: 'linear-gradient(135deg, #7c2d12 0%, #ea580c 100%)',
+      borderColor: '#f97316',
+      iconSvg: `<svg viewBox="0 0 32 32" class="rank-tier-svg"><polygon points="16,3 26,9 23,23 16,29 9,23 6,9" fill="#9a3412" stroke="#ea580c" stroke-width="1.8"/><polygon points="16,7 22,11 20,21 16,25 12,21 10,11" fill="#c2410c"/><circle cx="16" cy="16" r="3.5" fill="#fed7aa"/></svg>`
+    },
+    {
+      id: 'silver',
+      name: 'SILVER',
+      minScore: 25,
+      maxScore: 49,
+      color: '#cbd5e1',
+      badgeBg: 'linear-gradient(135deg, #334155 0%, #94a3b8 100%)',
+      borderColor: '#e2e8f0',
+      iconSvg: `<svg viewBox="0 0 32 32" class="rank-tier-svg"><polygon points="16,3 27,8 24,24 16,29 8,24 5,8" fill="#475569" stroke="#cbd5e1" stroke-width="1.8"/><polygon points="16,6 23,10 21,21 16,25 11,21 9,10" fill="#94a3b8"/><polygon points="16,11 18,15 22,15.5 19,18 20,22 16,20 12,22 13,18 10,15.5 14,15" fill="#f8fafc"/></svg>`
+    },
+    {
+      id: 'gold',
+      name: 'GOLD',
+      minScore: 50,
+      maxScore: 99,
+      color: '#facc15',
+      badgeBg: 'linear-gradient(135deg, #713f12 0%, #eab308 100%)',
+      borderColor: '#fde047',
+      iconSvg: `<svg viewBox="0 0 32 32" class="rank-tier-svg"><polygon points="16,2 28,8 25,25 16,30 7,25 4,8" fill="#854d0e" stroke="#facc15" stroke-width="2"/><polygon points="16,5 24,10 22,22 16,26 10,22 8,10" fill="#eab308"/><path d="M10 19 L16 12 L22 19 L19 22 L13 22 Z" fill="#fef08a"/><circle cx="16" cy="11" r="2" fill="#fff"/></svg>`
+    },
+    {
+      id: 'platinum',
+      name: 'PLATINUM',
+      minScore: 100,
+      maxScore: 159,
+      color: '#2dd4bf',
+      badgeBg: 'linear-gradient(135deg, #134e4a 0%, #14b8a6 100%)',
+      borderColor: '#5eead4',
+      iconSvg: `<svg viewBox="0 0 32 32" class="rank-tier-svg"><polygon points="16,2 28,7 26,24 16,30 6,24 4,7" fill="#115e59" stroke="#2dd4bf" stroke-width="2"/><polygon points="16,6 23,10 21,22 16,26 11,22 9,10" fill="#14b8a6"/><polygon points="16,9 21,15 16,23 11,15" fill="#ccfbf1"/><line x1="16" y1="9" x2="16" y2="23" stroke="#fff" stroke-width="1.2"/></svg>`
+    },
+    {
+      id: 'diamond',
+      name: 'DIAMOND',
+      minScore: 160,
+      maxScore: 229,
+      color: '#38bdf8',
+      badgeBg: 'linear-gradient(135deg, #0c4a6e 0%, #0284c7 100%)',
+      borderColor: '#7dd3fc',
+      iconSvg: `<svg viewBox="0 0 32 32" class="rank-tier-svg"><polygon points="16,2 29,8 25,26 16,31 7,26 3,8" fill="#0369a1" stroke="#38bdf8" stroke-width="2"/><polygon points="16,5 25,10 22,23 16,27 10,23 7,10" fill="#0284c7"/><polygon points="16,8 23,13 16,24 9,13" fill="#e0f2fe"/><polygon points="16,8 20,13 16,19 12,13" fill="#ffffff"/></svg>`
+    },
+    {
+      id: 'master',
+      name: 'MASTER',
+      minScore: 230,
+      maxScore: 299,
+      color: '#c084fc',
+      badgeBg: 'linear-gradient(135deg, #581c87 0%, #9333ea 100%)',
+      borderColor: '#e9d5ff',
+      iconSvg: `<svg viewBox="0 0 32 32" class="rank-tier-svg"><polygon points="16,1 30,7 26,27 16,31 6,27 2,7" fill="#6b21a8" stroke="#c084fc" stroke-width="2"/><path d="M6 13 L2 7 L10 9 Z" fill="#a855f7"/><path d="M26 13 L30 7 L22 9 Z" fill="#a855f7"/><polygon points="16,5 23,10 21,23 16,27 11,23 9,10" fill="#9333ea"/><polygon points="16,8 20,14 16,22 12,14" fill="#f3e8ff"/><circle cx="16" cy="15" r="2.5" fill="#ffffff"/></svg>`
+    },
+    {
+      id: 'grandmaster',
+      name: 'GRANDMASTER',
+      minScore: 300,
+      maxScore: 99999,
+      color: '#f43f5e',
+      badgeBg: 'linear-gradient(135deg, #881337 0%, #e11d48 50%, #facc15 100%)',
+      borderColor: '#fde047',
+      iconSvg: `<svg viewBox="0 0 32 32" class="rank-tier-svg"><polygon points="16,1 30,7 27,27 16,31 5,27 2,7" fill="#9f1239" stroke="#facc15" stroke-width="2"/><path d="M6 8 L10 16 L16 9 L22 16 L26 8 L24 23 L8 23 Z" fill="#facc15"/><polygon points="16,14 19,19 16,24 13,19" fill="#f43f5e"/><circle cx="16" cy="8" r="2.2" fill="#fff"/></svg>`
+    }
+  ];
+
+  function getRankTier(score) {
+    const s = Math.max(0, Number(score) || 0);
+    for(let i = rankTiers.length - 1; i >= 0; i--) {
+      const tier = rankTiers[i];
+      if(s >= tier.minScore) {
+        const nextTier = rankTiers[i + 1] || null;
+        let pointsToNext = 0;
+        let progressPercent = 100;
+        if(nextTier) {
+          pointsToNext = nextTier.minScore - s;
+          const range = nextTier.minScore - tier.minScore;
+          const current = s - tier.minScore;
+          progressPercent = Math.max(0, Math.min(100, Math.round((current / range) * 100)));
+        }
+        return {
+          ...tier,
+          score: s,
+          nextTier,
+          pointsToNext,
+          progressPercent
+        };
+      }
+    }
+    return {
+      ...rankTiers[0],
+      score: s,
+      nextTier: rankTiers[1],
+      pointsToNext: rankTiers[1].minScore - s,
+      progressPercent: 0
+    };
   }
 
   function sanitizeLeaderboard(list) {
@@ -1813,8 +1914,12 @@
         storage.set('skyFlappyLeaderboard', leaderboardData);
 
         if(el.rankedModal && !el.rankedModal.classList.contains('hidden')) {
-          renderLeaderboardList();
-          startChampionSpotlight(selectedSpotlightPlayer || leaderboardData[0]);
+          if(activeLeaderboardTab === 'global') {
+            renderLeaderboardList();
+            startChampionSpotlight(selectedSpotlightPlayer || leaderboardData[0]);
+          } else {
+            renderTiersProgressView();
+          }
         }
       }
     });
@@ -1876,6 +1981,75 @@
     el.championLoadoutTags.innerHTML = tagsHtml;
   }
 
+  let activeLeaderboardTab = 'global';
+
+  function switchLeaderboardTab(tab) {
+    activeLeaderboardTab = tab;
+    if(el.lbTabGlobalBtn) el.lbTabGlobalBtn.classList.toggle('active', tab === 'global');
+    if(el.lbTabTiersBtn) el.lbTabTiersBtn.classList.toggle('active', tab === 'tiers');
+    if(el.lbGlobalView) el.lbGlobalView.classList.toggle('hidden', tab !== 'global');
+    if(el.lbTiersView) el.lbTiersView.classList.toggle('hidden', tab !== 'tiers');
+
+    if(tab === 'global') {
+      renderLeaderboardList();
+      startChampionSpotlight(selectedSpotlightPlayer || leaderboardData[0]);
+    } else {
+      stopChampionSpotlight();
+      renderTiersProgressView();
+    }
+  }
+
+  function renderTiersProgressView() {
+    if(!el.myRankCard || !el.tiersGuideList) return;
+    const tier = getRankTier(rankedBest);
+
+    // 1. Render My Personal Rank Progression Card
+    let nextInfo = '';
+    if(tier.nextTier) {
+      nextInfo = `<span><b>${tier.score}</b> / ${tier.nextTier.minScore} PTS</span><span><b>${tier.pointsToNext}</b> POIN LAGI KE ${tier.nextTier.name}!</span>`;
+    } else {
+      nextInfo = `<span><b>${tier.score}</b> PTS</span><span>👑 <b>MAX SUPREME TIER!</b></span>`;
+    }
+
+    el.myRankCard.innerHTML = `
+      <div class="rank-card-top">
+        <div class="rank-card-badge">${tier.iconSvg}</div>
+        <div class="rank-card-info">
+          <div class="rank-card-title" style="color:${tier.color}">${tier.name} TIER</div>
+          <div class="rank-card-subtitle">Player: <b>${gpProfile.gamerTag}</b> • Best: <b>${rankedBest} pts</b></div>
+        </div>
+      </div>
+      <div class="rank-progress-wrap">
+        <div class="rank-progress-labels">
+          ${nextInfo}
+        </div>
+        <div class="rank-progress-bar">
+          <div class="rank-progress-fill" style="width: ${tier.progressPercent}%;"></div>
+        </div>
+      </div>
+    `;
+
+    // 2. Render All Tiers Division Ladder Guide
+    let ladderHtml = '';
+    rankTiers.forEach(t => {
+      const isCurrent = t.id === tier.id;
+      const ptsLabel = t.maxScore >= 99999 ? `${t.minScore}+ POIN` : `${t.minScore} - ${t.maxScore} POIN`;
+      ladderHtml += `
+        <div class="tier-guide-item${isCurrent ? ' current-tier' : ''}">
+          <div class="tier-guide-icon">${t.iconSvg}</div>
+          <div class="tier-guide-info">
+            <div class="tier-guide-name" style="color: ${t.color}">
+              ${t.name} TIER
+              ${isCurrent ? '<span class="tier-guide-badge-active">RANK SAYA</span>' : ''}
+            </div>
+            <div class="tier-guide-pts">Target Poin: <b>${ptsLabel}</b></div>
+          </div>
+        </div>
+      `;
+    });
+    el.tiersGuideList.innerHTML = ladderHtml;
+  }
+
   function renderLeaderboardList() {
     if(!el.leaderboardList) return;
     leaderboardData = sanitizeLeaderboard(leaderboardData);
@@ -1889,12 +2063,16 @@
       const rankBadge = isTop1 ? '#1' : p.rank === 2 ? '#2' : p.rank === 3 ? '#3' : `#${p.rank}`;
       const activeClass = (selectedSpotlightPlayer && selectedSpotlightPlayer.name === p.name) ? ' active-spotlight' : '';
       const userClass = p.isUser ? ' user-row' : '';
+      const playerTier = getRankTier(p.score);
 
       html += `
         <div class="lb-row${activeClass}${userClass}" data-player-name="${p.name}">
           <span class="lb-rank ${rankClass}">${rankBadge}</span>
           <span class="lb-player"><b class="lb-av-badge">${p.avatar || 'P1'}</b> ${p.name}</span>
-          <span class="lb-tier">${p.tier}</span>
+          <span class="lb-tier" style="color: ${playerTier.color}">
+            <span class="tier-icon-inline">${playerTier.iconSvg}</span>
+            ${playerTier.name}
+          </span>
           <span class="lb-score">${p.score}</span>
         </div>
       `;
@@ -6534,9 +6712,20 @@
     $('rankedLeaderboardBtn').onclick = () => {
       if(currentMode !== 'ranked') return;
       audio.click();
-      renderLeaderboardList();
-      startChampionSpotlight(leaderboardData[0]);
+      switchLeaderboardTab('global');
       showModal(el.rankedModal);
+    };
+  }
+  if(el.lbTabGlobalBtn) {
+    el.lbTabGlobalBtn.onclick = () => {
+      audio.click();
+      switchLeaderboardTab('global');
+    };
+  }
+  if(el.lbTabTiersBtn) {
+    el.lbTabTiersBtn.onclick = () => {
+      audio.click();
+      switchLeaderboardTab('tiers');
     };
   }
   $('googlePlayBtn').onclick = () => {

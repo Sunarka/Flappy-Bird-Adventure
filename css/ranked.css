@@ -552,6 +552,9 @@
   font-size: 9px;
   color: #38bdf8;
   letter-spacing: 0.4px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
 }
 
 .lb-score {
@@ -566,5 +569,248 @@
   border: 1.5px solid #fef08a !important;
   color: #451a03 !important;
   box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4) !important;
+}
+
+/* =========================================================
+   TWO LEADERBOARD TABS & RANK PROGRESSION STYLES
+   ========================================================= */
+.lb-tabs-bar {
+  display: flex;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  margin-bottom: 8px;
+}
+
+.lb-tab-btn {
+  flex: 1;
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  border-radius: 8px;
+  font: 900 10.5px 'Trebuchet MS', Arial, sans-serif;
+  letter-spacing: 0.5px;
+  padding: 6px 4px;
+  min-height: 32px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: all 0.2s ease;
+}
+
+.lb-tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lb-tab-btn.active {
+  background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
+}
+
+.lb-tab-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* --- Personal Rank Progression Card --- */
+.my-rank-card {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, rgba(30, 27, 75, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.rank-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.rank-card-badge {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+  animation: rankPulse 2.4s infinite ease-in-out;
+}
+
+@keyframes rankPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 2px 6px rgba(56, 189, 248, 0.3)); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.6)); }
+}
+
+.rank-tier-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.rank-card-info {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.rank-card-title {
+  font: 900 13.5px 'Trebuchet MS', Arial, sans-serif;
+  letter-spacing: 0.6px;
+  margin-bottom: 2px;
+}
+
+.rank-card-subtitle {
+  font: 800 10.5px 'Trebuchet MS', Arial, sans-serif;
+  color: #cbd5e1;
+}
+
+.rank-card-subtitle b {
+  color: #fde047;
+}
+
+/* Rank Progress Bar */
+.rank-progress-wrap {
+  width: 100%;
+}
+
+.rank-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font: 800 9.5px 'Trebuchet MS', Arial, sans-serif;
+  color: #94a3b8;
+  margin-bottom: 3px;
+}
+
+.rank-progress-labels b {
+  color: #38bdf8;
+}
+
+.rank-progress-bar {
+  width: 100%;
+  height: 9px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 99px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+}
+
+.rank-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8 0%, #facc15 100%);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 8px rgba(250, 204, 21, 0.5);
+}
+
+/* --- Tiers Guide Ladder List --- */
+.tiers-guide-container {
+  flex: 1 1 auto;
+  min-height: 130px;
+  max-height: 200px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 4px 6px;
+  margin-bottom: 8px;
+}
+
+.tiers-guide-header {
+  font: 900 9px 'Trebuchet MS', Arial, sans-serif;
+  color: #93c5fd;
+  letter-spacing: 0.7px;
+  padding: 4px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+}
+
+.tiers-guide-list {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 2px;
+  scrollbar-width: thin;
+  scrollbar-color: #38bdf8 rgba(15, 23, 42, 0.5);
+}
+
+.tiers-guide-list::-webkit-scrollbar {
+  width: 5px;
+}
+.tiers-guide-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #38bdf8, #2563eb);
+  border-radius: 99px;
+}
+
+.tier-guide-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+  transition: all 0.18s ease;
+}
+
+.tier-guide-item.current-tier {
+  background: rgba(250, 204, 21, 0.18);
+  border: 1.5px solid #facc15;
+  box-shadow: 0 2px 10px rgba(250, 204, 21, 0.25);
+}
+
+.tier-guide-icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.tier-guide-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.tier-guide-name {
+  font: 900 11px 'Trebuchet MS', Arial, sans-serif;
+  letter-spacing: 0.4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tier-guide-badge-active {
+  font: 900 7.5px 'Trebuchet MS', Arial, sans-serif;
+  background: #facc15;
+  color: #451a03;
+  padding: 1px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.4px;
+}
+
+.tier-guide-pts {
+  font: 700 9.5px 'Trebuchet MS', Arial, sans-serif;
+  color: #94a3b8;
+}
+
+.tier-icon-inline {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
 }
 
