@@ -1,5 +1,34 @@
 (() => {
   'use strict';
+
+  // Canvas Polyfills for 100% cross-browser backward compatibility
+  if(typeof CanvasRenderingContext2D !== 'undefined') {
+    if(!CanvasRenderingContext2D.prototype.ellipse) {
+      CanvasRenderingContext2D.prototype.ellipse = function(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise) {
+        this.save();
+        this.translate(x, y);
+        this.rotate(rotation);
+        this.scale(radiusX, radiusY);
+        this.arc(0, 0, 1, startAngle, endAngle, anticlockwise);
+        this.restore();
+      };
+    }
+    if(!CanvasRenderingContext2D.prototype.roundRect) {
+      CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, radii) {
+        let r = typeof radii === 'number' ? radii : (Array.isArray(radii) ? radii[0] : 0);
+        r = Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2);
+        this.beginPath();
+        this.moveTo(x + r, y);
+        this.arcTo(x + w, y, x + w, y + h, r);
+        this.arcTo(x + w, y + h, x, y + h, r);
+        this.arcTo(x, y + h, x, y, r);
+        this.arcTo(x, y, x + w, y, r);
+        this.closePath();
+        return this;
+      };
+    }
+  }
+
   const W = 360, H = 640, GROUND = 92;
   const State = Object.freeze({ MENU:'menu', READY:'ready', PLAYING:'playing', PAUSED:'paused', REVIVING:'reviving', OVER:'over' });
   const $ = id => document.getElementById(id);
