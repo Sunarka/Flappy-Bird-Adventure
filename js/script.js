@@ -828,7 +828,7 @@
   let shopCategory = 'bird';
   const previewLoadout = {
     bird: 'classic',
-    baby: 'classic_duo',
+    booster: 'none',
     aura: 'default',
     hat: 'none',
     outfit: 'none',
@@ -842,7 +842,7 @@
 
   function syncPreviewLoadout() {
     previewLoadout.bird = progress.selected || 'classic';
-    previewLoadout.baby = progress.selectedBaby || 'classic_duo';
+    previewLoadout.booster = progress.selectedBooster || 'none';
     previewLoadout.aura = progress.selectedAura || 'default';
     previewLoadout.hat = progress.selectedHat || 'none';
     previewLoadout.outfit = progress.selectedOutfit || 'none';
@@ -856,7 +856,7 @@
     if(!el.showcaseLabel) return;
     const cat = shopCategory;
     const catCatalog = shopCatalog();
-    const currentId = previewLoadout[cat] || (cat === 'baby' ? 'classic_duo' : 'none');
+    const currentId = previewLoadout[cat] || 'none';
     const item = catCatalog[currentId];
     if(item) {
       el.showcaseLabel.textContent = 'PREVIEW: ' + item.name;
@@ -977,34 +977,36 @@
       opacity: 1
     });
 
-    // 5b. Baby Birds Preview in Shop Showcase
-    const bSkin = babyBirdsCatalog[previewLoadout.baby] || babyBirdsCatalog.classic_duo;
-    if(bSkin && bSkin.baby1 && bSkin.baby2) {
-      drawBabyBird({
-        x: bX - 22,
-        y: bY - 14 + Math.sin(now / 220) * 3,
-        r: 7.2,
-        wing: now / 90,
-        angle: 0,
-        state: 'follow',
-        color: bSkin.baby1.color,
-        wingColor: bSkin.baby1.wingColor,
-        blushColor: bSkin.baby1.blushColor,
-        accessory: bSkin.baby1.accessory
-      }, sCtx);
+    // 5b. Baby Birds Preview in Shop Showcase (saat booster baby dipilih)
+    if(previewLoadout.booster === 'baby') {
+      const bSkin = babyBirdsCatalog[progress.selectedBaby || 'classic_duo'] || babyBirdsCatalog.classic_duo;
+      if(bSkin && bSkin.baby1 && bSkin.baby2) {
+        drawBabyBird({
+          x: bX - 22,
+          y: bY - 14 + Math.sin(now / 220) * 3,
+          r: 7.2,
+          wing: now / 90,
+          angle: 0,
+          state: 'follow',
+          color: bSkin.baby1.color,
+          wingColor: bSkin.baby1.wingColor,
+          blushColor: bSkin.baby1.blushColor,
+          accessory: bSkin.baby1.accessory
+        }, sCtx);
 
-      drawBabyBird({
-        x: bX - 26,
-        y: bY + 14 + Math.sin(now / 240 + Math.PI) * 3,
-        r: 6.8,
-        wing: now / 90,
-        angle: 0,
-        state: 'follow',
-        color: bSkin.baby2.color,
-        wingColor: bSkin.baby2.wingColor,
-        blushColor: bSkin.baby2.blushColor,
-        accessory: bSkin.baby2.accessory
-      }, sCtx);
+        drawBabyBird({
+          x: bX - 26,
+          y: bY + 14 + Math.sin(now / 240 + Math.PI) * 3,
+          r: 6.8,
+          wing: now / 90,
+          angle: 0,
+          state: 'follow',
+          color: bSkin.baby2.color,
+          wingColor: bSkin.baby2.wingColor,
+          blushColor: bSkin.baby2.blushColor,
+          accessory: bSkin.baby2.accessory
+        }, sCtx);
+      }
     }
 
     // 6. Floating Music Notes when previewing music
@@ -1026,7 +1028,6 @@
   function shopCatalog() {
     switch(shopCategory) {
       case 'bird': return skins;
-      case 'baby': return babyBirdsCatalog;
       case 'booster': return boosters;
       case 'aura': return auras;
       case 'hat': return hats;
