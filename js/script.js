@@ -1,33 +1,18 @@
 (() => {
   'use strict';
 
-  // Canvas Polyfills for 100% cross-browser backward compatibility
-  if(typeof CanvasRenderingContext2D !== 'undefined') {
-    if(!CanvasRenderingContext2D.prototype.ellipse) {
-      CanvasRenderingContext2D.prototype.ellipse = function(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise) {
-        this.save();
-        this.translate(x, y);
-        this.rotate(rotation || 0);
-        this.scale(radiusX, radiusY);
-        this.arc(0, 0, 1, startAngle, endAngle, anticlockwise || false);
-        this.restore();
-      };
-    }
-    if(!CanvasRenderingContext2D.prototype.roundRect) {
-      CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, radii) {
-        let r = typeof radii === 'number' ? radii : (Array.isArray(radii) ? (radii[0] || 0) : 0);
-        r = Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2);
-        // TIDAK memanggil beginPath() di sini — biarkan caller yang tentukan path-nya
-        this.moveTo(x + r, y);
-        this.arcTo(x + w, y, x + w, y + h, r);
-        this.arcTo(x + w, y + h, x, y + h, r);
-        this.arcTo(x, y + h, x, y, r);
-        this.arcTo(x, y, x + w, y, r);
-        this.closePath();
-        return this;
-      };
-    }
+  // Canvas Polyfill: ellipse() untuk browser lama yang tidak support
+  if(typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D.prototype.ellipse) {
+    CanvasRenderingContext2D.prototype.ellipse = function(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise) {
+      this.save();
+      this.translate(x, y);
+      this.rotate(rotation || 0);
+      this.scale(radiusX || 1, radiusY || 1);
+      this.arc(0, 0, 1, startAngle, endAngle, anticlockwise || false);
+      this.restore();
+    };
   }
+
 
   const W = 360, H = 640, GROUND = 92;
   const State = Object.freeze({ MENU:'menu', READY:'ready', PLAYING:'playing', PAUSED:'paused', REVIVING:'reviving', OVER:'over' });
@@ -3552,17 +3537,28 @@
     particles = particles.filter(q => q.life > 0);
   }
 
+  // Helper: gambar rounded rect path pakai arcTo (100% kompatibel semua browser)
+  function _rrPath(tc, x, y, w, h, r) {
+    const rx = Math.min(Math.abs(r || 0), Math.abs(w) / 2, Math.abs(h) / 2);
+    tc.beginPath();
+    tc.moveTo(x + rx, y);
+    tc.arcTo(x + w, y,     x + w, y + h, rx);
+    tc.arcTo(x + w, y + h, x,     y + h, rx);
+    tc.arcTo(x,     y + h, x,     y,     rx);
+    tc.arcTo(x,     y,     x + w, y,     rx);
+    tc.closePath();
+  }
+
   function rr(x, y, w, h, r, targetCtx = ctx) {
-    targetCtx.beginPath();
-    targetCtx.roundRect(x, y, w, h, r);
+    _rrPath(targetCtx, x, y, w, h, r);
     targetCtx.fill();
   }
 
   function rrTo(targetCtx, x, y, w, h, r) {
-    targetCtx.beginPath();
-    targetCtx.roundRect(x, y, w, h, r);
+    _rrPath(targetCtx, x, y, w, h, r);
     targetCtx.fill();
   }
+
 
   function drawAuraParticleTo(targetCtx, q) {
     drawAuraParticle(q, targetCtx);
@@ -4976,20 +4972,10 @@
       ctx.fill();
     }
 
-    // Dasar awan yang rata dan lembut
-    ctx.beginPath();
-    if(typeof ctx.roundRect === 'function') {
-      ctx.roundRect(-33, 4, 88, 18, 9);
-    } else {
-      const rx = -33, ry = 4, rw = 88, rh = 18, rr = 9;
-      ctx.moveTo(rx + rr, ry);
-      ctx.arcTo(rx + rw, ry, rx + rw, ry + rh, rr);
-      ctx.arcTo(rx + rw, ry + rh, rx, ry + rh, rr);
-      ctx.arcTo(rx, ry + rh, rx, ry, rr);
-      ctx.arcTo(rx, ry, rx + rw, ry, rr);
-      ctx.closePath();
-    }
+    // Dasar awan yang rata dan lembut (pure arcTo, no roundRect dependency)
+    _rrPath(ctx, -33, 4, 88, 18, 9);
     ctx.fill();
+
 
     // Highlight puncak awan terpapar sinar matahari
     ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
