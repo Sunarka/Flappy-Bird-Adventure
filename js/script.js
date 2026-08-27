@@ -26,6 +26,8 @@
     menuRankedCard:$('menuRankedCard'), menuRankIcon:$('menuRankIcon'), menuRankTitle:$('menuRankTitle'),
     menuRankSub:$('menuRankSub'), menuRankCurPts:$('menuRankCurPts'), menuRankTargetPts:$('menuRankTargetPts'),
     menuRankFill:$('menuRankFill'), rankTierHud:$('rankTierHud'),
+    modeRankPillIcon:$('modeRankPillIcon'), btnTierTag:$('btnTierTag'),
+    gpMenuTierBadge:$('gpMenuTierBadge'), menuBestTierBadge:$('menuBestTierBadge'),
     overRankCard:$('overRankCard'), overRankIcon:$('overRankIcon'), overRankTitle:$('overRankTitle'),
     overRankDesc:$('overRankDesc'), overRankFill:$('overRankFill'),
     dashBtn:$('dashBtn'), dashRingProgress:$('dashRingProgress'), dashCooldownText:$('dashCooldownText'),
@@ -1931,29 +1933,58 @@
   }
 
   function updateMenuRankedUI() {
-    if(!el.menuRankedCard) return;
     const isRanked = currentMode === 'ranked';
-    el.menuRankedCard.classList.toggle('hidden', !isRanked);
-    if(!isRanked) return;
-
     const tier = getRankTier(rankedBest);
-    if(el.menuRankIcon) el.menuRankIcon.innerHTML = tier.iconSvg;
-    if(el.menuRankTitle) {
-      el.menuRankTitle.textContent = tier.name + ' TIER';
-      el.menuRankTitle.style.color = tier.color;
+
+    // 1. Icon pada tombol [RANKED] di Mode Selector
+    if(el.modeRankPillIcon) {
+      el.modeRankPillIcon.innerHTML = tier.iconSvg;
     }
-    if(el.menuRankSub) {
-      el.menuRankSub.innerHTML = `Ranked Best: <b>${rankedBest} pts</b>`;
+
+    // 2. Tag Rank pada tombol LEADERBOARD & GOOGLE PLAY
+    if(el.btnTierTag) {
+      el.btnTierTag.innerHTML = `<span class="tier-icon-inline">${tier.iconSvg}</span> ${tier.name}`;
+      el.btnTierTag.style.color = tier.color;
     }
-    if(el.menuRankCurPts && el.menuRankTargetPts && el.menuRankFill) {
-      if(tier.nextTier) {
-        el.menuRankCurPts.textContent = `${tier.score} / ${tier.nextTier.minScore} PTS`;
-        el.menuRankTargetPts.textContent = `${tier.pointsToNext} Poin lagi ke ${tier.nextTier.name}!`;
+    if(el.gpMenuTierBadge) {
+      el.gpMenuTierBadge.innerHTML = `<span class="tier-icon-inline">${tier.iconSvg}</span> ${tier.name}`;
+      el.gpMenuTierBadge.style.color = tier.color;
+    }
+
+    // 3. Status di baris bawah BEST SCORE
+    if(el.menuBestTierBadge) {
+      if(isRanked) {
+        const nextInfo = tier.nextTier ? `(${tier.pointsToNext} pts lagi ke ${tier.nextTier.name})` : '(MAX TIER)';
+        el.menuBestTierBadge.innerHTML = `• <span class="tier-icon-inline">${tier.iconSvg}</span> <b style="color:${tier.color}">${tier.name}</b> <span style="font-size:9px;color:#94a3b8">${nextInfo}</span>`;
+        el.menuBestTierBadge.style.display = 'inline-flex';
       } else {
-        el.menuRankCurPts.textContent = `${tier.score} PTS`;
-        el.menuRankTargetPts.textContent = `👑 MAX SUPREME TIER!`;
+        el.menuBestTierBadge.style.display = 'none';
       }
-      el.menuRankFill.style.width = `${tier.progressPercent}%`;
+    }
+
+    // 4. Kartu Banner Rank Utama
+    if(el.menuRankedCard) {
+      el.menuRankedCard.classList.toggle('hidden', !isRanked);
+      if(isRanked) {
+        if(el.menuRankIcon) el.menuRankIcon.innerHTML = tier.iconSvg;
+        if(el.menuRankTitle) {
+          el.menuRankTitle.textContent = tier.name + ' TIER';
+          el.menuRankTitle.style.color = tier.color;
+        }
+        if(el.menuRankSub) {
+          el.menuRankSub.innerHTML = `Ranked Best: <b>${rankedBest} pts</b>`;
+        }
+        if(el.menuRankCurPts && el.menuRankTargetPts && el.menuRankFill) {
+          if(tier.nextTier) {
+            el.menuRankCurPts.textContent = `${tier.score} / ${tier.nextTier.minScore} PTS`;
+            el.menuRankTargetPts.textContent = `${tier.pointsToNext} Poin lagi ke ${tier.nextTier.name}!`;
+          } else {
+            el.menuRankCurPts.textContent = `${tier.score} PTS`;
+            el.menuRankTargetPts.textContent = `👑 MAX SUPREME TIER!`;
+          }
+          el.menuRankFill.style.width = `${tier.progressPercent}%`;
+        }
+      }
     }
   }
 

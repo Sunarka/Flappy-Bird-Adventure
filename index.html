@@ -79,7 +79,10 @@
         </button>
         <button class="mode-pill" id="modeRankedBtn" data-mode="ranked" type="button">
           <span class="mode-badge ranked">ONLINE</span>
-          <span class="mode-title">RANKED</span>
+          <span class="mode-title-row">
+            <span class="mode-rank-pill-icon" id="modeRankPillIcon"></span>
+            <span class="mode-title">RANKED</span>
+          </span>
         </button>
       </div>
 
@@ -118,15 +121,20 @@
           </svg>
         </span>
         <span>LEADERBOARD</span>
+        <span class="btn-tier-tag" id="btnTierTag"></span>
       </button>
 
-      <button class="secondary hidden" id="googlePlayBtn"><span class="gp-dot"></span> GOOGLE PLAY PROFILE</button>
+      <button class="secondary hidden" id="googlePlayBtn">
+        <span class="gp-dot"></span>
+        <span>GOOGLE PLAY PROFILE</span>
+        <span class="btn-tier-tag" id="gpMenuTierBadge"></span>
+      </button>
 
       <button class="secondary" id="shopBtn">SHOP</button>
       <button class="secondary" id="howBtn">HOW TO PLAY</button>
       <button class="secondary" id="settingsBtn">SETTINGS</button>
       <div class="home-wallet">COINS <b id="coinCount">0</b></div>
-      <small><span id="modeBestLabel">BEST SCORE</span>: <b id="menuBest">0</b></small>
+      <small><span id="modeBestLabel">BEST SCORE</span>: <b id="menuBest">0</b><span id="menuBestTierBadge" class="menu-best-tier-badge"></span></small>
     </section>
     <section id="ready" class="screen hidden">
       <h2>GET READY!</h2>
