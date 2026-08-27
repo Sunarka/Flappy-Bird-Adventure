@@ -163,60 +163,60 @@
     },
     momo_hana: {
       name: 'MOMO & HANA (SAKURA FAIRIES)',
-      desc: 'Peri kembar sakura. Memberikan perisai bunga sakura pelindung berkala tiap 16s',
+      desc: 'Peri kembar sakura. Memberikan Perisai Bunga Sakura Pelindung berbentuk bunga teratai pink',
       cost: 0,
       color: '#f472b6',
       skillType: 'barrier',
-      skillName: 'SAKURA BARRIER SHIELD',
-      skillDesc: 'Membuat perisai pelindung bunga sakura berkala tiap 16 detik yang menyerap 1 tabrakan',
-      barrierCooldown: 16.0,
+      skillName: 'SAKURA LOTUS SHIELD',
+      skillDesc: 'Perisai bunga teratai merah muda pelindung yang aktif sejak mulai & regenerasi tiap 10 detik',
+      barrierCooldown: 10.0,
       baby1: { name: 'Momo', color: '#fbcfe8', wingColor: '#f472b6', blushColor: '#fda4af', accessory: 'ribbon' },
       baby2: { name: 'Hana', color: '#fecdd3', wingColor: '#fb7185', blushColor: '#fda4af', accessory: 'flower' }
     },
     aero_lumos: {
       name: 'AERO & LUMOS (HOLY ARCHANGELS)',
-      desc: 'Duo bidadari suci. Memberi +1 Skor Ekstra & Bonus Koin setiap melewati 4 pipa',
+      desc: 'Duo bidadari suci. Memberi berkah cahaya +1 Skor Ekstra & +2 Koin Bonus setiap melewati 3 pipa',
       cost: 0,
       color: '#eab308',
       skillType: 'blessing',
       skillName: 'DIVINE SCORE & GOLD BLESSING',
-      skillDesc: 'Memberikan +1 Skor Ekstra & Bonus Koin setiap berhasil melewati 4 rintangan pipa',
-      interval: 4,
+      skillDesc: 'Memberikan +1 Skor Ekstra & +2 Koin Bonus setiap berhasil melewati 3 rintangan pipa',
+      interval: 3,
       baby1: { name: 'Aero', color: '#fef08a', wingColor: '#eab308', blushColor: '#fde047', accessory: 'halo' },
       baby2: { name: 'Lumos', color: '#ffffff', wingColor: '#fef08a', blushColor: '#fde047', accessory: 'halo' }
     },
     pixel_glitch: {
       name: 'PIXEL & GLITCH (CYBER DRONES)',
-      desc: 'Duo drone mecha. Menembakkan laser listrik otomatis tiap 4.5s untuk melumpuhkan musuh jarak jauh',
+      desc: 'Duo drone mecha. Menembakkan laser listrik EMP otomatis tiap 3.0s untuk melumpuhkan musuh jarak jauh',
       cost: 0,
       color: '#06b6d4',
       skillType: 'laser',
       skillName: 'AUTO EMP LASER ZAP',
-      skillDesc: 'Menembakkan laser listrik otomatis tiap 4.5 detik untuk melumpuhkan musuh dari jarak jauh',
-      laserCooldown: 4.5,
+      skillDesc: 'Menembakkan laser listrik EMP otomatis tiap 3.0 detik untuk melumpuhkan musuh dari jarak jauh',
+      laserCooldown: 3.0,
       baby1: { name: 'Pixel', color: '#38bdf8', wingColor: '#0284c7', blushColor: '#67e8f9', accessory: 'antenna' },
       baby2: { name: 'Glitch', color: '#34d399', wingColor: '#059669', blushColor: '#6ee7b7', accessory: 'antenna' }
     },
     blaze_ember: {
       name: 'BLAZE & EMBER (PHOENIX SPARKS)',
-      desc: 'Duo percikan api abadi. Membakar musuh di depan & melebarkan celah pipa +16px',
+      desc: 'Duo percikan api phoenix abadi. Semburan api naga membakar musuh & melebarkan pipa +16px',
       cost: 0,
       color: '#f97316',
       skillType: 'fire',
-      skillName: 'PHOENIX SCORCHER & GAP EXPANDER',
-      skillDesc: 'Membakar musuh di jalur depan & melebarkan celah pipa sebesar +16px saat mendekat',
+      skillName: 'PHOENIX DRAGON FLAMES & GAP EXPANDER',
+      skillDesc: 'Semburan api raksasa membakar musuh di depan & melebarkan celah pipa sebesar +16px',
       baby1: { name: 'Blaze', color: '#fb923c', wingColor: '#ea580c', blushColor: '#fdba74', accessory: 'flame' },
       baby2: { name: 'Ember', color: '#f87171', wingColor: '#dc2626', blushColor: '#fca5a5', accessory: 'flame' }
     },
     kuro_void: {
       name: 'KURO & VOID (SHADOW SPIRITS)',
-      desc: 'Duo roh bayangan mistis. Mempercepat cooldown Dash 35% (jadi 2.9s) & ledakan bayangan',
+      desc: 'Duo roh bayangan mistis. Mempercepat cooldown Dash 45% (jadi 2.5s) & ledakan bayangan hitam',
       cost: 0,
       color: '#a855f7',
       skillType: 'dash_master',
-      skillName: 'SHADOW WARP DASH BOOST',
-      skillDesc: 'Mengurangi cooldown skill Dash sebesar 35% (dari 4.5s jadi 2.9s) & shockwave hitam',
-      dashCd: 2.9,
+      skillName: 'SHADOW VOID DASH VORTEX',
+      skillDesc: 'Mengurangi cooldown skill Dash sebesar 45% (dari 4.5s jadi 2.5s) & shockwave void hitam',
+      dashCd: 2.5,
       baby1: { name: 'Kuro', color: '#c084fc', wingColor: '#7e22ce', blushColor: '#d8b4fe', accessory: 'horns' },
       baby2: { name: 'Void', color: '#64748b', wingColor: '#334155', blushColor: '#94a3b8', accessory: 'horns' }
     },
@@ -1049,6 +1049,35 @@
           blushColor: pSkin.baby2.blushColor,
           accessory: pSkin.baby2.accessory
         }, sCtx);
+
+        // Showcase Skill Effects for Selected Pet
+        if(previewLoadout.pet === 'momo_hana') {
+          sCtx.save();
+          sCtx.translate(bX, bY);
+          drawSakuraLotusShield(sCtx, 22);
+          sCtx.restore();
+        } else if(previewLoadout.pet === 'aero_lumos') {
+          sCtx.save();
+          sCtx.strokeStyle = '#fde047';
+          sCtx.lineWidth = 2;
+          sCtx.shadowColor = '#fde047';
+          sCtx.shadowBlur = 8;
+          sCtx.beginPath();
+          sCtx.ellipse(bX, bY - 20, 12, 4.5, 0, 0, Math.PI * 2);
+          sCtx.stroke();
+          sCtx.restore();
+        } else if(previewLoadout.pet === 'blaze_ember') {
+          sCtx.save();
+          const flameGrad = sCtx.createRadialGradient(bX + 16, bY, 4, bX + 45, bY, 35);
+          flameGrad.addColorStop(0, 'rgba(253, 224, 71, 0.9)');
+          flameGrad.addColorStop(0.5, 'rgba(249, 115, 22, 0.7)');
+          flameGrad.addColorStop(1, 'rgba(239, 68, 68, 0)');
+          sCtx.fillStyle = flameGrad;
+          sCtx.beginPath();
+          sCtx.arc(bX + 22, bY, 14, 0, Math.PI * 2);
+          sCtx.fill();
+          sCtx.restore();
+        }
       }
     }
 
@@ -2056,7 +2085,7 @@
   }
 
   function getDashMaxCd() {
-    return (progress.selectedPet === 'kuro_void') ? 2.9 : 4.5;
+    return (progress.selectedPet === 'kuro_void') ? 2.5 : 4.5;
   }
 
   function triggerDash() {
@@ -2287,14 +2316,46 @@
 
   function updatePowerupHUD() {
     let html = '';
-    const aliveBabies = babyBirds.filter(b => b.state === 'follow' || b.state === 'intercept' || b.state === 'return').length;
-    if(aliveBabies > 0) {
-      html += `<span class="powerup-badge baby">🐣 ${aliveBabies} ${aliveBabies > 1 ? 'BABIES' : 'BABY'}</span>`;
+    const petId = progress.selectedPet || 'pip_peep';
+    
+    // Status Skill Pet Khusus
+    if(petId === 'pip_peep') {
+      const aliveBabies = babyBirds.filter(b => b.state === 'follow' || b.state === 'intercept' || b.state === 'return').length;
+      if(aliveBabies > 0) {
+        html += `<span class="powerup-badge baby">🐣 ${aliveBabies} ${aliveBabies > 1 ? 'BABIES' : 'BABY'}</span>`;
+      }
+      const deadBabies = babyBirds.filter(b => b.state === 'dead');
+      if(deadBabies.length > 0) {
+        const minCd = Math.min(...deadBabies.map(b => b.respawnTimer || 0));
+        if(minCd > 0) {
+          html += `<span class="powerup-badge baby-cd">🥚 HATCH: ${Math.ceil(minCd)}s</span>`;
+        }
+      }
+    } else if(petId === 'momo_hana') {
+      if(activePowerups.shield && (activePowerups.shieldType === 'sakura' || progress.selectedPet === 'momo_hana')) {
+        html += `<span class="powerup-badge sakura">🌸 SAKURA SHIELD</span>`;
+      } else {
+        const rem = Math.max(0, 10.0 - petSkillTimer);
+        html += `<span class="powerup-badge sakura-cd">🌸 BARRIER: ${Math.ceil(rem)}s</span>`;
+      }
+    } else if(petId === 'pixel_glitch') {
+      if(petSkillTimer >= 3.0) {
+        html += `<span class="powerup-badge laser">⚡ EMP READY</span>`;
+      } else {
+        html += `<span class="powerup-badge laser-cd">⚡ EMP: ${Math.ceil(3.0 - petSkillTimer)}s</span>`;
+      }
+    } else if(petId === 'blaze_ember') {
+      html += `<span class="powerup-badge flame">🔥 PHOENIX FLAMES</span>`;
+    } else if(petId === 'aero_lumos') {
+      html += `<span class="powerup-badge holy">✨ BLESSING: ${(aeroPipesPassed % 3)}/3</span>`;
+    } else if(petId === 'kuro_void') {
+      html += `<span class="powerup-badge shadow">😈 SHADOW DASH -45%</span>`;
     }
+
     if(activePowerups.rocket > 0) {
       html += `<span class="powerup-badge rocket">NOS TURBO ${Math.ceil(activePowerups.rocket)}s</span>`;
     }
-    if(activePowerups.shield) {
+    if(activePowerups.shield && activePowerups.shieldType !== 'sakura' && petId !== 'momo_hana') {
       const shieldLabel = (activePowerups.shieldCount && activePowerups.shieldCount > 1) ? '2X SHIELD' : 'SHIELD';
       html += `<span class="powerup-badge shield">${shieldLabel} ON</span>`;
     }
@@ -3467,71 +3528,128 @@
     if(petId === 'none') return;
     const petData = petsCatalog[petId] || petsCatalog.pip_peep;
 
-    // 1. SKILL: MOMO & HANA (Sakura Barrier Shield - perisai berkala tiap 16 detik)
+    // 1. SKILL: MOMO & HANA (Sakura Barrier Shield - perisai teratai pink berkala tiap 10 detik)
     if(petData.skillType === 'barrier') {
       petSkillTimer += dt;
-      if(petSkillTimer >= (petData.barrierCooldown || 16.0)) {
-        petSkillTimer = 0;
+      if(petSkillTimer >= (petData.barrierCooldown || 10.0)) {
         if(!activePowerups.shield) {
+          petSkillTimer = 0;
           activePowerups.shield = true;
           activePowerups.shieldCount = 1;
+          activePowerups.shieldType = 'sakura';
           audio.powerup('shield');
           triggerPowerupSplash(bird.x, bird.y, 'shield');
           floatingTexts.push({
             x: bird.x, y: bird.y - 24,
-            text: '🌸 SAKURA BARRIER!',
+            text: '🌸 SAKURA LOTUS SHIELD!',
             color: '#f472b6',
             vy: -60, life: 0.9, maxLife: 0.9
           });
-          makeParticles(bird.x, bird.y, 22, '#f472b6');
+          makeParticles(bird.x, bird.y, 24, '#f472b6');
+          makeParticles(bird.x, bird.y, 16, '#fda4af');
+          updatePowerupHUD();
         }
       }
     }
 
-    // 2. SKILL: PIXEL & GLITCH (Auto EMP Laser Zap - menembak musuh tiap 4.5 detik)
+    // 2. SKILL: PIXEL & GLITCH (Auto EMP Laser Zap - menembak musuh tiap 3.0 detik)
     if(petData.skillType === 'laser') {
       petSkillTimer += dt;
-      if(petSkillTimer >= (petData.laserCooldown || 4.5)) {
-        const laserTarget = enemies.find(e => !e.dead && e.x > bird.x + 20 && e.x < bird.x + 240) ||
-                            flyers.find(f => !f.dead && f.x > bird.x + 20 && f.x < bird.x + 240);
+      if(petSkillTimer >= (petData.laserCooldown || 3.0)) {
+        const laserTarget = enemies.find(e => !e.dead && e.x > bird.x + 10 && e.x < bird.x + 280) ||
+                            flyers.find(f => !f.dead && f.x > bird.x + 10 && f.x < bird.x + 280) ||
+                            stormClouds.find(c => (c.phase === 'warn' || c.phase === 'strike') && c.targetX > bird.x + 10 && c.targetX < bird.x + 280);
         if(laserTarget) {
           petSkillTimer = 0;
-          laserTarget.dead = true;
-          laserTarget.x = -999;
+          const targetX = laserTarget.x !== undefined ? laserTarget.x : laserTarget.targetX;
+          const targetY = laserTarget.y !== undefined ? laserTarget.y : (laserTarget.y || 120) + 15;
+          if(laserTarget.phase) {
+            laserTarget.phase = 'fade';
+            laserTarget.timer = 0.05;
+          } else {
+            laserTarget.dead = true;
+            laserTarget.x = -999;
+          }
           laserBeams.push({
             x1: babyBirds[0].x, y1: babyBirds[0].y,
-            x2: laserTarget.x, y2: laserTarget.y,
-            life: 0.25
+            x2: targetX, y2: targetY,
+            life: 0.35
           });
           audio.rocketSmash();
           addScore();
           floatingTexts.push({
-            x: laserTarget.x, y: laserTarget.y - 18,
+            x: targetX, y: targetY - 18,
             text: '⚡ EMP ZAP! +1',
             color: '#38bdf8',
             vy: -65, life: 0.85, maxLife: 0.85
           });
-          makeParticles(laserTarget.x, laserTarget.y, 20, '#38bdf8');
-          shake = 0.15;
+          makeParticles(targetX, targetY, 24, '#38bdf8');
+          makeParticles(targetX, targetY, 18, '#00f5d4');
+          shockwaves.push({
+            x: targetX, y: targetY, r: 6, maxR: 52,
+            color: '#00f5d4', life: 0.3, maxLife: 0.3
+          });
+          shake = 0.2;
+          updatePowerupHUD();
         }
       }
     }
 
-    // 3. SKILL: BLAZE & EMBER (Phoenix Scorcher - membakar musuh sangat dekat)
+    // 3. SKILL: BLAZE & EMBER (Phoenix Scorcher - semburan api naga membakar musuh dalam radius 190px)
     if(petData.skillType === 'fire') {
+      const burnReach = 190;
       for(const e of enemies) {
-        if(!e.dead && Math.hypot(bird.x - e.x, bird.y - e.y) < 70) {
+        if(!e.dead && e.x > bird.x - 15 && e.x < bird.x + burnReach && Math.abs(e.y - bird.y) < 55) {
           e.dead = true;
           e.x = -999;
           audio.rocketSmash();
           addScore();
           floatingTexts.push({
             x: e.x, y: e.y - 18,
-            text: '🔥 SCORCHED! +1',
+            text: '🔥 INCINERATED! +1',
             color: '#f97316',
             vy: -65, life: 0.8, maxLife: 0.8
           });
-          makeParticles(e.x, e.y, 22, '#f97316');
+          makeParticles(e.x, e.y, 28, '#f97316');
+          makeParticles(e.x, e.y, 20, '#fde047');
+          shockwaves.push({ x: e.x, y: e.y, r: 8, maxR: 65, color: '#f97316', life: 0.35, maxLife: 0.35 });
+          shake = 0.22;
+        }
+      }
+      for(const f of flyers) {
+        if(!f.dead && f.x > bird.x - 15 && f.x < bird.x + burnReach && Math.abs(f.y - bird.y) < 55) {
+          f.dead = true;
+          f.x = -999;
+          audio.rocketSmash();
+          addScore();
+          floatingTexts.push({
+            x: f.x, y: f.y - 18,
+            text: '🔥 INCINERATED! +1',
+            color: '#f97316',
+            vy: -65, life: 0.8, maxLife: 0.8
+          });
+          makeParticles(f.x, f.y, 28, '#f97316');
+          makeParticles(f.x, f.y, 20, '#fde047');
+          shockwaves.push({ x: f.x, y: f.y, r: 8, maxR: 65, color: '#f97316', life: 0.35, maxLife: 0.35 });
+          shake = 0.22;
+        }
+      }
+      for(const c of stormClouds) {
+        if((c.phase === 'warn' || c.phase === 'strike') && c.targetX > bird.x - 15 && c.targetX < bird.x + burnReach && Math.abs(c.y + 15 - bird.y) < 65) {
+          c.phase = 'fade';
+          c.timer = 0.05;
+          audio.rocketSmash();
+          addScore();
+          floatingTexts.push({
+            x: c.targetX, y: c.y - 18,
+            text: '🔥 VAPORIZED! +1',
+            color: '#f97316',
+            vy: -65, life: 0.8, maxLife: 0.8
+          });
+          makeParticles(c.targetX, c.y + 15, 28, '#f97316');
+          makeParticles(c.targetX, c.y + 15, 20, '#fde047');
+          shockwaves.push({ x: c.targetX, y: c.y + 15, r: 8, maxR: 65, color: '#f97316', life: 0.35, maxLife: 0.35 });
+          shake = 0.22;
         }
       }
     }
@@ -3541,17 +3659,17 @@
       // 1. Kumpulkan musuh yang mendekat di area bahaya
       const activeTargets = [];
       for(const e of enemies) {
-        if(!e.dead && e.x > bird.x - 25 && e.x < bird.x + 230) {
+        if(!e.dead && e.x > bird.x - 25 && e.x < bird.x + 280) {
           activeTargets.push(e);
         }
       }
       for(const f of flyers) {
-        if(!f.dead && f.x > bird.x - 25 && f.x < bird.x + 230) {
+        if(!f.dead && f.x > bird.x - 25 && f.x < bird.x + 280) {
           activeTargets.push(f);
         }
       }
       for(const c of stormClouds) {
-        if((c.phase === 'warn' || c.phase === 'strike') && c.targetX > bird.x - 25 && c.targetX < bird.x + 220) {
+        if((c.phase === 'warn' || c.phase === 'strike') && c.targetX > bird.x - 25 && c.targetX < bird.x + 280) {
           activeTargets.push({
             x: c.targetX,
             y: c.y + 15,
@@ -3573,7 +3691,7 @@
             availableBaby.state = 'intercept';
             availableBaby.targetEnemy = target;
             audio.babyChirp();
-            makeParticles(availableBaby.x, availableBaby.y, 8, availableBaby.color);
+            makeParticles(availableBaby.x, availableBaby.y, 10, availableBaby.color);
           }
         }
       }
@@ -3730,9 +3848,49 @@
     });
   }
 
-  // Render Anak Burung Super Lucu (Chibi Guardian Bird)
+  // Render Anak Burung Super Lucu (Chibi Guardian Bird) / Telur Menetas
   function drawBabyBird(b, targetCtx = ctx) {
-    if(b.state === 'dead') return;
+    if(b.state === 'inactive') return;
+
+    // Saat mati/respawn: Gambarkan Telur Menetas Bergoyang Imut & Timer
+    if(b.state === 'dead') {
+      targetCtx.save();
+      const eggX = b.id === 0 ? bird.x - 22 : bird.x - 26;
+      const eggY = b.id === 0 ? bird.y - 18 : bird.y + 18;
+      targetCtx.translate(eggX, eggY);
+      const wobble = Math.sin(performance.now() / 90) * 0.18;
+      targetCtx.rotate(wobble);
+
+      targetCtx.shadowColor = b.color;
+      targetCtx.shadowBlur = 8;
+
+      // Cangkang Telur Pastel
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.beginPath();
+      targetCtx.ellipse(0, 0, 7.5, 9.5, 0, 0, Math.PI * 2);
+      targetCtx.fill();
+
+      // Corak Bintik Warna Pet
+      targetCtx.fillStyle = b.color;
+      targetCtx.beginPath();
+      targetCtx.arc(-2, -3, 1.4, 0, Math.PI * 2);
+      targetCtx.arc(2.5, 2, 1.6, 0, Math.PI * 2);
+      targetCtx.arc(-1, 4.5, 1.2, 0, Math.PI * 2);
+      targetCtx.fill();
+
+      // Retakan Zigzag Cangkang Menetas
+      targetCtx.strokeStyle = '#f59e0b';
+      targetCtx.lineWidth = 1.3;
+      targetCtx.beginPath();
+      targetCtx.moveTo(-4, -1);
+      targetCtx.lineTo(-1, 1);
+      targetCtx.lineTo(2, -2);
+      targetCtx.lineTo(4, 0);
+      targetCtx.stroke();
+
+      targetCtx.restore();
+      return;
+    }
     targetCtx.save();
     targetCtx.translate(b.x, b.y);
     targetCtx.rotate(b.angle + (b.state === 'intercept' ? b.flipAngle : 0));
@@ -3889,23 +4047,180 @@
   function drawLaserBeams() {
     for(const lb of laserBeams) {
       ctx.save();
-      const alpha = Math.max(0, lb.life / 0.25);
+      const alpha = Math.max(0, lb.life / 0.35);
       ctx.globalAlpha = alpha;
       ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth = 4.2;
+      ctx.lineWidth = 5.2;
       ctx.shadowColor = '#00f5d4';
-      ctx.shadowBlur = 14;
+      ctx.shadowBlur = 18;
       ctx.beginPath();
       ctx.moveTo(lb.x1, lb.y1);
       ctx.lineTo(lb.x2, lb.y2);
       ctx.stroke();
       ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 1.8;
+      ctx.lineWidth = 2.2;
       ctx.stroke();
+
+      // Electrical Arc Sparks
+      for(let i = 0; i < 3; i++) {
+        const t = Math.random();
+        const mx = lb.x1 + (lb.x2 - lb.x1) * t + (Math.random() - 0.5) * 16;
+        const my = lb.y1 + (lb.y2 - lb.y1) * t + (Math.random() - 0.5) * 16;
+        ctx.fillStyle = '#00f5d4';
+        ctx.beginPath();
+        ctx.arc(mx, my, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
       ctx.restore();
       lb.life -= 1 / 60;
     }
     laserBeams = laserBeams.filter(lb => lb.life > 0);
+  }
+
+  // Massive Fire Effects for Phoenix Sparks (Blaze & Ember)
+  function drawPhoenixFlames() {
+    if(progress.selectedPet !== 'blaze_ember' || state !== State.PLAYING) return;
+    const now = performance.now();
+    
+    ctx.save();
+    const bx = bird.x, by = bird.y;
+    const flameReach = 190 + Math.sin(now / 50) * 22;
+    const flameSpread = 46 + Math.sin(now / 70) * 10;
+
+    ctx.shadowColor = '#f97316';
+    ctx.shadowBlur = 22;
+
+    // Layer 1: Crimson & Scarlet Outer Roaring Dragon Fire Plume
+    const fireGrad1 = ctx.createRadialGradient(bx + 20, by, 10, bx + 110, by, flameReach);
+    fireGrad1.addColorStop(0, 'rgba(239, 68, 68, 0.95)');
+    fireGrad1.addColorStop(0.4, 'rgba(249, 115, 22, 0.75)');
+    fireGrad1.addColorStop(0.85, 'rgba(234, 88, 12, 0.4)');
+    fireGrad1.addColorStop(1, 'rgba(239, 68, 68, 0)');
+    ctx.fillStyle = fireGrad1;
+    ctx.beginPath();
+    ctx.moveTo(bx + 14, by - 14);
+    ctx.bezierCurveTo(bx + 80, by - flameSpread, bx + flameReach * 0.7, by - flameSpread * 0.9, bx + flameReach, by);
+    ctx.bezierCurveTo(bx + flameReach * 0.7, by + flameSpread * 0.9, bx + 80, by + flameSpread, bx + 14, by + 14);
+    ctx.closePath();
+    ctx.fill();
+
+    // Layer 2: Radiant Orange & Blazing Yellow Mid Flame
+    const fireGrad2 = ctx.createLinearGradient(bx + 14, by, bx + flameReach * 0.85, by);
+    fireGrad2.addColorStop(0, '#ffffff');
+    fireGrad2.addColorStop(0.2, '#fde047');
+    fireGrad2.addColorStop(0.65, '#f97316');
+    fireGrad2.addColorStop(1, 'rgba(249, 115, 22, 0)');
+    ctx.fillStyle = fireGrad2;
+    ctx.beginPath();
+    ctx.moveTo(bx + 18, by - 8);
+    ctx.bezierCurveTo(bx + 65, by - flameSpread * 0.6, bx + flameReach * 0.55, by - flameSpread * 0.5, bx + flameReach * 0.8, by);
+    ctx.bezierCurveTo(bx + flameReach * 0.55, by + flameSpread * 0.5, bx + 65, by + flameSpread * 0.6, bx + 18, by + 8);
+    ctx.closePath();
+    ctx.fill();
+
+    // Layer 3: White-Hot Ignition Core Jet Tip
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.ellipse(bx + 26, by, 14 + Math.sin(now / 35) * 4, 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. Swirling Fiery Sparks, Burning Embers & Fireballs
+    for(let i = 0; i < 6; i++) {
+      const ex = bx + 22 + ((now * 0.4 + i * 38) % flameReach);
+      const ey = by + Math.sin((now * 0.012) + i * 1.8) * (flameSpread * 0.7);
+      ctx.fillStyle = i % 3 === 0 ? '#ffffff' : i % 3 === 1 ? '#fde047' : '#ff3b00';
+      ctx.beginPath();
+      ctx.arc(ex, ey, 2.8 + (i % 2), 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // 3. Fiery Scorched Flame Overlay on Upcoming Pipes
+    for(const p of pipes) {
+      if(p.x > bx - 15 && p.x < bx + flameReach + 30) {
+        ctx.fillStyle = 'rgba(249, 115, 22, 0.55)';
+        ctx.fillRect(p.x - 3, p.gapY - 14, p.w + 6, 16);
+        ctx.fillRect(p.x - 3, p.gapY + p.gapSize - 2, p.w + 6, 16);
+        // Embers dancing on pipe
+        ctx.fillStyle = '#fde047';
+        ctx.beginPath();
+        ctx.arc(p.x + Math.random() * p.w, p.gapY - 12 - Math.random() * 8, 2, 0, Math.PI * 2);
+        ctx.arc(p.x + Math.random() * p.w, p.gapY + p.gapSize + 8 + Math.random() * 8, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    ctx.restore();
+  }
+
+  // Divine Golden Light Beam for Aero & Lumos
+  function drawHolyAura() {
+    if(progress.selectedPet !== 'aero_lumos' || state !== State.PLAYING) return;
+    const now = performance.now();
+    ctx.save();
+    const bx = bird.x, by = bird.y;
+
+    // Golden Ray of Light descending from sky onto bird
+    const rayAlpha = 0.22 + Math.sin(now / 140) * 0.1;
+    const rayGrad = ctx.createLinearGradient(0, 0, 0, by);
+    rayGrad.addColorStop(0, `rgba(254, 240, 138, ${rayAlpha * 1.6})`);
+    rayGrad.addColorStop(1, 'rgba(254, 240, 138, 0)');
+    ctx.fillStyle = rayGrad;
+    ctx.beginPath();
+    ctx.moveTo(bx - 36, 0);
+    ctx.lineTo(bx + 36, 0);
+    ctx.lineTo(bx + 20, by);
+    ctx.lineTo(bx - 20, by);
+    ctx.closePath();
+    ctx.fill();
+
+    // Holy Halo Ring above head
+    ctx.strokeStyle = '#fde047';
+    ctx.lineWidth = 2.4;
+    ctx.shadowColor = '#fde047';
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.ellipse(bx, by - 24, 15, 5.5, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Floating Golden Stardust
+    for(let i = 0; i < 3; i++) {
+      const sx = bx - 14 + ((now * 0.08 + i * 22) % 35);
+      const sy = by - 12 + Math.sin(now * 0.008 + i) * 18;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(sx, sy, 1.4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
+  // Void Shadow Nebula & Dark Runes for Kuro & Void
+  function drawShadowVortex() {
+    if(progress.selectedPet !== 'kuro_void' || state !== State.PLAYING) return;
+    const now = performance.now();
+    ctx.save();
+    const bx = bird.x, by = bird.y;
+
+    // Dark Purple Swirling Shadow Aura
+    ctx.save();
+    ctx.translate(bx, by);
+    ctx.rotate(-now / 320);
+    ctx.strokeStyle = 'rgba(168, 85, 247, 0.55)';
+    ctx.lineWidth = 2.2;
+    ctx.shadowColor = '#7e22ce';
+    ctx.shadowBlur = 14;
+    ctx.beginPath();
+    for(let i = 0; i < 3; i++) {
+      const a = (i * Math.PI * 2) / 3;
+      const sr = 23 + Math.sin(now / 110 + i) * 3.5;
+      ctx.arc(Math.cos(a) * 6, Math.sin(a) * 6, sr, a, a + Math.PI * 0.7);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.restore();
   }
 
   function render() {
@@ -3939,6 +4254,12 @@
     // Draw Supersonic Speedlines when Rocket or Dash is Active
     drawSupersonicSpeedlines();
 
+    // Draw Holy Angel Golden Light Beam
+    drawHolyAura();
+
+    // Draw Shadow Spirits Void Vortex
+    drawShadowVortex();
+
     // Draw Storm Clouds & Lightning
     for(const c of stormClouds) drawStormCloud(c);
 
@@ -3954,6 +4275,9 @@
 
     // Draw Shockwaves
     drawShockwaves();
+
+    // Draw Phoenix Dragon Flames Stream (Massive Fire Effects)
+    drawPhoenixFlames();
 
     // Draw Laser Beams (Cyber Drones)
     drawLaserBeams();
@@ -5630,6 +5954,85 @@
     targetCtx.restore();
   }
 
+  // Render Perisai Bunga Teratai Sakura (Sakura Lotus Blossom Shield) - Khusus Momo & Hana
+  function drawSakuraLotusShield(targetCtx, sR) {
+    targetCtx.save();
+    const now = performance.now();
+    const pulse = Math.sin(now / 110) * 1.6;
+    const radius = sR + pulse + 2;
+
+    // 1. Soft Pink & Rose Radiant Ambient Glowing Halo
+    targetCtx.shadowColor = '#f472b6';
+    targetCtx.shadowBlur = 18;
+    targetCtx.fillStyle = 'rgba(244, 114, 182, 0.22)';
+    targetCtx.beginPath();
+    targetCtx.arc(2, 0, radius, 0, Math.PI * 2);
+    targetCtx.fill();
+
+    // 2. Rotating 8-Petal Sakura Lotus Blossom Contour
+    targetCtx.save();
+    targetCtx.translate(2, 0);
+    targetCtx.rotate(now / 400);
+    targetCtx.strokeStyle = '#f472b6';
+    targetCtx.lineWidth = 2.4;
+    targetCtx.fillStyle = 'rgba(253, 226, 236, 0.38)';
+    targetCtx.beginPath();
+    for(let i = 0; i < 8; i++) {
+      const a = (i * Math.PI) / 4;
+      const petLen = radius * 1.12;
+      const petW = radius * 0.44;
+      const cpx = Math.cos(a) * petLen;
+      const cpy = Math.sin(a) * petLen;
+      const leftA = a - Math.PI / 8;
+      const rightA = a + Math.PI / 8;
+      const lx = Math.cos(leftA) * (radius * 0.68);
+      const ly = Math.sin(leftA) * (radius * 0.68);
+      const rx = Math.cos(rightA) * (radius * 0.68);
+      const ry = Math.sin(rightA) * (radius * 0.68);
+      if(i === 0) targetCtx.moveTo(lx, ly);
+      targetCtx.quadraticCurveTo(cpx - Math.sin(a) * petW, cpy + Math.cos(a) * petW, cpx, cpy);
+      targetCtx.quadraticCurveTo(cpx + Math.sin(a) * petW, cpy - Math.cos(a) * petW, rx, ry);
+    }
+    targetCtx.closePath();
+    targetCtx.fill();
+    targetCtx.stroke();
+
+    // Inner Sakura Blossom Star
+    targetCtx.strokeStyle = '#f43f5e';
+    targetCtx.lineWidth = 1.4;
+    targetCtx.beginPath();
+    for(let i = 0; i < 5; i++) {
+      const a = (i * Math.PI * 2) / 5 - Math.PI / 2;
+      const px = Math.cos(a) * (radius * 0.48);
+      const py = Math.sin(a) * (radius * 0.48);
+      if(i === 0) targetCtx.moveTo(px, py); else targetCtx.lineTo(px, py);
+    }
+    targetCtx.closePath();
+    targetCtx.stroke();
+    targetCtx.restore();
+
+    // 3. Floating Fluttering Sakura Petals Orbiting around Shield
+    for(let i = 0; i < 4; i++) {
+      const oa = now / 220 + (i * Math.PI * 2) / 4;
+      const ox = 2 + Math.cos(oa) * (radius + 5);
+      const oy = Math.sin(oa) * (radius + 5);
+      targetCtx.save();
+      targetCtx.translate(ox, oy);
+      targetCtx.rotate(oa + Math.PI / 4);
+      targetCtx.fillStyle = '#fb7185';
+      targetCtx.beginPath();
+      targetCtx.ellipse(0, 0, 5, 2.5, 0, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.beginPath();
+      targetCtx.arc(-1, -0.5, 1, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.restore();
+    }
+
+    targetCtx.restore();
+  }
+
   // Draw Game Bird with Power-Up Overlays
   function drawBird() {
     const skinId = progress.selected || 'classic';
@@ -5650,48 +6053,53 @@
       ctx.translate(bird.x, bird.y);
       ctx.rotate(bird.angle);
 
-      // 1. Shield Forcefield Bubble with Hexagonal Lattice & Orbital Nodes
+      // 1. Shield: Custom Sakura Lotus Shield (Momo & Hana) vs Classic Cyan Hexagonal Shield
       if(activePowerups.shield) {
-        ctx.save();
         const pulse = Math.sin(performance.now() / 110) * 1.8;
         const sR = 25 + pulse;
-        
-        ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 2.4;
-        ctx.shadowColor = '#38bdf8';
-        ctx.shadowBlur = 10;
-        ctx.beginPath();
-        ctx.arc(2, 0, sR, 0, Math.PI * 2);
-        ctx.stroke();
+        const isSakura = activePowerups.shieldType === 'sakura' || progress.selectedPet === 'momo_hana';
 
-        ctx.fillStyle = 'rgba(56, 189, 248, 0.22)';
-        ctx.fill();
-
-        // Rotating Hexagon Lattice
-        ctx.save();
-        ctx.rotate(performance.now() / 350);
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
-        ctx.lineWidth = 1.2;
-        ctx.beginPath();
-        for(let i = 0; i < 6; i++) {
-          const a = (i * Math.PI) / 3;
-          const hx = Math.cos(a) * (sR * 0.85);
-          const hy = Math.sin(a) * (sR * 0.85);
-          if(i === 0) ctx.moveTo(hx, hy); else ctx.lineTo(hx, hy);
-        }
-        ctx.closePath();
-        ctx.stroke();
-        ctx.restore();
-
-        // Orbiting Energy Nodes
-        for(let i = 0; i < 3; i++) {
-          const oa = performance.now() / 180 + (i * Math.PI * 2) / 3;
-          ctx.fillStyle = '#ffffff';
+        if(isSakura) {
+          drawSakuraLotusShield(ctx, sR);
+        } else {
+          ctx.save();
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = 2.4;
+          ctx.shadowColor = '#38bdf8';
+          ctx.shadowBlur = 10;
           ctx.beginPath();
-          ctx.arc(2 + Math.cos(oa) * sR, Math.sin(oa) * sR, 2.5, 0, Math.PI * 2);
+          ctx.arc(2, 0, sR, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.fillStyle = 'rgba(56, 189, 248, 0.22)';
           ctx.fill();
+
+          // Rotating Hexagon Lattice
+          ctx.save();
+          ctx.rotate(performance.now() / 350);
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          for(let i = 0; i < 6; i++) {
+            const a = (i * Math.PI) / 3;
+            const hx = Math.cos(a) * (sR * 0.85);
+            const hy = Math.sin(a) * (sR * 0.85);
+            if(i === 0) ctx.moveTo(hx, hy); else ctx.lineTo(hx, hy);
+          }
+          ctx.closePath();
+          ctx.stroke();
+          ctx.restore();
+
+          // Orbiting Energy Nodes
+          for(let i = 0; i < 3; i++) {
+            const oa = performance.now() / 180 + (i * Math.PI * 2) / 3;
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(2 + Math.cos(oa) * sR, Math.sin(oa) * sR, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
         }
-        ctx.restore();
       }
 
       // 2. Magnet Pulsing Magnetic Flux Waves

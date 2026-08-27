@@ -13,6 +13,14 @@
 .powerup-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font:900 10.5px Trebuchet MS,Arial;color:#fff;box-shadow:0 3px 8px rgba(0,0,0,0.22);animation:badgePop .2s ease-out;backdrop-filter:blur(4px);letter-spacing:.3px}
 .powerup-badge.shield{background:linear-gradient(135deg,#0284c7,#0369a1);border:1.2px solid #7dd3fc}
 .powerup-badge.baby{background:linear-gradient(135deg,#eab308,#ca8a04);border:1.2px solid #fef08a;color:#fff;box-shadow:0 3px 10px rgba(234,179,8,0.45)}
+.powerup-badge.sakura{background:linear-gradient(135deg,#ec4899,#db2777);border:1.2px solid #fbcfe8;color:#fff;box-shadow:0 3px 10px rgba(236,72,153,0.5)}
+.powerup-badge.sakura-cd{background:rgba(219,39,119,0.35);border:1px dashed #f472b6;color:#fdf2f8}
+.powerup-badge.laser{background:linear-gradient(135deg,#06b6d4,#0284c7);border:1.2px solid #67e8f9;color:#fff;box-shadow:0 3px 10px rgba(6,182,212,0.5)}
+.powerup-badge.laser-cd{background:rgba(2,132,199,0.35);border:1px dashed #38bdf8;color:#e0f2fe}
+.powerup-badge.flame{background:linear-gradient(135deg,#f97316,#dc2626);border:1.2px solid #fde047;color:#fff;box-shadow:0 3px 12px rgba(249,115,22,0.6);animation:badgeRocket .4s infinite alternate}
+.powerup-badge.holy{background:linear-gradient(135deg,#eab308,#ca8a04);border:1.2px solid #fff;color:#fff;box-shadow:0 3px 10px rgba(234,179,8,0.5)}
+.powerup-badge.shadow{background:linear-gradient(135deg,#7e22ce,#581c87);border:1.2px solid #c084fc;color:#fff;box-shadow:0 3px 10px rgba(126,34,206,0.5)}
+.powerup-badge.baby-cd{background:rgba(202,138,4,0.35);border:1px dashed #fde047;color:#fef9c3}
 .powerup-badge.magnet{background:linear-gradient(135deg,#e11d48,#be123c);border:1.2px solid #fda4af}
 .powerup-badge.slow{background:linear-gradient(135deg,#0891b2,#0e7490);border:1.2px solid #67e8f9}
 .powerup-badge.star{background:linear-gradient(135deg,#f59e0b,#d97706);border:1.2px solid #fde047;animation:badgeStar .55s infinite alternate}
