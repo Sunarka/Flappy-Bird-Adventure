@@ -169,7 +169,7 @@
   // 8. Starter Booster Perk (Skill Langsung Aktif Saat Mulai) - ALL FREE FOR TESTING
   const boosters = {
     none:{ name:'TANPA BOOSTER', desc:'Mulai game kasual tanpa booster instan', cost:0, color:'#94a3b8' },
-    extra_life:{ name:'STARTER EXTRA LIFE (+1 ❤️)', desc:'Mulai game dengan tambahan 1 nyawa ekstra', cost:0, color:'#ef4444' },
+    extra_life:{ name:'STARTER EXTRA LIFE (+1 LIFE)', desc:'Mulai game dengan tambahan 1 nyawa ekstra', cost:0, color:'#ef4444' },
     shield:{ name:'STARTER SHIELD', desc:'Mulai game langsung terlindungi perisai', cost:0, color:'#0284c7' },
     magnet:{ name:'STARTER MAGNET', desc:'Mulai game langsung menyedot semua koin', cost:0, color:'#dc2626' },
     slow:{ name:'STARTER SLOW ICE', desc:'Mulai game dengan waktu melambat 50%', cost:0, color:'#0891b2' },
@@ -1674,13 +1674,13 @@
     email: '',
     googleUid: null,
     gamerTag: 'SkyPlayer',
-    avatar: '🐥',
+    avatar: 'P1',
     level: 1,
     id: 'G-' + Math.floor(1000000 + Math.random() * 9000000),
     isOnline: true
   });
 
-  const availableAvatars = ['🐥', '🦅', '🦉', '🦜', '🦚', '👑', '⚡', '🔥', '🌟', '💎', '🚀', '⭐'];
+  const availableAvatars = ['P1', 'ACE', 'PRO', 'TOP', 'SKY', 'MAX', 'VIP', 'NEO', 'AIR', 'RAY', 'FOX', 'BOT'];
 
   function saveGPProfile() {
     storage.set('skyFlappyGPProfile', gpProfile);
@@ -1698,7 +1698,7 @@
     if(el.googleProfileCard) el.googleProfileCard.classList.toggle('hidden', !isLogged);
     if(el.gpSignOutBtn) el.gpSignOutBtn.classList.toggle('hidden', !isLogged);
 
-    if(el.gpAvatar) el.gpAvatar.textContent = gpProfile.avatar || '🐥';
+    if(el.gpAvatar) el.gpAvatar.textContent = gpProfile.avatar || 'P1';
     if(el.gpGamerTagInput) el.gpGamerTagInput.value = gpProfile.gamerTag || 'SkyPlayer';
     if(el.gpUserEmail) el.gpUserEmail.textContent = gpProfile.email || 'Akun Google Terhubung';
     if(el.gpRankedBest) el.gpRankedBest.textContent = rankedBest;
@@ -2121,7 +2121,7 @@
             el.menuRankTargetPts.textContent = `${tier.pointsToNext} Poin lagi ke ${tier.nextTier.name}!`;
           } else {
             el.menuRankCurPts.textContent = `${tier.score} PTS`;
-            el.menuRankTargetPts.textContent = `👑 MAX SUPREME TIER!`;
+            el.menuRankTargetPts.textContent = `MAX SUPREME TIER!`;
           }
           el.menuRankFill.style.width = `${tier.progressPercent}%`;
         }
@@ -2200,12 +2200,12 @@
       startChampionSpotlight(selectedSpotlightPlayer || leaderboardData[0]);
     } else {
       stopChampionSpotlight();
-      renderTiersProgressView();
     }
   }
 
-  function renderTiersProgressView() {
-    if(!el.myRankCard || !el.tiersGuideList) return;
+  // Update Dynamic Ranked Leaderboard & Spotlight Top 1 Player
+  function updateRankedLeaderboardUI() {
+    if(!el.rankedModal) return;
     const tier = getRankTier(rankedBest);
 
     // 1. Render My Personal Rank Progression Card
@@ -2213,7 +2213,7 @@
     if(tier.nextTier) {
       nextInfo = `<span><b>${tier.score}</b> / ${tier.nextTier.minScore} PTS</span><span><b>${tier.pointsToNext}</b> POIN LAGI KE ${tier.nextTier.name}!</span>`;
     } else {
-      nextInfo = `<span><b>${tier.score}</b> PTS</span><span>👑 <b>MAX SUPREME TIER!</b></span>`;
+      nextInfo = `<span><b>${tier.score}</b> PTS</span><span><b>MAX SUPREME TIER!</b></span>`;
     }
 
     el.myRankCard.innerHTML = `
@@ -2279,7 +2279,7 @@
         <span style="color:#fde047">${tier.pointsToNext} Poin lagi ke ${tier.nextTier.name}!</span>
       ` : `
         <span><b>${tier.score}</b> PTS</span>
-        <span style="color:#fde047">👑 MAX SUPREME TIER!</span>
+        <span style="color:#fde047">MAX SUPREME TIER!</span>
       `;
       el.modalMyTierCard.innerHTML = `
         <div class="my-rank-card" style="margin-bottom:0;">
@@ -2555,9 +2555,9 @@
     let html = '';
     for(let i = 0; i < maxDisplay; i++) {
       if(i < lives) {
-        html += `<span class="life-heart${i >= (currentMode === 'ranked' ? 3 : 1) ? ' bonus' : ''}">❤️</span>`;
+        html += `<span class="life-heart${i >= (currentMode === 'ranked' ? 3 : 1) ? ' bonus' : ''}"><svg viewBox="0 0 24 24" width="18" height="18" style="display:inline-block;vertical-align:middle;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#ef4444" stroke="#b91c1c" stroke-width="1.2"/></svg></span>`;
       } else {
-        html += `<span class="life-heart lost">🖤</span>`;
+        html += `<span class="life-heart lost"><svg viewBox="0 0 24 24" width="18" height="18" style="display:inline-block;vertical-align:middle;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#334155" stroke="#1e293b" stroke-width="1.2"/></svg></span>`;
       }
     }
     el.livesHud.innerHTML = html;
@@ -2576,10 +2576,10 @@
 
     const cost = getReviveCost();
     if(el.reviveCostLabel) {
-      el.reviveCostLabel.textContent = '🪙 ' + cost + ' COINS (SALDO: ' + progress.coins + ')';
+      el.reviveCostLabel.textContent = cost + ' COINS (SALDO: ' + progress.coins + ')';
     }
     if(el.reviveConfirmBtn) {
-      el.reviveConfirmBtn.innerHTML = `<span>💖 REVIVE (${cost} COINS)</span>`;
+      el.reviveConfirmBtn.innerHTML = `<span>REVIVE (${cost} COINS)</span>`;
       el.reviveConfirmBtn.style.opacity = progress.coins >= cost ? '1' : '0.55';
     }
 
@@ -2618,7 +2618,7 @@
       shake = 0.2;
       floatingTexts.push({
         x: W / 2, y: H / 2 - 40,
-        text: '❌ KOIN TIDAK CUKUP!',
+        text: 'KOIN TIDAK CUKUP!',
         color: '#ef4444', vy: -50, life: 0.85, maxLife: 0.85
       });
       return;
@@ -2680,7 +2680,7 @@
 
     floatingTexts.push({
       x: bird.x, y: bird.y - 25,
-      text: '💖 HEROIC REVIVE!',
+      text: 'HEROIC REVIVE!',
       color: '#ec4899', vy: -65, life: 0.95, maxLife: 0.95
     });
     makeParticles(bird.x, bird.y, 30, '#ec4899');
@@ -2909,7 +2909,7 @@
         floatingTexts.push({
           x: bird.x + 25,
           y: bird.y - 24,
-          text: '✨ DIVINE +1 SCORE & 2G!',
+          text: 'DIVINE +1 SCORE & 2G!',
           color: '#fde047',
           vy: -65,
           life: 0.9, maxLife: 0.9
@@ -2974,8 +2974,8 @@
       slow:   { text: isStarter ? 'STARTER FREEZE' : '+TIME FREEZE', color: '#67e8f9' },
       star:   { text: isStarter ? 'STARTER STAR'   : '+STAR POWER',   color: '#fbbf24' },
       rocket: { text: isStarter ? 'NOS TURBO BLAST': '+NOS ROCKET BOOST', color: '#ea580c' },
-      heart:  { text: '+1 EXTRA LIFE! ❤️', color: '#ef4444' },
-      extra_life: { text: 'STARTER EXTRA LIFE ❤️', color: '#ef4444' }
+      heart:  { text: '+1 EXTRA LIFE!', color: '#ef4444' },
+      extra_life: { text: 'STARTER EXTRA LIFE', color: '#ef4444' }
     }[type] || { text: '+POWER-UP!', color: '#fff' };
 
     // 1. Expanding Shockwaves
@@ -3011,34 +3011,34 @@
     if(petId === 'pip_peep') {
       const aliveBabies = babyBirds.filter(b => b.state === 'follow' || b.state === 'intercept' || b.state === 'return').length;
       if(aliveBabies > 0) {
-        html += `<span class="powerup-badge baby">🐣 ${aliveBabies} ${aliveBabies > 1 ? 'BABIES' : 'BABY'}</span>`;
+        html += `<span class="powerup-badge baby">${aliveBabies} ${aliveBabies > 1 ? 'BABIES' : 'BABY'}</span>`;
       }
       const deadBabies = babyBirds.filter(b => b.state === 'dead');
       if(deadBabies.length > 0) {
         const minCd = Math.min(...deadBabies.map(b => b.respawnTimer || 0));
         if(minCd > 0) {
-          html += `<span class="powerup-badge baby-cd">🥚 HATCH: ${Math.ceil(minCd)}s</span>`;
+          html += `<span class="powerup-badge baby-cd">HATCH: ${Math.ceil(minCd)}s</span>`;
         }
       }
     } else if(petId === 'momo_hana') {
       if(activePowerups.shield && (activePowerups.shieldType === 'sakura' || progress.selectedPet === 'momo_hana')) {
-        html += `<span class="powerup-badge sakura">🌸 SAKURA SHIELD</span>`;
+        html += `<span class="powerup-badge sakura">SAKURA SHIELD</span>`;
       } else {
         const rem = Math.max(0, 10.0 - petSkillTimer);
-        html += `<span class="powerup-badge sakura-cd">🌸 BARRIER: ${Math.ceil(rem)}s</span>`;
+        html += `<span class="powerup-badge sakura-cd">BARRIER: ${Math.ceil(rem)}s</span>`;
       }
     } else if(petId === 'pixel_glitch') {
       if(petSkillTimer >= 3.0) {
-        html += `<span class="powerup-badge laser">⚡ EMP READY</span>`;
+        html += `<span class="powerup-badge laser">EMP READY</span>`;
       } else {
-        html += `<span class="powerup-badge laser-cd">⚡ EMP: ${Math.ceil(3.0 - petSkillTimer)}s</span>`;
+        html += `<span class="powerup-badge laser-cd">EMP: ${Math.ceil(3.0 - petSkillTimer)}s</span>`;
       }
     } else if(petId === 'blaze_ember') {
-      html += `<span class="powerup-badge flame">🔥 PHOENIX FLAMES</span>`;
+      html += `<span class="powerup-badge flame">PHOENIX FLAMES</span>`;
     } else if(petId === 'aero_lumos') {
-      html += `<span class="powerup-badge holy">✨ BLESSING: ${(aeroPipesPassed % 3)}/3</span>`;
+      html += `<span class="powerup-badge holy">BLESSING: ${(aeroPipesPassed % 3)}/3</span>`;
     } else if(petId === 'kuro_void') {
-      html += `<span class="powerup-badge shadow">😈 SHADOW DASH -45%</span>`;
+      html += `<span class="powerup-badge shadow">SHADOW DASH -45%</span>`;
     }
 
     if(activePowerups.rocket > 0) {
@@ -3368,7 +3368,7 @@
       shake = 0.28;
       floatingTexts.push({
         x: bird.x, y: bird.y - 22,
-        text: '-1 ❤️ (' + lives + ' LIVES LEFT)',
+        text: '-1 LIFE (' + lives + ' LIVES LEFT)',
         color: '#ef4444',
         vy: -65, life: 0.85, maxLife: 0.85
       });
@@ -3924,7 +3924,7 @@
 
     // Power-Up Icons
     if(p.type === 'baby') {
-      // 🐣 Cute Baby Chick Power-Up Icon inside Bubble
+      // Baby Chick Power-Up Icon inside Bubble
       ctx.fillStyle = '#fef08a';
       ctx.beginPath();
       ctx.arc(0, 2, 7.5, 0, Math.PI * 2);
@@ -4294,7 +4294,7 @@
     if(petId === 'none') return;
     const petData = petsCatalog[petId] || petsCatalog.pip_peep;
 
-    // 1. SKILL: MOMO & HANA (Sakura Barrier Shield - perisai teratai pink berkala tiap 10 detik)
+    // 1. SKILL: MOMO & HANA (Sakura Lotus Barrier - perisai otomatis tiap 10 detik)
     if(petData.skillType === 'barrier') {
       petSkillTimer += dt;
       if(petSkillTimer >= (petData.barrierCooldown || 10.0)) {
@@ -4307,7 +4307,7 @@
           triggerPowerupSplash(bird.x, bird.y, 'shield');
           floatingTexts.push({
             x: bird.x, y: bird.y - 24,
-            text: '🌸 SAKURA LOTUS SHIELD!',
+            text: 'SAKURA LOTUS SHIELD!',
             color: '#f472b6',
             vy: -60, life: 0.9, maxLife: 0.9
           });
@@ -4345,7 +4345,7 @@
           addScore();
           floatingTexts.push({
             x: targetX, y: targetY - 18,
-            text: '⚡ EMP ZAP! +1',
+            text: 'EMP ZAP! +1',
             color: '#38bdf8',
             vy: -65, life: 0.85, maxLife: 0.85
           });
@@ -4372,7 +4372,7 @@
           addScore();
           floatingTexts.push({
             x: e.x, y: e.y - 18,
-            text: '🔥 INCINERATED! +1',
+            text: 'INCINERATED! +1',
             color: '#f97316',
             vy: -65, life: 0.8, maxLife: 0.8
           });
@@ -4390,7 +4390,7 @@
           addScore();
           floatingTexts.push({
             x: f.x, y: f.y - 18,
-            text: '🔥 INCINERATED! +1',
+            text: 'INCINERATED! +1',
             color: '#f97316',
             vy: -65, life: 0.8, maxLife: 0.8
           });
@@ -4408,7 +4408,7 @@
           addScore();
           floatingTexts.push({
             x: c.targetX, y: c.y - 18,
-            text: '🔥 VAPORIZED! +1',
+            text: 'VAPORIZED! +1',
             color: '#f97316',
             vy: -65, life: 0.8, maxLife: 0.8
           });
@@ -4480,7 +4480,7 @@
           floatingTexts.push({
             x: bird.x,
             y: bird.y - 25,
-            text: '🐣 ' + b.name + ' HATCHED!',
+            text: b.name + ' HATCHED!',
             color: b.color,
             vy: -60,
             life: 0.85, maxLife: 0.85
@@ -4575,7 +4575,7 @@
 
           floatingTexts.push({
             x: targetX, y: targetY - 16,
-            text: '💥 ' + b.name + ' SMASH! +1',
+            text: b.name + ' SMASH! +1',
             color: b.color,
             vy: -70,
             life: 0.85, maxLife: 0.85
@@ -5101,7 +5101,7 @@
       }
     } catch(err) {
       // Tampilkan error step + pesan ke layar
-      const msg = `⚠ [${_step}] ${err.message || err}`;
+      const msg = `[${_step}] ${err.message || err}`;
       console.error('Render error at step', _step, ':', err);
       if(!document._renderErrDiv) {
         const dbg = document.createElement('div');
@@ -7037,7 +7037,7 @@
           if(tier.nextTier) {
             el.overRankDesc.textContent = `${tier.pointsToNext} Poin lagi ke ${tier.nextTier.name} (${tier.score}/${tier.nextTier.minScore} pts)`;
           } else {
-            el.overRankDesc.textContent = `👑 MAX SUPREME TIER! (${tier.score} pts)`;
+            el.overRankDesc.textContent = `MAX SUPREME TIER! (${tier.score} pts)`;
           }
         }
         if(el.overRankFill) {
@@ -7170,7 +7170,7 @@
         syncGPProfileUI();
       }
     } catch(err) {
-      console.warn('⚠️ Google Sign-In notice:', err.message);
+      console.warn('[Google Sign-In notice]:', err.message);
       if(err.code !== 'auth/popup-closed-by-user') {
         alert('Info Google Login: ' + (err.message || 'Gagal terhubung ke akun Google. Pastikan internet aktif.'));
       }
@@ -7425,13 +7425,13 @@
     try {
       update(dt);
     } catch(err) {
-      _showErrBanner('⚠ UPDATE ERROR: ' + err.message + '\n' + (err.stack || '').split('\n').slice(0,3).join('\n'));
+      _showErrBanner('UPDATE ERROR: ' + err.message + '\n' + (err.stack || '').split('\n').slice(0,3).join('\n'));
       console.error('Update error:', err);
     }
     try {
       render();
     } catch(err) {
-      _showErrBanner('⚠ RENDER ERROR: ' + err.message + '\n' + (err.stack || '').split('\n').slice(0,3).join('\n'));
+      _showErrBanner('RENDER ERROR: ' + err.message + '\n' + (err.stack || '').split('\n').slice(0,3).join('\n'));
       console.error('Render error:', err);
     }
     requestAnimationFrame(loop);
@@ -7439,7 +7439,7 @@
 
   // Global uncaught error handler to catch init failures
   window.addEventListener('error', function(e) {
-    _showErrBanner('⚠ JS ERROR: ' + e.message + '\n  at ' + (e.filename || '') + ':' + e.lineno);
+    _showErrBanner('JS ERROR: ' + e.message + '\n  at ' + (e.filename || '') + ':' + e.lineno);
   });
 
   try {
@@ -7455,7 +7455,7 @@
     updateMusicUI();
     requestAnimationFrame(loop);
   } catch(initErr) {
-    _showErrBanner('⚠ INIT ERROR: ' + initErr.message + '\n' + (initErr.stack || '').split('\n').slice(0,4).join('\n'));
+    _showErrBanner('INIT ERROR: ' + initErr.message + '\n' + (initErr.stack || '').split('\n').slice(0,4).join('\n'));
     console.error('Init error:', initErr);
     // Coba tetap jalankan loop agar canvas tidak blank
     requestAnimationFrame(loop);

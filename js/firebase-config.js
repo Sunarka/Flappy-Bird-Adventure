@@ -41,13 +41,13 @@ class FirebaseLeaderboardService {
         }
         this.db = firebase.firestore();
         this.isInitialized = true;
-        console.log('🔥 [Firebase] Firestore Leaderboard initialized successfully.');
+        console.log('[Firebase] Firestore Leaderboard initialized successfully.');
       } catch (err) {
-        console.warn('⚠️ [Firebase] Init error (using local fallback mode):', err.message);
+        console.warn('[Firebase] Init error (using local fallback mode):', err.message);
         this.isInitialized = false;
       }
     } else {
-      console.warn('⚠️ [Firebase] SDK not loaded.');
+      console.warn('[Firebase] SDK not loaded.');
       this.isInitialized = false;
     }
   }
@@ -90,15 +90,15 @@ class FirebaseLeaderboardService {
           const oldScore = existingDoc.data().score || 0;
           if (payload.score > oldScore) {
             await docRef.set(payload, { merge: true });
-            console.log('🔥 [Firebase] New high score submitted:', payload.score);
+            console.log('[Firebase] New high score submitted:', payload.score);
           }
         } else {
           await docRef.set(payload);
-          console.log('🔥 [Firebase] Initial player score registered:', payload.score);
+          console.log('[Firebase] Initial player score registered:', payload.score);
         }
         return true;
       } catch (err) {
-        console.warn('⚠️ [Firebase] submitScore error:', err.message);
+        console.warn('[Firebase] submitScore error:', err.message);
         return false;
       }
     }
@@ -127,7 +127,7 @@ class FirebaseLeaderboardService {
           return results;
         }
       } catch (err) {
-        console.warn('⚠️ [Firebase] fetchTopScores error:', err.message);
+        console.warn('[Firebase] fetchTopScores error:', err.message);
       }
     }
     return this.cachedScores;
@@ -160,10 +160,10 @@ class FirebaseLeaderboardService {
               callback(results);
             }
           }, err => {
-            console.warn('⚠️ [Firebase] Realtime listener error:', err.message);
+            console.warn('[Firebase] Realtime listener error:', err.message);
           });
       } catch (err) {
-        console.warn('⚠️ [Firebase] listenToLeaderboard error:', err.message);
+        console.warn('[Firebase] listenToLeaderboard error:', err.message);
       }
     }
   }
