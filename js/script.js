@@ -2331,6 +2331,11 @@
     el.menu.classList.toggle('hidden', next !== State.MENU);
     el.ready.classList.toggle('hidden', next !== State.READY);
     el.hud.classList.toggle('hidden', next === State.MENU);
+    
+    // Sembunyikan coinHud & powerupHud saat layar GET READY agar tidak menumpuk di teks instruksi
+    if(el.coinHud) el.coinHud.classList.toggle('hidden', next === State.READY || next === State.MENU);
+    if(el.powerupHud) el.powerupHud.classList.toggle('hidden', next === State.READY || next === State.MENU);
+
     if(currentMode === 'ranked') {
       el.coinHud.innerHTML = 'RANKED MATCH <b>EXTREME</b>';
       if(el.rankTierHud) {
@@ -2346,6 +2351,7 @@
     el.sound.style.display = (next === State.MENU || next === State.PLAYING || next === State.READY) ? 'block' : 'none';
     updateDashUI();
     updateMenuRankedUI();
+    updatePowerupHUD();
   }
   function updateLivesHUD() {
     if(!el.livesHud) return;
@@ -2803,6 +2809,11 @@
   }
 
   function updatePowerupHUD() {
+    if(!el.powerupHud) return;
+    if(state === State.MENU || state === State.READY) {
+      el.powerupHud.innerHTML = '';
+      return;
+    }
     let html = '';
     const petId = progress.selectedPet || 'pip_peep';
     
@@ -4909,7 +4920,17 @@
 
     // Dasar awan yang rata dan lembut
     ctx.beginPath();
-    ctx.roundRect(-33, 4, 88, 18, 9);
+    if(typeof ctx.roundRect === 'function') {
+      ctx.roundRect(-33, 4, 88, 18, 9);
+    } else {
+      const rx = -33, ry = 4, rw = 88, rh = 18, rr = 9;
+      ctx.moveTo(rx + rr, ry);
+      ctx.arcTo(rx + rw, ry, rx + rw, ry + rh, rr);
+      ctx.arcTo(rx + rw, ry + rh, rx, ry + rh, rr);
+      ctx.arcTo(rx, ry + rh, rx, ry, rr);
+      ctx.arcTo(rx, ry, rx + rw, ry, rr);
+      ctx.closePath();
+    }
     ctx.fill();
 
     // Highlight puncak awan terpapar sinar matahari
