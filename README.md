@@ -28,7 +28,7 @@ flappy bird/
 - **🔥 Firebase Firestore Online Leaderboard**: Peringkat global real-time dengan profil pemain, badge tier (Grandmaster, Master, Diamond, dll), loadout custom, dan Top #1 Champion Golden Spotlight.
 - **🛡️ Sistem Power-Up**: Shield 🛡️, Dual Shield, Coin Magnet 🧲, Slow Time ❄️, Invincible Star ⭐, NOS Rocket Turbo 🚀.
 - **👿 Sistem Enemy Progresif**: Enemy Bird 👿, Bee Swarm 🐝, Storm Cloud ☁️⚡, Speed Scaling dinamis.
-- **🛍️ Shop Kosmetik**: 10 Bird Skins (dengan jingle kematian unik), 10 Tail Auras, 18 Topi (Hats), 16 Pakaian/Sayap (Outfits), 6 Pipe Skins, 7 Backgrounds, 6 Music Tracks.
+- **🛍️ Shop Kosmetik Lengkap**: 10 Bird Skins (dengan jingle kematian unik), **6 Pilihan Skin Anak Burung (Baby Guardian Duos)**, 10 Tail Auras, 18 Topi (Hats), 16 Pakaian/Sayap (Outfits), 6 Pipe Skins, 7 Backgrounds, 6 Music Tracks, Starter Boosters.
 - **🎵 Synthesizer Web Audio API**: Full polyphonic multi-track compositions & audio SFX retro.
 
 ## 🔥 Cara Konfigurasi Firebase Firestore (Opsional)

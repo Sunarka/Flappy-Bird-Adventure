@@ -147,6 +147,58 @@
     double_shield:{ name:'STARTER DUAL SHIELD', desc:'Mulai game dengan 2x lapisan perisai pelindung', cost:0, color:'#0284c7' }
   };
 
+  // 9. Anak Burung Pelindung Duo Skins (Baby Guardian Birds) - ALL FREE FOR TESTING
+  const babyBirdsCatalog = {
+    classic_duo: {
+      name: 'PIP & PEEP (CANARY & SKY)',
+      desc: 'Duo anak burung ceria dengan pita pink & bunga sakura',
+      cost: 0,
+      color: '#fef08a',
+      baby1: { name: 'Pip', color: '#fef08a', wingColor: '#fde047', blushColor: '#fda4af', accessory: 'ribbon' },
+      baby2: { name: 'Peep', color: '#bae6fd', wingColor: '#7dd3fc', blushColor: '#fda4af', accessory: 'flower' }
+    },
+    sakura_twins: {
+      name: 'MOMO & HANA (CHERRY BLOSSOM)',
+      desc: 'Kembar ceri manis merah muda bertabur kelopak sakura',
+      cost: 0,
+      color: '#f472b6',
+      baby1: { name: 'Momo', color: '#fbcfe8', wingColor: '#f472b6', blushColor: '#fda4af', accessory: 'ribbon' },
+      baby2: { name: 'Hana', color: '#fecdd3', wingColor: '#fb7185', blushColor: '#fda4af', accessory: 'flower' }
+    },
+    golden_angels: {
+      name: 'AERO & LUMOS (HOLY ANGELS)',
+      desc: 'Anak burung bidadari suci dengan halo lingkaran emas',
+      cost: 0,
+      color: '#eab308',
+      baby1: { name: 'Aero', color: '#fef08a', wingColor: '#eab308', blushColor: '#fde047', accessory: 'halo' },
+      baby2: { name: 'Lumos', color: '#ffffff', wingColor: '#fef08a', blushColor: '#fde047', accessory: 'halo' }
+    },
+    cyber_bots: {
+      name: 'PIXEL & GLITCH (CYBER DRONES)',
+      desc: 'Duo drone mecha mungil dengan antena neon masa depan',
+      cost: 0,
+      color: '#06b6d4',
+      baby1: { name: 'Pixel', color: '#38bdf8', wingColor: '#0284c7', blushColor: '#67e8f9', accessory: 'antenna' },
+      baby2: { name: 'Glitch', color: '#34d399', wingColor: '#059669', blushColor: '#6ee7b7', accessory: 'antenna' }
+    },
+    fire_hatchlings: {
+      name: 'BLAZE & EMBER (PHOENIX SPARKS)',
+      desc: 'Anak burung api abadi dengan jambul api berkilau',
+      cost: 0,
+      color: '#f97316',
+      baby1: { name: 'Blaze', color: '#fb923c', wingColor: '#ea580c', blushColor: '#fdba74', accessory: 'flame' },
+      baby2: { name: 'Ember', color: '#f87171', wingColor: '#dc2626', blushColor: '#fca5a5', accessory: 'flame' }
+    },
+    shadow_imps: {
+      name: 'KURO & VOID (SHADOW SPIRITS)',
+      desc: 'Roh bayangan mungil misterius dengan tanduk ungu imut',
+      cost: 0,
+      color: '#a855f7',
+      baby1: { name: 'Kuro', color: '#c084fc', wingColor: '#7e22ce', blushColor: '#d8b4fe', accessory: 'horns' },
+      baby2: { name: 'Void', color: '#64748b', wingColor: '#334155', blushColor: '#94a3b8', accessory: 'horns' }
+    }
+  };
+
   const progress = storage.get('skyFlappyProgress', { coins:0, unlocked:['classic'], selected:'classic' });
   if(!Array.isArray(progress.unlocked)) progress.unlocked=['classic'];
   if(!skins[progress.selected]) progress.selected='classic';
@@ -159,7 +211,8 @@
     ['aura', auras, 'default'],
     ['hat', hats, 'none'],
     ['outfit', outfits, 'none'],
-    ['booster', boosters, 'none']
+    ['booster', boosters, 'none'],
+    ['baby', babyBirdsCatalog, 'classic_duo']
   ]){
     const unlockedKey = key + 'Unlocked';
     const selectedKey = 'selected' + key[0].toUpperCase() + key.slice(1);
@@ -216,7 +269,26 @@
     }
   ];
 
+  function applyBabySkin() {
+    const babyId = progress.selectedBaby || 'classic_duo';
+    const skin = babyBirdsCatalog[babyId] || babyBirdsCatalog.classic_duo;
+    if(skin && skin.baby1 && skin.baby2) {
+      babyBirds[0].name = skin.baby1.name;
+      babyBirds[0].color = skin.baby1.color;
+      babyBirds[0].wingColor = skin.baby1.wingColor;
+      babyBirds[0].blushColor = skin.baby1.blushColor;
+      babyBirds[0].accessory = skin.baby1.accessory;
+
+      babyBirds[1].name = skin.baby2.name;
+      babyBirds[1].color = skin.baby2.color;
+      babyBirds[1].wingColor = skin.baby2.wingColor;
+      babyBirds[1].blushColor = skin.baby2.blushColor;
+      babyBirds[1].accessory = skin.baby2.accessory;
+    }
+  }
+
   function resetBabyBirds() {
+    applyBabySkin();
     babyBirds[0].x = bird.x - 22;
     babyBirds[0].y = bird.y - 18;
     babyBirds[0].state = 'follow';
@@ -753,6 +825,7 @@
   let shopCategory = 'bird';
   const previewLoadout = {
     bird: 'classic',
+    baby: 'classic_duo',
     aura: 'default',
     hat: 'none',
     outfit: 'none',
@@ -766,6 +839,7 @@
 
   function syncPreviewLoadout() {
     previewLoadout.bird = progress.selected || 'classic';
+    previewLoadout.baby = progress.selectedBaby || 'classic_duo';
     previewLoadout.aura = progress.selectedAura || 'default';
     previewLoadout.hat = progress.selectedHat || 'none';
     previewLoadout.outfit = progress.selectedOutfit || 'none';
@@ -779,7 +853,7 @@
     if(!el.showcaseLabel) return;
     const cat = shopCategory;
     const catCatalog = shopCatalog();
-    const currentId = previewLoadout[cat] || 'none';
+    const currentId = previewLoadout[cat] || (cat === 'baby' ? 'classic_duo' : 'none');
     const item = catCatalog[currentId];
     if(item) {
       el.showcaseLabel.textContent = 'PREVIEW: ' + item.name;
@@ -900,6 +974,36 @@
       opacity: 1
     });
 
+    // 5b. Baby Birds Preview in Shop Showcase
+    const bSkin = babyBirdsCatalog[previewLoadout.baby] || babyBirdsCatalog.classic_duo;
+    if(bSkin && bSkin.baby1 && bSkin.baby2) {
+      drawBabyBird({
+        x: bX - 22,
+        y: bY - 14 + Math.sin(now / 220) * 3,
+        r: 7.2,
+        wing: now / 90,
+        angle: 0,
+        state: 'follow',
+        color: bSkin.baby1.color,
+        wingColor: bSkin.baby1.wingColor,
+        blushColor: bSkin.baby1.blushColor,
+        accessory: bSkin.baby1.accessory
+      }, sCtx);
+
+      drawBabyBird({
+        x: bX - 26,
+        y: bY + 14 + Math.sin(now / 240 + Math.PI) * 3,
+        r: 6.8,
+        wing: now / 90,
+        angle: 0,
+        state: 'follow',
+        color: bSkin.baby2.color,
+        wingColor: bSkin.baby2.wingColor,
+        blushColor: bSkin.baby2.blushColor,
+        accessory: bSkin.baby2.accessory
+      }, sCtx);
+    }
+
     // 6. Floating Music Notes when previewing music
     if(audio.previewTrackId) {
       const noteOff = (now / 18) % 36;
@@ -919,6 +1023,7 @@
   function shopCatalog() {
     switch(shopCategory) {
       case 'bird': return skins;
+      case 'baby': return babyBirdsCatalog;
       case 'booster': return boosters;
       case 'aura': return auras;
       case 'hat': return hats;
@@ -937,6 +1042,27 @@
     const b = item.body || item.color || '#38bdf8';
     const w = item.wing || item.edge || '#0284c7';
     const bk = item.beak || '#f97316';
+
+    if(cat === 'baby') {
+      const b1 = item.baby1 ? item.baby1.color : '#fef08a';
+      const b2 = item.baby2 ? item.baby2.color : '#bae6fd';
+      const w1 = item.baby1 ? item.baby1.wingColor : '#fde047';
+      const w2 = item.baby2 ? item.baby2.wingColor : '#7dd3fc';
+      return `<svg viewBox="0 0 32 32" class="shop-item-svg">
+        <circle cx="11" cy="18" r="7" fill="${b1}"/>
+        <ellipse cx="6" cy="19" rx="3.5" ry="2.2" fill="${w1}"/>
+        <polygon points="17,17 21,18.5 17,20" fill="#f97316"/>
+        <circle cx="14" cy="16" r="2" fill="#0f172a"/>
+        <circle cx="14.6" cy="15.4" r="0.8" fill="#fff"/>
+        <circle cx="11" cy="19.5" r="1.3" fill="#fda4af"/>
+        <circle cx="21" cy="14" r="6.5" fill="${b2}"/>
+        <ellipse cx="16" cy="15" rx="3" ry="2" fill="${w2}"/>
+        <polygon points="26.5,13.5 30,14.8 26.5,16" fill="#f97316"/>
+        <circle cx="23.8" cy="12.2" r="1.8" fill="#0f172a"/>
+        <circle cx="24.4" cy="11.6" r="0.7" fill="#fff"/>
+        <circle cx="21" cy="15.2" r="1.2" fill="#fda4af"/>
+      </svg>`;
+    }
 
     if(cat === 'bird') {
       return `<svg viewBox="0 0 32 32" class="shop-item-svg">
@@ -1221,6 +1347,8 @@
 
     if(shopCategory === 'music') {
       audio.previewMusic(id);
+    } else if(shopCategory === 'baby') {
+      audio.babyChirp();
     } else if(shopCategory === 'booster' && id !== 'none') {
       audio.powerup(id);
     } else if(shopCategory === 'bird') {
@@ -1249,6 +1377,7 @@
     updateShowcaseLabel();
     audio.click();
     persistProgress();
+    if(shopCategory === 'baby') applyBabySkin();
     renderShop();
 
     if(shopCategory === 'music' && state === State.PLAYING) {
@@ -1276,6 +1405,7 @@
       audio.win();
       makeParticles(180, 100, 24, '#fbbf24');
       persistProgress();
+      if(shopCategory === 'baby') applyBabySkin();
       updateCoins();
       renderShop();
 
@@ -1490,6 +1620,7 @@
       avatar: gpProfile.avatar,
       loadout: {
         bird: progress.selected || 'classic',
+        baby: progress.selectedBaby || 'classic_duo',
         aura: progress.selectedAura || 'default',
         hat: progress.selectedHat || 'none',
         outfit: progress.selectedOutfit || 'none',
@@ -1551,6 +1682,7 @@
             avatar: gpProfile.avatar,
             loadout: {
               bird: progress.selected || 'classic',
+              baby: progress.selectedBaby || 'classic_duo',
               aura: progress.selectedAura || 'default',
               hat: progress.selectedHat || 'none',
               outfit: progress.selectedOutfit || 'none',
@@ -3375,95 +3507,140 @@
   }
 
   // Render Anak Burung Super Lucu (Chibi Guardian Bird)
-  function drawBabyBird(b) {
-    ctx.save();
-    ctx.translate(b.x, b.y);
-    ctx.rotate(b.angle + (b.state === 'intercept' ? b.flipAngle : 0));
+  function drawBabyBird(b, targetCtx = ctx) {
+    targetCtx.save();
+    targetCtx.translate(b.x, b.y);
+    targetCtx.rotate(b.angle + (b.state === 'intercept' ? b.flipAngle : 0));
 
     // Pendaran Aura Lembut
-    ctx.shadowColor = b.color;
-    ctx.shadowBlur = b.state === 'intercept' ? 14 : 7;
+    targetCtx.shadowColor = b.color;
+    targetCtx.shadowBlur = b.state === 'intercept' ? 14 : 7;
 
     // Tubuh Bulat Mungil Pastel
-    const bodyGrad = ctx.createRadialGradient(-2, -2, 2, 0, 0, b.r);
+    const bodyGrad = targetCtx.createRadialGradient(-2, -2, 2, 0, 0, b.r);
     bodyGrad.addColorStop(0, '#ffffff');
     bodyGrad.addColorStop(0.35, b.color);
     bodyGrad.addColorStop(1, b.wingColor);
 
-    ctx.fillStyle = bodyGrad;
-    ctx.beginPath();
-    ctx.arc(0, 0, b.r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
+    targetCtx.fillStyle = bodyGrad;
+    targetCtx.beginPath();
+    targetCtx.arc(0, 0, b.r, 0, Math.PI * 2);
+    targetCtx.fill();
+    targetCtx.shadowBlur = 0;
 
     // Pipi Merona Merah Muda (Blushing Cheeks)
-    ctx.fillStyle = b.blushColor || '#fda4af';
-    ctx.beginPath();
-    ctx.arc(3.2, 3.0, 2.2, 0, Math.PI * 2);
-    ctx.arc(-2.5, 3.0, 2.0, 0, Math.PI * 2);
-    ctx.fill();
+    targetCtx.fillStyle = b.blushColor || '#fda4af';
+    targetCtx.beginPath();
+    targetCtx.arc(3.2, 3.0, 2.2, 0, Math.PI * 2);
+    targetCtx.arc(-2.5, 3.0, 2.0, 0, Math.PI * 2);
+    targetCtx.fill();
 
     // Sayap Mungil Mengepak Cepat
     const flap = Math.sin(b.wing) * 0.55;
-    ctx.save();
-    ctx.translate(-4, 1);
-    ctx.rotate(flap);
-    ctx.fillStyle = b.wingColor;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, 5.5, 3.5, -0.2, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+    targetCtx.save();
+    targetCtx.translate(-4, 1);
+    targetCtx.rotate(flap);
+    targetCtx.fillStyle = b.wingColor;
+    targetCtx.beginPath();
+    targetCtx.ellipse(0, 0, 5.5, 3.5, -0.2, 0, Math.PI * 2);
+    targetCtx.fill();
+    targetCtx.restore();
 
     // Paruh Mungil Oranye
-    ctx.fillStyle = '#f97316';
-    ctx.beginPath();
-    ctx.moveTo(b.r - 2, -1.5);
-    ctx.lineTo(b.r + 4.5, 0.5);
-    ctx.lineTo(b.r - 2, 2.5);
-    ctx.closePath();
-    ctx.fill();
+    targetCtx.fillStyle = '#f97316';
+    targetCtx.beginPath();
+    targetCtx.moveTo(b.r - 2, -1.5);
+    targetCtx.lineTo(b.r + 4.5, 0.5);
+    targetCtx.lineTo(b.r - 2, 2.5);
+    targetCtx.closePath();
+    targetCtx.fill();
 
     // Mata Boba Besar Berkilau (Sparkly Anime Eyes)
-    ctx.fillStyle = '#0f172a';
-    ctx.beginPath();
-    ctx.arc(3, -2.5, 3.2, 0, Math.PI * 2);
-    ctx.fill();
+    targetCtx.fillStyle = '#0f172a';
+    targetCtx.beginPath();
+    targetCtx.arc(3, -2.5, 3.2, 0, Math.PI * 2);
+    targetCtx.fill();
 
     // Kilau Cahaya di Mata
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(4.0, -3.5, 1.4, 0, Math.PI * 2);
-    ctx.arc(2.0, -1.5, 0.8, 0, Math.PI * 2);
-    ctx.fill();
+    targetCtx.fillStyle = '#ffffff';
+    targetCtx.beginPath();
+    targetCtx.arc(4.0, -3.5, 1.4, 0, Math.PI * 2);
+    targetCtx.arc(2.0, -1.5, 0.8, 0, Math.PI * 2);
+    targetCtx.fill();
 
     // Aksesori Kepala Imut
     if(b.accessory === 'ribbon') {
-      // Pita Merah Muda Cantik (Pip)
-      ctx.fillStyle = '#f472b6';
-      ctx.beginPath();
-      ctx.moveTo(-1, -b.r); ctx.lineTo(-5, -b.r - 4); ctx.lineTo(-1, -b.r - 2); ctx.closePath();
-      ctx.moveTo(-1, -b.r); ctx.lineTo(3, -b.r - 4); ctx.lineTo(-1, -b.r - 2); ctx.closePath();
-      ctx.fill();
-      ctx.fillStyle = '#fbcfe8';
-      ctx.beginPath();
-      ctx.arc(-1, -b.r - 1.5, 1.4, 0, Math.PI * 2);
-      ctx.fill();
+      // Pita Merah Muda Cantik (Pip / Momo)
+      targetCtx.fillStyle = '#f472b6';
+      targetCtx.beginPath();
+      targetCtx.moveTo(-1, -b.r); targetCtx.lineTo(-5, -b.r - 4); targetCtx.lineTo(-1, -b.r - 2); targetCtx.closePath();
+      targetCtx.moveTo(-1, -b.r); targetCtx.lineTo(3, -b.r - 4); targetCtx.lineTo(-1, -b.r - 2); targetCtx.closePath();
+      targetCtx.fill();
+      targetCtx.fillStyle = '#fbcfe8';
+      targetCtx.beginPath();
+      targetCtx.arc(-1, -b.r - 1.5, 1.4, 0, Math.PI * 2);
+      targetCtx.fill();
     } else if(b.accessory === 'flower') {
-      // Bunga Sakura Mini (Peep)
-      ctx.fillStyle = '#f472b6';
+      // Bunga Sakura Mini (Peep / Hana)
+      targetCtx.fillStyle = '#f472b6';
       for(let a = 0; a < 5; a++) {
         const rad = (a * Math.PI * 2) / 5;
-        ctx.beginPath();
-        ctx.arc(-1 + Math.cos(rad) * 2.4, -b.r - 2.2 + Math.sin(rad) * 2.4, 1.4, 0, Math.PI * 2);
-        ctx.fill();
+        targetCtx.beginPath();
+        targetCtx.arc(-1 + Math.cos(rad) * 2.4, -b.r - 2.2 + Math.sin(rad) * 2.4, 1.4, 0, Math.PI * 2);
+        targetCtx.fill();
       }
-      ctx.fillStyle = '#fef08a';
-      ctx.beginPath();
-      ctx.arc(-1, -b.r - 2.2, 1.1, 0, Math.PI * 2);
-      ctx.fill();
+      targetCtx.fillStyle = '#fef08a';
+      targetCtx.beginPath();
+      targetCtx.arc(-1, -b.r - 2.2, 1.1, 0, Math.PI * 2);
+      targetCtx.fill();
+    } else if(b.accessory === 'halo') {
+      // Golden Angel Halo (Aero / Lumos)
+      targetCtx.strokeStyle = '#fde047';
+      targetCtx.lineWidth = 1.6;
+      targetCtx.shadowColor = '#fef08a';
+      targetCtx.shadowBlur = 6;
+      targetCtx.beginPath();
+      targetCtx.ellipse(0, -b.r - 4.5, 4.5, 1.8, 0, 0, Math.PI * 2);
+      targetCtx.stroke();
+      targetCtx.shadowBlur = 0;
+    } else if(b.accessory === 'antenna') {
+      // Cyber Neon Antenna (Pixel / Glitch)
+      targetCtx.strokeStyle = '#0284c7';
+      targetCtx.lineWidth = 1.5;
+      targetCtx.beginPath();
+      targetCtx.moveTo(0, -b.r);
+      targetCtx.lineTo(0, -b.r - 5.5);
+      targetCtx.stroke();
+      targetCtx.fillStyle = '#38bdf8';
+      targetCtx.shadowColor = '#38bdf8';
+      targetCtx.shadowBlur = 6;
+      targetCtx.beginPath();
+      targetCtx.arc(0, -b.r - 6, 2, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.shadowBlur = 0;
+    } else if(b.accessory === 'flame') {
+      // Phoenix Flame Tuft (Blaze / Ember)
+      targetCtx.fillStyle = '#f97316';
+      targetCtx.beginPath();
+      targetCtx.moveTo(-2, -b.r);
+      targetCtx.quadraticCurveTo(0, -b.r - 6, 3, -b.r - 7);
+      targetCtx.quadraticCurveTo(1, -b.r - 3, 2, -b.r);
+      targetCtx.closePath();
+      targetCtx.fill();
+      targetCtx.fillStyle = '#fde047';
+      targetCtx.beginPath();
+      targetCtx.arc(0, -b.r - 1.5, 1.3, 0, Math.PI * 2);
+      targetCtx.fill();
+    } else if(b.accessory === 'horns') {
+      // Cute Imp Horns (Kuro / Void)
+      targetCtx.fillStyle = '#7e22ce';
+      targetCtx.beginPath();
+      targetCtx.moveTo(-3, -b.r + 1); targetCtx.lineTo(-5, -b.r - 4); targetCtx.lineTo(-1, -b.r); targetCtx.closePath();
+      targetCtx.moveTo(1, -b.r); targetCtx.lineTo(3, -b.r - 4); targetCtx.lineTo(3, -b.r + 1); targetCtx.closePath();
+      targetCtx.fill();
     }
 
-    ctx.restore();
+    targetCtx.restore();
   }
 
   function drawSupersonicSpeedlines() {
