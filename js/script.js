@@ -7182,8 +7182,6 @@
     if(el.musicToggle) el.musicToggle.checked = settings.music;
     syncSettings();
     audio.click();
-    if(settings.music && state === State.PLAYING) playBackgroundMusic();
-    else stopBackgroundMusic();
     persist();
   });
 
@@ -7242,8 +7240,13 @@
     }
     updateMusicUI();
     persist();
-    if(!settings.music) audio.stopMusic();
-    else if(state === State.PLAYING) audio.music();
+    if(!settings.music) {
+      audio.stopMusic();
+      stopBackgroundMusic();
+    } else {
+      audio.music();
+      if(state === State.PLAYING) playBackgroundMusic();
+    }
   }
 
   function closeDifficulty() {
