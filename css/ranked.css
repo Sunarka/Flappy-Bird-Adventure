@@ -231,19 +231,25 @@
   border-color: #facc15;
 }
 
+.modal .gp-avatar-edit-btn,
 .gp-avatar-edit-btn {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
+  position: absolute !important;
+  bottom: -2px !important;
+  right: -2px !important;
   width: 22px !important;
   height: 22px !important;
-  aspect-ratio: 1 / 1;
-  flex-shrink: 0;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  min-width: 22px !important;
+  max-width: 22px !important;
+  aspect-ratio: 1 / 1 !important;
+  flex-shrink: 0 !important;
   border-radius: 50% !important;
   background: #22c55e !important;
   border: 2px solid #ffffff !important;
   color: #ffffff !important;
   padding: 0 !important;
+  margin: 0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -251,6 +257,14 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.5) !important;
   transition: transform 0.15s ease !important;
   box-sizing: border-box !important;
+  z-index: 5 !important;
+}
+
+.gp-avatar-edit-btn svg {
+  display: block !important;
+  width: 12px !important;
+  height: 12px !important;
+  pointer-events: none !important;
 }
 
 .gp-avatar-wrap:hover .gp-avatar-edit-btn {
