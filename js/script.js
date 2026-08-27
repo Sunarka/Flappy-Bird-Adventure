@@ -138,8 +138,7 @@
 
   // 8. Starter Booster Perk (Skill Langsung Aktif Saat Mulai) - ALL FREE FOR TESTING
   const boosters = {
-    none:{ name:'TANPA BOOSTER', desc:'Mulai game kasual tanpa skill instan', cost:0, color:'#94a3b8' },
-    baby:{ name:'STARTER BABY BIRDS', desc:'Mulai game langsung dikawal 2 anak burung pelindung', cost:0, color:'#fde047' },
+    none:{ name:'TANPA BOOSTER', desc:'Mulai game kasual tanpa booster instan', cost:0, color:'#94a3b8' },
     shield:{ name:'STARTER SHIELD', desc:'Mulai game langsung terlindungi perisai', cost:0, color:'#0284c7' },
     magnet:{ name:'STARTER MAGNET', desc:'Mulai game langsung menyedot semua koin', cost:0, color:'#dc2626' },
     slow:{ name:'STARTER SLOW ICE', desc:'Mulai game dengan waktu melambat 50%', cost:0, color:'#0891b2' },
@@ -148,55 +147,87 @@
     double_shield:{ name:'STARTER DUAL SHIELD', desc:'Mulai game dengan 2x lapisan perisai pelindung', cost:0, color:'#0284c7' }
   };
 
-  // 9. Anak Burung Pelindung Duo Skins (Baby Guardian Birds) - ALL FREE FOR TESTING
-  const babyBirdsCatalog = {
-    classic_duo: {
-      name: 'PIP & PEEP (CANARY & SKY)',
-      desc: 'Duo anak burung ceria dengan pita pink & bunga sakura',
+  // 9. Sistem Pet Pendamping & Skill Unik (Unique Pet Companions & Skills) - ALL FREE FOR TESTING
+  const petsCatalog = {
+    pip_peep: {
+      name: 'PIP & PEEP (CANARY DUO)',
+      desc: 'Duo pelindung imut. Meluncur menghancurkan musuh yang mendekat (1-hit kill) & respawn 11s',
       cost: 0,
       color: '#fef08a',
+      skillType: 'bodyguard',
+      skillName: 'DUO BODYGUARD INTERCEPT',
+      skillDesc: 'Meluncur menghancurkan musuh yang mendekat (1-hit kill) dan respawn setelah 11s',
+      respawnTime: 11.0,
       baby1: { name: 'Pip', color: '#fef08a', wingColor: '#fde047', blushColor: '#fda4af', accessory: 'ribbon' },
       baby2: { name: 'Peep', color: '#bae6fd', wingColor: '#7dd3fc', blushColor: '#fda4af', accessory: 'flower' }
     },
-    sakura_twins: {
-      name: 'MOMO & HANA (CHERRY BLOSSOM)',
-      desc: 'Kembar ceri manis merah muda bertabur kelopak sakura',
+    momo_hana: {
+      name: 'MOMO & HANA (SAKURA FAIRIES)',
+      desc: 'Peri kembar sakura. Memberikan perisai bunga sakura pelindung berkala tiap 16s',
       cost: 0,
       color: '#f472b6',
+      skillType: 'barrier',
+      skillName: 'SAKURA BARRIER SHIELD',
+      skillDesc: 'Membuat perisai pelindung bunga sakura berkala tiap 16 detik yang menyerap 1 tabrakan',
+      barrierCooldown: 16.0,
       baby1: { name: 'Momo', color: '#fbcfe8', wingColor: '#f472b6', blushColor: '#fda4af', accessory: 'ribbon' },
       baby2: { name: 'Hana', color: '#fecdd3', wingColor: '#fb7185', blushColor: '#fda4af', accessory: 'flower' }
     },
-    golden_angels: {
-      name: 'AERO & LUMOS (HOLY ANGELS)',
-      desc: 'Anak burung bidadari suci dengan halo lingkaran emas',
+    aero_lumos: {
+      name: 'AERO & LUMOS (HOLY ARCHANGELS)',
+      desc: 'Duo bidadari suci. Memberi +1 Skor Ekstra & Bonus Koin setiap melewati 4 pipa',
       cost: 0,
       color: '#eab308',
+      skillType: 'blessing',
+      skillName: 'DIVINE SCORE & GOLD BLESSING',
+      skillDesc: 'Memberikan +1 Skor Ekstra & Bonus Koin setiap berhasil melewati 4 rintangan pipa',
+      interval: 4,
       baby1: { name: 'Aero', color: '#fef08a', wingColor: '#eab308', blushColor: '#fde047', accessory: 'halo' },
       baby2: { name: 'Lumos', color: '#ffffff', wingColor: '#fef08a', blushColor: '#fde047', accessory: 'halo' }
     },
-    cyber_bots: {
+    pixel_glitch: {
       name: 'PIXEL & GLITCH (CYBER DRONES)',
-      desc: 'Duo drone mecha mungil dengan antena neon masa depan',
+      desc: 'Duo drone mecha. Menembakkan laser listrik otomatis tiap 4.5s untuk melumpuhkan musuh jarak jauh',
       cost: 0,
       color: '#06b6d4',
+      skillType: 'laser',
+      skillName: 'AUTO EMP LASER ZAP',
+      skillDesc: 'Menembakkan laser listrik otomatis tiap 4.5 detik untuk melumpuhkan musuh dari jarak jauh',
+      laserCooldown: 4.5,
       baby1: { name: 'Pixel', color: '#38bdf8', wingColor: '#0284c7', blushColor: '#67e8f9', accessory: 'antenna' },
       baby2: { name: 'Glitch', color: '#34d399', wingColor: '#059669', blushColor: '#6ee7b7', accessory: 'antenna' }
     },
-    fire_hatchlings: {
+    blaze_ember: {
       name: 'BLAZE & EMBER (PHOENIX SPARKS)',
-      desc: 'Anak burung api abadi dengan jambul api berkilau',
+      desc: 'Duo percikan api abadi. Membakar musuh di depan & melebarkan celah pipa +16px',
       cost: 0,
       color: '#f97316',
+      skillType: 'fire',
+      skillName: 'PHOENIX SCORCHER & GAP EXPANDER',
+      skillDesc: 'Membakar musuh di jalur depan & melebarkan celah pipa sebesar +16px saat mendekat',
       baby1: { name: 'Blaze', color: '#fb923c', wingColor: '#ea580c', blushColor: '#fdba74', accessory: 'flame' },
       baby2: { name: 'Ember', color: '#f87171', wingColor: '#dc2626', blushColor: '#fca5a5', accessory: 'flame' }
     },
-    shadow_imps: {
+    kuro_void: {
       name: 'KURO & VOID (SHADOW SPIRITS)',
-      desc: 'Roh bayangan mungil misterius dengan tanduk ungu imut',
+      desc: 'Duo roh bayangan mistis. Mempercepat cooldown Dash 35% (jadi 2.9s) & ledakan bayangan',
       cost: 0,
       color: '#a855f7',
+      skillType: 'dash_master',
+      skillName: 'SHADOW WARP DASH BOOST',
+      skillDesc: 'Mengurangi cooldown skill Dash sebesar 35% (dari 4.5s jadi 2.9s) & shockwave hitam',
+      dashCd: 2.9,
       baby1: { name: 'Kuro', color: '#c084fc', wingColor: '#7e22ce', blushColor: '#d8b4fe', accessory: 'horns' },
       baby2: { name: 'Void', color: '#64748b', wingColor: '#334155', blushColor: '#94a3b8', accessory: 'horns' }
+    },
+    none: {
+      name: 'TANPA PET',
+      desc: 'Bermain kasual murni tanpa bantuan pet pelindung',
+      cost: 0,
+      color: '#94a3b8',
+      skillType: 'none',
+      skillName: 'NO PET',
+      skillDesc: 'Tanpa pet pendamping'
     }
   };
 
@@ -213,7 +244,7 @@
     ['hat', hats, 'none'],
     ['outfit', outfits, 'none'],
     ['booster', boosters, 'none'],
-    ['baby', babyBirdsCatalog, 'classic_duo']
+    ['pet', petsCatalog, 'pip_peep']
   ]){
     const unlockedKey = key + 'Unlocked';
     const selectedKey = 'selected' + key[0].toUpperCase() + key.slice(1);
@@ -270,9 +301,13 @@
     }
   ];
 
-  function applyBabySkin() {
-    const babyId = progress.selectedBaby || 'classic_duo';
-    const skin = babyBirdsCatalog[babyId] || babyBirdsCatalog.classic_duo;
+  let petSkillTimer = 0;
+  let aeroPipesPassed = 0;
+  let laserBeams = [];
+
+  function applyPetSkin() {
+    const petId = progress.selectedPet || 'pip_peep';
+    const skin = petsCatalog[petId] || petsCatalog.pip_peep;
     if(skin && skin.baby1 && skin.baby2) {
       babyBirds[0].name = skin.baby1.name;
       babyBirds[0].color = skin.baby1.color;
@@ -288,11 +323,17 @@
     }
   }
 
-  function resetBabyBirds(active = false) {
-    applyBabySkin();
+  function resetBabyBirds(active = true) {
+    applyPetSkin();
+    const petId = progress.selectedPet || 'pip_peep';
+    const isNone = petId === 'none';
+    petSkillTimer = 0;
+    aeroPipesPassed = 0;
+    laserBeams = [];
+
     babyBirds[0].x = bird.x - 22;
     babyBirds[0].y = bird.y - 18;
-    babyBirds[0].state = active ? 'follow' : 'inactive';
+    babyBirds[0].state = (active && !isNone) ? 'follow' : 'inactive';
     babyBirds[0].targetEnemy = null;
     babyBirds[0].respawnTimer = 0;
     babyBirds[0].angle = 0;
@@ -300,7 +341,7 @@
 
     babyBirds[1].x = bird.x - 26;
     babyBirds[1].y = bird.y + 18;
-    babyBirds[1].state = active ? 'follow' : 'inactive';
+    babyBirds[1].state = (active && !isNone) ? 'follow' : 'inactive';
     babyBirds[1].targetEnemy = null;
     babyBirds[1].respawnTimer = 0;
     babyBirds[1].angle = 0;
@@ -308,7 +349,7 @@
   }
 
   // Active power-up states
-  const activePowerups = { shield: false, magnet: 0, slow: 0, star: 0, rocket: 0, baby: 0 };
+  const activePowerups = { shield: false, magnet: 0, slow: 0, star: 0, rocket: 0 };
   const bird = { x:104, y:280, vy:0, r:16, wing:0, angle:0, dead:false };
 
   // Audio Engine with Full Synthesizer
@@ -828,6 +869,7 @@
   let shopCategory = 'bird';
   const previewLoadout = {
     bird: 'classic',
+    pet: 'pip_peep',
     booster: 'none',
     aura: 'default',
     hat: 'none',
@@ -842,6 +884,7 @@
 
   function syncPreviewLoadout() {
     previewLoadout.bird = progress.selected || 'classic';
+    previewLoadout.pet = progress.selectedPet || 'pip_peep';
     previewLoadout.booster = progress.selectedBooster || 'none';
     previewLoadout.aura = progress.selectedAura || 'default';
     previewLoadout.hat = progress.selectedHat || 'none';
@@ -856,7 +899,7 @@
     if(!el.showcaseLabel) return;
     const cat = shopCategory;
     const catCatalog = shopCatalog();
-    const currentId = previewLoadout[cat] || 'none';
+    const currentId = previewLoadout[cat] || (cat === 'pet' ? 'pip_peep' : 'none');
     const item = catCatalog[currentId];
     if(item) {
       el.showcaseLabel.textContent = 'PREVIEW: ' + item.name;
@@ -977,10 +1020,10 @@
       opacity: 1
     });
 
-    // 5b. Baby Birds Preview in Shop Showcase (saat booster baby dipilih)
-    if(previewLoadout.booster === 'baby') {
-      const bSkin = babyBirdsCatalog[progress.selectedBaby || 'classic_duo'] || babyBirdsCatalog.classic_duo;
-      if(bSkin && bSkin.baby1 && bSkin.baby2) {
+    // 5b. Pet Companion Preview in Shop Showcase
+    if(previewLoadout.pet && previewLoadout.pet !== 'none') {
+      const pSkin = petsCatalog[previewLoadout.pet] || petsCatalog.pip_peep;
+      if(pSkin && pSkin.baby1 && pSkin.baby2) {
         drawBabyBird({
           x: bX - 22,
           y: bY - 14 + Math.sin(now / 220) * 3,
@@ -988,10 +1031,10 @@
           wing: now / 90,
           angle: 0,
           state: 'follow',
-          color: bSkin.baby1.color,
-          wingColor: bSkin.baby1.wingColor,
-          blushColor: bSkin.baby1.blushColor,
-          accessory: bSkin.baby1.accessory
+          color: pSkin.baby1.color,
+          wingColor: pSkin.baby1.wingColor,
+          blushColor: pSkin.baby1.blushColor,
+          accessory: pSkin.baby1.accessory
         }, sCtx);
 
         drawBabyBird({
@@ -1001,10 +1044,10 @@
           wing: now / 90,
           angle: 0,
           state: 'follow',
-          color: bSkin.baby2.color,
-          wingColor: bSkin.baby2.wingColor,
-          blushColor: bSkin.baby2.blushColor,
-          accessory: bSkin.baby2.accessory
+          color: pSkin.baby2.color,
+          wingColor: pSkin.baby2.wingColor,
+          blushColor: pSkin.baby2.blushColor,
+          accessory: pSkin.baby2.accessory
         }, sCtx);
       }
     }
@@ -1028,6 +1071,7 @@
   function shopCatalog() {
     switch(shopCategory) {
       case 'bird': return skins;
+      case 'pet': return petsCatalog;
       case 'booster': return boosters;
       case 'aura': return auras;
       case 'hat': return hats;
@@ -1047,7 +1091,10 @@
     const w = item.wing || item.edge || '#0284c7';
     const bk = item.beak || '#f97316';
 
-    if(cat === 'baby') {
+    if(cat === 'pet') {
+      if(id === 'none') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="11" fill="none" stroke="#94a3b8" stroke-width="2.5"/><line x1="8" y1="8" x2="24" y2="24" stroke="#94a3b8" stroke-width="2.5"/></svg>`;
+      }
       const b1 = item.baby1 ? item.baby1.color : '#fef08a';
       const b2 = item.baby2 ? item.baby2.color : '#bae6fd';
       const w1 = item.baby1 ? item.baby1.wingColor : '#fde047';
@@ -1058,13 +1105,13 @@
         <polygon points="17,17 21,18.5 17,20" fill="#f97316"/>
         <circle cx="14" cy="16" r="2" fill="#0f172a"/>
         <circle cx="14.6" cy="15.4" r="0.8" fill="#fff"/>
-        <circle cx="11" cy="19.5" r="1.3" fill="#fda4af"/>
+        <circle cx="11" cy="19.5" r="1.3" fill="${item.baby1 ? item.baby1.blushColor : '#fda4af'}"/>
         <circle cx="21" cy="14" r="6.5" fill="${b2}"/>
         <ellipse cx="16" cy="15" rx="3" ry="2" fill="${w2}"/>
         <polygon points="26.5,13.5 30,14.8 26.5,16" fill="#f97316"/>
         <circle cx="23.8" cy="12.2" r="1.8" fill="#0f172a"/>
         <circle cx="24.4" cy="11.6" r="0.7" fill="#fff"/>
-        <circle cx="21" cy="15.2" r="1.2" fill="#fda4af"/>
+        <circle cx="21" cy="15.2" r="1.2" fill="${item.baby2 ? item.baby2.blushColor : '#fda4af'}"/>
       </svg>`;
     }
 
@@ -1084,18 +1131,6 @@
     if(cat === 'booster') {
       if(id === 'none') {
         return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="11" fill="none" stroke="#94a3b8" stroke-width="2.5"/><line x1="8" y1="8" x2="24" y2="24" stroke="#94a3b8" stroke-width="2.5"/></svg>`;
-      }
-      if(id === 'baby') {
-        return `<svg viewBox="0 0 32 32" class="shop-item-svg">
-          <circle cx="16" cy="16" r="12" fill="rgba(254, 240, 138, 0.25)" stroke="#fde047" stroke-width="1.8"/>
-          <circle cx="14" cy="17" r="7" fill="#fef08a"/>
-          <ellipse cx="9.5" cy="18" rx="3.5" ry="2.2" fill="#fde047"/>
-          <polygon points="19,16 23.5,17.5 19,19" fill="#f97316"/>
-          <circle cx="17" cy="15" r="1.8" fill="#0f172a"/>
-          <circle cx="17.6" cy="14.4" r="0.7" fill="#fff"/>
-          <circle cx="14" cy="18.5" r="1.3" fill="#fda4af"/>
-          <circle cx="13" cy="9.5" r="1.8" fill="#f472b6"/>
-        </svg>`;
       }
       if(id === 'shield') {
         return `<svg viewBox="0 0 32 32" class="shop-item-svg"><path d="M16 4 L26 8 L24 20 L16 28 L8 20 L6 8 Z" fill="#0284c7" stroke="#7dd3fc" stroke-width="1.8"/><path d="M16 8 L22 11 L20 19 L16 24 L12 19 L10 11 Z" fill="#38bdf8"/></svg>`;
@@ -1363,7 +1398,7 @@
 
     if(shopCategory === 'music') {
       audio.previewMusic(id);
-    } else if(shopCategory === 'baby') {
+    } else if(shopCategory === 'pet' && id !== 'none') {
       audio.babyChirp();
     } else if(shopCategory === 'booster' && id !== 'none') {
       audio.powerup(id);
@@ -1393,7 +1428,7 @@
     updateShowcaseLabel();
     audio.click();
     persistProgress();
-    if(shopCategory === 'baby') applyBabySkin();
+    if(shopCategory === 'pet') applyPetSkin();
     renderShop();
 
     if(shopCategory === 'music' && state === State.PLAYING) {
@@ -1421,7 +1456,7 @@
       audio.win();
       makeParticles(180, 100, 24, '#fbbf24');
       persistProgress();
-      if(shopCategory === 'baby') applyBabySkin();
+      if(shopCategory === 'pet') applyPetSkin();
       updateCoins();
       renderShop();
 
@@ -2013,10 +2048,15 @@
 
     if(el.dashRingProgress) {
       const circ = 125.6; // 2 * PI * 20
-      const progressRatio = isReady ? 1 : Math.max(0, Math.min(1, 1 - (dashCooldown / DASH_COOLDOWN_MAX)));
+      const maxCd = getDashMaxCd();
+      const progressRatio = isReady ? 1 : Math.max(0, Math.min(1, 1 - (dashCooldown / maxCd)));
       const offset = circ * (1 - progressRatio);
       el.dashRingProgress.style.strokeDashoffset = String(offset);
     }
+  }
+
+  function getDashMaxCd() {
+    return (progress.selectedPet === 'kuro_void') ? 2.9 : 4.5;
   }
 
   function triggerDash() {
@@ -2036,7 +2076,7 @@
       }
     }
 
-    dashCooldown = DASH_COOLDOWN_MAX;
+    dashCooldown = getDashMaxCd();
     dashTimer = 0.28;
     graceTimer = Math.max(graceTimer, 0.45);
     bird.vy = Math.min(bird.vy, -130);
@@ -2044,22 +2084,23 @@
     audio.dash();
     shake = 0.22;
 
+    const isShadow = progress.selectedPet === 'kuro_void';
     shockwaves.push({
       x: bird.x, y: bird.y, r: 10, maxR: 95,
-      color: '#38bdf8',
+      color: isShadow ? '#a855f7' : '#38bdf8',
       life: 0.45, maxLife: 0.45
     });
 
     floatingTexts.push({
       x: bird.x + 15, y: bird.y - 20,
-      text: 'WARP DASH!',
-      color: '#38bdf8',
+      text: isShadow ? 'SHADOW DASH!' : 'WARP DASH!',
+      color: isShadow ? '#c084fc' : '#38bdf8',
       vy: -70,
       life: 0.75, maxLife: 0.75
     });
 
-    makeParticles(bird.x, bird.y, 22, '#38bdf8');
-    makeParticles(bird.x - 18, bird.y, 16, '#fde047');
+    makeParticles(bird.x, bird.y, 22, isShadow ? '#a855f7' : '#38bdf8');
+    makeParticles(bird.x - 18, bird.y, 16, isShadow ? '#7e22ce' : '#fde047');
     updateDashUI();
   }
 
@@ -2087,7 +2128,10 @@
     const level = Math.floor(score / 5);
     const gapBase = isRanked ? 116 : (d === 'easy' ? 164 : d === 'hard' ? 132 : 148);
     const minGap = isRanked ? 84 : (d === 'easy' ? 104 : d === 'hard' ? 90 : 96);
-    const gap = Math.max(minGap, gapBase - level * (isRanked ? 5 : 4));
+    let gap = Math.max(minGap, gapBase - level * (isRanked ? 5 : 4));
+    if(progress.selectedPet === 'blaze_ember') {
+      gap += 16; // Phoenix pipe gap expander
+    }
     const margin = isRanked ? 58 : 72;
     const max = H - GROUND - gap - margin;
     let y = margin + Math.random() * (max - margin);
@@ -2103,8 +2147,8 @@
     if(shouldSpawnPowerup) {
       powerupSpawnTimer = 0;
       const rand = Math.random();
-      // Baby Birds 22%, Shield 20%, Magnet 20%, Slow Time 16%, Star 11%, Rocket NOS 11%
-      const type = rand < 0.22 ? 'baby' : rand < 0.42 ? 'shield' : rand < 0.62 ? 'magnet' : rand < 0.78 ? 'slow' : rand < 0.89 ? 'star' : 'rocket';
+      // Shield 26%, Magnet 24%, Slow Time 20%, Star 15%, Rocket NOS 15%
+      const type = rand < 0.26 ? 'shield' : rand < 0.50 ? 'magnet' : rand < 0.70 ? 'slow' : rand < 0.85 ? 'star' : 'rocket';
       powerups.push({
         x: pipe.x + pipe.w / 2,
         y: pipe.gapY + pipe.gapSize / 2,
@@ -2145,6 +2189,29 @@
     makeParticles(180, 76, 9, '#fff0a8');
     audio.score();
     if(score === 10 || score === 25 || score === 50) makeParticles(180, 180, 25, '#ffe45c');
+
+    // Pet Skill: Aero & Lumos (Divine Blessing)
+    const petId = progress.selectedPet || 'pip_peep';
+    if(petId === 'aero_lumos') {
+      aeroPipesPassed++;
+      if(aeroPipesPassed % 4 === 0) {
+        score++;
+        updateScore();
+        progress.coins += 2;
+        updateCoins();
+        persistProgress();
+        floatingTexts.push({
+          x: bird.x + 25,
+          y: bird.y - 24,
+          text: '✨ DIVINE +1 SCORE & 2G!',
+          color: '#fde047',
+          vy: -65,
+          life: 0.9, maxLife: 0.9
+        });
+        makeParticles(bird.x, bird.y, 22, '#fde047');
+        audio.win();
+      }
+    }
   }
   function makeParticles(x, y, count, color) {
     for(let i = 0; i < count; i++) {
@@ -2158,13 +2225,7 @@
   // ==========================================
   function activatePowerup(type, x, y, isStarter = false) {
     if(!type || type === 'none') return;
-    
-    // Play distinctive skill jingle & fanfare
-    if(type === 'baby') {
-      audio.babyChirp();
-    } else {
-      audio.powerup(type);
-    }
+    audio.powerup(type);
 
     const px = x !== undefined ? x : bird.x;
     const py = y !== undefined ? y : bird.y;
@@ -2173,22 +2234,7 @@
     triggerPowerupSplash(px, py, type, isStarter);
 
     // Apply skill duration & physics
-    if(type === 'baby') {
-      applyBabySkin();
-      babyBirds[0].x = bird.x - 22;
-      babyBirds[0].y = bird.y - 18;
-      babyBirds[0].state = 'follow';
-      babyBirds[0].targetEnemy = null;
-      babyBirds[0].respawnTimer = 0;
-
-      babyBirds[1].x = bird.x - 26;
-      babyBirds[1].y = bird.y + 18;
-      babyBirds[1].state = 'follow';
-      babyBirds[1].targetEnemy = null;
-      babyBirds[1].respawnTimer = 0;
-
-      activePowerups.baby = 2;
-    } else if(type === 'shield') {
+    if(type === 'shield') {
       activePowerups.shield = true;
       activePowerups.shieldCount = 1;
     } else if(type === 'double_shield') {
@@ -2211,7 +2257,6 @@
 
   function triggerPowerupSplash(x, y, type, isStarter = false) {
     const info = {
-      baby:   { text: isStarter ? 'STARTER BABIES' : '+2 BABY GUARDIANS', color: '#fde047' },
       shield: { text: isStarter ? 'STARTER SHIELD' : '+SHIELD GUARD', color: '#38bdf8' },
       double_shield: { text: 'DUAL SHIELD LAYER', color: '#0284c7' },
       magnet: { text: isStarter ? 'STARTER MAGNET' : '+MAGNET PULL', color: '#f43f5e' },
@@ -3415,59 +3460,148 @@
     }
   }
 
-  // Update & Combat AI untuk 2 Anak Burung Pelindung Imut (Baby Guardian Birds)
+  // Update & Combat AI untuk Pet Pendamping & Skill Unik
   function updateBabyBirds(dt, speed, slowFactor) {
     const now = performance.now();
+    const petId = progress.selectedPet || 'pip_peep';
+    if(petId === 'none') return;
+    const petData = petsCatalog[petId] || petsCatalog.pip_peep;
 
-    // 1. Kumpulkan musuh yang mendekat di area bahaya (Enemies, Flyers, Storm Clouds)
-    const activeTargets = [];
-    for(const e of enemies) {
-      if(!e.dead && e.x > bird.x - 25 && e.x < bird.x + 230) {
-        activeTargets.push(e);
-      }
-    }
-    for(const f of flyers) {
-      if(!f.dead && f.x > bird.x - 25 && f.x < bird.x + 230) {
-        activeTargets.push(f);
-      }
-    }
-    for(const c of stormClouds) {
-      if((c.phase === 'warn' || c.phase === 'strike') && c.targetX > bird.x - 25 && c.targetX < bird.x + 220) {
-        activeTargets.push({
-          x: c.targetX,
-          y: c.y + 15,
-          r: 20,
-          isStormCloud: true,
-          cloudRef: c
-        });
-      }
-    }
-
-    // Urutkan musuh terdekat ke posisi burung induk
-    activeTargets.sort((a, b) => (a.x - bird.x) - (b.x - bird.x));
-
-    // 2. Jika ada musuh mendekat, tugaskan 1 anak burung yang idle untuk maju menyerang
-    for(const target of activeTargets) {
-      const isAlreadyTargeted = babyBirds.some(b => b.targetEnemy === target);
-      if(!isAlreadyTargeted) {
-        const availableBaby = babyBirds.find(b => b.state === 'follow');
-        if(availableBaby) {
-          availableBaby.state = 'intercept';
-          availableBaby.targetEnemy = target;
-          audio.babyChirp();
-          makeParticles(availableBaby.x, availableBaby.y, 8, availableBaby.color);
+    // 1. SKILL: MOMO & HANA (Sakura Barrier Shield - perisai berkala tiap 16 detik)
+    if(petData.skillType === 'barrier') {
+      petSkillTimer += dt;
+      if(petSkillTimer >= (petData.barrierCooldown || 16.0)) {
+        petSkillTimer = 0;
+        if(!activePowerups.shield) {
+          activePowerups.shield = true;
+          activePowerups.shieldCount = 1;
+          audio.powerup('shield');
+          triggerPowerupSplash(bird.x, bird.y, 'shield');
+          floatingTexts.push({
+            x: bird.x, y: bird.y - 24,
+            text: '🌸 SAKURA BARRIER!',
+            color: '#f472b6',
+            vy: -60, life: 0.9, maxLife: 0.9
+          });
+          makeParticles(bird.x, bird.y, 22, '#f472b6');
         }
       }
     }
 
-    // 3. Update animasi & pergerakan tiap anak burung
+    // 2. SKILL: PIXEL & GLITCH (Auto EMP Laser Zap - menembak musuh tiap 4.5 detik)
+    if(petData.skillType === 'laser') {
+      petSkillTimer += dt;
+      if(petSkillTimer >= (petData.laserCooldown || 4.5)) {
+        const laserTarget = enemies.find(e => !e.dead && e.x > bird.x + 20 && e.x < bird.x + 240) ||
+                            flyers.find(f => !f.dead && f.x > bird.x + 20 && f.x < bird.x + 240);
+        if(laserTarget) {
+          petSkillTimer = 0;
+          laserTarget.dead = true;
+          laserTarget.x = -999;
+          laserBeams.push({
+            x1: babyBirds[0].x, y1: babyBirds[0].y,
+            x2: laserTarget.x, y2: laserTarget.y,
+            life: 0.25
+          });
+          audio.rocketSmash();
+          addScore();
+          floatingTexts.push({
+            x: laserTarget.x, y: laserTarget.y - 18,
+            text: '⚡ EMP ZAP! +1',
+            color: '#38bdf8',
+            vy: -65, life: 0.85, maxLife: 0.85
+          });
+          makeParticles(laserTarget.x, laserTarget.y, 20, '#38bdf8');
+          shake = 0.15;
+        }
+      }
+    }
+
+    // 3. SKILL: BLAZE & EMBER (Phoenix Scorcher - membakar musuh sangat dekat)
+    if(petData.skillType === 'fire') {
+      for(const e of enemies) {
+        if(!e.dead && Math.hypot(bird.x - e.x, bird.y - e.y) < 70) {
+          e.dead = true;
+          e.x = -999;
+          audio.rocketSmash();
+          addScore();
+          floatingTexts.push({
+            x: e.x, y: e.y - 18,
+            text: '🔥 SCORCHED! +1',
+            color: '#f97316',
+            vy: -65, life: 0.8, maxLife: 0.8
+          });
+          makeParticles(e.x, e.y, 22, '#f97316');
+        }
+      }
+    }
+
+    // 4. SKILL: PIP & PEEP (Bodyguard Intercept & 11s Respawn)
+    if(petData.skillType === 'bodyguard') {
+      // 1. Kumpulkan musuh yang mendekat di area bahaya
+      const activeTargets = [];
+      for(const e of enemies) {
+        if(!e.dead && e.x > bird.x - 25 && e.x < bird.x + 230) {
+          activeTargets.push(e);
+        }
+      }
+      for(const f of flyers) {
+        if(!f.dead && f.x > bird.x - 25 && f.x < bird.x + 230) {
+          activeTargets.push(f);
+        }
+      }
+      for(const c of stormClouds) {
+        if((c.phase === 'warn' || c.phase === 'strike') && c.targetX > bird.x - 25 && c.targetX < bird.x + 220) {
+          activeTargets.push({
+            x: c.targetX,
+            y: c.y + 15,
+            r: 20,
+            isStormCloud: true,
+            cloudRef: c
+          });
+        }
+      }
+
+      activeTargets.sort((a, b) => (a.x - bird.x) - (b.x - bird.x));
+
+      // 2. Jika ada musuh mendekat, tugaskan 1 anak burung yang idle untuk maju menyerang
+      for(const target of activeTargets) {
+        const isAlreadyTargeted = babyBirds.some(b => b.targetEnemy === target);
+        if(!isAlreadyTargeted) {
+          const availableBaby = babyBirds.find(b => b.state === 'follow');
+          if(availableBaby) {
+            availableBaby.state = 'intercept';
+            availableBaby.targetEnemy = target;
+            audio.babyChirp();
+            makeParticles(availableBaby.x, availableBaby.y, 8, availableBaby.color);
+          }
+        }
+      }
+    }
+
+    // 5. Update animasi & pergerakan tiap anak burung pet
     babyBirds.forEach((b, idx) => {
       if(b.state === 'inactive') return;
 
       if(b.state === 'dead') {
         b.respawnTimer = Math.max(0, (b.respawnTimer || 0) - dt);
         if(b.respawnTimer <= 0) {
-          // Tetap dead/inactive sampai pemain mengambil power-up anak burung lagi di game!
+          b.state = 'follow';
+          b.x = bird.x - 22 - (idx * 4);
+          b.y = idx === 0 ? bird.y - 18 : bird.y + 18;
+          b.angle = 0;
+          b.flipAngle = 0;
+          audio.babyChirp();
+          makeParticles(b.x, b.y, 18, b.color);
+          floatingTexts.push({
+            x: bird.x,
+            y: bird.y - 25,
+            text: '🐣 ' + b.name + ' HATCHED!',
+            color: b.color,
+            vy: -60,
+            life: 0.85, maxLife: 0.85
+          });
+          updatePowerupHUD();
         }
         return;
       }
@@ -3563,8 +3697,9 @@
             life: 0.85, maxLife: 0.85
           });
 
-          // Anak burung sekali nabrak musuh LANGSUNG MATI (korbankan diri)!
+          // Anak burung sekali nabrak musuh LANGSUNG MATI (korbankan diri) & respawn 11 detik!
           b.state = 'dead';
+          b.respawnTimer = petData.respawnTime || 11.0;
           b.targetEnemy = null;
           updatePowerupHUD();
         }
@@ -3751,6 +3886,28 @@
     ctx.restore();
   }
 
+  function drawLaserBeams() {
+    for(const lb of laserBeams) {
+      ctx.save();
+      const alpha = Math.max(0, lb.life / 0.25);
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 4.2;
+      ctx.shadowColor = '#00f5d4';
+      ctx.shadowBlur = 14;
+      ctx.beginPath();
+      ctx.moveTo(lb.x1, lb.y1);
+      ctx.lineTo(lb.x2, lb.y2);
+      ctx.stroke();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
+      ctx.restore();
+      lb.life -= 1 / 60;
+    }
+    laserBeams = laserBeams.filter(lb => lb.life > 0);
+  }
+
   function render() {
     ctx.save();
     if(shake > 0) {
@@ -3797,6 +3954,9 @@
 
     // Draw Shockwaves
     drawShockwaves();
+
+    // Draw Laser Beams (Cyber Drones)
+    drawLaserBeams();
 
     // Draw Aura & Visual Particles
     for(const q of particles) drawAuraParticle(q);

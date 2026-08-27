@@ -23,12 +23,18 @@ flappy bird/
 ```
 
 ## 🎮 Fitur Utama
-- **🐣 Skill Power-Up & Booster Anak Burung (Baby Guardian Birds)**: Muncul sebagai gelembung power-up di celah pipa saat bermain dan tersedia sebagai Starter Booster di Shop! Mengaktifkan 2 anak burung pelindung imut (*Pip* & *Peep*). Setiap ada musuh mendekat (*Enemy Bird*, *Bee Swarm*, *Flyer*, atau *Storm Cloud*), anak burung akan meluncur secepat kilat menghancurkan musuh dan berkorban (*1-hit sacrifice*) memberi +1 skor dan perlindungan mutlak bagi induk burung!
-- **⚡ Active Forward Dash Skill**: Skill aktif bawaan dengan cooldown radial 4.5s di pojok kiri bawah (tombol jumbo touch & shortcut `Shift` / `D` / `F` / `X`). Memberikan dorongan kecepatan +320 burst, kebal rintangan, bayangan afterimages, dan shockwave.
+- **🐾 Sistem Pet Pendamping & Skill Unik (Unique Pet Companions)**: Dilengkapi tab khusus **`PETS`** di Shop! Setiap pet memiliki skill dan kemampuan pasif/aktif yang unik dan berbeda:
+  - 🐣 **Pip & Peep (Canary Duo)**: Duo bodyguard pelindung yang meluncur menghancurkan musuh yang mendekat (1-hit kill) & menetas kembali (respawn 11 detik).
+  - 🌸 **Momo & Hana (Sakura Fairies)**: Memberikan perisai bunga sakura pelindung otomatis setiap 16 detik.
+  - 👼 **Aero & Lumos (Holy Angels)**: Memberikan berkah +1 Skor Ekstra & Bonus Koin setiap melewati 4 rintangan pipa.
+  - 🤖 **Pixel & Glitch (Cyber Drones)**: Menembakkan laser listrik EMP otomatis tiap 4.5 detik untuk melumpuhkan musuh dari jarak jauh.
+  - 🔥 **Blaze & Ember (Phoenix Sparks)**: Membakar musuh di jalur depan & melebarkan celah pipa sebesar +16px saat mendekat.
+  - 😈 **Kuro & Void (Shadow Spirits)**: Mengurangi cooldown skill Dash sebesar 35% (dari 4.5s menjadi 2.9s) & gelombang bayangan ungu mistis.
+- **⚡ Active Forward Dash Skill**: Skill aktif bawaan dengan cooldown radial di pojok kiri bawah (tombol jumbo touch & shortcut `Shift` / `D` / `F` / `X`). Memberikan dorongan kecepatan +320 burst, kebal rintangan, bayangan afterimages, dan shockwave.
 - **🔥 Firebase Firestore Online Leaderboard**: Peringkat global real-time dengan profil pemain, badge tier (Grandmaster, Master, Diamond, dll), loadout custom, dan Top #1 Champion Golden Spotlight.
-- **🛡️ Sistem Power-Up Lengkap**: **Baby Guardians 🐣**, Shield 🛡️, Dual Shield, Coin Magnet 🧲, Slow Time ❄️, Invincible Star ⭐, NOS Rocket Turbo 🚀.
+- **🛡️ Sistem Power-Up Lengkap**: Shield 🛡️, Dual Shield, Coin Magnet 🧲, Slow Time ❄️, Invincible Star ⭐, NOS Rocket Turbo 🚀.
 - **👿 Sistem Enemy Progresif**: Enemy Bird 👿, Bee Swarm 🐝, Storm Cloud ☁️⚡, Speed Scaling dinamis.
-- **🛍️ Shop Kosmetik Lengkap**: 10 Bird Skins (dengan jingle kematian unik), **6 Pilihan Skin Anak Burung (Baby Guardian Duos)**, 10 Tail Auras, 18 Topi (Hats), 16 Pakaian/Sayap (Outfits), 6 Pipe Skins, 7 Backgrounds, 6 Music Tracks, Starter Boosters (termasuk *STARTER BABY BIRDS*).
+- **🛍️ Shop Kosmetik & Perk Lengkap**: 10 Bird Skins, **6 Pet Pendamping Unik**, 10 Tail Auras, 18 Topi (Hats), 16 Pakaian/Sayap (Outfits), 6 Pipe Skins, 7 Backgrounds, 6 Music Tracks, Starter Boosters.
 - **🎵 Synthesizer Web Audio API**: Full polyphonic multi-track compositions & audio SFX retro.
 
 ## 🔥 Cara Konfigurasi Firebase Firestore (Opsional)
