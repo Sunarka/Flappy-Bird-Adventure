@@ -6896,44 +6896,44 @@
     setState(State.MENU);
   }
 
+  // Helper pengikat event aman (tidak akan crash bila elemen null/missing)
+  const bindClick = (target, handler) => {
+    const elTarget = typeof target === 'string' ? $(target) : target;
+    if(elTarget) elTarget.onclick = handler;
+  };
+
   // Mode Selection & Play Handlers
-  el.modeClassicBtn.onclick = () => setMode('classic');
-  el.modeRankedBtn.onclick = () => setMode('ranked');
-  $('playBtn').onclick = () => {
+  bindClick(el.modeClassicBtn, () => setMode('classic'));
+  bindClick(el.modeRankedBtn, () => setMode('ranked'));
+  bindClick('playBtn', () => {
     if(currentMode === 'ranked' && !gpProfile.isLoggedIn) {
       audio.click();
       showModal(el.googlePlayModal);
       return;
     }
     goReady();
-  };
-  if($('rankedLeaderboardBtn')) {
-    $('rankedLeaderboardBtn').onclick = () => {
-      if(currentMode !== 'ranked') return;
-      audio.click();
-      switchLeaderboardTab('global');
-      showModal(el.rankedModal);
-    };
-  }
-  if(el.lbTabGlobalBtn) {
-    el.lbTabGlobalBtn.onclick = () => {
-      audio.click();
-      switchLeaderboardTab('global');
-    };
-  }
-  if(el.lbTabTiersBtn) {
-    el.lbTabTiersBtn.onclick = () => {
-      audio.click();
-      switchLeaderboardTab('tiers');
-    };
-  }
-  $('googlePlayBtn').onclick = () => {
+  });
+  bindClick('rankedLeaderboardBtn', () => {
+    if(currentMode !== 'ranked') return;
+    audio.click();
+    switchLeaderboardTab('global');
+    showModal(el.rankedModal);
+  });
+  bindClick(el.lbTabGlobalBtn, () => {
+    audio.click();
+    switchLeaderboardTab('global');
+  });
+  bindClick(el.lbTabTiersBtn, () => {
+    audio.click();
+    switchLeaderboardTab('tiers');
+  });
+  bindClick('googlePlayBtn', () => {
     if(currentMode !== 'ranked') return;
     audio.click();
     syncGPProfileUI();
     showModal(el.googlePlayModal);
-  };
-  $('playRankedFromModalBtn').onclick = () => {
+  });
+  bindClick('playRankedFromModalBtn', () => {
     audio.click();
     closeModal();
     setMode('ranked');
@@ -6942,69 +6942,73 @@
       return;
     }
     goReady();
-  };
+  });
 
   // Google Play Modal Actions
-  el.gpChangeAvatarBtn.onclick = () => {
+  bindClick(el.gpChangeAvatarBtn, () => {
     audio.click();
     const curIdx = availableAvatars.indexOf(gpProfile.avatar);
     const nextIdx = (curIdx + 1) % availableAvatars.length;
     gpProfile.avatar = availableAvatars[nextIdx];
     saveGPProfile();
-  };
-  el.gpSwitchAccountBtn.onclick = () => {
+  });
+  bindClick(el.gpSwitchAccountBtn, () => {
     audio.click();
     const tag = randomTags[Math.floor(Math.random() * randomTags.length)];
     const num = Math.floor(1000 + Math.random() * 9000);
     gpProfile.gamerTag = `${tag}#${num}`;
     gpProfile.id = 'GP-' + Math.floor(1000000 + Math.random() * 9000000);
     saveGPProfile();
-  };
-  el.gpAuthActionBtn.onclick = () => {
+  });
+  bindClick(el.gpAuthActionBtn, () => {
     audio.click();
-    const val = el.gpGamerTagInput.value.trim();
+    const val = el.gpGamerTagInput ? el.gpGamerTagInput.value.trim() : '';
     if(val) gpProfile.gamerTag = val;
     gpProfile.isLoggedIn = true;
     saveGPProfile();
     audio.win();
     closeModal();
-  };
+  });
 
-  $('howBtn').onclick = () => { audio.click(); showModal(el.how); };
-  $('settingsBtn').onclick = () => { audio.click(); showModal(el.settings); };
-  $('shopBtn').onclick = () => { audio.click(); syncPreviewLoadout(); updateCoins(); renderShop(); showModal(el.shop); startShopShowcase(); };
+  bindClick('howBtn', () => { audio.click(); showModal(el.how); });
+  bindClick('settingsBtn', () => { audio.click(); showModal(el.settings); });
+  bindClick('shopBtn', () => { audio.click(); syncPreviewLoadout(); updateCoins(); renderShop(); showModal(el.shop); startShopShowcase(); });
   document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => { audio.click(); closeModal(); });
   if(el.layer) {
     el.layer.addEventListener('pointerdown', e => {
       if(e.target === el.layer) {
-        if(!el.shop.classList.contains('hidden') || !el.how.classList.contains('hidden') || !el.settings.classList.contains('hidden') || !el.googlePlayModal.classList.contains('hidden') || !el.rankedModal.classList.contains('hidden')) {
+        if((el.shop && !el.shop.classList.contains('hidden')) || 
+           (el.how && !el.how.classList.contains('hidden')) || 
+           (el.settings && !el.settings.classList.contains('hidden')) || 
+           (el.googlePlayModal && !el.googlePlayModal.classList.contains('hidden')) || 
+           (el.rankedModal && !el.rankedModal.classList.contains('hidden'))) {
           audio.click();
           closeModal();
         }
       }
     });
   }
-  $('resumeBtn').onclick = resume;
-  $('restartBtn').onclick = goReady;
-  $('homeBtn').onclick = home;
-  $('replayBtn').onclick = goReady;
-  $('overHomeBtn').onclick = home;
-  el.pause.onclick = pause;
-  el.sound.onclick = () => {
+  bindClick('resumeBtn', resume);
+  bindClick('restartBtn', goReady);
+  bindClick('homeBtn', home);
+  bindClick('replayBtn', goReady);
+  bindClick('overHomeBtn', home);
+  bindClick(el.pause, pause);
+  bindClick(el.sound, () => {
     settings.sound = !settings.sound;
-    el.soundToggle.checked = settings.sound;
+    if(el.soundToggle) el.soundToggle.checked = settings.sound;
     syncSettings();
     audio.click();
-  };
-  el.musicBtn.onclick = () => {
+  });
+  bindClick(el.musicBtn, () => {
     settings.music = !settings.music;
-    el.musicToggle.checked = settings.music;
+    if(el.musicToggle) el.musicToggle.checked = settings.music;
     syncSettings();
     audio.click();
     if(settings.music && state === State.PLAYING) playBackgroundMusic();
     else stopBackgroundMusic();
     persist();
-  };
+  });
 
   // Shop Tabs Swipe / Scroll & Selection
   if(el.shopTabs) {
@@ -7039,20 +7043,26 @@
   }
 
   function syncSettings() {
-    el.soundToggle.checked = settings.sound;
-    el.musicToggle.checked = settings.music;
-    if(currentMode === 'ranked') {
-      el.difficultyValue.textContent = 'EXTREME (LOCKED)';
-      el.difficultyBtn.classList.add('locked-ranked');
-    } else {
-      el.difficultyValue.textContent = settings.difficulty.toUpperCase();
-      el.difficultyBtn.classList.remove('locked-ranked');
+    if(el.soundToggle) el.soundToggle.checked = settings.sound;
+    if(el.musicToggle) el.musicToggle.checked = settings.music;
+    if(el.difficultyValue) {
+      if(currentMode === 'ranked') {
+        el.difficultyValue.textContent = 'EXTREME (LOCKED)';
+        if(el.difficultyBtn) el.difficultyBtn.classList.add('locked-ranked');
+      } else {
+        el.difficultyValue.textContent = settings.difficulty.toUpperCase();
+        if(el.difficultyBtn) el.difficultyBtn.classList.remove('locked-ranked');
+      }
     }
-    el.difficultyMenu.querySelectorAll('[data-difficulty]').forEach(button => {
-      button.classList.toggle('active', button.dataset.difficulty === settings.difficulty);
-    });
-    el.sound.innerHTML = settings.sound ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="M15 9.25a4 4 0 0 1 0 5.5M17.5 6.75a7.5 7.5 0 0 1 0 10.5"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="m15 10 5 5m0-5-5 5"/></svg>';
-    el.sound.setAttribute('aria-label', settings.sound ? 'Matikan suara' : 'Nyalakan suara');
+    if(el.difficultyMenu) {
+      el.difficultyMenu.querySelectorAll('[data-difficulty]').forEach(button => {
+        button.classList.toggle('active', button.dataset.difficulty === settings.difficulty);
+      });
+    }
+    if(el.sound) {
+      el.sound.innerHTML = settings.sound ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="M15 9.25a4 4 0 0 1 0 5.5M17.5 6.75a7.5 7.5 0 0 1 0 10.5"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="m15 10 5 5m0-5-5 5"/></svg>';
+      el.sound.setAttribute('aria-label', settings.sound ? 'Matikan suara' : 'Nyalakan suara');
+    }
     updateMusicUI();
     persist();
     if(!settings.music) audio.stopMusic();
@@ -7060,30 +7070,36 @@
   }
 
   function closeDifficulty() {
-    el.difficultyMenu.classList.add('hidden');
-    el.difficultyBtn.setAttribute('aria-expanded', 'false');
+    if(el.difficultyMenu) el.difficultyMenu.classList.add('hidden');
+    if(el.difficultyBtn) el.difficultyBtn.setAttribute('aria-expanded', 'false');
   }
 
-  el.soundToggle.onchange = e => { settings.sound = e.target.checked; syncSettings(); };
-  el.musicToggle.onchange = e => { settings.music = e.target.checked; syncSettings(); };
-  el.difficultyBtn.onclick = () => {
-    if(currentMode === 'ranked') {
-      audio.hit();
-      return;
-    }
-    const open = el.difficultyMenu.classList.toggle('hidden');
-    el.difficultyBtn.setAttribute('aria-expanded', String(!open));
-  };
-  el.difficultyMenu.querySelectorAll('[data-difficulty]').forEach(button => {
-    button.onclick = () => {
-      settings.difficulty = button.dataset.difficulty;
-      audio.click();
-      syncSettings();
-      closeDifficulty();
+  if(el.soundToggle) el.soundToggle.onchange = e => { settings.sound = e.target.checked; syncSettings(); };
+  if(el.musicToggle) el.musicToggle.onchange = e => { settings.music = e.target.checked; syncSettings(); };
+  if(el.difficultyBtn) {
+    el.difficultyBtn.onclick = () => {
+      if(currentMode === 'ranked') {
+        audio.hit();
+        return;
+      }
+      if(el.difficultyMenu) {
+        const open = el.difficultyMenu.classList.toggle('hidden');
+        el.difficultyBtn.setAttribute('aria-expanded', String(!open));
+      }
     };
-  });
+  }
+  if(el.difficultyMenu) {
+    el.difficultyMenu.querySelectorAll('[data-difficulty]').forEach(button => {
+      button.onclick = () => {
+        settings.difficulty = button.dataset.difficulty;
+        audio.click();
+        syncSettings();
+        closeDifficulty();
+      };
+    });
+  }
   document.addEventListener('pointerdown', e => {
-    if(!e.target.closest('.difficulty-picker')) closeDifficulty();
+    if(!e.target.closest || !e.target.closest('.difficulty-picker')) closeDifficulty();
   });
 
   if(el.dashBtn) {
