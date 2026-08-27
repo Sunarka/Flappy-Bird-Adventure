@@ -12,12 +12,13 @@
  */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDummyKeyReplaceWithYourOwnIfAvailable",
-  authDomain: "flappy-bird-adventure.firebaseapp.com",
-  projectId: "flappy-bird-adventure",
-  storageBucket: "flappy-bird-adventure.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdef1234567890"
+  apiKey: "AIzaSyC7SH--W8EVVGMoEB0fs9p5bGLh3WE6XhU",
+  authDomain: "tess-d.firebaseapp.com",
+  projectId: "tess-d",
+  storageBucket: "tess-d.firebasestorage.app",
+  messagingSenderId: "20890561839",
+  appId: "1:20890561839:web:121ee25cddfdc6d13745da",
+  measurementId: "G-HN102WGTFD"
 };
 
 class FirebaseLeaderboardService {
@@ -170,3 +171,4 @@ class FirebaseLeaderboardService {
 
 // Global Export
 window.FirebaseLeaderboard = new FirebaseLeaderboardService();
+
