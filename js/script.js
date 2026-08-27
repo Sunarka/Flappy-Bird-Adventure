@@ -689,33 +689,130 @@
       }
     },
 
-    // Completely Distinct Synthesized Music Tracks
-    music() {
-      if(!settings.music || this.musicTimer) return;
+    // Dedicated Lobby Theme Music: "A World Beyond - Ghibli Melodic"
+    // Happy, candu, semangat terbang petualangan, lalu mengalir lembut ke bagian slow emosional khas Ghibli (Joe Hisaishi style)
+    lobbyMusic() {
+      if(!settings.music) return;
+      if(this.currentMusicType === 'lobby' && this.musicTimer) return;
+      this.stopMusic();
+      this.currentMusicType = 'lobby';
+      let step = 0;
+      this.init();
+
+      // Struktur Lagu: 
+      // 0-31: Happy Spirited Adventure Motif (D-Major Joyful Flight)
+      // 32-63: Bouncy Flying Arpeggios (Catchy & Upbeat)
+      // 64-95: Emotive Nostalgic Slow Ghibli Valley (Gentle Melodic Lullaby)
+      // 96-111: Soaring Wind Rising Transition back to Intro
+      const lobbyMelody = [
+        // [0-15] Intro Cerah & Semangat
+        587, 659, 740, 880, 1175, 880, 740, 659,
+        587, 740, 880, 988, 880, 740, 659, 587,
+        // [16-31] Flight Motif Melodic
+        494, 587, 740, 880, 988, 1175, 1319, 1175,
+        988, 880, 740, 880, 1175, 0, 880, 0,
+        // [32-47] Bouncy Joyful Arpeggios
+        1175, 1319, 1480, 1319, 1175, 880, 740, 880,
+        988, 1175, 1319, 1175, 988, 740, 659, 740,
+        // [48-63] Spirited Sky Dance
+        880, 988, 1175, 1480, 1760, 1480, 1319, 1175,
+        988, 1175, 1319, 1175, 988, 880, 740, 0,
+        // [64-79] Bagian Slow Emosional / Melodic Ghibli Valley
+        740, 0, 880, 0, 988, 0, 880, 0,
+        740, 0, 659, 0, 587, 0, 494, 0,
+        // [80-95] Nostalgic Warm Flute & Cello Harmony
+        587, 0, 740, 0, 880, 0, 659, 0,
+        587, 0, 494, 0, 440, 0, 0, 0,
+        // [96-111] Soaring Wind Rising Crescendo
+        494, 587, 740, 880, 988, 1175, 1319, 1480,
+        1760, 1480, 1319, 1175, 988, 880, 659, 0
+      ];
+
+      const lobbyBass = [
+        // Happy Phase Bass (Bouncing Root-Fifth-Octave)
+        147, 294, 147, 294, 196, 392, 196, 392,
+        123, 247, 123, 247, 220, 440, 220, 0,
+        147, 294, 147, 294, 196, 392, 196, 392,
+        123, 247, 123, 247, 147, 220, 147, 0,
+        // Slow Emotional Ghibli Phase Bass (Warm Deep Cello)
+        123, 0, 123, 0, 196, 0, 196, 0,
+        147, 0, 147, 0, 220, 0, 220, 0,
+        123, 0, 123, 0, 196, 0, 196, 0,
+        147, 0, 220, 0, 147, 0, 0, 0
+      ];
+
+      const ghibliChords = [
+        [587, 740, 880], [494, 587, 740], [392, 494, 587], [440, 554, 659],
+        [494, 587, 740, 880], [392, 494, 587, 740], [294, 370, 440, 587], [220, 277, 330, 440]
+      ];
+
+      this.musicTimer = setInterval(() => {
+        if(state !== State.MENU) return;
+        const totalSteps = lobbyMelody.length;
+        const curStep = step % totalSteps;
+        const isSlowPhase = curStep >= 64 && curStep < 96;
+
+        const note = lobbyMelody[curStep];
+        const low = lobbyBass[Math.floor(curStep / (isSlowPhase ? 2 : 1)) % lobbyBass.length];
+
+        if(isSlowPhase) {
+          // Fase Slow Ghibli: Nada seruling hangat, lembut, legato, dan akord piano impian
+          if(note) {
+            this.playTone(note, 0.38, 'sine', 0.038, 0);
+            this.playTone(note * 0.5, 0.32, 'triangle', 0.022, 0);
+          }
+          if(low && curStep % 2 === 0) {
+            this.playTone(low, 0.52, 'sine', 0.042, 0);
+          }
+          if(curStep % 4 === 0) {
+            const chord = ghibliChords[Math.floor((curStep - 64) / 4) % ghibliChords.length];
+            if(chord) chord.forEach(f => this.playTone(f * 0.75, 0.45, 'sine', 0.016));
+          }
+        } else {
+          // Fase Semangat / Happy Vibe: Bouncy, riang, ceria dengan petikan arpeggio jernih
+          if(note) {
+            this.playTone(note, 0.16, 'triangle', 0.028);
+            if(curStep % 4 === 0) this.playTone(note * 1.5, 0.12, 'sine', 0.018);
+          }
+          if(low) {
+            this.playTone(low, 0.22, 'sine', 0.034);
+          }
+          if(curStep % 4 === 2) {
+            this.playTone(1568, 0.035, 'square', 0.008); // Cute sparkle
+          }
+          if(curStep % 8 === 4) {
+            this.playTone(220, 0.06, 'triangle', 0.018, -60);
+          }
+        }
+
+        step++;
+      }, 145);
+    },
+
+    // In-Game Gameplay Soundtracks (Selected in Shop)
+    gameMusic() {
+      if(!settings.music) return;
+      if(this.currentMusicType === 'game' && this.musicTimer) return;
+      this.stopMusic();
+      this.currentMusicType = 'game';
       const trackId = progress.selectedMusic || 'happy';
       let step = 0;
       this.init();
 
       if(trackId === 'happy') {
-        // Happy Vibe Pop Melody: Super Catchy, Bouncy & Addictive Chiptune Pop!
+        // Happy Vibe In-Game Melody
         const melody = [
           523, 0, 659, 784, 880, 784, 659, 523,
           587, 0, 698, 880, 1047, 880, 698, 587,
           659, 0, 784, 988, 1047, 1175, 1047, 784,
-          880, 1047, 1319, 1175, 1047, 784, 523, 0,
-          523, 659, 784, 1047, 1319, 1047, 784, 659,
-          587, 698, 880, 1175, 1397, 1175, 880, 698,
-          659, 784, 988, 1319, 1568, 1319, 988, 784,
-          1047, 880, 784, 659, 587, 659, 523, 0
+          880, 1047, 1319, 1175, 1047, 784, 523, 0
         ];
         const bass = [
           131, 262, 131, 262, 147, 294, 147, 294,
-          165, 330, 165, 330, 175, 349, 196, 392,
-          131, 262, 131, 262, 147, 294, 147, 294,
-          165, 330, 165, 330, 131, 196, 131, 0
+          165, 330, 165, 330, 175, 349, 196, 392
         ];
         this.musicTimer = setInterval(() => {
-          if(state === State.PAUSED || state === State.OVER || state === State.REVIVING) return;
+          if(state !== State.PLAYING && state !== State.READY) return;
           const note = melody[step % melody.length];
           const low = bass[step % bass.length];
           if(note) this.playTone(note, .14, 'triangle', .028);
@@ -729,7 +826,7 @@
         const melody = [659, 784, 880, 784, 659, 784, 1047, 880, 988, 880, 784, 880, 659, 784, 880, 1047, 1174, 1047, 880, 784, 659, 784, 880, 988, 1047, 880, 784, 659, 587, 659, 784, 880];
         const bass = [220, 220, 175, 175, 196, 196, 165, 165, 220, 220, 175, 175, 196, 196, 247, 247];
         this.musicTimer = setInterval(() => {
-          if(state !== State.PLAYING) return;
+          if(state !== State.PLAYING && state !== State.READY) return;
           const note = melody[step % melody.length], low = bass[step % bass.length];
           if(note) this.playTone(note, .14, 'square', .02);
           if(low) this.playTone(low, .22, 'sawtooth', .028, -20);
@@ -741,7 +838,7 @@
         const melody = [392, 523, 659, 784, 659, 523, 440, 523, 587, 698, 880, 1047, 880, 698, 587, 659, 784, 1047, 1318, 1047, 784, 659, 523, 659, 880, 1047, 1174, 1318, 1568, 1318, 1047, 784];
         const bass = [98, 131, 110, 147, 131, 165, 110, 147];
         this.musicTimer = setInterval(() => {
-          if(state !== State.PLAYING) return;
+          if(state !== State.PLAYING && state !== State.READY) return;
           const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
           if(note) this.playTone(note, .11, 'square', .024, step % 3 === 0 ? 20 : 0);
           if(low && step % 2 === 0) this.playTone(low, .18, 'triangle', .03);
@@ -756,7 +853,7 @@
         ];
         const bass = [110, 98, 87, 82, 87, 98, 110, 82];
         this.musicTimer = setInterval(() => {
-          if(state !== State.PLAYING) return;
+          if(state !== State.PLAYING && state !== State.READY) return;
           const chord = chords[Math.floor(step / 2) % chords.length];
           const low = bass[Math.floor(step / 2) % bass.length];
           if(step % 2 === 0) {
@@ -772,7 +869,7 @@
         const melody = [523, 659, 784, 1047, 880, 1047, 1318, 1047, 784, 880, 1047, 1318, 1568, 1318, 1047, 784, 523, 659, 784, 1047, 1174, 1047, 880, 784, 659, 784, 880, 1047, 1174, 1318, 1568, 1047];
         const brassBass = [131, 165, 196, 262, 220, 262, 330, 262, 196, 220, 262, 330, 392, 330, 262, 196];
         this.musicTimer = setInterval(() => {
-          if(state !== State.PLAYING) return;
+          if(state !== State.PLAYING && state !== State.READY) return;
           const note = melody[step % melody.length], low = brassBass[Math.floor(step / 2) % brassBass.length];
           if(note) {
             this.playTone(note, .18, 'sawtooth', .024, 0);
@@ -790,7 +887,7 @@
         const melody = [440, 523, 587, 659, 784, 659, 587, 523, 440, 587, 659, 784, 880, 784, 659, 587, 659, 784, 880, 1047, 880, 784, 659, 587, 440, 523, 659, 587, 523, 440, 392, 440];
         const cyberBass = [110, 110, 131, 110, 147, 110, 165, 131, 110, 110, 131, 110, 175, 165, 147, 131];
         this.musicTimer = setInterval(() => {
-          if(state !== State.PLAYING) return;
+          if(state !== State.PLAYING && state !== State.READY) return;
           const note = melody[step % melody.length], low = cyberBass[step % cyberBass.length];
           if(note) this.playTone(note, .12, 'square', .022, step % 2 === 0 ? 15 : -15);
           if(low) this.playTone(low, .16, 'sawtooth', .034, -20);
@@ -798,6 +895,16 @@
           if(step % 4 === 0) this.playTone(70, .12, 'triangle', .04, -30);
           step++;
         }, 135);
+      }
+    },
+
+    // Master Music Director (Switch between Lobby & Game Tracks)
+    music() {
+      if(!settings.music) return;
+      if(state === State.MENU) {
+        this.lobbyMusic();
+      } else if(state === State.PLAYING || state === State.READY) {
+        this.gameMusic();
       }
     },
     previewMusic(trackId) {
@@ -892,6 +999,7 @@
       this.stopPreview();
       this.musicTimer = null;
       this.deathTimer = null;
+      this.currentMusicType = null;
     }
   };
 
@@ -2420,14 +2528,20 @@
       el.coinHud.innerHTML = 'COINS <b>' + progress.coins + '</b>';
       if(el.rankTierHud) el.rankTierHud.classList.add('hidden');
     }
-    el.pause.style.display = (next === State.PLAYING || next === State.READY) ? 'block' : 'none';
-    el.sound.style.display = (next === State.MENU || next === State.PLAYING || next === State.READY) ? 'block' : 'none';
+    if(el.pause) {
+      el.pause.style.display = (next === State.PLAYING || next === State.READY) ? 'flex' : 'none';
+      el.pause.classList.toggle('hidden', next !== State.PLAYING && next !== State.READY);
+    }
+    if(el.sound) {
+      el.sound.style.display = (next === State.MENU || next === State.PLAYING || next === State.READY) ? 'flex' : 'none';
+    }
     updateDashUI();
     updateMenuRankedUI();
     updatePowerupHUD();
-    if(settings.music && (next === State.MENU || next === State.PLAYING)) {
+    if(settings.music) {
       audio.music();
-      playBackgroundMusic();
+      if(next === State.PLAYING) playBackgroundMusic();
+      else if(next === State.MENU) stopBackgroundMusic();
     }
   }
   function updateLivesHUD() {
