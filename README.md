@@ -23,12 +23,12 @@ flappy bird/
 ```
 
 ## 🎮 Fitur Utama
-- **🐣 2 Anak Burung Pelindung Imut (Baby Guardian Birds)**: 2 anak burung mungil menggemaskan (*Pip* si pita merah muda & *Peep* si bunga sakura) yang selalu terbang mengawal induknya (permanen selamanya). Ketika ada musuh mendekat (*Enemy Bird*, *Bee Swarm*, *Flyer*, atau *Storm Cloud*), anak burung akan meluncur 1 per 1 dengan kecepatan tinggi menghancurkan musuh, meledakkannya dengan partikel sparkle ceria + menambah poin skor, lalu salto dan kembali ke samping induk!
+- **🐣 Skill Power-Up & Booster Anak Burung (Baby Guardian Birds)**: Muncul sebagai gelembung power-up di celah pipa saat bermain dan tersedia sebagai Starter Booster di Shop! Mengaktifkan 2 anak burung pelindung imut (*Pip* & *Peep*). Setiap ada musuh mendekat (*Enemy Bird*, *Bee Swarm*, *Flyer*, atau *Storm Cloud*), anak burung akan meluncur secepat kilat menghancurkan musuh dan berkorban (*1-hit sacrifice*) memberi +1 skor dan perlindungan mutlak bagi induk burung!
 - **⚡ Active Forward Dash Skill**: Skill aktif bawaan dengan cooldown radial 4.5s di pojok kiri bawah (tombol jumbo touch & shortcut `Shift` / `D` / `F` / `X`). Memberikan dorongan kecepatan +320 burst, kebal rintangan, bayangan afterimages, dan shockwave.
 - **🔥 Firebase Firestore Online Leaderboard**: Peringkat global real-time dengan profil pemain, badge tier (Grandmaster, Master, Diamond, dll), loadout custom, dan Top #1 Champion Golden Spotlight.
-- **🛡️ Sistem Power-Up**: Shield 🛡️, Dual Shield, Coin Magnet 🧲, Slow Time ❄️, Invincible Star ⭐, NOS Rocket Turbo 🚀.
+- **🛡️ Sistem Power-Up Lengkap**: **Baby Guardians 🐣**, Shield 🛡️, Dual Shield, Coin Magnet 🧲, Slow Time ❄️, Invincible Star ⭐, NOS Rocket Turbo 🚀.
 - **👿 Sistem Enemy Progresif**: Enemy Bird 👿, Bee Swarm 🐝, Storm Cloud ☁️⚡, Speed Scaling dinamis.
-- **🛍️ Shop Kosmetik Lengkap**: 10 Bird Skins (dengan jingle kematian unik), **6 Pilihan Skin Anak Burung (Baby Guardian Duos)**, 10 Tail Auras, 18 Topi (Hats), 16 Pakaian/Sayap (Outfits), 6 Pipe Skins, 7 Backgrounds, 6 Music Tracks, Starter Boosters.
+- **🛍️ Shop Kosmetik Lengkap**: 10 Bird Skins (dengan jingle kematian unik), **6 Pilihan Skin Anak Burung (Baby Guardian Duos)**, 10 Tail Auras, 18 Topi (Hats), 16 Pakaian/Sayap (Outfits), 6 Pipe Skins, 7 Backgrounds, 6 Music Tracks, Starter Boosters (termasuk *STARTER BABY BIRDS*).
 - **🎵 Synthesizer Web Audio API**: Full polyphonic multi-track compositions & audio SFX retro.
 
 ## 🔥 Cara Konfigurasi Firebase Firestore (Opsional)

@@ -139,6 +139,7 @@
   // 8. Starter Booster Perk (Skill Langsung Aktif Saat Mulai) - ALL FREE FOR TESTING
   const boosters = {
     none:{ name:'TANPA BOOSTER', desc:'Mulai game kasual tanpa skill instan', cost:0, color:'#94a3b8' },
+    baby:{ name:'STARTER BABY BIRDS', desc:'Mulai game langsung dikawal 2 anak burung pelindung', cost:0, color:'#fde047' },
     shield:{ name:'STARTER SHIELD', desc:'Mulai game langsung terlindungi perisai', cost:0, color:'#0284c7' },
     magnet:{ name:'STARTER MAGNET', desc:'Mulai game langsung menyedot semua koin', cost:0, color:'#dc2626' },
     slow:{ name:'STARTER SLOW ICE', desc:'Mulai game dengan waktu melambat 50%', cost:0, color:'#0891b2' },
@@ -244,7 +245,7 @@
       r: 9,
       wing: 0,
       angle: 0,
-      state: 'follow', // 'follow' | 'intercept' | 'return'
+      state: 'inactive', // 'inactive' | 'follow' | 'intercept' | 'return' | 'dead'
       targetEnemy: null,
       color: '#fef08a', // Canary Pastel Yellow
       wingColor: '#fde047',
@@ -259,7 +260,7 @@
       r: 8.5,
       wing: 0,
       angle: 0,
-      state: 'follow', // 'follow' | 'intercept' | 'return'
+      state: 'inactive', // 'inactive' | 'follow' | 'intercept' | 'return' | 'dead'
       targetEnemy: null,
       color: '#bae6fd', // Sky Pastel Cyan
       wingColor: '#7dd3fc',
@@ -287,25 +288,27 @@
     }
   }
 
-  function resetBabyBirds() {
+  function resetBabyBirds(active = false) {
     applyBabySkin();
     babyBirds[0].x = bird.x - 22;
     babyBirds[0].y = bird.y - 18;
-    babyBirds[0].state = 'follow';
+    babyBirds[0].state = active ? 'follow' : 'inactive';
     babyBirds[0].targetEnemy = null;
+    babyBirds[0].respawnTimer = 0;
     babyBirds[0].angle = 0;
     babyBirds[0].flipAngle = 0;
 
     babyBirds[1].x = bird.x - 26;
     babyBirds[1].y = bird.y + 18;
-    babyBirds[1].state = 'follow';
+    babyBirds[1].state = active ? 'follow' : 'inactive';
     babyBirds[1].targetEnemy = null;
+    babyBirds[1].respawnTimer = 0;
     babyBirds[1].angle = 0;
     babyBirds[1].flipAngle = 0;
   }
 
   // Active power-up states
-  const activePowerups = { shield: false, magnet: 0, slow: 0, star: 0, rocket: 0 };
+  const activePowerups = { shield: false, magnet: 0, slow: 0, star: 0, rocket: 0, baby: 0 };
   const bird = { x:104, y:280, vy:0, r:16, wing:0, angle:0, dead:false };
 
   // Audio Engine with Full Synthesizer
@@ -1080,6 +1083,18 @@
     if(cat === 'booster') {
       if(id === 'none') {
         return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="11" fill="none" stroke="#94a3b8" stroke-width="2.5"/><line x1="8" y1="8" x2="24" y2="24" stroke="#94a3b8" stroke-width="2.5"/></svg>`;
+      }
+      if(id === 'baby') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg">
+          <circle cx="16" cy="16" r="12" fill="rgba(254, 240, 138, 0.25)" stroke="#fde047" stroke-width="1.8"/>
+          <circle cx="14" cy="17" r="7" fill="#fef08a"/>
+          <ellipse cx="9.5" cy="18" rx="3.5" ry="2.2" fill="#fde047"/>
+          <polygon points="19,16 23.5,17.5 19,19" fill="#f97316"/>
+          <circle cx="17" cy="15" r="1.8" fill="#0f172a"/>
+          <circle cx="17.6" cy="14.4" r="0.7" fill="#fff"/>
+          <circle cx="14" cy="18.5" r="1.3" fill="#fda4af"/>
+          <circle cx="13" cy="9.5" r="1.8" fill="#f472b6"/>
+        </svg>`;
       }
       if(id === 'shield') {
         return `<svg viewBox="0 0 32 32" class="shop-item-svg"><path d="M16 4 L26 8 L24 20 L16 28 L8 20 L6 8 Z" fill="#0284c7" stroke="#7dd3fc" stroke-width="1.8"/><path d="M16 8 L22 11 L20 19 L16 24 L12 19 L10 11 Z" fill="#38bdf8"/></svg>`;
@@ -2087,8 +2102,8 @@
     if(shouldSpawnPowerup) {
       powerupSpawnTimer = 0;
       const rand = Math.random();
-      // Shield 26%, Magnet 24%, Slow Time 20%, Star 15%, Rocket NOS 15%
-      const type = rand < 0.26 ? 'shield' : rand < 0.50 ? 'magnet' : rand < 0.70 ? 'slow' : rand < 0.85 ? 'star' : 'rocket';
+      // Baby Birds 22%, Shield 20%, Magnet 20%, Slow Time 16%, Star 11%, Rocket NOS 11%
+      const type = rand < 0.22 ? 'baby' : rand < 0.42 ? 'shield' : rand < 0.62 ? 'magnet' : rand < 0.78 ? 'slow' : rand < 0.89 ? 'star' : 'rocket';
       powerups.push({
         x: pipe.x + pipe.w / 2,
         y: pipe.gapY + pipe.gapSize / 2,
@@ -2144,7 +2159,11 @@
     if(!type || type === 'none') return;
     
     // Play distinctive skill jingle & fanfare
-    audio.powerup(type);
+    if(type === 'baby') {
+      audio.babyChirp();
+    } else {
+      audio.powerup(type);
+    }
 
     const px = x !== undefined ? x : bird.x;
     const py = y !== undefined ? y : bird.y;
@@ -2153,7 +2172,22 @@
     triggerPowerupSplash(px, py, type, isStarter);
 
     // Apply skill duration & physics
-    if(type === 'shield') {
+    if(type === 'baby') {
+      applyBabySkin();
+      babyBirds[0].x = bird.x - 22;
+      babyBirds[0].y = bird.y - 18;
+      babyBirds[0].state = 'follow';
+      babyBirds[0].targetEnemy = null;
+      babyBirds[0].respawnTimer = 0;
+
+      babyBirds[1].x = bird.x - 26;
+      babyBirds[1].y = bird.y + 18;
+      babyBirds[1].state = 'follow';
+      babyBirds[1].targetEnemy = null;
+      babyBirds[1].respawnTimer = 0;
+
+      activePowerups.baby = 2;
+    } else if(type === 'shield') {
       activePowerups.shield = true;
       activePowerups.shieldCount = 1;
     } else if(type === 'double_shield') {
@@ -2176,6 +2210,7 @@
 
   function triggerPowerupSplash(x, y, type, isStarter = false) {
     const info = {
+      baby:   { text: isStarter ? 'STARTER BABIES' : '+2 BABY GUARDIANS', color: '#fde047' },
       shield: { text: isStarter ? 'STARTER SHIELD' : '+SHIELD GUARD', color: '#38bdf8' },
       double_shield: { text: 'DUAL SHIELD LAYER', color: '#0284c7' },
       magnet: { text: isStarter ? 'STARTER MAGNET' : '+MAGNET PULL', color: '#f43f5e' },
@@ -2206,6 +2241,10 @@
 
   function updatePowerupHUD() {
     let html = '';
+    const aliveBabies = babyBirds.filter(b => b.state === 'follow' || b.state === 'intercept' || b.state === 'return').length;
+    if(aliveBabies > 0) {
+      html += `<span class="powerup-badge baby">🐣 ${aliveBabies} ${aliveBabies > 1 ? 'BABIES' : 'BABY'}</span>`;
+    }
     if(activePowerups.rocket > 0) {
       html += `<span class="powerup-badge rocket">NOS TURBO ${Math.ceil(activePowerups.rocket)}s</span>`;
     }
@@ -3015,7 +3054,7 @@
     ctx.translate(p.x, bobY);
 
     // Glowing Aura Halo
-    const glowColor = p.type === 'shield' ? '#38bdf8' : p.type === 'magnet' ? '#f43f5e' : p.type === 'slow' ? '#67e8f9' : '#fbbf24';
+    const glowColor = p.type === 'baby' ? '#fde047' : p.type === 'shield' ? '#38bdf8' : p.type === 'magnet' ? '#f43f5e' : p.type === 'slow' ? '#67e8f9' : '#fbbf24';
     ctx.shadowColor = glowColor;
     ctx.shadowBlur = 10;
 
@@ -3030,7 +3069,42 @@
     ctx.shadowBlur = 0;
 
     // Power-Up Icons
-    if(p.type === 'shield') {
+    if(p.type === 'baby') {
+      // 🐣 Cute Baby Chick Power-Up Icon inside Bubble
+      ctx.fillStyle = '#fef08a';
+      ctx.beginPath();
+      ctx.arc(0, 2, 7.5, 0, Math.PI * 2);
+      ctx.fill();
+      // Tiny wing
+      ctx.fillStyle = '#fde047';
+      ctx.beginPath();
+      ctx.ellipse(-3.5, 3, 4, 2.4, -0.2, 0, Math.PI * 2);
+      ctx.fill();
+      // Beak
+      ctx.fillStyle = '#f97316';
+      ctx.beginPath();
+      ctx.moveTo(4, 0.5); ctx.lineTo(8.5, 2); ctx.lineTo(4, 3.5); ctx.closePath();
+      ctx.fill();
+      // Eye & sparkle
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.arc(2.5, -0.5, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(3.1, -1.1, 0.7, 0, Math.PI * 2);
+      ctx.fill();
+      // Cheeks
+      ctx.fillStyle = '#fda4af';
+      ctx.beginPath();
+      ctx.arc(1, 3.5, 1.4, 0, Math.PI * 2);
+      ctx.fill();
+      // Cute Ribbon on Head
+      ctx.fillStyle = '#f472b6';
+      ctx.beginPath();
+      ctx.arc(-1, -5.5, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+    } else if(p.type === 'shield') {
       // Shield
       ctx.fillStyle = '#0284c7';
       ctx.beginPath();
@@ -3387,24 +3461,12 @@
 
     // 3. Update animasi & pergerakan tiap anak burung
     babyBirds.forEach((b, idx) => {
+      if(b.state === 'inactive') return;
+
       if(b.state === 'dead') {
         b.respawnTimer = Math.max(0, (b.respawnTimer || 0) - dt);
         if(b.respawnTimer <= 0) {
-          b.state = 'follow';
-          b.x = bird.x - 22 - (idx * 4);
-          b.y = idx === 0 ? bird.y - 18 : bird.y + 18;
-          b.angle = 0;
-          b.flipAngle = 0;
-          audio.babyChirp();
-          makeParticles(b.x, b.y, 16, b.color);
-          floatingTexts.push({
-            x: bird.x,
-            y: bird.y - 25,
-            text: '🐣 ' + b.name + ' HATCHED!',
-            color: b.color,
-            vy: -60,
-            life: 0.8, maxLife: 0.8
-          });
+          // Tetap dead/inactive sampai pemain mengambil power-up anak burung lagi di game!
         }
         return;
       }
@@ -3500,10 +3562,10 @@
             life: 0.85, maxLife: 0.85
           });
 
-          // Anak burung sekali nabrak musuh LANGSUNG MATI & respawn setelah 6 detik!
+          // Anak burung sekali nabrak musuh LANGSUNG MATI (korbankan diri)!
           b.state = 'dead';
-          b.respawnTimer = 6.0;
           b.targetEnemy = null;
+          updatePowerupHUD();
         }
       } else if(b.state === 'return') {
         const tOffset = idx === 0 ? 0 : Math.PI;
