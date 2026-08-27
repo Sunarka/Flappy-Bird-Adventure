@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const W = 360, H = 640, GROUND = 92;
-  const State = Object.freeze({ MENU:'menu', READY:'ready', PLAYING:'playing', PAUSED:'paused', OVER:'over' });
+  const State = Object.freeze({ MENU:'menu', READY:'ready', PLAYING:'playing', PAUSED:'paused', REVIVING:'reviving', OVER:'over' });
   const $ = id => document.getElementById(id);
   const canvas = $('game'), ctx = canvas.getContext('2d');
   const el = {
@@ -10,7 +10,7 @@
     settings:$('settingsModal'), shop:$('shopModal'), paused:$('pauseModal'), over:$('overModal'),
     finalScore:$('finalScore'), finalBest:$('finalBest'), newBest:$('newBest'), medal:$('medal'),
     coinHud:$('coinHud'), coinCount:$('coinCount'), shopCoins:$('shopCoins'), shopTabs:$('shopTabs'),
-    skinList:$('skinList'), powerupHud:$('powerupHud'), soundToggle:$('soundToggle'), musicToggle:$('musicToggle'),
+    skinList:$('skinList'), powerupHud:$('powerupHud'), livesHud:$('livesHud'), soundToggle:$('soundToggle'), musicToggle:$('musicToggle'),
     difficultyBtn:$('difficultyBtn'), difficultyValue:$('difficultyValue'), difficultyMenu:$('difficultyMenu'),
     shopCanvas:$('shopCanvas'), showcaseLabel:$('showcaseLabel'), tabPrev:$('tabPrev'), tabNext:$('tabNext'),
     modeClassicBtn:$('modeClassicBtn'), modeRankedBtn:$('modeRankedBtn'), modeBestLabel:$('modeBestLabel'),
@@ -21,7 +21,9 @@
     rankedModal:$('rankedModal'), championCanvas:$('championCanvas'), championGamerTag:$('championGamerTag'),
     championScore:$('championScore'), championTier:$('championTier'), championLoadoutTags:$('championLoadoutTags'),
     spotlightTitle:$('spotlightTitle'), leaderboardList:$('leaderboardList'), playRankedFromModalBtn:$('playRankedFromModalBtn'),
-    dashBtn:$('dashBtn'), dashRingProgress:$('dashRingProgress'), dashCooldownText:$('dashCooldownText')
+    dashBtn:$('dashBtn'), dashRingProgress:$('dashRingProgress'), dashCooldownText:$('dashCooldownText'),
+    reviveModal:$('reviveModal'), reviveTimerRing:$('reviveTimerRing'), reviveCountdownText:$('reviveCountdownText'),
+    reviveCostLabel:$('reviveCostLabel'), reviveConfirmBtn:$('reviveConfirmBtn'), reviveGiveUpBtn:$('reviveGiveUpBtn')
   };
   const storage = {
     get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } },
@@ -139,6 +141,7 @@
   // 8. Starter Booster Perk (Skill Langsung Aktif Saat Mulai) - ALL FREE FOR TESTING
   const boosters = {
     none:{ name:'TANPA BOOSTER', desc:'Mulai game kasual tanpa booster instan', cost:0, color:'#94a3b8' },
+    extra_life:{ name:'STARTER EXTRA LIFE (+1 ❤️)', desc:'Mulai game dengan tambahan 1 nyawa ekstra', cost:0, color:'#ef4444' },
     shield:{ name:'STARTER SHIELD', desc:'Mulai game langsung terlindungi perisai', cost:0, color:'#0284c7' },
     magnet:{ name:'STARTER MAGNET', desc:'Mulai game langsung menyedot semua koin', cost:0, color:'#dc2626' },
     slow:{ name:'STARTER SLOW ICE', desc:'Mulai game dengan waktu melambat 50%', cost:0, color:'#0891b2' },
@@ -262,6 +265,7 @@
       spawn = 0, flyerSpawn = 0, trailSpawn = 0,
       powerupSpawnTimer = 0, enemySpawnTimer = 0, cloudSpawnTimer = 0,
       groundX = 0, cloudX = 0, shake = 0, overTimer = 0, lastGapY = 300, graceTimer = 0;
+  let lives = 1, maxLives = 5, reviveCount = 0, reviveTimerInterval = null, reviveSecondsLeft = 5;
 
   // Active Dash Skill state
   let dashCooldown = 0, dashTimer = 0, dashAfterimages = [];
@@ -455,7 +459,26 @@
             }, i * 40);
           });
         }, 130);
+      } else if(type === 'heart' || type === 'extra_life') {
+        // Extra Life / Heart: Warm Angelic Healing Chord & Chime
+        const notes = [523, 659, 784, 1046, 1318];
+        notes.forEach((f, i) => {
+          setTimeout(() => {
+            this.playTone(f, 0.22, 'sine', 0.055, 20);
+            this.playTone(f * 1.5, 0.15, 'triangle', 0.035, 0);
+          }, i * 35);
+        });
       }
+    },
+    revive() {
+      if(!settings.sound) return;
+      const notes = [440, 554, 659, 880, 1108, 1318, 1760];
+      notes.forEach((f, i) => {
+        setTimeout(() => {
+          this.playTone(f, 0.28, 'triangle', 0.06, 50);
+          this.playTone(f * 1.5, 0.2, 'sine', 0.04, 0);
+        }, i * 40);
+      });
     },
     birdChirp(skinId) {
       if(!settings.sound) return;
@@ -1160,6 +1183,9 @@
     if(cat === 'booster') {
       if(id === 'none') {
         return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="11" fill="none" stroke="#94a3b8" stroke-width="2.5"/><line x1="8" y1="8" x2="24" y2="24" stroke="#94a3b8" stroke-width="2.5"/></svg>`;
+      }
+      if(id === 'extra_life') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><path d="M16 28 C6 19 3 13 3 8 A6.5 6.5 0 0 1 16 7.2 A6.5 6.5 0 0 1 29 8 C29 13 26 19 16 28 Z" fill="#ef4444" stroke="#fda4af" stroke-width="1.8"/><text x="16" y="16.5" font-family="'Trebuchet MS', Arial, sans-serif" font-size="11" font-weight="900" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">+1</text></svg>`;
       }
       if(id === 'shield') {
         return `<svg viewBox="0 0 32 32" class="shop-item-svg"><path d="M16 4 L26 8 L24 20 L16 28 L8 20 L6 8 Z" fill="#0284c7" stroke="#7dd3fc" stroke-width="1.8"/><path d="M16 8 L22 11 L20 19 L16 24 L12 19 L10 11 Z" fill="#38bdf8"/></svg>`;
@@ -2035,6 +2061,162 @@
     el.sound.style.display = (next === State.MENU || next === State.PLAYING || next === State.READY) ? 'block' : 'none';
     updateDashUI();
   }
+  function updateLivesHUD() {
+    if(!el.livesHud) return;
+    if(state !== State.PLAYING && state !== State.READY && state !== State.REVIVING) {
+      el.livesHud.innerHTML = '';
+      return;
+    }
+    const maxDisplay = currentMode === 'ranked' ? Math.max(3, lives) : Math.max(1, lives);
+    let html = '';
+    for(let i = 0; i < maxDisplay; i++) {
+      if(i < lives) {
+        html += `<span class="life-heart${i >= (currentMode === 'ranked' ? 3 : 1) ? ' bonus' : ''}">❤️</span>`;
+      } else {
+        html += `<span class="life-heart lost">🖤</span>`;
+      }
+    }
+    el.livesHud.innerHTML = html;
+  }
+
+  function getReviveCost() {
+    return 20 * Math.pow(2, reviveCount);
+  }
+
+  function promptRevive() {
+    if(state === State.OVER || state === State.REVIVING) return;
+    state = State.REVIVING;
+    audio.stopMusic();
+    stopBackgroundMusic();
+    audio.hit();
+
+    const cost = getReviveCost();
+    if(el.reviveCostLabel) {
+      el.reviveCostLabel.textContent = '🪙 ' + cost + ' COINS (SALDO: ' + progress.coins + ')';
+    }
+    if(el.reviveConfirmBtn) {
+      el.reviveConfirmBtn.innerHTML = `<span>💖 REVIVE (${cost} COINS)</span>`;
+      el.reviveConfirmBtn.style.opacity = progress.coins >= cost ? '1' : '0.55';
+    }
+
+    el.layer.classList.remove('hidden');
+    el.reviveModal.classList.remove('hidden');
+
+    reviveSecondsLeft = 5;
+    if(el.reviveCountdownText) el.reviveCountdownText.textContent = '5';
+    if(el.reviveTimerRing) {
+      el.reviveTimerRing.style.strokeDashoffset = '0';
+    }
+
+    clearInterval(reviveTimerInterval);
+    const totalCirc = 113.1; // 2 * PI * 18
+    reviveTimerInterval = setInterval(() => {
+      reviveSecondsLeft -= 1;
+      if(el.reviveCountdownText) el.reviveCountdownText.textContent = String(reviveSecondsLeft);
+      if(el.reviveTimerRing) {
+        const offset = totalCirc * (1 - (reviveSecondsLeft / 5));
+        el.reviveTimerRing.style.strokeDashoffset = String(offset);
+      }
+      if(settings.sound && reviveSecondsLeft > 0) {
+        audio.playTone(880, 0.05, 'triangle', 0.02, 0);
+      }
+      if(reviveSecondsLeft <= 0) {
+        clearInterval(reviveTimerInterval);
+        reviveTimerInterval = null;
+        giveUpRevive();
+      }
+    }, 1000);
+  }
+
+  function executeRevive() {
+    const cost = getReviveCost();
+    if(progress.coins < cost) {
+      audio.hit();
+      shake = 0.2;
+      floatingTexts.push({
+        x: W / 2, y: H / 2 - 40,
+        text: '❌ KOIN TIDAK CUKUP!',
+        color: '#ef4444', vy: -50, life: 0.85, maxLife: 0.85
+      });
+      return;
+    }
+
+    clearInterval(reviveTimerInterval);
+    reviveTimerInterval = null;
+
+    // Deduct coins & double price for next revive in this run
+    progress.coins -= cost;
+    reviveCount++;
+    updateCoins();
+    persistProgress();
+
+    // Close revive modal
+    el.reviveModal.classList.add('hidden');
+    el.layer.classList.add('hidden');
+
+    // Restore Lives: Ranked mode -> 3 lives, Classic mode -> 1 life
+    lives = currentMode === 'ranked' ? 3 : 1;
+
+    // Clear immediate danger: push nearby pipes ahead and vaporize enemies on screen
+    pipes.forEach(p => {
+      if(p.x > bird.x - 70 && p.x < bird.x + 140) {
+        p.x += 160;
+      }
+    });
+    enemies.forEach(e => {
+      if(e.x > bird.x - 60 && e.x < bird.x + 240) {
+        e.dead = true;
+        e.x = -999;
+      }
+    });
+    flyers.forEach(f => {
+      if(f.x > bird.x - 60 && f.x < bird.x + 240) {
+        f.dead = true;
+        f.x = -999;
+      }
+    });
+    stormClouds.forEach(c => {
+      c.phase = 'fade';
+      c.timer = 0.01;
+    });
+
+    // Reset Bird safely
+    bird.y = 275;
+    bird.vy = -140;
+    bird.angle = 0;
+    bird.dead = false;
+
+    // Grant 2.5s Grace Invulnerability & Shield
+    graceTimer = 2.5;
+    activePowerups.shield = true;
+    activePowerups.shieldCount = 1;
+    activePowerups.shieldType = 'standard';
+
+    audio.revive();
+    audio.music();
+    playBackgroundMusic();
+
+    floatingTexts.push({
+      x: bird.x, y: bird.y - 25,
+      text: '💖 HEROIC REVIVE!',
+      color: '#ec4899', vy: -65, life: 0.95, maxLife: 0.95
+    });
+    makeParticles(bird.x, bird.y, 30, '#ec4899');
+    makeParticles(bird.x, bird.y, 20, '#ffd700');
+    makeParticles(bird.x, bird.y, 15, '#ffffff');
+
+    updateLivesHUD();
+    updatePowerupHUD();
+    setState(State.PLAYING);
+  }
+
+  function giveUpRevive() {
+    clearInterval(reviveTimerInterval);
+    reviveTimerInterval = null;
+    el.reviveModal.classList.add('hidden');
+    endGame();
+  }
+
   function reset() {
     score = 0; pipes = []; coins = []; flyers = []; particles = [];
     powerups = []; enemies = []; stormClouds = [];
@@ -2052,9 +2234,21 @@
     powerupSpawnTimer = 0; enemySpawnTimer = 0; cloudSpawnTimer = 0;
     groundX = 0; shake = 0; started = false; lastGapY = 300;
     el.over.classList.remove('visible');
+    if(el.reviveModal) el.reviveModal.classList.add('hidden');
+    clearInterval(reviveTimerInterval);
+    reviveTimerInterval = null;
+
+    // Inisialisasi Nyawa (Ranked Mode: 3 nyawa, Classic Mode: 1 nyawa, + Extra Life Booster)
+    lives = currentMode === 'ranked' ? 3 : 1;
+    if(progress.selectedBooster === 'extra_life') {
+      lives += 1;
+    }
+    reviveCount = 0;
+
     Object.assign(bird, { x:104, y:285, vy:0, wing:0, angle:0, dead:false });
     resetBabyBirds();
     updateScore();
+    updateLivesHUD();
     updatePowerupHUD();
     updateDashUI();
   }
@@ -2176,8 +2370,8 @@
     if(shouldSpawnPowerup) {
       powerupSpawnTimer = 0;
       const rand = Math.random();
-      // Shield 26%, Magnet 24%, Slow Time 20%, Star 15%, Rocket NOS 15%
-      const type = rand < 0.26 ? 'shield' : rand < 0.50 ? 'magnet' : rand < 0.70 ? 'slow' : rand < 0.85 ? 'star' : 'rocket';
+      // Shield 22%, Magnet 20%, Slow Time 16%, Star 14%, Rocket NOS 14%, Extra Life Heart 14%
+      const type = rand < 0.22 ? 'shield' : rand < 0.42 ? 'magnet' : rand < 0.58 ? 'slow' : rand < 0.72 ? 'star' : rand < 0.86 ? 'rocket' : 'heart';
       powerups.push({
         x: pipe.x + pipe.w / 2,
         y: pipe.gapY + pipe.gapSize / 2,
@@ -2279,6 +2473,11 @@
       activePowerups.rocket = 5.0;
       shake = 0.35;
       makeParticles(px, py, 28, '#f97316');
+    } else if(type === 'heart' || type === 'extra_life') {
+      lives = Math.min(maxLives, lives + 1);
+      updateLivesHUD();
+      makeParticles(px, py, 24, '#ef4444');
+      makeParticles(px, py, 14, '#fda4af');
     }
 
     updatePowerupHUD();
@@ -2291,7 +2490,9 @@
       magnet: { text: isStarter ? 'STARTER MAGNET' : '+MAGNET PULL', color: '#f43f5e' },
       slow:   { text: isStarter ? 'STARTER FREEZE' : '+TIME FREEZE', color: '#67e8f9' },
       star:   { text: isStarter ? 'STARTER STAR'   : '+STAR POWER',   color: '#fbbf24' },
-      rocket: { text: isStarter ? 'NOS TURBO BLAST': '+NOS ROCKET BOOST', color: '#ea580c' }
+      rocket: { text: isStarter ? 'NOS TURBO BLAST': '+NOS ROCKET BOOST', color: '#ea580c' },
+      heart:  { text: '+1 EXTRA LIFE! ❤️', color: '#ef4444' },
+      extra_life: { text: 'STARTER EXTRA LIFE ❤️', color: '#ef4444' }
     }[type] || { text: '+POWER-UP!', color: '#fff' };
 
     // 1. Expanding Shockwaves
@@ -2607,11 +2808,14 @@
     }
   }
 
-  function handleHit(hazard) {
+  function handleHit(hazard, isGround = false) {
+    if(state !== State.PLAYING) return;
+
     // 0. Warp Dash Active -> Invulnerable & destroy hazard!
     if(dashTimer > 0) {
       if(hazard && hazard.type) {
         hazard.dead = true;
+        hazard.x = -999;
         makeParticles(hazard.x, hazard.y, 18, '#38bdf8');
         audio.rocketSmash();
         addScore();
@@ -2623,6 +2827,7 @@
     if(activePowerups.rocket > 0) {
       if(hazard && hazard.type) {
         hazard.dead = true;
+        hazard.x = -999;
         makeParticles(hazard.x, hazard.y, 22, '#f97316');
         audio.rocketSmash();
         addScore();
@@ -2634,6 +2839,7 @@
     if(activePowerups.star > 0) {
       if(hazard && hazard.type) {
         hazard.dead = true;
+        hazard.x = -999;
         makeParticles(hazard.x, hazard.y, 14, '#ffd700');
         audio.hit();
       }
@@ -2646,25 +2852,61 @@
     if(activePowerups.shield) {
       if(activePowerups.shieldCount && activePowerups.shieldCount > 1) {
         activePowerups.shieldCount--;
-        graceTimer = 0.9;
+        graceTimer = 0.95;
         audio.shieldBreak();
         shake = 0.2;
         makeParticles(bird.x, bird.y, 20, '#38bdf8');
       } else {
         activePowerups.shield = false;
         activePowerups.shieldCount = 0;
-        graceTimer = 0.85; // 0.85s grace invulnerability
+        graceTimer = 0.9;
         audio.shieldBreak();
         shake = 0.25;
         makeParticles(bird.x, bird.y, 22, '#38bdf8');
       }
-      if(hazard && hazard.type) hazard.dead = true;
+      if(hazard && hazard.type) {
+        hazard.dead = true;
+        hazard.x = -999;
+      }
       updatePowerupHUD();
       return;
     }
 
-    // 5. No Protection -> End Game
-    endGame();
+    // 5. Lives System (Ranked Mode default 3 hearts, Classic default 1 heart, + Extra Life Booster)
+    if(lives > 1) {
+      lives--;
+      graceTimer = 1.6;
+      audio.hit();
+      shake = 0.28;
+      floatingTexts.push({
+        x: bird.x, y: bird.y - 22,
+        text: '-1 ❤️ (' + lives + ' LIVES LEFT)',
+        color: '#ef4444',
+        vy: -65, life: 0.85, maxLife: 0.85
+      });
+      makeParticles(bird.x, bird.y, 24, '#ef4444');
+      shockwaves.push({
+        x: bird.x, y: bird.y, r: 8, maxR: 70,
+        color: '#ef4444', life: 0.35, maxLife: 0.35
+      });
+      if(isGround) {
+        bird.y = H - GROUND - 45;
+        bird.vy = -280;
+      } else {
+        bird.vy = -180;
+      }
+      if(hazard && hazard.type) {
+        hazard.dead = true;
+        hazard.x = -999;
+      }
+      updateLivesHUD();
+      return;
+    }
+
+    // 6. No Lives Left -> Prompt Revive
+    lives = 0;
+    updateLivesHUD();
+    promptRevive();
   }
 
   function collide(p) {
@@ -2961,7 +3203,13 @@
     }
     coins = coins.filter(coin => !coin.collected && coin.x + coin.r > -8);
 
-    if(bird.y - bird.r < 0 || bird.y + bird.r > H - GROUND) handleHit(null);
+    if(bird.y - bird.r < 0) {
+      bird.y = bird.r + 2;
+      bird.vy = Math.max(bird.vy, 40);
+    }
+    if(bird.y + bird.r > H - GROUND) {
+      handleHit(null, true);
+    }
     groundX = (groundX + speed * dt) % 30;
 
     skinTrail(dt);
@@ -3161,7 +3409,7 @@
     ctx.translate(p.x, bobY);
 
     // Glowing Aura Halo
-    const glowColor = p.type === 'baby' ? '#fde047' : p.type === 'shield' ? '#38bdf8' : p.type === 'magnet' ? '#f43f5e' : p.type === 'slow' ? '#67e8f9' : '#fbbf24';
+    const glowColor = p.type === 'heart' ? '#ef4444' : p.type === 'baby' ? '#fde047' : p.type === 'shield' ? '#38bdf8' : p.type === 'magnet' ? '#f43f5e' : p.type === 'slow' ? '#67e8f9' : '#fbbf24';
     ctx.shadowColor = glowColor;
     ctx.shadowBlur = 10;
 
@@ -3211,6 +3459,25 @@
       ctx.beginPath();
       ctx.arc(-1, -5.5, 1.8, 0, Math.PI * 2);
       ctx.fill();
+    } else if(p.type === 'heart') {
+      // Extra Life Heart Icon
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      const s = 9;
+      ctx.moveTo(0, s * 0.4);
+      ctx.bezierCurveTo(-s * 0.8, -s * 0.4, -s * 0.8, -s * 1.1, 0, -s * 0.5);
+      ctx.bezierCurveTo(s * 0.8, -s * 1.1, s * 0.8, -s * 0.4, 0, s * 0.4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#fca5a5';
+      ctx.beginPath();
+      ctx.arc(-2.5, -4, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 8.5px Trebuchet MS, Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('+1', 0, 0);
     } else if(p.type === 'shield') {
       // Shield
       ctx.fillStyle = '#0284c7';
@@ -6443,6 +6710,19 @@
       e.preventDefault();
       triggerDash();
     });
+  }
+
+  if(el.reviveConfirmBtn) {
+    el.reviveConfirmBtn.onclick = e => {
+      e.stopPropagation();
+      executeRevive();
+    };
+  }
+  if(el.reviveGiveUpBtn) {
+    el.reviveGiveUpBtn.onclick = e => {
+      e.stopPropagation();
+      giveUpRevive();
+    };
   }
 
   window.addEventListener('keydown', e => {
