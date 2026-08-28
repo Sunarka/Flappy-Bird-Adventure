@@ -169,6 +169,22 @@ class FirebaseLeaderboardService {
   }
 
   /**
+   * Google Play Games Sign-In via Google Auth Provider
+   */
+  async signInWithGooglePlay() {
+    if (typeof firebase === 'undefined' || !firebase.auth) {
+      throw new Error('Firebase Auth SDK belum dimuat');
+    }
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('profile');
+    provider.addScope('email');
+    provider.setCustomParameters({ prompt: 'select_account' });
+    const result = await firebase.auth().signInWithPopup(provider);
+    if(result.user) result.user.providerType = 'play_games';
+    return result.user;
+  }
+
+  /**
    * Google Sign-In via Firebase Auth Popup
    */
   async signInWithGoogle() {
@@ -180,11 +196,27 @@ class FirebaseLeaderboardService {
     provider.addScope('email');
     provider.setCustomParameters({ prompt: 'select_account' });
     const result = await firebase.auth().signInWithPopup(provider);
+    if(result.user) result.user.providerType = 'google';
     return result.user;
   }
 
   /**
-   * Sign Out from Google
+   * Facebook Sign-In via Firebase Auth Popup
+   */
+  async signInWithFacebook() {
+    if (typeof firebase === 'undefined' || !firebase.auth) {
+      throw new Error('Firebase Auth SDK belum dimuat');
+    }
+    const provider = new firebase.auth.FacebookAuthProvider();
+    provider.addScope('public_profile');
+    provider.addScope('email');
+    const result = await firebase.auth().signInWithPopup(provider);
+    if(result.user) result.user.providerType = 'facebook';
+    return result.user;
+  }
+
+  /**
+   * Sign Out from any provider
    */
   async signOut() {
     if (typeof firebase !== 'undefined' && firebase.auth) {

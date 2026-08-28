@@ -33,7 +33,9 @@
     gpChangeAvatarBtn:$('gpChangeAvatarBtn'), gpGamerTagInput:$('gpGamerTagInput'), gpNameCostHint:$('gpNameCostHint'), gpTierBadge:$('gpTierBadge'),
     gpRankedBest:$('gpRankedBest'), gpAuthActionBtn:$('gpAuthActionBtn'), gpSwitchAccountBtn:$('gpSwitchAccountBtn'),
     googleSignInPrompt:$('googleSignInPrompt'), googleProfileCard:$('googleProfileCard'),
+    googlePlaySignInBtn:$('googlePlaySignInBtn'), googlePlayBtnText:$('googlePlayBtnText'),
     googleSignInBtn:$('googleSignInBtn'), googleSignInBtnText:$('googleSignInBtnText'),
+    facebookSignInBtn:$('facebookSignInBtn'), facebookSignInBtnText:$('facebookSignInBtnText'),
     guestSignInBtn:$('guestSignInBtn'),
     gpUserEmail:$('gpUserEmail'), gpSignOutBtn:$('gpSignOutBtn'),
     avatarPickerModal:$('avatarPickerModal'), avatarPickerGrid:$('avatarPickerGrid'),
@@ -8519,8 +8521,50 @@
   bindClick(el.gpChangeAvatarBtn, openAvatarPicker);
   bindClick(el.gpAvatarWrap, openAvatarPicker);
 
+  function handleAuthError(err, providerName) {
+    if(!err) return;
+    console.warn(`[${providerName} Sign-In notice]:`, err.code, err.message);
+    if(err.code === 'auth/unauthorized-domain') {
+      const currentDomain = window.location.hostname || '127.0.0.1';
+      alert('Domain Belum Diizinkan di Firebase (auth/unauthorized-domain):\n\nDomain "' + currentDomain + '" belum terdaftar di Authorized Domains Firebase.\n\nCara Menambahkan Domain:\n1. Buka console.firebase.google.com\n2. Pilih Authentication > Settings\n3. Di "Authorized domains", klik "Add domain"\n4. Masukkan: ' + currentDomain + ' & sunarka.github.io\n\nTips: Anda juga bisa klik "MASUK SEBAGAI TAMU" untuk langsung bermain sekarang!');
+    } else if(err.code === 'auth/configuration-not-found' || err.code === 'auth/operation-not-allowed') {
+      alert(`Pemberitahuan Firebase Auth:\n\nLogin ${providerName} belum diaktifkan di Firebase Console.\n\nCara mengaktifkan:\n1. Buka console.firebase.google.com\n2. Buka menu Authentication > Sign-in method\n3. Klik "${providerName}", lalu pilih Enable dan Simpan.\n\nTips: Anda juga bisa klik "MASUK SEBAGAI TAMU" untuk langsung bermain sekarang!`);
+    } else if(err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
+      alert(`Info ${providerName} Login: ` + (err.message || `Gagal terhubung ke akun ${providerName}. Pastikan internet aktif.`));
+    }
+  }
+
+  async function performGooglePlaySignIn() {
+    if(el.googlePlayBtnText) el.googlePlayBtnText.textContent = 'MENGHUBUNGKAN PLAY GAMES...';
+    try {
+      if(!window.FirebaseLeaderboard || typeof window.FirebaseLeaderboard.signInWithGooglePlay !== 'function') {
+        throw new Error('Firebase Auth Service belum siap');
+      }
+      const user = await window.FirebaseLeaderboard.signInWithGooglePlay();
+      if(user) {
+        gpProfile.isLoggedIn = true;
+        gpProfile.isGoogle = true;
+        gpProfile.authProvider = 'play_games';
+        gpProfile.email = user.email || 'PlayGames User';
+        gpProfile.googleUid = user.uid;
+        if(user.displayName) {
+          gpProfile.gamerTag = user.displayName.slice(0, 16);
+        } else if(user.email) {
+          gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
+        }
+        saveGPProfile();
+        audio.win();
+        syncGPProfileUI();
+      }
+    } catch(err) {
+      handleAuthError(err, 'Google Play Games');
+    } finally {
+      if(el.googlePlayBtnText) el.googlePlayBtnText.textContent = 'LOGIN GOOGLE PLAY GAMES';
+    }
+  }
+
   async function performGoogleSignIn() {
-    if(el.googleSignInBtnText) el.googleSignInBtnText.textContent = 'MENGHUBUNGKAN...';
+    if(el.googleSignInBtnText) el.googleSignInBtnText.textContent = 'MENGHUBUNGKAN GOOGLE...';
     try {
       if(!window.FirebaseLeaderboard || typeof window.FirebaseLeaderboard.signInWithGoogle !== 'function') {
         throw new Error('Firebase Auth Service belum siap');
@@ -8529,6 +8573,7 @@
       if(user) {
         gpProfile.isLoggedIn = true;
         gpProfile.isGoogle = true;
+        gpProfile.authProvider = 'google';
         gpProfile.email = user.email || '';
         gpProfile.googleUid = user.uid;
         if(user.displayName) {
@@ -8541,23 +8586,54 @@
         syncGPProfileUI();
       }
     } catch(err) {
-      console.warn('[Google Sign-In notice]:', err.code, err.message);
-      if(err.code === 'auth/unauthorized-domain') {
-        const currentDomain = window.location.hostname || '127.0.0.1';
-        alert('Domain Belum Diizinkan di Firebase (auth/unauthorized-domain):\n\nDomain "' + currentDomain + '" belum terdaftar di Authorized Domains Firebase.\n\nCara Menambahkan Domain (Hanya 1 Menit):\n1. Buka console.firebase.google.com\n2. Pilih Authentication > tab Settings (Pengaturan)\n3. Di bagian "Authorized domains", klik "Add domain" (Tambah domain)\n4. Masukkan: ' + currentDomain + ' (dan sunarka.github.io)\n5. Klik Simpan!\n\nTips: Anda juga bisa klik "MASUK SEBAGAI TAMU" untuk langsung bermain sekarang!');
-      } else if(err.code === 'auth/configuration-not-found') {
-        alert('Pemberitahuan Firebase Auth:\n\nGoogle Sign-In belum diaktifkan di Firebase Console untuk proyek ini.\n\nCara mengaktifkan:\n1. Buka console.firebase.google.com\n2. Buka menu Authentication > Sign-in method\n3. Klik "Google", lalu pilih Enable/Aktifkan dan Simpan.\n\nTips: Anda juga bisa menggunakan tombol "MASUK SEBAGAI TAMU" untuk langsung bermain sekarang!');
-      } else if(err.code !== 'auth/popup-closed-by-user') {
-        alert('Info Google Login: ' + (err.message || 'Gagal terhubung ke akun Google. Pastikan internet aktif.'));
-      }
+      handleAuthError(err, 'Google');
     } finally {
       if(el.googleSignInBtnText) el.googleSignInBtnText.textContent = 'LOGIN DENGAN GOOGLE';
     }
   }
 
+  async function performFacebookSignIn() {
+    if(el.facebookSignInBtnText) el.facebookSignInBtnText.textContent = 'MENGHUBUNGKAN FACEBOOK...';
+    try {
+      if(!window.FirebaseLeaderboard || typeof window.FirebaseLeaderboard.signInWithFacebook !== 'function') {
+        throw new Error('Firebase Auth Service belum siap');
+      }
+      const user = await window.FirebaseLeaderboard.signInWithFacebook();
+      if(user) {
+        gpProfile.isLoggedIn = true;
+        gpProfile.isGoogle = true;
+        gpProfile.authProvider = 'facebook';
+        gpProfile.email = user.email || (user.displayName ? `${user.displayName} (Facebook)` : 'Akun Facebook');
+        gpProfile.googleUid = user.uid;
+        if(user.displayName) {
+          gpProfile.gamerTag = user.displayName.slice(0, 16);
+        } else if(user.email) {
+          gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
+        }
+        saveGPProfile();
+        audio.win();
+        syncGPProfileUI();
+      }
+    } catch(err) {
+      handleAuthError(err, 'Facebook');
+    } finally {
+      if(el.facebookSignInBtnText) el.facebookSignInBtnText.textContent = 'LOGIN DENGAN FACEBOOK';
+    }
+  }
+
+  bindClick(el.googlePlaySignInBtn, () => {
+    audio.click();
+    performGooglePlaySignIn();
+  });
+
   bindClick(el.googleSignInBtn, () => {
     audio.click();
     performGoogleSignIn();
+  });
+
+  bindClick(el.facebookSignInBtn, () => {
+    audio.click();
+    performFacebookSignIn();
   });
 
   bindClick(el.guestSignInBtn, () => {
