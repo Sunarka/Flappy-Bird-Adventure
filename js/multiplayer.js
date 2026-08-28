@@ -33,6 +33,8 @@
       // Local BroadcastChannel fallback for multi-tab instant testing
       this.bc = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('flappy_mp_local_bus') : null;
       this.initBroadcastChannel();
+      this.pendingQueue = [];
+      this.connect();
     }
 
     on(event, callback) {
@@ -84,8 +86,15 @@
           this.emit('connected', { isLocal: false });
 
           // Send initial profile
-          if (profile) {
-            this.send({ type: 'UPDATE_PROFILE', profile });
+          if (profile || this.myProfile) {
+            this.send({ type: 'UPDATE_PROFILE', profile: profile || this.myProfile });
+          }
+
+          // Flush any pending queue
+          if (this.pendingQueue && this.pendingQueue.length > 0) {
+            const queue = [...this.pendingQueue];
+            this.pendingQueue = [];
+            queue.forEach(pkt => this.send(pkt));
           }
         };
 
@@ -107,7 +116,6 @@
         this.ws.onerror = () => {
           this.isConnected = false;
           this.isConnecting = false;
-          // Fallback to BroadcastChannel mode silently for offline / multi-tab dev
           this.emit('connected', { isLocal: true });
         };
       } catch (err) {
@@ -130,6 +138,9 @@
     send(data) {
       if (this.isConnected && this.ws && this.ws.readyState === WebSocket.OPEN) {
         this.ws.send(JSON.stringify(data));
+      } else if (this.isConnecting) {
+        if (!this.pendingQueue) this.pendingQueue = [];
+        this.pendingQueue.push(data);
       } else if (this.bc) {
         // BroadcastChannel Local Relay Fallback
         this.handleLocalBroadcastSend(data);
