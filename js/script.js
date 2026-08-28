@@ -9071,10 +9071,33 @@
   }
 
   window.addEventListener('keydown', e => {
-    if(['Space', 'ArrowUp'].includes(e.code)) { e.preventDefault(); flap(); }
-    if(['ShiftLeft', 'ShiftRight', 'KeyD', 'KeyF', 'KeyX'].includes(e.code)) { e.preventDefault(); triggerDash(); }
-    if((e.code === 'KeyP' || e.code === 'Escape') && (state === State.PLAYING || state === State.READY)) pause();
-    else if((e.code === 'KeyP' || e.code === 'Escape') && state === State.PAUSED) resume();
+    // Jangan trigger kontrol jika sedang mengetik di input nama
+    if(e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+
+    // Flap Keys: Space, ArrowUp, KeyW
+    if(['Space', 'ArrowUp', 'KeyW'].includes(e.code) || e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+      e.preventDefault();
+      flap();
+      return;
+    }
+
+    // Dash Keys: Shift (Left/Right), D, F, E, X, C, Z, ArrowRight, Enter
+    if(
+      ['ShiftLeft', 'ShiftRight', 'KeyD', 'KeyF', 'KeyE', 'KeyX', 'KeyC', 'KeyZ', 'ArrowRight', 'Enter'].includes(e.code) ||
+      e.key === 'Shift' || e.key === 'd' || e.key === 'D' || e.key === 'f' || e.key === 'F' || e.key === 'e' || e.key === 'E' ||
+      e.key === 'x' || e.key === 'X' || e.key === 'c' || e.key === 'C' || e.key === 'z' || e.key === 'Z' || e.key === 'ArrowRight'
+    ) {
+      e.preventDefault();
+      triggerDash();
+      return;
+    }
+
+    // Pause / Resume Keys: KeyP, Escape
+    if((e.code === 'KeyP' || e.code === 'Escape') && (state === State.PLAYING || state === State.READY)) {
+      pause();
+    } else if((e.code === 'KeyP' || e.code === 'Escape') && state === State.PAUSED) {
+      resume();
+    }
   });
   canvas.addEventListener('pointerdown', e => {
     if(e.target.closest('#dashBtn')) return;
