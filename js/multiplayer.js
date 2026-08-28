@@ -935,6 +935,27 @@
       }
     }
 
+    strikeOpponentsWithZap() {
+      this.opponents.forEach(op => {
+        if (op.isAlive) {
+          op.relX = (op.relX || 90) - 110;
+          op.curX = op.relX;
+          if (op.hasShield) {
+            op.hasShield = false;
+          } else {
+            op.lives = Math.max(1, (op.lives || 3) - 1);
+          }
+          op.isStunned = true;
+          op.stunTimer = 2.0;
+        }
+      });
+      this.send({
+        type: 'OPPONENT_ZAPPED',
+        roomId: this.currentRoom?.roomId,
+        senderId: this.localPlayerId
+      });
+    }
+
     broadcastMyDeath(finalScore) {
       this.send({
         type: this.isConnected ? 'PLAYER_DIED' : 'BC_OPPONENT_DIED',
@@ -954,7 +975,23 @@
       this.opponents.forEach((op, opId) => {
         if (opId === this.localPlayerId || (this.myProfile && op.name === this.myProfile.name)) return;
         if (!op.isAlive) {
-          // Fall to ground if dead
+          // If in Race Mode: 3-Second Auto-Respawn for Bot!
+          if (this.gameMode === 'race') {
+            op.respawnTimer = (op.respawnTimer || 3.0) - dt;
+            op.targetY = 250 + Math.sin(Date.now() / 250) * 10;
+            op.y = op.targetY;
+            if (op.respawnTimer <= 0) {
+              op.isAlive = true;
+              op.lives = 3;
+              op.graceTimer = 2.8;
+              op.respawnTimer = 3.0;
+              op.relX = baseBirdX - 60;
+              op.curX = op.relX;
+            }
+            return;
+          }
+
+          // Fall to ground if dead in Survival Mode
           if (op.targetY < 540) {
             op.vy = (op.vy || 0) + 850 * dt;
             op.targetY += op.vy * dt;

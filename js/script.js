@@ -382,6 +382,8 @@
       pipes = [], coins = [], flyers = [], particles = [],
       powerups = [], enemies = [], stormClouds = [],
       shockwaves = [], floatingTexts = [],
+      raceMissiles = [], raceTraps = [],
+      isRespawningRace = false, raceRespawnTimer = 0,
       spawn = 0, flyerSpawn = 0, trailSpawn = 0,
       powerupSpawnTimer = 0, enemySpawnTimer = 0, cloudSpawnTimer = 0,
       groundX = 0, cloudX = 0, shake = 0, overTimer = 0, lastGapY = 300, graceTimer = 0;
@@ -4170,8 +4172,15 @@
     if(shouldSpawnPowerup) {
       powerupSpawnTimer = 0;
       const rand = getRandomFloat();
-      // Shield 22%, Magnet 20%, Slow Time 16%, Star 14%, Rocket NOS 14%, Extra Life Heart 14%
-      const type = rand < 0.22 ? 'shield' : rand < 0.42 ? 'magnet' : rand < 0.58 ? 'slow' : rand < 0.72 ? 'star' : rand < 0.86 ? 'rocket' : 'heart';
+      let type = 'shield';
+      if(currentMode === 'multiplayer') {
+        // Multiplayer (Race & Survival): Offensive items & Race boosters
+        // Shield 18%, Rocket 18%, Zap 20%, Missile 20%, Trap 14%, Heart 10%
+        type = rand < 0.18 ? 'shield' : rand < 0.36 ? 'rocket' : rand < 0.56 ? 'zap' : rand < 0.76 ? 'missile' : rand < 0.90 ? 'trap' : 'heart';
+      } else {
+        // Singleplayer: Shield 22%, Magnet 20%, Slow Time 16%, Star 14%, Rocket NOS 14%, Extra Life Heart 14%
+        type = rand < 0.22 ? 'shield' : rand < 0.42 ? 'magnet' : rand < 0.58 ? 'slow' : rand < 0.72 ? 'star' : rand < 0.86 ? 'rocket' : 'heart';
+      }
       powerups.push({
         x: pipe.x + pipe.w / 2,
         y: pipe.gapY + pipe.gapSize / 2,
@@ -4278,6 +4287,37 @@
       updateLivesHUD();
       makeParticles(px, py, 24, '#ef4444');
       makeParticles(px, py, 14, '#fda4af');
+    } else if(type === 'zap') {
+      // ⚡ THUNDER ZAP: Serang semua lawan dengan petir halilintar & stun mereka!
+      shake = 0.45;
+      audio.hit();
+      shockwaves.push({ x: bird.x, y: bird.y, r: 10, maxR: 120, color: '#fde047', life: 0.6, maxLife: 0.6 });
+      makeParticles(bird.x, bird.y, 35, '#fde047');
+      makeParticles(bird.x, bird.y, 20, '#38bdf8');
+      if(window.multiplayerEngine) {
+        window.multiplayerEngine.strikeOpponentsWithZap();
+      }
+    } else if(type === 'missile') {
+      // 🚀 HOMING MISSILE: Luncurkan roket pelacak ke lawan terdepan!
+      audio.dash();
+      shake = 0.25;
+      raceMissiles.push({
+        x: bird.x + 20,
+        y: bird.y,
+        vx: 520,
+        life: 3.5
+      });
+      makeParticles(bird.x + 10, bird.y, 18, '#f97316');
+    } else if(type === 'trap') {
+      // 🍌 BANANA / OIL TRAP: Jatuhkan jebakan licin di belakang pemain!
+      audio.click();
+      raceTraps.push({
+        x: bird.x - 30,
+        y: bird.y,
+        r: 14,
+        life: 8.0,
+        rot: 0
+      });
     }
 
     updatePowerupHUD();
@@ -4292,7 +4332,10 @@
       star:   { text: isStarter ? 'STARTER STAR'   : '+STAR POWER',   color: '#fbbf24' },
       rocket: { text: isStarter ? 'NOS TURBO BLAST': '+NOS ROCKET BOOST', color: '#ea580c' },
       heart:  { text: '+1 EXTRA LIFE!', color: '#ef4444' },
-      extra_life: { text: 'STARTER EXTRA LIFE', color: '#ef4444' }
+      extra_life: { text: 'STARTER EXTRA LIFE', color: '#ef4444' },
+      zap:    { text: '⚡ THUNDER ZAP! ENEMIES STUNNED! ⚡', color: '#fde047' },
+      missile:{ text: '🚀 HOMING MISSILE LAUNCHED! 💥', color: '#f97316' },
+      trap:   { text: '🍌 BANANA TRAP DROPPED! 🍌', color: '#facc15' }
     }[type] || { text: '+POWER-UP!', color: '#fff' };
 
     // 1. Expanding Shockwaves
@@ -4784,14 +4827,38 @@
       return;
     }
 
-    // 6. 0 Lives Left -> Death (Multiplayer ends match, Singleplayer prompts revive)
+    // 6. 0 Lives Left -> Death (Race Mode: 3s Auto-Respawn, Survival Mode: Knockout End, Singleplayer: Revive Modal)
     lives = 0;
     updateLivesHUD();
     updateMpBattleHUD();
     if(currentMode === 'multiplayer') {
+      if(window.multiplayerEngine && window.multiplayerEngine.gameMode === 'race') {
+        triggerRaceRespawn();
+        return;
+      }
       endGame();
     } else {
       promptRevive();
+    }
+  }
+
+  function triggerRaceRespawn() {
+    isRespawningRace = true;
+    raceRespawnTimer = 3.0;
+    bird.vy = 0;
+    audio.hit();
+    shake = 0.35;
+    makeParticles(bird.x, bird.y, 30, '#ef4444');
+    floatingTexts.push({
+      x: bird.x, y: bird.y - 28,
+      text: '💀 TERJATUH! RESPAWN DALAM 3s...',
+      color: '#f87171',
+      vy: -50, life: 1.5, maxLife: 1.5
+    });
+    if(window.multiplayerEngine) {
+      window.multiplayerEngine.broadcastMyState({
+        y: bird.y, vy: 0, rot: 0, score, isAlive: true, lives: 0
+      });
     }
   }
 
@@ -4992,8 +5059,120 @@
     }
     floatingTexts = floatingTexts.filter(ft => ft.life > 0);
 
+    // Race Mode 3-Second Auto-Respawn Recovery
+    if(isRespawningRace) {
+      raceRespawnTimer -= dt;
+      bird.y = 260 + Math.sin(Date.now() / 180) * 6;
+      bird.vy = 0;
+      bird.angle = 0;
+      if(raceRespawnTimer <= 0) {
+        isRespawningRace = false;
+        lives = 3;
+        graceTimer = 2.8;
+        bird.vy = -220;
+        audio.win();
+        shockwaves.push({ x: bird.x, y: bird.y, r: 10, maxR: 95, color: '#38bdf8', life: 0.5, maxLife: 0.5 });
+        makeParticles(bird.x, bird.y, 30, '#38bdf8');
+        floatingTexts.push({
+          x: bird.x, y: bird.y - 24,
+          text: '⚡ RESPAWNED! GASPOLL! ⚡',
+          color: '#38bdf8',
+          vy: -60, life: 1.0, maxLife: 1.0
+        });
+        updateLivesHUD();
+        updateMpBattleHUD();
+      }
+    }
+
     // World speed is slowed when Slow Time is active, but player physics stays normal!
     const slowFactor = activePowerups.slow > 0 ? 0.52 : 1.0;
+
+    // Update Active Homing Race Missiles
+    for(let i = raceMissiles.length - 1; i >= 0; i--) {
+      const m = raceMissiles[i];
+      m.x += (m.vx || 520) * dt;
+      m.life -= dt;
+
+      // Exhaust smoke & flame
+      if(Math.random() < 0.6) {
+        particles.push({
+          x: m.x - 12, y: m.y + (Math.random() - 0.5) * 6,
+          vx: -180, vy: (Math.random() - 0.5) * 20,
+          life: 0.2, maxLife: 0.2,
+          color: Math.random() < 0.5 ? '#ef4444' : '#f97316',
+          size: 3
+        });
+      }
+
+      // Check collision with opponents
+      if(window.multiplayerEngine && window.multiplayerEngine.opponents) {
+        let hitOp = null;
+        window.multiplayerEngine.opponents.forEach(op => {
+          if(op.isAlive && Math.hypot(m.x - (op.curX || 90), m.y - op.y) < 35) {
+            hitOp = op;
+          }
+        });
+        if(hitOp || m.x > W + 60 || m.life <= 0) {
+          if(hitOp) {
+            hitOp.relX = (hitOp.relX || 90) - 130;
+            hitOp.curX = hitOp.relX;
+            if(hitOp.hasShield) {
+              hitOp.hasShield = false;
+            } else {
+              hitOp.lives = Math.max(1, (hitOp.lives || 3) - 1);
+            }
+            hitOp.isStunned = true;
+            hitOp.stunTimer = 1.8;
+            audio.hit();
+            shockwaves.push({ x: hitOp.curX, y: hitOp.y, r: 8, maxR: 85, color: '#ef4444', life: 0.45, maxLife: 0.45 });
+            makeParticles(hitOp.curX, hitOp.y, 28, '#ef4444');
+            floatingTexts.push({
+              x: hitOp.curX, y: hitOp.y - 24,
+              text: '🚀 MISSILE DIRECT HIT!',
+              color: '#ef4444',
+              vy: -60, life: 0.9, maxLife: 0.9
+            });
+          }
+          raceMissiles.splice(i, 1);
+        }
+      }
+    }
+
+    // Update Active Race Banana / Oil Traps
+    for(let i = raceTraps.length - 1; i >= 0; i--) {
+      const t = raceTraps[i];
+      t.x -= (320 * dt);
+      t.rot = (t.rot || 0) + dt * 4;
+      t.life -= dt;
+
+      // Check if opponents hit trap
+      if(window.multiplayerEngine && window.multiplayerEngine.opponents) {
+        let hitOp = null;
+        window.multiplayerEngine.opponents.forEach(op => {
+          if(op.isAlive && Math.hypot(t.x - (op.curX || 90), t.y - op.y) < 28) {
+            hitOp = op;
+          }
+        });
+        if(hitOp) {
+          hitOp.relX = (hitOp.relX || 90) - 80;
+          hitOp.vy = 260;
+          hitOp.rot = 3.14;
+          hitOp.isStunned = true;
+          hitOp.stunTimer = 1.5;
+          audio.hit();
+          makeParticles(t.x, t.y, 20, '#facc15');
+          floatingTexts.push({
+            x: hitOp.curX, y: hitOp.y - 20,
+            text: '🍌 SLIPPED ON BANANA!',
+            color: '#facc15',
+            vy: -50, life: 0.8, maxLife: 0.8
+          });
+          raceTraps.splice(i, 1);
+          continue;
+        }
+      }
+      if(t.x < -30 || t.life <= 0) raceTraps.splice(i, 1);
+    }
 
     if(activePowerups.rocket > 0 || dashTimer > 0) {
       // Terbang stabil melesat saat roket NOS / Dash aktif
@@ -5530,7 +5709,50 @@
       ctx.lineTo(3, 6);
       ctx.closePath();
       ctx.fill();
+    } else if(p.type === 'zap') {
+      // ⚡ Thunder Zap Lightning Icon
+      ctx.fillStyle = '#fde047';
+      ctx.beginPath();
+      ctx.moveTo(2, -9);
+      ctx.lineTo(-6, 0);
+      ctx.lineTo(0, 0);
+      ctx.lineTo(-2, 9);
+      ctx.lineTo(6, -1);
+      ctx.lineTo(0, -1);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#eab308';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    } else if(p.type === 'missile') {
+      // 🚀 Red Shell Homing Missile Icon
+      ctx.save();
+      ctx.rotate(-Math.PI / 4);
+      ctx.fillStyle = '#dc2626';
+      ctx.beginPath();
+      ctx.arc(0, -2, 6, Math.PI, 0);
+      ctx.lineTo(6, 6);
+      ctx.lineTo(-6, 6);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(0, 1, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#f97316';
+      ctx.fillRect(-4, 6, 8, 3);
       ctx.restore();
+    } else if(p.type === 'trap') {
+      // 🍌 Slippery Banana Peel Icon
+      ctx.fillStyle = '#facc15';
+      ctx.beginPath();
+      ctx.arc(0, 2, 6, 0, Math.PI);
+      ctx.bezierCurveTo(-8, -4, -4, -8, 0, -2);
+      ctx.bezierCurveTo(4, -8, 8, -4, 0, 2);
+      ctx.fill();
+      ctx.strokeStyle = '#a16207';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
     }
 
     ctx.restore();
@@ -6576,6 +6798,64 @@
         _step = 'babyBirds';
         for(const baby of babyBirds) {
           drawBabyBird(baby);
+        }
+
+        // Draw Active Race Missiles
+        for(const m of raceMissiles) {
+          ctx.save();
+          ctx.translate(m.x, m.y);
+          ctx.rotate(Math.PI / 4);
+          ctx.fillStyle = '#dc2626';
+          ctx.beginPath();
+          ctx.arc(0, -2, 7, Math.PI, 0);
+          ctx.lineTo(7, 8); ctx.lineTo(-7, 8); ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(0, 2, 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#f97316';
+          ctx.fillRect(-5, 8, 10, 4);
+          ctx.restore();
+        }
+
+        // Draw Active Race Banana / Oil Traps
+        for(const t of raceTraps) {
+          ctx.save();
+          ctx.translate(t.x, t.y);
+          ctx.rotate(t.rot || 0);
+          ctx.fillStyle = '#facc15';
+          ctx.beginPath();
+          ctx.arc(0, 2, 8, 0, Math.PI);
+          ctx.bezierCurveTo(-10, -6, -5, -11, 0, -3);
+          ctx.bezierCurveTo(5, -11, 10, -6, 0, 2);
+          ctx.fill();
+          ctx.strokeStyle = '#a16207';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Draw 3-Second Race Respawn Overlay
+        if(isRespawningRace) {
+          ctx.save();
+          ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
+          ctx.beginPath();
+          ctx.roundRect(W/2 - 110, 130, 220, 50, 12);
+          ctx.fill();
+          ctx.strokeStyle = '#f87171';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          ctx.font = '900 12px "Trebuchet MS", Arial';
+          ctx.fillStyle = '#fca5a5';
+          ctx.textAlign = 'center';
+          ctx.fillText('💀 TERJATUH! RESPAWNING...', W/2, 148);
+
+          ctx.font = '900 18px "Trebuchet MS", Arial';
+          ctx.fillStyle = '#fde047';
+          ctx.fillText(`⚡ ${Math.max(1, Math.ceil(raceRespawnTimer))} DETIK ⚡`, W/2, 168);
+          ctx.restore();
         }
 
         _step = 'floatingTexts';
