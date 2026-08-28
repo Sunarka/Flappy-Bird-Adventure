@@ -3581,10 +3581,16 @@
     }
 
     // 2. Rival Info (Right Card)
-    const rival = window.multiplayerEngine?.opponents?.values()?.next()?.value || { name: 'Rival', avatar: 'robo_mecha', tier: 'MASTER', score: 0, lives: 3 };
-    if(el.mpRivalHudName) el.mpRivalHudName.textContent = (rival.name || 'Rival').slice(0, 10);
-    if(el.mpRivalHudAvatar) el.mpRivalHudAvatar.innerHTML = getCuteAvatarSvg(rival.avatar || 'robo_mecha', 30);
-    if(el.mpRivalHudTier) el.mpRivalHudTier.textContent = rival.tier || 'MASTER';
+    const mp = window.multiplayerEngine;
+    const rivalProfile = mp?.currentRoom?.playersList?.find(p => p.id !== mp?.localPlayerId);
+    const rival = mp?.opponents?.values()?.next()?.value || rivalProfile || { name: 'Rival', avatar: 'robo_mecha', tier: 'MASTER', score: 0, lives: 3 };
+    const rName = rival.name || rivalProfile?.name || 'Rival';
+    const rAvatar = rival.avatar || rivalProfile?.avatar || 'robo_mecha';
+    const rTier = rival.tier || rivalProfile?.tier || 'MASTER';
+
+    if(el.mpRivalHudName) el.mpRivalHudName.textContent = rName.slice(0, 10);
+    if(el.mpRivalHudAvatar) el.mpRivalHudAvatar.innerHTML = getCuteAvatarSvg(rAvatar, 30);
+    if(el.mpRivalHudTier) el.mpRivalHudTier.textContent = rTier;
     if(el.mpRivalHudScore) el.mpRivalHudScore.textContent = rival.score || 0;
 
     // Rival 3 Hearts
@@ -8763,8 +8769,14 @@
 
   function showOver() {
     if(currentMode === 'multiplayer') {
-      const rival = window.multiplayerEngine?.opponents?.values()?.next()?.value;
-      const isWinner = rival && !rival.isAlive && score >= (rival.score || 0);
+      const mp = window.multiplayerEngine;
+      const rivalProfile = mp?.currentRoom?.playersList?.find(p => p.id !== mp?.localPlayerId);
+      const rival = mp?.opponents?.values()?.next()?.value || rivalProfile || { name: 'Rival', avatar: 'robo_mecha', score: 0, isAlive: true };
+      
+      // Broadcast death to opponent
+      if (mp) mp.broadcastMyDeath(score);
+
+      const isWinner = rival && rival.isAlive === false && score >= (rival.score || 0);
       showMpBattleResult(isWinner, score, rival?.score || 0, rival);
       return;
     }
@@ -9742,9 +9754,17 @@
     });
 
     mp.on('opponent_died', (data) => {
-      if(currentMode === 'multiplayer' && state === State.PLAYING) {
-        const rival = mp.opponents.get(data.playerId) || mp.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha', score: data.finalScore || 0 };
-        showMpBattleResult(true, score, data.finalScore || rival.score || 0, rival);
+      if(currentMode === 'multiplayer') {
+        const rivalProfile = mp?.currentRoom?.playersList?.find(p => p.id !== mp?.localPlayerId);
+        const rival = mp.opponents.get(data.playerId) || mp.opponents.values().next().value || rivalProfile || { name: 'Rival', avatar: 'robo_mecha', score: data.finalScore || 0 };
+        rival.isAlive = false;
+        rival.lives = 0;
+        rival.score = data.finalScore !== undefined ? data.finalScore : (rival.score || 0);
+
+        // Jika pemain lokal masih hidup, pemain lokal menang! (VICTORY)
+        if(state === State.PLAYING || state === State.READY) {
+          showMpBattleResult(true, score, rival.score, rival);
+        }
       }
     });
 
@@ -9868,7 +9888,7 @@
         el.mpGuestReadyBtn.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
       }
       if(el.mpGuestStatusBadge) {
-        el.mpGuestStatusBadge.textContent = 'READY ✅';
+        el.mpGuestStatusBadge.textContent = 'READY';
         el.mpGuestStatusBadge.style.background = '#22c55e';
       }
     } else {

@@ -408,17 +408,24 @@
     }
 
     updateOpponentState(data) {
+      if (!data || data.playerId === this.localPlayerId) return;
+
       let op = this.opponents.get(data.playerId);
       if (!op) {
+        const rivalProfile = this.currentRoom?.playersList?.find(p => p.id !== this.localPlayerId) || {};
         op = {
           id: data.playerId,
-          name: 'Rival',
-          avatar: 'chick_yellow',
-          skin: 'classic',
+          name: rivalProfile.name || 'Rival',
+          avatar: rivalProfile.avatar || 'chick_yellow',
+          skin: rivalProfile.skin || 'classic',
+          hat: rivalProfile.hat || 'none',
+          outfit: rivalProfile.outfit || 'none',
+          tier: rivalProfile.tier || 'GOLD',
           y: data.y,
           vy: data.vy,
           rot: data.rot,
           score: data.score || 0,
+          lives: data.lives !== undefined ? data.lives : 3,
           isAlive: data.isAlive !== false,
           isDashing: !!data.isDashing,
           targetY: data.y,
@@ -430,6 +437,7 @@
         op.vy = data.vy;
         op.rot = data.rot;
         op.score = data.score || 0;
+        if (data.lives !== undefined) op.lives = data.lives;
         op.isAlive = data.isAlive !== false;
         op.isDashing = !!data.isDashing;
         op.lastUpdate = Date.now();
