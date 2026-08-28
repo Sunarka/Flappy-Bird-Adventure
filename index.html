@@ -6,14 +6,14 @@
   <meta name="theme-color" content="#77cef2">
   <title>Flappy Bird - Sky Challenge</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=7.0">
-  <link rel="stylesheet" href="css/modern-icons.css?v=7.0">
-  <link rel="stylesheet" href="css/shop.css?v=7.0">
-  <link rel="stylesheet" href="css/shop-extra.css?v=7.0">
-  <link rel="stylesheet" href="css/mode-picker.css?v=7.0">
-  <link rel="stylesheet" href="css/store.css?v=7.0">
-  <link rel="stylesheet" href="css/ranked.css?v=7.0">
-  <link rel="stylesheet" href="css/multiplayer.css?v=7.0">
+  <link rel="stylesheet" href="css/style.css?v=7.1">
+  <link rel="stylesheet" href="css/modern-icons.css?v=7.1">
+  <link rel="stylesheet" href="css/shop.css?v=7.1">
+  <link rel="stylesheet" href="css/shop-extra.css?v=7.1">
+  <link rel="stylesheet" href="css/mode-picker.css?v=7.1">
+  <link rel="stylesheet" href="css/store.css?v=7.1">
+  <link rel="stylesheet" href="css/ranked.css?v=7.1">
+  <link rel="stylesheet" href="css/multiplayer.css?v=7.1">
 </head>
 <body>
   <main class="game-shell" aria-label="Flappy Bird Sky Challenge">
@@ -38,6 +38,52 @@
         <span class="mp-hud-score" id="mpRivalHudScore">0</span>
       </div>
     </div>
+    <!-- Searching Match Top Bar Notification -->
+    <div id="mpSearchingBar" class="mp-searching-bar hidden">
+      <div class="mp-search-spinner"></div>
+      <div class="mp-search-info">
+        <span class="mp-search-title">MENCARI LAWAN ONLINE...</span>
+        <span class="mp-search-timer" id="mpSearchTimerText">00:01</span>
+      </div>
+      <button class="mp-search-cancel-btn" id="mpCancelSearchBtn" type="button" title="Batal Mencari">BATAL ✕</button>
+    </div>
+
+    <!-- Cinematic 1v1 Versus Clash Screen -->
+    <section id="mpVersusScreen" class="mp-versus-screen hidden" aria-modal="true">
+      <div class="mp-vs-backdrop"></div>
+      <div class="mp-vs-header">
+        <div class="mp-vs-title-badge">1v1 BATTLE CLASH</div>
+      </div>
+      
+      <div class="mp-vs-arena">
+        <!-- Left Fighter: Player -->
+        <div class="mp-fighter-card left" id="mpFighterLeft">
+          <div class="mp-fighter-avatar-wrap">
+            <div class="mp-fighter-avatar" id="mpFighterMyAvatar"></div>
+          </div>
+          <div class="mp-fighter-name" id="mpFighterMyName">YOU</div>
+          <div class="mp-fighter-tag">PLAYER 1</div>
+        </div>
+
+        <!-- Center Clash VS Badge -->
+        <div class="mp-vs-center-badge" id="mpVsCenterBadge">
+          <span class="mp-vs-text">VS</span>
+          <div class="mp-vs-countdown" id="mpVsCountdownText">3</div>
+        </div>
+
+        <!-- Right Fighter: Opponent -->
+        <div class="mp-fighter-card right" id="mpFighterRight">
+          <div class="mp-fighter-avatar-wrap">
+            <div class="mp-fighter-avatar" id="mpFighterRivalAvatar"></div>
+          </div>
+          <div class="mp-fighter-name" id="mpFighterRivalName">RIVAL</div>
+          <div class="mp-fighter-tag rival">PLAYER 2</div>
+        </div>
+      </div>
+
+      <div class="mp-vs-footer-hint">PERSIAPKAN DIRIMU!</div>
+    </section>
+
     <!-- Top-Left Profile / Login Widget Button -->
     <div class="top-profile-wrapper" id="topProfileBtn" role="button" tabindex="0" title="Buka Profil / Login Google">
       <div class="top-profile-avatar" id="topProfileAvatar"></div>
@@ -597,8 +643,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=7.0"></script>
-  <script src="js/multiplayer.js?v=7.0"></script>
-  <script src="js/script.js?v=7.0"></script>
+  <script src="js/firebase-config.js?v=7.1"></script>
+  <script src="js/multiplayer.js?v=7.1"></script>
+  <script src="js/script.js?v=7.1"></script>
 </body>
 </html>

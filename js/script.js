@@ -67,7 +67,12 @@
     mpQuickFindBtn:$('mpQuickFindBtn'), mpCreatedCodeBadge:$('mpCreatedCodeBadge'), mpCopyCodeBtn:$('mpCopyCodeBtn'),
     mpHostAvatar:$('mpHostAvatar'), mpHostName:$('mpHostName'), mpGuestSlotCard:$('mpGuestSlotCard'),
     mpGuestAvatar:$('mpGuestAvatar'), mpGuestName:$('mpGuestName'), mpHostStartGameBtn:$('mpHostStartGameBtn'),
-    mpJoinCodeInput:$('mpJoinCodeInput'), mpJoinRoomBtn:$('mpJoinRoomBtn')
+    mpJoinCodeInput:$('mpJoinCodeInput'), mpJoinRoomBtn:$('mpJoinRoomBtn'),
+    mpSearchingBar:$('mpSearchingBar'), mpSearchTimerText:$('mpSearchTimerText'), mpCancelSearchBtn:$('mpCancelSearchBtn'),
+    mpVersusScreen:$('mpVersusScreen'), mpFighterLeft:$('mpFighterLeft'), mpFighterRight:$('mpFighterRight'),
+    mpFighterMyAvatar:$('mpFighterMyAvatar'), mpFighterMyName:$('mpFighterMyName'),
+    mpFighterRivalAvatar:$('mpFighterRivalAvatar'), mpFighterRivalName:$('mpFighterRivalName'),
+    mpVsCenterBadge:$('mpVsCenterBadge'), mpVsCountdownText:$('mpVsCountdownText')
   };
   const storage = {
     get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } },
@@ -9183,6 +9188,95 @@
   // =========================================================
   // MULTIPLAYER 1v1 CLOUDFLARE ENGINE EVENT WIRING
   // =========================================================
+  let mpSearchInterval = null;
+  let mpSearchStartTime = 0;
+
+  function startSearchingRadar() {
+    closeModal();
+    if(el.mpSearchingBar) {
+      el.mpSearchingBar.classList.remove('hidden');
+    }
+    mpSearchStartTime = Date.now();
+    if(mpSearchInterval) clearInterval(mpSearchInterval);
+    mpSearchInterval = setInterval(() => {
+      const elapsedSec = Math.floor((Date.now() - mpSearchStartTime) / 1000);
+      const mm = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
+      const ss = String(elapsedSec % 60).padStart(2, '0');
+      if(el.mpSearchTimerText) {
+        el.mpSearchTimerText.textContent = `${mm}:${ss}`;
+      }
+    }, 1000);
+    if(el.mpSearchTimerText) el.mpSearchTimerText.textContent = '00:00';
+  }
+
+  function stopSearchingRadar() {
+    if(mpSearchInterval) {
+      clearInterval(mpSearchInterval);
+      mpSearchInterval = null;
+    }
+    if(el.mpSearchingBar) {
+      el.mpSearchingBar.classList.add('hidden');
+    }
+  }
+
+  function playVersusClashIntro(opponent, onReadyToPlay) {
+    stopSearchingRadar();
+    closeModal();
+    setMode('multiplayer');
+
+    if(!el.mpVersusScreen) {
+      if(onReadyToPlay) onReadyToPlay();
+      return;
+    }
+
+    // Populate Left (Player)
+    if(el.mpFighterMyName) el.mpFighterMyName.textContent = gpProfile.gamerTag || 'YOU';
+    if(el.mpFighterMyAvatar) el.mpFighterMyAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 52);
+
+    // Populate Right (Opponent)
+    const opData = opponent || { name: 'RIVAL', avatar: 'robo_mecha' };
+    if(el.mpFighterRivalName) el.mpFighterRivalName.textContent = opData.name || 'Rival';
+    if(el.mpFighterRivalAvatar) el.mpFighterRivalAvatar.innerHTML = getCuteAvatarSvg(opData.avatar, 52);
+
+    // Reset card animation triggers
+    if(el.mpFighterLeft) {
+      el.mpFighterLeft.style.animation = 'none';
+      el.mpFighterLeft.offsetHeight; // Trigger reflow
+      el.mpFighterLeft.style.animation = '';
+    }
+    if(el.mpFighterRight) {
+      el.mpFighterRight.style.animation = 'none';
+      el.mpFighterRight.offsetHeight;
+      el.mpFighterRight.style.animation = '';
+    }
+    if(el.mpVsCenterBadge) {
+      el.mpVsCenterBadge.style.animation = 'none';
+      el.mpVsCenterBadge.offsetHeight;
+      el.mpVsCenterBadge.style.animation = '';
+    }
+
+    el.mpVersusScreen.classList.remove('hidden');
+    audio.win();
+
+    // 3.. 2.. 1.. FIGHT! Countdown
+    let count = 3;
+    if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = count;
+    const cdInterval = setInterval(() => {
+      count--;
+      if(count > 0) {
+        audio.click();
+        if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = count;
+      } else if(count === 0) {
+        audio.flap();
+        if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = 'FIGHT!';
+      } else {
+        clearInterval(cdInterval);
+        el.mpVersusScreen.classList.add('hidden');
+        if(onReadyToPlay) onReadyToPlay();
+      }
+    }, 850);
+  }
+
   if(window.multiplayerEngine) {
     const mp = window.multiplayerEngine;
 
@@ -9199,7 +9293,16 @@
       }
     });
 
+    mp.on('queued', () => {
+      startSearchingRadar();
+    });
+
+    mp.on('match_cancelled', () => {
+      stopSearchingRadar();
+    });
+
     mp.on('room_created', (room) => {
+      stopSearchingRadar();
       if(el.mpCreatedCodeBadge) el.mpCreatedCodeBadge.textContent = room.code;
       if(el.mpHostName) el.mpHostName.textContent = gpProfile.gamerTag || 'Host';
       if(el.mpHostAvatar) el.mpHostAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 36);
@@ -9239,6 +9342,7 @@
 
     mp.on('room_joined', (room) => {
       audio.win();
+      stopSearchingRadar();
       closeModal();
       setMode('multiplayer');
       showGameDialog({
@@ -9250,24 +9354,17 @@
     });
 
     mp.on('match_found', (data) => {
-      audio.win();
-      closeModal();
-      setMode('multiplayer');
-      const rivalName = data.playersList.find(p => p.id !== mp.localPlayerId)?.name || 'Rival';
-      showGameDialog({
-        title: 'Lawan Ditemukan!',
-        html: `<p>Bertanding 1v1 melawan <b>"${rivalName}"</b>!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Mode:</span><b>1v1 Battle</b></div></div>`,
-        type: 'success',
-        confirmText: 'GAS MAIN!'
-      }).then(() => {
+      const rival = data.playersList.find(p => p.id !== mp.localPlayerId) || { name: 'Rival', avatar: 'robo_mecha' };
+      playVersusClashIntro(rival, () => {
         goReady();
       });
     });
 
     mp.on('game_starting', (data) => {
-      closeModal();
-      setMode('multiplayer');
-      goReady();
+      const rival = mp.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha' };
+      playVersusClashIntro(rival, () => {
+        goReady();
+      });
     });
 
     mp.on('opponent_died', (data) => {
@@ -9283,6 +9380,7 @@
     });
 
     mp.on('error', (errMsg) => {
+      stopSearchingRadar();
       showGameDialog({
         title: 'Pemberitahuan Room',
         html: `<p>${errMsg}</p>`,
@@ -9304,6 +9402,14 @@
 
   bindClick(el.modeMultiplayerBtn, () => {
     setMode('multiplayer');
+  });
+
+  bindClick(el.mpCancelSearchBtn, () => {
+    audio.click();
+    stopSearchingRadar();
+    if(window.multiplayerEngine) {
+      window.multiplayerEngine.cancelMatch();
+    }
   });
 
   bindClick(el.mpTabQuickBtn, () => { audio.click(); switchMpTab('quick'); });
