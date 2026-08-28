@@ -55,7 +55,9 @@
     dashBtn:$('dashBtn'), dashRingProgress:$('dashRingProgress'), dashCooldownText:$('dashCooldownText'),
     reviveModal:$('reviveModal'), reviveTimerRing:$('reviveTimerRing'), reviveCountdownText:$('reviveCountdownText'),
     reviveCostLabel:$('reviveCostLabel'), reviveConfirmBtn:$('reviveConfirmBtn'), reviveGiveUpBtn:$('reviveGiveUpBtn'),
-    tierRoadmapModal:$('tierRoadmapModal'), modalMyTierCard:$('modalMyTierCard')
+    tierRoadmapModal:$('tierRoadmapModal'), modalMyTierCard:$('modalMyTierCard'),
+    gameDialogModal:$('gameDialogModal'), dialogIconWrap:$('dialogIconWrap'), dialogTitle:$('dialogTitle'),
+    dialogBody:$('dialogBody'), dialogActions:$('dialogActions'), dialogConfirmBtn:$('dialogConfirmBtn'), dialogCancelBtn:$('dialogCancelBtn')
   };
   const storage = {
     get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } },
@@ -8556,16 +8558,109 @@
   bindClick(el.gpChangeAvatarBtn, openAvatarPicker);
   bindClick(el.gpAvatarWrap, openAvatarPicker);
 
+  // =========================================================
+  // CUSTOM IN-GAME NOTIFICATION & CONFIRMATION DIALOG (PRO)
+  // =========================================================
+  let activeDialogResolver = null;
+  function showGameDialog({
+    title = 'PEMBERITAHUAN',
+    html = '',
+    type = 'info', // 'coin', 'warning', 'success', 'info'
+    confirmText = 'MENGERTI',
+    cancelText = null
+  } = {}) {
+    return new Promise((resolve) => {
+      activeDialogResolver = resolve;
+      if (!el.gameDialogModal) {
+        alert(title + '\n\n' + html.replace(/<[^>]+>/g, ''));
+        resolve(true);
+        return;
+      }
+
+      let iconSvg = '';
+      if (type === 'coin') {
+        iconSvg = `<svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="10" fill="#f59e0b" stroke="#fde047" stroke-width="2"/><circle cx="12" cy="12" r="7" fill="#fbbf24"/><text x="12" y="16" font-size="11" font-weight="900" text-anchor="middle" fill="#78350f" font-family="Arial">G</text></svg>`;
+      } else if (type === 'warning') {
+        iconSvg = `<svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 2L1 21h22L12 2zm0 3.8L20.2 19H3.8L12 5.8zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z" fill="#f59e0b"/></svg>`;
+      } else if (type === 'success') {
+        iconSvg = `<svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="10" fill="#15803d" stroke="#4ade80" stroke-width="2"/><path d="M7 12.5l3.5 3.5 6.5-6.5" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      } else {
+        iconSvg = `<svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="10" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/><path d="M12 8v.01M12 11v5" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`;
+      }
+
+      if (el.dialogIconWrap) {
+        el.dialogIconWrap.className = `dialog-icon-wrap ${type}`;
+        el.dialogIconWrap.innerHTML = iconSvg;
+      }
+      if (el.dialogTitle) {
+        el.dialogTitle.className = `dialog-title ${type}`;
+        el.dialogTitle.textContent = title;
+      }
+      if (el.dialogBody) {
+        el.dialogBody.innerHTML = html;
+      }
+      if (el.dialogConfirmBtn) {
+        el.dialogConfirmBtn.textContent = confirmText;
+      }
+      if (el.dialogCancelBtn) {
+        if (cancelText) {
+          el.dialogCancelBtn.textContent = cancelText;
+          el.dialogCancelBtn.classList.remove('hidden');
+        } else {
+          el.dialogCancelBtn.classList.add('hidden');
+        }
+      }
+
+      if (type === 'success') audio.win();
+      else if (type === 'warning' || type === 'coin') audio.hit();
+      else audio.click();
+
+      showModal(el.gameDialogModal);
+    });
+  }
+
+  bindClick(el.dialogConfirmBtn, () => {
+    audio.click();
+    closeModal();
+    if (activeDialogResolver) {
+      const res = activeDialogResolver;
+      activeDialogResolver = null;
+      res(true);
+    }
+  });
+
+  bindClick(el.dialogCancelBtn, () => {
+    audio.click();
+    closeModal();
+    if (activeDialogResolver) {
+      const res = activeDialogResolver;
+      activeDialogResolver = null;
+      res(false);
+    }
+  });
+
   function handleAuthError(err, providerName) {
     if(!err) return;
     console.warn(`[${providerName} Sign-In notice]:`, err.code, err.message);
     if(err.code === 'auth/unauthorized-domain') {
       const currentDomain = window.location.hostname || '127.0.0.1';
-      alert('Domain Belum Diizinkan di Firebase (auth/unauthorized-domain):\n\nDomain "' + currentDomain + '" belum terdaftar di Authorized Domains Firebase.\n\nCara Menambahkan Domain:\n1. Buka console.firebase.google.com\n2. Pilih Authentication > Settings\n3. Di "Authorized domains", klik "Add domain"\n4. Masukkan: ' + currentDomain + ' & sunarka.github.io\n\nTips: Anda juga bisa klik "MASUK SEBAGAI TAMU" untuk langsung bermain sekarang!');
+      showGameDialog({
+        title: 'Domain Belum Diizinkan',
+        html: `<p>Domain <b>"${currentDomain}"</b> belum terdaftar di Authorized Domains Firebase.</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Solusi:</span><b>Tambah Domain di Console</b></div></div><p style="font-size:11px;color:#94a3b8;">Tips: Anda juga bisa klik <b>MASUK SEBAGAI TAMU</b> untuk langsung bermain sekarang!</p>`,
+        type: 'warning'
+      });
     } else if(err.code === 'auth/configuration-not-found' || err.code === 'auth/operation-not-allowed') {
-      alert(`Pemberitahuan Firebase Auth:\n\nLogin ${providerName} belum diaktifkan di Firebase Console.\n\nCara mengaktifkan:\n1. Buka console.firebase.google.com\n2. Buka menu Authentication > Sign-in method\n3. Klik "${providerName}", lalu pilih Enable dan Simpan.\n\nTips: Anda juga bisa klik "MASUK SEBAGAI TAMU" untuk langsung bermain sekarang!`);
+      showGameDialog({
+        title: 'Metode Login Belum Aktif',
+        html: `<p>Login ${providerName} belum diaktifkan di Firebase Console.</p><p style="font-size:11px;color:#94a3b8;margin-top:6px;">Tips: Anda juga bisa klik <b>MASUK SEBAGAI TAMU</b> untuk langsung bermain sekarang!</p>`,
+        type: 'warning'
+      });
     } else if(err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
-      alert(`Info ${providerName} Login: ` + (err.message || `Gagal terhubung ke akun ${providerName}. Pastikan internet aktif.`));
+      showGameDialog({
+        title: 'Gagal Terhubung',
+        html: `<p>${err.message || `Gagal terhubung ke akun ${providerName}. Pastikan koneksi internet aktif.`}</p>`,
+        type: 'warning'
+      });
     }
   }
 
@@ -8708,7 +8803,7 @@
     syncGPProfileUI();
   });
 
-  bindClick(el.gpAuthActionBtn, () => {
+  bindClick(el.gpAuthActionBtn, async () => {
     audio.click();
     if(!gpProfile.isLoggedIn) {
       performGoogleSignIn();
@@ -8716,7 +8811,12 @@
     }
     const newName = el.gpGamerTagInput ? el.gpGamerTagInput.value.trim() : '';
     if(!newName) {
-      alert('Nama gamer tidak boleh kosong!');
+      showGameDialog({
+        title: 'Nama Kosong',
+        html: '<p>Nama gamer tidak boleh kosong! Silakan ketik nama baru Anda.</p>',
+        type: 'warning',
+        confirmText: 'MENGERTI'
+      });
       return;
     }
 
@@ -8728,21 +8828,37 @@
         gpProfile.gamerTag = newName;
         gpProfile.nameChangesDone = 1;
         saveGPProfile();
-        audio.win();
-        alert('Nama gamer Anda berhasil diubah menjadi "' + newName + '" (GRATIS)!');
-        closeModal();
+        showGameDialog({
+          title: 'Nama Berhasil Diubah',
+          html: `<p>Nama gamer Anda berhasil diubah menjadi:</p><div class="dialog-info-card"><div class="dialog-info-row"><span>GamerTag:</span><b>${newName}</b></div><div class="dialog-info-row"><span>Biaya:</span><b style="color:#4ade80;">GRATIS (1x)</b></div></div>`,
+          type: 'success',
+          confirmText: 'KEREN!'
+        });
       } else {
         // Ganti nama bayar 50 Koin
         const cost = 50;
         if(progress.coins < cost) {
-          audio.hit();
-          alert('Koin tidak cukup untuk ganti nama!\n\nBiaya: ' + cost + ' Koin\nSaldo Anda: ' + progress.coins + ' Koin.\n\nKumpulkan koin dengan bermain game!');
           if(el.gpGamerTagInput) el.gpGamerTagInput.value = oldName;
+          showGameDialog({
+            title: 'Koin Tidak Cukup',
+            html: `<p>Koin Anda tidak cukup untuk mengganti nama gamer!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya Ganti Nama:</span><b>🪙 ${cost} Koin</b></div><div class="dialog-info-row"><span>Saldo Anda:</span><b style="color:#f87171;">🪙 ${progress.coins} Koin</b></div></div><p style="font-size:11px;color:#94a3b8;margin-top:6px;">Kumpulkan koin dengan bermain game di Mode Classic / Ranked!</p>`,
+            type: 'coin',
+            confirmText: 'MENGERTI'
+          });
           return;
         }
 
-        const ok = confirm('Ganti nama menjadi "' + newName + '" seharga ' + cost + ' Koin?\n\nSaldo Anda: ' + progress.coins + ' Koin');
-        if(!ok) return;
+        const ok = await showGameDialog({
+          title: 'Konfirmasi Ganti Nama',
+          html: `<p>Apakah Anda yakin ingin mengganti nama gamer menjadi <b>"${newName}"</b>?</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya:</span><b>🪙 ${cost} Koin</b></div><div class="dialog-info-row"><span>Sisa Saldo:</span><b>🪙 ${progress.coins - cost} Koin</b></div></div>`,
+          type: 'coin',
+          confirmText: `GANTI NAMA (-${cost} KOIN)`,
+          cancelText: 'BATAL'
+        });
+        if(!ok) {
+          showModal(el.googlePlayModal);
+          return;
+        }
 
         progress.coins -= cost;
         gpProfile.gamerTag = newName;
@@ -8750,9 +8866,12 @@
         updateCoins();
         persistProgress();
         saveGPProfile();
-        audio.win();
-        alert('Nama gamer berhasil diubah menjadi "' + newName + '"! (-' + cost + ' Koin)');
-        closeModal();
+        showGameDialog({
+          title: 'Nama Berhasil Diubah',
+          html: `<p>Nama gamer berhasil diubah menjadi <b>"${newName}"</b>!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya:</span><b>🪙 -${cost} Koin</b></div><div class="dialog-info-row"><span>Sisa Koin:</span><b>🪙 ${progress.coins} Koin</b></div></div>`,
+          type: 'success',
+          confirmText: 'SELESAI'
+        });
       }
     } else {
       saveGPProfile();
