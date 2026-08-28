@@ -166,7 +166,6 @@
   margin-bottom: 14px;
   text-align: left;
 }
-
 .gp-icon-badge {
   width: 44px;
   height: 44px;
@@ -176,19 +175,16 @@
   align-items: center;
   justify-content: center;
   font-size: 22px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
 .gp-titles h2 {
   font: 900 15px 'Trebuchet MS', Arial, sans-serif !important;
   color: #38bdf8 !important;
-  margin: 0 0 2px !important;
   letter-spacing: 0.5px;
 }
 
 .gp-status {
   font: 800 10.5px 'Trebuchet MS', Arial, sans-serif;
-  color: #93c5fd;
   margin: 0;
 }
 
@@ -196,8 +192,6 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   padding: 12px;
   margin-bottom: 14px;
@@ -1124,12 +1118,24 @@
 .menu-rank-icon {
   width: 32px;
   height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  max-width: 32px;
+  max-height: 32px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.4));
   animation: rankPulse 2.4s infinite ease-in-out;
+}
+
+.menu-rank-icon svg {
+  width: 32px !important;
+  height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  display: block !important;
 }
 
 .menu-rank-text {
