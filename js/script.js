@@ -2723,9 +2723,12 @@
   }
 
   const cuteAvatarKeys = [
-    'chick_yellow', 'cat_calico', 'dog_shiba', 'bunny_white', 'panda', 'fox',
-    'penguin', 'frog', 'bear_brown', 'koala', 'duck', 'piggy', 'owl_night',
-    'monkey', 'lion', 'dragon'
+    'chick_yellow', 'pink_sakura', 'penguin_tux', 'panda_bamboo',
+    'cat_neko', 'bunny_fluff', 'fox_kitsune', 'dragon_pyro',
+    'owl_scholar', 'froggy_kero', 'astro_space', 'robo_mecha',
+    'ghost_spook', 'king_royal', 'ninja_shadow', 'phoenix_blaze',
+    'luffy_mugiwara', 'naruto_sage', 'tanjiro_slayer', 'nezuko_chan',
+    'gojo_satoru', 'goku_saiyan', 'levi_scout', 'anya_forger'
   ];
 
   function sanitizeLeaderboard(list) {
@@ -2743,50 +2746,46 @@
         name: name,
         score: score,
         tier: getRankTier(score).name,
-        avatar: av || 'chick_yellow',
+        avatar: av || 'gojo_satoru',
         isUser: !!p.isUser,
         loadout: p.loadout || {}
       };
     });
   }
 
-  // Default Leaderboard Data (Top 25 Players)
+  // Default Leaderboard Data (Top 25 Dummy Players with Varied Anime & Cute Avatars)
   const defaultLeaderboard = [
-    { rank: 1, name: 'SkyKing_Legend', score: 284, tier: 'GRANDMASTER', avatar: 'dragon', loadout: { bird: 'phoenix', aura: 'galaxy', hat: 'crown', outfit: 'cape', pipe: 'gold', background: 'sunset' } },
-    { rank: 2, name: 'CyberValkyrie', score: 241, tier: 'MASTER I', avatar: 'cat_calico', loadout: { bird: 'cyber', aura: 'fire', hat: 'tiara', outfit: 'goldchain', pipe: 'neon', background: 'space' } },
-    { rank: 3, name: 'GoldenFalcon_99', score: 198, tier: 'DIAMOND I', avatar: 'lion', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset' } },
-    { rank: 4, name: 'ShadowDrifter', score: 165, tier: 'DIAMOND III', avatar: 'fox', loadout: { bird: 'night', aura: 'neon', hat: 'cowboy', outfit: 'badge', pipe: 'green', background: 'forest' } },
-    { rank: 5, name: 'SakuraWing', score: 142, tier: 'PLATINUM I', avatar: 'bunny_white', loadout: { bird: 'rose', aura: 'hearts', hat: 'flowercrown', outfit: 'princessdress', pipe: 'candy', background: 'sky' } },
-    { rank: 6, name: 'PixelAce', score: 128, tier: 'PLATINUM II', avatar: 'panda', loadout: { bird: 'mint', aura: 'rainbow', hat: 'cap', outfit: 'redtie', pipe: 'green', background: 'sky' } },
-    { rank: 7, name: 'FrostGuardian', score: 110, tier: 'GOLD I', avatar: 'penguin', loadout: { bird: 'classic', aura: 'bubble', hat: 'beanie', outfit: 'fairy', pipe: 'neon', background: 'space' } },
-    { rank: 8, name: 'LunaKnight', score: 98, tier: 'GOLD II', avatar: 'owl_night', loadout: { bird: 'night', aura: 'galaxy', hat: 'witch', outfit: 'cape', pipe: 'cyber', background: 'space' } },
-    { rank: 9, name: 'BlazeRaptor', score: 89, tier: 'GOLD III', avatar: 'dog_shiba', loadout: { bird: 'phoenix', aura: 'fire', hat: 'bandana', outfit: 'leather_jacket', pipe: 'lava', background: 'sunset' } },
-    { rank: 10, name: 'StarGazer_X', score: 78, tier: 'SILVER I', avatar: 'koala', loadout: { bird: 'cyber', aura: 'neon', hat: 'astronaut_helmet', outfit: 'space_suit', pipe: 'neon', background: 'space' } },
-    { rank: 11, name: 'MysticOwl', score: 71, tier: 'SILVER I', avatar: 'chick_yellow', loadout: { bird: 'mint', aura: 'bubble', hat: 'wizard_hat', outfit: 'scarf', pipe: 'ice', background: 'forest' } },
-    { rank: 12, name: 'NeonNinja', score: 64, tier: 'SILVER II', avatar: 'frog', loadout: { bird: 'night', aura: 'neon', hat: 'shinobi_plate', outfit: 'akatsuki_cloak', pipe: 'bamboo', background: 'konoha' } },
-    { rank: 13, name: 'ThunderBird_7', score: 58, tier: 'SILVER II', avatar: 'monkey', loadout: { bird: 'classic', aura: 'super_saiyan', hat: 'saiyan_hair', outfit: 'goku_gi', pipe: 'torii', background: 'namek' } },
-    { rank: 14, name: 'EchoPhantom', score: 52, tier: 'SILVER III', avatar: 'bear_brown', loadout: { bird: 'ghost', aura: 'domain_expansion', hat: 'gojo_blindfold', outfit: 'jujutsu_coat', pipe: 'green', background: 'sunset' } },
-    { rank: 15, name: 'AquaFin', score: 46, tier: 'SILVER III', avatar: 'duck', loadout: { bird: 'mint', aura: 'bubble', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'candy', background: 'sky' } },
-    { rank: 16, name: 'CrimsonBeak', score: 40, tier: 'BRONZE I', avatar: 'piggy', loadout: { bird: 'classic', aura: 'fire', hat: 'tanjiro_earrings', outfit: 'tanjiro_haori', pipe: 'torii', background: 'wano' } },
-    { rank: 17, name: 'CloudChaser', score: 35, tier: 'BRONZE I', avatar: 'bunny_white', loadout: { bird: 'rose', aura: 'hearts', hat: 'chopper_hat', outfit: 'hoodie', pipe: 'candy', background: 'sky' } },
-    { rank: 18, name: 'SolarFlare_88', score: 30, tier: 'BRONZE I', avatar: 'lion', loadout: { bird: 'phoenix', aura: 'golden', hat: 'hokage_hat', outfit: 'scout_cape', pipe: 'gold', background: 'sunset' } },
-    { rank: 19, name: 'VortexWing', score: 25, tier: 'BRONZE II', avatar: 'fox', loadout: { bird: 'cyber', aura: 'rainbow', hat: 'cap', outfit: 'badge', pipe: 'neon', background: 'space' } },
-    { rank: 20, name: 'VelvetCrow', score: 20, tier: 'BRONZE II', avatar: 'cat_calico', loadout: { bird: 'night', aura: 'none', hat: 'catears', outfit: 'kimono', pipe: 'green', background: 'forest' } },
-    { rank: 21, name: 'SwiftSparrow', score: 16, tier: 'BRONZE II', avatar: 'chick_yellow', loadout: { bird: 'classic', aura: 'none', hat: 'cowboy', outfit: 'none', pipe: 'green', background: 'sky' } },
-    { rank: 22, name: 'StormRider', score: 12, tier: 'BRONZE III', avatar: 'dog_shiba', loadout: { bird: 'mint', aura: 'none', hat: 'beanie', outfit: 'none', pipe: 'green', background: 'sky' } },
-    { rank: 23, name: 'NovaPebble', score: 9, tier: 'BRONZE III', avatar: 'penguin', loadout: { bird: 'classic', aura: 'none', hat: 'none', outfit: 'scarf', pipe: 'green', background: 'sky' } },
-    { rank: 24, name: 'DawnFlapper', score: 6, tier: 'BRONZE III', avatar: 'panda', loadout: { bird: 'rose', aura: 'none', hat: 'none', outfit: 'none', pipe: 'green', background: 'sky' } },
-    { rank: 25, name: 'RookieFeather', score: 3, tier: 'BRONZE III', avatar: 'frog', loadout: { bird: 'classic', aura: 'none', hat: 'none', outfit: 'none', pipe: 'green', background: 'sky' } }
+    { rank: 1, name: 'SkyKing_Legend', score: 284, tier: 'GRANDMASTER', avatar: 'gojo_satoru', loadout: { bird: 'phoenix', aura: 'galaxy', hat: 'crown', outfit: 'cape', pipe: 'gold', background: 'sunset' } },
+    { rank: 2, name: 'CyberValkyrie', score: 241, tier: 'MASTER I', avatar: 'robo_mecha', loadout: { bird: 'cyber', aura: 'fire', hat: 'tiara', outfit: 'goldchain', pipe: 'neon', background: 'space' } },
+    { rank: 3, name: 'GoldenFalcon_99', score: 198, tier: 'DIAMOND I', avatar: 'goku_saiyan', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset' } },
+    { rank: 4, name: 'ShadowDrifter', score: 165, tier: 'DIAMOND III', avatar: 'ninja_shadow', loadout: { bird: 'night', aura: 'neon', hat: 'cowboy', outfit: 'badge', pipe: 'green', background: 'forest' } },
+    { rank: 5, name: 'SakuraWing', score: 142, tier: 'PLATINUM I', avatar: 'pink_sakura', loadout: { bird: 'rose', aura: 'hearts', hat: 'flowercrown', outfit: 'princessdress', pipe: 'candy', background: 'sky' } },
+    { rank: 6, name: 'PixelAce', score: 128, tier: 'PLATINUM II', avatar: 'luffy_mugiwara', loadout: { bird: 'mint', aura: 'rainbow', hat: 'cap', outfit: 'redtie', pipe: 'green', background: 'sky' } },
+    { rank: 7, name: 'FrostGuardian', score: 110, tier: 'GOLD I', avatar: 'penguin_tux', loadout: { bird: 'classic', aura: 'bubble', hat: 'beanie', outfit: 'fairy', pipe: 'neon', background: 'space' } },
+    { rank: 8, name: 'LunaKnight', score: 98, tier: 'GOLD II', avatar: 'owl_scholar', loadout: { bird: 'night', aura: 'galaxy', hat: 'witch', outfit: 'cape', pipe: 'cyber', background: 'space' } },
+    { rank: 9, name: 'BlazeRaptor', score: 89, tier: 'GOLD III', avatar: 'dragon_pyro', loadout: { bird: 'phoenix', aura: 'fire', hat: 'bandana', outfit: 'leather_jacket', pipe: 'lava', background: 'sunset' } },
+    { rank: 10, name: 'StarGazer_X', score: 78, tier: 'SILVER I', avatar: 'astro_space', loadout: { bird: 'cyber', aura: 'neon', hat: 'astronaut_helmet', outfit: 'space_suit', pipe: 'neon', background: 'space' } },
+    { rank: 11, name: 'MysticOwl', score: 71, tier: 'SILVER I', avatar: 'naruto_sage', loadout: { bird: 'mint', aura: 'bubble', hat: 'wizard_hat', outfit: 'scarf', pipe: 'ice', background: 'forest' } },
+    { rank: 12, name: 'NeonNinja', score: 64, tier: 'SILVER II', avatar: 'fox_kitsune', loadout: { bird: 'night', aura: 'neon', hat: 'shinobi_plate', outfit: 'akatsuki_cloak', pipe: 'bamboo', background: 'konoha' } },
+    { rank: 13, name: 'ThunderBird_7', score: 58, tier: 'SILVER II', avatar: 'king_royal', loadout: { bird: 'classic', aura: 'super_saiyan', hat: 'saiyan_hair', outfit: 'goku_gi', pipe: 'torii', background: 'namek' } },
+    { rank: 14, name: 'EchoPhantom', score: 52, tier: 'SILVER III', avatar: 'ghost_spook', loadout: { bird: 'ghost', aura: 'domain_expansion', hat: 'gojo_blindfold', outfit: 'jujutsu_coat', pipe: 'green', background: 'sunset' } },
+    { rank: 15, name: 'AquaFin', score: 46, tier: 'SILVER III', avatar: 'froggy_kero', loadout: { bird: 'mint', aura: 'bubble', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'candy', background: 'sky' } },
+    { rank: 16, name: 'CrimsonBeak', score: 40, tier: 'BRONZE I', avatar: 'tanjiro_slayer', loadout: { bird: 'classic', aura: 'fire', hat: 'tanjiro_earrings', outfit: 'tanjiro_haori', pipe: 'torii', background: 'wano' } },
+    { rank: 17, name: 'CloudChaser', score: 35, tier: 'BRONZE I', avatar: 'nezuko_chan', loadout: { bird: 'rose', aura: 'hearts', hat: 'chopper_hat', outfit: 'hoodie', pipe: 'candy', background: 'sky' } },
+    { rank: 18, name: 'SolarFlare_88', score: 30, tier: 'BRONZE I', avatar: 'phoenix_blaze', loadout: { bird: 'phoenix', aura: 'golden', hat: 'hokage_hat', outfit: 'scout_cape', pipe: 'gold', background: 'sunset' } },
+    { rank: 19, name: 'VortexWing', score: 25, tier: 'BRONZE II', avatar: 'levi_scout', loadout: { bird: 'cyber', aura: 'rainbow', hat: 'cap', outfit: 'badge', pipe: 'neon', background: 'space' } },
+    { rank: 20, name: 'VelvetCrow', score: 20, tier: 'BRONZE II', avatar: 'anya_forger', loadout: { bird: 'night', aura: 'none', hat: 'catears', outfit: 'kimono', pipe: 'green', background: 'forest' } },
+    { rank: 21, name: 'SwiftSparrow', score: 16, tier: 'BRONZE II', avatar: 'cat_neko', loadout: { bird: 'classic', aura: 'none', hat: 'cowboy', outfit: 'none', pipe: 'green', background: 'sky' } },
+    { rank: 22, name: 'StormRider', score: 12, tier: 'BRONZE III', avatar: 'bunny_fluff', loadout: { bird: 'mint', aura: 'none', hat: 'beanie', outfit: 'none', pipe: 'green', background: 'sky' } },
+    { rank: 23, name: 'NovaPebble', score: 9, tier: 'BRONZE III', avatar: 'panda_bamboo', loadout: { bird: 'classic', aura: 'none', hat: 'none', outfit: 'scarf', pipe: 'green', background: 'sky' } },
+    { rank: 24, name: 'DawnFlapper', score: 6, tier: 'BRONZE III', avatar: 'chick_yellow', loadout: { bird: 'rose', aura: 'none', hat: 'none', outfit: 'none', pipe: 'green', background: 'sky' } },
+    { rank: 25, name: 'RookieFeather', score: 3, tier: 'BRONZE III', avatar: 'froggy_kero', loadout: { bird: 'classic', aura: 'none', hat: 'none', outfit: 'none', pipe: 'green', background: 'sky' } }
   ];
 
-  let leaderboardData = sanitizeLeaderboard(storage.get('skyFlappyLeaderboard', defaultLeaderboard));
+  let leaderboardData = sanitizeLeaderboard(storage.get('skyFlappyLeaderboard_v6', defaultLeaderboard));
   if(!leaderboardData || leaderboardData.length < 25) {
-    const existingNames = new Set((leaderboardData || []).map(p => p.name));
-    defaultLeaderboard.forEach(dp => {
-      if(!existingNames.has(dp.name)) leaderboardData.push(dp);
-    });
-    leaderboardData = sanitizeLeaderboard(leaderboardData);
-    storage.set('skyFlappyLeaderboard', leaderboardData);
+    leaderboardData = sanitizeLeaderboard([...defaultLeaderboard]);
+    storage.set('skyFlappyLeaderboard_v6', leaderboardData);
   }
 
   let selectedSpotlightPlayer = leaderboardData[0];
