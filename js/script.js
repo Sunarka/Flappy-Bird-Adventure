@@ -382,7 +382,7 @@
       pipes = [], coins = [], flyers = [], particles = [],
       powerups = [], enemies = [], stormClouds = [],
       shockwaves = [], floatingTexts = [],
-      raceMissiles = [], raceTraps = [],
+      raceMissiles = [], raceTraps = [], raceBombs = [], raceTornadoes = [],
       isRespawningRace = false, raceRespawnTimer = 0,
       spawn = 0, flyerSpawn = 0, trailSpawn = 0,
       powerupSpawnTimer = 0, enemySpawnTimer = 0, cloudSpawnTimer = 0,
@@ -4165,18 +4165,33 @@
     const pipe = { x: W + 28, gapY: y, gapSize: gap, w: 60, passed: false };
     pipes.push(pipe);
 
-    // Cek apakah Skill Power-up muncul di celah tiang ini
-    const powerupInterval = isRanked ? Math.max(8.0, 14.0 - Math.min(score, 100) * 0.05) : Math.max(6.5, 12.0 - Math.min(score, 100) * 0.05);
-    const shouldSpawnPowerup = powerupSpawnTimer > powerupInterval && getRandomFloat() < 0.85;
+    // Cek apakah Skill Power-up muncul di celah tiang ini (Di mode Multiplayer hampir tiap pipa selalu ada item!)
+    let powerupInterval = 6.5;
+    if(currentMode === 'multiplayer') {
+      powerupInterval = 0.7;
+    } else if(isRanked) {
+      powerupInterval = Math.max(8.0, 14.0 - Math.min(score, 100) * 0.05);
+    } else {
+      powerupInterval = Math.max(6.5, 12.0 - Math.min(score, 100) * 0.05);
+    }
+    const shouldSpawnPowerup = currentMode === 'multiplayer' ? (powerupSpawnTimer > powerupInterval && getRandomFloat() < 0.95) : (powerupSpawnTimer > powerupInterval && getRandomFloat() < 0.85);
 
     if(shouldSpawnPowerup) {
       powerupSpawnTimer = 0;
       const rand = getRandomFloat();
       let type = 'shield';
       if(currentMode === 'multiplayer') {
-        // Multiplayer (Race & Survival): Offensive items & Race boosters
-        // Shield 18%, Rocket 18%, Zap 20%, Missile 20%, Trap 14%, Heart 10%
-        type = rand < 0.18 ? 'shield' : rand < 0.36 ? 'rocket' : rand < 0.56 ? 'zap' : rand < 0.76 ? 'missile' : rand < 0.90 ? 'trap' : 'heart';
+        // Multiplayer (Race & Survival): 9 Variasi Senjata & Booster Keren!
+        // Zap 14%, Missile 14%, Bomb 14%, Tornado 12%, Freeze 10%, Rocket 12%, Star 8%, Shield 10%, Trap 8%
+        if(rand < 0.14) type = 'zap';
+        else if(rand < 0.28) type = 'missile';
+        else if(rand < 0.42) type = 'bomb';
+        else if(rand < 0.54) type = 'tornado';
+        else if(rand < 0.64) type = 'freeze';
+        else if(rand < 0.76) type = 'rocket';
+        else if(rand < 0.84) type = 'star';
+        else if(rand < 0.92) type = 'shield';
+        else type = 'trap';
       } else {
         // Singleplayer: Shield 22%, Magnet 20%, Slow Time 16%, Star 14%, Rocket NOS 14%, Extra Life Heart 14%
         type = rand < 0.22 ? 'shield' : rand < 0.42 ? 'magnet' : rand < 0.58 ? 'slow' : rand < 0.72 ? 'star' : rand < 0.86 ? 'rocket' : 'heart';
@@ -4318,6 +4333,49 @@
         life: 8.0,
         rot: 0
       });
+    } else if(type === 'bomb') {
+      // 💣 MEGA BOMB: Luncurkan bom bola api raksasa ke depan!
+      audio.rocketSmash();
+      shake = 0.35;
+      raceBombs.push({
+        x: bird.x + 20,
+        y: bird.y,
+        vx: 460,
+        r: 16,
+        rot: 0,
+        life: 3.0
+      });
+      makeParticles(bird.x + 10, bird.y, 22, '#ef4444');
+    } else if(type === 'tornado') {
+      // 🌪️ TORNADO GUST: Luncurkan angin topan badai ke depan!
+      audio.dash();
+      shake = 0.3;
+      raceTornadoes.push({
+        x: bird.x + 20,
+        y: bird.y,
+        vx: 420,
+        r: 22,
+        rot: 0,
+        life: 3.2
+      });
+      makeParticles(bird.x + 10, bird.y, 24, '#38bdf8');
+    } else if(type === 'freeze') {
+      // ❄️ BLIZZARD FREEZE: Bekukan semua lawan di arena menjadi es!
+      shake = 0.35;
+      audio.hit();
+      shockwaves.push({ x: bird.x, y: bird.y, r: 10, maxR: 130, color: '#67e8f9', life: 0.6, maxLife: 0.6 });
+      makeParticles(bird.x, bird.y, 35, '#a5f3fc');
+      makeParticles(bird.x, bird.y, 20, '#0891b2');
+      if(window.multiplayerEngine) {
+        window.multiplayerEngine.opponents.forEach(op => {
+          if(op.isAlive) {
+            op.relX = (op.relX || 90) - 95;
+            op.curX = op.relX;
+            op.isStunned = true;
+            op.stunTimer = 2.4;
+          }
+        });
+      }
     }
 
     updatePowerupHUD();
@@ -4335,7 +4393,10 @@
       extra_life: { text: 'STARTER EXTRA LIFE', color: '#ef4444' },
       zap:    { text: '⚡ THUNDER ZAP! ENEMIES STUNNED! ⚡', color: '#fde047' },
       missile:{ text: '🚀 HOMING MISSILE LAUNCHED! 💥', color: '#f97316' },
-      trap:   { text: '🍌 BANANA TRAP DROPPED! 🍌', color: '#facc15' }
+      trap:   { text: '🍌 BANANA TRAP DROPPED! 🍌', color: '#facc15' },
+      bomb:   { text: '💣 MEGA BOMB LAUNCHED! 💥', color: '#ef4444' },
+      tornado:{ text: '🌪️ TORNADO CYCLONE GUST! 🌪️', color: '#38bdf8' },
+      freeze: { text: '❄️ BLIZZARD ICE FREEZE! ❄️', color: '#67e8f9' }
     }[type] || { text: '+POWER-UP!', color: '#fff' };
 
     // 1. Expanding Shockwaves
@@ -5174,6 +5235,118 @@
       if(t.x < -30 || t.life <= 0) raceTraps.splice(i, 1);
     }
 
+    // Update Active Mega Fire Bombs
+    for(let i = raceBombs.length - 1; i >= 0; i--) {
+      const b = raceBombs[i];
+      b.x += (b.vx || 460) * dt;
+      b.rot = (b.rot || 0) + dt * 6;
+      b.life -= dt;
+
+      // Flame particles trail
+      if(Math.random() < 0.65) {
+        particles.push({
+          x: b.x - 14, y: b.y + (Math.random() - 0.5) * 8,
+          vx: -160, vy: (Math.random() - 0.5) * 30,
+          life: 0.25, maxLife: 0.25,
+          color: Math.random() < 0.5 ? '#ef4444' : '#fde047',
+          size: 3.5
+        });
+      }
+
+      // Check collision with pipes (smashes pipes!)
+      for(const p of pipes) {
+        if(!p.smashed && b.x + b.r > p.x && b.x - b.r < p.x + p.w) {
+          p.smashed = true;
+          makeParticles(p.x + p.w/2, b.y, 25, '#ef4444');
+          audio.rocketSmash();
+        }
+      }
+
+      // Check collision with opponents
+      if(window.multiplayerEngine && window.multiplayerEngine.opponents) {
+        let hitOp = null;
+        window.multiplayerEngine.opponents.forEach(op => {
+          if(op.isAlive && Math.hypot(b.x - (op.curX || 90), b.y - op.y) < 38) {
+            hitOp = op;
+          }
+        });
+        if(hitOp || b.x > W + 70 || b.life <= 0) {
+          if(hitOp) {
+            hitOp.relX = (hitOp.relX || 90) - 150;
+            hitOp.curX = hitOp.relX;
+            if(hitOp.hasShield) {
+              hitOp.hasShield = false;
+            } else {
+              hitOp.lives = Math.max(1, (hitOp.lives || 3) - 1);
+            }
+            hitOp.isStunned = true;
+            hitOp.stunTimer = 2.0;
+            audio.rocketSmash();
+            shockwaves.push({ x: hitOp.curX, y: hitOp.y, r: 12, maxR: 110, color: '#ef4444', life: 0.5, maxLife: 0.5 });
+            makeParticles(hitOp.curX, hitOp.y, 35, '#ef4444');
+            makeParticles(hitOp.curX, hitOp.y, 20, '#fde047');
+            floatingTexts.push({
+              x: hitOp.curX, y: hitOp.y - 26,
+              text: '💣 MEGA BOMB EXPLOSION! 💥',
+              color: '#ef4444',
+              vy: -60, life: 1.0, maxLife: 1.0
+            });
+          }
+          raceBombs.splice(i, 1);
+        }
+      }
+    }
+
+    // Update Active Tornado Cyclones
+    for(let i = raceTornadoes.length - 1; i >= 0; i--) {
+      const tn = raceTornadoes[i];
+      tn.x += (tn.vx || 420) * dt;
+      tn.rot = (tn.rot || 0) + dt * 10;
+      tn.life -= dt;
+
+      // Swirling wind particles
+      if(Math.random() < 0.7) {
+        particles.push({
+          x: tn.x + (Math.random() - 0.5) * 16,
+          y: tn.y + (Math.random() - 0.5) * 24,
+          vx: -140 + (Math.random() - 0.5) * 40,
+          vy: (Math.random() - 0.5) * 60,
+          life: 0.28, maxLife: 0.28,
+          color: Math.random() < 0.6 ? '#38bdf8' : '#e0f2fe',
+          size: 2.8
+        });
+      }
+
+      // Check collision with opponents
+      if(window.multiplayerEngine && window.multiplayerEngine.opponents) {
+        let hitOp = null;
+        window.multiplayerEngine.opponents.forEach(op => {
+          if(op.isAlive && Math.hypot(tn.x - (op.curX || 90), tn.y - op.y) < 42) {
+            hitOp = op;
+          }
+        });
+        if(hitOp || tn.x > W + 80 || tn.life <= 0) {
+          if(hitOp) {
+            hitOp.relX = (hitOp.relX || 90) - 120;
+            hitOp.curX = hitOp.relX;
+            hitOp.rot = 6.28;
+            hitOp.isStunned = true;
+            hitOp.stunTimer = 1.8;
+            audio.dash();
+            shockwaves.push({ x: hitOp.curX, y: hitOp.y, r: 10, maxR: 95, color: '#38bdf8', life: 0.45, maxLife: 0.45 });
+            makeParticles(hitOp.curX, hitOp.y, 25, '#38bdf8');
+            floatingTexts.push({
+              x: hitOp.curX, y: hitOp.y - 24,
+              text: '🌪️ SWEPT BY TORNADO! 🌪️',
+              color: '#38bdf8',
+              vy: -55, life: 0.9, maxLife: 0.9
+            });
+          }
+          raceTornadoes.splice(i, 1);
+        }
+      }
+    }
+
     if(activePowerups.rocket > 0 || dashTimer > 0) {
       // Terbang stabil melesat saat roket NOS / Dash aktif
       bird.vy = Math.min(160, Math.max(-160, bird.vy + 220 * dt));
@@ -5753,6 +5926,54 @@
       ctx.strokeStyle = '#a16207';
       ctx.lineWidth = 1.2;
       ctx.stroke();
+    } else if(p.type === 'bomb') {
+      // 💣 Mega Bomb Cannonball Icon
+      ctx.fillStyle = '#1e293b';
+      ctx.beginPath();
+      ctx.arc(0, 2, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#64748b';
+      ctx.fillRect(-2, -7, 4, 3);
+      // Sparking fuse
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(2, -8, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fde047';
+      ctx.beginPath();
+      ctx.arc(2.5, -8.5, 0.9, 0, Math.PI * 2);
+      ctx.fill();
+    } else if(p.type === 'tornado') {
+      // 🌪️ Tornado Wind Vortex Icon
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.ellipse(0, -6, 7, 2, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.ellipse(0, -1, 5, 1.6, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.ellipse(0, 4, 3, 1.2, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.ellipse(0, 7, 1.5, 0.8, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    } else if(p.type === 'freeze') {
+      // ❄️ Blizzard Subzero Freeze Icon
+      ctx.strokeStyle = '#67e8f9';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for(let i = 0; i < 6; i++) {
+        const a = (i * Math.PI) / 3;
+        ctx.moveTo(0, 0);
+        ctx.lineTo(Math.cos(a) * 7.5, Math.sin(a) * 7.5);
+      }
+      ctx.stroke();
+      ctx.fillStyle = '#e0f2fe';
+      ctx.beginPath();
+      ctx.arc(0, 0, 3, 0, Math.PI * 2);
+      ctx.fill();
     }
 
     ctx.restore();
@@ -6832,6 +7053,48 @@
           ctx.fill();
           ctx.strokeStyle = '#a16207';
           ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Draw Active Mega Fire Bombs
+        for(const b of raceBombs) {
+          ctx.save();
+          ctx.translate(b.x, b.y);
+          ctx.rotate(b.rot || 0);
+          ctx.fillStyle = '#1e293b';
+          ctx.beginPath();
+          ctx.arc(0, 0, b.r || 15, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#ef4444';
+          ctx.beginPath();
+          ctx.arc(b.r * 0.4, -b.r * 0.4, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#fde047';
+          ctx.beginPath();
+          ctx.arc(b.r * 0.45, -b.r * 0.45, 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // Draw Active Tornado Cyclones
+        for(const tn of raceTornadoes) {
+          ctx.save();
+          ctx.translate(tn.x, tn.y);
+          ctx.rotate(tn.rot || 0);
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.ellipse(0, -12, 16, 5, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.ellipse(0, -3, 12, 4, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.ellipse(0, 6, 8, 3, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.ellipse(0, 13, 4, 1.8, 0, 0, Math.PI * 2);
           ctx.stroke();
           ctx.restore();
         }
