@@ -6,14 +6,14 @@
   <meta name="theme-color" content="#77cef2">
   <title>Flappy Bird - Sky Challenge</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=7.9">
-  <link rel="stylesheet" href="css/modern-icons.css?v=7.9">
-  <link rel="stylesheet" href="css/shop.css?v=7.9">
-  <link rel="stylesheet" href="css/shop-extra.css?v=7.9">
-  <link rel="stylesheet" href="css/mode-picker.css?v=7.9">
-  <link rel="stylesheet" href="css/store.css?v=7.9">
-  <link rel="stylesheet" href="css/ranked.css?v=7.9">
-  <link rel="stylesheet" href="css/multiplayer.css?v=7.9">
+  <link rel="stylesheet" href="css/style.css?v=8.0">
+  <link rel="stylesheet" href="css/modern-icons.css?v=8.0">
+  <link rel="stylesheet" href="css/shop.css?v=8.0">
+  <link rel="stylesheet" href="css/shop-extra.css?v=8.0">
+  <link rel="stylesheet" href="css/mode-picker.css?v=8.0">
+  <link rel="stylesheet" href="css/store.css?v=8.0">
+  <link rel="stylesheet" href="css/ranked.css?v=8.0">
+  <link rel="stylesheet" href="css/multiplayer.css?v=8.0">
 </head>
 <body>
   <main class="game-shell" aria-label="Flappy Bird Sky Challenge">
@@ -45,8 +45,13 @@
 
       <!-- Center Audio/Mute Toggle Button (Top Center) -->
       <div class="mp-hud-center-ctrl">
-        <button id="mpAudioToggleBtn" class="mp-hud-mute-btn" type="button" title="Mute / Unmute Suara" aria-label="Toggle Sound">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <button id="mpAudioToggleBtn" class="mp-hud-mute-btn" type="button" title="Mute / Unmute Suara (ON/OFF)" aria-label="Toggle Sound">
+          <div class="mp-mute-glow"></div>
+          <svg class="mp-mute-icon" viewBox="0 0 24 24" width="16" height="16">
+            <path fill="currentColor" d="M11 5L6 9H2v6h4l5 4V5z"/>
+            <path class="mp-wave mp-wave-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M15.5 8.5a5 5 0 0 1 0 7"/>
+            <path class="mp-wave mp-wave-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M19 5a9.5 9.5 0 0 1 0 14"/>
+          </svg>
         </button>
       </div>
 
@@ -717,8 +722,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=7.9"></script>
-  <script src="js/multiplayer.js?v=7.9"></script>
-  <script src="js/script.js?v=7.9"></script>
+  <script src="js/firebase-config.js?v=8.0"></script>
+  <script src="js/multiplayer.js?v=8.0"></script>
+  <script src="js/script.js?v=8.0"></script>
 </body>
 </html>

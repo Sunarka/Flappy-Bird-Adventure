@@ -568,6 +568,15 @@
         flapCooldownBase = 0.13;
       }
 
+      // Bot Starter Booster & Baby Birds / Companions
+      const BOT_BOOSTERS = ['shield', 'rocket', 'double_coins', 'magnet', 'extra_life', 'slow_mo', 'none'];
+      const botBooster = BOT_BOOSTERS[Math.floor(Math.random() * BOT_BOOSTERS.length)];
+      const hasBabies = Math.random() < 0.75;
+      const botBabyBirds = hasBabies ? [
+        { x: 90 - 22, y: 280 - 18, wing: 0, color: '#facc15' },
+        { x: 90 - 26, y: 280 + 18, wing: 0, color: '#38bdf8' }
+      ] : [];
+
       this.opponents.set(fakeOpponent.id, {
         id: fakeOpponent.id,
         name: fakeOpponent.name,
@@ -576,12 +585,15 @@
         hat: fakeOpponent.hat,
         outfit: fakeOpponent.outfit,
         tier: fakeOpponent.tier,
+        booster: botBooster,
+        hasShield: botBooster === 'shield',
+        babyBirds: botBabyBirds,
         y: 280,
         vy: 0,
         rot: 0,
         score: 0,
-        lives: 3,
-        maxLives: 3,
+        lives: botBooster === 'extra_life' ? 4 : 3,
+        maxLives: botBooster === 'extra_life' ? 4 : 3,
         graceTimer: 0,
         isAlive: true,
         isDashing: false,
@@ -724,7 +736,7 @@
           op.rot = Math.max(-0.4, Math.min(1.2, op.vy * 0.003));
           op.y = op.targetY;
 
-          // 1. PIPE COLLISION DETECTION FOR BOT (3 Lives System)
+          // 1. PIPE COLLISION DETECTION FOR BOT (Shield & 3 Lives System)
           const botX = 90;
           const botR = 12;
           if (activePipes && activePipes.length > 0 && op.graceTimer <= 0) {
@@ -733,7 +745,14 @@
               if (botX + botR > p.x && botX - botR < p.x + p.w) {
                 // Check if bot hit the top pipe or bottom pipe
                 if (op.y - botR < p.gapY || op.y + botR > p.gapY + p.gapSize) {
-                  if ((op.lives || 3) > 1) {
+                  if (op.hasShield) {
+                    // Shield absorbs hit
+                    op.hasShield = false;
+                    op.graceTimer = 1.4;
+                    op.vy = -220;
+                    op.targetY = Math.max(80, op.targetY - 20);
+                    break;
+                  } else if ((op.lives || 3) > 1) {
                     op.lives = (op.lives || 3) - 1;
                     op.graceTimer = 1.6;
                     op.vy = -260;
@@ -784,6 +803,17 @@
               return;
             }
           }
+
+          // Update Bot Baby Birds Position Following Behind
+          if (op.babyBirds && op.babyBirds.length > 0) {
+            op.babyBirds[0].x = 90 - 22;
+            op.babyBirds[0].y = op.y - 18 + Math.sin(Date.now() / 220) * 4;
+            op.babyBirds[0].wing += dt * 20;
+
+            op.babyBirds[1].x = 90 - 26;
+            op.babyBirds[1].y = op.y + 18 + Math.sin(Date.now() / 240 + Math.PI) * 4;
+            op.babyBirds[1].wing += dt * 20;
+          }
         }
 
         // Smooth Lerp target position for human opponents
@@ -794,7 +824,7 @@
       });
     }
 
-    // Render opponent birds onto canvas with custom skins, hats, outfits & nametag
+    // Render opponent birds onto canvas with custom skins, hats, outfits, baby birds & nametag
     renderOpponents(ctx, birdX = 90) {
       if (this.opponents.size === 0) return;
 
@@ -828,6 +858,50 @@
           ctx.restore();
         }
 
+        // Render Bot Shield Bubble if active
+        if (op.hasShield && op.isAlive) {
+          ctx.save();
+          ctx.translate(birdX, op.y);
+          ctx.strokeStyle = 'rgba(56, 189, 248, 0.75)';
+          ctx.fillStyle = 'rgba(56, 189, 248, 0.2)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(0, 0, 22, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Render Bot Baby Birds
+        if (op.babyBirds && op.babyBirds.length > 0 && op.isAlive) {
+          for (const b of op.babyBirds) {
+            ctx.save();
+            ctx.translate(b.x, b.y);
+            ctx.fillStyle = b.color || '#facc15';
+            ctx.beginPath();
+            ctx.arc(0, 0, 6, 0, Math.PI * 2);
+            ctx.fill();
+            // Tiny eye
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.arc(2, -1.5, 1.2, 0, Math.PI * 2);
+            ctx.fill();
+            // Tiny beak
+            ctx.fillStyle = '#f97316';
+            ctx.beginPath();
+            ctx.moveTo(5, -1);
+            ctx.lineTo(8, 0.5);
+            ctx.lineTo(5, 2);
+            ctx.fill();
+            // Tiny flapping wing
+            ctx.fillStyle = '#eab308';
+            ctx.beginPath();
+            ctx.ellipse(-2, Math.sin(b.wing) * 2, 3, 2, 0.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+        }
+
         // Opponent Name Tag & Live Score above head
         ctx.save();
         ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
@@ -836,7 +910,7 @@
         // Name pill
         const tagText = `${op.name} (${op.score || 0} pts)`;
         const textWidth = ctx.measureText(tagText).width;
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
         ctx.beginPath();
         ctx.roundRect(birdX - textWidth/2 - 6, op.y - 32, textWidth + 12, 15, 4);
         ctx.fill();

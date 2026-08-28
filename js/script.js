@@ -77,6 +77,7 @@
     mpOverModal:$('mpOverModal'), mpOverHeader:$('mpOverHeader'), mpOverBadge:$('mpOverBadge'), mpOverSub:$('mpOverSub'),
     mpOverMyAvatar:$('mpOverMyAvatar'), mpOverMyName:$('mpOverMyName'), mpOverMyScore:$('mpOverMyScore'),
     mpOverMyCrown:$('mpOverMyCrown'), mpOverMyReward:$('mpOverMyReward'),
+    mpOverRivalAvatar:$('mpOverRivalAvatar'), mpOverRivalName:$('mpOverRivalName'),
     mpOverRivalScore:$('mpOverRivalScore'), mpOverRivalCrown:$('mpOverRivalCrown'),
     mpOverRivalStatus:$('mpOverRivalStatus'), mpRematchBtn:$('mpRematchBtn'), mpOverHomeBtn:$('mpOverHomeBtn'),
     mpBattleHud:$('mpBattleHud'),
@@ -3527,6 +3528,14 @@
     }
   }
 
+  function getBattleHeartSvg(isActive) {
+    if(isActive) {
+      return `<svg viewBox="0 0 24 24" width="13" height="13" style="filter:drop-shadow(0 0 3px rgba(239, 68, 68, 0.8));"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#ef4444" stroke="#b91c1c" stroke-width="1.2"/></svg>`;
+    } else {
+      return `<svg viewBox="0 0 24 24" width="13" height="13"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#334155" stroke="#1e293b" stroke-width="1.2"/></svg>`;
+    }
+  }
+
   function updateMpBattleHUD() {
     if(!el.mpBattleHud) return;
     const isMpActive = currentMode === 'multiplayer' && (state === State.PLAYING || state === State.READY);
@@ -3535,7 +3544,7 @@
 
     // 1. Player Info (Left Card)
     if(el.mpMyHudName) el.mpMyHudName.textContent = gpProfile.gamerTag || 'YOU';
-    if(el.mpMyHudAvatar) el.mpMyHudAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 28);
+    if(el.mpMyHudAvatar) el.mpMyHudAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 30);
     const myTier = getRankTier(rankedBest || 0);
     if(el.mpMyHudTier) el.mpMyHudTier.textContent = myTier.name || 'GOLD';
     if(el.mpMyHudScore) el.mpMyHudScore.textContent = score;
@@ -3544,7 +3553,7 @@
     if(el.mpMyHudHearts) {
       let heartsHtml = '';
       for(let i = 0; i < 3; i++) {
-        heartsHtml += `<span class="mp-heart${i < lives ? ' active' : ' lost'}">${i < lives ? '❤️' : '🖤'}</span>`;
+        heartsHtml += `<span class="mp-heart ${i < lives ? 'active' : 'lost'}">${getBattleHeartSvg(i < lives)}</span>`;
       }
       el.mpMyHudHearts.innerHTML = heartsHtml;
     }
@@ -3552,7 +3561,7 @@
     // 2. Rival Info (Right Card)
     const rival = window.multiplayerEngine?.opponents?.values()?.next()?.value || { name: 'Rival', avatar: 'robo_mecha', tier: 'MASTER', score: 0, lives: 3 };
     if(el.mpRivalHudName) el.mpRivalHudName.textContent = (rival.name || 'Rival').slice(0, 10);
-    if(el.mpRivalHudAvatar) el.mpRivalHudAvatar.innerHTML = getCuteAvatarSvg(rival.avatar || 'robo_mecha', 28);
+    if(el.mpRivalHudAvatar) el.mpRivalHudAvatar.innerHTML = getCuteAvatarSvg(rival.avatar || 'robo_mecha', 30);
     if(el.mpRivalHudTier) el.mpRivalHudTier.textContent = rival.tier || 'MASTER';
     if(el.mpRivalHudScore) el.mpRivalHudScore.textContent = rival.score || 0;
 
@@ -3561,7 +3570,7 @@
       const rLives = rival.lives !== undefined ? rival.lives : (rival.isAlive ? 3 : 0);
       let rHeartsHtml = '';
       for(let i = 0; i < 3; i++) {
-        rHeartsHtml += `<span class="mp-heart${i < rLives ? ' active' : ' lost'}">${i < rLives ? '❤️' : '🖤'}</span>`;
+        rHeartsHtml += `<span class="mp-heart ${i < rLives ? 'active' : 'lost'}">${getBattleHeartSvg(i < rLives)}</span>`;
       }
       el.mpRivalHudHearts.innerHTML = rHeartsHtml;
     }
