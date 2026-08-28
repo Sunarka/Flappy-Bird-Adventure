@@ -792,14 +792,27 @@
     },
 
     // Dedicated Lobby Theme Music: "A World Beyond - Ghibli Melodic" (Soft Relaxing Music Box & Acoustic Piano)
-    // Suara lembut, menenangkan, hangat, dan sangat nyaman didengar (Zero distorsi / tidak bising)
+    // Suara lembut, menenangkan, hangat, dan sangat nyaman didengar (A World Beyond - Ghibli Melodic)
     lobbyMusic() {
       if(!settings.music) return;
-      if(this.currentMusicType === 'lobby' && this.musicTimer) return;
+      if(this.currentMusicType === 'lobby' && (this.musicTimer || this.currentAudioElem)) return;
       this.stopMusic();
       this.currentMusicType = 'lobby';
-      let step = 0;
       this.init();
+
+      // Putar lagu studio "A World Beyond - Ghibli Melodic" untuk suasana lobby yang tenang & damai
+      const aud = this.playAudioFile('lobby_ghibli.webm', true, 0.40);
+      if(aud) {
+        aud.onerror = () => {
+          this.playSynthLobbyMusic();
+        };
+        return;
+      }
+      this.playSynthLobbyMusic();
+    },
+
+    playSynthLobbyMusic() {
+      let step = 0;
 
       // Melodi Lembut "A World Beyond" (Ghibli Music Box & Acoustic Style)
       const ghibliLead = [
