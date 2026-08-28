@@ -1353,6 +1353,7 @@
       this.musicTimer = null;
       this.deathTimer = null;
       this.currentMusicType = null;
+      stopBackgroundMusic();
     }
   };
 
@@ -1365,20 +1366,20 @@
   }
 
   function playBackgroundMusic() {
-    try {
-      const bg = $('bgMusic');
-      if(!bg || !settings.music) return;
-      bg.volume = 0.45;
-      const p = bg.play();
-      if(p && typeof p.catch === 'function') p.catch(() => {});
-    } catch(_) {}
+    if(!settings.music) return;
+    if(state === State.MENU) {
+      if(audio) audio.lobbyMusic();
+    } else {
+      if(audio) audio.music();
+    }
   }
   function stopBackgroundMusic() {
     try {
       const bg = $('bgMusic');
-      if(!bg) return;
-      bg.pause();
-      bg.currentTime = 0;
+      if(bg) {
+        bg.pause();
+        bg.currentTime = 0;
+      }
     } catch(_) {}
   }
   function updateMusicUI() {
