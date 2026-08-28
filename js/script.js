@@ -8704,7 +8704,6 @@
     gpProfile.isGoogle = false;
     gpProfile.email = '';
     gpProfile.googleUid = null;
-    gpProfile.gamerTag = 'SkyPlayer';
     storage.set('skyFlappyGPProfile', gpProfile);
     syncGPProfileUI();
   });
@@ -8761,15 +8760,28 @@
     }
   });
 
-  // Auto-listen to Firebase Auth state on load
+  // Auto-listen to Firebase Auth state on load & preserve custom gamerTag
   if(typeof window.FirebaseLeaderboard !== 'undefined' && typeof window.FirebaseLeaderboard.onAuthStateChanged === 'function') {
     window.FirebaseLeaderboard.onAuthStateChanged(user => {
       if(user) {
+        const accKey = user.uid || user.email;
+        const accountsMap = storage.get('skyFlappyAccountsMap', {});
+        const savedAcc = accountsMap[accKey];
+
         gpProfile.isLoggedIn = true;
         gpProfile.isGoogle = true;
         gpProfile.email = user.email || '';
         gpProfile.googleUid = user.uid;
-        if(!gpProfile.gamerTag || gpProfile.gamerTag === 'SkyPlayer') {
+
+        if(savedAcc && savedAcc.gamerTag && savedAcc.gamerTag !== 'SkyPlayer') {
+          gpProfile.gamerTag = savedAcc.gamerTag;
+          if (savedAcc.avatar) gpProfile.avatar = savedAcc.avatar;
+          gpProfile.nameChangesDone = savedAcc.nameChangesDone || 0;
+          if (savedAcc.rankedBest && savedAcc.rankedBest > rankedBest) {
+            rankedBest = savedAcc.rankedBest;
+            storage.set('skyFlappyRankedBest', rankedBest);
+          }
+        } else if (!gpProfile.gamerTag || gpProfile.gamerTag === 'SkyPlayer') {
           gpProfile.gamerTag = user.displayName ? user.displayName.slice(0, 16) : (user.email ? user.email.split('@')[0] : 'SkyPlayer');
         }
         saveGPProfile();
