@@ -3787,6 +3787,22 @@
   }
 
   function goReady() { audio.click(); closeModal(); reset(); setState(State.READY); }
+  function startMultiplayerGameDirectly() {
+    closeModal();
+    reset();
+    started = true;
+    if (window.multiplayerEngine) window.multiplayerEngine.matchStatus = 'PLAYING';
+    setState(State.PLAYING);
+    bird.vy = -280;
+    bird.wing = 0.22;
+    makeParticles(bird.x - 12, bird.y, 4, '#fff5b2');
+    audio.flap();
+    audio.music();
+    playBackgroundMusic();
+    if(progress.selectedBooster && progress.selectedBooster !== 'none') {
+      activatePowerup(progress.selectedBooster, bird.x, bird.y, true);
+    }
+  }
   function flap() {
     if(state === State.MENU || state === State.OVER || state === State.PAUSED || state === State.REVIVING) return;
     if(state === State.READY) {
@@ -9491,14 +9507,14 @@
     mp.on('match_found', (data) => {
       const rival = data.opponent || data.playersList.find(p => p.id !== mp.localPlayerId) || mp.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha' };
       playVersusClashIntro(rival, () => {
-        goReady();
+        startMultiplayerGameDirectly();
       });
     });
 
     mp.on('game_starting', (data) => {
       const rival = data.opponent || mp.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha' };
       playVersusClashIntro(rival, () => {
-        goReady();
+        startMultiplayerGameDirectly();
       });
     });
 
