@@ -6311,6 +6311,13 @@
         shake -= 1 / 60;
       }
       _step = 'sky';
+      if (state === State.MENU) {
+        _step = 'lobbyWonderland';
+        drawLobbyWonderland(1 / 60);
+        ctx.restore();
+        return;
+      }
+
       const bg = backgrounds[progress.selectedBackground] || backgrounds.sky;
       const sky = ctx.createLinearGradient(0, 0, 0, H);
       sky.addColorStop(0, bg.top);
@@ -6427,6 +6434,453 @@
     }
   }
 
+  // =========================================================
+  // HAPPY VIBE LOBBY WONDERLAND BACKGROUND & CUTE BIRDS ANIMATIONS
+  // =========================================================
+  let lobbyTime = 0;
+  let lobbyPetals = [];
+  let lobbyEmotes = [];
+  let nextLobbyEmoteTime = 0;
+
+  function initLobbyParticles() {
+    lobbyPetals = [];
+    for(let i = 0; i < 28; i++) {
+      lobbyPetals.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: 3 + Math.random() * 4,
+        speedX: 0.4 + Math.random() * 0.8,
+        speedY: 0.5 + Math.random() * 0.9,
+        rot: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 2,
+        color: ['#fbcfe8', '#fda4af', '#f472b6', '#fef08a', '#93c5fd', '#c4b5fd', '#fed7aa'][Math.floor(Math.random() * 7)],
+        type: Math.random() < 0.65 ? 'petal' : 'star'
+      });
+    }
+  }
+
+  function drawCuteLobbyChick(targetCtx, x, y, bodyColor, wingColor, angle, dir = 1) {
+    targetCtx.save();
+    targetCtx.translate(x, y);
+    targetCtx.scale(dir, 1);
+    targetCtx.rotate(angle);
+
+    // Soft Shadow
+    targetCtx.fillStyle = 'rgba(0,0,0,0.18)';
+    targetCtx.beginPath();
+    targetCtx.ellipse(0, 14, 10, 3.5, 0, 0, Math.PI * 2);
+    targetCtx.fill();
+
+    // Round Chubby Body
+    targetCtx.fillStyle = bodyColor;
+    targetCtx.beginPath();
+    targetCtx.arc(0, 0, 11.5, 0, Math.PI * 2);
+    targetCtx.fill();
+
+    // Rosy Blush Cheeks
+    targetCtx.fillStyle = 'rgba(244, 114, 182, 0.65)';
+    targetCtx.beginPath();
+    targetCtx.arc(4, 3, 3, 0, Math.PI * 2);
+    targetCtx.fill();
+
+    // Cute Big Shiny Eye
+    targetCtx.fillStyle = '#0f172a';
+    targetCtx.beginPath();
+    targetCtx.arc(4, -2, 2.8, 0, Math.PI * 2);
+    targetCtx.fill();
+    targetCtx.fillStyle = '#ffffff';
+    targetCtx.beginPath();
+    targetCtx.arc(5, -3, 1.1, 0, Math.PI * 2);
+    targetCtx.fill();
+
+    // Tiny Orange Beak
+    targetCtx.fillStyle = '#f97316';
+    targetCtx.beginPath();
+    targetCtx.moveTo(8, -1);
+    targetCtx.lineTo(13, 1);
+    targetCtx.lineTo(8, 3);
+    targetCtx.closePath();
+    targetCtx.fill();
+
+    // Flapping Little Wing
+    targetCtx.fillStyle = wingColor;
+    targetCtx.beginPath();
+    targetCtx.ellipse(-4, 2, 5.5, 3.5, 0.2, 0, Math.PI * 2);
+    targetCtx.fill();
+
+    // Tiny Feet
+    targetCtx.strokeStyle = '#ea580c';
+    targetCtx.lineWidth = 1.6;
+    targetCtx.beginPath();
+    targetCtx.moveTo(-2, 10); targetCtx.lineTo(-2, 14);
+    targetCtx.moveTo(3, 10); targetCtx.lineTo(3, 14);
+    targetCtx.stroke();
+
+    targetCtx.restore();
+  }
+
+  function drawCuteButterfly(targetCtx, x, y, t) {
+    targetCtx.save();
+    targetCtx.translate(x, y);
+    const flap = Math.abs(Math.sin(t * 14));
+
+    // Fluttering gradient wings
+    targetCtx.save();
+    targetCtx.scale(flap, 1);
+    targetCtx.fillStyle = '#f472b6';
+    targetCtx.shadowColor = '#f472b6';
+    targetCtx.shadowBlur = 8;
+    // Left Wing
+    targetCtx.beginPath();
+    targetCtx.ellipse(-6, -4, 7, 5, -0.4, 0, Math.PI * 2);
+    targetCtx.fill();
+    // Right Wing
+    targetCtx.beginPath();
+    targetCtx.ellipse(6, -4, 7, 5, 0.4, 0, Math.PI * 2);
+    targetCtx.fill();
+    // Inner Glow
+    targetCtx.fillStyle = '#fef08a';
+    targetCtx.beginPath();
+    targetCtx.arc(-4, -4, 2.5, 0, Math.PI * 2);
+    targetCtx.arc(4, -4, 2.5, 0, Math.PI * 2);
+    targetCtx.fill();
+    targetCtx.restore();
+
+    // Body
+    targetCtx.fillStyle = '#701a75';
+    targetCtx.beginPath();
+    targetCtx.ellipse(0, -3, 1.5, 5, 0, 0, Math.PI * 2);
+    targetCtx.fill();
+
+    targetCtx.restore();
+  }
+
+  function drawLobbyWonderland(dt) {
+    lobbyTime += dt;
+    if(lobbyPetals.length === 0) initLobbyParticles();
+
+    // 1. Radiant Happy Sky Gradient
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, H);
+    skyGrad.addColorStop(0, '#38bdf8');
+    skyGrad.addColorStop(0.35, '#7dd3fc');
+    skyGrad.addColorStop(0.65, '#fed7aa');
+    skyGrad.addColorStop(0.88, '#fef08a');
+    skyGrad.addColorStop(1, '#bbf7d0');
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    // 2. Warm Glowing Sun with Rotating Sunbeams (Top Right)
+    ctx.save();
+    const sunX = W - 45;
+    const sunY = 55;
+    const sunPulse = Math.sin(lobbyTime * 1.5) * 3;
+    const sunGlow = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 90);
+    sunGlow.addColorStop(0, 'rgba(254, 240, 138, 0.95)');
+    sunGlow.addColorStop(0.3, 'rgba(253, 224, 71, 0.6)');
+    sunGlow.addColorStop(0.7, 'rgba(251, 191, 36, 0.2)');
+    sunGlow.addColorStop(1, 'rgba(245, 158, 11, 0)');
+    ctx.fillStyle = sunGlow;
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, 90, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Rotating Sunbeams
+    ctx.save();
+    ctx.translate(sunX, sunY);
+    ctx.rotate(lobbyTime * 0.12);
+    ctx.fillStyle = 'rgba(254, 240, 138, 0.18)';
+    for(let b = 0; b < 10; b++) {
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, 130, (b * Math.PI / 5) - 0.12, (b * Math.PI / 5) + 0.12);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // Sun Core
+    ctx.fillStyle = '#fef08a';
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, 24 + sunPulse, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#fbbf24';
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, 20 + sunPulse, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // 3. Distant Translucent Rainbow Arch
+    ctx.save();
+    ctx.globalAlpha = 0.35 + Math.sin(lobbyTime * 0.8) * 0.08;
+    const rbColors = ['#f87171', '#fb923c', '#facc15', '#4ade80', '#60a5fa', '#a855f7'];
+    for(let r = 0; r < rbColors.length; r++) {
+      ctx.beginPath();
+      ctx.strokeStyle = rbColors[r];
+      ctx.lineWidth = 4;
+      ctx.arc(W / 2 + 10, H - 90, 220 + r * 4.5, Math.PI * 1.05, Math.PI * 1.95);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // 4. Distant Sky Birds Flocking across the horizon
+    ctx.save();
+    ctx.strokeStyle = 'rgba(30, 41, 59, 0.45)';
+    ctx.lineWidth = 1.6;
+    for(let f = 0; f < 4; f++) {
+      const birdX = ((lobbyTime * 18 + f * 42) % (W + 80)) - 40;
+      const birdY = 120 + Math.sin(lobbyTime * 2 + f) * 12 + f * 16;
+      const wingFold = Math.sin(lobbyTime * 6 + f * 1.2) * 4;
+      ctx.beginPath();
+      ctx.moveTo(birdX - 6, birdY + wingFold);
+      ctx.quadraticCurveTo(birdX - 3, birdY - 3, birdX, birdY);
+      ctx.quadraticCurveTo(birdX + 3, birdY - 3, birdX + 6, birdY + wingFold);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // 5. Cute Floating Hot Air Balloon in Far Sky
+    ctx.save();
+    const balloonX = ((lobbyTime * 6 + 40) % (W + 90)) - 45;
+    const balloonY = 175 + Math.sin(lobbyTime * 1.1) * 8;
+    ctx.translate(balloonX, balloonY);
+    // Balloon envelope
+    ctx.fillStyle = '#ec4899';
+    ctx.beginPath();
+    ctx.ellipse(0, -12, 11, 14, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#38bdf8';
+    ctx.beginPath();
+    ctx.ellipse(0, -12, 4.5, 14, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // Basket & ropes
+    ctx.strokeStyle = '#78350f';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(-4, -1); ctx.lineTo(-3, 6);
+    ctx.moveTo(4, -1); ctx.lineTo(3, 6);
+    ctx.stroke();
+    ctx.fillStyle = '#b45309';
+    ctx.fillRect(-4, 6, 8, 5);
+    ctx.restore();
+
+    // 6. Volumetric Fluffy Clouds (Parallax Scrolling)
+    const bgW = W + 240;
+    drawFluffyCloud(((lobbyTime * 12 + 20) % bgW) - 120, 75, 0.65, 0.6);
+    drawFluffyCloud(((lobbyTime * 16 + 180) % bgW) - 120, 110, 0.8, 0.75);
+    drawFluffyCloud(((lobbyTime * 22 + 90) % bgW) - 120, 160, 0.95, 0.85);
+
+    // 7. Layered Rolling Green Hills
+    // Far Hill (Soft Mint/Teal)
+    ctx.fillStyle = '#86efac';
+    ctx.beginPath();
+    ctx.moveTo(0, H - 120);
+    for(let x = 0; x <= W; x += 50) {
+      ctx.quadraticCurveTo(x + 25, H - 170 + Math.sin(x * 0.03) * 15, x + 50, H - 120);
+    }
+    ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
+
+    // Mid Hill (Vibrant Grass Green)
+    ctx.fillStyle = '#4ade80';
+    ctx.beginPath();
+    ctx.moveTo(0, H - 95);
+    for(let x = 0; x <= W; x += 60) {
+      ctx.quadraticCurveTo(x + 30, H - 135 + Math.cos(x * 0.04) * 12, x + 60, H - 95);
+    }
+    ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
+
+    // Cute Distant Windmill on the hill
+    ctx.save();
+    const wmX = 65;
+    const wmY = H - 118;
+    ctx.fillStyle = '#f8fafc';
+    ctx.beginPath();
+    ctx.moveTo(wmX - 6, wmY + 22);
+    ctx.lineTo(wmX - 4, wmY);
+    ctx.lineTo(wmX + 4, wmY);
+    ctx.lineTo(wmX + 6, wmY + 22);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#e11d48';
+    ctx.beginPath();
+    ctx.moveTo(wmX - 5, wmY);
+    ctx.lineTo(wmX, wmY - 6);
+    ctx.lineTo(wmX + 5, wmY);
+    ctx.closePath();
+    ctx.fill();
+    // Windmill Blades Spinning
+    ctx.save();
+    ctx.translate(wmX, wmY);
+    ctx.rotate(lobbyTime * 2.2);
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 1.8;
+    for(let b = 0; b < 4; b++) {
+      ctx.rotate(Math.PI / 2);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, 16);
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.fillRect(-2, 6, 4, 10);
+    }
+    ctx.restore();
+    ctx.restore();
+
+    // Near Hill with Lush Grass Top Border
+    ctx.fillStyle = '#22c55e';
+    ctx.beginPath();
+    ctx.moveTo(0, H - 75);
+    for(let x = 0; x <= W; x += 40) {
+      ctx.quadraticCurveTo(x + 20, H - 98, x + 40, H - 75);
+    }
+    ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
+
+    // 8. Ground Surface & Cheerful Swaying Grass Blades & Wildflowers
+    drawGround();
+
+    // Swaying Daisy Flowers & Tulips on Grass
+    const flowerSpots = [
+      { x: 25, y: H - GROUND - 4, color: '#f43f5e' },
+      { x: 55, y: H - GROUND - 6, color: '#fbbf24' },
+      { x: 110, y: H - GROUND - 5, color: '#ec4899' },
+      { x: 155, y: H - GROUND - 6, color: '#a855f7' },
+      { x: 230, y: H - GROUND - 4, color: '#38bdf8' },
+      { x: 285, y: H - GROUND - 6, color: '#fbbf24' },
+      { x: 335, y: H - GROUND - 5, color: '#f43f5e' }
+    ];
+    flowerSpots.forEach((f, idx) => {
+      const sway = Math.sin(lobbyTime * 3 + idx * 1.5) * 3;
+      ctx.save();
+      ctx.translate(f.x, f.y);
+      // Stem
+      ctx.strokeStyle = '#15803d';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(sway / 2, -7, sway, -13);
+      ctx.stroke();
+      // Flower head
+      ctx.translate(sway, -13);
+      ctx.fillStyle = f.color;
+      for(let p = 0; p < 5; p++) {
+        ctx.beginPath();
+        const ang = (p * Math.PI * 2) / 5;
+        ctx.arc(Math.cos(ang) * 4, Math.sin(ang) * 4, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = '#fef08a';
+      ctx.beginPath();
+      ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+
+    // 9. CUTE ANIMATED BIRDS & COMPANIONS (HAPPY LOBBY MASCOTS)
+    // --- Mascot 1: Main Custom Player Bird (Cheering on the ground) ---
+    const mainBirdX = W / 2;
+    const mainBirdHop = Math.abs(Math.sin(lobbyTime * 3.5)) * 14;
+    const mainBirdY = H - GROUND - 22 - mainBirdHop;
+    const mainBirdAngle = Math.sin(lobbyTime * 3.5) * 0.12;
+    const mainBirdWing = Math.sin(lobbyTime * 10) * 8;
+
+    renderCustomBird(ctx, {
+      x: mainBirdX,
+      y: mainBirdY,
+      angle: mainBirdAngle,
+      wing: mainBirdWing,
+      skinId: progress.selected || 'classic',
+      hatId: progress.selectedHat || 'none',
+      outfitId: progress.selectedOutfit || 'none',
+      opacity: 1
+    });
+
+    // Main bird shadow on ground
+    ctx.save();
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    const shadowScale = 1 - (mainBirdHop / 35);
+    ctx.beginPath();
+    ctx.ellipse(mainBirdX, H - GROUND + 3, 16 * shadowScale, 5 * shadowScale, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Floating Cute Emote Bubble above Main Bird (Hearts, Music, Sparkles)
+    if(lobbyTime > nextLobbyEmoteTime) {
+      const emotes = ['❤️', '⭐', '♪', '🌸', '✨', '👑', '🎉', '💖'];
+      lobbyEmotes.push({
+        x: mainBirdX + (Math.random() - 0.5) * 18,
+        y: mainBirdY - 26,
+        text: emotes[Math.floor(Math.random() * emotes.length)],
+        life: 1.8,
+        maxLife: 1.8,
+        vy: -22
+      });
+      nextLobbyEmoteTime = lobbyTime + 1.2 + Math.random() * 1.5;
+    }
+
+    for(let eIdx = lobbyEmotes.length - 1; eIdx >= 0; eIdx--) {
+      const em = lobbyEmotes[eIdx];
+      em.life -= dt;
+      em.y += em.vy * dt;
+      if(em.life <= 0) {
+        lobbyEmotes.splice(eIdx, 1);
+        continue;
+      }
+      const alpha = Math.min(1, em.life / 0.4);
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.font = '900 16px "Segoe UI Emoji", "Apple Color Emoji", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+      ctx.shadowBlur = 8;
+      ctx.fillText(em.text, em.x, em.y);
+      ctx.restore();
+    }
+
+    // --- Mascot 2 & 3: Two Adorable Baby Chicks Waddling & Hopping ---
+    // Chick 1 (Left chick)
+    const chick1X = mainBirdX - 52 + Math.sin(lobbyTime * 2) * 8;
+    const chick1Hop = Math.abs(Math.sin(lobbyTime * 4 + 1)) * 9;
+    const chick1Y = H - GROUND - 14 - chick1Hop;
+    drawCuteLobbyChick(ctx, chick1X, chick1Y, '#facc15', '#f59e0b', Math.sin(lobbyTime * 4) * 0.1, 1);
+
+    // Chick 2 (Right chick)
+    const chick2X = mainBirdX + 54 + Math.sin(lobbyTime * 2 + 2) * 8;
+    const chick2Hop = Math.abs(Math.sin(lobbyTime * 4 + 2.5)) * 9;
+    const chick2Y = H - GROUND - 14 - chick2Hop;
+    drawCuteLobbyChick(ctx, chick2X, chick2Y, '#38bdf8', '#0284c7', Math.sin(lobbyTime * 4 + 2) * 0.1, -1);
+
+    // --- Mascot 4: Fluttering Golden Butterfly ---
+    const bfX = mainBirdX + Math.cos(lobbyTime * 2.2) * 75;
+    const bfY = H - GROUND - 65 + Math.sin(lobbyTime * 3.8) * 22;
+    drawCuteButterfly(ctx, bfX, bfY, lobbyTime);
+
+    // 10. Drifting Floating Sakura Petals, Sparkles & Dandelion Seeds
+    for(const p of lobbyPetals) {
+      p.x += p.speedX;
+      p.y += p.speedY;
+      p.rot += p.rotSpeed * dt;
+      if(p.x > W + 20) p.x = -20;
+      if(p.y > H + 20) { p.y = -20; p.x = Math.random() * W; }
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = 0.75;
+      if(p.type === 'petal') {
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.r, p.r * 0.55, 0, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Star sparkle
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(0, 0, p.r * 0.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
 
   // Volumetric Fluffy Cloud with Soft Sunlight Highlights & Atmospheric Shading
   function drawFluffyCloud(x, y, s, alpha = 0.85) {
