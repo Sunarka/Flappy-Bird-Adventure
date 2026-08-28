@@ -216,6 +216,8 @@
           lastUpdate: Date.now()
         });
         this.emit('player_joined', { player: data.playerProfile, playersList: this.currentRoom.playersList });
+      } else if (type === 'BC_PLAYER_READY' && this.currentRoom && this.currentRoom.roomId === data.roomId) {
+        this.emit('player_ready_status', { playerId: data.playerId, isReady: !!data.isReady });
       } else if (type === 'BC_GAME_START' && this.currentRoom && this.currentRoom.roomId === data.roomId) {
         this.setSeed(data.seed);
         this.matchStatus = 'COUNTDOWN';
@@ -466,6 +468,11 @@
             y: 280, vy: 0, rot: 0, score: 0, lives: 3, isAlive: true, isDashing: false, targetY: 280, lastUpdate: Date.now()
           });
           this.emit('player_joined', { player: data.guest, playersList: this.currentRoom.playersList });
+        }
+
+        // 1.5 Guest Ready Status Sync
+        if (data.guestReady !== undefined) {
+          this.emit('player_ready_status', { isReady: !!data.guestReady });
         }
 
         // 2. Game Starting Event

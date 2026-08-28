@@ -9667,32 +9667,30 @@
     });
 
     mp.on('player_ready_status', (data) => {
-      const isHost = mp.currentRoom && mp.currentRoom.isHost;
-      if(isHost) {
-        if(data.isReady) {
-          audio.win();
-          if(el.mpGuestStatusBadge) {
-            el.mpGuestStatusBadge.textContent = 'READY ✅';
-            el.mpGuestStatusBadge.style.background = '#22c55e';
-          }
-          if(el.mpHostStartGameBtn) {
-            el.mpHostStartGameBtn.disabled = false;
-            el.mpHostStartGameBtn.style.opacity = '1';
-            el.mpHostStartGameBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
-            el.mpHostStartGameBtn.textContent = 'MULAI BERTANDING SEKARANG!';
-          }
-        } else {
-          audio.click();
-          if(el.mpGuestStatusBadge) {
-            el.mpGuestStatusBadge.textContent = 'BELUM READY';
-            el.mpGuestStatusBadge.style.background = '#eab308';
-          }
-          if(el.mpHostStartGameBtn) {
-            el.mpHostStartGameBtn.disabled = true;
-            el.mpHostStartGameBtn.style.opacity = '0.6';
-            el.mpHostStartGameBtn.style.background = '#64748b';
-            el.mpHostStartGameBtn.textContent = 'MENUNGGU LAWAN READY...';
-          }
+      const isHost = !mp.currentRoom || mp.currentRoom.isHost !== false;
+      if(data.isReady) {
+        audio.win();
+        if(el.mpGuestStatusBadge) {
+          el.mpGuestStatusBadge.textContent = 'READY ✅';
+          el.mpGuestStatusBadge.style.background = '#22c55e';
+        }
+        if(isHost && el.mpHostStartGameBtn) {
+          el.mpHostStartGameBtn.disabled = false;
+          el.mpHostStartGameBtn.style.opacity = '1';
+          el.mpHostStartGameBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+          el.mpHostStartGameBtn.textContent = 'MULAI BERTANDING SEKARANG!';
+        }
+      } else {
+        audio.click();
+        if(el.mpGuestStatusBadge) {
+          el.mpGuestStatusBadge.textContent = 'BELUM READY';
+          el.mpGuestStatusBadge.style.background = '#eab308';
+        }
+        if(isHost && el.mpHostStartGameBtn) {
+          el.mpHostStartGameBtn.disabled = true;
+          el.mpHostStartGameBtn.style.opacity = '0.6';
+          el.mpHostStartGameBtn.style.background = '#64748b';
+          el.mpHostStartGameBtn.textContent = 'MENUNGGU LAWAN READY...';
         }
       }
     });
