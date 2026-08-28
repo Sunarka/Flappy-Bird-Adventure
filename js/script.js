@@ -3536,7 +3536,10 @@
   }
 
   function promptRevive() {
-    if(state === State.OVER || state === State.REVIVING) return;
+    if(state === State.OVER || state === State.REVIVING || currentMode === 'multiplayer') {
+      endGame();
+      return;
+    }
     state = State.REVIVING;
     audio.stopMusic();
     stopBackgroundMusic();
@@ -3688,9 +3691,9 @@
     clearInterval(reviveTimerInterval);
     reviveTimerInterval = null;
 
-    // Inisialisasi Nyawa (Ranked Mode: 3 nyawa, Classic Mode: 1 nyawa, + Extra Life Booster)
-    lives = currentMode === 'ranked' ? 3 : 1;
-    if(progress.selectedBooster === 'extra_life') {
+    // Inisialisasi Nyawa (Multiplayer: 1 nyawa, Ranked: 3 nyawa, Classic: 1 nyawa)
+    lives = currentMode === 'multiplayer' ? 1 : (currentMode === 'ranked' ? 3 : 1);
+    if(progress.selectedBooster === 'extra_life' && currentMode !== 'multiplayer') {
       lives += 1;
     }
     reviveCount = 0;
@@ -4406,7 +4409,7 @@
     }
 
     // 5. Lives System (Ranked Mode default 3 hearts, Classic default 1 heart, + Extra Life Booster)
-    if(lives > 1) {
+    if(currentMode !== 'multiplayer' && lives > 1) {
       lives--;
       graceTimer = 1.6;
       audio.hit();
@@ -4436,10 +4439,14 @@
       return;
     }
 
-    // 6. No Lives Left -> Prompt Revive
+    // 6. Sudden death for Multiplayer / Prompt Revive for Singleplayer
     lives = 0;
     updateLivesHUD();
-    promptRevive();
+    if(currentMode === 'multiplayer') {
+      endGame();
+    } else {
+      promptRevive();
+    }
   }
 
   function collide(p) {
