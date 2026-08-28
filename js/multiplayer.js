@@ -366,8 +366,10 @@
         }
 
         case 'MATCH_CANCELLED': {
-          this.matchStatus = 'IDLE';
-          this.emit('match_cancelled');
+          if (this.matchStatus !== 'QUEUED') {
+            this.matchStatus = 'IDLE';
+            this.emit('match_cancelled');
+          }
           break;
         }
 
@@ -648,9 +650,11 @@
     }
 
     quickMatch(profile) {
+      if (this.botFallbackTimer) {
+        clearTimeout(this.botFallbackTimer);
+        this.botFallbackTimer = null;
+      }
       this.myProfile = { ...profile, id: this.localPlayerId };
-      this.cancelMatch(); // Clear previous queue/timers
-
       this.matchStatus = 'QUEUED';
       this.emit('queued', { message: 'Mencari lawan 1v1 online...' });
 
@@ -660,7 +664,6 @@
 
       // Auto-Bot Fallback Timer: Random 7 sampai 11 detik jika belum ada pemain online asli, mulai dengan AI Bot!
       const botWaitMs = Math.floor(7000 + Math.random() * 4000); // 7s - 11s
-      if (this.botFallbackTimer) clearTimeout(this.botFallbackTimer);
       this.botFallbackTimer = setTimeout(() => {
         if (this.matchStatus === 'QUEUED') {
           this.spawnBotMatch();
