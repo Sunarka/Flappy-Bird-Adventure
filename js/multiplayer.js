@@ -945,7 +945,12 @@
     }
 
     // Update & Lerp positions of rival birds every animation frame
-    updateOpponents(dt, activePipes = [], activePowerups = []) {
+    updateOpponents(dt, activePipes = [], activePowerups = [], myContext = {}) {
+      const myIsDashing = !!myContext.isDashing;
+      const myIsRocket = !!myContext.isRocket;
+      const myScore = myContext.score || 0;
+      const baseBirdX = myContext.birdX || 90;
+
       this.opponents.forEach((op, opId) => {
         if (opId === this.localPlayerId || (this.myProfile && op.name === this.myProfile.name)) return;
         if (!op.isAlive) {
@@ -956,8 +961,38 @@
             op.rot = Math.min(1.5, (op.rot || 0) + 4 * dt);
             op.y = op.targetY;
           }
+          if (op.curX === undefined) op.curX = baseBirdX;
+          // When dead and player keeps advancing, dead body falls behind
+          op.curX -= dt * 140;
           return;
         }
+
+        // =========================================================
+        // Dynamic Relative Horizontal Position (X-Axis Physics)
+        // =========================================================
+        let targetX = baseBirdX;
+
+        // Player Dash & Rocket Surge Effects (Opponent shifts left/behind on screen)
+        if (myIsRocket) {
+          targetX -= 130; // Flying on rocket at warp speed, opponents drop far behind
+        } else if (myIsDashing) {
+          targetX -= 80;  // Dashing forward, opponents drop behind
+        }
+
+        // Opponent Dash & Rocket Surge Effects (Opponent surges right/ahead on screen)
+        if (op.isRocket) {
+          targetX += 130;
+        } else if (op.isDashing) {
+          targetX += 80;
+        }
+
+        // Relative Score/Distance Offset (In Race/Survival, leading players appear ahead)
+        const scoreDiff = (op.score || 0) - myScore;
+        targetX += Math.max(-140, Math.min(140, scoreDiff * 42));
+
+        if (op.curX === undefined) op.curX = baseBirdX;
+        const lerpFactorX = Math.min(1, dt * 9);
+        op.curX += (targetX - op.curX) * lerpFactorX;
 
         // If simulated bot, simulate intelligent human-like flapping with mistake chance & 3 lives
         if (op.isSimulatedBot && this.matchStatus === 'PLAYING') {
@@ -968,6 +1003,14 @@
           let nextPipe = null;
           if (activePipes && activePipes.length > 0) {
             nextPipe = activePipes.find(p => p.x + p.w >= 70);
+            
+            // Bot Score tracking when passing pipe
+            activePipes.forEach(p => {
+              if (p.x + p.w < 90 && !p[`_botScored_${op.id}`]) {
+                p[`_botScored_${op.id}`] = true;
+                op.score = (op.score || 0) + 1;
+              }
+            });
           }
 
           let idealY = 250;
@@ -1018,8 +1061,8 @@
                   } else if ((op.lives || 3) > 1) {
                     op.lives = (op.lives || 3) - 1;
                     op.graceTimer = 1.6;
-                    op.vy = -260;
-                    op.targetY = Math.max(80, op.targetY - 30);
+                    op.vy = -320;
+                    op.targetY = p.gapY + p.gapSize / 2;
                     this.emit('opponent_state', {
                       playerId: op.id,
                       y: op.y, vy: op.vy, rot: op.rot,
@@ -1098,16 +1141,17 @@
           }
 
           // 4. Bot Dash Ability Execution
-          op.dashCooldown = (op.dashCooldown || 4.5) - dt;
+          const botDashCooldownBase = this.gameMode === 'race' ? 0.6 : 4.5;
+          op.dashCooldown = (op.dashCooldown || botDashCooldownBase) - dt;
           if (op.dashTimer > 0) {
             op.dashTimer -= dt;
             if (op.dashTimer <= 0) op.isDashing = false;
           }
           if (op.dashCooldown <= 0 && !op.isDashing && op.isAlive) {
-            if (nextPipe && nextPipe.x < 185 && nextPipe.x > 80) {
+            if (this.gameMode === 'race' || (nextPipe && nextPipe.x < 185 && nextPipe.x > 80)) {
               op.isDashing = true;
               op.dashTimer = 0.28;
-              op.dashCooldown = 4.0 + Math.random() * 3.0;
+              op.dashCooldown = this.gameMode === 'race' ? (0.6 + Math.random() * 0.8) : (3.5 + Math.random() * 3.0);
               op.graceTimer = Math.max(op.graceTimer || 0, 0.45);
               op.vy = Math.min(op.vy, -130);
             }
@@ -1115,11 +1159,12 @@
 
           // 5. Update Bot Baby Birds Position Following Behind
           if (op.babyBirds && op.babyBirds.length > 0) {
-            op.babyBirds[0].x = 90 - 22;
+            const bx = op.curX !== undefined ? op.curX : 90;
+            op.babyBirds[0].x = bx - 22;
             op.babyBirds[0].y = op.y - 18 + Math.sin(Date.now() / 220) * 4;
             op.babyBirds[0].wing += dt * 20;
 
-            op.babyBirds[1].x = 90 - 26;
+            op.babyBirds[1].x = bx - 26;
             op.babyBirds[1].y = op.y + 18 + Math.sin(Date.now() / 240 + Math.PI) * 4;
             op.babyBirds[1].wing += dt * 20;
           }
@@ -1141,8 +1186,30 @@
         if (opId === this.localPlayerId || (this.myProfile && op.name === this.myProfile.name)) return;
         if (!op.isAlive && op.y >= 540) return;
 
+        const drawX = op.curX !== undefined ? op.curX : birdX;
+
+        // If opponent is offscreen left or right, draw a sleek indicator arrow at screen edge
+        if (drawX < -20 && op.isAlive) {
+          ctx.save();
+          ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
+          ctx.fillStyle = '#f43f5e';
+          ctx.textAlign = 'left';
+          ctx.fillText(`◀ ${op.name} (${op.score || 0}p)`, 6, Math.max(70, Math.min(480, op.y)));
+          ctx.restore();
+          return;
+        }
+        if (drawX > 380 && op.isAlive) {
+          ctx.save();
+          ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
+          ctx.fillStyle = '#38bdf8';
+          ctx.textAlign = 'right';
+          ctx.fillText(`${op.name} (${op.score || 0}p) ▶`, 354, Math.max(70, Math.min(480, op.y)));
+          ctx.restore();
+          return;
+        }
+
         // Turunkan opacity lawan agar mudah dibedakan dengan pemain sendiri (HD Ghost Rival)
-        const rivalOpacity = op.isAlive ? 0.68 : 0.35;
+        const rivalOpacity = op.isAlive ? 0.72 : 0.35;
 
         // 1. Render Opponent Baby Birds (100% HD identik dengan pemain tapi dengan opacity lawan)
         if (op.babyBirds && op.babyBirds.length > 0 && op.isAlive) {
@@ -1150,7 +1217,7 @@
             if (typeof window.drawCustomBabyBird === 'function') {
               window.drawCustomBabyBird(ctx, {
                 id: idx,
-                x: Number.isFinite(b.x) ? b.x : birdX - 22,
+                x: Number.isFinite(b.x) ? b.x : drawX - 22,
                 y: Number.isFinite(b.y) ? b.y : op.y - 18,
                 r: 8.5,
                 angle: (op.rot || 0) * 0.7,
@@ -1168,7 +1235,7 @@
         if (typeof window.renderCustomBird === 'function') {
           ctx.save();
           window.renderCustomBird(ctx, {
-            x: birdX,
+            x: drawX,
             y: op.y,
             vy: op.vy || 0,
             angle: op.rot || 0,
@@ -1182,7 +1249,7 @@
         } else {
           // Fallback custom renderer
           ctx.save();
-          ctx.translate(birdX, op.y);
+          ctx.translate(drawX, op.y);
           ctx.rotate(op.rot || 0);
           ctx.globalAlpha = rivalOpacity;
           ctx.fillStyle = op.isAlive ? '#f43f5e' : '#64748b';
@@ -1196,10 +1263,10 @@
         if (op.isDashing && op.isAlive) {
           ctx.save();
           ctx.globalAlpha = rivalOpacity * 0.7;
-          ctx.strokeStyle = '#f43f5e';
+          ctx.strokeStyle = '#38bdf8';
           ctx.lineWidth = 2;
           ctx.beginPath();
-          ctx.arc(birdX - 8, op.y, 20, 0, Math.PI * 2);
+          ctx.arc(drawX - 8, op.y, 20, 0, Math.PI * 2);
           ctx.stroke();
           ctx.restore();
         }
@@ -1207,11 +1274,11 @@
         // 4. Render Opponent Shield (100% HD Hexagonal Shield dengan opacity lawan)
         if (op.hasShield && op.isAlive) {
           if (typeof window.drawCustomShieldFX === 'function') {
-            window.drawCustomShieldFX(ctx, birdX, op.y, op.rot || 0, false, rivalOpacity);
+            window.drawCustomShieldFX(ctx, drawX, op.y, op.rot || 0, false, rivalOpacity);
           }
         }
 
-        // 4. Opponent Name Tag & Live Score above head
+        // 5. Opponent Name Tag & Live Score above head
         ctx.save();
         ctx.globalAlpha = rivalOpacity;
         ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
@@ -1222,14 +1289,14 @@
         const textWidth = ctx.measureText(tagText).width;
         ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
         ctx.beginPath();
-        ctx.roundRect(birdX - textWidth/2 - 6, op.y - 34, textWidth + 12, 15, 4);
+        ctx.roundRect(drawX - textWidth/2 - 6, op.y - 34, textWidth + 12, 15, 4);
         ctx.fill();
-        ctx.strokeStyle = op.isAlive ? '#f43f5e' : '#94a3b8';
+        ctx.strokeStyle = op.isAlive ? '#38bdf8' : '#94a3b8';
         ctx.lineWidth = 1;
         ctx.stroke();
 
-        ctx.fillStyle = op.isAlive ? '#fecdd3' : '#94a3b8';
-        ctx.fillText(tagText, birdX, op.y - 23);
+        ctx.fillStyle = op.isAlive ? '#bae6fd' : '#94a3b8';
+        ctx.fillText(tagText, drawX, op.y - 23);
         ctx.restore();
       });
     }

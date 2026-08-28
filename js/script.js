@@ -3984,13 +3984,16 @@
   }
 
   function getDashMaxCd() {
+    if(currentMode === 'multiplayer' && window.multiplayerEngine && window.multiplayerEngine.gameMode === 'race') {
+      return 0.05; // Mode Race: Unlimited & Instant Dash!
+    }
     return (progress.selectedPet === 'kuro_void') ? 2.5 : 4.5;
   }
 
   function triggerDash() {
     if(state !== State.PLAYING && state !== State.READY) return;
     if(currentMode === 'multiplayer' && !started) return; // Kunci input selama hitung mundur in-game arena
-    if(dashCooldown > 0) {
+    if(dashCooldown > 0 && !(currentMode === 'multiplayer' && window.multiplayerEngine && window.multiplayerEngine.gameMode === 'race')) {
       audio.hit();
       return;
     }
@@ -4835,12 +4838,16 @@
 
     // Multiplayer State Broadcast & Rival Interpolation
     if(currentMode === 'multiplayer' && window.multiplayerEngine) {
-      window.multiplayerEngine.updateOpponents(dt, pipes, powerups);
-      window.multiplayerEngine.opponents.forEach(op => {
-        if(op.isSimulatedBot && op.isAlive) {
-          op.score = score;
-        }
+      const isMyRocket = (activePowerups.rocket || 0) > 0;
+      const isMyDashing = dashTimer > 0;
+
+      window.multiplayerEngine.updateOpponents(dt, pipes, powerups, {
+        isDashing: isMyDashing,
+        isRocket: isMyRocket,
+        score: score,
+        birdX: bird.x
       });
+
       window.multiplayerEngine.broadcastMyState({
         y: bird.y,
         vy: bird.vy,
@@ -4848,10 +4855,16 @@
         score,
         lives,
         isAlive: true,
-        isDashing: dashTimer > 0
+        isDashing: isMyDashing,
+        isRocket: isMyRocket
       });
 
       updateMpBattleHUD();
+
+      // Unlimited instant dash in Race mode:
+      if(window.multiplayerEngine.gameMode === 'race') {
+        dashCooldown = 0;
+      }
     }
 
     // Power-Up & Dash Timer Management
