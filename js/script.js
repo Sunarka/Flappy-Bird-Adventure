@@ -3958,13 +3958,40 @@
     updateDashUI();
   }
 
-  // Active Dash Skill UI & Execution
+  // Active Dash Skill UI & Execution (With Race Mode Hold to Nitro Boost)
+  let isHoldingDash = false;
+  let nitroHoldAudioTimer = 0;
+
   function updateDashUI() {
     if(!el.dashBtn) return;
     const isPlayingOrReady = state === State.PLAYING || state === State.READY;
     el.dashBtn.classList.toggle('hidden', !isPlayingOrReady);
 
     if(!isPlayingOrReady) return;
+
+    const isRaceMode = currentMode === 'multiplayer' && window.multiplayerEngine && window.multiplayerEngine.gameMode === 'race';
+    el.dashBtn.classList.toggle('race-nitro-mode', !!isRaceMode);
+
+    if(isRaceMode) {
+      el.dashBtn.classList.remove('cooldown');
+      el.dashBtn.classList.add('ready');
+      el.dashBtn.classList.toggle('holding', !!isHoldingDash);
+
+      const keyHint = el.dashBtn.querySelector('.dash-key-hint');
+      if(keyHint) keyHint.textContent = '🔥 TAHAN (HOLD)';
+
+      if(el.dashCooldownText) {
+        el.dashCooldownText.textContent = isHoldingDash ? 'BOOSTING! ⚡' : 'NITRO BOOST';
+      }
+      if(el.dashRingProgress) {
+        el.dashRingProgress.style.strokeDashoffset = '0';
+      }
+      return;
+    }
+
+    el.dashBtn.classList.remove('race-nitro-mode', 'holding');
+    const keyHint = el.dashBtn.querySelector('.dash-key-hint');
+    if(keyHint) keyHint.textContent = 'SHIFT / D';
 
     const isReady = dashCooldown <= 0;
     el.dashBtn.classList.toggle('ready', isReady);
@@ -4864,6 +4891,35 @@
       // Unlimited instant dash in Race mode:
       if(window.multiplayerEngine.gameMode === 'race') {
         dashCooldown = 0;
+
+        // Continuous Nitro Boost when button/key is held down
+        if(isHoldingDash && (state === State.PLAYING || state === State.READY)) {
+          dashTimer = Math.max(dashTimer, 0.32);
+          graceTimer = Math.max(graceTimer, 0.45);
+          bird.vy = Math.min(bird.vy, -95);
+          bird.wing = 0.22;
+          shake = Math.max(shake, 0.12);
+
+          // Continuous hyper nitro flame exhaust particles
+          if(Math.random() < 0.75) {
+            particles.push({
+              x: bird.x - 16,
+              y: bird.y + (Math.random() - 0.5) * 14,
+              vx: -360 - Math.random() * 140,
+              vy: (Math.random() - 0.5) * 60,
+              life: 0.32, maxLife: 0.32,
+              color: Math.random() < 0.4 ? '#38bdf8' : (Math.random() < 0.7 ? '#fde047' : '#ea580c'),
+              size: 3.5 + Math.random() * 4,
+              type: 'sparkle'
+            });
+          }
+
+          nitroHoldAudioTimer -= dt;
+          if(nitroHoldAudioTimer <= 0) {
+            audio.dash();
+            nitroHoldAudioTimer = 0.24;
+          }
+        }
       }
     }
 
@@ -10025,8 +10081,19 @@
     el.dashBtn.addEventListener('pointerdown', e => {
       e.stopPropagation();
       e.preventDefault();
+      const isRaceMode = currentMode === 'multiplayer' && window.multiplayerEngine && window.multiplayerEngine.gameMode === 'race';
+      if(isRaceMode) {
+        isHoldingDash = true;
+      }
       triggerDash();
     });
+    const stopHold = () => {
+      isHoldingDash = false;
+    };
+    el.dashBtn.addEventListener('pointerup', stopHold);
+    el.dashBtn.addEventListener('pointercancel', stopHold);
+    el.dashBtn.addEventListener('pointerleave', stopHold);
+    el.dashBtn.addEventListener('pointerout', stopHold);
   }
 
   if(el.reviveConfirmBtn) {
@@ -10060,7 +10127,13 @@
       e.key === 'x' || e.key === 'X' || e.key === 'c' || e.key === 'C' || e.key === 'z' || e.key === 'Z' || e.key === 'ArrowRight'
     ) {
       e.preventDefault();
-      triggerDash();
+      const isRaceMode = currentMode === 'multiplayer' && window.multiplayerEngine && window.multiplayerEngine.gameMode === 'race';
+      if(isRaceMode) {
+        isHoldingDash = true;
+        if(dashTimer <= 0) triggerDash();
+      } else {
+        if(!e.repeat) triggerDash();
+      }
       return;
     }
 
@@ -10070,6 +10143,20 @@
     } else if((e.code === 'KeyP' || e.code === 'Escape') && state === State.PAUSED) {
       resume();
     }
+  });
+
+  window.addEventListener('keyup', e => {
+    if(
+      ['ShiftLeft', 'ShiftRight', 'KeyD', 'KeyF', 'KeyE', 'KeyX', 'KeyC', 'KeyZ', 'ArrowRight', 'Enter'].includes(e.code) ||
+      e.key === 'Shift' || e.key === 'd' || e.key === 'D' || e.key === 'f' || e.key === 'F' || e.key === 'e' || e.key === 'E' ||
+      e.key === 'x' || e.key === 'X' || e.key === 'c' || e.key === 'C' || e.key === 'z' || e.key === 'Z' || e.key === 'ArrowRight'
+    ) {
+      isHoldingDash = false;
+    }
+  });
+
+  window.addEventListener('blur', () => {
+    isHoldingDash = false;
   });
   canvas.addEventListener('pointerdown', e => {
     if(e.target.closest('#dashBtn')) return;
