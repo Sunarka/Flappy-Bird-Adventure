@@ -572,23 +572,12 @@
 }
 
 .mp-vs-text {
-  font: 900 32px/1 'Impact', 'Trebuchet MS', Arial, sans-serif;
-  letter-spacing: 1px;
+  font: 900 36px/1 'Impact', 'Trebuchet MS', Arial, sans-serif;
+  letter-spacing: 1.5px;
   background: linear-gradient(180deg, #fef08a 0%, #f59e0b 50%, #dc2626 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.8));
-}
-
-.mp-vs-countdown {
-  font: 900 16px/1 'Trebuchet MS', Arial, monospace;
-  color: #fde047;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 3px 10px;
-  border-radius: 99px;
-  border: 1px solid #fde047;
-  margin-top: 4px;
-  box-shadow: 0 0 10px rgba(253, 224, 71, 0.4);
+  filter: drop-shadow(0 0 14px rgba(245, 158, 11, 0.9));
 }
 
 .mp-vs-footer-hint {
@@ -597,6 +586,43 @@
   color: #94a3b8;
   letter-spacing: 1.5px;
   z-index: 2;
+}
+
+/* =========================================================
+   IN-GAME ARENA 3.. 2.. 1.. GO! COUNTDOWN OVERLAY
+   ========================================================= */
+.arena-countdown-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+}
+
+.arena-countdown-overlay.hidden {
+  display: none !important;
+}
+
+.arena-countdown-number {
+  font: 900 86px/1 'Trebuchet MS', 'Arial Black', sans-serif;
+  color: #fde047;
+  text-shadow: 0 0 28px rgba(245, 158, 11, 0.9), 0 6px 12px rgba(0, 0, 0, 0.8);
+  animation: arenaCountdownPop 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+  letter-spacing: 2px;
+}
+
+@keyframes arenaCountdownPop {
+  0% { transform: scale(2.2); opacity: 0; filter: blur(4px); }
+  30% { transform: scale(1); opacity: 1; filter: blur(0); }
+  75% { transform: scale(0.95); opacity: 1; }
+  100% { transform: scale(0.85); opacity: 0; }
 }
 
 /* =========================================================

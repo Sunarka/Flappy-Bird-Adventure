@@ -71,7 +71,9 @@
     mpSearchingBar:$('mpSearchingBar'), mpSearchTimerText:$('mpSearchTimerText'), mpCancelSearchBtn:$('mpCancelSearchBtn'),
     mpVersusScreen:$('mpVersusScreen'), mpFighterLeft:$('mpFighterLeft'), mpFighterRight:$('mpFighterRight'),
     mpFighterMyAvatar:$('mpFighterMyAvatar'), mpFighterMyName:$('mpFighterMyName'),
-    mpVsCenterBadge:$('mpVsCenterBadge'), mpVsCountdownText:$('mpVsCountdownText'),
+    mpFighterRivalAvatar:$('mpFighterRivalAvatar'), mpFighterRivalName:$('mpFighterRivalName'),
+    mpVsCenterBadge:$('mpVsCenterBadge'),
+    arenaCountdownOverlay:$('arenaCountdownOverlay'), arenaCountdownNumber:$('arenaCountdownNumber'),
     mpOverModal:$('mpOverModal'), mpOverHeader:$('mpOverHeader'), mpOverBadge:$('mpOverBadge'), mpOverSub:$('mpOverSub'),
     mpOverMyAvatar:$('mpOverMyAvatar'), mpOverMyName:$('mpOverMyName'), mpOverMyScore:$('mpOverMyScore'),
     mpOverMyCrown:$('mpOverMyCrown'), mpOverMyReward:$('mpOverMyReward'),
@@ -3788,21 +3790,59 @@
   }
 
   function goReady() { audio.click(); closeModal(); reset(); setState(State.READY); }
-  function startMultiplayerGameDirectly() {
+
+  let arenaCountdownInterval = null;
+
+  function startMultiplayerGameWithArenaCountdown() {
     closeModal();
     reset();
-    started = true;
-    if (window.multiplayerEngine) window.multiplayerEngine.matchStatus = 'PLAYING';
-    setState(State.PLAYING);
-    bird.vy = -280;
-    bird.wing = 0.22;
-    makeParticles(bird.x - 12, bird.y, 4, '#fff5b2');
-    audio.flap();
-    audio.music();
-    playBackgroundMusic();
-    if(progress.selectedBooster && progress.selectedBooster !== 'none') {
-      activatePowerup(progress.selectedBooster, bird.x, bird.y, true);
+    setState(State.READY);
+    started = false;
+
+    if(arenaCountdownInterval) {
+      clearInterval(arenaCountdownInterval);
+      arenaCountdownInterval = null;
     }
+
+    if(el.arenaCountdownOverlay) {
+      el.arenaCountdownOverlay.classList.remove('hidden');
+    }
+    if(el.arenaCountdownNumber) {
+      el.arenaCountdownNumber.textContent = '3';
+    }
+    try { if(settings.sound) audio.click(); } catch(_) {}
+
+    let count = 3;
+    arenaCountdownInterval = setInterval(() => {
+      count--;
+      if(count === 2) {
+        if(el.arenaCountdownNumber) el.arenaCountdownNumber.textContent = '2';
+        try { if(settings.sound) audio.click(); } catch(_) {}
+      } else if(count === 1) {
+        if(el.arenaCountdownNumber) el.arenaCountdownNumber.textContent = '1';
+        try { if(settings.sound) audio.click(); } catch(_) {}
+      } else if(count === 0) {
+        if(el.arenaCountdownNumber) el.arenaCountdownNumber.textContent = 'GO!';
+        try { if(settings.sound) audio.flap(); } catch(_) {}
+      } else {
+        clearInterval(arenaCountdownInterval);
+        arenaCountdownInterval = null;
+        if(el.arenaCountdownOverlay) el.arenaCountdownOverlay.classList.add('hidden');
+
+        // Launch Game & Fly
+        started = true;
+        if (window.multiplayerEngine) window.multiplayerEngine.matchStatus = 'PLAYING';
+        setState(State.PLAYING);
+        bird.vy = -280;
+        bird.wing = 0.22;
+        makeParticles(bird.x - 12, bird.y, 4, '#fff5b2');
+        audio.music();
+        playBackgroundMusic();
+        if(progress.selectedBooster && progress.selectedBooster !== 'none') {
+          activatePowerup(progress.selectedBooster, bird.x, bird.y, true);
+        }
+      }
+    }, 850);
   }
   function flap() {
     if(state === State.MENU || state === State.OVER || state === State.PAUSED || state === State.REVIVING) return;
@@ -9405,29 +9445,13 @@
       if(settings.sound) audio.click();
     } catch(_) {}
 
-    // Hitung mundur waktu yang jelas: 3 -> 2 -> 1 -> FIGHT! (1 detik per angka)
-    let count = 3;
-    if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = '3';
-
-    versusClashTimer = setInterval(() => {
-      count--;
-      if(count === 2) {
-        if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = '2';
-        try { if(settings.sound) audio.click(); } catch(_) {}
-      } else if(count === 1) {
-        if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = '1';
-        try { if(settings.sound) audio.click(); } catch(_) {}
-      } else if(count === 0) {
-        if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = 'FIGHT!';
-        try { if(settings.sound) audio.flap(); } catch(_) {}
-      } else {
-        clearInterval(versusClashTimer);
-        versusClashTimer = null;
-        versusClashActive = false;
-        el.mpVersusScreen.classList.add('hidden');
-        if(onReadyToPlay) onReadyToPlay();
-      }
-    }, 1000);
+    // Tampilkan animasi benturan kartu VS selama 1.8 detik, lalu masuk ke arena dan mulai hitung mundur in-game!
+    versusClashTimer = setTimeout(() => {
+      versusClashTimer = null;
+      versusClashActive = false;
+      el.mpVersusScreen.classList.add('hidden');
+      if(onReadyToPlay) onReadyToPlay();
+    }, 1800);
   }
 
   if(window.multiplayerEngine) {
@@ -9453,7 +9477,7 @@
     mp.on('match_cancelled', () => {
       stopSearchingRadar();
       if(versusClashTimer) {
-        clearInterval(versusClashTimer);
+        clearTimeout(versusClashTimer);
         versusClashTimer = null;
       }
       versusClashActive = false;
@@ -9515,14 +9539,14 @@
     mp.on('match_found', (data) => {
       const rival = data.opponent || data.playersList.find(p => p.id !== mp.localPlayerId) || mp.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha' };
       playVersusClashIntro(rival, () => {
-        startMultiplayerGameDirectly();
+        startMultiplayerGameWithArenaCountdown();
       });
     });
 
     mp.on('game_starting', (data) => {
       const rival = data.opponent || mp.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha' };
       playVersusClashIntro(rival, () => {
-        startMultiplayerGameDirectly();
+        startMultiplayerGameWithArenaCountdown();
       });
     });
 
