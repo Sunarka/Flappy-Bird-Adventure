@@ -913,7 +913,7 @@
     }
 
     // Update & Lerp positions of rival birds every animation frame
-    updateOpponents(dt, activePipes = []) {
+    updateOpponents(dt, activePipes = [], activePowerups = []) {
       this.opponents.forEach((op, opId) => {
         if (opId === this.localPlayerId || (this.myProfile && op.name === this.myProfile.name)) return;
         if (!op.isAlive) {
