@@ -2722,22 +2722,30 @@
     };
   }
 
+  const cuteAvatarKeys = [
+    'chick_yellow', 'cat_calico', 'dog_shiba', 'bunny_white', 'panda', 'fox',
+    'penguin', 'frog', 'bear_brown', 'koala', 'duck', 'piggy', 'owl_night',
+    'monkey', 'lion', 'dragon'
+  ];
+
   function sanitizeLeaderboard(list) {
     if(!Array.isArray(list)) return [];
-    const cleanAvatars = ['TOP', 'ACE', 'PRO', 'SKY', 'RAY', 'NEO', 'MAX', 'P1', 'FLY', 'VIP'];
     return list.map((item, idx) => {
-      let av = String(item.avatar || cleanAvatars[idx % cleanAvatars.length]);
-      av = av.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{1F900}-\u{1F9FF}\u{1FA70}-\u{1FAFF}\u{2300}-\u{23FF}\u{2B50}\u{2728}\u{2705}\u{274C}\u{2714}\u{2716}\u{25AA}-\u{25FE}]/ug, '').trim();
-      if(!av || av.length > 4) av = cleanAvatars[idx % cleanAvatars.length];
-
-      let tier = String(item.tier || 'BRONZE I').replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{1F900}-\u{1F9FF}\u{1FA70}-\u{1FAFF}\u{2300}-\u{23FF}\u{2B50}\u{2728}\u{2705}\u{274C}\u{2714}\u{2716}\u{25AA}-\u{25FE}]/ug, '').trim();
-      let name = String(item.name || 'Player').replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{1F900}-\u{1F9FF}\u{1FA70}-\u{1FAFF}\u{2300}-\u{23FF}\u{2B50}\u{2728}\u{2705}\u{274C}\u{2714}\u{2716}\u{25AA}-\u{25FE}]/ug, '').trim();
-
+      const p = item || {};
+      const score = Math.max(0, parseInt(p.score, 10) || 0);
+      const name = (p.name && typeof p.name === 'string') ? p.name.slice(0, 16) : 'Player';
+      let av = p.avatar;
+      if(!p.isUser && (!av || !cuteAvatarKeys.includes(av))) {
+        av = cuteAvatarKeys[idx % cuteAvatarKeys.length];
+      }
       return {
-        ...item,
-        name: name || 'Player',
-        tier: tier || 'BRONZE I',
-        avatar: av
+        id: p.id || name,
+        name: name,
+        score: score,
+        tier: getRankTier(score).name,
+        avatar: av || 'chick_yellow',
+        isUser: !!p.isUser,
+        loadout: p.loadout || {}
       };
     });
   }
@@ -3150,35 +3158,6 @@
       });
       el.tiersGuideList.innerHTML = ladderHtml;
     }
-  }
-
-  const cuteAvatarKeys = [
-    'chick_yellow', 'cat_calico', 'dog_shiba', 'bunny_white', 'panda', 'fox',
-    'penguin', 'frog', 'bear_brown', 'koala', 'duck', 'piggy', 'owl_night',
-    'monkey', 'lion', 'dragon'
-  ];
-
-  function sanitizeLeaderboard(list) {
-    if(!Array.isArray(list)) return [];
-    return list.map((item, idx) => {
-      const p = item || {};
-      const score = Math.max(0, parseInt(p.score, 10) || 0);
-      const name = (p.name && typeof p.name === 'string') ? p.name.slice(0, 16) : 'Player';
-      let av = p.avatar;
-      // Jika dummy player atau avatar tidak dikenal, berikan avatar acak dari koleksi PP lucu
-      if(!p.isUser && (!av || !cuteAvatarKeys.includes(av))) {
-        av = cuteAvatarKeys[idx % cuteAvatarKeys.length];
-      }
-      return {
-        id: p.id || name,
-        name: name,
-        score: score,
-        tier: getRankTier(score).name,
-        avatar: av || 'chick_yellow',
-        isUser: !!p.isUser,
-        loadout: p.loadout || {}
-      };
-    });
   }
 
   function renderLeaderboardList() {
