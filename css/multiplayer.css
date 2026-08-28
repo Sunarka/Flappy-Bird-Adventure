@@ -1,0 +1,339 @@
+/* =========================================================
+   FLAPPY BIRD - CLOUDFLARE MULTIPLAYER (1v1 BATTLE & ROOMS)
+   ========================================================= */
+
+/* 3-Pill Mode Selector Expansion */
+.mode-selector {
+  width: min(310px, 94vw) !important;
+  gap: 4px !important;
+}
+
+.mode-pill {
+  padding: 5px 4px !important;
+  min-height: 46px !important;
+}
+
+.mode-pill[data-mode="multiplayer"].active {
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #6366f1 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.5), 0 0 0 2px #f472b6 !important;
+}
+
+.mode-pill[data-mode="multiplayer"].active .mode-badge {
+  background: #4c1d95 !important;
+  color: #f472b6 !important;
+}
+
+/* --- Multiplayer Lobby Modal --- */
+.mp-modal {
+  width: min(330px, 94vw) !important;
+  max-height: min(540px, 88vh) !important;
+  background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 50%, #2e1065 100%) !important;
+  border: 2px solid #c084fc !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 26px rgba(192, 132, 252, 0.3) !important;
+  color: #ffffff !important;
+  padding: 18px 14px 16px !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+
+.mp-modal.hidden {
+  display: none !important;
+}
+
+.mp-modal:not(.hidden) {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.mp-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(192, 132, 252, 0.3);
+  margin-bottom: 12px;
+}
+
+.mp-icon-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+  flex-shrink: 0;
+}
+
+.mp-titles h2 {
+  font: 900 15px 'Trebuchet MS', Arial, sans-serif !important;
+  color: #f472b6 !important;
+  margin: 0 !important;
+  letter-spacing: 0.5px;
+}
+
+.mp-status-indicator {
+  font: 700 10px 'Trebuchet MS', Arial, sans-serif;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.mp-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+  display: inline-block;
+}
+
+/* Tabs: Quick Match, Buat Room, Gabung */
+.mp-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mp-tab-btn {
+  flex: 1;
+  font: 900 10.5px 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 6px 4px !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  color: #cbd5e1 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-height: 32px !important;
+}
+
+.mp-tab-btn.active {
+  background: #8b5cf6 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4) !important;
+}
+
+/* Tab Views */
+.mp-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.mp-view.hidden {
+  display: none !important;
+}
+
+/* Quick Match Card */
+.mp-quick-box {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1.5px solid rgba(192, 132, 252, 0.3);
+  border-radius: 14px;
+  padding: 16px 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.mp-quick-title {
+  font: 900 14px 'Trebuchet MS', Arial, sans-serif;
+  color: #fde047;
+}
+
+.mp-quick-desc {
+  font: 600 11px/1.4 'Trebuchet MS', Arial, sans-serif;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.mp-btn-find {
+  width: 100% !important;
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%) !important;
+  border-color: #f472b6 !important;
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.4) !important;
+  min-height: 42px !important;
+}
+
+/* Room Box (Create / Join) */
+.mp-room-box {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1.5px solid rgba(192, 132, 252, 0.3);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+}
+
+.mp-code-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.mp-code-badge {
+  font: 900 24px/1 'Trebuchet MS', Arial, monospace;
+  letter-spacing: 4px;
+  color: #fde047;
+  background: rgba(15, 23, 42, 0.9);
+  padding: 6px 16px;
+  border-radius: 10px;
+  border: 2px dashed #facc15;
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.4);
+}
+
+.mp-btn-copy {
+  background: #334155 !important;
+  color: #f1f5f9 !important;
+  font-size: 10px !important;
+  padding: 5px 8px !important;
+  min-height: 28px !important;
+  border-radius: 6px !important;
+}
+
+/* Input Code */
+.mp-code-input {
+  width: 100%;
+  font: 900 18px 'Trebuchet MS', Arial, monospace;
+  letter-spacing: 3px;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1.5px solid #a855f7;
+  color: #fde047;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.mp-code-input:focus {
+  border-color: #f472b6;
+  box-shadow: 0 0 12px rgba(244, 114, 182, 0.4);
+}
+
+/* Players Slot In Room */
+.mp-slots-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.mp-slot-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.mp-slot-card.occupied {
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.12);
+}
+
+.mp-slot-card.host {
+  border-color: #facc15;
+  background: rgba(250, 204, 21, 0.12);
+}
+
+.mp-slot-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mp-slot-name {
+  font: 900 10.5px 'Trebuchet MS', Arial, sans-serif;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.mp-slot-role {
+  font: 800 8px 'Trebuchet MS', Arial, sans-serif;
+  color: #fde047;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1px 6px;
+  border-radius: 99px;
+}
+
+/* In-Game Live 1v1 Battle HUD */
+.mp-battle-hud {
+  position: absolute;
+  top: 50px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.mp-battle-hud.hidden {
+  display: none !important;
+}
+
+.mp-player-hud-card {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1.5px solid #38bdf8;
+  border-radius: 10px;
+  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.mp-player-hud-card.rival {
+  border-color: #f43f5e;
+  box-shadow: 0 4px 10px rgba(244, 63, 94, 0.35);
+}
+
+.mp-hud-name {
+  font: 900 10px 'Trebuchet MS', Arial, sans-serif;
+  color: #ffffff;
+}
+
+.mp-hud-score {
+  font: 900 13px 'Trebuchet MS', Arial, sans-serif;
+  color: #fde047;
+}
+
+.mp-vs-badge {
+  font: 900 11px 'Trebuchet MS', Arial, sans-serif;
+  color: #ec4899;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(236, 72, 153, 0.5);
+}

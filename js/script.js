@@ -57,7 +57,17 @@
     reviveCostLabel:$('reviveCostLabel'), reviveConfirmBtn:$('reviveConfirmBtn'), reviveGiveUpBtn:$('reviveGiveUpBtn'),
     tierRoadmapModal:$('tierRoadmapModal'), modalMyTierCard:$('modalMyTierCard'),
     gameDialogModal:$('gameDialogModal'), dialogIconWrap:$('dialogIconWrap'), dialogTitle:$('dialogTitle'),
-    dialogBody:$('dialogBody'), dialogActions:$('dialogActions'), dialogConfirmBtn:$('dialogConfirmBtn'), dialogCancelBtn:$('dialogCancelBtn')
+    dialogBody:$('dialogBody'), dialogActions:$('dialogActions'), dialogConfirmBtn:$('dialogConfirmBtn'), dialogCancelBtn:$('dialogCancelBtn'),
+    modeMultiplayerBtn:$('modeMultiplayerBtn'), menuMultiplayerCard:$('menuMultiplayerCard'),
+    mpBattleHud:$('mpBattleHud'), mpMyHudName:$('mpMyHudName'), mpMyHudScore:$('mpMyHudScore'),
+    mpRivalHudName:$('mpRivalHudName'), mpRivalHudScore:$('mpRivalHudScore'),
+    multiplayerModal:$('multiplayerModal'), mpServerStatusText:$('mpServerStatusText'),
+    mpTabQuickBtn:$('mpTabQuickBtn'), mpTabCreateBtn:$('mpTabCreateBtn'), mpTabJoinBtn:$('mpTabJoinBtn'),
+    mpViewQuick:$('mpViewQuick'), mpViewCreate:$('mpViewCreate'), mpViewJoin:$('mpViewJoin'),
+    mpQuickFindBtn:$('mpQuickFindBtn'), mpCreatedCodeBadge:$('mpCreatedCodeBadge'), mpCopyCodeBtn:$('mpCopyCodeBtn'),
+    mpHostAvatar:$('mpHostAvatar'), mpHostName:$('mpHostName'), mpGuestSlotCard:$('mpGuestSlotCard'),
+    mpGuestAvatar:$('mpGuestAvatar'), mpGuestName:$('mpGuestName'), mpHostStartGameBtn:$('mpHostStartGameBtn'),
+    mpJoinCodeInput:$('mpJoinCodeInput'), mpJoinRoomBtn:$('mpJoinRoomBtn')
   };
   const storage = {
     get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } },
@@ -3072,15 +3082,29 @@
   function setMode(mode, silent = false) {
     currentMode = mode;
     if(!silent) audio.click();
-    el.modeClassicBtn.classList.toggle('active', mode === 'classic');
-    el.modeRankedBtn.classList.toggle('active', mode === 'ranked');
-    el.playBtn.textContent = mode === 'ranked' ? 'PLAY RANKED (EXTREME)' : 'PLAY CLASSIC';
-    if(el.modeBestLabel) el.modeBestLabel.textContent = mode === 'ranked' ? 'RANKED BEST' : 'CLASSIC BEST';
+    if(el.modeClassicBtn) el.modeClassicBtn.classList.toggle('active', mode === 'classic');
+    if(el.modeRankedBtn) el.modeRankedBtn.classList.toggle('active', mode === 'ranked');
+    if(el.modeMultiplayerBtn) el.modeMultiplayerBtn.classList.toggle('active', mode === 'multiplayer');
+
+    if(mode === 'multiplayer') {
+      el.playBtn.textContent = 'BUKA LOBI 1v1 BATTLE';
+      if(el.modeBestLabel) el.modeBestLabel.textContent = '1v1 BATTLE';
+    } else if(mode === 'ranked') {
+      el.playBtn.textContent = 'PLAY RANKED (EXTREME)';
+      if(el.modeBestLabel) el.modeBestLabel.textContent = 'RANKED BEST';
+    } else {
+      el.playBtn.textContent = 'PLAY CLASSIC';
+      if(el.modeBestLabel) el.modeBestLabel.textContent = 'CLASSIC BEST';
+    }
     
-    // Tampilkan tombol Leaderboard HANYA di mode Ranked, sembunyikan sepenuhnya di Mode Classic!
+    // Tampilkan tombol Leaderboard HANYA di mode Ranked
     if(el.rankedLeaderboardBtn) {
       el.rankedLeaderboardBtn.classList.toggle('hidden', mode !== 'ranked');
       el.rankedLeaderboardBtn.style.display = mode === 'ranked' ? 'flex' : 'none';
+    }
+
+    if(el.menuMultiplayerCard) {
+      el.menuMultiplayerCard.classList.toggle('hidden', mode !== 'multiplayer');
     }
 
     updateMenuRankedUI();
@@ -3461,9 +3485,16 @@
         el.rankTierHud.innerHTML = `<span class="tier-hud-icon">${tier.iconSvg}</span> <span>${tier.name}</span>`;
         el.rankTierHud.classList.remove('hidden');
       }
+      if(el.mpBattleHud) el.mpBattleHud.classList.add('hidden');
+    } else if(currentMode === 'multiplayer') {
+      el.coinHud.innerHTML = '1v1 BATTLE <b>CLOUDFLARE</b>';
+      if(el.rankTierHud) el.rankTierHud.classList.add('hidden');
+      if(el.mpBattleHud) el.mpBattleHud.classList.toggle('hidden', next !== State.PLAYING);
+      if(el.mpMyHudName) el.mpMyHudName.textContent = (gpProfile.gamerTag || 'YOU').slice(0, 10);
     } else {
       el.coinHud.innerHTML = 'COINS <b>' + progress.coins + '</b>';
       if(el.rankTierHud) el.rankTierHud.classList.add('hidden');
+      if(el.mpBattleHud) el.mpBattleHud.classList.add('hidden');
     }
     if(el.pause) {
       el.pause.style.display = (next === State.PLAYING || next === State.READY) ? 'flex' : 'none';
@@ -3763,31 +3794,38 @@
     makeParticles(bird.x - 12, bird.y, 4, '#fff5b2');
     audio.flap();
   }
+  function getRandomFloat() {
+    if(currentMode === 'multiplayer' && window.multiplayerEngine) {
+      return window.multiplayerEngine.random();
+    }
+    return Math.random();
+  }
+
   function makePipe() {
-    const isRanked = currentMode === 'ranked';
+    const isRanked = currentMode === 'ranked' || currentMode === 'multiplayer';
     const d = isRanked ? 'extreme' : settings.difficulty;
     const level = Math.floor(score / 5);
-    const gapBase = isRanked ? 116 : (d === 'easy' ? 164 : d === 'hard' ? 132 : 148);
-    const minGap = isRanked ? 84 : (d === 'easy' ? 104 : d === 'hard' ? 90 : 96);
+    const gapBase = isRanked ? 120 : (d === 'easy' ? 164 : d === 'hard' ? 132 : 148);
+    const minGap = isRanked ? 88 : (d === 'easy' ? 104 : d === 'hard' ? 90 : 96);
     let gap = Math.max(minGap, gapBase - level * (isRanked ? 5 : 4));
     if(progress.selectedPet === 'blaze_ember') {
       gap += 16; // Phoenix pipe gap expander
     }
     const margin = isRanked ? 58 : 72;
     const max = H - GROUND - gap - margin;
-    let y = margin + Math.random() * (max - margin);
-    y = Math.max(margin, Math.min(max, (y + lastGapY) / 2 + (Math.random() - .5) * (isRanked ? 125 : 95)));
+    let y = margin + getRandomFloat() * (max - margin);
+    y = Math.max(margin, Math.min(max, (y + lastGapY) / 2 + (getRandomFloat() - .5) * (isRanked ? 125 : 95)));
     lastGapY = y;
     const pipe = { x: W + 28, gapY: y, gapSize: gap, w: 60, passed: false };
     pipes.push(pipe);
 
     // Cek apakah Skill Power-up muncul di celah tiang ini
     const powerupInterval = isRanked ? Math.max(8.0, 14.0 - Math.min(score, 100) * 0.05) : Math.max(6.5, 12.0 - Math.min(score, 100) * 0.05);
-    const shouldSpawnPowerup = powerupSpawnTimer > powerupInterval && Math.random() < 0.85;
+    const shouldSpawnPowerup = powerupSpawnTimer > powerupInterval && getRandomFloat() < 0.85;
 
     if(shouldSpawnPowerup) {
       powerupSpawnTimer = 0;
-      const rand = Math.random();
+      const rand = getRandomFloat();
       // Shield 22%, Magnet 20%, Slow Time 16%, Star 14%, Rocket NOS 14%, Extra Life Heart 14%
       const type = rand < 0.22 ? 'shield' : rand < 0.42 ? 'magnet' : rand < 0.58 ? 'slow' : rand < 0.72 ? 'star' : rand < 0.86 ? 'rocket' : 'heart';
       powerups.push({
@@ -3799,13 +3837,13 @@
         rot: 0
       });
       // TIDAK ADA koin di tiang ini saat skill muncul!
-    } else if(!isRanked && Math.random() < 0.75) {
+    } else if(!isRanked && getRandomFloat() < 0.75) {
       // Koin HANYA muncul di Mode Classic, Mode Ranked Extreme TIDAK DAPAT GOLD!
       coins.push({
         x: pipe.x + pipe.w / 2,
         y: pipe.gapY + pipe.gapSize / 2,
         r: 11,
-        spin: Math.random() * Math.PI * 2
+        spin: getRandomFloat() * Math.PI * 2
       });
     }
   }
@@ -4470,6 +4508,28 @@
       return;
     }
     if(state !== State.PLAYING) return;
+
+    // Multiplayer State Broadcast & Rival Interpolation
+    if(currentMode === 'multiplayer' && window.multiplayerEngine) {
+      window.multiplayerEngine.updateOpponents(dt);
+      window.multiplayerEngine.broadcastMyState({
+        y: bird.y,
+        vy: bird.vy,
+        rot: bird.angle,
+        score,
+        isAlive: true,
+        isDashing: dashTimer > 0
+      });
+
+      if(el.mpMyHudScore) el.mpMyHudScore.textContent = score;
+      if(window.multiplayerEngine.opponents && window.multiplayerEngine.opponents.size > 0) {
+        const rival = window.multiplayerEngine.opponents.values().next().value;
+        if(rival) {
+          if(el.mpRivalHudScore) el.mpRivalHudScore.textContent = rival.score || 0;
+          if(el.mpRivalHudName) el.mpRivalHudName.textContent = (rival.name || 'RIVAL').slice(0, 10);
+        }
+      }
+    }
 
     // Power-Up & Dash Timer Management
     const prevDashCd = dashCooldown;
@@ -6096,6 +6156,11 @@
 
         _step = 'drawBird';
         drawBird();
+
+        if(currentMode === 'multiplayer' && window.multiplayerEngine) {
+          _step = 'renderOpponents';
+          window.multiplayerEngine.renderOpponents(ctx, bird.x);
+        }
 
         _step = 'babyBirds';
         for(const baby of babyBirds) {
@@ -8509,6 +8574,11 @@
     });
   }
   bindClick('playBtn', () => {
+    if(currentMode === 'multiplayer') {
+      audio.click();
+      showModal(el.multiplayerModal);
+      return;
+    }
     if(currentMode === 'ranked' && !gpProfile.isLoggedIn) {
       audio.click();
       showModal(el.googlePlayModal);
@@ -9109,8 +9179,196 @@
     e.preventDefault();
     flap();
   });
-  document.addEventListener('visibilitychange', () => {
-    if(document.hidden && (state === State.PLAYING || state === State.READY)) pause();
+  // =========================================================
+  // MULTIPLAYER 1v1 CLOUDFLARE ENGINE EVENT WIRING
+  // =========================================================
+  if(window.multiplayerEngine) {
+    const mp = window.multiplayerEngine;
+
+    // Connect to server on page init
+    mp.connect({
+      name: gpProfile.gamerTag || 'SkyPlayer',
+      avatar: gpProfile.avatar || 'chick_yellow',
+      skin: progress.selected || 'classic'
+    });
+
+    mp.on('connected', (data) => {
+      if(el.mpServerStatusText) {
+        el.mpServerStatusText.textContent = data.isLocal ? 'LOCAL BUS ONLINE' : 'CLOUDFLARE WS ONLINE';
+      }
+    });
+
+    mp.on('room_created', (room) => {
+      if(el.mpCreatedCodeBadge) el.mpCreatedCodeBadge.textContent = room.code;
+      if(el.mpHostName) el.mpHostName.textContent = gpProfile.gamerTag || 'Host';
+      if(el.mpHostAvatar) el.mpHostAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 36);
+      if(el.mpGuestName) el.mpGuestName.textContent = 'Menunggu Teman...';
+      if(el.mpGuestAvatar) el.mpGuestAvatar.innerHTML = '⏳';
+      if(el.mpGuestSlotCard) el.mpGuestSlotCard.classList.remove('occupied');
+      if(el.mpHostStartGameBtn) {
+        el.mpHostStartGameBtn.disabled = true;
+        el.mpHostStartGameBtn.style.opacity = '0.6';
+        el.mpHostStartGameBtn.style.background = '#64748b';
+        el.mpHostStartGameBtn.textContent = 'MENUNGGU LAWAN...';
+      }
+      switchMpTab('create');
+    });
+
+    mp.on('player_joined', (data) => {
+      audio.win();
+      const guest = data.player;
+      if(guest && el.mpGuestName) {
+        el.mpGuestName.textContent = guest.name || 'Pemain 2';
+        if(el.mpGuestAvatar) el.mpGuestAvatar.innerHTML = getCuteAvatarSvg(guest.avatar, 36);
+        if(el.mpGuestSlotCard) el.mpGuestSlotCard.classList.add('occupied');
+      }
+      if(el.mpHostStartGameBtn) {
+        el.mpHostStartGameBtn.disabled = false;
+        el.mpHostStartGameBtn.style.opacity = '1';
+        el.mpHostStartGameBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+        el.mpHostStartGameBtn.textContent = 'MULAI BERTANDING SEKARANG!';
+      }
+      showGameDialog({
+        title: 'Lawan Bergabung!',
+        html: `<p><b>"${guest.name}"</b> telah masuk ke room Anda!</p>`,
+        type: 'success',
+        confirmText: 'MANTAP'
+      });
+    });
+
+    mp.on('room_joined', (room) => {
+      audio.win();
+      closeModal();
+      setMode('multiplayer');
+      showGameDialog({
+        title: 'Berhasil Masuk Room',
+        html: `<p>Anda telah bergabung di Room <b>#${room.code}</b>!</p><p style="font-size:11px;color:#94a3b8;margin-top:6px;">Menunggu Host memulai pertandingan...</p>`,
+        type: 'success',
+        confirmText: 'SIAP BERTANDING'
+      });
+    });
+
+    mp.on('match_found', (data) => {
+      audio.win();
+      closeModal();
+      setMode('multiplayer');
+      const rivalName = data.playersList.find(p => p.id !== mp.localPlayerId)?.name || 'Rival';
+      showGameDialog({
+        title: 'Lawan Ditemukan!',
+        html: `<p>Bertanding 1v1 melawan <b>"${rivalName}"</b>!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Mode:</span><b>1v1 Battle</b></div></div>`,
+        type: 'success',
+        confirmText: 'GAS MAIN!'
+      }).then(() => {
+        goReady();
+      });
+    });
+
+    mp.on('game_starting', (data) => {
+      closeModal();
+      setMode('multiplayer');
+      goReady();
+    });
+
+    mp.on('opponent_died', (data) => {
+      if(currentMode === 'multiplayer' && state === State.PLAYING) {
+        audio.win();
+        showGameDialog({
+          title: '🏆 KAMU MENANG! 🏆',
+          html: `<p>Lawan Anda telah jatuh!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Skor Anda:</span><b style="color:#4ade80;">${score} Poin</b></div><div class="dialog-info-row"><span>Skor Lawan:</span><b style="color:#f87171;">${data.finalScore || 0} Poin</b></div></div>`,
+          type: 'success',
+          confirmText: 'KLAIM KEMENANGAN'
+        });
+      }
+    });
+
+    mp.on('error', (errMsg) => {
+      showGameDialog({
+        title: 'Pemberitahuan Room',
+        html: `<p>${errMsg}</p>`,
+        type: 'warning',
+        confirmText: 'MENGERTI'
+      });
+    });
+  }
+
+  function switchMpTab(tab) {
+    if(el.mpTabQuickBtn) el.mpTabQuickBtn.classList.toggle('active', tab === 'quick');
+    if(el.mpTabCreateBtn) el.mpTabCreateBtn.classList.toggle('active', tab === 'create');
+    if(el.mpTabJoinBtn) el.mpTabJoinBtn.classList.toggle('active', tab === 'join');
+
+    if(el.mpViewQuick) el.mpViewQuick.classList.toggle('hidden', tab !== 'quick');
+    if(el.mpViewCreate) el.mpViewCreate.classList.toggle('hidden', tab !== 'create');
+    if(el.mpViewJoin) el.mpViewJoin.classList.toggle('hidden', tab !== 'join');
+  }
+
+  bindClick(el.modeMultiplayerBtn, () => {
+    setMode('multiplayer');
+  });
+
+  bindClick(el.menuMultiplayerCard, () => {
+    audio.click();
+    showModal(el.multiplayerModal);
+  });
+
+  bindClick(el.mpTabQuickBtn, () => { audio.click(); switchMpTab('quick'); });
+  bindClick(el.mpTabCreateBtn, () => {
+    audio.click();
+    switchMpTab('create');
+    if(window.multiplayerEngine && (!window.multiplayerEngine.currentRoom || !window.multiplayerEngine.currentRoom.isHost)) {
+      window.multiplayerEngine.createRoom({
+        name: gpProfile.gamerTag || 'SkyPlayer',
+        avatar: gpProfile.avatar || 'chick_yellow',
+        skin: progress.selected || 'classic'
+      });
+    }
+  });
+  bindClick(el.mpTabJoinBtn, () => { audio.click(); switchMpTab('join'); });
+
+  bindClick(el.mpQuickFindBtn, () => {
+    audio.click();
+    if(window.multiplayerEngine) {
+      window.multiplayerEngine.quickMatch({
+        name: gpProfile.gamerTag || 'SkyPlayer',
+        avatar: gpProfile.avatar || 'chick_yellow',
+        skin: progress.selected || 'classic'
+      });
+    }
+  });
+
+  bindClick(el.mpCopyCodeBtn, () => {
+    audio.click();
+    const code = el.mpCreatedCodeBadge ? el.mpCreatedCodeBadge.textContent : '';
+    if(code && code !== '----') {
+      try {
+        navigator.clipboard.writeText(code);
+        showGameDialog({ title: 'Kode Disalin!', html: `<p>Kode room <b>#${code}</b> berhasil disalin ke clipboard!</p>`, type: 'success' });
+      } catch(_) {
+        prompt('Salin kode room Anda:', code);
+      }
+    }
+  });
+
+  bindClick(el.mpJoinRoomBtn, () => {
+    audio.click();
+    const code = el.mpJoinCodeInput ? el.mpJoinCodeInput.value.trim() : '';
+    if(!code) {
+      showGameDialog({ title: 'Kode Kosong', html: '<p>Masukkan 4-digit kode room teman Anda!</p>', type: 'warning' });
+      return;
+    }
+    if(window.multiplayerEngine) {
+      window.multiplayerEngine.joinRoom(code, {
+        name: gpProfile.gamerTag || 'SkyPlayer',
+        avatar: gpProfile.avatar || 'chick_yellow',
+        skin: progress.selected || 'classic'
+      });
+    }
+  });
+
+  bindClick(el.mpHostStartGameBtn, () => {
+    audio.click();
+    if(window.multiplayerEngine) {
+      window.multiplayerEngine.startRoomGame();
+    }
   });
 
   function _showErrBanner(msg) {
