@@ -9312,6 +9312,9 @@
     }
   }
 
+  let versusClashTimer = null;
+  let versusClashActive = false;
+
   function playVersusClashIntro(opponent, onReadyToPlay) {
     stopSearchingRadar();
     closeModal();
@@ -9322,14 +9325,36 @@
       return;
     }
 
+    if (versusClashActive) {
+      return; // Already actively counting down
+    }
+    versusClashActive = true;
+
+    if (versusClashTimer) {
+      clearInterval(versusClashTimer);
+      versusClashTimer = null;
+    }
+
+    // Resolve opponent info accurately
+    let op = opponent;
+    if (!op || !op.name || op.name === 'RIVAL' || op.name === 'Rival') {
+      if (window.multiplayerEngine && window.multiplayerEngine.opponents && window.multiplayerEngine.opponents.size > 0) {
+        op = window.multiplayerEngine.opponents.values().next().value;
+      } else if (window.multiplayerEngine && window.multiplayerEngine.currentRoom && window.multiplayerEngine.currentRoom.playersList) {
+        op = window.multiplayerEngine.currentRoom.playersList.find(p => p.id !== window.multiplayerEngine.localPlayerId);
+      }
+    }
+
+    const rivalName = op?.name || 'SkyRival';
+    const rivalAvatar = op?.avatar || 'robo_mecha';
+
     // Populate Left (Player)
     if(el.mpFighterMyName) el.mpFighterMyName.textContent = gpProfile.gamerTag || 'YOU';
     if(el.mpFighterMyAvatar) el.mpFighterMyAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 52);
 
     // Populate Right (Opponent)
-    const opData = opponent || { name: 'RIVAL', avatar: 'robo_mecha' };
-    if(el.mpFighterRivalName) el.mpFighterRivalName.textContent = opData.name || 'Rival';
-    if(el.mpFighterRivalAvatar) el.mpFighterRivalAvatar.innerHTML = getCuteAvatarSvg(opData.avatar, 52);
+    if(el.mpFighterRivalName) el.mpFighterRivalName.textContent = rivalName;
+    if(el.mpFighterRivalAvatar) el.mpFighterRivalAvatar.innerHTML = getCuteAvatarSvg(rivalAvatar, 52);
 
     // Reset card animation triggers
     if(el.mpFighterLeft) {
@@ -9349,25 +9374,36 @@
     }
 
     el.mpVersusScreen.classList.remove('hidden');
-    audio.win();
+    audio.stopMusic();
+    stopBackgroundMusic();
 
-    // 3.. 2.. 1.. FIGHT! Countdown
+    try {
+      if(settings.sound) audio.click();
+    } catch(_) {}
+
+    // Hitung mundur waktu yang jelas: 3 -> 2 -> 1 -> FIGHT! (1 detik per angka)
     let count = 3;
-    if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = count;
-    const cdInterval = setInterval(() => {
+    if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = '3';
+
+    versusClashTimer = setInterval(() => {
       count--;
-      if(count > 0) {
-        audio.click();
-        if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = count;
+      if(count === 2) {
+        if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = '2';
+        try { if(settings.sound) audio.click(); } catch(_) {}
+      } else if(count === 1) {
+        if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = '1';
+        try { if(settings.sound) audio.click(); } catch(_) {}
       } else if(count === 0) {
-        audio.flap();
         if(el.mpVsCountdownText) el.mpVsCountdownText.textContent = 'FIGHT!';
+        try { if(settings.sound) audio.flap(); } catch(_) {}
       } else {
-        clearInterval(cdInterval);
+        clearInterval(versusClashTimer);
+        versusClashTimer = null;
+        versusClashActive = false;
         el.mpVersusScreen.classList.add('hidden');
         if(onReadyToPlay) onReadyToPlay();
       }
-    }, 850);
+    }, 1000);
   }
 
   if(window.multiplayerEngine) {
@@ -9392,6 +9428,12 @@
 
     mp.on('match_cancelled', () => {
       stopSearchingRadar();
+      if(versusClashTimer) {
+        clearInterval(versusClashTimer);
+        versusClashTimer = null;
+      }
+      versusClashActive = false;
+      if(el.mpVersusScreen) el.mpVersusScreen.classList.add('hidden');
     });
 
     mp.on('room_created', (room) => {
@@ -9447,14 +9489,14 @@
     });
 
     mp.on('match_found', (data) => {
-      const rival = data.playersList.find(p => p.id !== mp.localPlayerId) || { name: 'Rival', avatar: 'robo_mecha' };
+      const rival = data.opponent || data.playersList.find(p => p.id !== mp.localPlayerId) || mp.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha' };
       playVersusClashIntro(rival, () => {
         goReady();
       });
     });
 
     mp.on('game_starting', (data) => {
-      const rival = mp.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha' };
+      const rival = data.opponent || mp.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha' };
       playVersusClashIntro(rival, () => {
         goReady();
       });

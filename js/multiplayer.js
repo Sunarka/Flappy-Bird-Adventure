@@ -575,6 +575,7 @@
         code,
         seed,
         playersList: this.currentRoom.playersList,
+        opponent: fakeOpponent,
         countdown: 3
       });
     }
