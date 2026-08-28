@@ -3023,6 +3023,8 @@
     el.championLoadoutTags.innerHTML = tagsHtml;
   }
 
+  let activeLeaderboardTab = 'global';
+
   function switchLeaderboardTab(tab) {
     activeLeaderboardTab = tab;
     if(el.lbTabGlobalBtn) el.lbTabGlobalBtn.classList.toggle('active', tab === 'global');
