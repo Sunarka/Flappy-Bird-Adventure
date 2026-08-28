@@ -3702,6 +3702,7 @@
       lives += 1;
     }
     reviveCount = 0;
+    mpBattleResultShown = false;
 
     Object.assign(bird, { x:104, y:285, vy:0, wing:0, angle:0, dead:false });
     resetBabyBirds();
@@ -4533,9 +4534,9 @@
       babyBirds[0].angle = bird.angle * 0.7;
       babyBirds[1].x += (bird.x - 26 - babyBirds[1].x) * 8 * dt;
       babyBirds[1].y += (bird.y + 18 - babyBirds[1].y) * 8 * dt;
-      babyBirds[1].angle = bird.angle * 0.7;
       overTimer -= dt;
-      if(overTimer <= 0 && !el.over.classList.contains('visible')) showOver();
+      const isModalOpen = el.over.classList.contains('visible') || (el.mpOverModal && !el.mpOverModal.classList.contains('hidden'));
+      if(overTimer <= 0 && !isModalOpen) showOver();
       return;
     }
     if(state !== State.PLAYING) return;
@@ -8528,7 +8529,12 @@
       ctx.restore();
     }
 
+  let mpBattleResultShown = false;
+
   function showMpBattleResult(isWinner, myFinalScore, rivalFinalScore, rivalProfile) {
+    if(mpBattleResultShown) return;
+    mpBattleResultShown = true;
+
     if(state !== State.OVER) {
       state = State.OVER;
       bird.dead = true;
@@ -8553,7 +8559,7 @@
     if(isWinner) {
       if(el.mpOverBadge) {
         el.mpOverBadge.className = 'mp-over-badge victory';
-        el.mpOverBadge.innerHTML = '<span>🏆</span> VICTORY';
+        el.mpOverBadge.textContent = 'VICTORY';
       }
       if(el.mpOverSub) el.mpOverSub.textContent = 'Kamu berhasil memenangkan duel 1v1!';
       if(el.mpOverMyCrown) el.mpOverMyCrown.classList.remove('hidden');
@@ -8576,7 +8582,7 @@
     } else {
       if(el.mpOverBadge) {
         el.mpOverBadge.className = 'mp-over-badge defeat';
-        el.mpOverBadge.innerHTML = '<span>⚔️</span> DEFEAT';
+        el.mpOverBadge.textContent = 'DEFEAT';
       }
       if(el.mpOverSub) el.mpOverSub.textContent = 'Kamu terjatuh lebih dulu dari lawan!';
       if(el.mpOverMyCrown) el.mpOverMyCrown.classList.add('hidden');
