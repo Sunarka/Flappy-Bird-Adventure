@@ -7,9 +7,8 @@
 (function(window) {
   'use strict';
 
-  // Default Cloudflare Worker WebSocket Relay URL (Can be customized by user or configured via settings)
-  // When running locally or before worker deploy, it seamlessly utilizes BroadcastChannel for multi-tab testing!
-  const DEFAULT_CF_WORKER_WS = 'wss://flappy-multiplayer.sunarka.workers.dev';
+  // Default Cloudflare Worker WebSocket Relay URL (lappy-sky workers subdomain)
+  const DEFAULT_CF_WORKER_WS = 'wss://flappy-bird-multiplayer.lappy-sky.workers.dev';
 
   class FlappyMultiplayer {
     constructor() {
