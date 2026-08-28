@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#77cef2">
   <title>Flappy Bird - Sky Challenge</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=4.9">
-  <link rel="stylesheet" href="css/modern-icons.css?v=4.9">
-  <link rel="stylesheet" href="css/shop.css?v=4.9">
-  <link rel="stylesheet" href="css/shop-extra.css?v=4.9">
-  <link rel="stylesheet" href="css/mode-picker.css?v=4.9">
-  <link rel="stylesheet" href="css/store.css?v=4.9">
-  <link rel="stylesheet" href="css/ranked.css?v=4.9">
+  <link rel="stylesheet" href="css/style.css?v=5.0">
+  <link rel="stylesheet" href="css/modern-icons.css?v=5.0">
+  <link rel="stylesheet" href="css/shop.css?v=5.0">
+  <link rel="stylesheet" href="css/shop-extra.css?v=5.0">
+  <link rel="stylesheet" href="css/mode-picker.css?v=5.0">
+  <link rel="stylesheet" href="css/store.css?v=5.0">
+  <link rel="stylesheet" href="css/ranked.css?v=5.0">
 </head>
 <body>
   <main class="game-shell" aria-label="Flappy Bird Sky Challenge">
@@ -303,24 +303,24 @@
         <button class="close" data-close>×</button>
         <h2>RANKED LEADERBOARD</h2>
 
-        <!-- Two Leaderboard Tabs: TOP 10 POIN vs TOP 10 RANK -->
+        <!-- Two Leaderboard Tabs: TOP 25 POIN vs TOP 25 RANK -->
         <div class="lb-tabs-bar" id="lbTabsBar">
           <button id="lbTabGlobalBtn" class="lb-tab-btn active" type="button">
-            <span><svg class="inline-tab-svg" viewBox="0 0 24 24" width="14" height="14" style="vertical-align:middle;margin-right:4px;"><path d="M6 3h12v4a6 6 0 0 1-5 5.91V17h3a1 1 0 0 1 1 1v2H7v-2a1 1 0 0 1 1-1h3v-4.09A6 6 0 0 1 6 7V3zM4 5H2v2a4 4 0 0 0 4 4h0V9A2 2 0 0 1 4 7V5zm16 0v2a2 2 0 0 1-2 2v2h0a4 4 0 0 0 4-4V5h-2z" fill="#facc15"/></svg>TOP 10 POIN TERTINGGI</span>
+            <span><svg class="inline-tab-svg" viewBox="0 0 24 24" width="14" height="14" style="vertical-align:middle;margin-right:4px;"><path d="M6 3h12v4a6 6 0 0 1-5 5.91V17h3a1 1 0 0 1 1 1v2H7v-2a1 1 0 0 1 1-1h3v-4.09A6 6 0 0 1 6 7V3zM4 5H2v2a4 4 0 0 0 4 4h0V9A2 2 0 0 1 4 7V5zm16 0v2a2 2 0 0 1-2 2v2h0a4 4 0 0 0 4-4V5h-2z" fill="#facc15"/></svg>TOP 25 POIN TERTINGGI</span>
           </button>
           <button id="lbTabTiersBtn" class="lb-tab-btn" type="button">
-            <span><svg class="inline-tab-svg" viewBox="0 0 24 24" width="14" height="14" style="vertical-align:middle;margin-right:4px;"><path d="M2 19h20v2H2zm1-8l4.5 4L12 6l4.5 9L21 11v6H3z" fill="#facc15"/></svg>TOP 10 RANK TERTINGGI</span>
+            <span><svg class="inline-tab-svg" viewBox="0 0 24 24" width="14" height="14" style="vertical-align:middle;margin-right:4px;"><path d="M2 19h20v2H2zm1-8l4.5 4L12 6l4.5 9L21 11v6H3z" fill="#facc15"/></svg>TOP 25 RANK TERTINGGI</span>
           </button>
         </div>
 
-        <!-- TAB 1: TOP 10 POIN TERTINGGI VIEW -->
+        <!-- TAB 1: TOP 25 POIN TERTINGGI VIEW (Hanya Poin, Tanpa Tier) -->
         <div id="lbGlobalView" class="lb-tab-content active">
           <!-- TOP 1 CHAMPION GOLDEN PORTRAIT SPOTLIGHT -->
           <div class="champion-spotlight" id="championSpotlight">
             <div class="portrait-frame">
               <div class="portrait-header">
                 <span class="laurel-wreath">TOP 1</span>
-                <span class="portrait-title" id="spotlightTitle">WORLD CHAMPION</span>
+                <span class="portrait-title" id="spotlightTitle">#1 WORLD CHAMPION</span>
                 <span class="laurel-wreath">TOP 1</span>
               </div>
               <!-- Portrait Canvas with Golden Border -->
@@ -335,7 +335,7 @@
                   <strong id="championGamerTag">SkyKing_Legend</strong>
                   <span class="champion-score">SCORE <b id="championScore">284</b></span>
                 </div>
-                <div class="champion-tier" id="championTier">GRANDMASTER TIER</div>
+                <div class="champion-tier hidden" id="championTier">GRANDMASTER TIER</div>
                 <div class="champion-loadout-tags" id="championLoadoutTags">
                   <!-- Injected via JavaScript -->
                 </div>
@@ -343,37 +343,35 @@
             </div>
           </div>
 
-          <!-- LEADERBOARD TOP 10 POIN LIST -->
-          <div class="leaderboard-container">
+          <!-- LEADERBOARD TOP 25 POIN LIST (RANK, PLAYER, SCORE) -->
+          <div class="leaderboard-container points-lb-container">
             <div class="lb-header">
               <span>RANK</span>
               <span>PLAYER</span>
-              <span>TIER</span>
-              <span>SCORE</span>
+              <span style="text-align:right;">SCORE</span>
             </div>
             <div class="leaderboard-list" id="leaderboardList">
-              <!-- Top 10 Points Dynamic Player Entries Generated in script.js -->
+              <!-- Top 25 Points Dynamic Player Entries Generated in script.js -->
             </div>
           </div>
         </div>
 
-        <!-- TAB 2: TOP 10 RANK TERTINGGI VIEW -->
+        <!-- TAB 2: TOP 25 RANK TERTINGGI VIEW (Hanya Tier, Tanpa Score) -->
         <div id="lbTiersView" class="lb-tab-content hidden">
           <!-- My Personal Rank Progression Card -->
           <div class="my-rank-card" id="myRankCard">
             <!-- Injected via JavaScript with big Rank SVG, progress bar, points to rank up -->
           </div>
 
-          <!-- LEADERBOARD TOP 10 RANK TERTINGGI LIST -->
+          <!-- LEADERBOARD TOP 25 RANK TERTINGGI LIST (RANK, PLAYER, TIER) -->
           <div class="leaderboard-container rank-lb-container">
             <div class="lb-header">
               <span>RANK</span>
               <span>PLAYER</span>
-              <span>TIER</span>
-              <span>SCORE</span>
+              <span style="text-align:right;">TIER / RANK</span>
             </div>
             <div class="leaderboard-list" id="leaderboardRankList">
-              <!-- Top 10 Highest Rank Tiers Players Generated in script.js -->
+              <!-- Top 25 Highest Rank Tiers Players Generated in script.js -->
             </div>
           </div>
         </div>
@@ -484,7 +482,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=4.9"></script>
-  <script src="js/script.js?v=4.9"></script>
+  <script src="js/firebase-config.js?v=5.0"></script>
+  <script src="js/script.js?v=5.0"></script>
 </body>
 </html>

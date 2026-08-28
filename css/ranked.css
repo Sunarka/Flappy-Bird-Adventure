@@ -621,14 +621,22 @@
 
 .lb-header {
   display: grid;
-  grid-template-columns: 32px 1fr 75px 40px;
-  gap: 4px;
+  grid-template-columns: 36px 1fr 65px;
+  gap: 6px;
   font: 900 9px 'Trebuchet MS', Arial, sans-serif;
   color: #94a3b8;
   letter-spacing: 0.7px;
   padding: 3px 6px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   text-align: left;
+}
+
+.points-lb-container .lb-header {
+  grid-template-columns: 36px 1fr 65px;
+}
+
+.rank-lb-container .lb-header {
+  grid-template-columns: 36px 1fr 95px;
 }
 
 .leaderboard-list {
@@ -659,8 +667,8 @@
 
 .lb-row {
   display: grid;
-  grid-template-columns: 32px 1fr 75px 40px;
-  gap: 4px;
+  grid-template-columns: 36px 1fr 65px;
+  gap: 6px;
   align-items: center;
   padding: 5px 6px;
   border-radius: 6px;
@@ -668,6 +676,14 @@
   text-align: left;
   cursor: pointer;
   transition: background 0.15s ease;
+}
+
+.points-lb-container .lb-row {
+  grid-template-columns: 36px 1fr 65px;
+}
+
+.rank-lb-container .lb-row {
+  grid-template-columns: 36px 1fr 95px;
 }
 
 .lb-player {
