@@ -911,7 +911,8 @@
 
     // Update & Lerp positions of rival birds every animation frame
     updateOpponents(dt, activePipes = []) {
-      this.opponents.forEach(op => {
+      this.opponents.forEach((op, opId) => {
+        if (opId === this.localPlayerId || (this.myProfile && op.name === this.myProfile.name)) return;
         if (!op.isAlive) {
           // Fall to ground if dead
           if (op.targetY < 540) {
@@ -1101,7 +1102,8 @@
     renderOpponents(ctx, birdX = 90) {
       if (this.opponents.size === 0) return;
 
-      this.opponents.forEach(op => {
+      this.opponents.forEach((op, opId) => {
+        if (opId === this.localPlayerId || (this.myProfile && op.name === this.myProfile.name)) return;
         if (!op.isAlive && op.y >= 540) return;
 
         // Turunkan opacity lawan agar mudah dibedakan dengan pemain sendiri (HD Ghost Rival)

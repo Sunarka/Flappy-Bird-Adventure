@@ -125,11 +125,12 @@ export class MultiplayerHub extends DurableObject {
 
       const data = JSON.parse(message);
       const type = data.type;
-      const playerId = session.playerId;
-
       if (data.profile) {
-        session.profile = { ...session.profile, ...data.profile, id: playerId };
+        if (data.profile.id) session.playerId = data.profile.id;
+        session.profile = { ...session.profile, ...data.profile, id: session.playerId };
       }
+
+      const playerId = session.playerId;
 
       switch (type) {
         case 'PING': {
@@ -138,9 +139,10 @@ export class MultiplayerHub extends DurableObject {
         }
 
         case 'UPDATE_PROFILE': {
-          session.profile = { ...session.profile, ...data.profile, id: playerId };
-          if (session.currentRoom && session.currentRoom.players.has(playerId)) {
-            session.currentRoom.players.get(playerId).profile = session.profile;
+          if (data.profile && data.profile.id) session.playerId = data.profile.id;
+          session.profile = { ...session.profile, ...data.profile, id: session.playerId };
+          if (session.currentRoom && session.currentRoom.players.has(session.playerId)) {
+            session.currentRoom.players.get(session.playerId).profile = session.profile;
             this.broadcastToRoom(session.currentRoom, {
               type: 'ROOM_PLAYERS_UPDATE',
               playersList: Array.from(session.currentRoom.players.values()).map(p => ({
