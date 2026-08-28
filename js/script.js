@@ -29,6 +29,7 @@
     shopCanvas:$('shopCanvas'), showcaseLabel:$('showcaseLabel'), tabPrev:$('tabPrev'), tabNext:$('tabNext'),
     modeClassicBtn:$('modeClassicBtn'), modeRankedBtn:$('modeRankedBtn'), modeBestLabel:$('modeBestLabel'),
     playBtn:$('playBtn'), rankedLeaderboardBtn:$('rankedLeaderboardBtn'), googlePlayBtn:$('googlePlayBtn'),
+    topProfileBtn:$('topProfileBtn'), topProfileAvatar:$('topProfileAvatar'), topProfileName:$('topProfileName'), topProfileTier:$('topProfileTier'),
     googlePlayModal:$('googlePlayModal'), gpOnlineStatus:$('gpOnlineStatus'), gpAvatarWrap:$('gpAvatarWrap'), gpAvatar:$('gpAvatar'),
     gpChangeAvatarBtn:$('gpChangeAvatarBtn'), gpGamerTagInput:$('gpGamerTagInput'), gpNameCostHint:$('gpNameCostHint'), gpTierBadge:$('gpTierBadge'),
     gpRankedBest:$('gpRankedBest'), gpAuthActionBtn:$('gpAuthActionBtn'), gpSwitchAccountBtn:$('gpSwitchAccountBtn'),
@@ -2680,6 +2681,32 @@
       el.gpTierBadge.innerHTML = `<span class="tier-icon-inline">${tier.iconSvg}</span> ${tier.name}`;
       el.gpTierBadge.style.color = tier.color;
     }
+
+    // Update Widget Profil Pojok Kiri Atas
+    if(el.topProfileBtn) {
+      if(isLogged) {
+        if(el.topProfileAvatar) el.topProfileAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 28);
+        if(el.topProfileName) el.topProfileName.textContent = gpProfile.gamerTag || 'Player';
+        if(el.topProfileTier) {
+          el.topProfileTier.textContent = tier.name;
+          el.topProfileTier.style.color = tier.color;
+        }
+      } else {
+        if(el.topProfileAvatar) {
+          el.topProfileAvatar.innerHTML = `<svg viewBox="0 0 48 48" width="18" height="18">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>`;
+        }
+        if(el.topProfileName) el.topProfileName.textContent = 'LOGIN';
+        if(el.topProfileTier) {
+          el.topProfileTier.textContent = 'PROFIL';
+          el.topProfileTier.style.color = '#38bdf8';
+        }
+      }
+    }
   }
 
   // 10. Daftar Tingkatan Rank Tier & Ikon Badge Vektor Unik
@@ -3410,6 +3437,7 @@
     el.menu.classList.toggle('hidden', next !== State.MENU);
     el.ready.classList.toggle('hidden', next !== State.READY);
     el.hud.classList.toggle('hidden', next === State.MENU);
+    if(el.topProfileBtn) el.topProfileBtn.classList.toggle('hidden', next !== State.MENU);
     
     // Sembunyikan coinHud & powerupHud saat layar GET READY agar tidak menumpuk di teks instruksi
     if(el.coinHud) el.coinHud.classList.toggle('hidden', next === State.READY || next === State.MENU);
@@ -8495,6 +8523,11 @@
   });
   bindClick('googlePlayBtn', () => {
     if(currentMode !== 'ranked') return;
+    audio.click();
+    syncGPProfileUI();
+    showModal(el.googlePlayModal);
+  });
+  bindClick(el.topProfileBtn, () => {
     audio.click();
     syncGPProfileUI();
     showModal(el.googlePlayModal);

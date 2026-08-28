@@ -1,6 +1,80 @@
 /* =========================================================
-   RANKED MODE, GOOGLE PLAY AUTH, & TOP 1 PORTRAIT SHOWCASE
+   TOP-LEFT PROFILE BUTTON / WIDGET
    ========================================================= */
+.top-profile-wrapper {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  height: 38px;
+  min-height: 38px;
+  background: rgba(15, 23, 42, 0.82);
+  border: 1.5px solid rgba(56, 189, 248, 0.65);
+  border-radius: 99px;
+  padding: 2px 10px 2px 3px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  z-index: 8;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 0 8px rgba(56, 189, 248, 0.15);
+  transition: transform 0.16s ease, filter 0.16s ease, border-color 0.16s ease;
+  user-select: none;
+  max-width: 145px;
+}
+
+.top-profile-wrapper:hover {
+  transform: translateY(-1px) scale(1.03);
+  filter: brightness(1.15);
+  border-color: #38bdf8;
+  box-shadow: 0 6px 16px rgba(56, 189, 248, 0.35);
+}
+
+.top-profile-wrapper:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+.top-profile-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.top-profile-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  min-width: 0;
+}
+
+.top-profile-name {
+  font: 900 11px/1.1 'Trebuchet MS', Arial, sans-serif;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 85px;
+}
+
+.top-profile-tier {
+  font: 800 8.5px/1 'Trebuchet MS', Arial, sans-serif;
+  color: #38bdf8;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 85px;
+  margin-top: 2px;
+}
 
 /* --- Mode Selector on Menu Screen --- */
 .mode-selector {
