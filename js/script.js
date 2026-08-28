@@ -9858,10 +9858,12 @@
     }
   });
 
+  window._guestIsReady = false;
+
   bindClick(el.mpGuestReadyBtn, () => {
     if(!window.multiplayerEngine) return;
-    guestIsReady = !guestIsReady;
-    if(guestIsReady) {
+    window._guestIsReady = !window._guestIsReady;
+    if(window._guestIsReady) {
       audio.win();
       if(el.mpGuestReadyBtn) {
         el.mpGuestReadyBtn.textContent = 'BATAL SIAP';
@@ -9882,7 +9884,7 @@
         el.mpGuestStatusBadge.style.background = '#eab308';
       }
     }
-    window.multiplayerEngine.setReady(guestIsReady);
+    window.multiplayerEngine.setReady(window._guestIsReady);
   });
 
   bindClick(el.mpHostStartGameBtn, () => {
