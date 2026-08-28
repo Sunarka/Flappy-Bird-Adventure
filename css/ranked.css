@@ -126,9 +126,9 @@
 }
 
 .mode-pill[data-mode="multiplayer"].active {
-  background: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #6366f1 100%);
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   color: #ffffff;
-  box-shadow: 0 3px 10px rgba(168, 85, 247, 0.4), 0 0 0 1.5px #f472b6;
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.35), 0 0 0 1.5px #38bdf8;
 }
 
 .mode-badge {
@@ -152,8 +152,8 @@
 }
 
 .mode-pill[data-mode="multiplayer"].active .mode-badge {
-  background: rgba(0, 0, 0, 0.3);
-  color: #fbcfe8;
+  background: rgba(0, 0, 0, 0.25);
+  color: #bae6fd;
 }
 
 .mode-title {
