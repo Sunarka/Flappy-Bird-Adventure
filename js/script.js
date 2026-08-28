@@ -8553,9 +8553,9 @@
     if(isWinner) {
       if(el.mpOverBadge) {
         el.mpOverBadge.className = 'mp-over-badge victory';
-        el.mpOverBadge.textContent = '🏆 VICTORY! 🏆';
+        el.mpOverBadge.innerHTML = '<span>🏆</span> VICTORY';
       }
-      if(el.mpOverSub) el.mpOverSub.textContent = 'Kamu berhasil mengalahkan lawan di 1v1 Battle!';
+      if(el.mpOverSub) el.mpOverSub.textContent = 'Kamu berhasil memenangkan duel 1v1!';
       if(el.mpOverMyCrown) el.mpOverMyCrown.classList.remove('hidden');
       if(el.mpOverRivalCrown) el.mpOverRivalCrown.classList.add('hidden');
       if(el.mpOverMyReward) el.mpOverMyReward.textContent = '+50 COINS';
@@ -8567,15 +8567,16 @@
       audio.stopMusic();
       stopBackgroundMusic();
       if(settings.sound) {
-        audio.playTone(523.25, 0.12, 'triangle', 0.08, 0);
-        setTimeout(() => audio.playTone(659.25, 0.12, 'triangle', 0.08, 0), 110);
-        setTimeout(() => audio.playTone(783.99, 0.12, 'triangle', 0.08, 0), 220);
-        setTimeout(() => audio.playTone(1046.50, 0.45, 'triangle', 0.10, 0), 330);
+        // Melodi kemenangan lembut yang harmonis & nyaman di telinga (pure gentle sine waves)
+        audio.playTone(523.25, 0.14, 'sine', 0.038, 0); // C5
+        setTimeout(() => audio.playTone(659.25, 0.14, 'sine', 0.038, 0), 120); // E5
+        setTimeout(() => audio.playTone(783.99, 0.16, 'sine', 0.040, 0), 240); // G5
+        setTimeout(() => audio.playTone(1046.50, 0.32, 'sine', 0.042, 0), 360); // C6
       }
     } else {
       if(el.mpOverBadge) {
         el.mpOverBadge.className = 'mp-over-badge defeat';
-        el.mpOverBadge.textContent = '💀 DEFEAT';
+        el.mpOverBadge.innerHTML = '<span>⚔️</span> DEFEAT';
       }
       if(el.mpOverSub) el.mpOverSub.textContent = 'Kamu terjatuh lebih dulu dari lawan!';
       if(el.mpOverMyCrown) el.mpOverMyCrown.classList.add('hidden');
@@ -8588,10 +8589,11 @@
       audio.stopMusic();
       stopBackgroundMusic();
       if(settings.sound) {
-        audio.playTone(392.00, 0.15, 'sawtooth', 0.06, 0);
-        setTimeout(() => audio.playTone(349.23, 0.18, 'sawtooth', 0.06, 0), 140);
-        setTimeout(() => audio.playTone(311.13, 0.22, 'sawtooth', 0.07, 0), 300);
-        setTimeout(() => audio.playTone(261.63, 0.42, 'sawtooth', 0.08, 0), 480);
+        // Nada kekalahan lembut yang tenang & tidak menyengat telinga (pure gentle sine waves)
+        audio.playTone(392.00, 0.14, 'sine', 0.032, 0); // G4
+        setTimeout(() => audio.playTone(349.23, 0.16, 'sine', 0.032, 0), 130); // F4
+        setTimeout(() => audio.playTone(311.13, 0.18, 'sine', 0.032, 0), 270); // Eb4
+        setTimeout(() => audio.playTone(261.63, 0.30, 'sine', 0.032, 0), 420); // C4
       }
     }
 

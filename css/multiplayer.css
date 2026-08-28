@@ -604,11 +604,11 @@
    ========================================================= */
 .mp-over-modal {
   width: min(340px, 94vw) !important;
-  background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 50%, #2e1065 100%) !important;
-  border: 2px solid #c084fc !important;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 28px rgba(192, 132, 252, 0.4) !important;
-  border-radius: 22px !important;
-  padding: 20px 16px 18px !important;
+  background: linear-gradient(180deg, #090d16 0%, #111827 50%, #1e1b4b 100%) !important;
+  border: 2px solid rgba(192, 132, 252, 0.4) !important;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.85), 0 0 35px rgba(139, 92, 246, 0.25) !important;
+  border-radius: 24px !important;
+  padding: 22px 18px 20px !important;
   color: #ffffff !important;
   text-align: center !important;
 }
@@ -618,42 +618,68 @@
 }
 
 .mp-over-header {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+  position: relative;
 }
 
 .mp-over-badge {
-  font: 900 18px 'Trebuchet MS', Arial, sans-serif;
-  letter-spacing: 1px;
-  padding: 6px 18px;
-  border-radius: 99px;
-  display: inline-block;
-  margin-bottom: 4px;
+  font: 900 22px/1.1 'Trebuchet MS', 'Arial Black', sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 22px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mp-over-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: skewX(-25deg);
+  animation: shineRibbon 2.5s infinite;
+}
+
+@keyframes shineRibbon {
+  0% { left: -100%; }
+  40%, 100% { left: 200%; }
 }
 
 .mp-over-badge.victory {
-  background: linear-gradient(135deg, #eab308 0%, #f97316 100%);
-  color: #ffffff;
-  box-shadow: 0 4px 16px rgba(234, 179, 8, 0.5);
-  border: 1.5px solid #fef08a;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-  animation: pulseVictory 1.5s infinite;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  color: #fffef0;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  border: 1.5px solid #fde047;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6), 0 0 12px rgba(254, 240, 138, 0.5);
+  animation: glowVictory 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowVictory {
+  0% { box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35); }
+  100% { box-shadow: 0 8px 28px rgba(245, 158, 11, 0.7), 0 0 15px rgba(253, 224, 71, 0.6); }
 }
 
 .mp-over-badge.defeat {
-  background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%);
-  color: #ffffff;
-  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
-  border: 1.5px solid #fca5a5;
-}
-
-@keyframes pulseVictory {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+  color: #fee2e2;
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  border: 1.5px solid #ef4444;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .mp-over-sub {
-  font: 700 11.5px 'Trebuchet MS', Arial, sans-serif;
-  color: #cbd5e1;
+  font: 700 12px 'Trebuchet MS', Arial, sans-serif;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
   margin: 0;
 }
 
