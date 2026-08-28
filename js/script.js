@@ -5860,39 +5860,46 @@
       targetCtx.restore();
       return;
     }
+    const br = Number.isFinite(b.r) ? b.r : 8.5;
+    const bColor = b.color || '#facc15';
+    const bWingColor = b.wingColor || '#eab308';
+    const bBlushColor = b.blushColor || '#fda4af';
+    const bAngle = Number.isFinite(b.angle) ? b.angle : 0;
+    const bFlip = Number.isFinite(b.flipAngle) ? b.flipAngle : 0;
+
     targetCtx.save();
-    targetCtx.translate(b.x, b.y);
-    targetCtx.rotate(b.angle + (b.state === 'intercept' ? b.flipAngle : 0));
+    targetCtx.translate(b.x || 0, b.y || 0);
+    targetCtx.rotate(bAngle + (b.state === 'intercept' ? bFlip : 0));
 
     // Pendaran Aura Lembut
-    targetCtx.shadowColor = b.color;
+    targetCtx.shadowColor = bColor;
     targetCtx.shadowBlur = b.state === 'intercept' ? 14 : 7;
 
     // Tubuh Bulat Mungil Pastel
-    const bodyGrad = targetCtx.createRadialGradient(-2, -2, 2, 0, 0, b.r);
+    const bodyGrad = targetCtx.createRadialGradient(-2, -2, 2, 0, 0, br);
     bodyGrad.addColorStop(0, '#ffffff');
-    bodyGrad.addColorStop(0.35, b.color);
-    bodyGrad.addColorStop(1, b.wingColor);
+    bodyGrad.addColorStop(0.35, bColor);
+    bodyGrad.addColorStop(1, bWingColor);
 
     targetCtx.fillStyle = bodyGrad;
     targetCtx.beginPath();
-    targetCtx.arc(0, 0, b.r, 0, Math.PI * 2);
+    targetCtx.arc(0, 0, br, 0, Math.PI * 2);
     targetCtx.fill();
     targetCtx.shadowBlur = 0;
 
     // Pipi Merona Merah Muda (Blushing Cheeks)
-    targetCtx.fillStyle = b.blushColor || '#fda4af';
+    targetCtx.fillStyle = bBlushColor;
     targetCtx.beginPath();
     targetCtx.arc(3.2, 3.0, 2.2, 0, Math.PI * 2);
     targetCtx.arc(-2.5, 3.0, 2.0, 0, Math.PI * 2);
     targetCtx.fill();
 
     // Sayap Mungil Mengepak Cepat
-    const flap = Math.sin(b.wing) * 0.55;
+    const flap = Math.sin(b.wing || 0) * 0.55;
     targetCtx.save();
     targetCtx.translate(-4, 1);
     targetCtx.rotate(flap);
-    targetCtx.fillStyle = b.wingColor;
+    targetCtx.fillStyle = bWingColor;
     targetCtx.beginPath();
     targetCtx.ellipse(0, 0, 5.5, 3.5, -0.2, 0, Math.PI * 2);
     targetCtx.fill();
@@ -5901,9 +5908,9 @@
     // Paruh Mungil Oranye
     targetCtx.fillStyle = '#f97316';
     targetCtx.beginPath();
-    targetCtx.moveTo(b.r - 2, -1.5);
-    targetCtx.lineTo(b.r + 4.5, 0.5);
-    targetCtx.lineTo(b.r - 2, 2.5);
+    targetCtx.moveTo(br - 2, -1.5);
+    targetCtx.lineTo(br + 4.5, 0.5);
+    targetCtx.lineTo(br - 2, 2.5);
     targetCtx.closePath();
     targetCtx.fill();
 

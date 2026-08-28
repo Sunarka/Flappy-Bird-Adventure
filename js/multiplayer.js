@@ -573,8 +573,8 @@
       const botBooster = BOT_BOOSTERS[Math.floor(Math.random() * BOT_BOOSTERS.length)];
       const hasBabies = Math.random() < 0.75;
       const botBabyBirds = hasBabies ? [
-        { x: 90 - 22, y: 280 - 18, wing: 0, color: '#facc15' },
-        { x: 90 - 26, y: 280 + 18, wing: 0, color: '#38bdf8' }
+        { id: 0, x: 90 - 22, y: 280 - 18, r: 8.5, wing: 0, color: '#facc15', wingColor: '#eab308', blushColor: '#fda4af', state: 'following' },
+        { id: 1, x: 90 - 26, y: 280 + 18, r: 8.5, wing: 0, color: '#38bdf8', wingColor: '#0284c7', blushColor: '#fda4af', state: 'following' }
       ] : [];
 
       this.opponents.set(fakeOpponent.id, {
@@ -840,11 +840,14 @@
             if (typeof window.drawCustomBabyBird === 'function') {
               window.drawCustomBabyBird(ctx, {
                 id: idx,
-                x: b.x,
-                y: b.y,
+                x: Number.isFinite(b.x) ? b.x : birdX - 22,
+                y: Number.isFinite(b.y) ? b.y : op.y - 18,
+                r: 8.5,
                 angle: (op.rot || 0) * 0.7,
                 wing: b.wing || 0,
                 color: b.color || (idx === 0 ? '#facc15' : '#38bdf8'),
+                wingColor: b.wingColor || (idx === 0 ? '#eab308' : '#0284c7'),
+                blushColor: '#fda4af',
                 state: 'following'
               }, rivalOpacity);
             }
