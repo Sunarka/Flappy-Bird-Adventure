@@ -4947,6 +4947,11 @@
         });
       }
     }
+
+    // Dynamic Player Bird Surge forward on screen during Dash & Rocket
+    const targetBirdX = (dashTimer > 0 || activePowerups.rocket > 0) ? Math.min(138, 90 + ((dashTimer > 0 ? dashTimer : 0.3) / 0.35) * 48) : 90;
+    bird.x += (targetBirdX - bird.x) * Math.min(1, dt * 10);
+
     for(const img of dashAfterimages) img.alpha -= dt * 3.5;
     dashAfterimages = dashAfterimages.filter(img => img.alpha > 0);
     updateDashUI();

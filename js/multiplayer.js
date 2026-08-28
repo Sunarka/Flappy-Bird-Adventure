@@ -961,38 +961,32 @@
             op.rot = Math.min(1.5, (op.rot || 0) + 4 * dt);
             op.y = op.targetY;
           }
-          if (op.curX === undefined) op.curX = baseBirdX;
-          // When dead and player keeps advancing, dead body falls behind
-          op.curX -= dt * 140;
+          if (op.relX === undefined) op.relX = baseBirdX;
+          // When dead and player keeps advancing, dead body falls behind quickly
+          op.relX -= dt * 260;
+          op.curX = op.relX;
           return;
         }
 
         // =========================================================
-        // Dynamic Relative Horizontal Position (X-Axis Physics)
+        // Cumulative Relative Horizontal Physics (X-Axis Speed Differential)
         // =========================================================
-        let targetX = baseBirdX;
+        const mySpeed = myIsRocket ? 540 : (myIsDashing ? 460 : 140);
+        const opSpeed = op.isRocket ? 540 : (op.isDashing ? 280 : 135);
+        const speedDelta = opSpeed - mySpeed; // When player dashes (460), speedDelta is -325 px/s!
 
-        // Player Dash & Rocket Surge Effects (Opponent shifts left/behind on screen)
-        if (myIsRocket) {
-          targetX -= 130; // Flying on rocket at warp speed, opponents drop far behind
-        } else if (myIsDashing) {
-          targetX -= 80;  // Dashing forward, opponents drop behind
+        if (op.relX === undefined) op.relX = baseBirdX;
+        
+        // Continuously integrate relative velocity
+        op.relX += speedDelta * dt;
+
+        // When neither is boosting, gently pull towards pipe distance offset
+        if (!myIsDashing && !myIsRocket && !op.isDashing && !op.isRocket) {
+          const targetBaseX = baseBirdX + Math.max(-200, Math.min(200, ((op.score || 0) - myScore) * 120));
+          op.relX += (targetBaseX - op.relX) * Math.min(1, dt * 3.5);
         }
 
-        // Opponent Dash & Rocket Surge Effects (Opponent surges right/ahead on screen)
-        if (op.isRocket) {
-          targetX += 130;
-        } else if (op.isDashing) {
-          targetX += 80;
-        }
-
-        // Relative Score/Distance Offset (In Race/Survival, leading players appear ahead)
-        const scoreDiff = (op.score || 0) - myScore;
-        targetX += Math.max(-140, Math.min(140, scoreDiff * 42));
-
-        if (op.curX === undefined) op.curX = baseBirdX;
-        const lerpFactorX = Math.min(1, dt * 9);
-        op.curX += (targetX - op.curX) * lerpFactorX;
+        op.curX = op.relX;
 
         // If simulated bot, simulate intelligent human-like flapping with mistake chance & 3 lives
         if (op.isSimulatedBot && this.matchStatus === 'PLAYING') {
@@ -1140,18 +1134,18 @@
             }
           }
 
-          // 4. Bot Dash Ability Execution
-          const botDashCooldownBase = this.gameMode === 'race' ? 0.6 : 4.5;
+          // 4. Bot Dash Ability Execution (Bursts in Race mode with fair cooldowns)
+          const botDashCooldownBase = this.gameMode === 'race' ? 3.8 : 4.5;
           op.dashCooldown = (op.dashCooldown || botDashCooldownBase) - dt;
           if (op.dashTimer > 0) {
             op.dashTimer -= dt;
             if (op.dashTimer <= 0) op.isDashing = false;
           }
           if (op.dashCooldown <= 0 && !op.isDashing && op.isAlive) {
-            if (this.gameMode === 'race' || (nextPipe && nextPipe.x < 185 && nextPipe.x > 80)) {
+            if ((this.gameMode === 'race' && Math.random() < 0.6) || (nextPipe && nextPipe.x < 185 && nextPipe.x > 80)) {
               op.isDashing = true;
               op.dashTimer = 0.28;
-              op.dashCooldown = this.gameMode === 'race' ? (0.6 + Math.random() * 0.8) : (3.5 + Math.random() * 3.0);
+              op.dashCooldown = this.gameMode === 'race' ? (3.5 + Math.random() * 2.5) : (3.5 + Math.random() * 3.0);
               op.graceTimer = Math.max(op.graceTimer || 0, 0.45);
               op.vy = Math.min(op.vy, -130);
             }
@@ -1188,13 +1182,14 @@
 
         const drawX = op.curX !== undefined ? op.curX : birdX;
 
-        // If opponent is offscreen left or right, draw a sleek indicator arrow at screen edge
+        // If opponent is offscreen left or right, draw a sleek indicator badge at screen edge
         if (drawX < -20 && op.isAlive) {
           ctx.save();
           ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
           ctx.fillStyle = '#f43f5e';
           ctx.textAlign = 'left';
-          ctx.fillText(`◀ ${op.name} (${op.score || 0}p)`, 6, Math.max(70, Math.min(480, op.y)));
+          const distBehind = Math.max(1, Math.round(Math.abs(drawX - birdX) / 8));
+          ctx.fillText(`◀ ${op.name} (${distBehind}m)`, 6, Math.max(70, Math.min(480, op.y)));
           ctx.restore();
           return;
         }
@@ -1203,7 +1198,8 @@
           ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
           ctx.fillStyle = '#38bdf8';
           ctx.textAlign = 'right';
-          ctx.fillText(`${op.name} (${op.score || 0}p) ▶`, 354, Math.max(70, Math.min(480, op.y)));
+          const distAhead = Math.max(1, Math.round(Math.abs(drawX - birdX) / 8));
+          ctx.fillText(`${op.name} (+${distAhead}m) ▶`, 354, Math.max(70, Math.min(480, op.y)));
           ctx.restore();
           return;
         }
