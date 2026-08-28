@@ -61,7 +61,7 @@
     modeMultiplayerBtn:$('modeMultiplayerBtn'),
     mpBattleHud:$('mpBattleHud'), mpMyHudName:$('mpMyHudName'), mpMyHudScore:$('mpMyHudScore'),
     mpRivalHudName:$('mpRivalHudName'), mpRivalHudScore:$('mpRivalHudScore'),
-    multiplayerModal:$('multiplayerModal'), mpServerStatusText:$('mpServerStatusText'),
+    multiplayerModal:$('multiplayerModal'), mpModal:$('multiplayerModal'), mpServerStatusText:$('mpServerStatusText'),
     mpTabQuickBtn:$('mpTabQuickBtn'), mpTabCreateBtn:$('mpTabCreateBtn'), mpTabJoinBtn:$('mpTabJoinBtn'),
     mpViewQuick:$('mpViewQuick'), mpViewCreate:$('mpViewCreate'), mpViewJoin:$('mpViewJoin'),
     mpQuickFindBtn:$('mpQuickFindBtn'), mpQuickInitialBox:$('mpQuickInitialBox'), mpQuickSearchingBox:$('mpQuickSearchingBox'),
@@ -9604,15 +9604,11 @@
       return;
     }
 
-    if (versusClashActive) {
-      return; // Already actively counting down
-    }
-    versusClashActive = true;
-
     if (versusClashTimer) {
-      clearInterval(versusClashTimer);
+      clearTimeout(versusClashTimer);
       versusClashTimer = null;
     }
+    versusClashActive = true;
 
     // Resolve opponent info accurately
     let op = opponent;
