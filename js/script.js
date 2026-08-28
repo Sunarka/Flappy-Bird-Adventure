@@ -1387,7 +1387,8 @@
   function updateMusicUI() {
     const button = el.musicBtn;
     if(!button) return;
-    button.innerHTML = settings.music ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l9-2v12"/><path d="M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3ZM18 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l9-2v12"/><path d="M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3ZM18 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z"/><path d="m4 4 16 16"/></svg>';
+    button.classList.toggle('muted', !settings.music);
+    button.innerHTML = settings.music ? '<svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l9-2v12"/><path d="M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3ZM18 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z"/></svg>' : '<svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l9-2v12"/><path d="M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3ZM18 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z"/><path d="m4 4 16 16" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/></svg>';
     button.setAttribute('aria-label', settings.music ? 'Matikan musik' : 'Nyalakan musik');
   }
 
@@ -9864,7 +9865,8 @@
       });
     }
     if(el.sound) {
-      el.sound.innerHTML = settings.sound ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="M15 9.25a4 4 0 0 1 0 5.5M17.5 6.75a7.5 7.5 0 0 1 0 10.5"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="m15 10 5 5m0-5-5 5"/></svg>';
+      el.sound.classList.toggle('muted', !settings.sound);
+      el.sound.innerHTML = settings.sound ? '<svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path class="sound-wave w1" d="M15 9.25a4 4 0 0 1 0 5.5"/><path class="sound-wave w2" d="M17.5 6.75a7.5 7.5 0 0 1 0 10.5"/></svg>' : '<svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="m15 10 5 5m0-5-5 5" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/></svg>';
       el.sound.setAttribute('aria-label', settings.sound ? 'Matikan suara' : 'Nyalakan suara');
     }
     updateMusicUI();
