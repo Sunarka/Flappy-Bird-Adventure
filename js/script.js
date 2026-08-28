@@ -77,9 +77,14 @@
     mpOverModal:$('mpOverModal'), mpOverHeader:$('mpOverHeader'), mpOverBadge:$('mpOverBadge'), mpOverSub:$('mpOverSub'),
     mpOverMyAvatar:$('mpOverMyAvatar'), mpOverMyName:$('mpOverMyName'), mpOverMyScore:$('mpOverMyScore'),
     mpOverMyCrown:$('mpOverMyCrown'), mpOverMyReward:$('mpOverMyReward'),
-    mpOverRivalAvatar:$('mpOverRivalAvatar'), mpOverRivalName:$('mpOverRivalName'),
     mpOverRivalScore:$('mpOverRivalScore'), mpOverRivalCrown:$('mpOverRivalCrown'),
-    mpOverRivalStatus:$('mpOverRivalStatus'), mpRematchBtn:$('mpRematchBtn'), mpOverHomeBtn:$('mpOverHomeBtn')
+    mpOverRivalStatus:$('mpOverRivalStatus'), mpRematchBtn:$('mpRematchBtn'), mpOverHomeBtn:$('mpOverHomeBtn'),
+    mpBattleHud:$('mpBattleHud'),
+    mpMyHudCard:$('mpMyHudCard'), mpMyHudAvatar:$('mpMyHudAvatar'), mpMyHudName:$('mpMyHudName'),
+    mpMyHudTier:$('mpMyHudTier'), mpMyHudHearts:$('mpMyHudHearts'), mpMyHudScore:$('mpMyHudScore'),
+    mpAudioToggleBtn:$('mpAudioToggleBtn'),
+    mpRivalHudCard:$('mpRivalHudCard'), mpRivalHudAvatar:$('mpRivalHudAvatar'), mpRivalHudName:$('mpRivalHudName'),
+    mpRivalHudTier:$('mpRivalHudTier'), mpRivalHudHearts:$('mpRivalHudHearts'), mpRivalHudScore:$('mpRivalHudScore')
   };
   const storage = {
     get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } },
@@ -3497,16 +3502,17 @@
     } else if(currentMode === 'multiplayer') {
       el.coinHud.innerHTML = '1v1 BATTLE <b>CLOUDFLARE</b>';
       if(el.rankTierHud) el.rankTierHud.classList.add('hidden');
-      if(el.mpBattleHud) el.mpBattleHud.classList.toggle('hidden', next !== State.PLAYING);
-      if(el.mpMyHudName) el.mpMyHudName.textContent = (gpProfile.gamerTag || 'YOU').slice(0, 10);
+      if(el.livesHud) el.livesHud.innerHTML = '';
+      updateMpBattleHUD();
     } else {
       el.coinHud.innerHTML = 'COINS <b>' + progress.coins + '</b>';
       if(el.rankTierHud) el.rankTierHud.classList.add('hidden');
       if(el.mpBattleHud) el.mpBattleHud.classList.add('hidden');
     }
     if(el.pause) {
-      el.pause.style.display = (next === State.PLAYING || next === State.READY) ? 'flex' : 'none';
-      el.pause.classList.toggle('hidden', next !== State.PLAYING && next !== State.READY);
+      const showPause = (next === State.PLAYING || next === State.READY) && currentMode !== 'multiplayer';
+      el.pause.style.display = showPause ? 'flex' : 'none';
+      el.pause.classList.toggle('hidden', !showPause);
     }
     if(el.sound) {
       el.sound.style.display = (next === State.MENU || next === State.PLAYING || next === State.READY) ? 'flex' : 'none';
@@ -3520,9 +3526,50 @@
       else if(next === State.MENU) stopBackgroundMusic();
     }
   }
+
+  function updateMpBattleHUD() {
+    if(!el.mpBattleHud) return;
+    const isMpActive = currentMode === 'multiplayer' && (state === State.PLAYING || state === State.READY);
+    el.mpBattleHud.classList.toggle('hidden', !isMpActive);
+    if(!isMpActive) return;
+
+    // 1. Player Info (Left Card)
+    if(el.mpMyHudName) el.mpMyHudName.textContent = gpProfile.gamerTag || 'YOU';
+    if(el.mpMyHudAvatar) el.mpMyHudAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 28);
+    const myTier = getRankTier(rankedBest || 0);
+    if(el.mpMyHudTier) el.mpMyHudTier.textContent = myTier.name || 'GOLD';
+    if(el.mpMyHudScore) el.mpMyHudScore.textContent = score;
+
+    // Player 3 Hearts
+    if(el.mpMyHudHearts) {
+      let heartsHtml = '';
+      for(let i = 0; i < 3; i++) {
+        heartsHtml += `<span class="mp-heart${i < lives ? ' active' : ' lost'}">${i < lives ? '❤️' : '🖤'}</span>`;
+      }
+      el.mpMyHudHearts.innerHTML = heartsHtml;
+    }
+
+    // 2. Rival Info (Right Card)
+    const rival = window.multiplayerEngine?.opponents?.values()?.next()?.value || { name: 'Rival', avatar: 'robo_mecha', tier: 'MASTER', score: 0, lives: 3 };
+    if(el.mpRivalHudName) el.mpRivalHudName.textContent = (rival.name || 'Rival').slice(0, 10);
+    if(el.mpRivalHudAvatar) el.mpRivalHudAvatar.innerHTML = getCuteAvatarSvg(rival.avatar || 'robo_mecha', 28);
+    if(el.mpRivalHudTier) el.mpRivalHudTier.textContent = rival.tier || 'MASTER';
+    if(el.mpRivalHudScore) el.mpRivalHudScore.textContent = rival.score || 0;
+
+    // Rival 3 Hearts
+    if(el.mpRivalHudHearts) {
+      const rLives = rival.lives !== undefined ? rival.lives : (rival.isAlive ? 3 : 0);
+      let rHeartsHtml = '';
+      for(let i = 0; i < 3; i++) {
+        rHeartsHtml += `<span class="mp-heart${i < rLives ? ' active' : ' lost'}">${i < rLives ? '❤️' : '🖤'}</span>`;
+      }
+      el.mpRivalHudHearts.innerHTML = rHeartsHtml;
+    }
+  }
+
   function updateLivesHUD() {
     if(!el.livesHud) return;
-    if(state !== State.PLAYING && state !== State.READY && state !== State.REVIVING) {
+    if(currentMode === 'multiplayer' || (state !== State.PLAYING && state !== State.READY && state !== State.REVIVING)) {
       el.livesHud.innerHTML = '';
       return;
     }
@@ -3698,8 +3745,8 @@
     clearInterval(reviveTimerInterval);
     reviveTimerInterval = null;
 
-    // Inisialisasi Nyawa (Multiplayer: 1 nyawa, Ranked: 3 nyawa, Classic: 1 nyawa)
-    lives = currentMode === 'multiplayer' ? 1 : (currentMode === 'ranked' ? 3 : 1);
+    // Inisialisasi Nyawa (Ranked: 3 nyawa, Multiplayer: 3 nyawa, Classic: 1 nyawa)
+    lives = (currentMode === 'ranked' || currentMode === 'multiplayer') ? 3 : 1;
     if(progress.selectedBooster === 'extra_life' && currentMode !== 'multiplayer') {
       lives += 1;
     }
@@ -3710,6 +3757,7 @@
     resetBabyBirds();
     updateScore();
     updateLivesHUD();
+    updateMpBattleHUD();
     updatePowerupHUD();
     updateDashUI();
   }
@@ -3745,6 +3793,7 @@
 
   function triggerDash() {
     if(state !== State.PLAYING && state !== State.READY) return;
+    if(currentMode === 'multiplayer' && !started) return; // Kunci input selama hitung mundur in-game arena
     if(dashCooldown > 0) {
       audio.hit();
       return;
@@ -3846,6 +3895,7 @@
   }
   function flap() {
     if(state === State.MENU || state === State.OVER || state === State.PAUSED || state === State.REVIVING) return;
+    if(currentMode === 'multiplayer' && !started) return; // Kunci flap selama hitung mundur in-game arena
     if(state === State.READY) {
       started = true;
       if(window.multiplayerEngine) window.multiplayerEngine.matchStatus = 'PLAYING';
@@ -4472,8 +4522,8 @@
       return;
     }
 
-    // 5. Lives System (Ranked Mode default 3 hearts, Classic default 1 heart, + Extra Life Booster)
-    if(currentMode !== 'multiplayer' && lives > 1) {
+    // 5. Lives System (Ranked Mode: 3 hearts, Multiplayer Mode: 3 hearts, Classic: 1 heart)
+    if(lives > 1) {
       lives--;
       graceTimer = 1.6;
       audio.hit();
@@ -4500,12 +4550,19 @@
         hazard.x = -999;
       }
       updateLivesHUD();
+      updateMpBattleHUD();
+      if(currentMode === 'multiplayer' && window.multiplayerEngine) {
+        window.multiplayerEngine.broadcastMyState({
+          y: bird.y, vy: bird.vy, rot: bird.angle, score, isAlive: true, lives
+        });
+      }
       return;
     }
 
-    // 6. Sudden death for Multiplayer / Prompt Revive for Singleplayer
+    // 6. 0 Lives Left -> Death (Multiplayer ends match, Singleplayer prompts revive)
     lives = 0;
     updateLivesHUD();
+    updateMpBattleHUD();
     if(currentMode === 'multiplayer') {
       endGame();
     } else {
@@ -4594,18 +4651,12 @@
         vy: bird.vy,
         rot: bird.angle,
         score,
+        lives,
         isAlive: true,
         isDashing: dashTimer > 0
       });
 
-      if(el.mpMyHudScore) el.mpMyHudScore.textContent = score;
-      if(window.multiplayerEngine.opponents && window.multiplayerEngine.opponents.size > 0) {
-        const rival = window.multiplayerEngine.opponents.values().next().value;
-        if(rival) {
-          if(el.mpRivalHudScore) el.mpRivalHudScore.textContent = rival.score || 0;
-          if(el.mpRivalHudName) el.mpRivalHudName.textContent = (rival.name || 'RIVAL').slice(0, 10);
-        }
-      }
+      updateMpBattleHUD();
     }
 
     // Power-Up & Dash Timer Management
@@ -9178,6 +9229,18 @@
     syncSettings();
     audio.click();
     persist();
+  });
+  bindClick(el.mpAudioToggleBtn, () => {
+    settings.sound = !settings.sound;
+    settings.music = settings.sound;
+    if(el.soundToggle) el.soundToggle.checked = settings.sound;
+    if(el.musicToggle) el.musicToggle.checked = settings.music;
+    syncSettings();
+    if(settings.sound) audio.click();
+    persist();
+    if(el.mpAudioToggleBtn) {
+      el.mpAudioToggleBtn.classList.toggle('muted', !settings.sound);
+    }
   });
 
   // Shop Tabs Swipe / Scroll & Selection

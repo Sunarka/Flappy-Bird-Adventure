@@ -545,8 +545,29 @@
       this.setSeed(seed);
       this.opponents.clear();
 
-      // Bot Skill Configuration (Bisa kalah di skor antara 4 s/d 25 poin)
-      const targetMaxScore = Math.floor(4 + Math.random() * 22);
+      // Bot Skill Scaling based on Rank Tier (Variasi ada yang cupu, sedang, dan pro jago)
+      let targetMaxScore = 15;
+      let flapCooldownBase = 0.22;
+      if (botTier === 'BRONZE') {
+        targetMaxScore = Math.floor(6 + Math.random() * 10);
+        flapCooldownBase = 0.25;
+      } else if (botTier === 'SILVER') {
+        targetMaxScore = Math.floor(12 + Math.random() * 12);
+        flapCooldownBase = 0.22;
+      } else if (botTier === 'GOLD') {
+        targetMaxScore = Math.floor(18 + Math.random() * 18);
+        flapCooldownBase = 0.19;
+      } else if (botTier === 'PLATINUM') {
+        targetMaxScore = Math.floor(28 + Math.random() * 22);
+        flapCooldownBase = 0.17;
+      } else if (botTier === 'DIAMOND') {
+        targetMaxScore = Math.floor(38 + Math.random() * 26);
+        flapCooldownBase = 0.15;
+      } else { // MASTER, GRANDMASTER, SUPREME (Pro & Jago Banget)
+        targetMaxScore = Math.floor(55 + Math.random() * 45);
+        flapCooldownBase = 0.13;
+      }
+
       this.opponents.set(fakeOpponent.id, {
         id: fakeOpponent.id,
         name: fakeOpponent.name,
@@ -559,12 +580,16 @@
         vy: 0,
         rot: 0,
         score: 0,
+        lives: 3,
+        maxLives: 3,
+        graceTimer: 0,
         isAlive: true,
         isDashing: false,
         targetY: 280,
         lastUpdate: Date.now(),
         isSimulatedBot: true,
         botTargetScore: targetMaxScore,
+        botFlapCooldownBase: flapCooldownBase,
         botFlapCooldown: 0,
         shouldFail: false,
         wing: 0
@@ -627,6 +652,7 @@
         vy: Math.round(birdState.vy),
         rot: Math.round(birdState.rot * 100) / 100,
         score: birdState.score || 0,
+        lives: birdState.lives !== undefined ? birdState.lives : 3,
         isAlive: birdState.isAlive !== false,
         isDashing: !!birdState.isDashing,
         t: Date.now()
@@ -658,9 +684,10 @@
           return;
         }
 
-        // If simulated bot, simulate intelligent human-like flapping with mistake chance
+        // If simulated bot, simulate intelligent human-like flapping with mistake chance & 3 lives
         if (op.isSimulatedBot && this.matchStatus === 'PLAYING') {
           op.wing = (op.wing || 0) + dt * 14;
+          op.graceTimer = Math.max(0, (op.graceTimer || 0) - dt);
 
           // Find next approaching pipe
           let nextPipe = null;
@@ -678,15 +705,16 @@
           op.botFlapCooldown = (op.botFlapCooldown || 0) - dt;
 
           // Cek apakah bot melakukan kesalahan / mencapai batas kemampuannya
-          if ((op.score || 0) >= (op.botTargetScore || 15)) {
+          if ((op.score || 0) >= (op.botTargetScore || 20)) {
             op.shouldFail = true;
           }
 
           if (!op.shouldFail) {
             // Intelligent flap trigger
+            const cdBase = op.botFlapCooldownBase || 0.20;
             if (op.targetY > idealY + 12 && op.botFlapCooldown <= 0) {
-              op.vy = -305 + (Math.random() - 0.5) * 40;
-              op.botFlapCooldown = 0.22 + Math.random() * 0.12;
+              op.vy = -305 + (Math.random() - 0.5) * 35;
+              op.botFlapCooldown = cdBase + Math.random() * 0.08;
             }
           }
 
@@ -696,34 +724,65 @@
           op.rot = Math.max(-0.4, Math.min(1.2, op.vy * 0.003));
           op.y = op.targetY;
 
-          // 1. PIPE COLLISION DETECTION FOR BOT (Mati jika menabrak tiang atas / bawah)
+          // 1. PIPE COLLISION DETECTION FOR BOT (3 Lives System)
           const botX = 90;
           const botR = 12;
-          if (activePipes && activePipes.length > 0) {
+          if (activePipes && activePipes.length > 0 && op.graceTimer <= 0) {
             for (const p of activePipes) {
               // Check if bot is inside the pipe's horizontal span
               if (botX + botR > p.x && botX - botR < p.x + p.w) {
                 // Check if bot hit the top pipe or bottom pipe
                 if (op.y - botR < p.gapY || op.y + botR > p.gapY + p.gapSize) {
-                  op.isAlive = false;
-                  op.vy = 120;
-                  this.emit('opponent_died', { playerId: op.id, finalScore: op.score || 0 });
-                  return;
+                  if ((op.lives || 3) > 1) {
+                    op.lives = (op.lives || 3) - 1;
+                    op.graceTimer = 1.6;
+                    op.vy = -260;
+                    op.targetY = Math.max(80, op.targetY - 30);
+                    this.emit('opponent_state', {
+                      playerId: op.id,
+                      y: op.y, vy: op.vy, rot: op.rot,
+                      score: op.score || 0,
+                      isAlive: true,
+                      lives: op.lives
+                    });
+                    break;
+                  } else {
+                    op.lives = 0;
+                    op.isAlive = false;
+                    op.vy = 120;
+                    this.emit('opponent_died', { playerId: op.id, finalScore: op.score || 0 });
+                    return;
+                  }
                 }
               }
             }
           }
 
-          // 2. Ceiling & Floor collision checks
+          // 2. Ceiling & Floor collision checks (3 Lives System)
           if (op.targetY < 25) {
             op.targetY = 25;
             op.vy = 80;
           }
           if (op.targetY > 520) {
-            op.targetY = 520;
-            op.isAlive = false;
-            this.emit('opponent_died', { playerId: op.id, finalScore: op.score || 0 });
-            return;
+            if ((op.lives || 3) > 1) {
+              op.lives = (op.lives || 3) - 1;
+              op.graceTimer = 1.6;
+              op.vy = -340;
+              op.targetY = 460;
+              this.emit('opponent_state', {
+                playerId: op.id,
+                y: op.y, vy: op.vy, rot: op.rot,
+                score: op.score || 0,
+                isAlive: true,
+                lives: op.lives
+              });
+            } else {
+              op.lives = 0;
+              op.targetY = 520;
+              op.isAlive = false;
+              this.emit('opponent_died', { playerId: op.id, finalScore: op.score || 0 });
+              return;
+            }
           }
         }
 

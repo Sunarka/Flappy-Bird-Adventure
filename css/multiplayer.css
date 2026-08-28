@@ -289,13 +289,13 @@
 /* In-Game Live 1v1 Battle HUD */
 .mp-battle-hud {
   position: absolute;
-  top: 50px;
-  left: 12px;
-  right: 12px;
+  top: 10px;
+  left: 8px;
+  right: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 5;
+  z-index: 45;
   pointer-events: none;
 }
 
@@ -303,39 +303,142 @@
   display: none !important;
 }
 
-.mp-player-hud-card {
-  background: rgba(15, 23, 42, 0.8);
+.mp-hud-card {
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(8px);
   border: 1.5px solid #38bdf8;
-  border-radius: 10px;
-  padding: 3px 8px;
+  border-radius: 14px;
+  padding: 4px 8px;
   display: flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 10px rgba(56, 189, 248, 0.25);
+  pointer-events: auto;
 }
 
-.mp-player-hud-card.rival {
+.mp-hud-card.rival {
   border-color: #f43f5e;
-  box-shadow: 0 4px 10px rgba(244, 63, 94, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 10px rgba(244, 63, 94, 0.25);
+}
+
+.mp-hud-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.mp-hud-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.mp-hud-info.rival {
+  align-items: flex-end;
+}
+
+.mp-hud-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .mp-hud-name {
   font: 900 10px 'Trebuchet MS', Arial, sans-serif;
   color: #ffffff;
+  max-width: 65px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.mp-hud-score {
-  font: 900 13px 'Trebuchet MS', Arial, sans-serif;
+.mp-hud-tier {
+  font: 900 7.5px 'Trebuchet MS', Arial, sans-serif;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.18);
+  padding: 1px 4px;
+  border-radius: 4px;
+  border: 0.5px solid rgba(56, 189, 248, 0.4);
+}
+
+.mp-hud-tier.rival {
+  color: #f43f5e;
+  background: rgba(244, 63, 94, 0.18);
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+.mp-hud-hearts {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 9px;
+  line-height: 1;
+}
+
+.mp-hud-hearts .mp-heart {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.mp-hud-hearts .mp-heart.lost {
+  opacity: 0.25;
+  filter: grayscale(1);
+}
+
+.mp-hud-score-badge {
+  font: 900 14px 'Trebuchet MS', Arial, sans-serif;
   color: #fde047;
-}
-
-.mp-vs-badge {
-  font: 900 11px 'Trebuchet MS', Arial, sans-serif;
-  color: #ec4899;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.4);
   padding: 2px 6px;
   border-radius: 6px;
-  border: 1px solid rgba(236, 72, 153, 0.5);
+  border: 1px solid rgba(253, 224, 71, 0.4);
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Center Audio / Mute Button in top middle */
+.mp-hud-center-ctrl {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mp-hud-mute-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(192, 132, 252, 0.5);
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.mp-hud-mute-btn:hover {
+  transform: scale(1.1);
+  border-color: #c084fc;
+  background: rgba(30, 27, 75, 0.95);
+  color: #ffffff;
+}
+
+.mp-hud-mute-btn:active {
+  transform: scale(0.95);
+}
+
+.mp-hud-mute-btn.muted {
+  color: #ef4444;
+  border-color: #ef4444;
 }
 
 /* =========================================================
@@ -574,13 +677,10 @@
 .mp-vs-text {
   font: 900 36px/1 'Impact', 'Trebuchet MS', Arial, sans-serif;
   letter-spacing: 1.5px;
-  background: linear-gradient(180deg, #fef08a 0%, #f59e0b 50%, #dc2626 100%);
-  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 0 14px rgba(245, 158, 11, 0.9));
 }
 
-.mp-vs-footer-hint {
   margin-top: 24px;
   font: 800 11px 'Trebuchet MS', Arial, sans-serif;
   color: #94a3b8;
@@ -603,43 +703,6 @@
   z-index: 60;
   pointer-events: none;
   background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(2px);
-}
-
-.arena-countdown-overlay.hidden {
-  display: none !important;
-}
-
-.arena-countdown-number {
-  font: 900 86px/1 'Trebuchet MS', 'Arial Black', sans-serif;
-  color: #fde047;
-  text-shadow: 0 0 28px rgba(245, 158, 11, 0.9), 0 6px 12px rgba(0, 0, 0, 0.8);
-  animation: arenaCountdownPop 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
-  letter-spacing: 2px;
-}
-
-@keyframes arenaCountdownPop {
-  0% { transform: scale(2.2); opacity: 0; filter: blur(4px); }
-  30% { transform: scale(1); opacity: 1; filter: blur(0); }
-  75% { transform: scale(0.95); opacity: 1; }
-  100% { transform: scale(0.85); opacity: 0; }
-}
-
-/* =========================================================
-   1v1 MULTIPLAYER BATTLE OVER MODAL
-   ========================================================= */
-.mp-over-modal {
-  width: min(340px, 94vw) !important;
-  background: linear-gradient(180deg, #090d16 0%, #111827 50%, #1e1b4b 100%) !important;
-  border: 2px solid rgba(192, 132, 252, 0.4) !important;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.85), 0 0 35px rgba(139, 92, 246, 0.25) !important;
-  border-radius: 24px !important;
-  padding: 22px 18px 20px !important;
-  color: #ffffff !important;
-  text-align: center !important;
-}
-
-.mp-over-modal.hidden {
   display: none !important;
 }
 
