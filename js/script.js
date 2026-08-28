@@ -71,8 +71,13 @@
     mpSearchingBar:$('mpSearchingBar'), mpSearchTimerText:$('mpSearchTimerText'), mpCancelSearchBtn:$('mpCancelSearchBtn'),
     mpVersusScreen:$('mpVersusScreen'), mpFighterLeft:$('mpFighterLeft'), mpFighterRight:$('mpFighterRight'),
     mpFighterMyAvatar:$('mpFighterMyAvatar'), mpFighterMyName:$('mpFighterMyName'),
-    mpFighterRivalAvatar:$('mpFighterRivalAvatar'), mpFighterRivalName:$('mpFighterRivalName'),
-    mpVsCenterBadge:$('mpVsCenterBadge'), mpVsCountdownText:$('mpVsCountdownText')
+    mpVsCenterBadge:$('mpVsCenterBadge'), mpVsCountdownText:$('mpVsCountdownText'),
+    mpOverModal:$('mpOverModal'), mpOverHeader:$('mpOverHeader'), mpOverBadge:$('mpOverBadge'), mpOverSub:$('mpOverSub'),
+    mpOverMyAvatar:$('mpOverMyAvatar'), mpOverMyName:$('mpOverMyName'), mpOverMyScore:$('mpOverMyScore'),
+    mpOverMyCrown:$('mpOverMyCrown'), mpOverMyReward:$('mpOverMyReward'),
+    mpOverRivalAvatar:$('mpOverRivalAvatar'), mpOverRivalName:$('mpOverRivalName'),
+    mpOverRivalScore:$('mpOverRivalScore'), mpOverRivalCrown:$('mpOverRivalCrown'),
+    mpOverRivalStatus:$('mpOverRivalStatus'), mpRematchBtn:$('mpRematchBtn'), mpOverHomeBtn:$('mpOverHomeBtn')
   };
   const storage = {
     get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } },
@@ -3744,6 +3749,7 @@
 
     if(state === State.READY) {
       started = true;
+      if(window.multiplayerEngine) window.multiplayerEngine.matchStatus = 'PLAYING';
       setState(State.PLAYING);
       audio.music();
       playBackgroundMusic();
@@ -3785,6 +3791,7 @@
     if(state === State.MENU || state === State.OVER || state === State.PAUSED || state === State.REVIVING) return;
     if(state === State.READY) {
       started = true;
+      if(window.multiplayerEngine) window.multiplayerEngine.matchStatus = 'PLAYING';
       setState(State.PLAYING);
       audio.music();
       playBackgroundMusic();
@@ -8505,7 +8512,70 @@
       ctx.restore();
     }
 
+  function showMpBattleResult(isWinner, myFinalScore, rivalFinalScore, rivalProfile) {
+    if(state !== State.OVER) {
+      state = State.OVER;
+      bird.dead = true;
+      audio.stopMusic();
+      stopBackgroundMusic();
+    }
+
+    const rival = rivalProfile || (window.multiplayerEngine?.opponents?.values()?.next()?.value) || { name: 'Rival', avatar: 'robo_mecha', score: 0 };
+    const myScore = myFinalScore !== undefined ? myFinalScore : score;
+    const rivalScore = rivalFinalScore !== undefined ? rivalFinalScore : (rival.score || 0);
+
+    // Left (Player)
+    if(el.mpOverMyName) el.mpOverMyName.textContent = gpProfile.gamerTag || 'YOU';
+    if(el.mpOverMyAvatar) el.mpOverMyAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 46);
+    if(el.mpOverMyScore) el.mpOverMyScore.textContent = myScore;
+
+    // Right (Rival)
+    if(el.mpOverRivalName) el.mpOverRivalName.textContent = rival.name || 'Rival';
+    if(el.mpOverRivalAvatar) el.mpOverRivalAvatar.innerHTML = getCuteAvatarSvg(rival.avatar, 46);
+    if(el.mpOverRivalScore) el.mpOverRivalScore.textContent = rivalScore;
+
+    if(isWinner) {
+      if(el.mpOverBadge) {
+        el.mpOverBadge.className = 'mp-over-badge victory';
+        el.mpOverBadge.textContent = '🏆 VICTORY! 🏆';
+      }
+      if(el.mpOverSub) el.mpOverSub.textContent = 'Kamu berhasil mengalahkan lawan di 1v1 Battle!';
+      if(el.mpOverMyCrown) el.mpOverMyCrown.classList.remove('hidden');
+      if(el.mpOverRivalCrown) el.mpOverRivalCrown.classList.add('hidden');
+      if(el.mpOverMyReward) el.mpOverMyReward.textContent = '+50 COINS';
+      if(el.mpOverRivalStatus) el.mpOverRivalStatus.textContent = 'FALLEN';
+
+      // Reward player
+      progress.coins = (progress.coins || 0) + 50;
+      updateCoins();
+      audio.win();
+    } else {
+      if(el.mpOverBadge) {
+        el.mpOverBadge.className = 'mp-over-badge defeat';
+        el.mpOverBadge.textContent = '💀 DEFEAT';
+      }
+      if(el.mpOverSub) el.mpOverSub.textContent = 'Kamu terjatuh lebih dulu dari lawan!';
+      if(el.mpOverMyCrown) el.mpOverMyCrown.classList.add('hidden');
+      if(el.mpOverRivalCrown) el.mpOverRivalCrown.classList.remove('hidden');
+      if(el.mpOverMyReward) el.mpOverMyReward.textContent = '+10 COINS';
+      if(el.mpOverRivalStatus) el.mpOverRivalStatus.textContent = 'WINNER';
+
+      progress.coins = (progress.coins || 0) + 10;
+      updateCoins();
+      audio.hit();
+    }
+
+    showModal(el.mpOverModal);
+  }
+
   function showOver() {
+    if(currentMode === 'multiplayer') {
+      const rival = window.multiplayerEngine?.opponents?.values()?.next()?.value;
+      const isWinner = rival && !rival.isAlive && score >= (rival.score || 0);
+      showMpBattleResult(isWinner, score, rival?.score || 0, rival);
+      return;
+    }
+
     el.over.classList.add('visible');
     el.finalScore.textContent = score;
     el.finalBest.textContent = best;
@@ -9378,13 +9448,8 @@
 
     mp.on('opponent_died', (data) => {
       if(currentMode === 'multiplayer' && state === State.PLAYING) {
-        audio.win();
-        showGameDialog({
-          title: '🏆 KAMU MENANG! 🏆',
-          html: `<p>Lawan Anda telah jatuh!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Skor Anda:</span><b style="color:#4ade80;">${score} Poin</b></div><div class="dialog-info-row"><span>Skor Lawan:</span><b style="color:#f87171;">${data.finalScore || 0} Poin</b></div></div>`,
-          type: 'success',
-          confirmText: 'KLAIM KEMENANGAN'
-        });
+        const rival = mp.opponents.get(data.playerId) || mp.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha', score: data.finalScore || 0 };
+        showMpBattleResult(true, score, data.finalScore || rival.score || 0, rival);
       }
     });
 
@@ -9419,6 +9484,27 @@
     if(window.multiplayerEngine) {
       window.multiplayerEngine.cancelMatch();
     }
+  });
+
+  bindClick(el.mpRematchBtn, () => {
+    audio.click();
+    closeModal();
+    if(window.multiplayerEngine) {
+      window.multiplayerEngine.quickMatch({
+        name: gpProfile.gamerTag || 'SkyPlayer',
+        avatar: gpProfile.avatar || 'chick_yellow',
+        skin: progress.selected || 'classic'
+      });
+    }
+  });
+
+  bindClick(el.mpOverHomeBtn, () => {
+    audio.click();
+    closeModal();
+    if(window.multiplayerEngine) {
+      window.multiplayerEngine.leaveRoom();
+    }
+    setState(State.MENU);
   });
 
   bindClick(el.mpTabQuickBtn, () => { audio.click(); switchMpTab('quick'); });
