@@ -1302,8 +1302,10 @@
   border: 2px solid #38bdf8 !important;
   box-shadow: 0 16px 36px rgba(0,0,0,0.75), 0 0 24px rgba(56, 189, 248, 0.25) !important;
   color: #ffffff;
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  padding: 20px 14px 16px !important;
 }
 
 .avatar-picker-header h2 {
@@ -1321,18 +1323,24 @@
 }
 
 .avatar-picker-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px 8px;
-  max-height: 48vh;
-  overflow-y: auto;
-  padding: 4px 2px 14px;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 10px 8px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  max-height: 48vh !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 4px 4px 14px !important;
   scrollbar-width: thin;
   scrollbar-color: #38bdf8 transparent;
+  touch-action: pan-y !important;
+  overscroll-behavior: contain !important;
 }
 
 .avatar-picker-grid::-webkit-scrollbar {
   width: 5px;
+  height: 0px;
 }
 .avatar-picker-grid::-webkit-scrollbar-thumb {
   background: #38bdf8;

@@ -2294,7 +2294,7 @@
         <polygon points="24,25 20,31 28,31" fill="#facc15"/>
       </svg>`
     },
-    // ANIME SPECIAL PROFILE AVATARS (AUTHENTIC CHIBI PORTRAITS)
+    // ANIME SPECIAL PROFILE AVATARS (SUPER CUTE KAWAII CHIBI PORTRAITS)
     {
       id: 'luffy_mugiwara',
       name: 'LUFFY MUGIWARA',
@@ -2303,28 +2303,33 @@
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
         <circle cx="24" cy="24" r="23" fill="#fee2e2"/>
         <!-- Straw Hat -->
-        <ellipse cx="24" cy="14" rx="20" ry="5.5" fill="#facc15" stroke="#ca8a04" stroke-width="1.2"/>
-        <path d="M 13 14 C 13 5 35 5 35 14 Z" fill="#facc15"/>
-        <path d="M 13 14 C 14 10.5 34 10.5 35 14 Z" fill="#dc2626"/>
-        <!-- Black Messy Hair Tufts -->
-        <polygon points="8,19 13,24 14,18" fill="#0f172a"/>
-        <polygon points="40,19 35,24 34,18" fill="#0f172a"/>
-        <polygon points="17,16 20,21 21,16" fill="#0f172a"/>
-        <polygon points="27,16 29,21 31,16" fill="#0f172a"/>
-        <!-- Head & Neck -->
+        <ellipse cx="24" cy="13" rx="20" ry="5.5" fill="#facc15" stroke="#ca8a04" stroke-width="1.2"/>
+        <path d="M 13 13 C 13 4 35 4 35 13 Z" fill="#facc15"/>
+        <path d="M 13 13 C 14 9.5 34 9.5 35 13 Z" fill="#dc2626"/>
+        <!-- Messy Black Hair -->
+        <polygon points="7,19 12,23 13,17" fill="#0f172a"/>
+        <polygon points="41,19 36,23 35,17" fill="#0f172a"/>
+        <polygon points="16,15 19,20 20,15" fill="#0f172a"/>
+        <polygon points="28,15 30,20 32,15" fill="#0f172a"/>
+        <!-- Cute Chibi Face -->
         <circle cx="24" cy="27" r="14.5" fill="#fed7aa"/>
-        <!-- Eyes -->
-        <circle cx="17.5" cy="25" r="3.2" fill="#0f172a"/>
-        <circle cx="18.8" cy="23.8" r="1.3" fill="#ffffff"/>
-        <circle cx="30.5" cy="25" r="3.2" fill="#0f172a"/>
-        <circle cx="31.8" cy="23.8" r="1.3" fill="#ffffff"/>
-        <!-- Under Eye Stitched Scar -->
-        <path d="M 14.5 29.5 L 19 29.5 M 16.8 28 L 16.8 31" stroke="#991b1b" stroke-width="1.1" stroke-linecap="round"/>
-        <!-- Big Joyful Grin -->
-        <path d="M 17 31 Q 24 39 31 31 Z" fill="#ffffff" stroke="#991b1b" stroke-width="1.1"/>
-        <path d="M 20 34 Q 24 37 28 34" fill="#f87171"/>
+        <!-- Big Sparkling Eyes -->
+        <circle cx="17" cy="25" r="3.6" fill="#0f172a"/>
+        <circle cx="18.3" cy="23.6" r="1.5" fill="#ffffff"/>
+        <circle cx="16" cy="26.3" r="0.7" fill="#ffffff"/>
+        <circle cx="31" cy="25" r="3.6" fill="#0f172a"/>
+        <circle cx="32.3" cy="23.6" r="1.5" fill="#ffffff"/>
+        <circle cx="30" cy="26.3" r="0.7" fill="#ffffff"/>
+        <!-- Cute Blushing Cheeks -->
+        <ellipse cx="11" cy="29" rx="3.2" ry="1.8" fill="#fb7185" opacity="0.75"/>
+        <ellipse cx="37" cy="29" rx="3.2" ry="1.8" fill="#fb7185" opacity="0.75"/>
+        <!-- Stitched Scar -->
+        <path d="M 14 29 L 18 29 M 16 27.5 L 16 30.5" stroke="#991b1b" stroke-width="1.1" stroke-linecap="round"/>
+        <!-- Big Joyful Open Mouth -->
+        <path d="M 17.5 31 Q 24 38 30.5 31 Z" fill="#ffffff" stroke="#991b1b" stroke-width="1.1"/>
+        <path d="M 20 33.5 Q 24 36.5 28 33.5" fill="#f87171"/>
         <!-- Red Vest Collar -->
-        <path d="M 12 42 L 18 36 L 24 40 L 30 36 L 36 42 Z" fill="#dc2626"/>
+        <path d="M 12 43 L 18 36 L 24 40 L 30 36 L 36 43 Z" fill="#dc2626"/>
       </svg>`
     },
     {
@@ -2334,30 +2339,34 @@
       bg: 'linear-gradient(135deg, #ffedd5 0%, #ea580c 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
         <circle cx="24" cy="24" r="23" fill="#ffedd5"/>
-        <!-- Spiky Yellow Hair -->
-        <polygon points="6,18 10,6 16,13 24,3 32,13 38,6 42,18" fill="#facc15" stroke="#eab308" stroke-width="1.2"/>
-        <polygon points="12,12 18,5 24,10 30,5 36,12" fill="#fef08a"/>
-        <circle cx="24" cy="27" r="15" fill="#fed7aa"/>
-        <!-- Shinobi Navy Headband & Konoha Steel Plate -->
-        <rect x="9" y="13" width="30" height="7" rx="2" fill="#1e3a8a"/>
-        <rect x="15" y="14" width="18" height="5" rx="1.2" fill="#e2e8f0" stroke="#64748b" stroke-width="0.7"/>
-        <circle cx="24" cy="16.5" r="1.2" fill="#0f172a"/>
+        <!-- Spiky Golden Hair -->
+        <polygon points="5,18 9,5 15,12 24,2 33,12 39,5 43,18" fill="#facc15" stroke="#ca8a04" stroke-width="1.2"/>
+        <polygon points="11,11 17,4 24,9 31,4 37,11" fill="#fef08a"/>
+        <circle cx="24" cy="27" r="14.5" fill="#fed7aa"/>
+        <!-- Navy Headband & Silver Plate -->
+        <rect x="9" y="12" width="30" height="7" rx="2" fill="#1e3a8a"/>
+        <rect x="15" y="13" width="18" height="5" rx="1.2" fill="#e2e8f0" stroke="#64748b" stroke-width="0.7"/>
+        <circle cx="24" cy="15.5" r="1.2" fill="#0f172a"/>
         <!-- Sage Mode Orange Eye Patches -->
-        <ellipse cx="17" cy="25" rx="5" ry="3.2" fill="#ea580c"/>
-        <ellipse cx="31" cy="25" rx="5" ry="3.2" fill="#ea580c"/>
-        <!-- Sage Eyes (Toad Horizontal Slits) -->
-        <circle cx="17" cy="25" r="3.2" fill="#fef08a"/>
-        <rect x="15.2" y="24.4" width="3.6" height="1.2" rx="0.6" fill="#1e293b"/>
-        <circle cx="31" cy="25" r="3.2" fill="#fef08a"/>
-        <rect x="29.2" y="24.4" width="3.6" height="1.2" rx="0.6" fill="#1e293b"/>
-        <!-- 3 Whiskers per cheek -->
-        <line x1="8" y1="26.5" x2="13" y2="27.5" stroke="#9a3412" stroke-width="1.2" stroke-linecap="round"/>
-        <line x1="8" y1="29.5" x2="13" y2="29.5" stroke="#9a3412" stroke-width="1.2" stroke-linecap="round"/>
-        <line x1="40" y1="26.5" x2="35" y2="27.5" stroke="#9a3412" stroke-width="1.2" stroke-linecap="round"/>
-        <line x1="40" y1="29.5" x2="35" y2="29.5" stroke="#9a3412" stroke-width="1.2" stroke-linecap="round"/>
-        <!-- Confident Smile & Collar -->
-        <path d="M 21 32 Q 24 35 27 32" fill="none" stroke="#78350f" stroke-width="1.3" stroke-linecap="round"/>
-        <path d="M 12 42 L 18 36 L 24 39 L 30 36 L 36 42 Z" fill="#ea580c"/>
+        <ellipse cx="17" cy="24.5" rx="5.2" ry="3.4" fill="#ea580c"/>
+        <ellipse cx="31" cy="24.5" rx="5.2" ry="3.4" fill="#ea580c"/>
+        <!-- Golden Sage Toad Eyes -->
+        <circle cx="17" cy="24.5" r="3.4" fill="#fef08a"/>
+        <rect x="15" y="23.8" width="4" height="1.3" rx="0.65" fill="#1e293b"/>
+        <circle cx="18.2" cy="23.2" r="0.9" fill="#ffffff"/>
+        <circle cx="31" cy="24.5" r="3.4" fill="#fef08a"/>
+        <rect x="29" y="23.8" width="4" height="1.3" rx="0.65" fill="#1e293b"/>
+        <circle cx="32.2" cy="23.2" r="0.9" fill="#ffffff"/>
+        <!-- Whiskers & Blush -->
+        <ellipse cx="11" cy="28.5" rx="3" ry="1.6" fill="#fb7185" opacity="0.65"/>
+        <ellipse cx="37" cy="28.5" rx="3" ry="1.6" fill="#fb7185" opacity="0.65"/>
+        <line x1="8" y1="26" x2="13" y2="27" stroke="#9a3412" stroke-width="1.1" stroke-linecap="round"/>
+        <line x1="8" y1="29" x2="13" y2="29" stroke="#9a3412" stroke-width="1.1" stroke-linecap="round"/>
+        <line x1="40" y1="26" x2="35" y2="27" stroke="#9a3412" stroke-width="1.1" stroke-linecap="round"/>
+        <line x1="40" y1="29" x2="35" y2="29" stroke="#9a3412" stroke-width="1.1" stroke-linecap="round"/>
+        <!-- Happy Smile & Collar -->
+        <path d="M 21 31.5 Q 24 35 27 31.5" fill="none" stroke="#78350f" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M 12 43 L 18 36 L 24 39 L 30 36 L 36 43 Z" fill="#ea580c"/>
       </svg>`
     },
     {
@@ -2367,25 +2376,29 @@
       bg: 'linear-gradient(135deg, #dcfce7 0%, #15803d 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
         <circle cx="24" cy="24" r="23" fill="#dcfce7"/>
-        <!-- Spiky Dark Burgundy Hair -->
-        <polygon points="7,20 10,7 16,13 24,4 32,13 38,7 41,20" fill="#881337" stroke="#4c0519" stroke-width="1.2"/>
-        <polygon points="12,12 18,6 24,11 30,6 36,12" fill="#be123c"/>
-        <circle cx="24" cy="27" r="15" fill="#fed7aa"/>
+        <!-- Spiky Burgundy Hair -->
+        <polygon points="6,19 9,6 15,12 24,3 33,12 39,6 42,19" fill="#881337" stroke="#4c0519" stroke-width="1.2"/>
+        <polygon points="11,11 17,5 24,10 31,5 37,11" fill="#be123c"/>
+        <circle cx="24" cy="27" r="14.5" fill="#fed7aa"/>
         <!-- Demon Slayer Forehead Flame Scar -->
-        <path d="M 12 16 Q 16 13 18 17 Q 16 21 13 19 Z" fill="#991b1b"/>
-        <!-- Hanafuda Earrings -->
+        <path d="M 12 15 Q 16 12 18 16 Q 16 20 13 18 Z" fill="#991b1b"/>
+        <!-- Dangling Hanafuda Earrings -->
         <rect x="7" y="24" width="4" height="8" rx="0.5" fill="#ffffff" stroke="#991b1b" stroke-width="0.8"/>
         <circle cx="9" cy="27" r="1.3" fill="#dc2626"/>
         <rect x="37" y="24" width="4" height="8" rx="0.5" fill="#ffffff" stroke="#991b1b" stroke-width="0.8"/>
         <circle cx="39" cy="27" r="1.3" fill="#dc2626"/>
-        <!-- Kind Burgundy Eyes -->
-        <circle cx="17.5" cy="25" r="3.5" fill="#881337"/>
-        <circle cx="18.8" cy="23.8" r="1.4" fill="#ffffff"/>
-        <circle cx="30.5" cy="25" r="3.5" fill="#881337"/>
-        <circle cx="31.8" cy="23.8" r="1.4" fill="#ffffff"/>
-        <!-- Determined Mouth -->
-        <path d="M 21 31.5 Q 24 34 27 31.5" fill="none" stroke="#4c0519" stroke-width="1.3" stroke-linecap="round"/>
-        <!-- Green-Black Checkered Haori Collar -->
+        <!-- Kind Sparkling Ruby Eyes -->
+        <circle cx="17" cy="25" r="3.6" fill="#881337"/>
+        <circle cx="18.3" cy="23.6" r="1.5" fill="#ffffff"/>
+        <circle cx="16" cy="26.3" r="0.7" fill="#ffffff"/>
+        <circle cx="31" cy="25" r="3.6" fill="#881337"/>
+        <circle cx="32.3" cy="23.6" r="1.5" fill="#ffffff"/>
+        <circle cx="30" cy="26.3" r="0.7" fill="#ffffff"/>
+        <!-- Cute Blush & Smile -->
+        <ellipse cx="11" cy="29" rx="3.2" ry="1.8" fill="#fb7185" opacity="0.75"/>
+        <ellipse cx="37" cy="29" rx="3.2" ry="1.8" fill="#fb7185" opacity="0.75"/>
+        <path d="M 21 31.5 Q 24 34.5 27 31.5" fill="none" stroke="#4c0519" stroke-width="1.4" stroke-linecap="round"/>
+        <!-- Green-Black Checkered Collar -->
         <rect x="13" y="38" width="6" height="6" fill="#15803d"/>
         <rect x="19" y="38" width="5" height="6" fill="#0f172a"/>
         <rect x="24" y="38" width="5" height="6" fill="#15803d"/>
@@ -2399,28 +2412,30 @@
       bg: 'linear-gradient(135deg, #fce7f3 0%, #f472b6 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
         <circle cx="24" cy="24" r="23" fill="#fce7f3"/>
-        <!-- Long Black Flowing Hair with Orange Tips -->
+        <!-- Flowing Black Hair with Orange Flame Tips -->
         <circle cx="24" cy="27" r="16.5" fill="#0f172a"/>
         <polygon points="5,33 9,45 14,35" fill="#ea580c"/>
         <polygon points="34,35 39,45 43,33" fill="#ea580c"/>
-        <!-- Face -->
+        <!-- Cute Face -->
         <circle cx="24" cy="27" r="14" fill="#fff1f2"/>
         <!-- Pink Ribbon Hairpin -->
         <polygon points="12,12 16,16 12,20" fill="#f43f5e"/>
         <polygon points="20,12 16,16 20,20" fill="#f43f5e"/>
         <circle cx="16" cy="16" r="1.6" fill="#ffffff"/>
-        <!-- Soft Pink Blush -->
+        <!-- Rosy Blush Cheeks -->
         <ellipse cx="11" cy="28" rx="3.5" ry="2" fill="#fb7185" opacity="0.8"/>
         <ellipse cx="37" cy="28" rx="3.5" ry="2" fill="#fb7185" opacity="0.8"/>
-        <!-- Big Pink Anime Eyes with Eyelashes -->
-        <path d="M 13.5 22 Q 17.5 19 21.5 22" fill="none" stroke="#0f172a" stroke-width="1.4" stroke-linecap="round"/>
-        <circle cx="17.5" cy="24.5" r="3.2" fill="#f43f5e"/>
-        <circle cx="18.5" cy="23.2" r="1.3" fill="#ffffff"/>
-        <path d="M 26.5 22 Q 30.5 19 34.5 22" fill="none" stroke="#0f172a" stroke-width="1.4" stroke-linecap="round"/>
-        <circle cx="30.5" cy="24.5" r="3.2" fill="#f43f5e"/>
-        <circle cx="31.5" cy="23.2" r="1.3" fill="#ffffff"/>
+        <!-- Big Sparkling Pink Anime Eyes with Eyelashes -->
+        <path d="M 13 21.5 Q 17 18.5 21 21.5" fill="none" stroke="#0f172a" stroke-width="1.4" stroke-linecap="round"/>
+        <circle cx="17" cy="24" r="3.5" fill="#f43f5e"/>
+        <circle cx="18.2" cy="22.8" r="1.5" fill="#ffffff"/>
+        <circle cx="16" cy="25.2" r="0.7" fill="#ffffff"/>
+        <path d="M 27 21.5 Q 31 18.5 35 21.5" fill="none" stroke="#0f172a" stroke-width="1.4" stroke-linecap="round"/>
+        <circle cx="31" cy="24" r="3.5" fill="#f43f5e"/>
+        <circle cx="32.2" cy="22.8" r="1.5" fill="#ffffff"/>
+        <circle cx="30" cy="25.2" r="0.7" fill="#ffffff"/>
         <!-- Green Bamboo Muzzle & Red Ribbon -->
-        <line x1="12" y1="31.5" x2="36" y2="31.5" stroke="#e11d48" stroke-width="1.4"/>
+        <line x1="11" y1="31.5" x2="37" y2="31.5" stroke="#e11d48" stroke-width="1.5"/>
         <rect x="16.5" y="28.5" width="15" height="6.5" rx="3.2" fill="#22c55e" stroke="#15803d" stroke-width="1"/>
         <line x1="21.5" y1="28.5" x2="21.5" y2="35" stroke="#15803d" stroke-width="1"/>
         <line x1="26.5" y1="28.5" x2="26.5" y2="35" stroke="#15803d" stroke-width="1"/>
@@ -2433,27 +2448,29 @@
       bg: 'linear-gradient(135deg, #0f172a 0%, #0284c7 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
         <circle cx="24" cy="24" r="23" fill="#0f172a"/>
-        <!-- Spiky Silver Hair -->
-        <polygon points="7,20 9,5 15,12 24,2 33,12 39,5 41,20" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
-        <polygon points="12,12 18,5 24,10 30,5 36,12" fill="#f1f5f9"/>
-        <circle cx="24" cy="27" r="15" fill="#f8fafc"/>
-        <!-- High Collar Dark Uniform -->
-        <path d="M 11 42 L 17 35 L 24 38 L 31 35 L 37 42 Z" fill="#020617"/>
+        <!-- Fluffy Spiky Silver Hair -->
+        <polygon points="6,19 8,4 14,11 24,1 34,11 40,4 42,19" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+        <polygon points="11,11 17,4 24,9 31,4 37,11" fill="#f1f5f9"/>
+        <circle cx="24" cy="27" r="14.5" fill="#f8fafc"/>
         <!-- Sorcerer Blindfold / Glasses Tilted -->
-        <polygon points="10,21 38,18 38,23 10,26" fill="#020617"/>
-        <!-- Radiant Six Eyes Glowing Cyan/Blue -->
-        <circle cx="17.5" cy="25" r="4.2" fill="#00f5d4"/>
-        <circle cx="17.5" cy="25" r="2.8" fill="#38bdf8"/>
-        <circle cx="17.5" cy="25" r="1.5" fill="#0284c7"/>
-        <circle cx="18.8" cy="23.8" r="1.2" fill="#ffffff"/>
-        <circle cx="30.5" cy="25" r="4.2" fill="#00f5d4"/>
-        <circle cx="30.5" cy="25" r="2.8" fill="#38bdf8"/>
-        <circle cx="30.5" cy="25" r="1.5" fill="#0284c7"/>
-        <circle cx="31.8" cy="23.8" r="1.2" fill="#ffffff"/>
+        <polygon points="9,21 39,18 39,23 9,26" fill="#020617"/>
+        <!-- Radiant Six Eyes Glowing Cyan/Blue with Diamond Sparkle -->
+        <circle cx="17" cy="24.5" r="4.2" fill="#00f5d4"/>
+        <circle cx="17" cy="24.5" r="2.8" fill="#38bdf8"/>
+        <circle cx="17" cy="24.5" r="1.5" fill="#0284c7"/>
+        <circle cx="18.3" cy="23.3" r="1.3" fill="#ffffff"/>
+        <circle cx="31" cy="24.5" r="4.2" fill="#00f5d4"/>
+        <circle cx="31" cy="24.5" r="2.8" fill="#38bdf8"/>
+        <circle cx="31" cy="24.5" r="1.5" fill="#0284c7"/>
+        <circle cx="32.3" cy="23.3" r="1.3" fill="#ffffff"/>
         <!-- Diamond Glint Stars -->
-        <path d="M 17.5 22 L 18 24 L 20 24.5 L 18 25 L 17.5 27 L 17 25 L 15 24.5 L 17 24 Z" fill="#ffffff" opacity="0.9"/>
-        <!-- Smug Confident Smirk -->
-        <path d="M 21 32 Q 25 35 28 32" fill="none" stroke="#0284c7" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M 17 21.5 L 17.5 23.5 L 19.5 24 L 17.5 24.5 L 17 26.5 L 16.5 24.5 L 14.5 24 L 16.5 23.5 Z" fill="#ffffff" opacity="0.95"/>
+        <ellipse cx="11" cy="28.5" rx="3" ry="1.6" fill="#38bdf8" opacity="0.6"/>
+        <ellipse cx="37" cy="28.5" rx="3" ry="1.6" fill="#38bdf8" opacity="0.6"/>
+        <!-- Cute Smug Smile -->
+        <path d="M 21 31.5 Q 24.5 34.5 28 31.5" fill="none" stroke="#0284c7" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Dark High Collar Jacket -->
+        <path d="M 11 43 L 17 36 L 24 39 L 31 36 L 37 43 Z" fill="#020617"/>
       </svg>`
     },
     {
@@ -2463,20 +2480,22 @@
       bg: 'linear-gradient(135deg, #fef08a 0%, #ca8a04 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
         <circle cx="24" cy="24" r="23" fill="#fef08a"/>
-        <!-- Huge Super Saiyan Golden Spikes -->
-        <polygon points="4,22 7,4 16,13 24,0 32,13 41,4 44,22" fill="#facc15" stroke="#ca8a04" stroke-width="1.4"/>
-        <polygon points="12,12 18,3 24,9 30,3 36,12" fill="#fef08a"/>
-        <circle cx="24" cy="28" r="15" fill="#fed7aa"/>
-        <!-- Fierce Warrior Eyebrows & Teal Eyes -->
-        <path d="M 13 22 L 21 24.5 M 35 22 L 27 24.5" stroke="#ca8a04" stroke-width="1.8" stroke-linecap="round"/>
-        <polygon points="14,23 20,24.5 18,28 15,27" fill="#06b6d4"/>
-        <circle cx="17.5" cy="25.5" r="1.3" fill="#0f172a"/>
-        <circle cx="18.2" cy="24.8" r="0.6" fill="#ffffff"/>
-        <polygon points="34,23 28,24.5 30,28 33,27" fill="#06b6d4"/>
-        <circle cx="30.5" cy="25.5" r="1.3" fill="#0f172a"/>
-        <circle cx="31.2" cy="24.8" r="0.6" fill="#ffffff"/>
-        <!-- Determined Mouth -->
-        <path d="M 21 32.5 Q 24 35.5 27 32.5" fill="none" stroke="#78350f" stroke-width="1.4" stroke-linecap="round"/>
+        <!-- Super Saiyan Golden Spikes -->
+        <polygon points="3,21 6,3 15,12 24,0 33,12 42,3 45,21" fill="#facc15" stroke="#ca8a04" stroke-width="1.4"/>
+        <polygon points="11,11 17,2 24,8 31,2 37,11" fill="#fef08a"/>
+        <circle cx="24" cy="28" r="14.5" fill="#fed7aa"/>
+        <!-- Cute Fierce Eyebrows & Teal Eyes -->
+        <path d="M 13 21.5 L 21 24 M 35 21.5 L 27 24" stroke="#ca8a04" stroke-width="1.8" stroke-linecap="round"/>
+        <polygon points="14,22.5 20,24 18,27.5 15,26.5" fill="#06b6d4"/>
+        <circle cx="17" cy="25" r="1.4" fill="#0f172a"/>
+        <circle cx="17.8" cy="24.2" r="0.7" fill="#ffffff"/>
+        <polygon points="34,22.5 28,24 30,27.5 33,26.5" fill="#06b6d4"/>
+        <circle cx="31" cy="25" r="1.4" fill="#0f172a"/>
+        <circle cx="31.8" cy="24.2" r="0.7" fill="#ffffff"/>
+        <!-- Blush & Smirk -->
+        <ellipse cx="11" cy="29.5" rx="3" ry="1.6" fill="#fb7185" opacity="0.65"/>
+        <ellipse cx="37" cy="29.5" rx="3" ry="1.6" fill="#fb7185" opacity="0.65"/>
+        <path d="M 21 32 Q 24 35 27 32" fill="none" stroke="#78350f" stroke-width="1.4" stroke-linecap="round"/>
         <!-- Orange Gi with Navy Undershirt -->
         <path d="M 10 43 L 18 36 L 24 41 L 30 36 L 38 43 Z" fill="#ea580c"/>
         <polygon points="21,38 24,42 27,38" fill="#1d4ed8"/>
@@ -2490,17 +2509,19 @@
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
         <circle cx="24" cy="24" r="23" fill="#cbd5e1"/>
         <!-- Parted Undercut Black Hair -->
-        <path d="M 8 20 C 8 8 40 8 40 20 L 40 25 L 34 21 L 28 25 L 24 19 L 20 25 L 14 21 L 8 25 Z" fill="#0f172a"/>
-        <circle cx="24" cy="28" r="14.5" fill="#f8fafc"/>
+        <path d="M 7 19 C 7 7 41 7 41 19 L 41 24 L 35 20 L 29 24 L 24 18 L 19 24 L 13 20 L 7 24 Z" fill="#0f172a"/>
+        <circle cx="24" cy="28" r="14" fill="#f8fafc"/>
         <!-- Sharp Stoic Steel-Grey Anime Eyes -->
-        <path d="M 13 23.5 L 21 23.5 L 19 27.5 L 14 26.5 Z" fill="#475569"/>
-        <circle cx="17.5" cy="25" r="1.3" fill="#0f172a"/>
-        <circle cx="18" cy="24.3" r="0.5" fill="#ffffff"/>
-        <path d="M 35 23.5 L 27 23.5 L 29 27.5 L 34 26.5 Z" fill="#475569"/>
-        <circle cx="30.5" cy="25" r="1.3" fill="#0f172a"/>
-        <circle cx="31" cy="24.3" r="0.5" fill="#ffffff"/>
-        <!-- Serious Calm Expression -->
-        <line x1="21.5" y1="32.5" x2="26.5" y2="32.5" stroke="#334155" stroke-width="1.3" stroke-linecap="round"/>
+        <path d="M 13 23 L 21 23 L 19 27 L 14 26 Z" fill="#475569"/>
+        <circle cx="17" cy="24.5" r="1.4" fill="#0f172a"/>
+        <circle cx="17.6" cy="23.8" r="0.6" fill="#ffffff"/>
+        <path d="M 35 23 L 27 23 L 29 27 L 34 26 Z" fill="#475569"/>
+        <circle cx="31" cy="24.5" r="1.4" fill="#0f172a"/>
+        <circle cx="31.6" cy="23.8" r="0.6" fill="#ffffff"/>
+        <!-- Stoic Expression & Subtle Blush -->
+        <ellipse cx="11" cy="29" rx="2.8" ry="1.5" fill="#fca5a5" opacity="0.5"/>
+        <ellipse cx="37" cy="29" rx="2.8" ry="1.5" fill="#fca5a5" opacity="0.5"/>
+        <line x1="21.5" y1="32" x2="26.5" y2="32" stroke="#334155" stroke-width="1.3" stroke-linecap="round"/>
         <!-- White Ascot Cravat & Scout Cape -->
         <polygon points="24,35 20,44 28,44" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8"/>
         <circle cx="24" cy="36" r="1.2" fill="#fbbf24"/>
@@ -2514,29 +2535,29 @@
       bg: 'linear-gradient(135deg, #fce7f3 0%, #fb7185 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
         <circle cx="24" cy="24" r="23" fill="#ffe4e6"/>
-        <!-- Soft Strawberry Pink Hair -->
+        <!-- Soft Fluffy Pink Hair -->
         <circle cx="24" cy="26" r="16.5" fill="#f472b6"/>
-        <!-- Signature Black-Gold Hair Horns -->
-        <polygon points="11,14 7,6 16,11" fill="#0f172a"/>
-        <polygon points="10,13 7,8 14,11" fill="#facc15"/>
-        <polygon points="37,14 41,6 32,11" fill="#0f172a"/>
-        <polygon points="38,13 41,8 34,11" fill="#facc15"/>
+        <!-- Black-Gold Conical Hair Ornaments -->
+        <polygon points="10,13 6,5 15,10" fill="#0f172a"/>
+        <polygon points="9,12 6,7 13,10" fill="#facc15"/>
+        <polygon points="38,13 42,5 33,10" fill="#0f172a"/>
+        <polygon points="39,12 42,7 35,10" fill="#facc15"/>
         <!-- Cute Face -->
         <circle cx="24" cy="28" r="14" fill="#fff1f2"/>
-        <!-- Big Emerald Anime Eyes with Highlights -->
-        <circle cx="17.5" cy="25.5" r="3.8" fill="#059669"/>
-        <circle cx="17.5" cy="25.5" r="2.4" fill="#10b981"/>
-        <circle cx="18.8" cy="24.2" r="1.4" fill="#ffffff"/>
-        <circle cx="16.2" cy="26.8" r="0.7" fill="#ffffff"/>
-        <circle cx="30.5" cy="25.5" r="3.8" fill="#059669"/>
-        <circle cx="30.5" cy="25.5" r="2.4" fill="#10b981"/>
-        <circle cx="31.8" cy="24.2" r="1.4" fill="#ffffff"/>
-        <circle cx="29.2" cy="26.8" r="0.7" fill="#ffffff"/>
+        <!-- Giant Sparkling Emerald Anime Eyes -->
+        <circle cx="17" cy="25" r="4" fill="#059669"/>
+        <circle cx="17" cy="25" r="2.6" fill="#10b981"/>
+        <circle cx="18.3" cy="23.6" r="1.5" fill="#ffffff"/>
+        <circle cx="15.8" cy="26.3" r="0.8" fill="#ffffff"/>
+        <circle cx="31" cy="25" r="4" fill="#059669"/>
+        <circle cx="31" cy="25" r="2.6" fill="#10b981"/>
+        <circle cx="32.3" cy="23.6" r="1.5" fill="#ffffff"/>
+        <circle cx="29.8" cy="26.3" r="0.8" fill="#ffffff"/>
         <!-- Waku Waku Blush -->
-        <ellipse cx="11" cy="30" rx="3.5" ry="1.8" fill="#fb7185" opacity="0.8"/>
-        <ellipse cx="37" cy="30" rx="3.5" ry="1.8" fill="#fb7185" opacity="0.8"/>
-        <!-- Smug 'Heh' Mouth -->
-        <path d="M 20.5 32 Q 24 36 27.5 32" fill="none" stroke="#e11d48" stroke-width="1.3" stroke-linecap="round"/>
+        <ellipse cx="11" cy="29.5" rx="3.5" ry="1.8" fill="#fb7185" opacity="0.85"/>
+        <ellipse cx="37" cy="29.5" rx="3.5" ry="1.8" fill="#fb7185" opacity="0.85"/>
+        <!-- Smug 'Heh' Cute Smile -->
+        <path d="M 20.5 31.5 Q 24 35.5 27.5 31.5" fill="none" stroke="#e11d48" stroke-width="1.4" stroke-linecap="round"/>
         <!-- Eden Academy Uniform Collar -->
         <path d="M 12 43 L 18 36 L 24 39 L 30 36 L 36 43 Z" fill="#0f172a"/>
         <path d="M 18 36 L 24 39 L 30 36" fill="none" stroke="#facc15" stroke-width="1.2"/>
