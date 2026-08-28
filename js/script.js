@@ -9865,6 +9865,8 @@
     if(window.multiplayerEngine) {
       window.multiplayerEngine.cancelMatch();
     }
+    showModal(el.mpModal);
+    switchMpTab('quick');
   });
 
   bindClick(el.mpRematchBtn, () => {
