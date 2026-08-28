@@ -3189,8 +3189,8 @@
     if(el.modeMultiplayerBtn) el.modeMultiplayerBtn.classList.toggle('active', mode === 'multiplayer');
 
     if(mode === 'multiplayer') {
-      el.playBtn.textContent = 'BUKA LOBI 1v1 BATTLE';
-      if(el.modeBestLabel) el.modeBestLabel.textContent = '1v1 BATTLE';
+      el.playBtn.textContent = 'BUKA LOBI MULTIPLAYER';
+      if(el.modeBestLabel) el.modeBestLabel.textContent = 'MULTIPLAYER';
     } else if(mode === 'ranked') {
       el.playBtn.textContent = 'PLAY RANKED (EXTREME)';
       if(el.modeBestLabel) el.modeBestLabel.textContent = 'RANKED BEST';
