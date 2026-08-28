@@ -1302,10 +1302,17 @@
   border: 2px solid #38bdf8 !important;
   box-shadow: 0 16px 36px rgba(0,0,0,0.75), 0 0 24px rgba(56, 189, 248, 0.25) !important;
   color: #ffffff;
-  display: flex !important;
-  flex-direction: column !important;
+  flex-direction: column;
   overflow: hidden !important;
   padding: 20px 14px 16px !important;
+}
+
+.avatar-picker-modal:not(.hidden) {
+  display: flex !important;
+}
+
+.avatar-picker-modal.hidden {
+  display: none !important;
 }
 
 .avatar-picker-header h2 {

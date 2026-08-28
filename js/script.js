@@ -8874,6 +8874,7 @@
     setMode('classic', true);
     syncSettings();
     syncGPProfileUI();
+    renderAvatarPickerGrid();
     syncLeaderboardFromFirebase();
     updateCoins();
     renderShop();
