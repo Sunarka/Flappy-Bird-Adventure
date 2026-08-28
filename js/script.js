@@ -9581,6 +9581,8 @@
     }, 1800);
   }
 
+  let guestIsReady = false;
+
   if(window.multiplayerEngine) {
     const mp = window.multiplayerEngine;
 
@@ -9610,8 +9612,6 @@
       versusClashActive = false;
       if(el.mpVersusScreen) el.mpVersusScreen.classList.add('hidden');
     });
-
-    let guestIsReady = false;
 
     mp.on('room_created', (room) => {
       stopSearchingRadar();
