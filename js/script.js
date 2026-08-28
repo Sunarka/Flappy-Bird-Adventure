@@ -3015,8 +3015,6 @@
     el.championLoadoutTags.innerHTML = tagsHtml;
   }
 
-  let activeLeaderboardTab = 'global';
-
   function switchLeaderboardTab(tab) {
     activeLeaderboardTab = tab;
     if(el.lbTabGlobalBtn) el.lbTabGlobalBtn.classList.toggle('active', tab === 'global');
@@ -3028,6 +3026,7 @@
       renderLeaderboardList();
       startChampionSpotlight(selectedSpotlightPlayer || leaderboardData[0]);
     } else {
+      updateRankedLeaderboardUI();
       stopChampionSpotlight();
     }
   }
@@ -3153,18 +3152,29 @@
     }
   }
 
+  const cuteAvatarKeys = [
+    'chick_yellow', 'cat_calico', 'dog_shiba', 'bunny_white', 'panda', 'fox',
+    'penguin', 'frog', 'bear_brown', 'koala', 'duck', 'piggy', 'owl_night',
+    'monkey', 'lion', 'dragon'
+  ];
+
   function sanitizeLeaderboard(list) {
     if(!Array.isArray(list)) return [];
-    return list.map(item => {
+    return list.map((item, idx) => {
       const p = item || {};
       const score = Math.max(0, parseInt(p.score, 10) || 0);
       const name = (p.name && typeof p.name === 'string') ? p.name.slice(0, 16) : 'Player';
+      let av = p.avatar;
+      // Jika dummy player atau avatar tidak dikenal, berikan avatar acak dari koleksi PP lucu
+      if(!p.isUser && (!av || !cuteAvatars[av])) {
+        av = cuteAvatarKeys[idx % cuteAvatarKeys.length];
+      }
       return {
         id: p.id || name,
         name: name,
         score: score,
         tier: getRankTier(score).name,
-        avatar: p.avatar || 'chick_yellow',
+        avatar: av || 'chick_yellow',
         isUser: !!p.isUser,
         loadout: p.loadout || {}
       };
@@ -8424,6 +8434,8 @@
   bindClick('rankedLeaderboardBtn', () => {
     if(currentMode !== 'ranked') return;
     audio.click();
+    updateRankedLeaderboardUI();
+    renderLeaderboardList();
     switchLeaderboardTab('global');
     showModal(el.rankedModal);
   });
