@@ -38,6 +38,7 @@
     facebookSignInBtn:$('facebookSignInBtn'), facebookSignInBtnText:$('facebookSignInBtnText'),
     guestSignInBtn:$('guestSignInBtn'),
     gpUserEmail:$('gpUserEmail'), gpSignOutBtn:$('gpSignOutBtn'),
+    gpWelcomeToast:$('gpWelcomeToast'), gpToastName:$('gpToastName'), gpToastAvatar:$('gpToastAvatar'),
     avatarPickerModal:$('avatarPickerModal'), avatarPickerGrid:$('avatarPickerGrid'),
     rankedModal:$('rankedModal'), championCanvas:$('championCanvas'), championGamerTag:$('championGamerTag'),
     championScore:$('championScore'), championTier:$('championTier'), championLoadoutTags:$('championLoadoutTags'),
@@ -8521,6 +8522,35 @@
   bindClick(el.gpChangeAvatarBtn, openAvatarPicker);
   bindClick(el.gpAvatarWrap, openAvatarPicker);
 
+  let welcomeToastTimer = null;
+  function triggerPlayGamesWelcomeToast(name, avatar, provider = 'play_games') {
+    if(!el.gpWelcomeToast) return;
+    if(el.gpToastName) el.gpToastName.textContent = name || 'Gamer';
+    if(el.gpToastAvatar) el.gpToastAvatar.innerHTML = getCuteAvatarSvg(avatar || gpProfile.avatar || 'chick_yellow', 32);
+    
+    const titleElem = el.gpWelcomeToast.querySelector('.gp-toast-title');
+    if(titleElem) {
+      if(provider === 'facebook') titleElem.textContent = 'Facebook • Terhubung';
+      else if(provider === 'google') titleElem.textContent = 'Google • Terhubung';
+      else titleElem.textContent = 'Play Games • Terhubung';
+    }
+
+    if(welcomeToastTimer) clearTimeout(welcomeToastTimer);
+    el.gpWelcomeToast.classList.remove('hidden');
+    void el.gpWelcomeToast.offsetWidth;
+    el.gpWelcomeToast.classList.add('show');
+    audio.win();
+
+    welcomeToastTimer = setTimeout(() => {
+      if(el.gpWelcomeToast) {
+        el.gpWelcomeToast.classList.remove('show');
+        setTimeout(() => {
+          if(el.gpWelcomeToast) el.gpWelcomeToast.classList.add('hidden');
+        }, 500);
+      }
+    }, 4000);
+  }
+
   function handleAuthError(err, providerName) {
     if(!err) return;
     console.warn(`[${providerName} Sign-In notice]:`, err.code, err.message);
@@ -8553,8 +8583,8 @@
           gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
         }
         saveGPProfile();
-        audio.win();
         syncGPProfileUI();
+        triggerPlayGamesWelcomeToast(gpProfile.gamerTag, gpProfile.avatar, 'play_games');
       }
     } catch(err) {
       handleAuthError(err, 'Google Play Games');
@@ -8582,8 +8612,8 @@
           gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
         }
         saveGPProfile();
-        audio.win();
         syncGPProfileUI();
+        triggerPlayGamesWelcomeToast(gpProfile.gamerTag, gpProfile.avatar, 'google');
       }
     } catch(err) {
       handleAuthError(err, 'Google');
@@ -8611,8 +8641,8 @@
           gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
         }
         saveGPProfile();
-        audio.win();
         syncGPProfileUI();
+        triggerPlayGamesWelcomeToast(gpProfile.gamerTag, gpProfile.avatar, 'facebook');
       }
     } catch(err) {
       handleAuthError(err, 'Facebook');

@@ -1495,4 +1495,78 @@
   flex-shrink: 0;
 }
 
+/* =========================================================
+   GOOGLE PLAY GAMES WELCOME BANNER NOTIFICATION (TOP SLIDE)
+   ========================================================= */
+.gp-welcome-toast {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-140%);
+  background: linear-gradient(135deg, #091811 0%, #0f2d1e 50%, #061e12 100%);
+  border: 1.5px solid #00E676;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 22px rgba(0, 230, 118, 0.45);
+  border-radius: 99px;
+  padding: 6px 16px 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 999;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.35s ease;
+  opacity: 0;
+}
+
+.gp-welcome-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.gp-toast-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 8px #00E676);
+  flex-shrink: 0;
+}
+
+.gp-toast-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid #00E676;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #020617;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.gp-toast-content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.gp-toast-title {
+  font: 900 8.5px 'Trebuchet MS', Arial, sans-serif;
+  color: #00E676;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  text-shadow: 0 0 6px rgba(0, 230, 118, 0.5);
+}
+
+.gp-toast-gamertag {
+  font: 900 13.5px 'Trebuchet MS', Arial, sans-serif;
+  color: #ffffff;
+  letter-spacing: 0.4px;
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
 
