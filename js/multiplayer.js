@@ -369,6 +369,18 @@
           break;
         }
 
+        case 'PLAYER_READY_STATUS': {
+          if (this.currentRoom && this.currentRoom.playersList) {
+            const p = this.currentRoom.playersList.find(pl => pl.id === data.playerId);
+            if (p) p.isReady = data.isReady;
+          }
+          if (this.opponents.has(data.playerId)) {
+            this.opponents.get(data.playerId).isReady = data.isReady;
+          }
+          this.emit('player_ready_status', data);
+          break;
+        }
+
         case 'GAME_STARTING': {
           this.matchStatus = 'COUNTDOWN';
           this.setSeed(data.seed);
@@ -769,6 +781,27 @@
       }
       this.matchStatus = 'IDLE';
       this.send({ type: 'CANCEL_MATCH' });
+    }
+
+    setReady(isReady) {
+      if (this.myProfile) this.myProfile.isReady = isReady;
+      this.send({ type: 'PLAYER_READY', isReady: !!isReady });
+
+      if (this.fs && this.currentRoom && this.currentRoom.code) {
+        this.fs.collection('flappy_mp_rooms').doc(this.currentRoom.code).update({
+          guestReady: !!isReady,
+          lastActive: Date.now()
+        }).catch(() => {});
+      }
+
+      if (this.bc && this.currentRoom) {
+        this.bc.postMessage({
+          type: 'BC_PLAYER_READY',
+          roomId: this.currentRoom.roomId,
+          playerId: this.localPlayerId,
+          isReady: !!isReady
+        });
+      }
     }
 
     startRoomGame() {

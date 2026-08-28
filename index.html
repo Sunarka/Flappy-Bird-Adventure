@@ -6,14 +6,14 @@
   <meta name="theme-color" content="#77cef2">
   <title>Flappy Bird - Sky Challenge</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=9.0">
-  <link rel="stylesheet" href="css/modern-icons.css?v=9.0">
-  <link rel="stylesheet" href="css/shop.css?v=9.0">
-  <link rel="stylesheet" href="css/shop-extra.css?v=9.0">
-  <link rel="stylesheet" href="css/mode-picker.css?v=9.0">
-  <link rel="stylesheet" href="css/store.css?v=9.0">
-  <link rel="stylesheet" href="css/ranked.css?v=9.0">
-  <link rel="stylesheet" href="css/multiplayer.css?v=9.0">
+  <link rel="stylesheet" href="css/style.css?v=9.1">
+  <link rel="stylesheet" href="css/modern-icons.css?v=9.1">
+  <link rel="stylesheet" href="css/shop.css?v=9.1">
+  <link rel="stylesheet" href="css/shop-extra.css?v=9.1">
+  <link rel="stylesheet" href="css/mode-picker.css?v=9.1">
+  <link rel="stylesheet" href="css/store.css?v=9.1">
+  <link rel="stylesheet" href="css/ranked.css?v=9.1">
+  <link rel="stylesheet" href="css/multiplayer.css?v=9.1">
 </head>
 <body>
   <main class="game-shell" aria-label="Flappy Bird Sky Challenge">
@@ -584,30 +584,35 @@
           </div>
         </div>
 
-        <!-- TAB 2: BUAT ROOM -->
+        <!-- TAB 2: ROOM LOBBY (HOST & GUEST) -->
         <div class="mp-view hidden" id="mpViewCreate">
           <div class="mp-room-box">
-            <span style="font-size:12px;font-weight:700;color:#cbd5e1;">BAGIKAN KODE INI KE TEMAN ANDA:</span>
+            <span style="font-size:12px;font-weight:700;color:#cbd5e1;" id="mpLobbyTitle">KODE ROOM PERTANDINGAN:</span>
             <div class="mp-code-display">
               <span class="mp-code-badge" id="mpCreatedCodeBadge">----</span>
               <button class="mp-btn-copy" id="mpCopyCodeBtn" type="button">SALIN</button>
             </div>
             
             <div class="mp-slots-grid" id="mpHostSlotsGrid">
-              <!-- Player Slot 1 (Host) & Slot 2 (Guest) -->
-              <div class="mp-slot-card host">
+              <!-- Player Slot 1 (Host) -->
+              <div class="mp-slot-card host" id="mpHostSlotCard">
                 <div class="mp-slot-avatar" id="mpHostAvatar"></div>
                 <span class="mp-slot-name" id="mpHostName">HOST</span>
-                <span class="mp-slot-role">KAMU (HOST)</span>
+                <span class="mp-slot-role" id="mpHostRoleBadge">HOST (LEADER)</span>
               </div>
+              <!-- Player Slot 2 (Guest) -->
               <div class="mp-slot-card" id="mpGuestSlotCard">
                 <div class="mp-slot-avatar" id="mpGuestAvatar">?</div>
                 <span class="mp-slot-name" id="mpGuestName">Menunggu Teman...</span>
-                <span class="mp-slot-role" style="background:#475569;">GUEST</span>
+                <span class="mp-slot-role" id="mpGuestStatusBadge" style="background:#475569;">GUEST</span>
               </div>
             </div>
 
-            <button class="primary" id="mpHostStartGameBtn" type="button" disabled style="opacity:0.6;background:#64748b;margin:0;">MULAI BERTANDING</button>
+            <!-- Host Action Button -->
+            <button class="primary" id="mpHostStartGameBtn" type="button" disabled style="opacity:0.6;background:#64748b;margin:0;">MENUNGGU LAWAN READY...</button>
+            
+            <!-- Guest Action Button (Toggle Ready) -->
+            <button class="primary hidden" id="mpGuestReadyBtn" type="button" style="margin:0;background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">SAYA SIAP! (READY)</button>
           </div>
         </div>
 
@@ -722,8 +727,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=9.0"></script>
-  <script src="js/multiplayer.js?v=9.0"></script>
-  <script src="js/script.js?v=9.0"></script>
+  <script src="js/firebase-config.js?v=9.1"></script>
+  <script src="js/multiplayer.js?v=9.1"></script>
+  <script src="js/script.js?v=9.1"></script>
 </body>
 </html>

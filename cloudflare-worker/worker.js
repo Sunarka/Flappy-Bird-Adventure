@@ -214,6 +214,7 @@ export class MultiplayerHub extends DurableObject {
             break;
           }
 
+          session.profile.isReady = false;
           targetRoom.players.set(playerId, {
             ws,
             profile: session.profile
@@ -225,7 +226,7 @@ export class MultiplayerHub extends DurableObject {
             name: p.profile.name,
             avatar: p.profile.avatar,
             skin: p.profile.skin,
-            isReady: true,
+            isReady: p.profile.isReady !== false,
             isHost: p.profile.id === targetRoom.hostId
           }));
 
@@ -241,9 +242,22 @@ export class MultiplayerHub extends DurableObject {
           this.broadcastToRoom(targetRoom, {
             type: 'PLAYER_JOINED',
             player: session.profile,
+            isReady: false,
             playersCount: targetRoom.players.size,
             playersList
           }, ws);
+          break;
+        }
+
+        case 'PLAYER_READY': {
+          if (!session.currentRoom) return;
+          const isReady = !!data.isReady;
+          session.profile.isReady = isReady;
+          this.broadcastToRoom(session.currentRoom, {
+            type: 'PLAYER_READY_STATUS',
+            playerId,
+            isReady
+          });
           break;
         }
 
