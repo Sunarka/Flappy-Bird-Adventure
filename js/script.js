@@ -2607,6 +2607,19 @@
 
   function saveGPProfile() {
     storage.set('skyFlappyGPProfile', gpProfile);
+    if(gpProfile.googleUid || gpProfile.email) {
+      const accKey = gpProfile.googleUid || gpProfile.email;
+      const accountsMap = storage.get('skyFlappyAccountsMap', {});
+      accountsMap[accKey] = {
+        gamerTag: gpProfile.gamerTag,
+        avatar: gpProfile.avatar,
+        nameChangesDone: gpProfile.nameChangesDone || 0,
+        rankedBest: rankedBest || 0,
+        email: gpProfile.email,
+        authProvider: gpProfile.authProvider || 'google'
+      };
+      storage.set('skyFlappyAccountsMap', accountsMap);
+    }
     syncGPProfileUI();
     if(rankedBest > 0 && typeof submitRankedScore === 'function') {
       submitRankedScore(rankedBest);
@@ -8564,16 +8577,32 @@
       }
       const user = await window.FirebaseLeaderboard.signInWithGoogle();
       if(user) {
+        const accKey = user.uid || user.email;
+        const accountsMap = storage.get('skyFlappyAccountsMap', {});
+        const savedAcc = accountsMap[accKey];
+
         gpProfile.isLoggedIn = true;
         gpProfile.isGoogle = true;
         gpProfile.authProvider = 'google';
         gpProfile.email = user.email || '';
         gpProfile.googleUid = user.uid;
-        if(user.displayName) {
-          gpProfile.gamerTag = user.displayName.slice(0, 16);
-        } else if(user.email) {
-          gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
+
+        if (savedAcc && savedAcc.gamerTag) {
+          gpProfile.gamerTag = savedAcc.gamerTag;
+          if (savedAcc.avatar) gpProfile.avatar = savedAcc.avatar;
+          gpProfile.nameChangesDone = savedAcc.nameChangesDone || 0;
+          if (savedAcc.rankedBest && savedAcc.rankedBest > rankedBest) {
+            rankedBest = savedAcc.rankedBest;
+            storage.set('skyFlappyRankedBest', rankedBest);
+          }
+        } else {
+          if(user.displayName) {
+            gpProfile.gamerTag = user.displayName.slice(0, 16);
+          } else if(user.email) {
+            gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
+          }
         }
+
         saveGPProfile();
         audio.win();
         syncGPProfileUI();
@@ -8593,16 +8622,32 @@
       }
       const user = await window.FirebaseLeaderboard.signInWithFacebook();
       if(user) {
+        const accKey = user.uid || user.email;
+        const accountsMap = storage.get('skyFlappyAccountsMap', {});
+        const savedAcc = accountsMap[accKey];
+
         gpProfile.isLoggedIn = true;
         gpProfile.isGoogle = true;
         gpProfile.authProvider = 'facebook';
         gpProfile.email = user.email || (user.displayName ? `${user.displayName} (Facebook)` : 'Akun Facebook');
         gpProfile.googleUid = user.uid;
-        if(user.displayName) {
-          gpProfile.gamerTag = user.displayName.slice(0, 16);
-        } else if(user.email) {
-          gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
+
+        if (savedAcc && savedAcc.gamerTag) {
+          gpProfile.gamerTag = savedAcc.gamerTag;
+          if (savedAcc.avatar) gpProfile.avatar = savedAcc.avatar;
+          gpProfile.nameChangesDone = savedAcc.nameChangesDone || 0;
+          if (savedAcc.rankedBest && savedAcc.rankedBest > rankedBest) {
+            rankedBest = savedAcc.rankedBest;
+            storage.set('skyFlappyRankedBest', rankedBest);
+          }
+        } else {
+          if(user.displayName) {
+            gpProfile.gamerTag = user.displayName.slice(0, 16);
+          } else if(user.email) {
+            gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
+          }
         }
+
         saveGPProfile();
         audio.win();
         syncGPProfileUI();
@@ -8642,11 +8687,25 @@
     if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.signOut === 'function') {
       try { await window.FirebaseLeaderboard.signOut(); } catch(_) {}
     }
+    if(gpProfile.googleUid || gpProfile.email) {
+      const accKey = gpProfile.googleUid || gpProfile.email;
+      const accountsMap = storage.get('skyFlappyAccountsMap', {});
+      accountsMap[accKey] = {
+        gamerTag: gpProfile.gamerTag,
+        avatar: gpProfile.avatar,
+        nameChangesDone: gpProfile.nameChangesDone || 0,
+        rankedBest: rankedBest || 0,
+        email: gpProfile.email,
+        authProvider: gpProfile.authProvider || 'google'
+      };
+      storage.set('skyFlappyAccountsMap', accountsMap);
+    }
     gpProfile.isLoggedIn = false;
     gpProfile.isGoogle = false;
     gpProfile.email = '';
     gpProfile.googleUid = null;
-    saveGPProfile();
+    gpProfile.gamerTag = 'SkyPlayer';
+    storage.set('skyFlappyGPProfile', gpProfile);
     syncGPProfileUI();
   });
 
