@@ -1,21 +1,46 @@
+import { DurableObject } from "cloudflare:workers";
+
 /**
  * Cloudflare Worker: Flappy Bird Real-Time Multiplayer Room & Matchmaking Server
- * Uses Cloudflare Durable Objects to guarantee that ALL players globally
- * connect to the EXACT SAME real-time room registry & matchmaking queue!
+ * Built with Cloudflare Durable Objects WebSocket Hibernation API.
+ * Guarantees ultra-low latency and 100% universal global state pairing across all devices.
  */
 
-export class MultiplayerHub {
-  constructor(state, env) {
-    this.state = state;
-    this.env = env;
-    this.rooms = new Map(); // roomId -> { code, hostId, players: Map(playerId -> { ws, profile, isReady, lastSeen }), seed, status }
+export class MultiplayerHub extends DurableObject {
+  constructor(ctx, env) {
+    super(ctx, env);
+    this.rooms = new Map(); // roomId -> { id, code, hostId, seed, status, players: Map(playerId -> { ws, profile }) }
     this.waitingQueue = []; // array of { playerId, ws, profile }
+    this.sessions = new Map(); // ws -> { playerId, profile, currentRoom }
   }
 
   async fetch(request) {
     const url = new URL(request.url);
 
-    // Health check endpoint
+    // 1. WebSocket upgrade endpoint
+    if (request.headers.get('Upgrade') === 'websocket') {
+      const pair = new WebSocketPair();
+      const [client, server] = Object.values(pair);
+
+      this.ctx.acceptWebSocket(server);
+
+      const playerId = 'P-' + Math.random().toString(36).substring(2, 8);
+      this.sessions.set(server, {
+        playerId,
+        profile: { id: playerId, name: 'SkyPlayer', avatar: 'chick_yellow', skin: 'classic' },
+        currentRoom: null
+      });
+
+      return new Response(null, {
+        status: 101,
+        webSocket: client,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      });
+    }
+
+    // 2. Health check endpoint
     if (url.pathname === '/health' || url.pathname === '/') {
       return new Response(JSON.stringify({
         status: 'online',
@@ -31,348 +56,332 @@ export class MultiplayerHub {
       });
     }
 
-    // WebSocket upgrade endpoint
-    if (request.headers.get('Upgrade') === 'websocket') {
-      const pair = new WebSocketPair();
-      const [client, server] = Object.values(pair);
-
-      this.handleSession(server);
-
-      return new Response(null, {
-        status: 101,
-        webSocket: client,
-        headers: {
-          'Access-Control-Allow-Origin': '*'
-        }
-      });
-    }
-
     return new Response('Not Found', { status: 404 });
   }
 
-  handleSession(ws) {
-    ws.accept();
+  send(ws, data) {
+    try {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify(data));
+      }
+    } catch (_) {}
+  }
 
-    const hub = this;
-    let playerId = 'P-' + Math.random().toString(36).substring(2, 8);
-    let playerProfile = { id: playerId, name: 'SkyPlayer', avatar: 'chick_yellow', skin: 'classic' };
-    let currentRoom = null;
-
-    function send(data) {
+  broadcastToRoom(room, data, excludeWs = null) {
+    if (!room || !room.players) return;
+    const msg = JSON.stringify(data);
+    for (const [id, p] of room.players) {
+      if (excludeWs && p.ws === excludeWs) continue;
       try {
-        if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify(data));
+        if (p.ws.readyState === WebSocket.OPEN) {
+          p.ws.send(msg);
         }
       } catch (_) {}
     }
+  }
 
-    function broadcastToRoom(room, data, excludeSelf = false) {
-      if (!room || !room.players) return;
-      const msg = JSON.stringify(data);
-      for (const [id, p] of room.players) {
-        if (excludeSelf && id === playerId) continue;
-        try {
-          if (p.ws.readyState === WebSocket.OPEN) {
-            p.ws.send(msg);
-          }
-        } catch (_) {}
+  leaveRoom(ws) {
+    const session = this.sessions.get(ws);
+    if (!session || !session.currentRoom) return;
+
+    const room = session.currentRoom;
+    const playerId = session.playerId;
+
+    room.players.delete(playerId);
+    session.currentRoom = null;
+
+    // Remove from queue if was queued
+    const qIdx = this.waitingQueue.findIndex(q => q.playerId === playerId);
+    if (qIdx !== -1) this.waitingQueue.splice(qIdx, 1);
+
+    if (room.players.size === 0) {
+      this.rooms.delete(room.id);
+    } else {
+      if (room.hostId === playerId) {
+        const nextHost = room.players.keys().next().value;
+        room.hostId = nextHost;
       }
+      this.broadcastToRoom(room, {
+        type: 'PLAYER_LEFT',
+        playerId,
+        newHostId: room.hostId,
+        playersCount: room.players.size,
+        playersList: Array.from(room.players.values()).map(p => ({
+          id: p.profile.id,
+          name: p.profile.name,
+          avatar: p.profile.avatar,
+          skin: p.profile.skin,
+          isReady: true,
+          isHost: p.profile.id === room.hostId
+        }))
+      });
     }
+  }
 
-    function leaveCurrentRoom() {
-      if (!currentRoom) return;
-      const room = currentRoom;
-      room.players.delete(playerId);
+  async webSocketMessage(ws, message) {
+    try {
+      const session = this.sessions.get(ws);
+      if (!session) return;
 
-      // Remove from queue if was queued
-      const qIdx = hub.waitingQueue.findIndex(q => q.playerId === playerId);
-      if (qIdx !== -1) hub.waitingQueue.splice(qIdx, 1);
+      const data = JSON.parse(message);
+      const type = data.type;
+      const playerId = session.playerId;
 
-      if (room.players.size === 0) {
-        hub.rooms.delete(room.id);
-      } else {
-        if (room.hostId === playerId) {
-          const nextHost = room.players.keys().next().value;
-          room.hostId = nextHost;
+      if (data.profile) {
+        session.profile = { ...session.profile, ...data.profile, id: playerId };
+      }
+
+      switch (type) {
+        case 'PING': {
+          this.send(ws, { type: 'PONG', serverTime: Date.now() });
+          break;
         }
-        broadcastToRoom(room, {
-          type: 'PLAYER_LEFT',
-          playerId,
-          newHostId: room.hostId,
-          playersCount: room.players.size,
-          playersList: Array.from(room.players.values()).map(p => ({
+
+        case 'UPDATE_PROFILE': {
+          session.profile = { ...session.profile, ...data.profile, id: playerId };
+          if (session.currentRoom && session.currentRoom.players.has(playerId)) {
+            session.currentRoom.players.get(playerId).profile = session.profile;
+            this.broadcastToRoom(session.currentRoom, {
+              type: 'ROOM_PLAYERS_UPDATE',
+              playersList: Array.from(session.currentRoom.players.values()).map(p => ({
+                id: p.profile.id,
+                name: p.profile.name,
+                avatar: p.profile.avatar,
+                skin: p.profile.skin,
+                isReady: true,
+                isHost: p.profile.id === session.currentRoom.hostId
+              }))
+            });
+          }
+          break;
+        }
+
+        case 'CREATE_ROOM': {
+          this.leaveRoom(ws);
+          const code = data.code || Math.floor(1000 + Math.random() * 9000).toString();
+          const roomId = 'room_' + code;
+          const seed = Math.floor(Math.random() * 1000000);
+
+          const room = {
+            id: roomId,
+            code,
+            hostId: playerId,
+            seed,
+            status: 'LOBBY',
+            players: new Map([
+              [playerId, { ws, profile: session.profile }]
+            ])
+          };
+          this.rooms.set(roomId, room);
+          session.currentRoom = room;
+
+          this.send(ws, {
+            type: 'ROOM_CREATED',
+            roomId,
+            code,
+            seed,
+            isHost: true,
+            playersList: [{
+              id: playerId,
+              name: session.profile.name,
+              avatar: session.profile.avatar,
+              skin: session.profile.skin,
+              isReady: true,
+              isHost: true
+            }]
+          });
+          break;
+        }
+
+        case 'JOIN_ROOM': {
+          this.leaveRoom(ws);
+          const code = (data.code || '').toString().trim();
+          let targetRoom = null;
+          for (const r of this.rooms.values()) {
+            if (r.code === code) {
+              targetRoom = r;
+              break;
+            }
+          }
+
+          if (!targetRoom) {
+            this.send(ws, { type: 'ERROR', message: 'Room #' + code + ' tidak ditemukan! Pastikan kode benar.' });
+            break;
+          }
+
+          if (targetRoom.players.size >= 2) {
+            this.send(ws, { type: 'ERROR', message: 'Room #' + code + ' penuh! Maksimal 2 pemain.' });
+            break;
+          }
+
+          targetRoom.players.set(playerId, {
+            ws,
+            profile: session.profile
+          });
+          session.currentRoom = targetRoom;
+
+          const playersList = Array.from(targetRoom.players.values()).map(p => ({
             id: p.profile.id,
             name: p.profile.name,
             avatar: p.profile.avatar,
             skin: p.profile.skin,
-            isReady: p.isReady,
-            isHost: p.profile.id === room.hostId
-          }))
-        });
-      }
-      currentRoom = null;
-    }
+            isReady: true,
+            isHost: p.profile.id === targetRoom.hostId
+          }));
 
-    ws.addEventListener('message', event => {
-      try {
-        const data = JSON.parse(event.data);
-        const type = data.type;
+          this.send(ws, {
+            type: 'ROOM_JOINED',
+            roomId: targetRoom.id,
+            code: targetRoom.code,
+            seed: targetRoom.seed,
+            isHost: false,
+            playersList
+          });
 
-        if (data.profile) {
-          playerProfile = { ...playerProfile, ...data.profile, id: playerId };
+          this.broadcastToRoom(targetRoom, {
+            type: 'PLAYER_JOINED',
+            player: session.profile,
+            playersCount: targetRoom.players.size,
+            playersList
+          }, ws);
+          break;
         }
 
-        switch (type) {
-          case 'PING': {
-            send({ type: 'PONG', serverTime: Date.now() });
-            break;
-          }
+        case 'QUICK_MATCH': {
+          this.leaveRoom(ws);
+          if (this.waitingQueue.length > 0) {
+            const matchedOpponent = this.waitingQueue.shift();
+            if (matchedOpponent.ws.readyState === WebSocket.OPEN && matchedOpponent.playerId !== playerId) {
+              const code = Math.floor(1000 + Math.random() * 9000).toString();
+              const roomId = 'quick_' + code;
+              const seed = Math.floor(Math.random() * 1000000);
 
-          case 'UPDATE_PROFILE': {
-            playerProfile = { ...playerProfile, ...data.profile, id: playerId };
-            if (currentRoom && currentRoom.players.has(playerId)) {
-              currentRoom.players.get(playerId).profile = playerProfile;
-              broadcastToRoom(currentRoom, {
-                type: 'ROOM_PLAYERS_UPDATE',
-                playersList: Array.from(currentRoom.players.values()).map(p => ({
-                  id: p.profile.id,
-                  name: p.profile.name,
-                  avatar: p.profile.avatar,
-                  skin: p.profile.skin,
-                  isReady: p.isReady,
-                  isHost: p.profile.id === currentRoom.hostId
-                }))
+              const room = {
+                id: roomId,
+                code,
+                hostId: matchedOpponent.playerId,
+                seed,
+                status: 'COUNTDOWN',
+                players: new Map([
+                  [matchedOpponent.playerId, { ws: matchedOpponent.ws, profile: matchedOpponent.profile }],
+                  [playerId, { ws, profile: session.profile }]
+                ])
+              };
+              this.rooms.set(roomId, room);
+              session.currentRoom = room;
+
+              const oppSession = this.sessions.get(matchedOpponent.ws);
+              if (oppSession) oppSession.currentRoom = room;
+
+              const playersList = [matchedOpponent.profile, session.profile];
+
+              this.send(matchedOpponent.ws, {
+                type: 'MATCH_FOUND',
+                roomId,
+                code,
+                seed,
+                isHost: true,
+                opponent: session.profile,
+                playersList,
+                countdown: 3
               });
-            }
-            break;
-          }
 
-          case 'CREATE_ROOM': {
-            leaveCurrentRoom();
-            const code = data.code || Math.floor(1000 + Math.random() * 9000).toString();
-            const roomId = 'room_' + code;
-            const seed = Math.floor(Math.random() * 1000000);
-
-            const room = {
-              id: roomId,
-              code,
-              hostId: playerId,
-              seed,
-              status: 'LOBBY',
-              players: new Map([
-                [playerId, { ws, profile: playerProfile, isReady: true, lastSeen: Date.now() }]
-              ])
-            };
-            hub.rooms.set(roomId, room);
-            currentRoom = room;
-
-            send({
-              type: 'ROOM_CREATED',
-              roomId,
-              code,
-              seed,
-              isHost: true,
-              playersList: [{
-                id: playerId,
-                name: playerProfile.name,
-                avatar: playerProfile.avatar,
-                skin: playerProfile.skin,
-                isReady: true,
-                isHost: true
-              }]
-            });
-            break;
-          }
-
-          case 'JOIN_ROOM': {
-            leaveCurrentRoom();
-            const code = (data.code || '').toString().trim();
-            let targetRoom = null;
-            for (const r of hub.rooms.values()) {
-              if (r.code === code) {
-                targetRoom = r;
-                break;
-              }
-            }
-
-            if (!targetRoom) {
-              send({ type: 'ERROR', message: 'Room dengan kode #' + code + ' tidak ditemukan!' });
-              break;
-            }
-
-            if (targetRoom.players.size >= 2) {
-              send({ type: 'ERROR', message: 'Room #' + code + ' penuh! Maksimal 2 pemain.' });
-              break;
-            }
-
-            targetRoom.players.set(playerId, {
-              ws,
-              profile: playerProfile,
-              isReady: false,
-              lastSeen: Date.now()
-            });
-            currentRoom = targetRoom;
-
-            const playersList = Array.from(targetRoom.players.values()).map(p => ({
-              id: p.profile.id,
-              name: p.profile.name,
-              avatar: p.profile.avatar,
-              skin: p.profile.skin,
-              isReady: p.isReady,
-              isHost: p.profile.id === targetRoom.hostId
-            }));
-
-            send({
-              type: 'ROOM_JOINED',
-              roomId: targetRoom.id,
-              code: targetRoom.code,
-              seed: targetRoom.seed,
-              isHost: false,
-              playersList
-            });
-
-            broadcastToRoom(targetRoom, {
-              type: 'PLAYER_JOINED',
-              player: playerProfile,
-              playersCount: targetRoom.players.size,
-              playersList
-            }, true);
-            break;
-          }
-
-          case 'QUICK_MATCH': {
-            leaveCurrentRoom();
-            if (hub.waitingQueue.length > 0) {
-              const matchedOpponent = hub.waitingQueue.shift();
-              if (matchedOpponent.ws.readyState === WebSocket.OPEN && matchedOpponent.playerId !== playerId) {
-                const code = Math.floor(1000 + Math.random() * 9000).toString();
-                const roomId = 'quick_' + code;
-                const seed = Math.floor(Math.random() * 1000000);
-
-                const room = {
-                  id: roomId,
-                  code,
-                  hostId: matchedOpponent.playerId,
-                  seed,
-                  status: 'COUNTDOWN',
-                  players: new Map([
-                    [matchedOpponent.playerId, { ws: matchedOpponent.ws, profile: matchedOpponent.profile, isReady: true, lastSeen: Date.now() }],
-                    [playerId, { ws, profile: playerProfile, isReady: true, lastSeen: Date.now() }]
-                  ])
-                };
-                hub.rooms.set(roomId, room);
-                currentRoom = room;
-
-                const playersList = [matchedOpponent.profile, playerProfile];
-
-                try {
-                  matchedOpponent.ws.send(JSON.stringify({
-                    type: 'MATCH_FOUND',
-                    roomId,
-                    code,
-                    seed,
-                    isHost: true,
-                    opponent: playerProfile,
-                    playersList,
-                    countdown: 3
-                  }));
-                } catch (_) {}
-
-                send({
-                  type: 'MATCH_FOUND',
-                  roomId,
-                  code,
-                  seed,
-                  isHost: false,
-                  opponent: matchedOpponent.profile,
-                  playersList,
-                  countdown: 3
-                });
-                return;
-              }
-            }
-
-            hub.waitingQueue.push({ playerId, ws, profile: playerProfile });
-            send({ type: 'QUEUED', message: 'Mencari lawan 1v1 online...' });
-            break;
-          }
-
-          case 'CANCEL_MATCH': {
-            const qIdx = hub.waitingQueue.findIndex(q => q.playerId === playerId);
-            if (qIdx !== -1) hub.waitingQueue.splice(qIdx, 1);
-            leaveCurrentRoom();
-            send({ type: 'MATCH_CANCELLED' });
-            break;
-          }
-
-          case 'START_GAME': {
-            if (!currentRoom) return;
-            if (currentRoom.hostId !== playerId) {
-              send({ type: 'ERROR', message: 'Hanya Host yang bisa memulai pertandingan!' });
+              this.send(ws, {
+                type: 'MATCH_FOUND',
+                roomId,
+                code,
+                seed,
+                isHost: false,
+                opponent: matchedOpponent.profile,
+                playersList,
+                countdown: 3
+              });
               return;
             }
-            currentRoom.status = 'PLAYING';
-            currentRoom.seed = Math.floor(Math.random() * 1000000);
-
-            broadcastToRoom(currentRoom, {
-              type: 'GAME_STARTING',
-              seed: currentRoom.seed,
-              countdown: 3
-            });
-            break;
           }
 
-          case 'SYNC_STATE': {
-            if (!currentRoom) return;
-            broadcastToRoom(currentRoom, {
-              type: 'OPPONENT_STATE',
-              playerId,
-              y: data.y,
-              vy: data.vy,
-              rot: data.rot,
-              score: data.score,
-              lives: data.lives,
-              isAlive: data.isAlive,
-              isDashing: data.isDashing,
-              time: data.time || data.t
-            }, true);
-            break;
-          }
-
-          case 'PLAYER_DIED': {
-            if (!currentRoom) return;
-            broadcastToRoom(currentRoom, {
-              type: 'OPPONENT_DIED',
-              playerId,
-              finalScore: data.finalScore || 0
-            }, true);
-            break;
-          }
-
-          case 'LEAVE_ROOM': {
-            leaveCurrentRoom();
-            send({ type: 'ROOM_LEFT' });
-            break;
-          }
+          this.waitingQueue.push({ playerId, ws, profile: session.profile });
+          this.send(ws, { type: 'QUEUED', message: 'Mencari lawan 1v1 online...' });
+          break;
         }
-      } catch (e) {
-        console.error('[WS Message Error]:', e);
+
+        case 'CANCEL_MATCH': {
+          const qIdx = this.waitingQueue.findIndex(q => q.playerId === playerId);
+          if (qIdx !== -1) this.waitingQueue.splice(qIdx, 1);
+          this.leaveRoom(ws);
+          this.send(ws, { type: 'MATCH_CANCELLED' });
+          break;
+        }
+
+        case 'START_GAME': {
+          if (!session.currentRoom) return;
+          const room = session.currentRoom;
+          if (room.hostId !== playerId) {
+            this.send(ws, { type: 'ERROR', message: 'Hanya Host yang bisa memulai pertandingan!' });
+            return;
+          }
+          room.status = 'PLAYING';
+          room.seed = Math.floor(Math.random() * 1000000);
+
+          this.broadcastToRoom(room, {
+            type: 'GAME_STARTING',
+            seed: room.seed,
+            countdown: 3
+          });
+          break;
+        }
+
+        case 'SYNC_STATE': {
+          if (!session.currentRoom) return;
+          this.broadcastToRoom(session.currentRoom, {
+            type: 'OPPONENT_STATE',
+            playerId,
+            y: data.y,
+            vy: data.vy,
+            rot: data.rot,
+            score: data.score,
+            lives: data.lives,
+            isAlive: data.isAlive,
+            isDashing: data.isDashing,
+            time: data.time || data.t
+          }, ws);
+          break;
+        }
+
+        case 'PLAYER_DIED': {
+          if (!session.currentRoom) return;
+          this.broadcastToRoom(session.currentRoom, {
+            type: 'OPPONENT_DIED',
+            playerId,
+            finalScore: data.finalScore || 0
+          }, ws);
+          break;
+        }
+
+        case 'LEAVE_ROOM': {
+          this.leaveRoom(ws);
+          this.send(ws, { type: 'ROOM_LEFT' });
+          break;
+        }
       }
-    });
+    } catch (e) {
+      console.error('[WS Message Error]:', e);
+    }
+  }
 
-    ws.addEventListener('close', () => {
-      leaveCurrentRoom();
-    });
+  async webSocketClose(ws, code, reason, wasClean) {
+    this.leaveRoom(ws);
+    this.sessions.delete(ws);
+  }
 
-    ws.addEventListener('error', () => {
-      leaveCurrentRoom();
-    });
+  async webSocketError(ws, error) {
+    this.leaveRoom(ws);
+    this.sessions.delete(ws);
   }
 }
 
 export default {
   async fetch(request, env, ctx) {
-    // Handle CORS preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         headers: {
@@ -383,15 +392,9 @@ export default {
       });
     }
 
-    // If Durable Object is bound, forward everything to the unified global hub
-    if (env.GAME_HUB) {
-      const id = env.GAME_HUB.idFromName("global_game_hub");
-      const hub = env.GAME_HUB.get(id);
-      return hub.fetch(request);
-    }
-
-    // Direct fallback if running in basic standalone mode
-    const hub = new MultiplayerHub(null, env);
+    // Forward all requests and WebSockets to the unified global hub
+    const id = env.GAME_HUB.idFromName("global_game_hub");
+    const hub = env.GAME_HUB.get(id);
     return hub.fetch(request);
   }
 };
