@@ -23,6 +23,10 @@
       this.currentRoom = null; // { roomId, code, seed, isHost, playersList }
       this.opponents = new Map(); // id -> { id, name, avatar, skin, y, vy, rot, score, isAlive, isDashing, targetY, lastUpdate }
       
+      this.gameMode = 'survival'; // 'survival' | 'race'
+      this.maxPlayers = 2; // 2 | 3 | 4
+      this.raceTargetScore = 30; // Target score for Race mode
+      
       this.matchStatus = 'IDLE'; // IDLE, QUEUED, IN_ROOM, COUNTDOWN, PLAYING, ENDED
       this.eventListeners = new Map();
 
@@ -325,10 +329,14 @@
         }
 
         case 'MATCH_FOUND': {
+          this.gameMode = data.gameMode || 'survival';
+          this.maxPlayers = data.maxPlayers || (data.playersList ? data.playersList.length : 2);
           this.currentRoom = {
             roomId: data.roomId,
             code: data.code,
             seed: data.seed,
+            gameMode: this.gameMode,
+            maxPlayers: this.maxPlayers,
             isHost: data.playersList[0]?.id === this.localPlayerId,
             playersList: data.playersList
           };
@@ -336,17 +344,23 @@
           this.setSeed(data.seed);
           this.opponents.clear();
 
-          data.playersList.forEach(p => {
+          const oppList = data.opponents || data.playersList.filter(p => p.id !== this.localPlayerId);
+          oppList.forEach(p => {
             if (p.id !== this.localPlayerId) {
               this.opponents.set(p.id, {
                 id: p.id,
                 name: p.name,
                 avatar: p.avatar,
                 skin: p.skin,
+                hat: p.hat || 'none',
+                outfit: p.outfit || 'none',
+                tier: p.tier || 'GOLD',
                 y: 250,
                 vy: 0,
                 rot: 0,
                 score: 0,
+                lives: 3,
+                maxLives: 3,
                 isAlive: true,
                 isDashing: false,
                 targetY: 250,
@@ -355,7 +369,12 @@
             }
           });
 
-          this.emit('match_found', data);
+          this.emit('match_found', {
+            ...data,
+            gameMode: this.gameMode,
+            maxPlayers: this.maxPlayers,
+            opponents: Array.from(this.opponents.values())
+          });
           break;
         }
 
@@ -649,17 +668,19 @@
       }
     }
 
-    quickMatch(profile) {
+    quickMatch(profile, gameMode = 'survival', maxPlayers = 2) {
       if (this.botFallbackTimer) {
         clearTimeout(this.botFallbackTimer);
         this.botFallbackTimer = null;
       }
+      this.gameMode = gameMode || 'survival';
+      this.maxPlayers = Number(maxPlayers) || 2;
       this.myProfile = { ...profile, id: this.localPlayerId };
       this.matchStatus = 'QUEUED';
-      this.emit('queued', { message: 'Mencari lawan 1v1 online...' });
+      this.emit('queued', { message: `Mencari ${this.maxPlayers} pemain mode ${this.gameMode.toUpperCase()} online...` });
 
       if (this.isConnected) {
-        this.send({ type: 'QUICK_MATCH', profile: this.myProfile });
+        this.send({ type: 'QUICK_MATCH', profile: this.myProfile, gameMode: this.gameMode, maxPlayers: this.maxPlayers });
       }
 
       // Auto-Bot Fallback Timer: Random 7 sampai 11 detik jika belum ada pemain online asli, mulai dengan AI Bot!
@@ -682,28 +703,33 @@
       const BOT_OUTFITS = ['none', 'none', 'tuxedo', 'cape', 'armor', 'hoodie', 'cyber_suit', 'ninja_gi', 'hero_suit', 'jacket', 'kimono'];
       const BOT_TIERS = ['BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'SUPREME'];
 
-      const p = BOT_PREFIXES[Math.floor(Math.random() * BOT_PREFIXES.length)];
-      const s = BOT_SUFFIXES[Math.floor(Math.random() * BOT_SUFFIXES.length)];
-      const num = Math.random() < 0.4 ? '_' + Math.floor(10 + Math.random() * 90) : (Math.random() < 0.2 ? '_ID' : '');
-      const botName = p + (Math.random() < 0.3 ? '_' : '') + s + num;
-      const botAvatar = BOT_AVATARS[Math.floor(Math.random() * BOT_AVATARS.length)];
-      const botSkin = BOT_SKINS[Math.floor(Math.random() * BOT_SKINS.length)];
-      const botHat = BOT_HATS[Math.floor(Math.random() * BOT_HATS.length)];
-      const botOutfit = BOT_OUTFITS[Math.floor(Math.random() * BOT_OUTFITS.length)];
-      const botTier = BOT_TIERS[Math.floor(Math.random() * BOT_TIERS.length)];
-      const botId = 'BOT-' + Math.floor(100 + Math.random() * 900);
+      const neededBotsCount = Math.max(1, this.maxPlayers - 1);
+      const fakeBots = [];
 
-      const fakeOpponent = {
-        id: botId,
-        name: botName,
-        avatar: botAvatar,
-        skin: botSkin,
-        hat: botHat,
-        outfit: botOutfit,
-        tier: botTier,
-        isReady: true,
-        isHost: false
-      };
+      for (let i = 0; i < neededBotsCount; i++) {
+        const p = BOT_PREFIXES[Math.floor(Math.random() * BOT_PREFIXES.length)];
+        const s = BOT_SUFFIXES[Math.floor(Math.random() * BOT_SUFFIXES.length)];
+        const num = Math.random() < 0.4 ? '_' + Math.floor(10 + Math.random() * 90) : (Math.random() < 0.2 ? '_ID' : '');
+        const botName = p + (Math.random() < 0.3 ? '_' : '') + s + num;
+        const botAvatar = BOT_AVATARS[Math.floor(Math.random() * BOT_AVATARS.length)];
+        const botSkin = BOT_SKINS[Math.floor(Math.random() * BOT_SKINS.length)];
+        const botHat = BOT_HATS[Math.floor(Math.random() * BOT_HATS.length)];
+        const botOutfit = BOT_OUTFITS[Math.floor(Math.random() * BOT_OUTFITS.length)];
+        const botTier = BOT_TIERS[Math.floor(Math.random() * BOT_TIERS.length)];
+        const botId = 'BOT-' + Math.floor(100 + Math.random() * 900) + '-' + (i + 1);
+
+        fakeBots.push({
+          id: botId,
+          name: botName,
+          avatar: botAvatar,
+          skin: botSkin,
+          hat: botHat,
+          outfit: botOutfit,
+          tier: botTier,
+          isReady: true,
+          isHost: false
+        });
+      }
 
       const code = Math.floor(1000 + Math.random() * 9000).toString();
       const seed = Math.floor(Math.random() * 1000000);
@@ -712,82 +738,88 @@
         roomId: 'bot_match_' + code,
         code,
         seed,
+        gameMode: this.gameMode,
+        maxPlayers: this.maxPlayers,
         isHost: true,
-        playersList: [this.myProfile, fakeOpponent]
+        playersList: [this.myProfile, ...fakeBots]
       };
 
       this.matchStatus = 'COUNTDOWN';
       this.setSeed(seed);
       this.opponents.clear();
 
-      // Bot Skill Scaling based on Rank Tier (Variasi ada yang cupu, sedang, dan pro jago)
-      let targetMaxScore = 15;
-      let flapCooldownBase = 0.22;
-      if (botTier === 'BRONZE') {
-        targetMaxScore = Math.floor(6 + Math.random() * 10);
-        flapCooldownBase = 0.25;
-      } else if (botTier === 'SILVER') {
-        targetMaxScore = Math.floor(12 + Math.random() * 12);
-        flapCooldownBase = 0.22;
-      } else if (botTier === 'GOLD') {
-        targetMaxScore = Math.floor(18 + Math.random() * 18);
-        flapCooldownBase = 0.19;
-      } else if (botTier === 'PLATINUM') {
-        targetMaxScore = Math.floor(28 + Math.random() * 22);
-        flapCooldownBase = 0.17;
-      } else if (botTier === 'DIAMOND') {
-        targetMaxScore = Math.floor(38 + Math.random() * 26);
-        flapCooldownBase = 0.15;
-      } else { // MASTER, GRANDMASTER, SUPREME (Pro & Jago Banget)
-        targetMaxScore = Math.floor(55 + Math.random() * 45);
-        flapCooldownBase = 0.13;
-      }
+      fakeBots.forEach((fakeOpponent, idx) => {
+        // Bot Skill Scaling based on Rank Tier
+        let targetMaxScore = this.gameMode === 'race' ? this.raceTargetScore : 15;
+        let flapCooldownBase = 0.22;
+        if (fakeOpponent.tier === 'BRONZE') {
+          targetMaxScore = this.gameMode === 'race' ? Math.floor(20 + Math.random() * 10) : Math.floor(6 + Math.random() * 10);
+          flapCooldownBase = 0.25;
+        } else if (fakeOpponent.tier === 'SILVER') {
+          targetMaxScore = this.gameMode === 'race' ? Math.floor(24 + Math.random() * 8) : Math.floor(12 + Math.random() * 12);
+          flapCooldownBase = 0.22;
+        } else if (fakeOpponent.tier === 'GOLD') {
+          targetMaxScore = this.gameMode === 'race' ? Math.floor(27 + Math.random() * 6) : Math.floor(18 + Math.random() * 18);
+          flapCooldownBase = 0.19;
+        } else if (fakeOpponent.tier === 'PLATINUM') {
+          targetMaxScore = this.gameMode === 'race' ? 30 : Math.floor(28 + Math.random() * 22);
+          flapCooldownBase = 0.17;
+        } else if (fakeOpponent.tier === 'DIAMOND') {
+          targetMaxScore = this.gameMode === 'race' ? 30 : Math.floor(38 + Math.random() * 26);
+          flapCooldownBase = 0.15;
+        } else {
+          targetMaxScore = this.gameMode === 'race' ? 30 : Math.floor(55 + Math.random() * 45);
+          flapCooldownBase = 0.13;
+        }
 
-      // Bot Starter Booster & Baby Birds / Companions
-      const BOT_BOOSTERS = ['shield', 'rocket', 'double_coins', 'magnet', 'extra_life', 'slow_mo', 'none'];
-      const botBooster = BOT_BOOSTERS[Math.floor(Math.random() * BOT_BOOSTERS.length)];
-      const hasBabies = Math.random() < 0.75;
-      const botBabyBirds = hasBabies ? [
-        { id: 0, x: 90 - 22, y: 280 - 18, r: 8.5, wing: 0, color: '#facc15', wingColor: '#eab308', blushColor: '#fda4af', state: 'following' },
-        { id: 1, x: 90 - 26, y: 280 + 18, r: 8.5, wing: 0, color: '#38bdf8', wingColor: '#0284c7', blushColor: '#fda4af', state: 'following' }
-      ] : [];
+        const BOT_BOOSTERS = ['shield', 'rocket', 'double_coins', 'magnet', 'extra_life', 'slow_mo', 'none'];
+        const botBooster = BOT_BOOSTERS[Math.floor(Math.random() * BOT_BOOSTERS.length)];
+        const hasBabies = Math.random() < 0.75;
+        const botBabyBirds = hasBabies ? [
+          { id: 0, x: 90 - 22, y: 280 - 18, r: 8.5, wing: 0, color: '#facc15', wingColor: '#eab308', blushColor: '#fda4af', state: 'following' },
+          { id: 1, x: 90 - 26, y: 280 + 18, r: 8.5, wing: 0, color: '#38bdf8', wingColor: '#0284c7', blushColor: '#fda4af', state: 'following' }
+        ] : [];
 
-      this.opponents.set(fakeOpponent.id, {
-        id: fakeOpponent.id,
-        name: fakeOpponent.name,
-        avatar: fakeOpponent.avatar,
-        skin: fakeOpponent.skin,
-        hat: fakeOpponent.hat,
-        outfit: fakeOpponent.outfit,
-        tier: fakeOpponent.tier,
-        booster: botBooster,
-        hasShield: botBooster === 'shield',
-        babyBirds: botBabyBirds,
-        y: 280,
-        vy: 0,
-        rot: 0,
-        score: 0,
-        lives: botBooster === 'extra_life' ? 4 : 3,
-        maxLives: botBooster === 'extra_life' ? 4 : 3,
-        graceTimer: 0,
-        isAlive: true,
-        isDashing: false,
-        targetY: 280,
-        lastUpdate: Date.now(),
-        isSimulatedBot: true,
-        botTargetScore: targetMaxScore,
-        botFlapCooldownBase: flapCooldownBase,
-        botFlapCooldown: 0,
-        shouldFail: false,
-        wing: 0
+        this.opponents.set(fakeOpponent.id, {
+          id: fakeOpponent.id,
+          name: fakeOpponent.name,
+          avatar: fakeOpponent.avatar,
+          skin: fakeOpponent.skin,
+          hat: fakeOpponent.hat,
+          outfit: fakeOpponent.outfit,
+          tier: fakeOpponent.tier,
+          booster: botBooster,
+          hasShield: botBooster === 'shield',
+          babyBirds: botBabyBirds,
+          y: 280 + (idx * 20),
+          vy: 0,
+          rot: 0,
+          score: 0,
+          lives: botBooster === 'extra_life' ? 4 : 3,
+          maxLives: botBooster === 'extra_life' ? 4 : 3,
+          graceTimer: 0,
+          isAlive: true,
+          isDashing: false,
+          targetY: 280 + (idx * 20),
+          lastUpdate: Date.now(),
+          isSimulatedBot: true,
+          botTargetScore: targetMaxScore,
+          botFlapCooldownBase: flapCooldownBase,
+          botFlapCooldown: 0,
+          shouldFail: false,
+          wing: 0
+        });
       });
 
       this.emit('match_found', {
         roomId: this.currentRoom.roomId,
         code,
         seed,
+        gameMode: this.gameMode,
+        maxPlayers: this.maxPlayers,
         playersList: this.currentRoom.playersList,
-        opponent: fakeOpponent,
+        opponent: fakeBots[0],
+        opponents: fakeBots,
         countdown: 3
       });
     }

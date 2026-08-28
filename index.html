@@ -6,14 +6,14 @@
   <meta name="theme-color" content="#77cef2">
   <title>Flappy Bird - Sky Challenge</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=11.2">
-  <link rel="stylesheet" href="css/modern-icons.css?v=11.2">
-  <link rel="stylesheet" href="css/shop.css?v=11.2">
-  <link rel="stylesheet" href="css/shop-extra.css?v=11.2">
-  <link rel="stylesheet" href="css/mode-picker.css?v=11.2">
-  <link rel="stylesheet" href="css/store.css?v=11.2">
-  <link rel="stylesheet" href="css/ranked.css?v=11.2">
-  <link rel="stylesheet" href="css/multiplayer.css?v=11.2">
+  <link rel="stylesheet" href="css/style.css?v=11.3">
+  <link rel="stylesheet" href="css/modern-icons.css?v=11.3">
+  <link rel="stylesheet" href="css/shop.css?v=11.3">
+  <link rel="stylesheet" href="css/shop-extra.css?v=11.3">
+  <link rel="stylesheet" href="css/mode-picker.css?v=11.3">
+  <link rel="stylesheet" href="css/store.css?v=11.3">
+  <link rel="stylesheet" href="css/ranked.css?v=11.3">
+  <link rel="stylesheet" href="css/multiplayer.css?v=11.3">
 </head>
 <body>
   <main class="game-shell" aria-label="Flappy Bird Sky Challenge">
@@ -68,6 +68,47 @@
           </div>
         </div>
         <div class="mp-hud-avatar rival" id="mpRivalHudAvatar"></div>
+      </div>
+    </div>
+
+    <!-- Live In-Game Race Progress Bar (Khusus Mode Race) -->
+    <div id="mpRaceProgressBarWrap" class="mp-race-bar-wrap hidden">
+      <div class="mp-race-meta">
+        <span class="mp-race-tag">🏁 SPRINT RACE</span>
+        <span class="mp-race-target-text" id="mpRaceTargetText">FINISH: 30 PTS</span>
+      </div>
+      <div class="mp-race-track">
+        <div class="mp-race-fill" id="mpRaceFill" style="width: 0%;"></div>
+        <div class="mp-race-pin my-pin" id="mpRaceMyPin" style="left: 0%;">🐥</div>
+        <div class="mp-race-pin rival-pin" id="mpRaceRivalPin" style="left: 0%;">🦅</div>
+      </div>
+    </div>
+
+    <!-- Live Multi-Player Leaderboard HUD (Untuk 3P dan 4P) -->
+    <div id="mpMultiPlayersHud" class="mp-multi-hud hidden">
+      <div class="mp-multi-player-row" id="mpMultiHudRow1">
+        <span class="mp-multi-rank">1st</span>
+        <div class="mp-multi-avatar" id="mpMultiAvatar1"></div>
+        <span class="mp-multi-name" id="mpMultiName1">Player 1</span>
+        <span class="mp-multi-score" id="mpMultiScore1">0</span>
+      </div>
+      <div class="mp-multi-player-row" id="mpMultiHudRow2">
+        <span class="mp-multi-rank">2nd</span>
+        <div class="mp-multi-avatar" id="mpMultiAvatar2"></div>
+        <span class="mp-multi-name" id="mpMultiName2">Player 2</span>
+        <span class="mp-multi-score" id="mpMultiScore2">0</span>
+      </div>
+      <div class="mp-multi-player-row hidden" id="mpMultiHudRow3">
+        <span class="mp-multi-rank">3rd</span>
+        <div class="mp-multi-avatar" id="mpMultiAvatar3"></div>
+        <span class="mp-multi-name" id="mpMultiName3">Player 3</span>
+        <span class="mp-multi-score" id="mpMultiScore3">0</span>
+      </div>
+      <div class="mp-multi-player-row hidden" id="mpMultiHudRow4">
+        <span class="mp-multi-rank">4th</span>
+        <div class="mp-multi-avatar" id="mpMultiAvatar4"></div>
+        <span class="mp-multi-name" id="mpMultiName4">Player 4</span>
+        <span class="mp-multi-score" id="mpMultiScore4">0</span>
       </div>
     </div>
 
@@ -539,10 +580,29 @@
             <svg viewBox="0 0 24 24" width="24" height="24"><path d="M14.5 17.5L3 6V3h3l11.5 11.5-3 3zM14.5 6.5l3-3 3.5 3.5-3 3-3.5-3.5zM6.5 14.5l-3.5 3.5 3 3 3.5-3.5-3-3z" fill="#ffffff"/></svg>
           </div>
           <div class="mp-titles">
-            <h2>1v1 BATTLE LOBBY</h2>
+            <h2>MULTIPLAYER LOBBY</h2>
             <div class="mp-status-indicator">
               <span class="mp-dot"></span>
               <span id="mpServerStatusText">CLOUDFLARE RELAY ONLINE</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-Mode & Player Count Selector Bar -->
+        <div class="mp-submode-wrapper">
+          <div class="mp-submode-row">
+            <span class="mp-submode-label">TIPE MODE:</span>
+            <div class="mp-submode-pill-group" id="mpGameModeGroup">
+              <button class="mp-submode-pill active" data-gamemode="survival" type="button">🏆 SURVIVAL</button>
+              <button class="mp-submode-pill" data-gamemode="race" type="button">🏁 SPRINT RACE</button>
+            </div>
+          </div>
+          <div class="mp-submode-row">
+            <span class="mp-submode-label">JUMLAH PEMAIN:</span>
+            <div class="mp-submode-pill-group" id="mpPlayerCountGroup">
+              <button class="mp-player-count-pill active" data-count="2" type="button">👥 2P (1v1)</button>
+              <button class="mp-player-count-pill" data-count="3" type="button">👥 3P</button>
+              <button class="mp-player-count-pill" data-count="4" type="button">👥 4P</button>
             </div>
           </div>
         </div>
@@ -557,8 +617,8 @@
         <!-- TAB 1: QUICK MATCH -->
         <div class="mp-view" id="mpViewQuick">
           <div class="mp-quick-box" id="mpQuickInitialBox">
-            <div class="mp-quick-title">1v1 QUICK MATCHMAKING</div>
-            <p class="mp-quick-desc">Sistem akan otomatis mencarikan lawan online secara acak untuk bertanding!</p>
+            <div class="mp-quick-title" id="mpQuickTitleText">SURVIVAL MATCHMAKING</div>
+            <p class="mp-quick-desc" id="mpQuickDescText">Mencari 2 pemain untuk bertanding bertahan hidup!</p>
             <button class="primary mp-btn-find" id="mpQuickFindBtn" type="button">CARI LAWAN SEKARANG</button>
           </div>
           <!-- Active Searching Radar View Inside Modal -->
@@ -569,9 +629,9 @@
               <div class="mp-radar-sweep"></div>
               <div class="mp-radar-dot"></div>
             </div>
-            <div class="mp-quick-search-title">MENCARI LAWAN 1v1...</div>
+            <div class="mp-quick-search-title" id="mpQuickSearchTitle">MENCARI PEMAIN ONLINE...</div>
             <div class="mp-quick-search-timer" id="mpModalSearchTimer">00:01</div>
-            <p class="mp-quick-search-status">Menghubungkan ke lawan online...</p>
+            <p class="mp-quick-search-status" id="mpQuickSearchStatus">Menghubungkan ke lawan online...</p>
             <button class="secondary mp-btn-cancel-search" id="mpModalCancelSearchBtn" type="button">BATALKAN PENCARIAN</button>
           </div>
         </div>
@@ -592,11 +652,23 @@
                 <span class="mp-slot-name" id="mpHostName">HOST</span>
                 <span class="mp-slot-role" id="mpHostRoleBadge">HOST (LEADER)</span>
               </div>
-              <!-- Player Slot 2 (Guest) -->
-              <div class="mp-slot-card" id="mpGuestSlotCard">
-                <div class="mp-slot-avatar" id="mpGuestAvatar">?</div>
-                <span class="mp-slot-name" id="mpGuestName">Menunggu Teman...</span>
-                <span class="mp-slot-role" id="mpGuestStatusBadge" style="background:#475569;">GUEST</span>
+              <!-- Player Slot 2 -->
+              <div class="mp-slot-card" id="mpSlotCard2">
+                <div class="mp-slot-avatar" id="mpSlotAvatar2">?</div>
+                <span class="mp-slot-name" id="mpSlotName2">Menunggu Pemain 2...</span>
+                <span class="mp-slot-role" id="mpSlotRoleBadge2" style="background:#475569;">SLOT 2</span>
+              </div>
+              <!-- Player Slot 3 -->
+              <div class="mp-slot-card hidden" id="mpSlotCard3">
+                <div class="mp-slot-avatar" id="mpSlotAvatar3">?</div>
+                <span class="mp-slot-name" id="mpSlotName3">Menunggu Pemain 3...</span>
+                <span class="mp-slot-role" id="mpSlotRoleBadge3" style="background:#475569;">SLOT 3</span>
+              </div>
+              <!-- Player Slot 4 -->
+              <div class="mp-slot-card hidden" id="mpSlotCard4">
+                <div class="mp-slot-avatar" id="mpSlotAvatar4">?</div>
+                <span class="mp-slot-name" id="mpSlotName4">Menunggu Pemain 4...</span>
+                <span class="mp-slot-role" id="mpSlotRoleBadge4" style="background:#475569;">SLOT 4</span>
               </div>
             </div>
 
@@ -717,8 +789,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=11.2"></script>
-  <script src="js/multiplayer.js?v=11.2"></script>
-  <script src="js/script.js?v=11.2"></script>
+  <script src="js/firebase-config.js?v=11.3"></script>
+  <script src="js/multiplayer.js?v=11.3"></script>
+  <script src="js/script.js?v=11.3"></script>
 </body>
 </html>

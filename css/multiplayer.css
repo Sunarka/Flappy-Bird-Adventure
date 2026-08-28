@@ -1104,13 +1104,199 @@
 }
 
 .mp-btn-rematch {
-  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
-  border-color: #f472b6 !important;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  border-color: #38bdf8 !important;
   color: #ffffff !important;
   font-weight: 900 !important;
   margin-bottom: 6px !important;
-  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.4) !important;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.45) !important;
 }
+
+/* =========================================================
+   SUB-MODE & PLAYER COUNT SELECTOR (SURVIVAL/RACE & 2P/3P/4P)
+   ========================================================= */
+.mp-submode-wrapper {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mp-submode-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mp-submode-label {
+  font: 900 9.5px 'Trebuchet MS', Arial, sans-serif;
+  color: #bae6fd;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.mp-submode-pill-group {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.mp-submode-pill, .mp-player-count-pill {
+  font: 900 10px 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 4px 8px !important;
+  border-radius: 8px !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid rgba(56, 189, 248, 0.2) !important;
+  color: #94a3b8 !important;
+  cursor: pointer;
+  min-height: 26px !important;
+  transition: all 0.15s ease;
+  box-shadow: none !important;
+}
+
+.mp-submode-pill:hover, .mp-player-count-pill:hover {
+  background: rgba(2, 132, 199, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.mp-submode-pill.active, .mp-player-count-pill.active {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.45) !important;
+}
+
+/* Slots Grid for Up to 4 Players */
+.mp-slots-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 6px 0 10px;
+}
+
+/* =========================================================
+   LIVE IN-GAME RACE PROGRESS BAR
+   ========================================================= */
+.mp-race-bar-wrap {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(320px, 90%);
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  border-radius: 12px;
+  padding: 5px 10px;
+  z-index: 25;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+.mp-race-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.mp-race-tag {
+  font: 900 10px 'Trebuchet MS', Arial, sans-serif;
+  color: #fde047;
+  letter-spacing: 0.5px;
+}
+
+.mp-race-target-text {
+  font: 800 9.5px 'Trebuchet MS', Arial, sans-serif;
+  color: #38bdf8;
+}
+
+.mp-race-track {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 99px;
+  overflow: visible;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.mp-race-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0284c7 0%, #38bdf8 100%);
+  border-radius: 99px;
+  transition: width 0.15s ease-out;
+}
+
+.mp-race-pin {
+  position: absolute;
+  top: -7px;
+  font-size: 16px;
+  transform: translateX(-50%);
+  transition: left 0.15s ease-out;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* =========================================================
+   LIVE IN-GAME MULTI-PLAYER LEADERBOARD HUD (3P & 4P)
+   ========================================================= */
+.mp-multi-hud {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.mp-multi-player-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 99px;
+  padding: 2px 8px 2px 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
+}
+
+.mp-multi-rank {
+  font: 900 10px 'Trebuchet MS', Arial, sans-serif;
+  color: #fde047;
+  min-width: 16px;
+}
+
+.mp-multi-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #1e293b;
+  overflow: hidden;
+}
+
+.mp-multi-name {
+  font: 800 10px 'Trebuchet MS', Arial, sans-serif;
+  color: #ffffff;
+  max-width: 65px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mp-multi-score {
+  font: 900 11px 'Trebuchet MS', Arial, monospace;
+  color: #38bdf8;
+  margin-left: auto;
+}
+
 
 
 

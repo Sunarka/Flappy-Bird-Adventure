@@ -163,12 +163,16 @@ export class MultiplayerHub extends DurableObject {
           const code = data.code || Math.floor(1000 + Math.random() * 9000).toString();
           const roomId = 'room_' + code;
           const seed = Math.floor(Math.random() * 1000000);
+          const gameMode = data.gameMode || 'survival';
+          const maxPlayers = Number(data.maxPlayers) || 4;
 
           const room = {
             id: roomId,
             code,
             hostId: playerId,
             seed,
+            gameMode,
+            maxPlayers,
             status: 'LOBBY',
             players: new Map([
               [playerId, { ws, profile: session.profile }]
@@ -182,6 +186,8 @@ export class MultiplayerHub extends DurableObject {
             roomId,
             code,
             seed,
+            gameMode,
+            maxPlayers,
             isHost: true,
             playersList: [{
               id: playerId,
@@ -211,8 +217,9 @@ export class MultiplayerHub extends DurableObject {
             break;
           }
 
-          if (targetRoom.players.size >= 2) {
-            this.send(ws, { type: 'ERROR', message: 'Room #' + code + ' penuh! Maksimal 2 pemain.' });
+          const limit = targetRoom.maxPlayers || 4;
+          if (targetRoom.players.size >= limit) {
+            this.send(ws, { type: 'ERROR', message: 'Room #' + code + ' penuh! Maksimal ' + limit + ' pemain.' });
             break;
           }
 
@@ -237,6 +244,8 @@ export class MultiplayerHub extends DurableObject {
             roomId: targetRoom.id,
             code: targetRoom.code,
             seed: targetRoom.seed,
+            gameMode: targetRoom.gameMode || 'survival',
+            maxPlayers: targetRoom.maxPlayers || 4,
             isHost: false,
             playersList
           });
@@ -265,59 +274,80 @@ export class MultiplayerHub extends DurableObject {
 
         case 'QUICK_MATCH': {
           this.leaveRoom(ws);
-          if (this.waitingQueue.length > 0) {
-            const matchedOpponent = this.waitingQueue.shift();
-            if (matchedOpponent.ws.readyState === WebSocket.OPEN && matchedOpponent.playerId !== playerId) {
-              const code = Math.floor(1000 + Math.random() * 9000).toString();
-              const roomId = 'quick_' + code;
-              const seed = Math.floor(Math.random() * 1000000);
+          const gameMode = data.gameMode || 'survival';
+          const maxPlayers = Number(data.maxPlayers) || 2;
 
-              const room = {
-                id: roomId,
-                code,
-                hostId: matchedOpponent.playerId,
-                seed,
-                status: 'COUNTDOWN',
-                players: new Map([
-                  [matchedOpponent.playerId, { ws: matchedOpponent.ws, profile: matchedOpponent.profile }],
-                  [playerId, { ws, profile: session.profile }]
-                ])
-              };
-              this.rooms.set(roomId, room);
-              session.currentRoom = room;
-
-              const oppSession = this.sessions.get(matchedOpponent.ws);
-              if (oppSession) oppSession.currentRoom = room;
-
-              const playersList = [matchedOpponent.profile, session.profile];
-
-              this.send(matchedOpponent.ws, {
-                type: 'MATCH_FOUND',
-                roomId,
-                code,
-                seed,
-                isHost: true,
-                opponent: session.profile,
-                playersList,
-                countdown: 3
-              });
-
-              this.send(ws, {
-                type: 'MATCH_FOUND',
-                roomId,
-                code,
-                seed,
-                isHost: false,
-                opponent: matchedOpponent.profile,
-                playersList,
-                countdown: 3
-              });
-              return;
+          // Find waiting players with matching gameMode and maxPlayers
+          const matchedIndices = [];
+          for (let i = 0; i < this.waitingQueue.length; i++) {
+            const q = this.waitingQueue[i];
+            if (q.ws.readyState === WebSocket.OPEN && q.playerId !== playerId && (q.gameMode === gameMode) && (q.maxPlayers === maxPlayers)) {
+              matchedIndices.push(i);
+              if (matchedIndices.length === maxPlayers - 1) break;
             }
           }
 
-          this.waitingQueue.push({ playerId, ws, profile: session.profile });
-          this.send(ws, { type: 'QUEUED', message: 'Mencari lawan 1v1 online...' });
+          if (matchedIndices.length === maxPlayers - 1) {
+            // Found a full match!
+            const matchedPlayers = matchedIndices.map(idx => this.waitingQueue[idx]);
+            // Remove from queue in reverse order
+            for (let i = matchedIndices.length - 1; i >= 0; i--) {
+              this.waitingQueue.splice(matchedIndices[i], 1);
+            }
+
+            const code = Math.floor(1000 + Math.random() * 9000).toString();
+            const roomId = 'quick_' + code;
+            const seed = Math.floor(Math.random() * 1000000);
+
+            const allParticipants = [...matchedPlayers, { playerId, ws, profile: session.profile }];
+            const hostPlayer = allParticipants[0];
+
+            const playersMap = new Map();
+            allParticipants.forEach(p => {
+              playersMap.set(p.playerId, { ws: p.ws, profile: p.profile });
+            });
+
+            const room = {
+              id: roomId,
+              code,
+              hostId: hostPlayer.playerId,
+              seed,
+              gameMode,
+              maxPlayers,
+              status: 'COUNTDOWN',
+              players: playersMap
+            };
+            this.rooms.set(roomId, room);
+
+            allParticipants.forEach(p => {
+              const sess = this.sessions.get(p.ws);
+              if (sess) sess.currentRoom = room;
+            });
+
+            const playersList = allParticipants.map(p => p.profile);
+
+            allParticipants.forEach(p => {
+              const isHost = p.playerId === hostPlayer.playerId;
+              const opponents = allParticipants.filter(x => x.playerId !== p.playerId).map(x => x.profile);
+              this.send(p.ws, {
+                type: 'MATCH_FOUND',
+                roomId,
+                code,
+                seed,
+                gameMode,
+                maxPlayers,
+                isHost,
+                opponent: opponents[0], // primary opponent for backwards compat
+                opponents, // full list of opponents
+                playersList,
+                countdown: 3
+              });
+            });
+            return;
+          }
+
+          this.waitingQueue.push({ playerId, ws, profile: session.profile, gameMode, maxPlayers });
+          this.send(ws, { type: 'QUEUED', message: `Mencari ${maxPlayers} pemain mode ${gameMode.toUpperCase()} online...` });
           break;
         }
 

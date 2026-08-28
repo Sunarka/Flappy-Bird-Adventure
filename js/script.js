@@ -62,6 +62,20 @@
     mpBattleHud:$('mpBattleHud'), mpMyHudName:$('mpMyHudName'), mpMyHudScore:$('mpMyHudScore'),
     mpRivalHudName:$('mpRivalHudName'), mpRivalHudScore:$('mpRivalHudScore'),
     multiplayerModal:$('multiplayerModal'), mpModal:$('multiplayerModal'), mpServerStatusText:$('mpServerStatusText'),
+    mpGameModeGroup:$('mpGameModeGroup'), mpPlayerCountGroup:$('mpPlayerCountGroup'),
+    mpQuickTitleText:$('mpQuickTitleText'), mpQuickDescText:$('mpQuickDescText'),
+    mpRaceProgressBarWrap:$('mpRaceProgressBarWrap'), mpRaceFill:$('mpRaceFill'),
+    mpRaceMyPin:$('mpRaceMyPin'), mpRaceRivalPin:$('mpRaceRivalPin'), mpRaceTargetText:$('mpRaceTargetText'),
+    mpMultiPlayersHud:$('mpMultiPlayersHud'),
+    mpMultiHudRow1:$('mpMultiHudRow1'), mpMultiHudRow2:$('mpMultiHudRow2'),
+    mpMultiHudRow3:$('mpMultiHudRow3'), mpMultiHudRow4:$('mpMultiHudRow4'),
+    mpMultiAvatar1:$('mpMultiAvatar1'), mpMultiAvatar2:$('mpMultiAvatar2'),
+    mpMultiAvatar3:$('mpMultiAvatar3'), mpMultiAvatar4:$('mpMultiAvatar4'),
+    mpMultiName1:$('mpMultiName1'), mpMultiName2:$('mpMultiName2'),
+    mpMultiName3:$('mpMultiName3'), mpMultiName4:$('mpMultiName4'),
+    mpMultiScore1:$('mpMultiScore1'), mpMultiScore2:$('mpMultiScore2'),
+    mpMultiScore3:$('mpMultiScore3'), mpMultiScore4:$('mpMultiScore4'),
+    mpSlotCard2:$('mpSlotCard2'), mpSlotCard3:$('mpSlotCard3'), mpSlotCard4:$('mpSlotCard4'),
     mpTabQuickBtn:$('mpTabQuickBtn'), mpTabCreateBtn:$('mpTabCreateBtn'), mpTabJoinBtn:$('mpTabJoinBtn'),
     mpViewQuick:$('mpViewQuick'), mpViewCreate:$('mpViewCreate'), mpViewJoin:$('mpViewJoin'),
     mpQuickFindBtn:$('mpQuickFindBtn'), mpQuickInitialBox:$('mpQuickInitialBox'), mpQuickSearchingBox:$('mpQuickSearchingBox'),
@@ -3631,45 +3645,121 @@
     if(!el.mpBattleHud) return;
     const isMpActive = currentMode === 'multiplayer' && (state === State.PLAYING || state === State.READY);
     el.mpBattleHud.classList.toggle('hidden', !isMpActive);
-    if(!isMpActive) return;
-
-    // 1. Player Info (Left Card)
-    if(el.mpMyHudName) el.mpMyHudName.textContent = gpProfile.gamerTag || 'YOU';
-    if(el.mpMyHudAvatar) el.mpMyHudAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 30);
-    const myTier = getRankTier(rankedBest || 0);
-    if(el.mpMyHudTier) el.mpMyHudTier.textContent = myTier.name || 'GOLD';
-    if(el.mpMyHudScore) el.mpMyHudScore.textContent = score;
-
-    // Player 3 Hearts
-    if(el.mpMyHudHearts) {
-      let heartsHtml = '';
-      for(let i = 0; i < 3; i++) {
-        heartsHtml += `<span class="mp-heart ${i < lives ? 'active' : 'lost'}">${getBattleHeartSvg(i < lives)}</span>`;
-      }
-      el.mpMyHudHearts.innerHTML = heartsHtml;
+    
+    const mp = window.multiplayerEngine;
+    if(!isMpActive || !mp) {
+      if(el.mpRaceProgressBarWrap) el.mpRaceProgressBarWrap.classList.add('hidden');
+      if(el.mpMultiPlayersHud) el.mpMultiPlayersHud.classList.add('hidden');
+      return;
     }
 
-    // 2. Rival Info (Right Card)
-    const mp = window.multiplayerEngine;
-    const rivalProfile = mp?.currentRoom?.playersList?.find(p => p.id !== mp?.localPlayerId);
-    const rival = mp?.opponents?.values()?.next()?.value || rivalProfile || { name: 'Rival', avatar: 'robo_mecha', tier: 'MASTER', score: 0, lives: 3 };
-    const rName = rival.name || rivalProfile?.name || 'Rival';
-    const rAvatar = rival.avatar || rivalProfile?.avatar || 'robo_mecha';
-    const rTier = rival.tier || rivalProfile?.tier || 'MASTER';
+    const isRaceMode = mp.gameMode === 'race';
+    const isMultiP = (mp.maxPlayers > 2) || (mp.opponents && mp.opponents.size > 1);
 
-    if(el.mpRivalHudName) el.mpRivalHudName.textContent = rName.slice(0, 10);
-    if(el.mpRivalHudAvatar) el.mpRivalHudAvatar.innerHTML = getCuteAvatarSvg(rAvatar, 30);
-    if(el.mpRivalHudTier) el.mpRivalHudTier.textContent = rTier;
-    if(el.mpRivalHudScore) el.mpRivalHudScore.textContent = rival.score || 0;
+    // 1. Race Mode Progress Bar Updates
+    if(el.mpRaceProgressBarWrap) {
+      el.mpRaceProgressBarWrap.classList.toggle('hidden', !isRaceMode);
+      if(isRaceMode) {
+        const targetScore = mp.raceTargetScore || 30;
+        if(el.mpRaceTargetText) el.mpRaceTargetText.textContent = `FINISH: ${targetScore} PTS`;
+        const myPct = Math.min(100, Math.max(0, (score / targetScore) * 100));
+        if(el.mpRaceFill) el.mpRaceFill.style.width = `${myPct}%`;
+        if(el.mpRaceMyPin) el.mpRaceMyPin.style.left = `${myPct}%`;
 
-    // Rival 3 Hearts
-    if(el.mpRivalHudHearts) {
-      const rLives = rival.lives !== undefined ? rival.lives : (rival.isAlive ? 3 : 0);
-      let rHeartsHtml = '';
-      for(let i = 0; i < 3; i++) {
-        rHeartsHtml += `<span class="mp-heart ${i < rLives ? 'active' : 'lost'}">${getBattleHeartSvg(i < rLives)}</span>`;
+        let highestOppScore = 0;
+        let highestOpponent = null;
+        mp.opponents.forEach(op => {
+          if((op.score || 0) > highestOppScore) {
+            highestOppScore = op.score || 0;
+            highestOpponent = op;
+          }
+        });
+        const oppPct = Math.min(100, Math.max(0, (highestOppScore / targetScore) * 100));
+        if(el.mpRaceRivalPin) el.mpRaceRivalPin.style.left = `${oppPct}%`;
+
+        // Check Victory in Race Mode:
+        if(score >= targetScore && state === State.PLAYING) {
+          showMpBattleResult(true, score, highestOppScore, highestOpponent || { name: 'Rival', avatar: 'robo_mecha', score: highestOppScore });
+          return;
+        }
+        if(highestOppScore >= targetScore && state === State.PLAYING) {
+          showMpBattleResult(false, score, highestOppScore, highestOpponent || { name: 'Rival', avatar: 'robo_mecha', score: highestOppScore });
+          return;
+        }
       }
-      el.mpRivalHudHearts.innerHTML = rHeartsHtml;
+    }
+
+    // 2. Multi-Player Live Leaderboard (3P / 4P) vs 2P Duel Cards
+    if(isMultiP) {
+      if(el.mpRivalHudCard) el.mpRivalHudCard.classList.add('hidden');
+      if(el.mpMultiPlayersHud) {
+        el.mpMultiPlayersHud.classList.remove('hidden');
+        
+        // Build and sort participant list
+        const participants = [
+          { name: gpProfile.gamerTag || 'YOU', avatar: gpProfile.avatar || 'chick_yellow', score, isAlive: bird.isAlive, isMe: true },
+          ...Array.from(mp.opponents.values())
+        ].sort((a, b) => (b.score || 0) - (a.score || 0));
+
+        const rows = [
+          { row: el.mpMultiHudRow1, av: el.mpMultiAvatar1, nm: el.mpMultiName1, sc: el.mpMultiScore1 },
+          { row: el.mpMultiHudRow2, av: el.mpMultiAvatar2, nm: el.mpMultiName2, sc: el.mpMultiScore2 },
+          { row: el.mpMultiHudRow3, av: el.mpMultiAvatar3, nm: el.mpMultiName3, sc: el.mpMultiScore3 },
+          { row: el.mpMultiHudRow4, av: el.mpMultiAvatar4, nm: el.mpMultiName4, sc: el.mpMultiScore4 }
+        ];
+
+        rows.forEach((r, idx) => {
+          if(!r.row) return;
+          const p = participants[idx];
+          if(p) {
+            r.row.classList.remove('hidden');
+            if(r.av) r.av.innerHTML = getCuteAvatarSvg(p.avatar, 20);
+            if(r.nm) r.nm.textContent = (p.name || `P${idx+1}`).slice(0, 8) + (p.isMe ? ' (YOU)' : '');
+            if(r.sc) r.sc.textContent = p.score || 0;
+            r.row.style.opacity = p.isAlive !== false ? '1' : '0.4';
+          } else {
+            r.row.classList.add('hidden');
+          }
+        });
+      }
+    } else {
+      if(el.mpMultiPlayersHud) el.mpMultiPlayersHud.classList.add('hidden');
+      if(el.mpRivalHudCard) el.mpRivalHudCard.classList.remove('hidden');
+
+      // 1v1 Player & Rival Info Cards
+      if(el.mpMyHudName) el.mpMyHudName.textContent = gpProfile.gamerTag || 'YOU';
+      if(el.mpMyHudAvatar) el.mpMyHudAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 30);
+      const myTier = getRankTier(rankedBest || 0);
+      if(el.mpMyHudTier) el.mpMyHudTier.textContent = myTier.name || 'GOLD';
+      if(el.mpMyHudScore) el.mpMyHudScore.textContent = score;
+
+      if(el.mpMyHudHearts) {
+        let heartsHtml = '';
+        for(let i = 0; i < 3; i++) {
+          heartsHtml += `<span class="mp-heart ${i < lives ? 'active' : 'lost'}">${getBattleHeartSvg(i < lives)}</span>`;
+        }
+        el.mpMyHudHearts.innerHTML = heartsHtml;
+      }
+
+      const rivalProfile = mp?.currentRoom?.playersList?.find(p => p.id !== mp?.localPlayerId);
+      const rival = mp?.opponents?.values()?.next()?.value || rivalProfile || { name: 'Rival', avatar: 'robo_mecha', tier: 'MASTER', score: 0, lives: 3 };
+      const rName = rival.name || rivalProfile?.name || 'Rival';
+      const rAvatar = rival.avatar || rivalProfile?.avatar || 'robo_mecha';
+      const rTier = rival.tier || rivalProfile?.tier || 'MASTER';
+
+      if(el.mpRivalHudName) el.mpRivalHudName.textContent = rName.slice(0, 10);
+      if(el.mpRivalHudAvatar) el.mpRivalHudAvatar.innerHTML = getCuteAvatarSvg(rAvatar, 30);
+      if(el.mpRivalHudTier) el.mpRivalHudTier.textContent = rTier;
+      if(el.mpRivalHudScore) el.mpRivalHudScore.textContent = rival.score || 0;
+
+      if(el.mpRivalHudHearts) {
+        const rLives = rival.lives !== undefined ? rival.lives : (rival.isAlive ? 3 : 0);
+        let rHeartsHtml = '';
+        for(let i = 0; i < 3; i++) {
+          rHeartsHtml += `<span class="mp-heart ${i < rLives ? 'active' : 'lost'}">${getBattleHeartSvg(i < rLives)}</span>`;
+        }
+        el.mpRivalHudHearts.innerHTML = rHeartsHtml;
+      }
     }
   }
 
@@ -10323,6 +10413,45 @@
     setState(State.MENU);
   });
 
+  // Sub-Mode & Player Count Selection
+  let selectedMpGameMode = 'survival'; // 'survival' | 'race'
+  let selectedMpPlayerCount = 2; // 2 | 3 | 4
+
+  function updateMpQuickMatchTexts() {
+    if(!el.mpQuickTitleText || !el.mpQuickDescText) return;
+    const modeName = selectedMpGameMode === 'race' ? 'SPRINT RACE' : 'SURVIVAL';
+    el.mpQuickTitleText.textContent = `${modeName} MATCHMAKING (${selectedMpPlayerCount}P)`;
+    if(selectedMpGameMode === 'race') {
+      el.mpQuickDescText.textContent = `Mencari ${selectedMpPlayerCount} pemain untuk balapan cepat mencapai 30 Poin! Siapa tercepat sampai finish menang!`;
+    } else {
+      el.mpQuickDescText.textContent = `Mencari ${selectedMpPlayerCount} pemain untuk bertanding bertahan hidup (Last Bird Standing)!`;
+    }
+  }
+
+  if(el.mpGameModeGroup) {
+    el.mpGameModeGroup.querySelectorAll('.mp-submode-pill').forEach(btn => {
+      btn.onclick = () => {
+        audio.click();
+        el.mpGameModeGroup.querySelectorAll('.mp-submode-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedMpGameMode = btn.dataset.gamemode || 'survival';
+        updateMpQuickMatchTexts();
+      };
+    });
+  }
+
+  if(el.mpPlayerCountGroup) {
+    el.mpPlayerCountGroup.querySelectorAll('.mp-player-count-pill').forEach(btn => {
+      btn.onclick = () => {
+        audio.click();
+        el.mpPlayerCountGroup.querySelectorAll('.mp-player-count-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedMpPlayerCount = Number(btn.dataset.count) || 2;
+        updateMpQuickMatchTexts();
+      };
+    });
+  }
+
   bindClick(el.mpTabQuickBtn, () => { audio.click(); switchMpTab('quick'); });
   bindClick(el.mpTabCreateBtn, () => {
     audio.click();
@@ -10345,7 +10474,7 @@
         name: gpProfile.gamerTag || 'SkyPlayer',
         avatar: gpProfile.avatar || 'chick_yellow',
         skin: progress.selected || 'classic'
-      });
+      }, selectedMpGameMode, selectedMpPlayerCount);
     }
   });
 
