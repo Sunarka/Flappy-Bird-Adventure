@@ -6559,65 +6559,38 @@
     lobbyTime += dt;
     if(lobbyPetals.length === 0) initLobbyParticles();
 
-    // 1. Radiant Happy Sky Gradient
+    // 1. Serene Crystal-Clear Sky Gradient (Ghibli / Sky Aesthetic)
     const skyGrad = ctx.createLinearGradient(0, 0, 0, H);
-    skyGrad.addColorStop(0, '#38bdf8');
-    skyGrad.addColorStop(0.35, '#7dd3fc');
-    skyGrad.addColorStop(0.65, '#fed7aa');
-    skyGrad.addColorStop(0.88, '#fef08a');
-    skyGrad.addColorStop(1, '#bbf7d0');
+    skyGrad.addColorStop(0, '#53bfe5');
+    skyGrad.addColorStop(0.3, '#7cd6f6');
+    skyGrad.addColorStop(0.6, '#bfe9fb');
+    skyGrad.addColorStop(0.85, '#e4f7ff');
+    skyGrad.addColorStop(1, '#c7f2d4');
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, W, H);
 
-    // 2. Warm Glowing Sun with Rotating Sunbeams (Top Right)
+    // 2. Soft Ambient Sunlight Bloom (Atmospheric & Non-Intrusive)
     ctx.save();
-    const sunX = W - 45;
-    const sunY = 55;
-    const sunPulse = Math.sin(lobbyTime * 1.5) * 3;
-    const sunGlow = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 90);
-    sunGlow.addColorStop(0, 'rgba(254, 240, 138, 0.95)');
-    sunGlow.addColorStop(0.3, 'rgba(253, 224, 71, 0.6)');
-    sunGlow.addColorStop(0.7, 'rgba(251, 191, 36, 0.2)');
-    sunGlow.addColorStop(1, 'rgba(245, 158, 11, 0)');
+    const sunGlow = ctx.createRadialGradient(W * 0.5, 40, 20, W * 0.5, 40, 260);
+    sunGlow.addColorStop(0, 'rgba(255, 255, 255, 0.45)');
+    sunGlow.addColorStop(0.35, 'rgba(254, 243, 199, 0.22)');
+    sunGlow.addColorStop(0.7, 'rgba(253, 230, 138, 0.08)');
+    sunGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
     ctx.fillStyle = sunGlow;
     ctx.beginPath();
-    ctx.arc(sunX, sunY, 90, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Rotating Sunbeams
-    ctx.save();
-    ctx.translate(sunX, sunY);
-    ctx.rotate(lobbyTime * 0.12);
-    ctx.fillStyle = 'rgba(254, 240, 138, 0.18)';
-    for(let b = 0; b < 10; b++) {
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.arc(0, 0, 130, (b * Math.PI / 5) - 0.12, (b * Math.PI / 5) + 0.12);
-      ctx.closePath();
-      ctx.fill();
-    }
-    ctx.restore();
-
-    // Sun Core
-    ctx.fillStyle = '#fef08a';
-    ctx.beginPath();
-    ctx.arc(sunX, sunY, 24 + sunPulse, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#fbbf24';
-    ctx.beginPath();
-    ctx.arc(sunX, sunY, 20 + sunPulse, 0, Math.PI * 2);
+    ctx.arc(W * 0.5, 40, 260, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 
-    // 3. Distant Translucent Rainbow Arch
+    // 3. Delicate Pastel Rainbow Arch (Soft & Translucent)
     ctx.save();
-    ctx.globalAlpha = 0.35 + Math.sin(lobbyTime * 0.8) * 0.08;
+    ctx.globalAlpha = 0.16 + Math.sin(lobbyTime * 0.6) * 0.04;
     const rbColors = ['#f87171', '#fb923c', '#facc15', '#4ade80', '#60a5fa', '#a855f7'];
     for(let r = 0; r < rbColors.length; r++) {
       ctx.beginPath();
       ctx.strokeStyle = rbColors[r];
-      ctx.lineWidth = 4;
-      ctx.arc(W / 2 + 10, H - 90, 220 + r * 4.5, Math.PI * 1.05, Math.PI * 1.95);
+      ctx.lineWidth = 3.5;
+      ctx.arc(W / 2, H - 70, 230 + r * 4, Math.PI * 1.05, Math.PI * 1.95);
       ctx.stroke();
     }
     ctx.restore();
