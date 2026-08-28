@@ -4507,7 +4507,12 @@
 
     // Multiplayer State Broadcast & Rival Interpolation
     if(currentMode === 'multiplayer' && window.multiplayerEngine) {
-      window.multiplayerEngine.updateOpponents(dt);
+      window.multiplayerEngine.updateOpponents(dt, pipes);
+      window.multiplayerEngine.opponents.forEach(op => {
+        if(op.isSimulatedBot && op.isAlive) {
+          op.score = score;
+        }
+      });
       window.multiplayerEngine.broadcastMyState({
         y: bird.y,
         vy: bird.vy,

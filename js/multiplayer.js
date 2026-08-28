@@ -478,58 +478,98 @@
 
     quickMatch(profile) {
       this.myProfile = { ...profile, id: this.localPlayerId };
+      this.cancelMatch(); // Clear previous queue/timers
+
+      this.matchStatus = 'QUEUED';
+      this.emit('queued', { message: 'Mencari lawan 1v1 online...' });
+
       if (this.isConnected) {
         this.send({ type: 'QUICK_MATCH', profile: this.myProfile });
-      } else {
-        // Instant simulated bot or local match
-        this.emit('queued', { message: 'Mencari lawan 1v1 online...' });
-        setTimeout(() => {
-          const fakeOpponent = {
-            id: 'RIVAL-' + Math.floor(100 + Math.random() * 900),
-            name: 'Cyber_Flapper',
-            avatar: 'robo_mecha',
-            skin: 'cyber',
-            isReady: true,
-            isHost: false
-          };
-          const code = Math.floor(1000 + Math.random() * 9000).toString();
-          const seed = Math.floor(Math.random() * 1000000);
-          this.currentRoom = {
-            roomId: 'qm_' + code,
-            code,
-            seed,
-            isHost: true,
-            playersList: [this.myProfile, fakeOpponent]
-          };
-          this.matchStatus = 'COUNTDOWN';
-          this.setSeed(seed);
-          this.opponents.set(fakeOpponent.id, {
-            id: fakeOpponent.id,
-            name: fakeOpponent.name,
-            avatar: fakeOpponent.avatar,
-            skin: fakeOpponent.skin,
-            y: 250,
-            vy: 0,
-            rot: 0,
-            score: 0,
-            isAlive: true,
-            isDashing: false,
-            targetY: 250,
-            lastUpdate: Date.now(),
-            isSimulatedBot: true
-          });
-          this.emit('match_found', {
-            roomId: this.currentRoom.roomId,
-            code,
-            seed,
-            playersList: this.currentRoom.playersList,
-            countdown: 3
-          });
-        }, 1200);
       }
+
+      // Auto-Bot Fallback Timer: Jika dalam 3.5 detik belum ada lawan pemain asli, masukkan AI Bot!
+      if (this.botFallbackTimer) clearTimeout(this.botFallbackTimer);
+      this.botFallbackTimer = setTimeout(() => {
+        if (this.matchStatus === 'QUEUED') {
+          this.spawnBotMatch();
+        }
+      }, 3500);
+    }
+
+    spawnBotMatch() {
+      if (this.matchStatus !== 'QUEUED') return;
+
+      const BOT_PROFILES = [
+        { name: 'SkyFalcon_AI', avatar: 'phoenix_blaze', skin: 'cyber' },
+        { name: 'ProFlapper_ID', avatar: 'king_royal', skin: 'gold' },
+        { name: 'AeroMaster_99', avatar: 'astro_space', skin: 'stealth' },
+        { name: 'CyberNeko', avatar: 'cat_neko', skin: 'rainbow' },
+        { name: 'Draco_Vortex', avatar: 'dragon_pyro', skin: 'fire' },
+        { name: 'Sakura_Wing', avatar: 'pink_sakura', skin: 'neon' },
+        { name: 'MechaFlap_X', avatar: 'robo_mecha', skin: 'cyber' },
+        { name: 'Kitsune_Pro', avatar: 'fox_kitsune', skin: 'gold' }
+      ];
+      const bot = BOT_PROFILES[Math.floor(Math.random() * BOT_PROFILES.length)];
+      const botId = 'BOT-' + Math.floor(100 + Math.random() * 900);
+
+      const fakeOpponent = {
+        id: botId,
+        name: bot.name,
+        avatar: bot.avatar,
+        skin: bot.skin,
+        isReady: true,
+        isHost: false
+      };
+
+      const code = Math.floor(1000 + Math.random() * 9000).toString();
+      const seed = Math.floor(Math.random() * 1000000);
+
+      this.currentRoom = {
+        roomId: 'bot_match_' + code,
+        code,
+        seed,
+        isHost: true,
+        playersList: [this.myProfile, fakeOpponent]
+      };
+
+      this.matchStatus = 'COUNTDOWN';
+      this.setSeed(seed);
+      this.opponents.clear();
+
+      // Bot Skill Configuration
+      const targetMaxScore = Math.floor(12 + Math.random() * 26); // Bot will play well up to 12-38 points
+      this.opponents.set(fakeOpponent.id, {
+        id: fakeOpponent.id,
+        name: fakeOpponent.name,
+        avatar: fakeOpponent.avatar,
+        skin: fakeOpponent.skin,
+        y: 280,
+        vy: 0,
+        rot: 0,
+        score: 0,
+        isAlive: true,
+        isDashing: false,
+        targetY: 280,
+        lastUpdate: Date.now(),
+        isSimulatedBot: true,
+        botTargetScore: targetMaxScore,
+        botFlapCooldown: 0
+      });
+
+      this.emit('match_found', {
+        roomId: this.currentRoom.roomId,
+        code,
+        seed,
+        playersList: this.currentRoom.playersList,
+        countdown: 3
+      });
     }
 
     cancelMatch() {
+      if (this.botFallbackTimer) {
+        clearTimeout(this.botFallbackTimer);
+        this.botFallbackTimer = null;
+      }
       this.matchStatus = 'IDLE';
       this.send({ type: 'CANCEL_MATCH' });
     }
@@ -590,24 +630,54 @@
     }
 
     // Update & Lerp positions of rival birds every animation frame
-    updateOpponents(dt) {
+    updateOpponents(dt, activePipes = []) {
       this.opponents.forEach(op => {
         if (!op.isAlive) return;
 
-        // If simulated bot, simulate graceful flapping
+        // If simulated bot, simulate intelligent human-like flapping
         if (op.isSimulatedBot && this.matchStatus === 'PLAYING') {
-          op.simTimer = (op.simTimer || 0) + dt;
-          if (op.simTimer > 0.38) {
-            op.simTimer = 0;
-            op.vy = -260;
+          // Find next approaching pipe
+          let nextPipe = null;
+          if (activePipes && activePipes.length > 0) {
+            nextPipe = activePipes.find(p => p.x + p.w >= 70);
           }
-          op.vy = (op.vy || 0) + 750 * dt;
+
+          let idealY = 250;
+          if (nextPipe) {
+            idealY = nextPipe.gapY + nextPipe.gapSize / 2;
+          } else {
+            idealY = 240 + Math.sin(Date.now() / 500) * 35;
+          }
+
+          op.botFlapCooldown = (op.botFlapCooldown || 0) - dt;
+
+          // Check if bot should die (exceeded target skill level or hit ground)
+          if ((op.score || 0) >= (op.botTargetScore || 20) && Math.random() < 0.04) {
+            op.shouldFail = true;
+          }
+
+          if (!op.shouldFail) {
+            // Intelligent flap trigger
+            if (op.targetY > idealY + 12 && op.botFlapCooldown <= 0) {
+              op.vy = -305 + (Math.random() - 0.5) * 40;
+              op.botFlapCooldown = 0.22 + Math.random() * 0.12;
+            }
+          }
+
+          // Apply Gravity
+          op.vy = (op.vy || 0) + 820 * dt;
           op.targetY = (op.targetY || 250) + op.vy * dt;
-          if (op.targetY < 50) op.targetY = 50;
-          if (op.targetY > 520) {
-            op.targetY = 520;
+          op.rot = Math.max(-0.4, Math.min(1.2, op.vy * 0.003));
+
+          // Ceiling & Floor checks
+          if (op.targetY < 35) {
+            op.targetY = 35;
+            op.vy = 50;
+          }
+          if (op.targetY > 525) {
+            op.targetY = 525;
             op.isAlive = false;
-            this.emit('opponent_died', { playerId: op.id, finalScore: op.score });
+            this.emit('opponent_died', { playerId: op.id, finalScore: op.score || 0 });
           }
         }
 
