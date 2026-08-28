@@ -831,7 +831,27 @@
       this.opponents.forEach(op => {
         if (!op.isAlive && op.y >= 540) return;
 
-        // Render full cosmetics using window.renderCustomBird if available
+        // Turunkan opacity lawan agar mudah dibedakan dengan pemain sendiri (HD Ghost Rival)
+        const rivalOpacity = op.isAlive ? 0.68 : 0.35;
+
+        // 1. Render Opponent Baby Birds (100% HD identik dengan pemain tapi dengan opacity lawan)
+        if (op.babyBirds && op.babyBirds.length > 0 && op.isAlive) {
+          op.babyBirds.forEach((b, idx) => {
+            if (typeof window.drawCustomBabyBird === 'function') {
+              window.drawCustomBabyBird(ctx, {
+                id: idx,
+                x: b.x,
+                y: b.y,
+                angle: (op.rot || 0) * 0.7,
+                wing: b.wing || 0,
+                color: b.color || (idx === 0 ? '#facc15' : '#38bdf8'),
+                state: 'following'
+              }, rivalOpacity);
+            }
+          });
+        }
+
+        // 2. Render Opponent Bird (100% HD Custom Bird dengan skins, hats, outfits & opacity lawan)
         if (typeof window.renderCustomBird === 'function') {
           ctx.save();
           window.renderCustomBird(ctx, {
@@ -839,10 +859,11 @@
             y: op.y,
             vy: op.vy || 0,
             angle: op.rot || 0,
+            wing: op.wing || 0,
             skinId: op.skin || 'classic',
             hatId: op.hat || 'none',
             outfitId: op.outfit || 'none',
-            opacity: op.isAlive ? 0.85 : 0.4
+            opacity: rivalOpacity
           });
           ctx.restore();
         } else {
@@ -850,7 +871,7 @@
           ctx.save();
           ctx.translate(birdX, op.y);
           ctx.rotate(op.rot || 0);
-          ctx.globalAlpha = op.isAlive ? 0.85 : 0.4;
+          ctx.globalAlpha = rivalOpacity;
           ctx.fillStyle = op.isAlive ? '#f43f5e' : '#64748b';
           ctx.beginPath();
           ctx.ellipse(0, 0, 16, 12, 0, 0, Math.PI * 2);
@@ -858,68 +879,32 @@
           ctx.restore();
         }
 
-        // Render Bot Shield Bubble if active
+        // 3. Render Opponent Shield (100% HD Hexagonal Shield dengan opacity lawan)
         if (op.hasShield && op.isAlive) {
-          ctx.save();
-          ctx.translate(birdX, op.y);
-          ctx.strokeStyle = 'rgba(56, 189, 248, 0.75)';
-          ctx.fillStyle = 'rgba(56, 189, 248, 0.2)';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.arc(0, 0, 22, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        // Render Bot Baby Birds
-        if (op.babyBirds && op.babyBirds.length > 0 && op.isAlive) {
-          for (const b of op.babyBirds) {
-            ctx.save();
-            ctx.translate(b.x, b.y);
-            ctx.fillStyle = b.color || '#facc15';
-            ctx.beginPath();
-            ctx.arc(0, 0, 6, 0, Math.PI * 2);
-            ctx.fill();
-            // Tiny eye
-            ctx.fillStyle = '#0f172a';
-            ctx.beginPath();
-            ctx.arc(2, -1.5, 1.2, 0, Math.PI * 2);
-            ctx.fill();
-            // Tiny beak
-            ctx.fillStyle = '#f97316';
-            ctx.beginPath();
-            ctx.moveTo(5, -1);
-            ctx.lineTo(8, 0.5);
-            ctx.lineTo(5, 2);
-            ctx.fill();
-            // Tiny flapping wing
-            ctx.fillStyle = '#eab308';
-            ctx.beginPath();
-            ctx.ellipse(-2, Math.sin(b.wing) * 2, 3, 2, 0.2, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
+          if (typeof window.drawCustomShieldFX === 'function') {
+            window.drawCustomShieldFX(ctx, birdX, op.y, op.rot || 0, false, rivalOpacity);
           }
         }
 
-        // Opponent Name Tag & Live Score above head
+        // 4. Opponent Name Tag & Live Score above head
         ctx.save();
+        ctx.globalAlpha = rivalOpacity;
         ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
         ctx.textAlign = 'center';
         
         // Name pill
         const tagText = `${op.name} (${op.score || 0} pts)`;
         const textWidth = ctx.measureText(tagText).width;
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
         ctx.beginPath();
-        ctx.roundRect(birdX - textWidth/2 - 6, op.y - 32, textWidth + 12, 15, 4);
+        ctx.roundRect(birdX - textWidth/2 - 6, op.y - 34, textWidth + 12, 15, 4);
         ctx.fill();
         ctx.strokeStyle = op.isAlive ? '#f43f5e' : '#94a3b8';
         ctx.lineWidth = 1;
         ctx.stroke();
 
         ctx.fillStyle = op.isAlive ? '#fecdd3' : '#94a3b8';
-        ctx.fillText(tagText, birdX, op.y - 21);
+        ctx.fillText(tagText, birdX, op.y - 23);
         ctx.restore();
       });
     }

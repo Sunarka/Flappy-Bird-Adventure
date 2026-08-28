@@ -8440,8 +8440,71 @@
     targetCtx.restore();
   }
 
+  function drawClassicHexShield(targetCtx, sR) {
+    targetCtx.save();
+    targetCtx.strokeStyle = '#38bdf8';
+    targetCtx.lineWidth = 2.4;
+    targetCtx.shadowColor = '#38bdf8';
+    targetCtx.shadowBlur = 10;
+    targetCtx.beginPath();
+    targetCtx.arc(2, 0, sR, 0, Math.PI * 2);
+    targetCtx.stroke();
+
+    targetCtx.fillStyle = 'rgba(56, 189, 248, 0.22)';
+    targetCtx.fill();
+
+    // Rotating Hexagon Lattice
+    targetCtx.save();
+    targetCtx.rotate(performance.now() / 350);
+    targetCtx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+    targetCtx.lineWidth = 1.2;
+    targetCtx.beginPath();
+    for(let i = 0; i < 6; i++) {
+      const a = (i * Math.PI) / 3;
+      const hx = Math.cos(a) * (sR * 0.85);
+      const hy = Math.sin(a) * (sR * 0.85);
+      if(i === 0) targetCtx.moveTo(hx, hy); else targetCtx.lineTo(hx, hy);
+    }
+    targetCtx.closePath();
+    targetCtx.stroke();
+    targetCtx.restore();
+
+    // Orbiting Energy Nodes
+    for(let i = 0; i < 3; i++) {
+      const oa = performance.now() / 180 + (i * Math.PI * 2) / 3;
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.beginPath();
+      targetCtx.arc(2 + Math.cos(oa) * sR, Math.sin(oa) * sR, 2.5, 0, Math.PI * 2);
+      targetCtx.fill();
+    }
+    targetCtx.restore();
+  }
+
   // Draw Game Bird with Power-Up Overlays
   window.renderCustomBird = renderCustomBird;
+
+  window.drawCustomShieldFX = function(targetCtx, x, y, angle, isSakura = false, alpha = 0.68) {
+    targetCtx.save();
+    targetCtx.translate(x, y);
+    targetCtx.rotate(angle || 0);
+    targetCtx.globalAlpha = alpha;
+    const pulse = Math.sin(performance.now() / 110) * 1.8;
+    const sR = 25 + pulse;
+
+    if(isSakura) {
+      drawSakuraLotusShield(targetCtx, sR);
+    } else {
+      drawClassicHexShield(targetCtx, sR);
+    }
+    targetCtx.restore();
+  };
+
+  window.drawCustomBabyBird = function(targetCtx, b, alpha = 0.68) {
+    targetCtx.save();
+    targetCtx.globalAlpha = alpha;
+    drawBabyBird(b, targetCtx);
+    targetCtx.restore();
+  };
 
   function drawBird() {
     const skinId = progress.selected || 'classic';
@@ -8453,63 +8516,27 @@
       opacity = 0.4;
     }
 
-      renderCustomBird(ctx, {
-        x: bird.x, y: bird.y, angle: bird.angle, wing: bird.wing,
-        skinId, hatId, outfitId, opacity
-      });
+    renderCustomBird(ctx, {
+      x: bird.x, y: bird.y, angle: bird.angle, wing: bird.wing,
+      skinId, hatId, outfitId, opacity
+    });
 
-      ctx.save();
-      ctx.translate(bird.x, bird.y);
-      ctx.rotate(bird.angle);
+    ctx.save();
+    ctx.translate(bird.x, bird.y);
+    ctx.rotate(bird.angle);
 
-      // 1. Shield: Custom Sakura Lotus Shield (Momo & Hana) vs Classic Cyan Hexagonal Shield
-      if(activePowerups.shield) {
-        const pulse = Math.sin(performance.now() / 110) * 1.8;
-        const sR = 25 + pulse;
-        const isSakura = activePowerups.shieldType === 'sakura' || progress.selectedPet === 'momo_hana';
+    // 1. Shield: Custom Sakura Lotus Shield (Momo & Hana) vs Classic Cyan Hexagonal Shield
+    if(activePowerups.shield) {
+      const pulse = Math.sin(performance.now() / 110) * 1.8;
+      const sR = 25 + pulse;
+      const isSakura = activePowerups.shieldType === 'sakura' || progress.selectedPet === 'momo_hana';
 
-        if(isSakura) {
-          drawSakuraLotusShield(ctx, sR);
-        } else {
-          ctx.save();
-          ctx.strokeStyle = '#38bdf8';
-          ctx.lineWidth = 2.4;
-          ctx.shadowColor = '#38bdf8';
-          ctx.shadowBlur = 10;
-          ctx.beginPath();
-          ctx.arc(2, 0, sR, 0, Math.PI * 2);
-          ctx.stroke();
-
-          ctx.fillStyle = 'rgba(56, 189, 248, 0.22)';
-          ctx.fill();
-
-          // Rotating Hexagon Lattice
-          ctx.save();
-          ctx.rotate(performance.now() / 350);
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
-          ctx.lineWidth = 1.2;
-          ctx.beginPath();
-          for(let i = 0; i < 6; i++) {
-            const a = (i * Math.PI) / 3;
-            const hx = Math.cos(a) * (sR * 0.85);
-            const hy = Math.sin(a) * (sR * 0.85);
-            if(i === 0) ctx.moveTo(hx, hy); else ctx.lineTo(hx, hy);
-          }
-          ctx.closePath();
-          ctx.stroke();
-          ctx.restore();
-
-          // Orbiting Energy Nodes
-          for(let i = 0; i < 3; i++) {
-            const oa = performance.now() / 180 + (i * Math.PI * 2) / 3;
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(2 + Math.cos(oa) * sR, Math.sin(oa) * sR, 2.5, 0, Math.PI * 2);
-            ctx.fill();
-          }
-          ctx.restore();
-        }
+      if(isSakura) {
+        drawSakuraLotusShield(ctx, sR);
+      } else {
+        drawClassicHexShield(ctx, sR);
       }
+    }
 
       // 2. Magnet Pulsing Magnetic Flux Waves
       if(activePowerups.magnet > 0) {
