@@ -3493,6 +3493,13 @@
         x.classList.add('hidden');
       });
     }
+    if (el.gameDialogModal) el.gameDialogModal.classList.add('hidden');
+    if (el.multiplayerModal) el.multiplayerModal.classList.add('hidden');
+    if (activeDialogResolver) {
+      const res = activeDialogResolver;
+      activeDialogResolver = null;
+      res(true);
+    }
   }
   function setState(next) {
     state = next;
@@ -9633,11 +9640,13 @@
         el.mpHostStartGameBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
         el.mpHostStartGameBtn.textContent = 'MULAI BERTANDING SEKARANG!';
       }
-      showGameDialog({
-        title: 'Lawan Bergabung!',
-        html: `<p><b>"${guest.name}"</b> telah masuk ke room Anda!</p>`,
-        type: 'success',
-        confirmText: 'MANTAP'
+      // Floating notification without blocking start button
+      floatingTexts.push({
+        x: 180, y: 120,
+        text: `"${guest.name}" BERGABUNG!`,
+        color: '#22c55e',
+        vy: -40,
+        life: 1.5, maxLife: 1.5
       });
     });
 
@@ -9646,15 +9655,10 @@
       stopSearchingRadar();
       closeModal();
       setMode('multiplayer');
-      showGameDialog({
-        title: 'Berhasil Masuk Room',
-        html: `<p>Anda telah bergabung di Room <b>#${room.code}</b>!</p><p style="font-size:11px;color:#94a3b8;margin-top:6px;">Menunggu Host memulai pertandingan...</p>`,
-        type: 'success',
-        confirmText: 'SIAP BERTANDING'
-      });
     });
 
     mp.on('match_found', (data) => {
+      closeModal();
       const rival = data.opponent || data.playersList.find(p => p.id !== mp.localPlayerId) || mp.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha' };
       playVersusClashIntro(rival, () => {
         startMultiplayerGameWithArenaCountdown();
@@ -9662,6 +9666,7 @@
     });
 
     mp.on('game_starting', (data) => {
+      closeModal();
       const rival = data.opponent || mp.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha' };
       playVersusClashIntro(rival, () => {
         startMultiplayerGameWithArenaCountdown();
