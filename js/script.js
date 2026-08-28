@@ -1099,10 +1099,75 @@
       }
     },
 
+    // Dedicated Multiplayer Battle Theme: "Nyan Cat" (Nyanyanyanyanyanyanya!)
+    multiplayerMusic() {
+      if(!settings.music) return;
+      if(this.currentMusicType === 'multiplayer' && (this.musicTimer || this.currentAudioElem)) return;
+      this.stopMusic();
+      this.currentMusicType = 'multiplayer';
+      this.init();
+
+      // Putar soundtrack Nyan Cat yang riang, seru, dan energik untuk duel multiplayer 1v1
+      const aud = this.playAudioFile('nyan_cat.wav', true, 0.45);
+      if(aud) {
+        aud.onerror = () => {
+          this.playSynthNyanCat();
+        };
+        return;
+      }
+      this.playSynthNyanCat();
+    },
+
+    playSynthNyanCat() {
+      let step = 0;
+      // Melodi Otentik Nyan Cat (F# Major / Eb Minor 8-bit Chiptune)
+      const melodyScore = [
+        // Intro / Chorus A
+        740, 831, 622, 622, 494, 587, 554, 494,
+        494, 554, 587, 587, 554, 494, 554, 622,
+        740, 831, 622, 740, 554, 622, 494, 554,
+        494, 622, 740, 831, 622, 740, 554, 622,
+        494, 587, 622, 587, 554, 494, 554, 587,
+        494, 587, 622, 740, 554, 622, 554, 494, 554, 494, 0, 0,
+        // Chorus B
+        494, 370, 415, 494, 370, 415, 494, 554, 622, 494, 659, 622, 659, 740,
+        494, 494, 370, 415, 494, 370, 415, 494, 554, 622, 494, 622, 659, 740,
+        494, 554, 622, 494, 554, 622, 494, 554, 494, 415, 494, 415, 494, 554,
+        622, 494, 622, 659, 740, 494, 554, 622, 494, 622, 554, 494, 554, 494, 554, 0
+      ];
+
+      const bassScore = [
+        123, 123, 92, 92, 104, 104, 78, 78,
+        82, 82, 123, 123, 138, 138, 92, 92
+      ];
+
+      this.musicTimer = setInterval(() => {
+        if(state !== State.PLAYING && state !== State.READY) return;
+        const note = melodyScore[step % melodyScore.length];
+        const low = bassScore[Math.floor(step / 2) % bassScore.length];
+
+        if(note) {
+          this.playTone(note, 0.12, 'square', 0.026, 0);
+          this.playTone(note * 0.5, 0.10, 'triangle', 0.018, 0);
+        }
+        if(low && step % 2 === 0) {
+          this.playTone(low, 0.20, 'triangle', 0.038, 0);
+        }
+        if(step % 2 === 1) {
+          this.playTone(1400, 0.025, 'sawtooth', 0.010, -500);
+        }
+        step++;
+      }, 108); // 138 BPM 16th note timing
+    },
+
     // Master Music Director (Switch between Lobby & Game Tracks)
     music() {
       if(state === State.PLAYING || state === State.READY) {
-        this.gameMusic();
+        if(currentMode === 'multiplayer') {
+          this.multiplayerMusic();
+        } else {
+          this.gameMusic();
+        }
       } else {
         this.lobbyMusic();
       }
