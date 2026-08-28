@@ -28,7 +28,7 @@
     difficultyBtn:$('difficultyBtn'), difficultyValue:$('difficultyValue'), difficultyMenu:$('difficultyMenu'),
     shopCanvas:$('shopCanvas'), showcaseLabel:$('showcaseLabel'), tabPrev:$('tabPrev'), tabNext:$('tabNext'),
     modeClassicBtn:$('modeClassicBtn'), modeRankedBtn:$('modeRankedBtn'), modeBestLabel:$('modeBestLabel'),
-    playBtn:$('playBtn'), rankedLeaderboardBtn:$('rankedLeaderboardBtn'), googlePlayBtn:$('googlePlayBtn'),
+    playBtn:$('playBtn'), rankedLeaderboardBtn:$('rankedLeaderboardBtn'),
     topProfileBtn:$('topProfileBtn'), topProfileAvatar:$('topProfileAvatar'), topProfileName:$('topProfileName'), topProfileTier:$('topProfileTier'),
     googlePlayModal:$('googlePlayModal'), gpOnlineStatus:$('gpOnlineStatus'), gpAvatarWrap:$('gpAvatarWrap'), gpAvatar:$('gpAvatar'),
     gpChangeAvatarBtn:$('gpChangeAvatarBtn'), gpGamerTagInput:$('gpGamerTagInput'), gpNameCostHint:$('gpNameCostHint'), gpTierBadge:$('gpTierBadge'),
@@ -3062,14 +3062,10 @@
     el.playBtn.textContent = mode === 'ranked' ? 'PLAY RANKED (EXTREME)' : 'PLAY CLASSIC';
     if(el.modeBestLabel) el.modeBestLabel.textContent = mode === 'ranked' ? 'RANKED BEST' : 'CLASSIC BEST';
     
-    // Tampilkan tombol Leaderboard & Google Play HANYA di mode Ranked, sembunyikan sepenuhnya di Mode Classic!
+    // Tampilkan tombol Leaderboard HANYA di mode Ranked, sembunyikan sepenuhnya di Mode Classic!
     if(el.rankedLeaderboardBtn) {
       el.rankedLeaderboardBtn.classList.toggle('hidden', mode !== 'ranked');
       el.rankedLeaderboardBtn.style.display = mode === 'ranked' ? 'flex' : 'none';
-    }
-    if(el.googlePlayBtn) {
-      el.googlePlayBtn.classList.toggle('hidden', mode !== 'ranked');
-      el.googlePlayBtn.style.display = mode === 'ranked' ? 'block' : 'none';
     }
 
     updateMenuRankedUI();
@@ -8520,12 +8516,6 @@
   bindClick(el.lbTabTiersBtn, () => {
     audio.click();
     switchLeaderboardTab('tiers');
-  });
-  bindClick('googlePlayBtn', () => {
-    if(currentMode !== 'ranked') return;
-    audio.click();
-    syncGPProfileUI();
-    showModal(el.googlePlayModal);
   });
   bindClick(el.topProfileBtn, () => {
     audio.click();
