@@ -8317,6 +8317,8 @@
   }
 
   // Draw Game Bird with Power-Up Overlays
+  window.renderCustomBird = renderCustomBird;
+
   function drawBird() {
     const skinId = progress.selected || 'classic';
     const hatId = progress.selectedHat || 'none';

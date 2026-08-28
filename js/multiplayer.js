@@ -487,36 +487,45 @@
         this.send({ type: 'QUICK_MATCH', profile: this.myProfile });
       }
 
-      // Auto-Bot Fallback Timer: Jika dalam 3.5 detik belum ada lawan pemain asli, masukkan AI Bot!
+      // Auto-Bot Fallback Timer: Tepat setelah 10 detik belum ada lawan pemain asli, masukkan AI Bot!
       if (this.botFallbackTimer) clearTimeout(this.botFallbackTimer);
       this.botFallbackTimer = setTimeout(() => {
         if (this.matchStatus === 'QUEUED') {
           this.spawnBotMatch();
         }
-      }, 3500);
+      }, 10000);
     }
 
     spawnBotMatch() {
       if (this.matchStatus !== 'QUEUED') return;
 
-      const BOT_PROFILES = [
-        { name: 'SkyFalcon_AI', avatar: 'phoenix_blaze', skin: 'cyber' },
-        { name: 'ProFlapper_ID', avatar: 'king_royal', skin: 'gold' },
-        { name: 'AeroMaster_99', avatar: 'astro_space', skin: 'stealth' },
-        { name: 'CyberNeko', avatar: 'cat_neko', skin: 'rainbow' },
-        { name: 'Draco_Vortex', avatar: 'dragon_pyro', skin: 'fire' },
-        { name: 'Sakura_Wing', avatar: 'pink_sakura', skin: 'neon' },
-        { name: 'MechaFlap_X', avatar: 'robo_mecha', skin: 'cyber' },
-        { name: 'Kitsune_Pro', avatar: 'fox_kitsune', skin: 'gold' }
-      ];
-      const bot = BOT_PROFILES[Math.floor(Math.random() * BOT_PROFILES.length)];
+      const BOT_PREFIXES = ['Sky', 'Cyber', 'Shadow', 'Aero', 'Dragon', 'Neko', 'Vortex', 'Phoenix', 'Star', 'Ghost', 'Quantum', 'Lunar', 'Pixel', 'Hyper', 'Nova', 'Falcon', 'Alpha', 'Mega', 'Blaze', 'Storm', 'Frost', 'Apex', 'Turbo', 'Kitsune', 'Mecha', 'Zen', 'Pyro', 'Cosmo', 'Mystic', 'Iron', 'Thunder'];
+      const BOT_SUFFIXES = ['Flapper', 'Master', 'Hunter', 'Knight', 'Striker', 'Rider', 'Wing', 'Ace', 'Pro', 'Lord', 'King', 'Ninja', 'Pilot', 'Viper', 'Beast', 'Hawk', 'Slayer', 'Legend', 'Samurai', 'Hero'];
+      const BOT_AVATARS = ['chick_yellow', 'pink_sakura', 'penguin_tux', 'king_royal', 'blue_sky', 'phoenix_blaze', 'cat_neko', 'robo_mecha', 'astro_space', 'dragon_pyro', 'fox_kitsune', 'bear_grizzly', 'frog_ninja', 'panda_zen', 'lion_brave', 'bunny_cotton', 'duck_bubble', 'tiger_savage', 'owl_wisdom', 'shark_apex'];
+      const BOT_SKINS = ['classic', 'blue', 'pink', 'gold', 'stealth', 'rainbow', 'neon', 'fire', 'ice', 'cyber', 'matrix', 'galaxy', 'toxic', 'lava', 'phantom', 'sunset', 'inferno', 'void', 'aurora', 'obsidian'];
+      const BOT_HATS = ['none', 'none', 'crown', 'viking', 'wizard', 'halo', 'pirate', 'ninja', 'cap', 'chef', 'cyber_helm', 'horns', 'tophat', 'beanie', 'samurai'];
+      const BOT_OUTFITS = ['none', 'none', 'tuxedo', 'cape', 'armor', 'hoodie', 'cyber_suit', 'ninja_gi', 'hero_suit', 'jacket', 'kimono'];
+      const BOT_TIERS = ['BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'SUPREME'];
+
+      const p = BOT_PREFIXES[Math.floor(Math.random() * BOT_PREFIXES.length)];
+      const s = BOT_SUFFIXES[Math.floor(Math.random() * BOT_SUFFIXES.length)];
+      const num = Math.random() < 0.4 ? '_' + Math.floor(10 + Math.random() * 90) : (Math.random() < 0.2 ? '_ID' : '');
+      const botName = p + (Math.random() < 0.3 ? '_' : '') + s + num;
+      const botAvatar = BOT_AVATARS[Math.floor(Math.random() * BOT_AVATARS.length)];
+      const botSkin = BOT_SKINS[Math.floor(Math.random() * BOT_SKINS.length)];
+      const botHat = BOT_HATS[Math.floor(Math.random() * BOT_HATS.length)];
+      const botOutfit = BOT_OUTFITS[Math.floor(Math.random() * BOT_OUTFITS.length)];
+      const botTier = BOT_TIERS[Math.floor(Math.random() * BOT_TIERS.length)];
       const botId = 'BOT-' + Math.floor(100 + Math.random() * 900);
 
       const fakeOpponent = {
         id: botId,
-        name: bot.name,
-        avatar: bot.avatar,
-        skin: bot.skin,
+        name: botName,
+        avatar: botAvatar,
+        skin: botSkin,
+        hat: botHat,
+        outfit: botOutfit,
+        tier: botTier,
         isReady: true,
         isHost: false
       };
@@ -536,13 +545,16 @@
       this.setSeed(seed);
       this.opponents.clear();
 
-      // Bot Skill Configuration
-      const targetMaxScore = Math.floor(12 + Math.random() * 26); // Bot will play well up to 12-38 points
+      // Bot Skill Configuration (Bisa kalah di skor antara 4 s/d 25 poin)
+      const targetMaxScore = Math.floor(4 + Math.random() * 22);
       this.opponents.set(fakeOpponent.id, {
         id: fakeOpponent.id,
         name: fakeOpponent.name,
         avatar: fakeOpponent.avatar,
         skin: fakeOpponent.skin,
+        hat: fakeOpponent.hat,
+        outfit: fakeOpponent.outfit,
+        tier: fakeOpponent.tier,
         y: 280,
         vy: 0,
         rot: 0,
@@ -553,7 +565,9 @@
         lastUpdate: Date.now(),
         isSimulatedBot: true,
         botTargetScore: targetMaxScore,
-        botFlapCooldown: 0
+        botFlapCooldown: 0,
+        shouldFail: false,
+        wing: 0
       });
 
       this.emit('match_found', {
@@ -632,10 +646,21 @@
     // Update & Lerp positions of rival birds every animation frame
     updateOpponents(dt, activePipes = []) {
       this.opponents.forEach(op => {
-        if (!op.isAlive) return;
+        if (!op.isAlive) {
+          // Fall to ground if dead
+          if (op.targetY < 540) {
+            op.vy = (op.vy || 0) + 850 * dt;
+            op.targetY += op.vy * dt;
+            op.rot = Math.min(1.5, (op.rot || 0) + 4 * dt);
+            op.y = op.targetY;
+          }
+          return;
+        }
 
-        // If simulated bot, simulate intelligent human-like flapping
+        // If simulated bot, simulate intelligent human-like flapping with mistake chance
         if (op.isSimulatedBot && this.matchStatus === 'PLAYING') {
+          op.wing = (op.wing || 0) + dt * 14;
+
           // Find next approaching pipe
           let nextPipe = null;
           if (activePipes && activePipes.length > 0) {
@@ -651,8 +676,8 @@
 
           op.botFlapCooldown = (op.botFlapCooldown || 0) - dt;
 
-          // Check if bot should die (exceeded target skill level or hit ground)
-          if ((op.score || 0) >= (op.botTargetScore || 20) && Math.random() < 0.04) {
+          // Cek apakah bot melakukan kesalahan / mencapai batas kemampuannya
+          if ((op.score || 0) >= (op.botTargetScore || 15)) {
             op.shouldFail = true;
           }
 
@@ -669,13 +694,13 @@
           op.targetY = (op.targetY || 250) + op.vy * dt;
           op.rot = Math.max(-0.4, Math.min(1.2, op.vy * 0.003));
 
-          // Ceiling & Floor checks
-          if (op.targetY < 35) {
-            op.targetY = 35;
-            op.vy = 50;
+          // Ceiling & Floor collision checks
+          if (op.targetY < 30) {
+            op.targetY = 30;
+            op.vy = 60;
           }
-          if (op.targetY > 525) {
-            op.targetY = 525;
+          if (op.targetY > 520) {
+            op.targetY = 520;
             op.isAlive = false;
             this.emit('opponent_died', { playerId: op.id, finalScore: op.score || 0 });
           }
@@ -687,82 +712,58 @@
       });
     }
 
-    // Render opponent birds onto canvas with ghostly aesthetics & player nametag
+    // Render opponent birds onto canvas with custom skins, hats, outfits & nametag
     renderOpponents(ctx, birdX = 90) {
       if (this.opponents.size === 0) return;
 
       this.opponents.forEach(op => {
-        if (!op.isAlive && op.y >= 530) return;
+        if (!op.isAlive && op.y >= 540) return;
 
-        ctx.save();
-        ctx.translate(birdX, op.y);
-        ctx.rotate(op.rot || 0);
-
-        // Ghostly Semi-transparent Rival Glow
-        ctx.globalAlpha = op.isAlive ? 0.78 : 0.35;
-
-        // Rival Bird Body
-        ctx.fillStyle = op.isAlive ? '#f43f5e' : '#64748b';
-        ctx.beginPath();
-        ctx.ellipse(0, 0, 16, 12, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = '#ffe4e6';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        // Eye
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.arc(7, -4, 4.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#0f172a';
-        ctx.beginPath();
-        ctx.arc(8.5, -4, 2, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Beak
-        ctx.fillStyle = '#f59e0b';
-        ctx.beginPath();
-        ctx.moveTo(14, -2);
-        ctx.lineTo(22, 1);
-        ctx.lineTo(14, 5);
-        ctx.closePath();
-        ctx.fill();
-
-        // Wing
-        ctx.fillStyle = '#e11d48';
-        ctx.beginPath();
-        ctx.ellipse(-5, 1, 8, 5, -0.2, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Dash trail if active
-        if (op.isDashing) {
-          ctx.fillStyle = '#38bdf8';
+        // Render full cosmetics using window.renderCustomBird if available
+        if (typeof window.renderCustomBird === 'function') {
+          ctx.save();
+          window.renderCustomBird(ctx, {
+            x: birdX,
+            y: op.y,
+            vy: op.vy || 0,
+            angle: op.rot || 0,
+            skinId: op.skin || 'classic',
+            hatId: op.hat || 'none',
+            outfitId: op.outfit || 'none',
+            opacity: op.isAlive ? 0.85 : 0.4
+          });
+          ctx.restore();
+        } else {
+          // Fallback custom renderer
+          ctx.save();
+          ctx.translate(birdX, op.y);
+          ctx.rotate(op.rot || 0);
+          ctx.globalAlpha = op.isAlive ? 0.85 : 0.4;
+          ctx.fillStyle = op.isAlive ? '#f43f5e' : '#64748b';
           ctx.beginPath();
-          ctx.arc(-22, 0, 8, 0, Math.PI * 2);
+          ctx.ellipse(0, 0, 16, 12, 0, 0, Math.PI * 2);
           ctx.fill();
+          ctx.restore();
         }
-
-        ctx.restore();
 
         // Opponent Name Tag & Live Score above head
         ctx.save();
-        ctx.font = 'bold 9px "Trebuchet MS", Arial, sans-serif';
+        ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
         ctx.textAlign = 'center';
         
         // Name pill
         const tagText = `${op.name} (${op.score || 0} pts)`;
         const textWidth = ctx.measureText(tagText).width;
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
         ctx.beginPath();
-        ctx.roundRect(birdX - textWidth/2 - 6, op.y - 30, textWidth + 12, 14, 4);
+        ctx.roundRect(birdX - textWidth/2 - 6, op.y - 32, textWidth + 12, 15, 4);
         ctx.fill();
         ctx.strokeStyle = op.isAlive ? '#f43f5e' : '#94a3b8';
         ctx.lineWidth = 1;
         ctx.stroke();
 
         ctx.fillStyle = op.isAlive ? '#fecdd3' : '#94a3b8';
-        ctx.fillText(tagText, birdX, op.y - 19);
+        ctx.fillText(tagText, birdX, op.y - 21);
         ctx.restore();
       });
     }
