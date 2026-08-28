@@ -8548,7 +8548,14 @@
       // Reward player
       progress.coins = (progress.coins || 0) + 50;
       updateCoins();
-      audio.win();
+      audio.stopMusic();
+      stopBackgroundMusic();
+      if(settings.sound) {
+        audio.playTone(523.25, 0.12, 'triangle', 0.08, 0);
+        setTimeout(() => audio.playTone(659.25, 0.12, 'triangle', 0.08, 0), 110);
+        setTimeout(() => audio.playTone(783.99, 0.12, 'triangle', 0.08, 0), 220);
+        setTimeout(() => audio.playTone(1046.50, 0.45, 'triangle', 0.10, 0), 330);
+      }
     } else {
       if(el.mpOverBadge) {
         el.mpOverBadge.className = 'mp-over-badge defeat';
@@ -8562,7 +8569,14 @@
 
       progress.coins = (progress.coins || 0) + 10;
       updateCoins();
-      audio.hit();
+      audio.stopMusic();
+      stopBackgroundMusic();
+      if(settings.sound) {
+        audio.playTone(392.00, 0.15, 'sawtooth', 0.06, 0);
+        setTimeout(() => audio.playTone(349.23, 0.18, 'sawtooth', 0.06, 0), 140);
+        setTimeout(() => audio.playTone(311.13, 0.22, 'sawtooth', 0.07, 0), 300);
+        setTimeout(() => audio.playTone(261.63, 0.42, 'sawtooth', 0.08, 0), 480);
+      }
     }
 
     showModal(el.mpOverModal);

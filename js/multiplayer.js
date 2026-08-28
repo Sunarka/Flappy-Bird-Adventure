@@ -693,22 +693,44 @@
           op.vy = (op.vy || 0) + 820 * dt;
           op.targetY = (op.targetY || 250) + op.vy * dt;
           op.rot = Math.max(-0.4, Math.min(1.2, op.vy * 0.003));
+          op.y = op.targetY;
 
-          // Ceiling & Floor collision checks
-          if (op.targetY < 30) {
-            op.targetY = 30;
-            op.vy = 60;
+          // 1. PIPE COLLISION DETECTION FOR BOT (Mati jika menabrak tiang atas / bawah)
+          const botX = 90;
+          const botR = 12;
+          if (activePipes && activePipes.length > 0) {
+            for (const p of activePipes) {
+              // Check if bot is inside the pipe's horizontal span
+              if (botX + botR > p.x && botX - botR < p.x + p.w) {
+                // Check if bot hit the top pipe or bottom pipe
+                if (op.y - botR < p.gapY || op.y + botR > p.gapY + p.gapSize) {
+                  op.isAlive = false;
+                  op.vy = 120;
+                  this.emit('opponent_died', { playerId: op.id, finalScore: op.score || 0 });
+                  return;
+                }
+              }
+            }
+          }
+
+          // 2. Ceiling & Floor collision checks
+          if (op.targetY < 25) {
+            op.targetY = 25;
+            op.vy = 80;
           }
           if (op.targetY > 520) {
             op.targetY = 520;
             op.isAlive = false;
             this.emit('opponent_died', { playerId: op.id, finalScore: op.score || 0 });
+            return;
           }
         }
 
-        // Smooth Lerp target position
-        const lerpFactor = Math.min(1, dt * 14);
-        op.y = op.y + (op.targetY - op.y) * lerpFactor;
+        // Smooth Lerp target position for human opponents
+        if (!op.isSimulatedBot) {
+          const lerpFactor = Math.min(1, dt * 14);
+          op.y = op.y + (op.targetY - op.y) * lerpFactor;
+        }
       });
     }
 
