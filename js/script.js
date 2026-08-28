@@ -33,12 +33,10 @@
     gpChangeAvatarBtn:$('gpChangeAvatarBtn'), gpGamerTagInput:$('gpGamerTagInput'), gpNameCostHint:$('gpNameCostHint'), gpTierBadge:$('gpTierBadge'),
     gpRankedBest:$('gpRankedBest'), gpAuthActionBtn:$('gpAuthActionBtn'), gpSwitchAccountBtn:$('gpSwitchAccountBtn'),
     googleSignInPrompt:$('googleSignInPrompt'), googleProfileCard:$('googleProfileCard'),
-    googlePlaySignInBtn:$('googlePlaySignInBtn'), googlePlayBtnText:$('googlePlayBtnText'),
     googleSignInBtn:$('googleSignInBtn'), googleSignInBtnText:$('googleSignInBtnText'),
     facebookSignInBtn:$('facebookSignInBtn'), facebookSignInBtnText:$('facebookSignInBtnText'),
     guestSignInBtn:$('guestSignInBtn'),
     gpUserEmail:$('gpUserEmail'), gpSignOutBtn:$('gpSignOutBtn'),
-    gpWelcomeToast:$('gpWelcomeToast'), gpToastName:$('gpToastName'), gpToastAvatar:$('gpToastAvatar'),
     avatarPickerModal:$('avatarPickerModal'), avatarPickerGrid:$('avatarPickerGrid'),
     rankedModal:$('rankedModal'), championCanvas:$('championCanvas'), championGamerTag:$('championGamerTag'),
     championScore:$('championScore'), championTier:$('championTier'), championLoadoutTags:$('championLoadoutTags'),
@@ -8522,35 +8520,6 @@
   bindClick(el.gpChangeAvatarBtn, openAvatarPicker);
   bindClick(el.gpAvatarWrap, openAvatarPicker);
 
-  let welcomeToastTimer = null;
-  function triggerPlayGamesWelcomeToast(name, avatar, provider = 'play_games') {
-    if(!el.gpWelcomeToast) return;
-    if(el.gpToastName) el.gpToastName.textContent = name || 'Gamer';
-    if(el.gpToastAvatar) el.gpToastAvatar.innerHTML = getCuteAvatarSvg(avatar || gpProfile.avatar || 'chick_yellow', 32);
-    
-    const titleElem = el.gpWelcomeToast.querySelector('.gp-toast-title');
-    if(titleElem) {
-      if(provider === 'facebook') titleElem.textContent = 'Facebook • Terhubung';
-      else if(provider === 'google') titleElem.textContent = 'Google • Terhubung';
-      else titleElem.textContent = 'Play Games • Terhubung';
-    }
-
-    if(welcomeToastTimer) clearTimeout(welcomeToastTimer);
-    el.gpWelcomeToast.classList.remove('hidden');
-    void el.gpWelcomeToast.offsetWidth;
-    el.gpWelcomeToast.classList.add('show');
-    audio.win();
-
-    welcomeToastTimer = setTimeout(() => {
-      if(el.gpWelcomeToast) {
-        el.gpWelcomeToast.classList.remove('show');
-        setTimeout(() => {
-          if(el.gpWelcomeToast) el.gpWelcomeToast.classList.add('hidden');
-        }, 500);
-      }
-    }, 4000);
-  }
-
   function handleAuthError(err, providerName) {
     if(!err) return;
     console.warn(`[${providerName} Sign-In notice]:`, err.code, err.message);
@@ -8561,35 +8530,6 @@
       alert(`Pemberitahuan Firebase Auth:\n\nLogin ${providerName} belum diaktifkan di Firebase Console.\n\nCara mengaktifkan:\n1. Buka console.firebase.google.com\n2. Buka menu Authentication > Sign-in method\n3. Klik "${providerName}", lalu pilih Enable dan Simpan.\n\nTips: Anda juga bisa klik "MASUK SEBAGAI TAMU" untuk langsung bermain sekarang!`);
     } else if(err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
       alert(`Info ${providerName} Login: ` + (err.message || `Gagal terhubung ke akun ${providerName}. Pastikan internet aktif.`));
-    }
-  }
-
-  async function performGooglePlaySignIn() {
-    if(el.googlePlayBtnText) el.googlePlayBtnText.textContent = 'MENGHUBUNGKAN PLAY GAMES...';
-    try {
-      if(!window.FirebaseLeaderboard || typeof window.FirebaseLeaderboard.signInWithGooglePlay !== 'function') {
-        throw new Error('Firebase Auth Service belum siap');
-      }
-      const user = await window.FirebaseLeaderboard.signInWithGooglePlay();
-      if(user) {
-        gpProfile.isLoggedIn = true;
-        gpProfile.isGoogle = true;
-        gpProfile.authProvider = 'play_games';
-        gpProfile.email = user.email || 'PlayGames User';
-        gpProfile.googleUid = user.uid;
-        if(user.displayName) {
-          gpProfile.gamerTag = user.displayName.slice(0, 16);
-        } else if(user.email) {
-          gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
-        }
-        saveGPProfile();
-        syncGPProfileUI();
-        triggerPlayGamesWelcomeToast(gpProfile.gamerTag, gpProfile.avatar, 'play_games');
-      }
-    } catch(err) {
-      handleAuthError(err, 'Google Play Games');
-    } finally {
-      if(el.googlePlayBtnText) el.googlePlayBtnText.textContent = 'LOGIN GOOGLE PLAY GAMES';
     }
   }
 
@@ -8612,8 +8552,8 @@
           gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
         }
         saveGPProfile();
+        audio.win();
         syncGPProfileUI();
-        triggerPlayGamesWelcomeToast(gpProfile.gamerTag, gpProfile.avatar, 'google');
       }
     } catch(err) {
       handleAuthError(err, 'Google');
@@ -8641,8 +8581,8 @@
           gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
         }
         saveGPProfile();
+        audio.win();
         syncGPProfileUI();
-        triggerPlayGamesWelcomeToast(gpProfile.gamerTag, gpProfile.avatar, 'facebook');
       }
     } catch(err) {
       handleAuthError(err, 'Facebook');
@@ -8650,11 +8590,6 @@
       if(el.facebookSignInBtnText) el.facebookSignInBtnText.textContent = 'LOGIN DENGAN FACEBOOK';
     }
   }
-
-  bindClick(el.googlePlaySignInBtn, () => {
-    audio.click();
-    performGooglePlaySignIn();
-  });
 
   bindClick(el.googleSignInBtn, () => {
     audio.click();
