@@ -3166,7 +3166,7 @@
       const name = (p.name && typeof p.name === 'string') ? p.name.slice(0, 16) : 'Player';
       let av = p.avatar;
       // Jika dummy player atau avatar tidak dikenal, berikan avatar acak dari koleksi PP lucu
-      if(!p.isUser && (!av || !cuteAvatars[av])) {
+      if(!p.isUser && (!av || !cuteAvatarKeys.includes(av))) {
         av = cuteAvatarKeys[idx % cuteAvatarKeys.length];
       }
       return {
