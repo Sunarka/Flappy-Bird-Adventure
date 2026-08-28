@@ -9924,6 +9924,7 @@
 
   bindClick(el.mpQuickFindBtn, () => {
     audio.click();
+    startSearchingRadar();
     if(window.multiplayerEngine) {
       window.multiplayerEngine.quickMatch({
         name: gpProfile.gamerTag || 'SkyPlayer',

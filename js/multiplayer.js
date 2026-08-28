@@ -658,8 +658,8 @@
         this.send({ type: 'QUICK_MATCH', profile: this.myProfile });
       }
 
-      // Auto-Bot Fallback Timer: Random 6 sampai 12 detik jika belum ada lawan pemain asli, masukkan AI Bot!
-      const botWaitMs = Math.floor(6000 + Math.random() * 6000); // 6s - 12s
+      // Auto-Bot Fallback Timer: Random 7 sampai 11 detik jika belum ada pemain online asli, mulai dengan AI Bot!
+      const botWaitMs = Math.floor(7000 + Math.random() * 4000); // 7s - 11s
       if (this.botFallbackTimer) clearTimeout(this.botFallbackTimer);
       this.botFallbackTimer = setTimeout(() => {
         if (this.matchStatus === 'QUEUED') {
