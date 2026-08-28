@@ -64,7 +64,9 @@
     multiplayerModal:$('multiplayerModal'), mpServerStatusText:$('mpServerStatusText'),
     mpTabQuickBtn:$('mpTabQuickBtn'), mpTabCreateBtn:$('mpTabCreateBtn'), mpTabJoinBtn:$('mpTabJoinBtn'),
     mpViewQuick:$('mpViewQuick'), mpViewCreate:$('mpViewCreate'), mpViewJoin:$('mpViewJoin'),
-    mpQuickFindBtn:$('mpQuickFindBtn'), mpCreatedCodeBadge:$('mpCreatedCodeBadge'), mpCopyCodeBtn:$('mpCopyCodeBtn'),
+    mpQuickFindBtn:$('mpQuickFindBtn'), mpQuickInitialBox:$('mpQuickInitialBox'), mpQuickSearchingBox:$('mpQuickSearchingBox'),
+    mpModalSearchTimer:$('mpModalSearchTimer'), mpModalCancelSearchBtn:$('mpModalCancelSearchBtn'),
+    mpCreatedCodeBadge:$('mpCreatedCodeBadge'), mpCopyCodeBtn:$('mpCopyCodeBtn'),
     mpHostAvatar:$('mpHostAvatar'), mpHostName:$('mpHostName'), mpGuestSlotCard:$('mpGuestSlotCard'),
     mpGuestAvatar:$('mpGuestAvatar'), mpGuestName:$('mpGuestName'), mpHostStartGameBtn:$('mpHostStartGameBtn'),
     mpGuestReadyBtn:$('mpGuestReadyBtn'), mpGuestStatusBadge:$('mpGuestStatusBadge'),
@@ -9554,21 +9556,27 @@
   let mpSearchStartTime = 0;
 
   function startSearchingRadar() {
-    closeModal();
+    // 1. Tampilkan floating notification bar di atas
     if(el.mpSearchingBar) {
       el.mpSearchingBar.classList.remove('hidden');
     }
+
+    // 2. Tampilkan radar visual interaktif langsung di dalam modal Quick Match
+    if(el.mpQuickInitialBox) el.mpQuickInitialBox.classList.add('hidden');
+    if(el.mpQuickSearchingBox) el.mpQuickSearchingBox.classList.remove('hidden');
+
     mpSearchStartTime = Date.now();
     if(mpSearchInterval) clearInterval(mpSearchInterval);
     mpSearchInterval = setInterval(() => {
       const elapsedSec = Math.floor((Date.now() - mpSearchStartTime) / 1000);
       const mm = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
       const ss = String(elapsedSec % 60).padStart(2, '0');
-      if(el.mpSearchTimerText) {
-        el.mpSearchTimerText.textContent = `${mm}:${ss}`;
-      }
+      const timeStr = `${mm}:${ss}`;
+      if(el.mpSearchTimerText) el.mpSearchTimerText.textContent = timeStr;
+      if(el.mpModalSearchTimer) el.mpModalSearchTimer.textContent = timeStr;
     }, 1000);
     if(el.mpSearchTimerText) el.mpSearchTimerText.textContent = '00:00';
+    if(el.mpModalSearchTimer) el.mpModalSearchTimer.textContent = '00:00';
   }
 
   function stopSearchingRadar() {
@@ -9579,6 +9587,8 @@
     if(el.mpSearchingBar) {
       el.mpSearchingBar.classList.add('hidden');
     }
+    if(el.mpQuickSearchingBox) el.mpQuickSearchingBox.classList.add('hidden');
+    if(el.mpQuickInitialBox) el.mpQuickInitialBox.classList.remove('hidden');
   }
 
   let versusClashTimer = null;
@@ -9867,6 +9877,14 @@
     }
     showModal(el.mpModal);
     switchMpTab('quick');
+  });
+
+  bindClick(el.mpModalCancelSearchBtn, () => {
+    audio.click();
+    stopSearchingRadar();
+    if(window.multiplayerEngine) {
+      window.multiplayerEngine.cancelMatch();
+    }
   });
 
   bindClick(el.mpRematchBtn, () => {
