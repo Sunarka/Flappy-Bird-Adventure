@@ -58,7 +58,7 @@
     tierRoadmapModal:$('tierRoadmapModal'), modalMyTierCard:$('modalMyTierCard'),
     gameDialogModal:$('gameDialogModal'), dialogIconWrap:$('dialogIconWrap'), dialogTitle:$('dialogTitle'),
     dialogBody:$('dialogBody'), dialogActions:$('dialogActions'), dialogConfirmBtn:$('dialogConfirmBtn'), dialogCancelBtn:$('dialogCancelBtn'),
-    modeMultiplayerBtn:$('modeMultiplayerBtn'), menuMultiplayerCard:$('menuMultiplayerCard'),
+    modeMultiplayerBtn:$('modeMultiplayerBtn'),
     mpBattleHud:$('mpBattleHud'), mpMyHudName:$('mpMyHudName'), mpMyHudScore:$('mpMyHudScore'),
     mpRivalHudName:$('mpRivalHudName'), mpRivalHudScore:$('mpRivalHudScore'),
     multiplayerModal:$('multiplayerModal'), mpServerStatusText:$('mpServerStatusText'),
@@ -3101,10 +3101,6 @@
     if(el.rankedLeaderboardBtn) {
       el.rankedLeaderboardBtn.classList.toggle('hidden', mode !== 'ranked');
       el.rankedLeaderboardBtn.style.display = mode === 'ranked' ? 'flex' : 'none';
-    }
-
-    if(el.menuMultiplayerCard) {
-      el.menuMultiplayerCard.classList.toggle('hidden', mode !== 'multiplayer');
     }
 
     updateMenuRankedUI();
@@ -9303,11 +9299,6 @@
 
   bindClick(el.modeMultiplayerBtn, () => {
     setMode('multiplayer');
-  });
-
-  bindClick(el.menuMultiplayerCard, () => {
-    audio.click();
-    showModal(el.multiplayerModal);
   });
 
   bindClick(el.mpTabQuickBtn, () => { audio.click(); switchMpTab('quick'); });
