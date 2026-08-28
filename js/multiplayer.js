@@ -422,53 +422,187 @@
       }
     }
 
+    initFirestore() {
+      if (typeof firebase !== 'undefined' && firebase.firestore) {
+        try {
+          this.fs = firebase.firestore();
+        } catch(_) {}
+      }
+    }
+
+    listenToRoomDoc(docRef) {
+      if (this.roomUnsubscribe) {
+        this.roomUnsubscribe();
+        this.roomUnsubscribe = null;
+      }
+      this.roomUnsubscribe = docRef.onSnapshot(snap => {
+        if (!snap.exists) return;
+        const data = snap.data();
+        const isHost = this.currentRoom && this.currentRoom.isHost;
+
+        // 1. Guest Joined Event
+        if (isHost && data.guest && (!this.currentRoom.playersList || this.currentRoom.playersList.length < 2)) {
+          this.currentRoom.playersList = [this.myProfile, data.guest];
+          this.opponents.set(data.guest.id, {
+            id: data.guest.id,
+            name: data.guest.name,
+            avatar: data.guest.avatar,
+            skin: data.guest.skin,
+            hat: data.guest.hat,
+            outfit: data.guest.outfit,
+            tier: data.guest.tier || 'GOLD',
+            y: 280, vy: 0, rot: 0, score: 0, lives: 3, isAlive: true, isDashing: false, targetY: 280, lastUpdate: Date.now()
+          });
+          this.emit('player_joined', { player: data.guest, playersList: this.currentRoom.playersList });
+        }
+
+        // 2. Game Starting Event
+        if (data.status === 'PLAYING' && this.matchStatus !== 'COUNTDOWN' && this.matchStatus !== 'PLAYING') {
+          this.setSeed(data.seed);
+          this.matchStatus = 'COUNTDOWN';
+          const rival = isHost ? data.guest : data.host;
+          this.emit('game_starting', {
+            seed: data.seed,
+            countdown: 3,
+            opponent: rival,
+            playersList: [data.host, data.guest]
+          });
+        }
+
+        // 3. Opponent State Sync
+        const opponentState = isHost ? data.guestState : data.hostState;
+        if (opponentState && opponentState.time && (this.matchStatus === 'PLAYING' || this.matchStatus === 'COUNTDOWN')) {
+          this.updateOpponentState(opponentState);
+        }
+
+        // 4. Opponent Died Event
+        const opponentDeath = isHost ? data.guestDeath : data.hostDeath;
+        if (opponentDeath && opponentDeath.time && this.matchStatus === 'PLAYING') {
+          this.emit('opponent_died', { playerId: opponentDeath.playerId, finalScore: opponentDeath.finalScore });
+        }
+      }, err => {
+        console.warn('[MP Firestore Listener Warning]:', err);
+      });
+    }
+
     // Public Actions
     createRoom(profile) {
       this.myProfile = { ...profile, id: this.localPlayerId };
+      this.initFirestore();
+
+      const code = Math.floor(1000 + Math.random() * 9000).toString();
+      const seed = Math.floor(Math.random() * 1000000);
+      this.currentRoom = {
+        roomId: 'room_' + code,
+        code,
+        seed,
+        isHost: true,
+        playersList: [this.myProfile]
+      };
+      this.matchStatus = 'IN_ROOM';
+      this.setSeed(seed);
+      this.opponents.clear();
+
+      // 1. Sync via Firestore for Universal Instant Device Pairing
+      if (this.fs) {
+        const roomDoc = {
+          code,
+          roomId: 'room_' + code,
+          seed,
+          host: this.myProfile,
+          guest: null,
+          status: 'LOBBY',
+          createdAt: Date.now(),
+          lastActive: Date.now()
+        };
+        const docRef = this.fs.collection('flappy_mp_rooms').doc(code);
+        docRef.set(roomDoc).catch(e => console.warn('[Firestore MP Create Error]:', e));
+        this.listenToRoomDoc(docRef);
+      }
+
+      // 2. Sync via Cloudflare Worker
       if (this.isConnected) {
-        this.send({ type: 'CREATE_ROOM', profile: this.myProfile });
-      } else {
-        // Local Broadcast Fallback
-        const code = Math.floor(1000 + Math.random() * 9000).toString();
-        const seed = Math.floor(Math.random() * 1000000);
-        this.currentRoom = {
-          roomId: 'local_' + code,
+        this.send({ type: 'CREATE_ROOM', profile: this.myProfile, code });
+      }
+
+      // 3. Local Broadcast Fallback
+      if (this.bc) {
+        this.bc.postMessage({
+          type: 'BC_ROOM_ANNOUNCE',
+          roomId: this.currentRoom.roomId,
           code,
           seed,
-          isHost: true,
-          playersList: [this.myProfile]
-        };
-        this.matchStatus = 'IN_ROOM';
-        this.setSeed(seed);
-        this.opponents.clear();
-
-        // Broadcast to other tabs
-        if (this.bc) {
-          this.bc.postMessage({
-            type: 'BC_ROOM_ANNOUNCE',
-            roomId: this.currentRoom.roomId,
-            code,
-            seed,
-            hostProfile: this.myProfile
-          });
-        }
-        this.emit('room_created', this.currentRoom);
+          hostProfile: this.myProfile
+        });
       }
+
+      this.emit('room_created', this.currentRoom);
     }
 
     joinRoom(code, profile) {
       this.myProfile = { ...profile, id: this.localPlayerId };
+      this.initFirestore();
+
       const cleanCode = (code || '').toString().trim();
       if (!cleanCode) {
         this.emit('error', 'Masukkan 4-digit kode room!');
         return;
       }
 
+      this.matchStatus = 'JOINING';
+
+      // 1. Check & Join via Firestore
+      if (this.fs) {
+        const docRef = this.fs.collection('flappy_mp_rooms').doc(cleanCode);
+        docRef.get().then(doc => {
+          if (doc.exists) {
+            const data = doc.data();
+            if (data.status === 'LOBBY') {
+              this.currentRoom = {
+                roomId: data.roomId,
+                code: cleanCode,
+                seed: data.seed,
+                isHost: false,
+                playersList: [data.host, this.myProfile]
+              };
+              this.matchStatus = 'IN_ROOM';
+              this.setSeed(data.seed);
+              this.opponents.set(data.host.id, {
+                id: data.host.id,
+                name: data.host.name,
+                avatar: data.host.avatar,
+                skin: data.host.skin,
+                hat: data.host.hat,
+                outfit: data.host.outfit,
+                tier: data.host.tier || 'GOLD',
+                y: 280, vy: 0, rot: 0, score: 0, lives: 3, isAlive: true, isDashing: false, targetY: 280, lastUpdate: Date.now()
+              });
+              docRef.update({
+                guest: this.myProfile,
+                lastActive: Date.now()
+              });
+              this.listenToRoomDoc(docRef);
+              this.emit('room_joined', this.currentRoom);
+              return;
+            } else {
+              this.emit('error', 'Room #' + cleanCode + ' sudah memulai pertandingan!');
+              return;
+            }
+          }
+          // If not found in Firestore, fallback to Cloudflare/Local
+          this.fallbackJoin(cleanCode);
+        }).catch(() => {
+          this.fallbackJoin(cleanCode);
+        });
+      } else {
+        this.fallbackJoin(cleanCode);
+      }
+    }
+
+    fallbackJoin(cleanCode) {
       if (this.isConnected) {
         this.send({ type: 'JOIN_ROOM', code: cleanCode, profile: this.myProfile });
       } else {
-        // Local Broadcast Fallback
-        this.matchStatus = 'JOINING';
         this.pendingJoinCode = cleanCode;
         if (this.bc) {
           this.bc.postMessage({
@@ -480,7 +614,7 @@
         setTimeout(() => {
           if (this.matchStatus === 'JOINING') {
             this.matchStatus = 'IDLE';
-            this.emit('error', 'Room ' + cleanCode + ' tidak ditemukan (Pastikan tab host aktif)!');
+            this.emit('error', 'Room #' + cleanCode + ' tidak ditemukan! Pastikan kode benar.');
           }
         }, 1500);
       }
@@ -643,20 +777,43 @@
       this.setSeed(seed);
       this.matchStatus = 'COUNTDOWN';
 
+      // 1. Sync via Firestore
+      if (this.fs && this.currentRoom.code) {
+        this.fs.collection('flappy_mp_rooms').doc(this.currentRoom.code).update({
+          status: 'PLAYING',
+          seed,
+          startAt: Date.now(),
+          lastActive: Date.now()
+        }).catch(e => console.warn('[Firestore Start Game Error]:', e));
+      }
+
+      // 2. Sync via Cloudflare Worker
       if (this.isConnected) {
         this.send({ type: 'START_GAME' });
-      } else if (this.bc) {
+      }
+
+      // 3. Local Broadcast
+      if (this.bc) {
         this.bc.postMessage({
           type: 'BC_GAME_START',
           roomId: this.currentRoom.roomId,
           seed,
           countdown: 3
         });
-        this.emit('game_starting', { seed, countdown: 3 });
       }
+
+      const rival = this.opponents.values().next().value || { name: 'Rival', avatar: 'robo_mecha' };
+      this.emit('game_starting', { seed, countdown: 3, opponent: rival });
     }
 
     leaveRoom() {
+      if (this.roomUnsubscribe) {
+        this.roomUnsubscribe();
+        this.roomUnsubscribe = null;
+      }
+      if (this.fs && this.currentRoom && this.currentRoom.code && this.currentRoom.isHost) {
+        this.fs.collection('flappy_mp_rooms').doc(this.currentRoom.code).delete().catch(() => {});
+      }
       this.matchStatus = 'IDLE';
       this.currentRoom = null;
       this.opponents.clear();
@@ -678,10 +835,21 @@
         lives: birdState.lives !== undefined ? birdState.lives : 3,
         isAlive: birdState.isAlive !== false,
         isDashing: !!birdState.isDashing,
-        t: Date.now()
+        time: Date.now()
       };
 
       this.send(payload);
+
+      // Debounced Firestore Relay Sync for cross-network perfection
+      const now = Date.now();
+      if (this.currentRoom && this.fs && this.currentRoom.code && (now - (this.lastStateBroadcastTime || 0) > 85)) {
+        this.lastStateBroadcastTime = now;
+        const stateKey = this.currentRoom.isHost ? 'hostState' : 'guestState';
+        this.fs.collection('flappy_mp_rooms').doc(this.currentRoom.code).update({
+          [stateKey]: payload,
+          lastActive: now
+        }).catch(() => {});
+      }
     }
 
     broadcastMyDeath(finalScore) {
