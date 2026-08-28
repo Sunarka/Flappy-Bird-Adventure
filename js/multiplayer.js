@@ -487,13 +487,14 @@
         this.send({ type: 'QUICK_MATCH', profile: this.myProfile });
       }
 
-      // Auto-Bot Fallback Timer: Tepat setelah 10 detik belum ada lawan pemain asli, masukkan AI Bot!
+      // Auto-Bot Fallback Timer: Random 6 sampai 12 detik jika belum ada lawan pemain asli, masukkan AI Bot!
+      const botWaitMs = Math.floor(6000 + Math.random() * 6000); // 6s - 12s
       if (this.botFallbackTimer) clearTimeout(this.botFallbackTimer);
       this.botFallbackTimer = setTimeout(() => {
         if (this.matchStatus === 'QUEUED') {
           this.spawnBotMatch();
         }
-      }, 10000);
+      }, botWaitMs);
     }
 
     spawnBotMatch() {
@@ -804,7 +805,53 @@
             }
           }
 
-          // Update Bot Baby Birds Position Following Behind
+          // 3. Bot Power-up Collection (Bot bisa mengambil power-up di celah tiang)
+          if (activePowerups && activePowerups.length > 0 && op.isAlive) {
+            for (let i = activePowerups.length - 1; i >= 0; i--) {
+              const p = activePowerups[i];
+              if (!p || p.dead) continue;
+              const dx = botX - p.x;
+              const dy = op.y - p.y;
+              const dist = Math.hypot(dx, dy);
+              if (dist < (p.r || 15) + 14) {
+                if (p.type === 'shield' || p.type === 'double_shield') {
+                  op.hasShield = true;
+                } else if (p.type === 'heart') {
+                  op.lives = Math.min(3, (op.lives || 3) + 1);
+                } else if (p.type === 'star' || p.type === 'rocket') {
+                  op.graceTimer = 2.5;
+                }
+                p.dead = true;
+                p.x = -999;
+                activePowerups.splice(i, 1);
+                this.emit('opponent_state', {
+                  playerId: op.id,
+                  y: op.y, vy: op.vy, rot: op.rot,
+                  score: op.score || 0,
+                  isAlive: true,
+                  lives: op.lives
+                });
+              }
+            }
+          }
+
+          // 4. Bot Dash Ability Execution
+          op.dashCooldown = (op.dashCooldown || 4.5) - dt;
+          if (op.dashTimer > 0) {
+            op.dashTimer -= dt;
+            if (op.dashTimer <= 0) op.isDashing = false;
+          }
+          if (op.dashCooldown <= 0 && !op.isDashing && op.isAlive) {
+            if (nextPipe && nextPipe.x < 185 && nextPipe.x > 80) {
+              op.isDashing = true;
+              op.dashTimer = 0.28;
+              op.dashCooldown = 4.0 + Math.random() * 3.0;
+              op.graceTimer = Math.max(op.graceTimer || 0, 0.45);
+              op.vy = Math.min(op.vy, -130);
+            }
+          }
+
+          // 5. Update Bot Baby Birds Position Following Behind
           if (op.babyBirds && op.babyBirds.length > 0) {
             op.babyBirds[0].x = 90 - 22;
             op.babyBirds[0].y = op.y - 18 + Math.sin(Date.now() / 220) * 4;
@@ -882,7 +929,19 @@
           ctx.restore();
         }
 
-        // 3. Render Opponent Shield (100% HD Hexagonal Shield dengan opacity lawan)
+        // 3. Render Opponent Dash Warp Trail & Shockwave
+        if (op.isDashing && op.isAlive) {
+          ctx.save();
+          ctx.globalAlpha = rivalOpacity * 0.7;
+          ctx.strokeStyle = '#f43f5e';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(birdX - 8, op.y, 20, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // 4. Render Opponent Shield (100% HD Hexagonal Shield dengan opacity lawan)
         if (op.hasShield && op.isAlive) {
           if (typeof window.drawCustomShieldFX === 'function') {
             window.drawCustomShieldFX(ctx, birdX, op.y, op.rot || 0, false, rivalOpacity);

@@ -3963,9 +3963,8 @@
         bob: 0,
         rot: 0
       });
-      // TIDAK ADA koin di tiang ini saat skill muncul!
-    } else if(!isRanked && getRandomFloat() < 0.75) {
-      // Koin HANYA muncul di Mode Classic, Mode Ranked Extreme TIDAK DAPAT GOLD!
+    } else if(!isRanked && currentMode !== 'multiplayer' && getRandomFloat() < 0.75) {
+      // Koin HANYA muncul di Mode Classic, Mode Ranked Extreme & Multiplayer TIDAK ADA KOIN!
       coins.push({
         x: pipe.x + pipe.w / 2,
         y: pipe.gapY + pipe.gapSize / 2,
@@ -4649,7 +4648,7 @@
 
     // Multiplayer State Broadcast & Rival Interpolation
     if(currentMode === 'multiplayer' && window.multiplayerEngine) {
-      window.multiplayerEngine.updateOpponents(dt, pipes);
+      window.multiplayerEngine.updateOpponents(dt, pipes, powerups);
       window.multiplayerEngine.opponents.forEach(op => {
         if(op.isSimulatedBot && op.isAlive) {
           op.score = score;
