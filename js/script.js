@@ -1,16 +1,34 @@
 (() => {
   'use strict';
 
-  // Canvas Polyfill: ellipse() untuk browser lama yang tidak support
-  if(typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D.prototype.ellipse) {
-    CanvasRenderingContext2D.prototype.ellipse = function(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise) {
-      this.save();
-      this.translate(x, y);
-      this.rotate(rotation || 0);
-      this.scale(radiusX || 1, radiusY || 1);
-      this.arc(0, 0, 1, startAngle, endAngle, anticlockwise || false);
-      this.restore();
-    };
+  // Canvas Polyfill: ellipse() & roundRect() untuk browser HP / WebView yang belum support
+  if(typeof CanvasRenderingContext2D !== 'undefined') {
+    if(!CanvasRenderingContext2D.prototype.ellipse) {
+      CanvasRenderingContext2D.prototype.ellipse = function(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise) {
+        this.save();
+        this.translate(x, y);
+        this.rotate(rotation || 0);
+        this.scale(radiusX || 1, radiusY || 1);
+        this.arc(0, 0, 1, startAngle, endAngle, anticlockwise || false);
+        this.restore();
+      };
+    }
+    if(!CanvasRenderingContext2D.prototype.roundRect) {
+      CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, radii) {
+        if (!radii) radii = 0;
+        let r = 0;
+        if (typeof radii === 'number') r = radii;
+        else if (Array.isArray(radii) && radii.length) r = radii[0];
+        r = Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2);
+        this.moveTo(x + r, y);
+        this.arcTo(x + w, y, x + w, y + h, r);
+        this.arcTo(x + w, y + h, x, y + h, r);
+        this.arcTo(x, y + h, x, y, r);
+        this.arcTo(x, y, x + w, y, r);
+        this.closePath();
+        return this;
+      };
+    }
   }
 
 

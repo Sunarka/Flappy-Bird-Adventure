@@ -7,6 +7,24 @@
 (function(window) {
   'use strict';
 
+  // Polyfill roundRect untuk CanvasRenderingContext2D jika belum didukung
+  if(typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D.prototype.roundRect) {
+    CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, radii) {
+      if (!radii) radii = 0;
+      let r = 0;
+      if (typeof radii === 'number') r = radii;
+      else if (Array.isArray(radii) && radii.length) r = radii[0];
+      r = Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2);
+      this.moveTo(x + r, y);
+      this.arcTo(x + w, y, x + w, y + h, r);
+      this.arcTo(x + w, y + h, x, y + h, r);
+      this.arcTo(x, y + h, x, y, r);
+      this.arcTo(x, y, x + w, y, r);
+      this.closePath();
+      return this;
+    };
+  }
+
   // Default Cloudflare Worker WebSocket Relay URL (lappy-sky workers subdomain)
   const DEFAULT_CF_WORKER_WS = 'wss://flappy-bird-multiplayer.lappy-sky.workers.dev';
 
@@ -1211,179 +1229,184 @@
 
     // Render opponent birds onto canvas with custom skins, hats, outfits, baby birds & nametag
     renderOpponents(ctx, birdX = 90) {
-      if (this.opponents.size === 0) return;
+      if (!ctx || this.opponents.size === 0) return;
 
       this.opponents.forEach((op, opId) => {
-        if (opId === this.localPlayerId || (this.myProfile && op.name === this.myProfile.name)) return;
-        if (!op.isAlive && op.y >= 540) return;
+        try {
+          if (!op || opId === this.localPlayerId || (this.myProfile && op.name === this.myProfile.name)) return;
+          if (!op.isAlive && (op.y === undefined || op.y >= 540)) return;
 
-        const drawX = op.curX !== undefined ? op.curX : birdX;
+          const drawX = (typeof op.curX === 'number' && !isNaN(op.curX)) ? op.curX : birdX;
+          const drawY = (typeof op.y === 'number' && !isNaN(op.y)) ? op.y : 250;
 
-        // If opponent is offscreen left or right, draw a sleek indicator badge at screen edge
-        if (drawX < -20 && op.isAlive) {
-          ctx.save();
-          ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
-          ctx.fillStyle = '#f43f5e';
-          ctx.textAlign = 'left';
-          const distBehind = Math.max(1, Math.round(Math.abs(drawX - birdX) / 8));
-          ctx.fillText(`◀ ${op.name} (${distBehind}m)`, 6, Math.max(70, Math.min(480, op.y)));
-          ctx.restore();
-          return;
-        }
-        if (drawX > 380 && op.isAlive) {
-          ctx.save();
-          ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
-          ctx.fillStyle = '#38bdf8';
-          ctx.textAlign = 'right';
-          const distAhead = Math.max(1, Math.round(Math.abs(drawX - birdX) / 8));
-          ctx.fillText(`${op.name} (+${distAhead}m) ▶`, 354, Math.max(70, Math.min(480, op.y)));
-          ctx.restore();
-          return;
-        }
-
-        // Turunkan opacity lawan agar mudah dibedakan dengan pemain sendiri (HD Ghost Rival)
-        const rivalOpacity = op.isAlive ? 0.72 : 0.35;
-
-        // 1. Render Opponent Baby Birds (100% HD identik dengan pemain tapi dengan opacity lawan)
-        if (op.babyBirds && op.babyBirds.length > 0 && op.isAlive) {
-          op.babyBirds.forEach((b, idx) => {
-            if (typeof window.drawCustomBabyBird === 'function') {
-              window.drawCustomBabyBird(ctx, {
-                id: idx,
-                x: Number.isFinite(b.x) ? b.x : drawX - 22,
-                y: Number.isFinite(b.y) ? b.y : op.y - 18,
-                r: 8.5,
-                angle: (op.rot || 0) * 0.7,
-                wing: b.wing || 0,
-                color: b.color || (idx === 0 ? '#facc15' : '#38bdf8'),
-                wingColor: b.wingColor || (idx === 0 ? '#eab308' : '#0284c7'),
-                blushColor: '#fda4af',
-                state: 'following'
-              }, rivalOpacity);
-            }
-          });
-        }
-
-        // 2. Render Opponent Bird (100% HD Custom Bird dengan skins, hats, outfits & opacity lawan)
-        if (typeof window.renderCustomBird === 'function') {
-          ctx.save();
-          window.renderCustomBird(ctx, {
-            x: drawX,
-            y: op.y,
-            vy: op.vy || 0,
-            angle: op.rot || 0,
-            wing: op.wing || 0,
-            skinId: op.skin || 'classic',
-            hatId: op.hat || 'none',
-            outfitId: op.outfit || 'none',
-            opacity: rivalOpacity
-          });
-          ctx.restore();
-        } else {
-          // Fallback custom renderer
-          ctx.save();
-          ctx.translate(drawX, op.y);
-          ctx.rotate(op.rot || 0);
-          ctx.globalAlpha = rivalOpacity;
-          ctx.fillStyle = op.isAlive ? '#f43f5e' : '#64748b';
-          ctx.beginPath();
-          ctx.ellipse(0, 0, 16, 12, 0, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        }
-
-        // 3. Render Opponent Dash Warp Trail & Shockwave
-        if (op.isDashing && op.isAlive) {
-          ctx.save();
-          ctx.globalAlpha = rivalOpacity * 0.7;
-          ctx.strokeStyle = '#38bdf8';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.arc(drawX - 8, op.y, 20, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        // 4. Render Opponent Shield (100% HD Hexagonal Shield dengan opacity lawan)
-        if (op.hasShield && op.isAlive) {
-          if (typeof window.drawCustomShieldFX === 'function') {
-            window.drawCustomShieldFX(ctx, drawX, op.y, op.rot || 0, false, rivalOpacity);
+          // If opponent is offscreen left or right, draw a sleek indicator badge at screen edge
+          if (drawX < -20 && op.isAlive) {
+            ctx.save();
+            ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
+            ctx.fillStyle = '#f43f5e';
+            ctx.textAlign = 'left';
+            const distBehind = Math.max(1, Math.round(Math.abs(drawX - birdX) / 8));
+            ctx.fillText(`◀ ${op.name || 'Rival'} (${distBehind}m)`, 6, Math.max(70, Math.min(480, drawY)));
+            ctx.restore();
+            return;
           }
-        }
+          if (drawX > 380 && op.isAlive) {
+            ctx.save();
+            ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
+            ctx.fillStyle = '#38bdf8';
+            ctx.textAlign = 'right';
+            const distAhead = Math.max(1, Math.round(Math.abs(drawX - birdX) / 8));
+            ctx.fillText(`${op.name || 'Rival'} (+${distAhead}m) ▶`, 354, Math.max(70, Math.min(480, drawY)));
+            ctx.restore();
+            return;
+          }
 
-        // 5. Render Combat Stun / Freeze / Electrocuted VFX
-        if (op.isStunned && op.stunTimer > 0 && op.isAlive) {
-          ctx.save();
-          if (op.stunType === 'freeze') {
-            // Crystalline 3D Ice Cube Block Encasing Opponent
-            ctx.fillStyle = 'rgba(165, 243, 252, 0.45)';
-            ctx.strokeStyle = '#38bdf8';
-            ctx.lineWidth = 2.2;
-            ctx.shadowColor = '#00f5d4';
-            ctx.shadowBlur = 12;
-            ctx.beginPath();
-            ctx.roundRect(drawX - 20, op.y - 20, 40, 40, 6);
-            ctx.fill();
-            ctx.stroke();
+          // Turunkan opacity lawan agar mudah dibedakan dengan pemain sendiri (HD Ghost Rival)
+          const rivalOpacity = op.isAlive ? 0.72 : 0.35;
 
-            // Ice Facet Reflection Lines
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(drawX - 14, op.y - 14); ctx.lineTo(drawX - 2, op.y - 14);
-            ctx.moveTo(drawX - 14, op.y - 14); ctx.lineTo(drawX - 14, op.y - 2);
-            ctx.stroke();
+          // 1. Render Opponent Baby Birds (100% HD identik dengan pemain tapi dengan opacity lawan)
+          if (op.babyBirds && op.babyBirds.length > 0 && op.isAlive) {
+            op.babyBirds.forEach((b, idx) => {
+              if (typeof window.drawCustomBabyBird === 'function') {
+                window.drawCustomBabyBird(ctx, {
+                  id: idx,
+                  x: (b && Number.isFinite(b.x)) ? b.x : drawX - 22,
+                  y: (b && Number.isFinite(b.y)) ? b.y : drawY - 18,
+                  r: 8.5,
+                  angle: (op.rot || 0) * 0.7,
+                  wing: (b && b.wing) || 0,
+                  color: (b && b.color) || (idx === 0 ? '#facc15' : '#38bdf8'),
+                  wingColor: (b && b.wingColor) || (idx === 0 ? '#eab308' : '#0284c7'),
+                  blushColor: '#fda4af',
+                  state: 'following'
+                }, rivalOpacity);
+              }
+            });
+          }
+
+          // 2. Render Opponent Bird (100% HD Custom Bird dengan skins, hats, outfits & opacity lawan)
+          if (typeof window.renderCustomBird === 'function') {
+            ctx.save();
+            window.renderCustomBird(ctx, {
+              x: drawX,
+              y: drawY,
+              vy: op.vy || 0,
+              angle: op.rot || 0,
+              wing: op.wing || 0,
+              skinId: op.skin || 'classic',
+              hatId: op.hat || 'none',
+              outfitId: op.outfit || 'none',
+              opacity: rivalOpacity
+            });
+            ctx.restore();
           } else {
-            // Crackling Electric Zap Aura
-            ctx.strokeStyle = '#fde047';
-            ctx.lineWidth = 2.2;
-            ctx.shadowColor = '#eab308';
-            ctx.shadowBlur = 10;
+            // Fallback custom renderer
+            ctx.save();
+            ctx.translate(drawX, drawY);
+            ctx.rotate(op.rot || 0);
+            ctx.globalAlpha = rivalOpacity;
+            ctx.fillStyle = op.isAlive ? '#f43f5e' : '#64748b';
             ctx.beginPath();
-            for (let i = 0; i < 4; i++) {
-              const ang = Math.random() * Math.PI * 2;
-              const r = 16 + Math.random() * 8;
-              const ex = drawX + Math.cos(ang) * r;
-              const ey = op.y + Math.sin(ang) * r;
-              if (i === 0) ctx.moveTo(ex, ey); else ctx.lineTo(ex, ey);
-            }
-            ctx.stroke();
+            ctx.ellipse(0, 0, 16, 12, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
 
-            // Dizzy Cartoon Orbiting Stars above head
-            const now = performance.now();
-            for (let s = 0; s < 3; s++) {
-              const starAng = (now / 200) + (s * Math.PI * 2 / 3);
-              const sx = drawX + Math.cos(starAng) * 16;
-              const sy = (op.y - 20) + Math.sin(starAng) * 6;
-              ctx.fillStyle = '#fde047';
-              ctx.beginPath();
-              ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
-              ctx.fill();
+          // 3. Render Opponent Dash Warp Trail & Shockwave
+          if (op.isDashing && op.isAlive) {
+            ctx.save();
+            ctx.globalAlpha = rivalOpacity * 0.7;
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(drawX - 8, drawY, 20, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          // 4. Render Opponent Shield (100% HD Hexagonal Shield dengan opacity lawan)
+          if (op.hasShield && op.isAlive) {
+            if (typeof window.drawCustomShieldFX === 'function') {
+              window.drawCustomShieldFX(ctx, drawX, drawY, op.rot || 0, false, rivalOpacity);
             }
           }
+
+          // 5. Render Combat Stun / Freeze / Electrocuted VFX
+          if (op.isStunned && op.stunTimer > 0 && op.isAlive) {
+            ctx.save();
+            if (op.stunType === 'freeze') {
+              // Crystalline 3D Ice Cube Block Encasing Opponent
+              ctx.fillStyle = 'rgba(165, 243, 252, 0.45)';
+              ctx.strokeStyle = '#38bdf8';
+              ctx.lineWidth = 2.2;
+              ctx.shadowColor = '#00f5d4';
+              ctx.shadowBlur = 12;
+              ctx.beginPath();
+              ctx.roundRect(drawX - 20, drawY - 20, 40, 40, 6);
+              ctx.fill();
+              ctx.stroke();
+
+              // Ice Facet Reflection Lines
+              ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+              ctx.lineWidth = 1.5;
+              ctx.beginPath();
+              ctx.moveTo(drawX - 14, drawY - 14); ctx.lineTo(drawX - 2, drawY - 14);
+              ctx.moveTo(drawX - 14, drawY - 14); ctx.lineTo(drawX - 14, drawY - 2);
+              ctx.stroke();
+            } else {
+              // Crackling Electric Zap Aura
+              ctx.strokeStyle = '#fde047';
+              ctx.lineWidth = 2.2;
+              ctx.shadowColor = '#eab308';
+              ctx.shadowBlur = 10;
+              ctx.beginPath();
+              for (let i = 0; i < 4; i++) {
+                const ang = Math.random() * Math.PI * 2;
+                const r = 16 + Math.random() * 8;
+                const ex = drawX + Math.cos(ang) * r;
+                const ey = drawY + Math.sin(ang) * r;
+                if (i === 0) ctx.moveTo(ex, ey); else ctx.lineTo(ex, ey);
+              }
+              ctx.stroke();
+
+              // Dizzy Cartoon Orbiting Stars above head
+              const now = performance.now();
+              for (let s = 0; s < 3; s++) {
+                const starAng = (now / 200) + (s * Math.PI * 2 / 3);
+                const sx = drawX + Math.cos(starAng) * 16;
+                const sy = (drawY - 20) + Math.sin(starAng) * 6;
+                ctx.fillStyle = '#fde047';
+                ctx.beginPath();
+                ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+              }
+            }
+            ctx.restore();
+          }
+
+          // 6. Opponent Name Tag & Live Score above head
+          ctx.save();
+          ctx.globalAlpha = rivalOpacity;
+          ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
+          ctx.textAlign = 'center';
+          
+          // Name pill
+          const tagText = `${op.name || 'Rival'} (${op.score || 0} pts)`;
+          const textWidth = ctx.measureText(tagText).width;
+          ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
+          ctx.beginPath();
+          ctx.roundRect(drawX - textWidth/2 - 6, drawY - 34, textWidth + 12, 15, 4);
+          ctx.fill();
+          ctx.strokeStyle = op.isAlive ? '#38bdf8' : '#94a3b8';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          ctx.fillStyle = op.isAlive ? '#bae6fd' : '#94a3b8';
+          ctx.fillText(tagText, drawX, drawY - 23);
           ctx.restore();
+        } catch (opErr) {
+          console.warn('[MP Render Error for Opponent]:', opErr);
         }
-
-        // 5. Opponent Name Tag & Live Score above head
-        ctx.save();
-        ctx.globalAlpha = rivalOpacity;
-        ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
-        ctx.textAlign = 'center';
-        
-        // Name pill
-        const tagText = `${op.name} (${op.score || 0} pts)`;
-        const textWidth = ctx.measureText(tagText).width;
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
-        ctx.beginPath();
-        ctx.roundRect(drawX - textWidth/2 - 6, op.y - 34, textWidth + 12, 15, 4);
-        ctx.fill();
-        ctx.strokeStyle = op.isAlive ? '#38bdf8' : '#94a3b8';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        ctx.fillStyle = op.isAlive ? '#bae6fd' : '#94a3b8';
-        ctx.fillText(tagText, drawX, op.y - 23);
-        ctx.restore();
       });
     }
   }
