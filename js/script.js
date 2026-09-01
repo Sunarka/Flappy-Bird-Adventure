@@ -10812,13 +10812,32 @@
     grantAdmobCoinReward(25);
   }
 
-  bindClick(el.lobbyAdmobRewardBtn, () => {
-    showAdmobRewardedAd();
-  });
+  window.showAdmobRewardedAd = showAdmobRewardedAd;
+  window.claimAdmobReward = claimAdmobReward;
 
-  bindClick(el.admobCloseBtn, () => {
-    claimAdmobReward();
-  });
+  const btnAdmob = $('lobbyAdmobRewardBtn') || el.lobbyAdmobRewardBtn;
+  if(btnAdmob) {
+    btnAdmob.onclick = (e) => {
+      if(e) e.stopPropagation();
+      showAdmobRewardedAd();
+    };
+    btnAdmob.addEventListener('pointerup', (e) => {
+      if(e) e.stopPropagation();
+      showAdmobRewardedAd();
+    });
+  }
+
+  const btnClaim = $('admobCloseBtn') || el.admobCloseBtn;
+  if(btnClaim) {
+    btnClaim.onclick = (e) => {
+      if(e) e.stopPropagation();
+      claimAdmobReward();
+    };
+    btnClaim.addEventListener('pointerup', (e) => {
+      if(e) e.stopPropagation();
+      claimAdmobReward();
+    });
+  }
 
   // Shop Tabs Swipe / Scroll & Selection
   if(el.shopTabs) {

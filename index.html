@@ -6,15 +6,15 @@
   <meta name="theme-color" content="#77cef2">
   <title>Feather Rush</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=13.3">
-  <link rel="stylesheet" href="css/modern-icons.css?v=13.3">
-  <link rel="stylesheet" href="css/shop.css?v=13.3">
-  <link rel="stylesheet" href="css/shop-extra.css?v=13.3">
-  <link rel="stylesheet" href="css/mode-picker.css?v=13.3">
-  <link rel="stylesheet" href="css/store.css?v=13.3">
-  <link rel="stylesheet" href="css/ranked.css?v=13.3">
-  <link rel="stylesheet" href="css/multiplayer.css?v=13.3">
-  <link rel="stylesheet" href="css/splash.css?v=13.3">
+  <link rel="stylesheet" href="css/style.css?v=13.4">
+  <link rel="stylesheet" href="css/modern-icons.css?v=13.4">
+  <link rel="stylesheet" href="css/shop.css?v=13.4">
+  <link rel="stylesheet" href="css/shop-extra.css?v=13.4">
+  <link rel="stylesheet" href="css/mode-picker.css?v=13.4">
+  <link rel="stylesheet" href="css/store.css?v=13.4">
+  <link rel="stylesheet" href="css/ranked.css?v=13.4">
+  <link rel="stylesheet" href="css/multiplayer.css?v=13.4">
+  <link rel="stylesheet" href="css/splash.css?v=13.4">
 
   <!-- ========================================================= -->
   <!-- GOOGLE ADMOB & H5 GAMES REWARDED ADS SDK                  -->
@@ -304,7 +304,7 @@
           <span>PENGADUAN</span>
         </a>
 
-        <button id="lobbyAdmobRewardBtn" class="lobby-action-pill admob-reward" type="button" title="Tonton Iklan Dapat +25 Koin Gratis!" aria-label="Tonton Iklan Dapat Koin">
+        <button id="lobbyAdmobRewardBtn" class="lobby-action-pill admob-reward" type="button" onclick="if(window.showAdmobRewardedAd) window.showAdmobRewardedAd(event);" title="Tonton Iklan Dapat +25 Koin Gratis!" aria-label="Tonton Iklan Dapat Koin">
           <svg class="pill-icon coin-ad-icon" viewBox="0 0 24 24">
             <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12zm-11-2l6-4-6-4v8z"/>
           </svg>
@@ -851,7 +851,7 @@
               <span>HADIAH:</span>
               <strong class="admob-reward-coins">+25 KOIN EMAS 🪙</strong>
             </div>
-            <button id="admobCloseBtn" class="primary admob-close-btn hidden" type="button">KLAIM +25 KOIN 🪙</button>
+            <button id="admobCloseBtn" class="primary admob-close-btn hidden" type="button" onclick="if(window.claimAdmobReward) window.claimAdmobReward(event);">KLAIM +25 KOIN 🪙</button>
           </div>
         </div>
       </section>
@@ -880,9 +880,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=13.3"></script>
-  <script src="js/admob-config.js?v=13.3"></script>
-  <script src="js/multiplayer.js?v=13.3"></script>
-  <script src="js/script.js?v=13.3"></script>
+  <script src="js/firebase-config.js?v=13.4"></script>
+  <script src="js/admob-config.js?v=13.4"></script>
+  <script src="js/multiplayer.js?v=13.4"></script>
+  <script src="js/script.js?v=13.4"></script>
 </body>
 </html>
