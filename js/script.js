@@ -2785,6 +2785,20 @@
       };
       storage.set('skyFlappyAccountsMap', accountsMap);
     }
+
+    // Perbarui entri user di leaderboard secara langsung agar nama lama tidak menduplikasi akun
+    if(Array.isArray(leaderboardData)) {
+      leaderboardData.forEach(p => {
+        if(p.isUser || p.id === gpProfile.id || p.id === gpProfile.googleUid) {
+          p.name = gpProfile.gamerTag;
+          p.avatar = gpProfile.avatar;
+          p.isUser = true;
+        }
+      });
+      leaderboardData = sanitizeLeaderboard(leaderboardData);
+      storage.set('skyFlappyLeaderboard_v6', leaderboardData);
+    }
+
     syncGPProfileUI();
     if(rankedBest > 0 && typeof submitRankedScore === 'function') {
       submitRankedScore(rankedBest);
@@ -3004,24 +3018,54 @@
 
   function sanitizeLeaderboard(list) {
     if(!Array.isArray(list)) return [];
-    return list.map((item, idx) => {
-      const p = item || {};
-      const score = Math.max(0, parseInt(p.score, 10) || 0);
-      const name = (p.name && typeof p.name === 'string') ? p.name.slice(0, 16) : 'Player';
-      let av = p.avatar;
-      if(!p.isUser && (!av || !cuteAvatarKeys.includes(av))) {
-        av = cuteAvatarKeys[idx % cuteAvatarKeys.length];
+    const seenUsers = new Set();
+    const seenIds = new Set();
+    const uniqueList = [];
+
+    // Prioritaskan skor tertinggi saat memproses daftar
+    const sorted = [...list].sort((a, b) => (parseInt(b.score, 10) || 0) - (parseInt(a.score, 10) || 0));
+
+    for(const item of sorted) {
+      if(!item) continue;
+      const p = item;
+      const isUser = !!(p.isUser || p.id === gpProfile.id || p.id === gpProfile.googleUid || (gpProfile.gamerTag && p.name === gpProfile.gamerTag));
+      const uniqueKey = isUser ? 'CURRENT_USER' : (p.id || p.name);
+
+      if(uniqueKey === 'CURRENT_USER') {
+        if(seenUsers.has('CURRENT_USER')) continue; // Lewati jika akun user sudah ada (hanya ambil 1 skor terbaik)
+        seenUsers.add('CURRENT_USER');
+      } else {
+        if(seenIds.has(uniqueKey)) continue;
+        seenIds.add(uniqueKey);
       }
-      return {
-        id: p.id || name,
+
+      const score = Math.max(0, parseInt(p.score, 10) || 0);
+      const name = isUser ? (gpProfile.gamerTag || p.name || 'SkyPlayer').slice(0, 16) : ((p.name && typeof p.name === 'string') ? p.name.slice(0, 16) : 'Player');
+      let av = isUser ? (gpProfile.avatar || p.avatar || 'chick_yellow') : p.avatar;
+      if(!isUser && (!av || !cuteAvatarKeys.includes(av))) {
+        av = cuteAvatarKeys[uniqueList.length % cuteAvatarKeys.length];
+      }
+
+      uniqueList.push({
+        id: isUser ? (gpProfile.googleUid || gpProfile.id) : (p.id || name),
+        uid: isUser ? (gpProfile.googleUid || gpProfile.id) : (p.uid || p.id || name),
         name: name,
         score: score,
         tier: getRankTier(score).name,
         avatar: av || 'gojo_satoru',
-        isUser: !!p.isUser,
-        loadout: p.loadout || {}
-      };
-    });
+        isUser: isUser,
+        loadout: isUser ? {
+          bird: progress.selected || 'classic',
+          aura: progress.selectedAura || 'default',
+          hat: progress.selectedHat || 'none',
+          outfit: progress.selectedOutfit || 'none',
+          pipe: progress.selectedPipe || 'green',
+          background: progress.selectedBackground || 'sky'
+        } : (p.loadout || {})
+      });
+    }
+
+    return uniqueList;
   }
 
   // Default Leaderboard Data (Top 25 Dummy Players with Varied Anime & Cute Avatars)
@@ -3067,11 +3111,14 @@
   function submitRankedScore(s) {
     if(!gpProfile.isLoggedIn) return;
     const tier = getRankTier(s);
+    const userUid = gpProfile.googleUid || gpProfile.id;
     
-    let existingIndex = leaderboardData.findIndex(p => p.isUser || p.name === gpProfile.gamerTag);
+    // Cari index entri user saat ini secara spesifik
+    let existingIndex = leaderboardData.findIndex(p => p.isUser || p.id === userUid || p.uid === userUid || p.name === gpProfile.gamerTag);
     const userEntry = {
       isUser: true,
-      id: gpProfile.id || gpProfile.gamerTag,
+      id: userUid,
+      uid: userUid,
       name: gpProfile.gamerTag,
       score: Math.max(s, rankedBest),
       tier: tier.name,
@@ -3090,6 +3137,10 @@
     if(existingIndex >= 0) {
       if(userEntry.score >= leaderboardData[existingIndex].score) {
         leaderboardData[existingIndex] = userEntry;
+      } else {
+        leaderboardData[existingIndex].name = userEntry.name;
+        leaderboardData[existingIndex].avatar = userEntry.avatar;
+        leaderboardData[existingIndex].loadout = userEntry.loadout;
       }
     } else {
       leaderboardData.push(userEntry);
@@ -3099,6 +3150,7 @@
     leaderboardData.sort((a, b) => b.score - a.score);
     leaderboardData.forEach((p, i) => p.rank = i + 1);
 
+    storage.set('skyFlappyLeaderboard_v6', leaderboardData);
     storage.set('skyFlappyLeaderboard', leaderboardData);
 
     // Kirim Skor Tertinggi ke Firebase Firestore Global Leaderboard

@@ -59,14 +59,16 @@ class FirebaseLeaderboardService {
   async submitScore(player) {
     if (!player || !player.name || typeof player.score !== 'number') return false;
 
-    // Pastikan data bersih & aman
-    const docId = String(player.id || player.name).replace(/[^a-zA-Z0-9_-]/g, '_');
+    // Pastikan docId unik dan konsisten per akun pengguna (gunakan UID / ID akun tetap)
+    const rawId = player.uid || player.id || player.email || player.name;
+    const docId = 'user_' + String(rawId).replace(/[^a-zA-Z0-9_-]/g, '_');
     const payload = {
       id: docId,
+      uid: player.uid || player.id || '',
       name: String(player.name).slice(0, 20),
       score: Math.floor(player.score),
       tier: player.tier || 'BRONZE I',
-      avatar: player.avatar || 'P1',
+      avatar: player.avatar || 'chick_yellow',
       loadout: {
         bird: player.loadout?.bird || 'classic',
         aura: player.loadout?.aura || 'default',
@@ -88,13 +90,13 @@ class FirebaseLeaderboardService {
         const existingDoc = await docRef.get();
         if (existingDoc.exists) {
           const oldScore = existingDoc.data().score || 0;
-          if (payload.score > oldScore) {
+          if (payload.score >= oldScore) {
             await docRef.set(payload, { merge: true });
-            console.log('[Firebase] New high score submitted:', payload.score);
+            console.log('[Firebase] Score updated for account:', docId, payload.score);
           }
         } else {
           await docRef.set(payload);
-          console.log('[Firebase] Initial player score registered:', payload.score);
+          console.log('[Firebase] Player registered for account:', docId, payload.score);
         }
         return true;
       } catch (err) {

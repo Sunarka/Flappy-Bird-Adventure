@@ -267,3 +267,4 @@
   window.petsCatalog = petsCatalog;
 
 })(window);
+
