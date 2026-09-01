@@ -10728,9 +10728,18 @@
   let admobAdTimer = null;
 
   function showAdmobRewardedAd() {
-    if(!el.admobRewardModal) return;
-
     if(audio) audio.click();
+
+    // 1. Coba tayangkan iklan real AdMob jika SDK aktif & siap
+    if(typeof window.showGoogleAdMobRewarded === 'function') {
+      const shown = window.showGoogleAdMobRewarded((rewardAmount) => {
+        grantAdmobCoinReward(rewardAmount || 25);
+      });
+      if(shown) return;
+    }
+
+    // 2. Tampilkan Reward Ad Player Modal
+    if(!el.admobRewardModal) return;
     showModal(el.admobRewardModal);
 
     if(el.admobCloseBtn) el.admobCloseBtn.classList.add('hidden');
@@ -10754,18 +10763,13 @@
         admobAdTimer = null;
         if(el.admobTimerCount) el.admobTimerCount.textContent = 'SELESAI! ✅';
         if(el.admobCloseBtn) el.admobCloseBtn.classList.remove('hidden');
-        if(audio) audio.win();
+        if(audio && typeof audio.win === 'function') audio.win();
       }
     }, 100);
   }
 
-  function claimAdmobReward() {
-    closeModal();
-    clearInterval(admobAdTimer);
-    admobAdTimer = null;
-
-    // Grant +25 coins reward!
-    progress.coins = (progress.coins || 0) + 25;
+  function grantAdmobCoinReward(amount = 25) {
+    progress.coins = (progress.coins || 0) + amount;
     persistProgress();
     updateCoins();
     if(audio && typeof audio.coin === 'function') audio.coin();
@@ -10779,7 +10783,7 @@
     floatingTexts.push({
       x: fxX,
       y: fxY - 30,
-      text: '+25 KOIN BERHASIL DIKLAIM! 🪙',
+      text: `+${amount} KOIN BERHASIL DIKLAIM! 🪙`,
       color: '#fbbf24',
       vy: -55,
       life: 1.2,
@@ -10790,6 +10794,13 @@
     if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.saveUserData === 'function') {
       window.FirebaseLeaderboard.saveUserData(gpProfile, progress, classicBest, rankedBest);
     }
+  }
+
+  function claimAdmobReward() {
+    closeModal();
+    clearInterval(admobAdTimer);
+    admobAdTimer = null;
+    grantAdmobCoinReward(25);
   }
 
   bindClick(el.lobbyAdmobRewardBtn, () => {
