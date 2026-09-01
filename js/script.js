@@ -11422,16 +11422,13 @@
     _showErrBanner('JS ERROR: ' + e.message + '\n  at ' + (e.filename || '') + ':' + e.lineno);
   });
 
-  // Cinematic Opening Splash Screen Animation Controller (App Logo & Dev Studio Logo)
+  // Standard Game Splash Screen Controller (App Logo -> Dev Studio Logo)
   function initSplashScreen() {
     const splash = document.getElementById('appSplashScreen');
     if(!splash) return;
 
     const stageApp = document.getElementById('splashStageApp');
     const stageDev = document.getElementById('splashStageDev');
-    const dot1 = document.getElementById('splashDot1');
-    const dot2 = document.getElementById('splashDot2');
-    const skipBtn = document.getElementById('splashSkipBtn');
 
     let isDone = false;
     let timer1 = null;
@@ -11446,36 +11443,25 @@
       splash.classList.add('fade-out');
       setTimeout(() => {
         splash.style.display = 'none';
-        // Auto-play lobby background music if enabled
         if(settings.music && audio) {
           audio.lobbyMusic();
         }
-      }, 650);
+      }, 500);
     }
 
-    // Switch from App Logo to Dev Studio Logo after 1.8s
+    // Switch from App Logo to Dev Studio Logo after 1.3s
     timer1 = setTimeout(() => {
       if(isDone) return;
       if(stageApp) stageApp.classList.remove('active');
       if(stageDev) stageDev.classList.add('active');
-      if(dot1) dot1.classList.remove('active');
-      if(dot2) dot2.classList.add('active');
-    }, 1800);
+    }, 1300);
 
-    // Auto finish splash after 3.8s and reveal lobby
+    // Auto finish splash after 2.8s and reveal lobby
     timer2 = setTimeout(() => {
       finishSplash();
-    }, 3800);
+    }, 2800);
 
-    // Click Skip button or tap anywhere on splash to skip immediately
-    if(skipBtn) {
-      skipBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if(audio) audio.click();
-        finishSplash();
-      });
-    }
-
+    // Tap anywhere on splash to skip immediately
     splash.addEventListener('click', () => {
       finishSplash();
     });
