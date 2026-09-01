@@ -10730,15 +10730,24 @@
   function showAdmobRewardedAd() {
     if(audio) audio.click();
 
-    // 1. Coba tayangkan iklan real AdMob jika SDK aktif & siap
+    // 1. Coba tayangkan iklan real AdMob jika SDK siap
     if(typeof window.showGoogleAdMobRewarded === 'function') {
-      const shown = window.showGoogleAdMobRewarded((rewardAmount) => {
-        grantAdmobCoinReward(rewardAmount || 25);
-      });
-      if(shown) return;
+      window.showGoogleAdMobRewarded(
+        (rewardAmount) => {
+          grantAdmobCoinReward(rewardAmount || 25);
+        },
+        () => {}, // onAdDismissed
+        () => {
+          // Fallback ke modal player jika Google belum siap / no-fill
+          openFallbackAdPlayerModal();
+        }
+      );
+    } else {
+      openFallbackAdPlayerModal();
     }
+  }
 
-    // 2. Tampilkan Reward Ad Player Modal
+  function openFallbackAdPlayerModal() {
     if(!el.admobRewardModal) return;
     showModal(el.admobRewardModal);
 
