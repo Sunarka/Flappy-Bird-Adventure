@@ -6,15 +6,15 @@
   <meta name="theme-color" content="#77cef2">
   <title>Feather Rush</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=13.7">
-  <link rel="stylesheet" href="css/modern-icons.css?v=13.7">
-  <link rel="stylesheet" href="css/shop.css?v=13.7">
-  <link rel="stylesheet" href="css/shop-extra.css?v=13.7">
-  <link rel="stylesheet" href="css/mode-picker.css?v=13.7">
-  <link rel="stylesheet" href="css/store.css?v=13.7">
-  <link rel="stylesheet" href="css/ranked.css?v=13.7">
-  <link rel="stylesheet" href="css/multiplayer.css?v=13.7">
-  <link rel="stylesheet" href="css/splash.css?v=13.7">
+  <link rel="stylesheet" href="css/style.css?v=13.8">
+  <link rel="stylesheet" href="css/modern-icons.css?v=13.8">
+  <link rel="stylesheet" href="css/shop.css?v=13.8">
+  <link rel="stylesheet" href="css/shop-extra.css?v=13.8">
+  <link rel="stylesheet" href="css/mode-picker.css?v=13.8">
+  <link rel="stylesheet" href="css/store.css?v=13.8">
+  <link rel="stylesheet" href="css/ranked.css?v=13.8">
+  <link rel="stylesheet" href="css/multiplayer.css?v=13.8">
+  <link rel="stylesheet" href="css/splash.css?v=13.8">
 
   <!-- ========================================================= -->
   <!-- GOOGLE ADMOB & H5 GAMES REWARDED ADS SDK                  -->
@@ -831,28 +831,26 @@
           </div>
 
           <div class="admob-ad-stage" id="admobAdStage">
-            <!-- Unit Iklan Resmi Google Ads / AdSense / AdMob Web -->
-            <div class="admob-live-slot-wrap">
-              <ins class="adsbygoogle"
-                   style="display:block;min-width:250px;min-height:160px;"
-                   data-ad-client="ca-pub-3613614202318317"
-                   data-ad-format="rectangle,horizontal"
-                   data-full-width-responsive="true"></ins>
-            </div>
-
-            <!-- Sponsor Video Screen & Progress Bar -->
-            <div class="admob-ad-video-mock" id="admobVideoMock">
-              <div class="admob-ad-sponsor-tag">Google Ads / AdSense (pub-3613614202318317)</div>
-              <div class="admob-sponsor-logo">
-                <span class="admob-bird-anim">🪶</span>
-                <div class="admob-promo-text">
-                  <h3>FEATHER RUSH</h3>
-                  <p>Memuat iklan Google...</p>
-                </div>
+            <!-- Google Official Video Ad Container -->
+            <div class="admob-video-ad-container" id="admobVideoAdContainer">
+              <video id="admobVideoElement" class="admob-video-player" playsinline autoplay muted loop preload="auto">
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+              </video>
+              <div class="admob-video-overlay-badge">
+                <span class="ad-tag-google">Ad &bull; Google Ads</span>
               </div>
               <div class="admob-progress-bar">
                 <div class="admob-progress-fill" id="admobProgressFill"></div>
               </div>
+            </div>
+
+            <!-- Slot Iklan Google AdSense Web (pub-3613614202318317) -->
+            <div class="admob-live-slot-wrap" id="admobLiveSlotWrap">
+              <ins class="adsbygoogle"
+                   style="display:block;width:100%;"
+                   data-ad-client="ca-pub-3613614202318317"
+                   data-ad-format="auto"
+                   data-full-width-responsive="true"></ins>
             </div>
           </div>
 
@@ -890,9 +888,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=13.7"></script>
-  <script src="js/admob-config.js?v=13.7"></script>
-  <script src="js/multiplayer.js?v=13.7"></script>
-  <script src="js/script.js?v=13.7"></script>
+  <script src="js/firebase-config.js?v=13.8"></script>
+  <script src="js/admob-config.js?v=13.8"></script>
+  <script src="js/multiplayer.js?v=13.8"></script>
+  <script src="js/script.js?v=13.8"></script>
 </body>
 </html>

@@ -10756,6 +10756,12 @@
 
     showModal(modal);
 
+    const videoEl = $('admobVideoElement');
+    if(videoEl) {
+      videoEl.currentTime = 0;
+      videoEl.play().catch(() => {});
+    }
+
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch(_) {}
