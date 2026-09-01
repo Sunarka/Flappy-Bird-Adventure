@@ -267,14 +267,15 @@
 }
 
 /* =========================================================
-   ADMOB REWARDED VIDEO AD MODAL
+   ADMOB REWARDED VIDEO AD MODAL (COMPACT & CLEAN)
    ========================================================= */
 .admob-ad-modal {
-  max-width: 320px;
-  padding: 16px;
+  width: min(300px, 90vw) !important;
+  max-width: 300px;
+  padding: 14px;
   background: linear-gradient(180deg, #1e293b, #0f172a);
   border: 2px solid rgba(245, 158, 11, 0.6);
-  border-radius: 24px;
+  border-radius: 20px;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(245, 158, 11, 0.25);
   color: #ffffff;
 }
@@ -283,25 +284,25 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .admob-badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font: 900 10.5px 'Trebuchet MS', system-ui, sans-serif;
+  font: 900 10px 'Trebuchet MS', system-ui, sans-serif;
   color: #fbbf24;
   letter-spacing: 0.8px;
   text-transform: uppercase;
 }
 
 .admob-timer-badge {
-  font: 800 11px 'Trebuchet MS', sans-serif;
+  font: 800 10.5px 'Trebuchet MS', sans-serif;
   color: #94a3b8;
   background: rgba(0, 0, 0, 0.4);
-  padding: 3px 8px;
-  border-radius: 12px;
+  padding: 2px 7px;
+  border-radius: 10px;
 }
 
 .admob-timer-badge b {
@@ -310,15 +311,15 @@
 
 .admob-ad-stage {
   background: #000000;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 0;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   position: relative;
   overflow: hidden;
-  min-height: 180px;
+  width: 100%;
+  height: 140px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -326,10 +327,9 @@
 .admob-video-ad-container {
   position: relative;
   width: 100%;
-  height: 180px;
+  height: 100%;
   background: #000000;
   overflow: hidden;
-  border-radius: 16px;
 }
 
 .admob-video-player {
@@ -341,44 +341,43 @@
 
 .admob-video-overlay-badge {
   position: absolute;
-  top: 8px;
-  left: 8px;
+  top: 6px;
+  left: 6px;
   background: rgba(0, 0, 0, 0.75);
   color: #ffffff;
-  padding: 3px 8px;
+  padding: 2px 6px;
   border-radius: 4px;
-  font: 800 10px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font: 800 9.5px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   letter-spacing: 0.5px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   pointer-events: none;
   z-index: 5;
 }
 
 .admob-live-slot-wrap {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  display: none;
 }
 
 .admob-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 99px;
-  margin-top: 20px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0;
   overflow: hidden;
+  z-index: 6;
 }
 
 .admob-progress-fill {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, #f59e0b, #38bdf8);
-  border-radius: 99px;
   transition: width 0.1s linear;
 }
 
@@ -386,20 +385,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .admob-reward-preview {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font: 800 11px 'Trebuchet MS', sans-serif;
+  gap: 5px;
+  font: 800 10.5px 'Trebuchet MS', sans-serif;
   color: #94a3b8;
 }
 
 .admob-reward-coins {
   color: #fbbf24;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 900;
 }
 
@@ -409,12 +408,13 @@
   background: linear-gradient(135deg, #f59e0b, #d97706);
   border: none;
   color: #ffffff;
-  font: 900 13.5px 'Trebuchet MS', sans-serif;
-  padding: 10px;
-  border-radius: 12px;
+  font: 900 12.5px 'Trebuchet MS', sans-serif;
+  padding: 8px 12px;
+  border-radius: 10px;
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 36px;
 }
 
 .admob-close-btn:hover {
