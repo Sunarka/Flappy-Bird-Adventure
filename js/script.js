@@ -103,7 +103,9 @@
     mpMyHudTier:$('mpMyHudTier'), mpMyHudHearts:$('mpMyHudHearts'), mpMyHudScore:$('mpMyHudScore'),
     mpAudioToggleBtn:$('mpAudioToggleBtn'),
     mpRivalHudCard:$('mpRivalHudCard'), mpRivalHudAvatar:$('mpRivalHudAvatar'), mpRivalHudName:$('mpRivalHudName'),
-    mpRivalHudTier:$('mpRivalHudTier'), mpRivalHudHearts:$('mpRivalHudHearts'), mpRivalHudScore:$('mpRivalHudScore')
+    mpRivalHudTier:$('mpRivalHudTier'), mpRivalHudHearts:$('mpRivalHudHearts'), mpRivalHudScore:$('mpRivalHudScore'),
+    lobbyAdmobRewardBtn:$('lobbyAdmobRewardBtn'), admobRewardModal:$('admobRewardModal'),
+    admobTimerCount:$('admobTimerCount'), admobProgressFill:$('admobProgressFill'), admobCloseBtn:$('admobCloseBtn')
   };
   const storage = {
     get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } },
@@ -10717,6 +10719,81 @@
     if(el.mpAudioToggleBtn) {
       el.mpAudioToggleBtn.classList.toggle('muted', !settings.sound);
     }
+  });
+
+  // =========================================================
+  // ADMOB REWARDED VIDEO ADS SYSTEM (WATCH AD -> GET +50 COINS)
+  // =========================================================
+  let admobAdTimer = null;
+
+  function showAdmobRewardedAd() {
+    if(!el.admobRewardModal) return;
+
+    if(audio) audio.click();
+    openModal(el.admobRewardModal);
+
+    if(el.admobCloseBtn) el.admobCloseBtn.classList.add('hidden');
+    if(el.admobTimerCount) el.admobTimerCount.textContent = '5s';
+    if(el.admobProgressFill) el.admobProgressFill.style.width = '0%';
+
+    clearInterval(admobAdTimer);
+    const startTime = Date.now();
+    const duration = 5000;
+
+    admobAdTimer = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const progressRatio = Math.min(1, elapsed / duration);
+      const remainingSecs = Math.max(0, Math.ceil((duration - elapsed) / 1000));
+
+      if(el.admobProgressFill) el.admobProgressFill.style.width = (progressRatio * 100) + '%';
+      if(el.admobTimerCount) el.admobTimerCount.textContent = remainingSecs + 's';
+
+      if(elapsed >= duration) {
+        clearInterval(admobAdTimer);
+        admobAdTimer = null;
+        if(el.admobTimerCount) el.admobTimerCount.textContent = 'SELESAI! ✅';
+        if(el.admobCloseBtn) el.admobCloseBtn.classList.remove('hidden');
+        if(audio) audio.win();
+      }
+    }, 100);
+  }
+
+  function claimAdmobReward() {
+    closeModal();
+    clearInterval(admobAdTimer);
+    admobAdTimer = null;
+
+    // Grant +50 coins reward!
+    progress.coins = (progress.coins || 0) + 50;
+    persistProgress();
+    updateCoins();
+    if(audio) audio.coin();
+
+    // Gold coin particles & floating text popup!
+    makeParticles(bird.x, bird.y, 35, '#fbbf24');
+    makeParticles(bird.x, bird.y, 20, '#fde047');
+    floatingTexts.push({
+      x: bird.x,
+      y: bird.y - 30,
+      text: '+50 KOIN BERHASIL DIKLAIM! 🪙',
+      color: '#fbbf24',
+      vy: -55,
+      life: 1.2,
+      maxLife: 1.2
+    });
+
+    // Sync to Firebase Firestore if logged in
+    if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.saveUserData === 'function') {
+      window.FirebaseLeaderboard.saveUserData(gpProfile, progress, classicBest, rankedBest);
+    }
+  }
+
+  bindClick(el.lobbyAdmobRewardBtn, () => {
+    showAdmobRewardedAd();
+  });
+
+  bindClick(el.admobCloseBtn, () => {
+    claimAdmobReward();
   });
 
   // Shop Tabs Swipe / Scroll & Selection

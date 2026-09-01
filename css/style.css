@@ -185,52 +185,230 @@
 }
 
 /* =========================================================
-   BOTTOM-LEFT LOBBY FEEDBACK & BUG REPORT BUTTON (GOOGLE FORM)
+   BOTTOM-LEFT LOBBY ACTION BAR (FEEDBACK & ADMOB REWARD)
    ========================================================= */
-.lobby-feedback-btn {
+.lobby-bottom-left-bar {
   position: absolute;
   bottom: 14px;
   left: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+
+.lobby-action-pill {
   height: 32px;
-  padding: 0 12px;
+  padding: 0 11px;
   background: rgba(255, 255, 255, 0.88);
   border: 1.5px solid rgba(255, 255, 255, 0.95);
   border-radius: 99px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  color: #e11d48;
+  gap: 5px;
   font-family: 'Trebuchet MS', system-ui, -apple-system, sans-serif;
   font-size: 10.5px;
   font-weight: 800;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
   text-decoration: none;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.12), 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  z-index: 10;
   cursor: pointer;
   user-select: none;
 }
 
-.lobby-feedback-btn:hover {
+.lobby-action-pill.feedback {
+  color: #e11d48;
+}
+
+.lobby-action-pill.feedback:hover {
   transform: translateY(-2px) scale(1.05);
   background: #ffffff;
   color: #be123c;
   border-color: #fda4af;
-  box-shadow: 0 6px 18px rgba(225, 29, 72, 0.25);
+  box-shadow: 0 6px 18px rgba(225, 29, 72, 0.22);
 }
 
-.lobby-feedback-btn:active {
+.lobby-action-pill.admob-reward {
+  color: #d97706;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(254, 240, 138, 0.75));
+  border-color: #fef08a;
+  animation: admobPillPulse 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes admobPillPulse {
+  0% { box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15); border-color: #fef08a; }
+  100% { box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35); border-color: #f59e0b; }
+}
+
+.lobby-action-pill.admob-reward:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: #ffffff;
+  color: #b45309;
+  border-color: #f59e0b;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+}
+
+.lobby-action-pill:active {
   transform: translateY(1px) scale(0.95);
 }
 
-.lobby-feedback-btn .feedback-icon {
+.lobby-action-pill .pill-icon {
   width: 14px;
   height: 14px;
   display: block;
   fill: currentColor;
   flex-shrink: 0;
+}
+
+/* =========================================================
+   ADMOB REWARDED VIDEO AD MODAL
+   ========================================================= */
+.admob-ad-modal {
+  max-width: 320px;
+  padding: 16px;
+  background: linear-gradient(180deg, #1e293b, #0f172a);
+  border: 2px solid rgba(245, 158, 11, 0.6);
+  border-radius: 24px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(245, 158, 11, 0.25);
+  color: #ffffff;
+}
+
+.admob-ad-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.admob-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font: 900 10.5px 'Trebuchet MS', system-ui, sans-serif;
+  color: #fbbf24;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.admob-timer-badge {
+  font: 800 11px 'Trebuchet MS', sans-serif;
+  color: #94a3b8;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.admob-timer-badge b {
+  color: #38bdf8;
+}
+
+.admob-ad-stage {
+  background: #020617;
+  border-radius: 16px;
+  padding: 24px 16px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.admob-ad-sponsor-tag {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font: 800 9px 'Trebuchet MS', sans-serif;
+  color: #64748b;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.admob-sponsor-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.admob-bird-anim {
+  font-size: 38px;
+  animation: simpleTitleFloat 2s ease-in-out infinite;
+  display: block;
+}
+
+.admob-promo-text h3 {
+  margin: 0 0 4px 0;
+  font: 900 16px 'Trebuchet MS', sans-serif;
+  background: linear-gradient(135deg, #fef08a, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1.5px;
+}
+
+.admob-promo-text p {
+  margin: 0;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.admob-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.admob-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #f59e0b, #38bdf8);
+  border-radius: 99px;
+  transition: width 0.1s linear;
+}
+
+.admob-ad-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.admob-reward-preview {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: 800 11px 'Trebuchet MS', sans-serif;
+  color: #94a3b8;
+}
+
+.admob-reward-coins {
+  color: #fbbf24;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.admob-close-btn {
+  width: 100%;
+  margin: 0 !important;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border: none;
+  color: #ffffff;
+  font: 900 13.5px 'Trebuchet MS', sans-serif;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admob-close-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
 }
 
