@@ -53,7 +53,7 @@
 .powerup-badge.heart{background:linear-gradient(135deg,#e11d48,#be123c);border:1.2px solid #fda4af;color:#fff;box-shadow:0 3px 10px rgba(225,29,72,0.5)}
 
 /* =========================================================
-   MODERN SIMPLE TOP-ACTIONS (SOUND & MUSIC)
+   MODERN PREMIUM TOP-ACTIONS (SOUND & MUSIC BUTTONS)
    ========================================================= */
 .top-actions {
   position: absolute;
@@ -69,44 +69,50 @@
   height: 40px;
   min-height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1.5px solid rgba(255, 255, 255, 0.98);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   padding: 0;
   margin: 0;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06);
-  transition: all 0.18s ease;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   color: #0284c7;
 }
 
 .action-glass-btn:hover {
-  transform: translateY(-1px) scale(1.05);
+  transform: translateY(-2px) scale(1.06);
   background: #ffffff;
-  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.25);
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.25);
   color: #0369a1;
+  border-color: #7dd3fc;
 }
 
 .action-glass-btn:active {
-  transform: translateY(1px) scale(0.95);
+  transform: translateY(1px) scale(0.94);
 }
 
 .action-glass-btn.muted {
-  background: rgba(241, 245, 249, 0.85);
-  border-color: rgba(226, 232, 240, 0.9);
+  background: rgba(241, 245, 249, 0.82);
+  border-color: rgba(226, 232, 240, 0.88);
   color: #94a3b8;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .action-glass-btn .btn-svg {
-  width: 20px;
-  height: 20px;
+  width: 19px;
+  height: 19px;
   display: block;
   fill: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.action-glass-btn:hover .btn-svg {
+  transform: scale(1.1);
 }
 
 .action-glass-btn .sound-wave {
@@ -117,7 +123,7 @@
 }
 
 /* =========================================================
-   MODERN SIMPLE BRAND TITLE & TAG
+   MODERN PREMIUM FEATHER RUSH BRAND TITLE & TAG
    ========================================================= */
 .simple-brand-header {
   display: flex;
@@ -126,35 +132,39 @@
   margin-top: 14px;
   margin-bottom: 12px;
   user-select: none;
-  animation: simpleTitleFloat 3s ease-in-out infinite;
+  animation: simpleTitleFloat 3.2s ease-in-out infinite;
 }
 
 @keyframes simpleTitleFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(0.4deg); }
 }
 
 .simple-brand-title {
   margin: 0;
-  font: 900 36px/1.05 'Trebuchet MS', 'Arial Black', sans-serif;
-  letter-spacing: -1px;
+  font: 900 38px/1.05 'Trebuchet MS', 'Arial Black', system-ui, sans-serif;
+  letter-spacing: -0.5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  text-shadow: 0 4px 14px rgba(15, 23, 42, 0.18);
+  gap: 4px;
+  filter: drop-shadow(0 6px 14px rgba(15, 23, 42, 0.2));
 }
 
 .brand-flappy {
-  color: #ffffff;
-  text-shadow: 0 3px 0 #0284c7, 0 6px 14px rgba(2, 132, 199, 0.35);
-  -webkit-text-stroke: 1px #0369a1;
+  background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 45%, #bae6fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 3px 0 #0284c7) drop-shadow(0 5px 0 #0369a1);
+  display: inline-block;
 }
 
 .brand-bird {
-  color: #facc15;
-  text-shadow: 0 3px 0 #ca8a04, 0 6px 14px rgba(202, 138, 4, 0.35);
-  -webkit-text-stroke: 1px #a16207;
+  background: linear-gradient(180deg, #fef08a 0%, #facc15 50%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 3px 0 #b45309) drop-shadow(0 5px 0 #78350f);
+  display: inline-block;
 }
 
 .simple-brand-tag {
@@ -165,8 +175,12 @@
   background: rgba(255, 255, 255, 0.92);
   border: 1.5px solid rgba(255, 255, 255, 0.98);
   border-radius: 99px;
-  padding: 3px 14px;
-  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
-  backdrop-filter: blur(8px);
+  padding: 4px 16px;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
