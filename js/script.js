@@ -11422,6 +11422,65 @@
     _showErrBanner('JS ERROR: ' + e.message + '\n  at ' + (e.filename || '') + ':' + e.lineno);
   });
 
+  // Cinematic Opening Splash Screen Animation Controller (App Logo & Dev Studio Logo)
+  function initSplashScreen() {
+    const splash = document.getElementById('appSplashScreen');
+    if(!splash) return;
+
+    const stageApp = document.getElementById('splashStageApp');
+    const stageDev = document.getElementById('splashStageDev');
+    const dot1 = document.getElementById('splashDot1');
+    const dot2 = document.getElementById('splashDot2');
+    const skipBtn = document.getElementById('splashSkipBtn');
+
+    let isDone = false;
+    let timer1 = null;
+    let timer2 = null;
+
+    function finishSplash() {
+      if(isDone) return;
+      isDone = true;
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+
+      splash.classList.add('fade-out');
+      setTimeout(() => {
+        splash.style.display = 'none';
+        // Auto-play lobby background music if enabled
+        if(settings.music && audio) {
+          audio.lobbyMusic();
+        }
+      }, 650);
+    }
+
+    // Switch from App Logo to Dev Studio Logo after 1.8s
+    timer1 = setTimeout(() => {
+      if(isDone) return;
+      if(stageApp) stageApp.classList.remove('active');
+      if(stageDev) stageDev.classList.add('active');
+      if(dot1) dot1.classList.remove('active');
+      if(dot2) dot2.classList.add('active');
+    }, 1800);
+
+    // Auto finish splash after 3.8s and reveal lobby
+    timer2 = setTimeout(() => {
+      finishSplash();
+    }, 3800);
+
+    // Click Skip button or tap anywhere on splash to skip immediately
+    if(skipBtn) {
+      skipBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if(audio) audio.click();
+        finishSplash();
+      });
+    }
+
+    splash.addEventListener('click', () => {
+      finishSplash();
+    });
+  }
+
   try {
     setMode('classic', true);
     syncSettings();
@@ -11434,6 +11493,7 @@
     setState(State.MENU);
     updateScore();
     updateMusicUI();
+    initSplashScreen();
     requestAnimationFrame(loop);
   } catch(initErr) {
     _showErrBanner('INIT ERROR: ' + initErr.message + '\n' + (initErr.stack || '').split('\n').slice(0,4).join('\n'));
