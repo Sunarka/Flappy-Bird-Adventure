@@ -4239,7 +4239,16 @@
     updateDashUI();
   }
 
-  function goReady() { audio.click(); closeModal(); reset(); setState(State.READY); }
+  function goReady() {
+    audio.click();
+    closeModal();
+    if(currentMode === 'multiplayer') {
+      startMultiplayerGameWithArenaCountdown();
+      return;
+    }
+    reset();
+    setState(State.READY);
+  }
 
   let arenaCountdownInterval = null;
 
