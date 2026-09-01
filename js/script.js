@@ -4740,6 +4740,7 @@
   }
 
   function spawnRandomHazard() {
+    if(currentMode === 'multiplayer') return; // Di mode multiplayer, arena murni balapan skill & item senjata antar pemain
     const isRanked = currentMode === 'ranked';
     const rand = Math.random();
 
