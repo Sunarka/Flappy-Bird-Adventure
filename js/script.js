@@ -4258,22 +4258,32 @@
       el.arenaCountdownOverlay.classList.remove('hidden');
     }
     if(el.arenaCountdownNumber) {
+      el.arenaCountdownNumber.className = 'arena-countdown-number num-3';
       el.arenaCountdownNumber.textContent = '3';
     }
-    try { if(settings.sound) audio.click(); } catch(_) {}
+    try { audio.countdownBeep(3); } catch(_) {}
 
     let count = 3;
     arenaCountdownInterval = setInterval(() => {
       count--;
       if(count === 2) {
-        if(el.arenaCountdownNumber) el.arenaCountdownNumber.textContent = '2';
-        try { if(settings.sound) audio.click(); } catch(_) {}
+        if(el.arenaCountdownNumber) {
+          el.arenaCountdownNumber.className = 'arena-countdown-number num-2';
+          el.arenaCountdownNumber.textContent = '2';
+        }
+        try { audio.countdownBeep(2); } catch(_) {}
       } else if(count === 1) {
-        if(el.arenaCountdownNumber) el.arenaCountdownNumber.textContent = '1';
-        try { if(settings.sound) audio.click(); } catch(_) {}
+        if(el.arenaCountdownNumber) {
+          el.arenaCountdownNumber.className = 'arena-countdown-number num-1';
+          el.arenaCountdownNumber.textContent = '1';
+        }
+        try { audio.countdownBeep(1); } catch(_) {}
       } else if(count === 0) {
-        if(el.arenaCountdownNumber) el.arenaCountdownNumber.textContent = 'GO!';
-        try { if(settings.sound) audio.flap(); } catch(_) {}
+        if(el.arenaCountdownNumber) {
+          el.arenaCountdownNumber.className = 'arena-countdown-number num-go';
+          el.arenaCountdownNumber.textContent = 'GO!';
+        }
+        try { audio.countdownGo(); } catch(_) {}
       } else {
         clearInterval(arenaCountdownInterval);
         arenaCountdownInterval = null;

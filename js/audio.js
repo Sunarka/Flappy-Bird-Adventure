@@ -94,6 +94,28 @@
     hit() { this.tone(130, .2, 'sawtooth', .06, -70); },
     click() { this.tone(360, .045, 'square', .025, 70); },
     win() { this.tone(660, .16, 'triangle', .05, 500); },
+
+    // 3.. 2.. 1.. GO! Countdown Chime & Fanfare
+    countdownBeep(count) {
+      const s = window.settings || { sound: true };
+      if(!s.sound) return;
+      const freq = count === 3 ? 440 : (count === 2 ? 493.88 : 554.37);
+      this.playTone(freq, 0.24, 'triangle', 0.12, 0);
+      this.playTone(freq * 2, 0.18, 'sine', 0.06, 0);
+    },
+
+    countdownGo() {
+      const s = window.settings || { sound: true };
+      if(!s.sound) return;
+      const goNotes = [880, 1108.73, 1318.51, 1760];
+      goNotes.forEach((f, i) => {
+        setTimeout(() => {
+          this.playTone(f, 0.5, 'triangle', 0.14, 20);
+          this.playTone(f * 0.5, 0.45, 'sine', 0.09, 0);
+          this.playTone(f * 1.5, 0.38, 'square', 0.04, 10);
+        }, i * 18);
+      });
+    },
     
     // Power-up & Skill Sound Effects & Jingles
     powerup(type) {
