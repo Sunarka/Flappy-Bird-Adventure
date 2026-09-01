@@ -10545,6 +10545,8 @@
     }
   }
 
+  let unsubscribeUserProfileListener = null;
+
   async function syncCloudProfile(user, providerName = 'google') {
     if(!user || !user.uid) return;
     const uid = user.uid;
@@ -10611,8 +10613,34 @@
     }
 
     saveGPProfile();
-    audio.win();
     syncGPProfileUI();
+
+    // 2. Real-time Live Listener: Update instan tanpa reload ketika nama diubah di perangkat lain!
+    if(unsubscribeUserProfileListener) {
+      try { unsubscribeUserProfileListener(); } catch(_) {}
+      unsubscribeUserProfileListener = null;
+    }
+    if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.listenToUserProfile === 'function') {
+      unsubscribeUserProfileListener = window.FirebaseLeaderboard.listenToUserProfile(primaryKey, updatedProfile => {
+        if(updatedProfile && updatedProfile.gamerTag && updatedProfile.gamerTag !== gpProfile.gamerTag) {
+          console.log('[CloudSync] Live update terdeteksi dari perangkat lain:', updatedProfile.gamerTag);
+          gpProfile.gamerTag = updatedProfile.gamerTag;
+          if(updatedProfile.avatar) gpProfile.avatar = updatedProfile.avatar;
+          gpProfile.nameChangesDone = updatedProfile.nameChangesDone || 0;
+          if(typeof updatedProfile.rankedBest === 'number' && updatedProfile.rankedBest > rankedBest) {
+            rankedBest = updatedProfile.rankedBest;
+            storage.set('skyFlappyRankedBest', rankedBest);
+          }
+          if(typeof updatedProfile.coins === 'number' && updatedProfile.coins !== progress.coins) {
+            progress.coins = updatedProfile.coins;
+            persistProgress();
+            updateCoins();
+          }
+          storage.set('skyFlappyGPProfile', gpProfile);
+          syncGPProfileUI();
+        }
+      });
+    }
   }
 
   async function performGoogleSignIn() {

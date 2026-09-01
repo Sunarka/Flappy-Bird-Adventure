@@ -312,6 +312,36 @@ class FirebaseLeaderboardService {
   }
 
   /**
+   * Listen to real-time User Profile changes (Live Cross-Device Sync)
+   * @param {string} primaryKey
+   * @param {Function} callback
+   */
+  listenToUserProfile(primaryKey, callback) {
+    if (!primaryKey || !this.isInitialized || !this.db || typeof callback !== 'function') return () => {};
+    const cleanKey = String(primaryKey).replace(/[^a-zA-Z0-9_-]/g, '_');
+    try {
+      return this.db.collection(this.collectionName).doc(cleanKey).onSnapshot(doc => {
+        if (doc && doc.exists) {
+          const d = doc.data();
+          callback({
+            gamerTag: d.name || d.gamerTag,
+            avatar: d.avatar,
+            rankedBest: typeof d.score === 'number' ? d.score : (d.rankedBest || 0),
+            coins: d.coins || 0,
+            nameChangesDone: d.nameChangesDone || 0,
+            loadout: d.loadout || {}
+          });
+        }
+      }, err => {
+        console.warn('[Firebase] listenToUserProfile error:', err.message);
+      });
+    } catch(err) {
+      console.warn('[Firebase] listenToUserProfile exception:', err.message);
+      return () => {};
+    }
+  }
+
+  /**
    * Listen to Auth State Changes
    */
   onAuthStateChanged(callback) {
