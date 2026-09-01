@@ -2775,15 +2775,24 @@
     if(gpProfile.googleUid || gpProfile.email) {
       const accKey = gpProfile.googleUid || gpProfile.email;
       const accountsMap = storage.get('skyFlappyAccountsMap', {});
-      accountsMap[accKey] = {
+      const accData = {
+        uid: gpProfile.googleUid || '',
         gamerTag: gpProfile.gamerTag,
         avatar: gpProfile.avatar,
         nameChangesDone: gpProfile.nameChangesDone || 0,
         rankedBest: rankedBest || 0,
+        coins: progress.coins || 0,
         email: gpProfile.email,
-        authProvider: gpProfile.authProvider || 'google'
+        authProvider: gpProfile.authProvider || 'google',
+        updatedAt: new Date().toISOString()
       };
+      accountsMap[accKey] = accData;
       storage.set('skyFlappyAccountsMap', accountsMap);
+
+      // Simpan ke Firestore Cloud agar seluruh perangkat mendapatkan profil yang sama
+      if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.saveUserProfile === 'function' && gpProfile.googleUid) {
+        window.FirebaseLeaderboard.saveUserProfile(gpProfile.googleUid, accData);
+      }
     }
 
     // Perbarui entri user di leaderboard secara langsung agar nama lama tidak menduplikasi akun
@@ -10483,6 +10492,55 @@
     }
   }
 
+  async function syncCloudProfile(user, providerName = 'google') {
+    if(!user || !user.uid) return;
+    const uid = user.uid;
+
+    gpProfile.isLoggedIn = true;
+    gpProfile.isGoogle = true;
+    gpProfile.authProvider = providerName;
+    gpProfile.email = user.email || (user.displayName ? `${user.displayName} (${providerName})` : 'Akun Terhubung');
+    gpProfile.googleUid = uid;
+
+    // 1. Ambil profil akun terpusat dari Firestore Cloud (agar nama di Device 1 langsung sinkron ke Device 2)
+    let cloudProfile = null;
+    if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.fetchUserProfile === 'function') {
+      cloudProfile = await window.FirebaseLeaderboard.fetchUserProfile(uid);
+    }
+
+    if(cloudProfile && cloudProfile.gamerTag) {
+      console.log('[CloudSync] Memuat profil akun dari cloud:', cloudProfile.gamerTag);
+      gpProfile.gamerTag = cloudProfile.gamerTag;
+      if(cloudProfile.avatar) gpProfile.avatar = cloudProfile.avatar;
+      gpProfile.nameChangesDone = cloudProfile.nameChangesDone || 0;
+      if(typeof cloudProfile.rankedBest === 'number' && cloudProfile.rankedBest > rankedBest) {
+        rankedBest = cloudProfile.rankedBest;
+        storage.set('skyFlappyRankedBest', rankedBest);
+      }
+      if(typeof cloudProfile.coins === 'number' && cloudProfile.coins > (progress.coins || 0)) {
+        progress.coins = cloudProfile.coins;
+        persistProgress();
+        updateCoins();
+      }
+    } else {
+      const accountsMap = storage.get('skyFlappyAccountsMap', {});
+      const savedAcc = accountsMap[uid] || accountsMap[user.email];
+      if(savedAcc && savedAcc.gamerTag) {
+        gpProfile.gamerTag = savedAcc.gamerTag;
+        if(savedAcc.avatar) gpProfile.avatar = savedAcc.avatar;
+        gpProfile.nameChangesDone = savedAcc.nameChangesDone || 0;
+      } else if(user.displayName) {
+        gpProfile.gamerTag = user.displayName.slice(0, 16);
+      } else if(user.email) {
+        gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
+      }
+    }
+
+    saveGPProfile();
+    audio.win();
+    syncGPProfileUI();
+  }
+
   async function performGoogleSignIn() {
     if(el.googleSignInBtnText) el.googleSignInBtnText.textContent = 'MENGHUBUNGKAN GOOGLE...';
     try {
@@ -10491,35 +10549,7 @@
       }
       const user = await window.FirebaseLeaderboard.signInWithGoogle();
       if(user) {
-        const accKey = user.uid || user.email;
-        const accountsMap = storage.get('skyFlappyAccountsMap', {});
-        const savedAcc = accountsMap[accKey];
-
-        gpProfile.isLoggedIn = true;
-        gpProfile.isGoogle = true;
-        gpProfile.authProvider = 'google';
-        gpProfile.email = user.email || '';
-        gpProfile.googleUid = user.uid;
-
-        if (savedAcc && savedAcc.gamerTag) {
-          gpProfile.gamerTag = savedAcc.gamerTag;
-          if (savedAcc.avatar) gpProfile.avatar = savedAcc.avatar;
-          gpProfile.nameChangesDone = savedAcc.nameChangesDone || 0;
-          if (savedAcc.rankedBest && savedAcc.rankedBest > rankedBest) {
-            rankedBest = savedAcc.rankedBest;
-            storage.set('skyFlappyRankedBest', rankedBest);
-          }
-        } else {
-          if(user.displayName) {
-            gpProfile.gamerTag = user.displayName.slice(0, 16);
-          } else if(user.email) {
-            gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
-          }
-        }
-
-        saveGPProfile();
-        audio.win();
-        syncGPProfileUI();
+        await syncCloudProfile(user, 'google');
       }
     } catch(err) {
       handleAuthError(err, 'Google');
@@ -10536,41 +10566,22 @@
       }
       const user = await window.FirebaseLeaderboard.signInWithFacebook();
       if(user) {
-        const accKey = user.uid || user.email;
-        const accountsMap = storage.get('skyFlappyAccountsMap', {});
-        const savedAcc = accountsMap[accKey];
-
-        gpProfile.isLoggedIn = true;
-        gpProfile.isGoogle = true;
-        gpProfile.authProvider = 'facebook';
-        gpProfile.email = user.email || (user.displayName ? `${user.displayName} (Facebook)` : 'Akun Facebook');
-        gpProfile.googleUid = user.uid;
-
-        if (savedAcc && savedAcc.gamerTag) {
-          gpProfile.gamerTag = savedAcc.gamerTag;
-          if (savedAcc.avatar) gpProfile.avatar = savedAcc.avatar;
-          gpProfile.nameChangesDone = savedAcc.nameChangesDone || 0;
-          if (savedAcc.rankedBest && savedAcc.rankedBest > rankedBest) {
-            rankedBest = savedAcc.rankedBest;
-            storage.set('skyFlappyRankedBest', rankedBest);
-          }
-        } else {
-          if(user.displayName) {
-            gpProfile.gamerTag = user.displayName.slice(0, 16);
-          } else if(user.email) {
-            gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
-          }
-        }
-
-        saveGPProfile();
-        audio.win();
-        syncGPProfileUI();
+        await syncCloudProfile(user, 'facebook');
       }
     } catch(err) {
       handleAuthError(err, 'Facebook');
     } finally {
       if(el.facebookSignInBtnText) el.facebookSignInBtnText.textContent = 'LOGIN DENGAN FACEBOOK';
     }
+  }
+
+  // Auto-Sync Auth & Profile saat game dibuka
+  if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.onAuthStateChanged === 'function') {
+    window.FirebaseLeaderboard.onAuthStateChanged(user => {
+      if(user && (!gpProfile.isLoggedIn || gpProfile.googleUid !== user.uid)) {
+        syncCloudProfile(user, user.providerData && user.providerData[0] ? user.providerData[0].providerId : 'google');
+      }
+    });
   }
 
   bindClick(el.googleSignInBtn, () => {

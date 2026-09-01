@@ -227,6 +227,39 @@ class FirebaseLeaderboardService {
   }
 
   /**
+   * Fetch User Profile from Firestore by UID (Cross-Device Cloud Sync)
+   * @param {string} uid
+   */
+  async fetchUserProfile(uid) {
+    if (!uid || !this.isInitialized || !this.db) return null;
+    try {
+      const doc = await this.db.collection('flappy_users').doc(String(uid)).get();
+      if (doc.exists) {
+        return doc.data();
+      }
+    } catch(err) {
+      console.warn('[Firebase] fetchUserProfile error:', err.message);
+    }
+    return null;
+  }
+
+  /**
+   * Save or Update User Profile in Firestore by UID
+   * @param {string} uid
+   * @param {Object} data
+   */
+  async saveUserProfile(uid, data) {
+    if (!uid || !data || !this.isInitialized || !this.db) return false;
+    try {
+      await this.db.collection('flappy_users').doc(String(uid)).set(data, { merge: true });
+      return true;
+    } catch(err) {
+      console.warn('[Firebase] saveUserProfile error:', err.message);
+      return false;
+    }
+  }
+
+  /**
    * Listen to Auth State Changes
    */
   onAuthStateChanged(callback) {
