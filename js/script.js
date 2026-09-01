@@ -3598,20 +3598,24 @@
   }
 
   function showModal(modal) {
-    if(!el.layer) return;
-    el.layer.classList.remove('hidden');
-    el.layer.querySelectorAll('.modal').forEach(x => {
-      x.classList.add('hidden');
-    });
-    if(modal) modal.classList.remove('hidden');
+    const modalEl = typeof modal === 'string' ? $(modal) : modal;
+    const layer = el.layer || $('modalLayer');
+    if(layer) {
+      layer.classList.remove('hidden');
+      layer.querySelectorAll('.modal').forEach(x => {
+        x.classList.add('hidden');
+      });
+    }
+    if(modalEl) modalEl.classList.remove('hidden');
   }
   function closeModal() {
-    audio.stopPreview();
-    stopShopShowcase();
-    stopChampionSpotlight();
-    if(el.layer) {
-      el.layer.classList.add('hidden');
-      el.layer.querySelectorAll('.modal').forEach(x => {
+    if(audio && typeof audio.stopPreview === 'function') audio.stopPreview();
+    if(typeof stopShopShowcase === 'function') stopShopShowcase();
+    if(typeof stopChampionSpotlight === 'function') stopChampionSpotlight();
+    const layer = el.layer || $('modalLayer');
+    if(layer) {
+      layer.classList.add('hidden');
+      layer.querySelectorAll('.modal').forEach(x => {
         x.classList.add('hidden');
       });
     }
@@ -10747,12 +10751,18 @@
   }
 
   function openFallbackAdPlayerModal() {
-    if(!el.admobRewardModal) return;
-    showModal(el.admobRewardModal);
+    const modal = $('admobRewardModal') || el.admobRewardModal;
+    if(!modal) return;
 
-    if(el.admobCloseBtn) el.admobCloseBtn.classList.add('hidden');
-    if(el.admobTimerCount) el.admobTimerCount.textContent = '5s';
-    if(el.admobProgressFill) el.admobProgressFill.style.width = '0%';
+    showModal(modal);
+
+    const closeBtn = $('admobCloseBtn') || el.admobCloseBtn;
+    const timerCount = $('admobTimerCount') || el.admobTimerCount;
+    const progressFill = $('admobProgressFill') || el.admobProgressFill;
+
+    if(closeBtn) closeBtn.classList.add('hidden');
+    if(timerCount) timerCount.textContent = '5s';
+    if(progressFill) progressFill.style.width = '0%';
 
     clearInterval(admobAdTimer);
     const startTime = Date.now();
@@ -10763,14 +10773,14 @@
       const progressRatio = Math.min(1, elapsed / duration);
       const remainingSecs = Math.max(0, Math.ceil((duration - elapsed) / 1000));
 
-      if(el.admobProgressFill) el.admobProgressFill.style.width = (progressRatio * 100) + '%';
-      if(el.admobTimerCount) el.admobTimerCount.textContent = remainingSecs + 's';
+      if(progressFill) progressFill.style.width = (progressRatio * 100) + '%';
+      if(timerCount) timerCount.textContent = remainingSecs + 's';
 
       if(elapsed >= duration) {
         clearInterval(admobAdTimer);
         admobAdTimer = null;
-        if(el.admobTimerCount) el.admobTimerCount.textContent = 'SELESAI! ✅';
-        if(el.admobCloseBtn) el.admobCloseBtn.classList.remove('hidden');
+        if(timerCount) timerCount.textContent = 'SELESAI! ✅';
+        if(closeBtn) closeBtn.classList.remove('hidden');
         if(audio && typeof audio.win === 'function') audio.win();
       }
     }, 100);
