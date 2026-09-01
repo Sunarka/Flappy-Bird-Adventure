@@ -237,15 +237,42 @@ class FirebaseLeaderboardService {
   }
 
   /**
-   * Fetch User Profile from Firestore by UID (Cross-Device Cloud Sync)
-   * @param {string} uid
+   * Fetch User Profile from Firestore by Primary Key (Cross-Device Cloud Sync)
+   * @param {string} primaryKey
    */
-  async fetchUserProfile(uid) {
-    if (!uid || !this.isInitialized || !this.db) return null;
+  async fetchUserProfile(primaryKey) {
+    if (!primaryKey || !this.isInitialized || !this.db) return null;
+    const cleanKey = String(primaryKey).replace(/[^a-zA-Z0-9_-]/g, '_');
     try {
-      const doc = await this.db.collection('flappy_users').doc(String(uid)).get();
+      // 1. Cek di flappy_leaderboard (dokumen utama yang menyimpan profil & skor)
+      const doc = await this.db.collection(this.collectionName).doc(cleanKey).get();
       if (doc.exists) {
-        return doc.data();
+        const d = doc.data();
+        return {
+          gamerTag: d.name || d.gamerTag,
+          avatar: d.avatar,
+          rankedBest: typeof d.score === 'number' ? d.score : (d.rankedBest || 0),
+          coins: d.coins || 0,
+          nameChangesDone: d.nameChangesDone || 0,
+          loadout: d.loadout || {}
+        };
+      }
+
+      // 2. Cek variasi UID tanpa prefix 'acc_'
+      const rawUid = cleanKey.replace(/^acc_/, '');
+      if (rawUid !== cleanKey) {
+        const doc2 = await this.db.collection(this.collectionName).doc(rawUid).get();
+        if (doc2.exists) {
+          const d2 = doc2.data();
+          return {
+            gamerTag: d2.name || d2.gamerTag,
+            avatar: d2.avatar,
+            rankedBest: typeof d2.score === 'number' ? d2.score : (d2.rankedBest || 0),
+            coins: d2.coins || 0,
+            nameChangesDone: d2.nameChangesDone || 0,
+            loadout: d2.loadout || {}
+          };
+        }
       }
     } catch(err) {
       console.warn('[Firebase] fetchUserProfile error:', err.message);
@@ -254,14 +281,29 @@ class FirebaseLeaderboardService {
   }
 
   /**
-   * Save or Update User Profile in Firestore by UID
-   * @param {string} uid
+   * Save or Update User Profile in Firestore by Primary Key
+   * @param {string} primaryKey
    * @param {Object} data
    */
-  async saveUserProfile(uid, data) {
-    if (!uid || !data || !this.isInitialized || !this.db) return false;
+  async saveUserProfile(primaryKey, data) {
+    if (!primaryKey || !data || !this.isInitialized || !this.db) return false;
+    const cleanKey = String(primaryKey).replace(/[^a-zA-Z0-9_-]/g, '_');
     try {
-      await this.db.collection('flappy_users').doc(String(uid)).set(data, { merge: true });
+      const payload = {
+        primaryKey: cleanKey,
+        id: cleanKey,
+        uid: data.uid || cleanKey.replace(/^acc_/, ''),
+        name: String(data.gamerTag || data.name || 'SkyPlayer').slice(0, 20),
+        avatar: data.avatar || 'chick_yellow',
+        nameChangesDone: data.nameChangesDone || 0,
+        score: typeof data.rankedBest === 'number' ? data.rankedBest : (data.score || 0),
+        coins: data.coins || 0,
+        loadout: data.loadout || {},
+        updatedAt: (typeof firebase !== 'undefined' && firebase.firestore?.FieldValue)
+          ? firebase.firestore.FieldValue.serverTimestamp()
+          : new Date().toISOString()
+      };
+      await this.db.collection(this.collectionName).doc(cleanKey).set(payload, { merge: true });
       return true;
     } catch(err) {
       console.warn('[Firebase] saveUserProfile error:', err.message);
