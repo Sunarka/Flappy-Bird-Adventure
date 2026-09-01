@@ -3175,30 +3175,55 @@
     window.FirebaseLeaderboard.listenToLeaderboard(remoteScores => {
       if(Array.isArray(remoteScores) && remoteScores.length > 0) {
         const merged = [];
-        const seen = new Set();
+        const seenKeys = new Set();
+        const userUid = gpProfile.googleUid || gpProfile.id;
+        let currentUserAdded = false;
 
-        // 1. Masukkan pemain dari Firebase
+        // 1. Masukkan pemain dari Firebase dengan deduplikasi akun ketat
         remoteScores.forEach(r => {
-          if(r && r.name) {
-            const isMe = gpProfile && (r.name === gpProfile.gamerTag || r.id === gpProfile.id);
-            seen.add(r.name);
-            merged.push({
-              ...r,
-              isUser: isMe
-            });
+          if(r && (r.name || r.id)) {
+            const isMe = !!(
+              (userUid && (r.uid === userUid || r.id === 'user_' + userUid || r.id === userUid)) ||
+              (gpProfile.gamerTag && r.name === gpProfile.gamerTag)
+            );
+
+            if(isMe) {
+              if(!currentUserAdded) {
+                currentUserAdded = true;
+                merged.push({
+                  ...r,
+                  id: userUid,
+                  uid: userUid,
+                  name: gpProfile.gamerTag || r.name,
+                  avatar: gpProfile.avatar || r.avatar || 'chick_yellow',
+                  score: Math.max(r.score || 0, rankedBest || 0),
+                  isUser: true
+                });
+              }
+            } else {
+              const accountKey = r.uid || r.id || r.name;
+              if(!seenKeys.has(accountKey) && !seenKeys.has(r.name)) {
+                seenKeys.add(accountKey);
+                seenKeys.add(r.name);
+                merged.push({
+                  ...r,
+                  isUser: false
+                });
+              }
+            }
           }
         });
 
-        // 2. Tambahkan entri pemain jika sudah pernah skor tapi belum masuk query
-        if(gpProfile && gpProfile.gamerTag && rankedBest > 0 && !seen.has(gpProfile.gamerTag)) {
-          seen.add(gpProfile.gamerTag);
+        // 2. Tambahkan entri pemain saat ini jika belum masuk query Firebase
+        if(!currentUserAdded && gpProfile && gpProfile.gamerTag && rankedBest > 0) {
           merged.push({
             isUser: true,
-            id: gpProfile.id || gpProfile.gamerTag,
+            id: userUid,
+            uid: userUid,
             name: gpProfile.gamerTag,
             score: rankedBest,
             tier: getRankTier(rankedBest).name,
-            avatar: gpProfile.avatar,
+            avatar: gpProfile.avatar || 'chick_yellow',
             loadout: {
               bird: progress.selected || 'classic',
               baby: progress.selectedBaby || 'classic_duo',
@@ -3211,10 +3236,10 @@
           });
         }
 
-        // 3. Tambahkan default bot/hall of fame jika daftar masih sedikit (< 7 pemain)
+        // 3. Tambahkan default bot jika daftar masih sedikit (< 12 pemain)
         defaultLeaderboard.forEach(d => {
-          if(!seen.has(d.name) && merged.length < 12) {
-            seen.add(d.name);
+          if(!seenKeys.has(d.name) && merged.length < 12) {
+            seenKeys.add(d.name);
             merged.push(d);
           }
         });
@@ -3223,6 +3248,7 @@
         leaderboardData.sort((a, b) => b.score - a.score);
         leaderboardData.forEach((p, i) => p.rank = i + 1);
 
+        storage.set('skyFlappyLeaderboard_v6', leaderboardData);
         storage.set('skyFlappyLeaderboard', leaderboardData);
 
         if(el.rankedModal && !el.rankedModal.classList.contains('hidden')) {
@@ -10709,35 +10735,7 @@
     }
   });
 
-  // Auto-listen to Firebase Auth state on load & preserve custom gamerTag
-  if(typeof window.FirebaseLeaderboard !== 'undefined' && typeof window.FirebaseLeaderboard.onAuthStateChanged === 'function') {
-    window.FirebaseLeaderboard.onAuthStateChanged(user => {
-      if(user) {
-        const accKey = user.uid || user.email;
-        const accountsMap = storage.get('skyFlappyAccountsMap', {});
-        const savedAcc = accountsMap[accKey];
-
-        gpProfile.isLoggedIn = true;
-        gpProfile.isGoogle = true;
-        gpProfile.email = user.email || '';
-        gpProfile.googleUid = user.uid;
-
-        if(savedAcc && savedAcc.gamerTag && savedAcc.gamerTag !== 'SkyPlayer') {
-          gpProfile.gamerTag = savedAcc.gamerTag;
-          if (savedAcc.avatar) gpProfile.avatar = savedAcc.avatar;
-          gpProfile.nameChangesDone = savedAcc.nameChangesDone || 0;
-          if (savedAcc.rankedBest && savedAcc.rankedBest > rankedBest) {
-            rankedBest = savedAcc.rankedBest;
-            storage.set('skyFlappyRankedBest', rankedBest);
-          }
-        } else if (!gpProfile.gamerTag || gpProfile.gamerTag === 'SkyPlayer') {
-          gpProfile.gamerTag = user.displayName ? user.displayName.slice(0, 16) : (user.email ? user.email.split('@')[0] : 'SkyPlayer');
-        }
-        saveGPProfile();
-      }
-      syncGPProfileUI();
-    });
-  }
+  // (Auth state managed seamlessly by syncCloudProfile)
 
   bindClick('howBtn', () => { audio.click(); showModal(el.how); });
   bindClick('settingsBtn', () => { audio.click(); showModal(el.settings); });
