@@ -6,15 +6,15 @@
   <meta name="theme-color" content="#77cef2">
   <title>Feather Rush</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=12.4">
-  <link rel="stylesheet" href="css/modern-icons.css?v=12.4">
-  <link rel="stylesheet" href="css/shop.css?v=12.4">
-  <link rel="stylesheet" href="css/shop-extra.css?v=12.4">
-  <link rel="stylesheet" href="css/mode-picker.css?v=12.4">
-  <link rel="stylesheet" href="css/store.css?v=12.4">
-  <link rel="stylesheet" href="css/ranked.css?v=12.4">
-  <link rel="stylesheet" href="css/multiplayer.css?v=12.4">
-  <link rel="stylesheet" href="css/splash.css?v=12.4">
+  <link rel="stylesheet" href="css/style.css?v=12.5">
+  <link rel="stylesheet" href="css/modern-icons.css?v=12.5">
+  <link rel="stylesheet" href="css/shop.css?v=12.5">
+  <link rel="stylesheet" href="css/shop-extra.css?v=12.5">
+  <link rel="stylesheet" href="css/mode-picker.css?v=12.5">
+  <link rel="stylesheet" href="css/store.css?v=12.5">
+  <link rel="stylesheet" href="css/ranked.css?v=12.5">
+  <link rel="stylesheet" href="css/multiplayer.css?v=12.5">
+  <link rel="stylesheet" href="css/splash.css?v=12.5">
 </head>
 <body>
   <!-- Standard Minimalist Game Splash Screen (Black Background) -->
@@ -279,6 +279,15 @@
       <button class="secondary" id="shopBtn">SHOP</button>
       <button class="secondary" id="howBtn">HOW TO PLAY</button>
       <button class="secondary" id="settingsBtn">SETTINGS</button>
+
+      <!-- Bottom-Left Feedback & Complaint Button (Google Form) -->
+      <a id="lobbyFeedbackBtn" class="lobby-feedback-btn" href="https://forms.gle" target="_blank" rel="noopener noreferrer" title="Pengaduan & Masukan Game (Google Form)" aria-label="Pengaduan Game">
+        <svg class="feedback-icon" viewBox="0 0 24 24">
+          <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/>
+        </svg>
+        <span>PENGADUAN</span>
+      </a>
+
       <div class="home-wallet">COINS <b id="coinCount">0</b></div>
     </section>
     <section id="ready" class="screen hidden">
@@ -810,8 +819,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=12.4"></script>
-  <script src="js/multiplayer.js?v=12.4"></script>
-  <script src="js/script.js?v=12.4"></script>
+  <script src="js/firebase-config.js?v=12.5"></script>
+  <script src="js/multiplayer.js?v=12.5"></script>
+  <script src="js/script.js?v=12.5"></script>
 </body>
 </html>

@@ -184,3 +184,53 @@
   gap: 6px;
 }
 
+/* =========================================================
+   BOTTOM-LEFT LOBBY FEEDBACK & BUG REPORT BUTTON (GOOGLE FORM)
+   ========================================================= */
+.lobby-feedback-btn {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  height: 32px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-radius: 99px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #e11d48;
+  font-family: 'Trebuchet MS', system-ui, -apple-system, sans-serif;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-decoration: none;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.12), 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 10;
+  cursor: pointer;
+  user-select: none;
+}
+
+.lobby-feedback-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: #ffffff;
+  color: #be123c;
+  border-color: #fda4af;
+  box-shadow: 0 6px 18px rgba(225, 29, 72, 0.25);
+}
+
+.lobby-feedback-btn:active {
+  transform: translateY(1px) scale(0.95);
+}
+
+.lobby-feedback-btn .feedback-icon {
+  width: 14px;
+  height: 14px;
+  display: block;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
