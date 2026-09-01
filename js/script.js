@@ -10722,7 +10722,7 @@
   });
 
   // =========================================================
-  // ADMOB REWARDED VIDEO ADS SYSTEM (WATCH AD -> GET +50 COINS)
+  // ADMOB REWARDED VIDEO ADS SYSTEM (WATCH AD -> GET +25 COINS)
   // =========================================================
   let admobAdTimer = null;
 
@@ -10730,7 +10730,7 @@
     if(!el.admobRewardModal) return;
 
     if(audio) audio.click();
-    openModal(el.admobRewardModal);
+    showModal(el.admobRewardModal);
 
     if(el.admobCloseBtn) el.admobCloseBtn.classList.add('hidden');
     if(el.admobTimerCount) el.admobTimerCount.textContent = '5s';
@@ -10763,8 +10763,8 @@
     clearInterval(admobAdTimer);
     admobAdTimer = null;
 
-    // Grant +50 coins reward!
-    progress.coins = (progress.coins || 0) + 50;
+    // Grant +25 coins reward!
+    progress.coins = (progress.coins || 0) + 25;
     persistProgress();
     updateCoins();
     if(audio) audio.coin();
@@ -10775,7 +10775,7 @@
     floatingTexts.push({
       x: bird.x,
       y: bird.y - 30,
-      text: '+50 KOIN BERHASIL DIKLAIM! 🪙',
+      text: '+25 KOIN BERHASIL DIKLAIM! 🪙',
       color: '#fbbf24',
       vy: -55,
       life: 1.2,
