@@ -14,14 +14,14 @@
 
 (function(window) {
   const AdMobConfig = {
-    // GANTI DENGAN PUBLISHER ID GOOGLE ADMOB / ADSENSE ASLI ANDA:
-    PUBLISHER_ID: 'ca-pub-0000000000000000', // Ganti dengan ca-pub-XXXXXXXXXXXXXXXX Anda
+    // PUBLISHER ID GOOGLE ADMOB / ADSENSE RESMI:
+    PUBLISHER_ID: 'ca-pub-3613614202318317',
 
     // Channel ID / Ad Unit ID khusus (opsional):
     CHANNEL_ID: 'rewarded_coin_ad',
 
-    // Mode Pengujian: true = menampilkan iklan test AdMob / Simulator, false = Iklan Real Live
-    TEST_MODE: true,
+    // Mode Pengujian: false = Siap menayangkan iklan resmi Google Ads / AdSense / AdMob
+    TEST_MODE: false,
 
     // Frekuensi hint untuk Google H5 Games Ads
     FREQUENCY_HINT: '30s',
