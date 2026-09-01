@@ -1,6 +1,6 @@
-# Flappy Bird — Sky Challenge
+# Feather Rush — Sky Challenge
 
-Game Canvas vanilla HTML5, CSS3, dan JavaScript dengan sistem Online Global Leaderboard (Firebase Cloud Firestore), Active Dash Skill, Power-Up, Enemy Progression, Audio Synthesizer, serta Shop Kosmetik.
+Game Canvas arcade HTML5, CSS3, dan JavaScript dengan sistem Online Global Leaderboard (Firebase Cloud Firestore), Multiplayer 1v1 / 3P / 4P Sprint Race & Battle Royale, Active Dash Skill, Power-Up Tempur, Enemy Progression, Audio Synthesizer, serta Shop Kosmetik.
 
 ## 📁 Struktur Direktori
 
