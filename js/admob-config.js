@@ -1,23 +1,33 @@
 /**
  * =========================================================
- * GOOGLE AD MANAGER (GAM) & GPT REWARDED ADS SDK CONTROLLER
+ * GOOGLE ADMOB & AD MANAGER REWARDED ADS SDK CONTROLLER
  * =========================================================
  * 
- * Untuk game web, Google Ad Manager (GAM) menggunakan Google Publisher Tag (GPT)
- * dan Out-Of-Page Rewarded Ads (`googletag.enums.OutOfPageType.REWARDED`).
+ * Konfigurasi Resmi Google AdMob:
+ * - ID Aplikasi AdMob: ca-app-pub-3613614202318317~3032753757
+ * - ID Unit Iklan Reward: ca-app-pub-3613614202318317/6774733814
+ * - Slot ID: 6774733814
+ * - Publisher ID: ca-pub-3613614202318317
  */
 
 (function(window) {
-  const AdManagerConfig = {
-    // GOOGLE AD MANAGER AD UNIT PATH / NETWORK CODE:
-    // Format: '/<NETWORK_CODE>/<AD_UNIT_NAME>'
-    // Contoh resmi Google Test Ad Unit: '/21775744923/example/rewarded'
-    AD_UNIT_PATH: '/21775744923/example/rewarded',
+  const AdMobConfig = {
+    // ID APLIKASI GOOGLE ADMOB RESMI:
+    APP_ID: 'ca-app-pub-3613614202318317~3032753757',
 
-    // PUBLISHER ID GOOGLE ADSENSE / AD MANAGER:
+    // ID UNIT IKLAN REWARD ADMOB:
+    REWARD_AD_UNIT_ID: 'ca-app-pub-3613614202318317/6774733814',
+
+    // AD SLOT ID:
+    AD_SLOT_ID: '6774733814',
+
+    // PUBLISHER ID:
     PUBLISHER_ID: 'ca-pub-3613614202318317',
 
-    // Nilai Koin Hadiah
+    // GAM Ad Unit Path:
+    AD_UNIT_PATH: '/21775744923/example/rewarded',
+
+    // Nilai Koin Hadiah:
     REWARD_COIN_AMOUNT: 25,
 
     // State
@@ -27,36 +37,35 @@
 
   window.googletag = window.googletag || { cmd: [] };
 
-  // Inisialisasi Google Ad Manager GPT Rewarded Slot
+  // Inisialisasi Google GPT Rewarded Slot
   window.googletag.cmd.push(() => {
     try {
       if (typeof googletag.defineOutOfPageSlot === 'function' && googletag.enums && googletag.enums.OutOfPageType) {
         const rewardedSlot = googletag.defineOutOfPageSlot(
-          AdManagerConfig.AD_UNIT_PATH,
+          AdMobConfig.AD_UNIT_PATH,
           googletag.enums.OutOfPageType.REWARDED
         );
 
         if (rewardedSlot) {
-          AdManagerConfig.rewardedSlot = rewardedSlot;
+          AdMobConfig.rewardedSlot = rewardedSlot;
           rewardedSlot.addService(googletag.pubads());
 
           googletag.pubads().addEventListener('rewardedSlotReady', (event) => {
-            console.log('[Google Ad Manager] Iklan rewarded siap ditayangkan!');
-            AdManagerConfig.isRewardedReady = true;
-            AdManagerConfig.makeVisibleCallback = () => event.makeRewardedVisible();
+            console.log('[Google AdMob/GAM] Iklan rewarded siap tayang!');
+            AdMobConfig.isRewardedReady = true;
+            AdMobConfig.makeVisibleCallback = () => event.makeRewardedVisible();
           });
 
           googletag.pubads().addEventListener('rewardedSlotGranted', (event) => {
-            console.log('[Google Ad Manager] Hadiah reward berhasil diberikan!');
+            console.log('[Google AdMob/GAM] Hadiah reward berhasil diklaim!');
             if (typeof window.onAdManagerRewardGranted === 'function') {
-              window.onAdManagerRewardGranted(AdManagerConfig.REWARD_COIN_AMOUNT);
+              window.onAdManagerRewardGranted(AdMobConfig.REWARD_COIN_AMOUNT);
             }
           });
 
           googletag.pubads().addEventListener('rewardedSlotClosed', () => {
-            console.log('[Google Ad Manager] Iklan rewarded ditutup.');
-            AdManagerConfig.isRewardedReady = false;
-            // Muat slot baru untuk kesempatan berikutnya
+            console.log('[Google AdMob/GAM] Iklan rewarded ditutup.');
+            AdMobConfig.isRewardedReady = false;
             googletag.pubads().refresh([rewardedSlot]);
           });
         }
@@ -65,23 +74,20 @@
         if (rewardedSlot) googletag.display(rewardedSlot);
       }
     } catch (err) {
-      console.warn('[Google Ad Manager] Inisialisasi GPT error:', err);
+      console.warn('[Google AdMob/GAM] Inisialisasi error:', err);
     }
   });
 
-  // Helper pemanggil Iklan Berhadiah Google Ad Manager
-  window.showGoogleAdManagerRewarded = function(onRewardSuccess, onAdDismissed, onFallbackNeeded) {
+  // Helper pemanggil Iklan Berhadiah Google AdMob & GAM
+  window.showGoogleAdMobRewarded = function(onRewardSuccess, onAdDismissed, onFallbackNeeded) {
     window.onAdManagerRewardGranted = onRewardSuccess;
 
-    // 1. Jika Google Ad Manager GPT memiliki iklan siap tayang
-    if (AdManagerConfig.isRewardedReady && typeof AdManagerConfig.makeVisibleCallback === 'function') {
-      console.log('[Google Ad Manager] Menampilkan iklan resmi GAM...');
+    // 1. Jika GPT memiliki iklan siap tayang
+    if (AdMobConfig.isRewardedReady && typeof AdMobConfig.makeVisibleCallback === 'function') {
       try {
-        AdManagerConfig.makeVisibleCallback();
+        AdMobConfig.makeVisibleCallback();
         return true;
-      } catch (e) {
-        console.warn('[Google Ad Manager] Gagal menampilkan iklan GAM:', e);
-      }
+      } catch (_) {}
     }
 
     // 2. Cek apakah Google H5 adBreak tersedia
@@ -89,23 +95,22 @@
       try {
         window.adBreak({
           type: 'reward',
-          name: 'gam_rewarded_ad',
+          name: 'admob_reward_ad',
           beforeReward: (showAdFn) => { showAdFn(); },
           adViewed: () => {
-            if (typeof onRewardSuccess === 'function') onRewardSuccess(AdManagerConfig.REWARD_COIN_AMOUNT);
+            if (typeof onRewardSuccess === 'function') onRewardSuccess(AdMobConfig.REWARD_COIN_AMOUNT);
           }
         });
         return true;
       } catch (_) {}
     }
 
-    // 3. Fallback jika GAM belum ada inventory
+    // 3. Fallback jika iklan belum ready
     if (typeof onFallbackNeeded === 'function') onFallbackNeeded();
     return false;
   };
 
-  // Kompatibilitas mundur
-  window.showGoogleAdMobRewarded = window.showGoogleAdManagerRewarded;
-  window.AdManagerConfig = AdManagerConfig;
-  window.AdMobConfig = AdManagerConfig;
+  window.showGoogleAdManagerRewarded = window.showGoogleAdMobRewarded;
+  window.AdMobConfig = AdMobConfig;
+  window.AdManagerConfig = AdMobConfig;
 })(window);
