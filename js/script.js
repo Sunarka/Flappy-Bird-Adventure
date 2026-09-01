@@ -10649,10 +10649,10 @@
     }
   }
 
-  // Auto-Sync Auth & Profile saat game dibuka
+  // Auto-Sync Auth & Profile secara realtime saat game dibuka di perangkat apa pun
   if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.onAuthStateChanged === 'function') {
     window.FirebaseLeaderboard.onAuthStateChanged(user => {
-      if(user && (!gpProfile.isLoggedIn || gpProfile.googleUid !== user.uid)) {
+      if(user) {
         syncCloudProfile(user, user.providerData && user.providerData[0] ? user.providerData[0].providerId : 'google');
       }
     });
