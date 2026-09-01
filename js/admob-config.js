@@ -2,14 +2,6 @@
  * =========================================================
  * GOOGLE ADMOB & H5 GAMES ADS REWARDED SDK CONFIGURATION
  * =========================================================
- * 
- * CARA MENGHUBUNGKAN AKUN GOOGLE ADMOB / ADSENSE ANDA:
- * 1. Buka dashboard Google AdMob / Google AdSense Anda.
- * 2. Salin Publisher ID Anda (format: ca-pub-XXXXXXXXXXXXXXXX)
- *    lalu masukkan ke variabel `PUBLISHER_ID` di bawah.
- * 3. Jika menggunakan Ad Unit / Channel ID khusus, masukkan ke `CHANNEL_ID`.
- * 4. Untuk mode uji coba / testing, set `TEST_MODE: true` agar tidak melanggar
- *    kebijakan penayangan iklan Google.
  */
 
 (function(window) {
@@ -17,11 +9,8 @@
     // PUBLISHER ID GOOGLE ADMOB / ADSENSE RESMI:
     PUBLISHER_ID: 'ca-pub-3613614202318317',
 
-    // Channel ID / Ad Unit ID khusus (opsional):
+    // Channel ID / Ad Unit ID khusus:
     CHANNEL_ID: 'rewarded_coin_ad',
-
-    // Mode Pengujian: false = Siap menayangkan iklan resmi Google Ads / AdSense / AdMob
-    TEST_MODE: false,
 
     // Frekuensi hint untuk Google H5 Games Ads
     FREQUENCY_HINT: '30s',
@@ -38,36 +27,23 @@
     }
   };
 
-  // Muat script Google Ads secara dinamis jika Publisher ID valid dan bukan placeholder
-  if (AdMobConfig.PUBLISHER_ID && AdMobConfig.PUBLISHER_ID !== 'ca-pub-0000000000000000') {
-    const adScript = document.createElement('script');
-    adScript.async = true;
-    adScript.setAttribute('data-ad-client', AdMobConfig.PUBLISHER_ID);
-    adScript.setAttribute('data-ad-frequency-hint', AdMobConfig.FREQUENCY_HINT);
-    if (AdMobConfig.CHANNEL_ID) {
-      adScript.setAttribute('data-ad-channel', AdMobConfig.CHANNEL_ID);
-    }
-    adScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
-    adScript.onerror = function() {
-      console.warn('[AdMob SDK] Gagal memuat skrip iklan Google Ads (terblokir adblock atau offline). Menggunakan simulator.');
-    };
-    document.head.appendChild(adScript);
-  }
-
-  // Helper pemanggil Iklan Berhadiah Google AdMob
+  // Helper pemanggil Iklan Berhadiah Google AdMob / H5 Ads
   window.showGoogleAdMobRewarded = function(onRewardSuccess, onAdDismissed) {
-    // Cek apakah Google adBreak SDK aktif & siap menayangkan iklan real
+    // Cek apakah Google adBreak SDK aktif & siap menayangkan iklan
     try {
-      if (typeof window.adBreak === 'function' && window.adsbygoogle && window.adsbygoogle.loaded) {
+      if (typeof window.adBreak === 'function') {
+        console.log('[AdMob SDK] Meminta penayangan iklan video berhadiah ke Google Ads...');
         window.adBreak({
           type: 'reward',
           name: 'feather_rush_coin_reward',
           beforeAd: () => {
+            console.log('[AdMob SDK] Iklan Google mulai tayang');
             if (window.audio && typeof window.audio.stopMusic === 'function') {
               window.audio.stopMusic();
             }
           },
           afterAd: () => {
+            console.log('[AdMob SDK] Iklan Google selesai');
             if (window.settings && window.settings.music && window.audio) {
               window.audio.lobbyMusic();
             }
@@ -77,6 +53,7 @@
             showAdFn();
           },
           adViewed: () => {
+            console.log('[AdMob SDK] Hadiah koin terverifikasi oleh Google Ads!');
             if (typeof onRewardSuccess === 'function') {
               onRewardSuccess(AdMobConfig.REWARD_COIN_AMOUNT);
             }
@@ -95,4 +72,3 @@
 
   window.AdMobConfig = AdMobConfig;
 })(window);
-
