@@ -310,139 +310,18 @@
 }
 
 .admob-ad-stage {
-  background: #000000;
+  background: #020617;
   border-radius: 12px;
-  padding: 0;
+  padding: 8px;
   margin-bottom: 10px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 140px;
+  min-height: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.admob-video-ad-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: #000000;
-  overflow: hidden;
-}
-
-.admob-video-player {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.admob-commercial-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 12px;
-  z-index: 4;
-}
-
-.admob-commercial-content {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-}
-
-.admob-app-icon {
-  width: 42px;
-  height: 42px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-  flex-shrink: 0;
-}
-
-.admob-app-info {
-  flex: 1;
-  text-align: left;
-  min-width: 0;
-}
-
-.admob-app-title {
-  font: 900 11.5px 'Trebuchet MS', sans-serif;
-  color: #ffffff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.admob-app-desc {
-  font: 500 9px sans-serif;
-  color: #94a3b8;
-  line-height: 1.2;
-  margin: 2px 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.admob-app-stars {
-  font-size: 8.5px;
-  color: #fbbf24;
-  font-weight: 700;
-}
-
-.admob-rating-count {
-  color: #64748b;
-  font-weight: normal;
-}
-
-.admob-install-pill {
-  background: #22c55e;
-  color: #ffffff !important;
-  font: 900 10px 'Trebuchet MS', sans-serif;
-  padding: 5px 10px;
-  border-radius: 99px;
-  text-decoration: none;
-  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4);
-  flex-shrink: 0;
-  transition: transform 0.15s ease, background 0.15s ease;
-}
-
-.admob-install-pill:hover {
-  background: #16a34a;
-  transform: scale(1.05);
-}
-
-.admob-video-overlay-badge {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  background: rgba(0, 0, 0, 0.75);
-  color: #ffffff;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font: 800 9.5px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  letter-spacing: 0.5px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.admob-live-slot-wrap {
-  display: none;
 }
 
 .admob-progress-bar {
