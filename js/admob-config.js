@@ -1,100 +1,111 @@
 /**
  * =========================================================
- * GOOGLE ADMOB & H5 GAMES ADS REWARDED SDK CONFIGURATION
+ * GOOGLE AD MANAGER (GAM) & GPT REWARDED ADS SDK CONTROLLER
  * =========================================================
+ * 
+ * Untuk game web, Google Ad Manager (GAM) menggunakan Google Publisher Tag (GPT)
+ * dan Out-Of-Page Rewarded Ads (`googletag.enums.OutOfPageType.REWARDED`).
  */
 
 (function(window) {
-  const AdMobConfig = {
-    // PUBLISHER ID GOOGLE ADMOB / ADSENSE RESMI:
+  const AdManagerConfig = {
+    // GOOGLE AD MANAGER AD UNIT PATH / NETWORK CODE:
+    // Format: '/<NETWORK_CODE>/<AD_UNIT_NAME>'
+    // Contoh resmi Google Test Ad Unit: '/21775744923/example/rewarded'
+    AD_UNIT_PATH: '/21775744923/example/rewarded',
+
+    // PUBLISHER ID GOOGLE ADSENSE / AD MANAGER:
     PUBLISHER_ID: 'ca-pub-3613614202318317',
 
-    // Channel ID / Ad Unit ID khusus:
-    CHANNEL_ID: 'rewarded_coin_ad',
-
-    // Frekuensi hint untuk Google H5 Games Ads
-    FREQUENCY_HINT: '30s',
-
     // Nilai Koin Hadiah
-    REWARD_COIN_AMOUNT: 25
+    REWARD_COIN_AMOUNT: 25,
+
+    // State
+    isRewardedReady: false,
+    rewardedSlot: null
   };
 
-  // Inisialisasi Google H5 Games Ads SDK (adsbygoogle / adBreak / adConfig)
-  window.adsbygoogle = window.adsbygoogle || [];
-  window.adBreak = window.adConfig = function(o) {
-    if (window.adsbygoogle && typeof window.adsbygoogle.push === 'function') {
-      window.adsbygoogle.push(o);
-    }
-  };
+  window.googletag = window.googletag || { cmd: [] };
 
-  // Helper pemanggil Iklan Berhadiah Google AdMob / H5 Ads
-  window.showGoogleAdMobRewarded = function(onRewardSuccess, onAdDismissed, onFallbackNeeded) {
-    let adStarted = false;
-    let fallbackTimeout = null;
-
+  // Inisialisasi Google Ad Manager GPT Rewarded Slot
+  window.googletag.cmd.push(() => {
     try {
-      // Jika Google Ads SDK terpasang
-      if (typeof window.adBreak === 'function') {
-        console.log('[AdMob SDK] Meminta penayangan iklan video berhadiah ke Google Ads...');
+      if (typeof googletag.defineOutOfPageSlot === 'function' && googletag.enums && googletag.enums.OutOfPageType) {
+        const rewardedSlot = googletag.defineOutOfPageSlot(
+          AdManagerConfig.AD_UNIT_PATH,
+          googletag.enums.OutOfPageType.REWARDED
+        );
 
-        // Jika dalam 800ms Google tidak merespons (misal no-fill atau belum di-approve), buka modal player
-        fallbackTimeout = setTimeout(() => {
-          if (!adStarted) {
-            console.log('[AdMob SDK] Google Ads no-fill / belum menayangkan iklan, mengalihkan ke modal player...');
-            if (typeof onFallbackNeeded === 'function') onFallbackNeeded();
-          }
-        }, 800);
+        if (rewardedSlot) {
+          AdManagerConfig.rewardedSlot = rewardedSlot;
+          rewardedSlot.addService(googletag.pubads());
 
-        window.adBreak({
-          type: 'reward',
-          name: 'feather_rush_coin_reward',
-          beforeAd: () => {
-            adStarted = true;
-            if (fallbackTimeout) clearTimeout(fallbackTimeout);
-            console.log('[AdMob SDK] Iklan Google mulai tayang');
-            if (window.audio && typeof window.audio.stopMusic === 'function') {
-              window.audio.stopMusic();
+          googletag.pubads().addEventListener('rewardedSlotReady', (event) => {
+            console.log('[Google Ad Manager] Iklan rewarded siap ditayangkan!');
+            AdManagerConfig.isRewardedReady = true;
+            AdManagerConfig.makeVisibleCallback = () => event.makeRewardedVisible();
+          });
+
+          googletag.pubads().addEventListener('rewardedSlotGranted', (event) => {
+            console.log('[Google Ad Manager] Hadiah reward berhasil diberikan!');
+            if (typeof window.onAdManagerRewardGranted === 'function') {
+              window.onAdManagerRewardGranted(AdManagerConfig.REWARD_COIN_AMOUNT);
             }
-          },
-          afterAd: () => {
-            if (fallbackTimeout) clearTimeout(fallbackTimeout);
-            console.log('[AdMob SDK] Iklan Google selesai');
-            if (window.settings && window.settings.music && window.audio) {
-              window.audio.lobbyMusic();
-            }
-            if (typeof onAdDismissed === 'function') onAdDismissed();
-          },
-          beforeReward: (showAdFn) => {
-            adStarted = true;
-            if (fallbackTimeout) clearTimeout(fallbackTimeout);
-            showAdFn();
-          },
-          adViewed: () => {
-            console.log('[AdMob SDK] Hadiah koin terverifikasi oleh Google Ads!');
-            if (typeof onRewardSuccess === 'function') {
-              onRewardSuccess(AdMobConfig.REWARD_COIN_AMOUNT);
-            }
-          },
-          adDismissed: () => {
-            if (fallbackTimeout) clearTimeout(fallbackTimeout);
-            if (typeof onAdDismissed === 'function') onAdDismissed();
-          },
-          adBreakDone: (placementInfo) => {
-            if (placementInfo && placementInfo.breakStatus !== 'viewed' && !adStarted) {
-              if (fallbackTimeout) clearTimeout(fallbackTimeout);
-              if (typeof onFallbackNeeded === 'function') onFallbackNeeded();
-            }
-          }
-        });
-        return;
+          });
+
+          googletag.pubads().addEventListener('rewardedSlotClosed', () => {
+            console.log('[Google Ad Manager] Iklan rewarded ditutup.');
+            AdManagerConfig.isRewardedReady = false;
+            // Muat slot baru untuk kesempatan berikutnya
+            googletag.pubads().refresh([rewardedSlot]);
+          });
+        }
+
+        googletag.enableServices();
+        if (rewardedSlot) googletag.display(rewardedSlot);
       }
     } catch (err) {
-      console.warn('[AdMob SDK] adBreak error:', err);
+      console.warn('[Google Ad Manager] Inisialisasi GPT error:', err);
+    }
+  });
+
+  // Helper pemanggil Iklan Berhadiah Google Ad Manager
+  window.showGoogleAdManagerRewarded = function(onRewardSuccess, onAdDismissed, onFallbackNeeded) {
+    window.onAdManagerRewardGranted = onRewardSuccess;
+
+    // 1. Jika Google Ad Manager GPT memiliki iklan siap tayang
+    if (AdManagerConfig.isRewardedReady && typeof AdManagerConfig.makeVisibleCallback === 'function') {
+      console.log('[Google Ad Manager] Menampilkan iklan resmi GAM...');
+      try {
+        AdManagerConfig.makeVisibleCallback();
+        return true;
+      } catch (e) {
+        console.warn('[Google Ad Manager] Gagal menampilkan iklan GAM:', e);
+      }
     }
 
-    // Jika gagal atau SDK belum siap
+    // 2. Cek apakah Google H5 adBreak tersedia
+    if (typeof window.adBreak === 'function' && window.adsbygoogle && window.adsbygoogle.loaded) {
+      try {
+        window.adBreak({
+          type: 'reward',
+          name: 'gam_rewarded_ad',
+          beforeReward: (showAdFn) => { showAdFn(); },
+          adViewed: () => {
+            if (typeof onRewardSuccess === 'function') onRewardSuccess(AdManagerConfig.REWARD_COIN_AMOUNT);
+          }
+        });
+        return true;
+      } catch (_) {}
+    }
+
+    // 3. Fallback jika GAM belum ada inventory
     if (typeof onFallbackNeeded === 'function') onFallbackNeeded();
+    return false;
   };
 
-  window.AdMobConfig = AdMobConfig;
+  // Kompatibilitas mundur
+  window.showGoogleAdMobRewarded = window.showGoogleAdManagerRewarded;
+  window.AdManagerConfig = AdManagerConfig;
+  window.AdMobConfig = AdManagerConfig;
 })(window);
