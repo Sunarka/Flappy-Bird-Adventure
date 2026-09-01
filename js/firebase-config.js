@@ -53,18 +53,20 @@ class FirebaseLeaderboardService {
   }
 
   /**
-   * Submit or update player's high score to Firestore
-   * @param {Object} player - { id, name, score, tier, avatar, loadout }
+   * Submit or update player's high score to Firestore using Unique Primary Key
+   * @param {Object} player - { primaryKey, id, uid, name, score, tier, avatar, loadout }
    */
   async submitScore(player) {
     if (!player || !player.name || typeof player.score !== 'number') return false;
 
-    // Pastikan docId unik dan konsisten per akun pengguna (gunakan UID / ID akun tetap)
-    const rawId = player.uid || player.id || player.email || player.name;
-    const docId = 'user_' + String(rawId).replace(/[^a-zA-Z0-9_-]/g, '_');
+    // PRIMARY KEY KETAT: 1 Akun = 1 Primary Key = 1 Dokumen Firestore
+    const primaryKey = player.primaryKey || (player.uid ? ('acc_' + player.uid) : ('user_' + String(player.id || player.name).replace(/[^a-zA-Z0-9_-]/g, '_')));
+    const docId = primaryKey;
+
     const payload = {
-      id: docId,
-      uid: player.uid || player.id || '',
+      primaryKey: primaryKey,
+      id: primaryKey,
+      uid: player.uid || '',
       name: String(player.name).slice(0, 20),
       score: Math.floor(player.score),
       tier: player.tier || 'BRONZE I',
@@ -86,17 +88,25 @@ class FirebaseLeaderboardService {
       try {
         const docRef = this.db.collection(this.collectionName).doc(docId);
         
-        // Ambil data lama dulu agar tidak menimpa skor yang lebih tinggi
+        // Ambil data lama jika ada
         const existingDoc = await docRef.get();
         if (existingDoc.exists) {
           const oldScore = existingDoc.data().score || 0;
           if (payload.score >= oldScore) {
             await docRef.set(payload, { merge: true });
-            console.log('[Firebase] Score updated for account:', docId, payload.score);
+            console.log('[Firebase] Score updated for Primary Key:', primaryKey, payload.score);
+          } else {
+            // Update nama & kosmetik tanpa menurunkan highscore
+            await docRef.set({
+              name: payload.name,
+              avatar: payload.avatar,
+              loadout: payload.loadout,
+              updatedAt: payload.updatedAt
+            }, { merge: true });
           }
         } else {
           await docRef.set(payload);
-          console.log('[Firebase] Player registered for account:', docId, payload.score);
+          console.log('[Firebase] Primary Key registered:', primaryKey, payload.score);
         }
         return true;
       } catch (err) {

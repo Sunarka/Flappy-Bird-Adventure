@@ -2747,6 +2747,18 @@
     return cuteAvatarsCatalog[0].render(size);
   }
 
+  function getPrimaryAccountKey() {
+    if (gpProfile && gpProfile.googleUid) {
+      return 'acc_' + gpProfile.googleUid;
+    }
+    let devKey = storage.get('skyFlappyDeviceUUID');
+    if (!devKey) {
+      devKey = 'guest_' + Math.random().toString(36).substring(2, 11);
+      storage.set('skyFlappyDeviceUUID', devKey);
+    }
+    return devKey;
+  }
+
   let gpProfile = storage.get('skyFlappyGPProfile', {
     isLoggedIn: false,
     isGoogle: false,
@@ -2756,9 +2768,15 @@
     avatar: 'chick_yellow',
     nameChangesDone: 0,
     level: 1,
-    id: 'G-' + Math.floor(1000000 + Math.random() * 9000000),
+    id: null,
+    primaryKey: null,
     isOnline: true
   });
+
+  if (!gpProfile.primaryKey) {
+    gpProfile.primaryKey = getPrimaryAccountKey();
+    gpProfile.id = gpProfile.primaryKey;
+  }
 
   // Normalisasi avatar jika masih format lama
   if(!cuteAvatarsCatalog.some(a => a.id === gpProfile.avatar)) {
@@ -2771,11 +2789,15 @@
   }
 
   function saveGPProfile() {
+    gpProfile.primaryKey = getPrimaryAccountKey();
+    gpProfile.id = gpProfile.primaryKey;
     storage.set('skyFlappyGPProfile', gpProfile);
+
+    const primaryKey = gpProfile.primaryKey;
     if(gpProfile.googleUid || gpProfile.email) {
-      const accKey = gpProfile.googleUid || gpProfile.email;
       const accountsMap = storage.get('skyFlappyAccountsMap', {});
       const accData = {
+        primaryKey: primaryKey,
         uid: gpProfile.googleUid || '',
         gamerTag: gpProfile.gamerTag,
         avatar: gpProfile.avatar,
@@ -2786,21 +2808,24 @@
         authProvider: gpProfile.authProvider || 'google',
         updatedAt: new Date().toISOString()
       };
-      accountsMap[accKey] = accData;
+      accountsMap[primaryKey] = accData;
+      if(gpProfile.googleUid) accountsMap[gpProfile.googleUid] = accData;
       storage.set('skyFlappyAccountsMap', accountsMap);
 
-      // Simpan ke Firestore Cloud agar seluruh perangkat mendapatkan profil yang sama
+      // Simpan ke Firestore Cloud dengan Primary Key
       if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.saveUserProfile === 'function' && gpProfile.googleUid) {
-        window.FirebaseLeaderboard.saveUserProfile(gpProfile.googleUid, accData);
+        window.FirebaseLeaderboard.saveUserProfile(primaryKey, accData);
       }
     }
 
-    // Perbarui entri user di leaderboard secara langsung agar nama lama tidak menduplikasi akun
+    // Perbarui entri user di leaderboard secara langsung
     if(Array.isArray(leaderboardData)) {
       leaderboardData.forEach(p => {
-        if(p.isUser || p.id === gpProfile.id || p.id === gpProfile.googleUid) {
+        if(p.isUser || p.primaryKey === primaryKey || p.id === primaryKey || (gpProfile.googleUid && p.uid === gpProfile.googleUid)) {
           p.name = gpProfile.gamerTag;
           p.avatar = gpProfile.avatar;
+          p.primaryKey = primaryKey;
+          p.id = primaryKey;
           p.isUser = true;
         }
       });
@@ -3120,14 +3145,15 @@
   function submitRankedScore(s) {
     if(!gpProfile.isLoggedIn) return;
     const tier = getRankTier(s);
-    const userUid = gpProfile.googleUid || gpProfile.id;
+    const primaryKey = getPrimaryAccountKey();
     
-    // Cari index entri user saat ini secara spesifik
-    let existingIndex = leaderboardData.findIndex(p => p.isUser || p.id === userUid || p.uid === userUid || p.name === gpProfile.gamerTag);
+    // Cari index entri user saat ini secara spesifik menggunakan Primary Key
+    let existingIndex = leaderboardData.findIndex(p => p.isUser || p.primaryKey === primaryKey || p.id === primaryKey || (gpProfile.googleUid && p.uid === gpProfile.googleUid) || p.name === gpProfile.gamerTag);
     const userEntry = {
       isUser: true,
-      id: userUid,
-      uid: userUid,
+      primaryKey: primaryKey,
+      id: primaryKey,
+      uid: gpProfile.googleUid || '',
       name: gpProfile.gamerTag,
       score: Math.max(s, rankedBest),
       tier: tier.name,
@@ -3150,6 +3176,7 @@
         leaderboardData[existingIndex].name = userEntry.name;
         leaderboardData[existingIndex].avatar = userEntry.avatar;
         leaderboardData[existingIndex].loadout = userEntry.loadout;
+        leaderboardData[existingIndex].primaryKey = primaryKey;
       }
     } else {
       leaderboardData.push(userEntry);
@@ -3162,7 +3189,7 @@
     storage.set('skyFlappyLeaderboard_v6', leaderboardData);
     storage.set('skyFlappyLeaderboard', leaderboardData);
 
-    // Kirim Skor Tertinggi ke Firebase Firestore Global Leaderboard
+    // Kirim Skor Tertinggi ke Firebase Firestore Global Leaderboard dengan Primary Key
     if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.submitScore === 'function') {
       window.FirebaseLeaderboard.submitScore(userEntry);
     }
@@ -10521,21 +10548,27 @@
   async function syncCloudProfile(user, providerName = 'google') {
     if(!user || !user.uid) return;
     const uid = user.uid;
+    const primaryKey = 'acc_' + uid;
 
     gpProfile.isLoggedIn = true;
     gpProfile.isGoogle = true;
     gpProfile.authProvider = providerName;
     gpProfile.email = user.email || (user.displayName ? `${user.displayName} (${providerName})` : 'Akun Terhubung');
     gpProfile.googleUid = uid;
+    gpProfile.primaryKey = primaryKey;
+    gpProfile.id = primaryKey;
 
-    // 1. Ambil profil akun terpusat dari Firestore Cloud (agar nama di Device 1 langsung sinkron ke Device 2)
+    // 1. Ambil profil akun terpusat dari Firestore Cloud menggunakan Primary Key
     let cloudProfile = null;
     if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.fetchUserProfile === 'function') {
-      cloudProfile = await window.FirebaseLeaderboard.fetchUserProfile(uid);
+      cloudProfile = await window.FirebaseLeaderboard.fetchUserProfile(primaryKey);
+      if(!cloudProfile) {
+        cloudProfile = await window.FirebaseLeaderboard.fetchUserProfile(uid);
+      }
     }
 
     if(cloudProfile && cloudProfile.gamerTag) {
-      console.log('[CloudSync] Memuat profil akun dari cloud:', cloudProfile.gamerTag);
+      console.log('[CloudSync] Profil Primary Key dimuat dari cloud:', primaryKey, cloudProfile.gamerTag);
       gpProfile.gamerTag = cloudProfile.gamerTag;
       if(cloudProfile.avatar) gpProfile.avatar = cloudProfile.avatar;
       gpProfile.nameChangesDone = cloudProfile.nameChangesDone || 0;
@@ -10550,7 +10583,7 @@
       }
     } else {
       const accountsMap = storage.get('skyFlappyAccountsMap', {});
-      const savedAcc = accountsMap[uid] || accountsMap[user.email];
+      const savedAcc = accountsMap[primaryKey] || accountsMap[uid] || accountsMap[user.email];
       if(savedAcc && savedAcc.gamerTag) {
         gpProfile.gamerTag = savedAcc.gamerTag;
         if(savedAcc.avatar) gpProfile.avatar = savedAcc.avatar;
@@ -10559,6 +10592,21 @@
         gpProfile.gamerTag = user.displayName.slice(0, 16);
       } else if(user.email) {
         gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
+      }
+
+      // Simpan data awal ke Firestore Cloud menggunakan Primary Key
+      if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.saveUserProfile === 'function') {
+        await window.FirebaseLeaderboard.saveUserProfile(primaryKey, {
+          primaryKey: primaryKey,
+          uid: uid,
+          email: gpProfile.email,
+          gamerTag: gpProfile.gamerTag,
+          avatar: gpProfile.avatar,
+          nameChangesDone: gpProfile.nameChangesDone || 0,
+          rankedBest: rankedBest || 0,
+          coins: progress.coins || 0,
+          updatedAt: new Date().toISOString()
+        });
       }
     }
 
