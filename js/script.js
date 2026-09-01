@@ -480,24 +480,32 @@
 
   // Audio Engine with Full Synthesizer
   const audio = {
-    ctx:null, musicTimer:null, deathTimer:null, currentAudioElem:null,
+    ctx:null, musicTimer:null, deathTimer:null, currentAudioElem:null, previewAudioElem:null,
     init() {
       if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
       if(this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
     },
-    playAudioFile(filename, loop = true, volume = 0.45) {
-      this.stopFileMusic();
+    playAudioFile(filename, loop = true, volume = 0.45, isPreview = false) {
+      if(isPreview) {
+        this.stopPreviewFileMusic();
+      } else {
+        this.stopFileMusic();
+      }
       try {
         const aud = new Audio('audio/' + filename);
         aud.loop = loop;
         aud.volume = volume;
-        this.currentAudioElem = aud;
+        if(isPreview) {
+          this.previewAudioElem = aud;
+        } else {
+          this.currentAudioElem = aud;
+        }
         const p = aud.play();
         if(p && typeof p.catch === 'function') {
           p.catch(() => {});
         }
         return aud;
-      } catch(e) {
+      } catch(_) {
         return null;
       }
     },
@@ -508,6 +516,15 @@
           this.currentAudioElem.currentTime = 0;
         } catch(e) {}
         this.currentAudioElem = null;
+      }
+    },
+    stopPreviewFileMusic() {
+      if(this.previewAudioElem) {
+        try {
+          this.previewAudioElem.pause();
+          this.previewAudioElem.currentTime = 0;
+        } catch(e) {}
+        this.previewAudioElem = null;
       }
     },
     tone(freq, dur=.1, type='sine', volume=.05, slide=0) {
@@ -1191,11 +1208,15 @@
       }
     },
     previewMusic(trackId) {
-      this.stopMusic();
       this.stopPreview();
       if(!settings.sound && !settings.music) return;
       this.init();
       this.previewTrackId = trackId;
+
+      // Pause background audio while previewing track
+      if(this.currentAudioElem) {
+        try { this.currentAudioElem.pause(); } catch(_) {}
+      }
 
       const animeAudioMap = {
         'gurenge': 'gurenge.wav',
@@ -1205,7 +1226,7 @@
       };
 
       if(animeAudioMap[trackId]) {
-        const aud = this.playAudioFile(animeAudioMap[trackId], true, 0.5);
+        const aud = this.playAudioFile(animeAudioMap[trackId], true, 0.5, true);
         if(aud) {
           aud.onerror = () => {
             this.playSynthPreview(trackId);
@@ -1359,15 +1380,26 @@
     },
     stopPreview() {
       clearInterval(this.previewTimer);
-      this.stopFileMusic();
+      this.stopPreviewFileMusic();
       this.previewTimer = null;
       this.previewTrackId = null;
+      // Resume background lobby music if we're in the menu
+      if(state === State.MENU && settings.music) {
+        if(this.currentAudioElem) {
+          try { this.currentAudioElem.play().catch(() => {}); } catch(_) {}
+        } else {
+          this.lobbyMusic();
+        }
+      }
     },
     stopMusic() {
       clearInterval(this.musicTimer);
       clearInterval(this.deathTimer);
       this.stopFileMusic();
-      this.stopPreview();
+      this.stopPreviewFileMusic();
+      clearInterval(this.previewTimer);
+      this.previewTimer = null;
+      this.previewTrackId = null;
       this.musicTimer = null;
       this.deathTimer = null;
       this.currentMusicType = null;
@@ -3926,6 +3958,8 @@
     score = 0; pipes = []; coins = []; flyers = []; particles = [];
     powerups = []; enemies = []; stormClouds = [];
     shockwaves = []; floatingTexts = [];
+    raceMissiles = []; raceTraps = []; raceBombs = []; raceTornadoes = [];
+    isRespawningRace = false; raceRespawnTimer = 0;
     activePowerups.shield = false;
     activePowerups.magnet = 0;
     activePowerups.slow = 0;
@@ -5148,20 +5182,58 @@
     // World speed is slowed when Slow Time is active, but player physics stays normal!
     const slowFactor = activePowerups.slow > 0 ? 0.52 : 1.0;
 
-    // Update Active Homing Race Missiles
+    // Update Active Homing Race Missiles (Smart Target Tracking)
     for(let i = raceMissiles.length - 1; i >= 0; i--) {
       const m = raceMissiles[i];
-      m.x += (m.vx || 520) * dt;
       m.life -= dt;
 
-      // Exhaust smoke & flame
-      if(Math.random() < 0.6) {
+      // Find closest living rival to home into
+      let targetOp = null;
+      let closestDist = 99999;
+      if(window.multiplayerEngine && window.multiplayerEngine.opponents) {
+        window.multiplayerEngine.opponents.forEach(op => {
+          if(op.isAlive) {
+            const opX = op.curX !== undefined ? op.curX : 90;
+            const d = Math.hypot(opX - m.x, op.y - m.y);
+            if(d < closestDist) {
+              closestDist = d;
+              targetOp = op;
+            }
+          }
+        });
+      }
+
+      if(targetOp) {
+        const targetX = targetOp.curX !== undefined ? targetOp.curX : 90;
+        const targetY = targetOp.y;
+        const dx = targetX - m.x;
+        const dy = targetY - m.y;
+        const desiredAngle = Math.atan2(dy, dx);
+        m.angle = m.angle !== undefined ? m.angle : 0;
+        let diff = desiredAngle - m.angle;
+        while(diff > Math.PI) diff -= Math.PI * 2;
+        while(diff < -Math.PI) diff += Math.PI * 2;
+        m.angle += diff * Math.min(1, dt * 10);
+        const speed = 580;
+        m.vx = Math.cos(m.angle) * speed;
+        m.vy = Math.sin(m.angle) * speed;
+        m.x += m.vx * dt;
+        m.y += m.vy * dt;
+      } else {
+        m.angle = 0;
+        m.x += (m.vx || 540) * dt;
+      }
+
+      // Exhaust smoke & flame trail
+      if(Math.random() < 0.65) {
         particles.push({
-          x: m.x - 12, y: m.y + (Math.random() - 0.5) * 6,
-          vx: -180, vy: (Math.random() - 0.5) * 20,
-          life: 0.2, maxLife: 0.2,
+          x: m.x - 12 * Math.cos(m.angle || 0),
+          y: m.y - 12 * Math.sin(m.angle || 0) + (Math.random() - 0.5) * 4,
+          vx: -180 * Math.cos(m.angle || 0),
+          vy: -180 * Math.sin(m.angle || 0),
+          life: 0.22, maxLife: 0.22,
           color: Math.random() < 0.5 ? '#ef4444' : '#f97316',
-          size: 3
+          size: 3.5
         });
       }
 
@@ -5169,11 +5241,11 @@
       if(window.multiplayerEngine && window.multiplayerEngine.opponents) {
         let hitOp = null;
         window.multiplayerEngine.opponents.forEach(op => {
-          if(op.isAlive && Math.hypot(m.x - (op.curX || 90), m.y - op.y) < 35) {
+          if(op.isAlive && Math.hypot(m.x - (op.curX || 90), m.y - op.y) < 38) {
             hitOp = op;
           }
         });
-        if(hitOp || m.x > W + 60 || m.life <= 0) {
+        if(hitOp || m.x > W + 90 || m.life <= 0) {
           if(hitOp) {
             hitOp.relX = (hitOp.relX || 90) - 130;
             hitOp.curX = hitOp.relX;
@@ -5235,12 +5307,23 @@
       if(t.x < -30 || t.life <= 0) raceTraps.splice(i, 1);
     }
 
-    // Update Active Mega Fire Bombs
+    // Update Active Mega Fire Bombs (Tracks target height & smashes pipes)
     for(let i = raceBombs.length - 1; i >= 0; i--) {
       const b = raceBombs[i];
-      b.x += (b.vx || 460) * dt;
       b.rot = (b.rot || 0) + dt * 6;
       b.life -= dt;
+
+      // Home towards nearest opponent height
+      let targetOp = null;
+      if(window.multiplayerEngine && window.multiplayerEngine.opponents) {
+        window.multiplayerEngine.opponents.forEach(op => {
+          if(op.isAlive) targetOp = op;
+        });
+      }
+      if(targetOp) {
+        b.y += (targetOp.y - b.y) * Math.min(1, dt * 5.0);
+      }
+      b.x += (b.vx || 480) * dt;
 
       // Flame particles trail
       if(Math.random() < 0.65) {
@@ -5297,12 +5380,22 @@
       }
     }
 
-    // Update Active Tornado Cyclones
+    // Update Active Tornado Cyclones (Tracks opponent height)
     for(let i = raceTornadoes.length - 1; i >= 0; i--) {
       const tn = raceTornadoes[i];
-      tn.x += (tn.vx || 420) * dt;
       tn.rot = (tn.rot || 0) + dt * 10;
       tn.life -= dt;
+
+      let targetOp = null;
+      if(window.multiplayerEngine && window.multiplayerEngine.opponents) {
+        window.multiplayerEngine.opponents.forEach(op => {
+          if(op.isAlive) targetOp = op;
+        });
+      }
+      if(targetOp) {
+        tn.y += (targetOp.y - tn.y) * Math.min(1, dt * 4.0);
+      }
+      tn.x += (tn.vx || 440) * dt;
 
       // Swirling wind particles
       if(Math.random() < 0.7) {
@@ -7025,18 +7118,18 @@
         for(const m of raceMissiles) {
           ctx.save();
           ctx.translate(m.x, m.y);
-          ctx.rotate(Math.PI / 4);
+          ctx.rotate((m.angle !== undefined ? m.angle : 0) + Math.PI / 2);
           ctx.fillStyle = '#dc2626';
           ctx.beginPath();
-          ctx.arc(0, -2, 7, Math.PI, 0);
-          ctx.lineTo(7, 8); ctx.lineTo(-7, 8); ctx.closePath();
+          ctx.arc(0, -4, 6, Math.PI, 0);
+          ctx.lineTo(6, 8); ctx.lineTo(-6, 8); ctx.closePath();
           ctx.fill();
           ctx.fillStyle = '#ffffff';
           ctx.beginPath();
-          ctx.arc(0, 2, 3, 0, Math.PI * 2);
+          ctx.arc(0, 1, 2.5, 0, Math.PI * 2);
           ctx.fill();
           ctx.fillStyle = '#f97316';
-          ctx.fillRect(-5, 8, 10, 4);
+          ctx.fillRect(-4, 8, 8, 3);
           ctx.restore();
         }
 
