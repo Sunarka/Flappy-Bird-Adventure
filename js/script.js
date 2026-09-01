@@ -549,6 +549,7 @@
     },
     flap() { this.tone(520, .07, 'triangle', .035, 180); },
     score() { this.tone(760, .13, 'sine', .05, 260); },
+    coin() { this.tone(980, .14, 'sine', .05, 350); },
     hit() { this.tone(130, .2, 'sawtooth', .06, -70); },
     click() { this.tone(360, .045, 'square', .025, 70); },
     win() { this.tone(660, .16, 'triangle', .05, 500); },
@@ -10767,14 +10768,17 @@
     progress.coins = (progress.coins || 0) + 25;
     persistProgress();
     updateCoins();
-    if(audio) audio.coin();
+    if(audio && typeof audio.coin === 'function') audio.coin();
+    else if(audio && typeof audio.win === 'function') audio.win();
 
     // Gold coin particles & floating text popup!
-    makeParticles(bird.x, bird.y, 35, '#fbbf24');
-    makeParticles(bird.x, bird.y, 20, '#fde047');
+    const fxX = (typeof bird !== 'undefined' && bird && Number.isFinite(bird.x)) ? bird.x : 90;
+    const fxY = (typeof bird !== 'undefined' && bird && Number.isFinite(bird.y)) ? bird.y : 260;
+    makeParticles(fxX, fxY, 35, '#fbbf24');
+    makeParticles(fxX, fxY, 20, '#fde047');
     floatingTexts.push({
-      x: bird.x,
-      y: bird.y - 30,
+      x: fxX,
+      y: fxY - 30,
       text: '+25 KOIN BERHASIL DIKLAIM! 🪙',
       color: '#fbbf24',
       vy: -55,
