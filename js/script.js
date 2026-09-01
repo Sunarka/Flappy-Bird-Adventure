@@ -381,7 +381,7 @@
   let best = classicBest, state = State.MENU, last = 0, started = false, score = 0,
       pipes = [], coins = [], flyers = [], particles = [],
       powerups = [], enemies = [], stormClouds = [],
-      shockwaves = [], floatingTexts = [],
+      shockwaves = [], floatingTexts = [], lightningBolts = [],
       raceMissiles = [], raceTraps = [], raceBombs = [], raceTornadoes = [],
       isRespawningRace = false, raceRespawnTimer = 0,
       spawn = 0, flyerSpawn = 0, trailSpawn = 0,
@@ -4337,26 +4337,54 @@
       makeParticles(px, py, 24, '#ef4444');
       makeParticles(px, py, 14, '#fda4af');
     } else if(type === 'zap') {
-      // ⚡ THUNDER ZAP: Serang semua lawan dengan petir halilintar & stun mereka!
-      shake = 0.45;
+      // ⚡ THUNDER ZAP: Serang semua lawan dengan petir halilintar bercabang & stun mereka!
+      shake = 0.5;
       audio.hit();
-      shockwaves.push({ x: bird.x, y: bird.y, r: 10, maxR: 120, color: '#fde047', life: 0.6, maxLife: 0.6 });
-      makeParticles(bird.x, bird.y, 35, '#fde047');
-      makeParticles(bird.x, bird.y, 20, '#38bdf8');
-      if(window.multiplayerEngine) {
+      shockwaves.push({ x: bird.x, y: bird.y, r: 10, maxR: 140, color: '#fde047', life: 0.65, maxLife: 0.65 });
+      shockwaves.push({ x: bird.x, y: bird.y, r: 5, maxR: 90, color: '#38bdf8', life: 0.45, maxLife: 0.45 });
+      makeParticles(bird.x, bird.y, 40, '#fde047');
+      makeParticles(bird.x, bird.y, 25, '#38bdf8');
+
+      if(window.multiplayerEngine && window.multiplayerEngine.opponents) {
+        window.multiplayerEngine.opponents.forEach(op => {
+          if(op.isAlive) {
+            const tx = op.curX !== undefined ? op.curX : 90;
+            const ty = op.y;
+            // Generate realistic procedural lightning segments
+            const segments = [];
+            const steps = 9;
+            for(let s = 0; s <= steps; s++) {
+              const t = s / steps;
+              const lx = bird.x + (tx - bird.x) * t + (s > 0 && s < steps ? (Math.random() - 0.5) * 55 : 0);
+              const ly = bird.y + (ty - bird.y) * t + (s > 0 && s < steps ? (Math.random() - 0.5) * 55 : 0);
+              segments.push({ x: lx, y: ly });
+            }
+            lightningBolts.push({
+              points: segments,
+              life: 0.45,
+              maxLife: 0.45,
+              color: '#fde047'
+            });
+            makeParticles(tx, ty, 20, '#fde047');
+          }
+        });
         window.multiplayerEngine.strikeOpponentsWithZap();
       }
     } else if(type === 'missile') {
       // 🚀 HOMING MISSILE: Luncurkan roket pelacak ke lawan terdepan!
       audio.dash();
-      shake = 0.25;
+      shake = 0.28;
+      shockwaves.push({ x: bird.x, y: bird.y, r: 6, maxR: 55, color: '#f97316', life: 0.35, maxLife: 0.35 });
       raceMissiles.push({
         x: bird.x + 20,
         y: bird.y,
-        vx: 520,
-        life: 3.5
+        vx: 580,
+        vy: 0,
+        angle: 0,
+        life: 4.0
       });
-      makeParticles(bird.x + 10, bird.y, 18, '#f97316');
+      makeParticles(bird.x + 10, bird.y, 24, '#f97316');
+      makeParticles(bird.x + 10, bird.y, 14, '#fde047');
     } else if(type === 'trap') {
       // 🍌 BANANA / OIL TRAP: Jatuhkan jebakan licin di belakang pemain!
       audio.click();
@@ -4367,46 +4395,53 @@
         life: 8.0,
         rot: 0
       });
+      makeParticles(bird.x - 20, bird.y, 16, '#facc15');
     } else if(type === 'bomb') {
       // 💣 MEGA BOMB: Luncurkan bom bola api raksasa ke depan!
       audio.rocketSmash();
-      shake = 0.35;
+      shake = 0.4;
+      shockwaves.push({ x: bird.x, y: bird.y, r: 8, maxR: 70, color: '#ef4444', life: 0.4, maxLife: 0.4 });
       raceBombs.push({
         x: bird.x + 20,
         y: bird.y,
-        vx: 460,
+        vx: 480,
         r: 16,
-        rot: 0,
-        life: 3.0
-      });
-      makeParticles(bird.x + 10, bird.y, 22, '#ef4444');
-    } else if(type === 'tornado') {
-      // 🌪️ TORNADO GUST: Luncurkan angin topan badai ke depan!
-      audio.dash();
-      shake = 0.3;
-      raceTornadoes.push({
-        x: bird.x + 20,
-        y: bird.y,
-        vx: 420,
-        r: 22,
         rot: 0,
         life: 3.2
       });
-      makeParticles(bird.x + 10, bird.y, 24, '#38bdf8');
-    } else if(type === 'freeze') {
-      // ❄️ BLIZZARD FREEZE: Bekukan semua lawan di arena menjadi es!
+      makeParticles(bird.x + 10, bird.y, 28, '#ef4444');
+      makeParticles(bird.x + 10, bird.y, 18, '#f97316');
+    } else if(type === 'tornado') {
+      // 🌪️ TORNADO GUST: Luncurkan angin topan badai ke depan!
+      audio.dash();
       shake = 0.35;
+      shockwaves.push({ x: bird.x, y: bird.y, r: 12, maxR: 85, color: '#38bdf8', life: 0.45, maxLife: 0.45 });
+      raceTornadoes.push({
+        x: bird.x + 20,
+        y: bird.y,
+        vx: 440,
+        r: 24,
+        rot: 0,
+        life: 3.5
+      });
+      makeParticles(bird.x + 10, bird.y, 30, '#38bdf8');
+      makeParticles(bird.x + 10, bird.y, 18, '#e0f2fe');
+    } else if(type === 'freeze') {
+      // ❄️ BLIZZARD FREEZE: Bekukan semua lawan di arena menjadi es kristal!
+      shake = 0.4;
       audio.hit();
-      shockwaves.push({ x: bird.x, y: bird.y, r: 10, maxR: 130, color: '#67e8f9', life: 0.6, maxLife: 0.6 });
-      makeParticles(bird.x, bird.y, 35, '#a5f3fc');
-      makeParticles(bird.x, bird.y, 20, '#0891b2');
-      if(window.multiplayerEngine) {
+      shockwaves.push({ x: bird.x, y: bird.y, r: 12, maxR: 140, color: '#67e8f9', life: 0.65, maxLife: 0.65 });
+      makeParticles(bird.x, bird.y, 40, '#a5f3fc');
+      makeParticles(bird.x, bird.y, 25, '#0891b2');
+      if(window.multiplayerEngine && window.multiplayerEngine.opponents) {
         window.multiplayerEngine.opponents.forEach(op => {
           if(op.isAlive) {
             op.relX = (op.relX || 90) - 95;
             op.curX = op.relX;
             op.isStunned = true;
             op.stunTimer = 2.4;
+            op.stunType = 'freeze';
+            makeParticles(op.curX || 90, op.y, 24, '#a5f3fc');
           }
         });
       }
@@ -5147,6 +5182,11 @@
     }
     shockwaves = shockwaves.filter(sw => sw.life > 0);
 
+    for(const lb of lightningBolts) {
+      lb.life -= dt;
+    }
+    lightningBolts = lightningBolts.filter(lb => lb.life > 0);
+
     for(const ft of floatingTexts) {
       ft.y += ft.vy * dt;
       ft.vy += 30 * dt;
@@ -5809,25 +5849,59 @@
     targetCtx.restore();
   }
 
-  // Draw Power-Up Pickup Floating Item
+  // Draw Power-Up Pickup Floating Item (Juicy Radiant Animated Holographic Bubble)
   function drawPowerup(p) {
     ctx.save();
-    const bobY = p.y + Math.sin(p.bob) * 5;
+    const now = performance.now();
+    const bobY = p.y + Math.sin((p.bob || 0) + now / 250) * 6;
     ctx.translate(p.x, bobY);
 
-    // Glowing Aura Halo
-    const glowColor = p.type === 'heart' ? '#ef4444' : p.type === 'baby' ? '#fde047' : p.type === 'shield' ? '#38bdf8' : p.type === 'magnet' ? '#f43f5e' : p.type === 'slow' ? '#67e8f9' : '#fbbf24';
-    ctx.shadowColor = glowColor;
-    ctx.shadowBlur = 10;
+    // Dynamic Thematic Glow Color
+    const glowColor =
+      p.type === 'heart' || p.type === 'extra_life' ? '#ef4444' :
+      p.type === 'baby' ? '#fde047' :
+      p.type === 'shield' ? '#38bdf8' :
+      p.type === 'double_shield' ? '#0284c7' :
+      p.type === 'magnet' ? '#f43f5e' :
+      p.type === 'slow' || p.type === 'freeze' ? '#67e8f9' :
+      p.type === 'star' ? '#f59e0b' :
+      p.type === 'rocket' || p.type === 'missile' ? '#f97316' :
+      p.type === 'zap' ? '#fde047' :
+      p.type === 'bomb' ? '#ef4444' :
+      p.type === 'tornado' ? '#38bdf8' :
+      p.type === 'trap' ? '#facc15' : '#38bdf8';
 
-    // Outer Bubble Ring
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    const pulse = Math.sin(now / 160) * 1.5;
+    ctx.shadowColor = glowColor;
+    ctx.shadowBlur = 14;
+
+    // 1. Holographic Iridescent Bubble Gradient
+    const radGrad = ctx.createRadialGradient(-3, -3, 2, 0, 0, p.r + pulse);
+    radGrad.addColorStop(0, '#ffffff');
+    radGrad.addColorStop(0.65, 'rgba(255, 255, 255, 0.88)');
+    radGrad.addColorStop(1, glowColor + '77');
+
+    ctx.fillStyle = radGrad;
     ctx.beginPath();
-    ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+    ctx.arc(0, 0, p.r + pulse * 0.4, 0, Math.PI * 2);
     ctx.fill();
+
     ctx.strokeStyle = glowColor;
-    ctx.lineWidth = 2.2;
+    ctx.lineWidth = 2.4;
     ctx.stroke();
+
+    // 2. Animated Orbiting Glint Sparkles around Bubble
+    for(let i = 0; i < 3; i++) {
+      const ang = (now / 350) + (i * Math.PI * 2 / 3);
+      const sx = Math.cos(ang) * (p.r + 4);
+      const sy = Math.sin(ang) * (p.r + 4);
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 6;
+      ctx.beginPath();
+      ctx.arc(sx, sy, 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
     ctx.shadowBlur = 0;
 
     // Power-Up Icons
@@ -6850,6 +6924,33 @@
     laserBeams = laserBeams.filter(lb => lb.life > 0);
   }
 
+  // Sinuous Procedural Lightning Bolt Arcs for Thunder Zap
+  function drawLightningBolts() {
+    for(const lb of lightningBolts) {
+      const alpha = Math.max(0, lb.life / (lb.maxLife || 0.45));
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = lb.color || '#fde047';
+      ctx.lineWidth = 4.8 * alpha;
+      ctx.shadowColor = '#eab308';
+      ctx.shadowBlur = 18;
+      ctx.beginPath();
+      if(lb.points && lb.points.length > 0) {
+        ctx.moveTo(lb.points[0].x, lb.points[0].y);
+        for(let i = 1; i < lb.points.length; i++) {
+          ctx.lineTo(lb.points[i].x, lb.points[i].y);
+        }
+      }
+      ctx.stroke();
+
+      // Bright white electric inner core
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2.2 * alpha;
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
   // Massive Fire Effects for Phoenix Sparks (Blaze & Ember)
   function drawPhoenixFlames() {
     if(progress.selectedPet !== 'blaze_ember' || state !== State.PLAYING) return;
@@ -7072,6 +7173,9 @@
 
       _step = 'laserBeams';
       drawLaserBeams();
+
+      _step = 'lightningBolts';
+      drawLightningBolts();
 
       _step = 'particles';
       for(const q of particles) drawAuraParticle(q);
