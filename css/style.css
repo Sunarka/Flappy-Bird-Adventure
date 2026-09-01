@@ -318,6 +318,17 @@
   overflow: hidden;
 }
 
+.admob-live-slot-wrap {
+  width: 100%;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
 .admob-ad-sponsor-tag {
   position: absolute;
   top: 8px;

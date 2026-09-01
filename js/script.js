@@ -10756,6 +10756,10 @@
 
     showModal(modal);
 
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch(_) {}
+
     const closeBtn = $('admobCloseBtn') || el.admobCloseBtn;
     const timerCount = $('admobTimerCount') || el.admobTimerCount;
     const progressFill = $('admobProgressFill') || el.admobProgressFill;
