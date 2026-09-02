@@ -32,7 +32,7 @@
   }
 
 
-  const W = 360, H = 640, GROUND = 92;
+  const W = 640, H = 360, GROUND = 56;
   const State = Object.freeze({ MENU:'menu', READY:'ready', PLAYING:'playing', PAUSED:'paused', REVIVING:'reviving', OVER:'over' });
   const $ = id => document.getElementById(id);
   const canvas = $('game'), ctx = canvas.getContext('2d');
@@ -4676,7 +4676,7 @@
     reviveCount = 0;
     mpBattleResultShown = false;
 
-    Object.assign(bird, { x:104, y:285, vy:0, wing:0, angle:0, dead:false });
+    Object.assign(bird, { x:130, y:150, vy:0, wing:0, angle:0, dead:false });
     resetBabyBirds();
     updateScore();
     updateLivesHUD();
@@ -4895,18 +4895,18 @@
     const isRanked = currentMode === 'ranked' || currentMode === 'multiplayer';
     const d = isRanked ? 'extreme' : settings.difficulty;
     const level = Math.floor(score / 5);
-    const gapBase = isRanked ? 120 : (d === 'easy' ? 164 : d === 'hard' ? 132 : 148);
-    const minGap = isRanked ? 88 : (d === 'easy' ? 104 : d === 'hard' ? 90 : 96);
-    let gap = Math.max(minGap, gapBase - level * (isRanked ? 5 : 4));
+    const gapBase = isRanked ? 104 : (d === 'easy' ? 136 : d === 'hard' ? 112 : 122);
+    const minGap = isRanked ? 82 : (d === 'easy' ? 95 : d === 'hard' ? 84 : 88);
+    let gap = Math.max(minGap, gapBase - level * (isRanked ? 4 : 3));
     if(progress.selectedPet === 'blaze_ember') {
       gap += 16; // Phoenix pipe gap expander
     }
-    const margin = isRanked ? 58 : 72;
+    const margin = isRanked ? 40 : 48;
     const max = H - GROUND - gap - margin;
     let y = margin + getRandomFloat() * (max - margin);
-    y = Math.max(margin, Math.min(max, (y + lastGapY) / 2 + (getRandomFloat() - .5) * (isRanked ? 125 : 95)));
+    y = Math.max(margin, Math.min(max, (y + lastGapY) / 2 + (getRandomFloat() - .5) * (isRanked ? 75 : 55)));
     lastGapY = y;
-    const pipe = { x: W + 28, gapY: y, gapSize: gap, w: 60, passed: false };
+    const pipe = { x: W + 28, gapY: y, gapSize: gap, w: 56, passed: false };
     pipes.push(pipe);
 
     // Cek apakah Skill Power-up muncul di celah tiang ini (Di mode Multiplayer hampir tiap pipa selalu ada item!)

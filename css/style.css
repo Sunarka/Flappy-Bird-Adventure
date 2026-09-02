@@ -32,20 +32,20 @@ body {
 }
 
 /* =========================================================
-   FLUID RESPONSIVE GAME SHELL (HP, TABLET, PC WIDESCREEN)
+   FLUID RESPONSIVE GAME SHELL (LANDSCAPE 16:9 WIDESCREEN)
    ========================================================= */
 .game-shell {
   position: relative;
-  /* Auto-fit width & height sesuai rasio 9:16 di layar apa pun */
-  width: min(100vw, calc(100dvh * 0.5625));
-  height: min(100dvh, calc(100vw * 1.7778));
-  max-width: 520px;
-  max-height: 924px;
-  aspect-ratio: 9/16;
+  /* Auto-fit width & height sesuai rasio 16:9 di layar apa pun */
+  width: min(100vw, calc(100dvh * 1.7778));
+  height: min(100dvh, calc(100vw * 0.5625));
+  max-width: 960px;
+  max-height: 540px;
+  aspect-ratio: 16/9;
   overflow: hidden;
   background: #76cfee;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65), 0 0 0 1.5px rgba(255, 255, 255, 0.15);
-  border-radius: min(3vw, 22px);
+  border-radius: min(2vw, 16px);
   display: flex;
   flex-direction: column;
 }
@@ -72,7 +72,7 @@ canvas {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding-top: clamp(8%, 12vh, 15%);
+  padding-top: clamp(6px, 2vh, 12px);
 }
 
 .hidden {
@@ -80,17 +80,18 @@ canvas {
 }
 
 .menu-screen {
-  padding-top: clamp(8%, 11vh, 14%);
+  padding-top: clamp(8px, 2vh, 14px);
   background: transparent;
+  justify-content: flex-start;
 }
 
 .title {
   line-height: .78;
   color: #fff;
   text-shadow: 3px 4px 0 #1d5481, 0 5px 12px #16365d88;
-  font-size: clamp(38px, 8.5vw, 62px);
+  font-size: clamp(30px, 6vw, 44px);
   font-weight: 900;
-  letter-spacing: -2px;
+  letter-spacing: -1.5px;
 }
 
 .title span, .title strong {
@@ -103,28 +104,28 @@ canvas {
 }
 
 .menu-screen > p {
-  margin: 10px 0 0;
+  margin: 6px 0 0;
   font-weight: 900;
-  font-size: clamp(10px, 2.5vw, 12px);
-  letter-spacing: 3px;
+  font-size: clamp(9px, 2vw, 11px);
+  letter-spacing: 2.5px;
   color: #1c5682;
 }
 
 .menu-bird {
-  font-size: clamp(44px, 12vw, 56px);
-  margin: clamp(10px, 2.5vh, 20px) 0 clamp(8px, 1.8vh, 14px);
+  font-size: clamp(36px, 8vw, 46px);
+  margin: clamp(6px, 1.5vh, 12px) 0 clamp(4px, 1vh, 8px);
   animation: bob 1.6s ease-in-out infinite;
-  filter: drop-shadow(0 5px 2px #3479a588);
+  filter: drop-shadow(0 4px 2px #3479a588);
 }
 
 button {
   border: 0;
-  font: 900 clamp(13.5px, 3.5vw, 15px) 'Trebuchet MS', Arial;
+  font: 900 clamp(12px, 2.5vw, 14px) 'Trebuchet MS', Arial;
   color: #17355a;
   letter-spacing: 0.8px;
   cursor: pointer;
   transition: transform .12s, filter .12s, background .15s;
-  min-height: clamp(38px, 5.5vh, 44px);
+  min-height: clamp(32px, 4.5vh, 38px);
 }
 
 button:hover {
@@ -141,11 +142,11 @@ button:focus-visible {
 }
 
 .primary, .secondary {
-  width: min(210px, 78%);
-  border-radius: 14px;
-  margin: 4px;
-  padding: clamp(9px, 1.5vh, 12px);
-  box-shadow: 0 4px 0 #ba7611, 0 6px 14px #275d7b44;
+  width: min(190px, 42%);
+  border-radius: 12px;
+  margin: 2.5px;
+  padding: clamp(6px, 1vh, 9px) 12px;
+  box-shadow: 0 3px 0 #ba7611, 0 5px 12px #275d7b33;
 }
 
 .primary {
@@ -154,14 +155,14 @@ button:focus-visible {
 
 .secondary {
   background: #fff;
-  box-shadow: 0 4px 0 #b5d2dd, 0 6px 14px #275d7b44;
+  box-shadow: 0 3px 0 #b5d2dd, 0 5px 12px #275d7b33;
 }
 
 .menu-screen small {
-  margin-top: 10px;
+  margin-top: 6px;
   color: #26527b;
   font-weight: bold;
-  font-size: clamp(10px, 2.5vw, 11.5px);
+  font-size: clamp(9px, 2vw, 10.5px);
 }
 
 .hud {
@@ -312,9 +313,9 @@ button:focus-visible {
 }
 
 /* =========================================================
-   MOBILE FULLSCREEN & TALL PHONE OPTIMIZATIONS
+   MOBILE LANDSCAPE FULLSCREEN OPTIMIZATIONS
    ========================================================= */
-@media (max-width: 500px), (max-height: 680px) and (orientation: portrait) {
+@media (max-width: 960px) and (orientation: landscape) {
   .game-shell {
     width: 100vw;
     height: 100dvh;

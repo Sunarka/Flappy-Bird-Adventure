@@ -626,8 +626,8 @@
    RANKED LEADERBOARD & TOP 1 PORTRAIT SHOWCASE
    ========================================================= */
 .ranked-modal {
-  width: min(330px, 94vw);
-  max-height: min(560px, 88vh);
+  width: min(440px, 94vw);
+  max-height: min(500px, 92vh);
   display: flex;
   flex-direction: column;
   background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%) !important;
