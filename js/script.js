@@ -708,7 +708,7 @@
       isRespawningRace = false, raceRespawnTimer = 0,
       spawn = 0, flyerSpawn = 0, trailSpawn = 0,
       powerupSpawnTimer = 0, enemySpawnTimer = 0, cloudSpawnTimer = 0,
-      groundX = 0, cloudX = 0, shake = 0, overTimer = 0, lastGapY = 300, graceTimer = 0;
+      groundX = 0, cloudX = 0, shake = 0, overTimer = 0, lastGapY = 150, graceTimer = 0;
   let lives = 1, maxLives = 5, reviveCount = 0, reviveTimerInterval = null, reviveSecondsLeft = 5;
 
   // Active Dash Skill state
@@ -3504,10 +3504,6 @@
       }
     }
 
-    const qf1 = $('mlbbQfAvatar1');
-    if(qf1) qf1.innerHTML = getCuteAvatarSvg('eagle_ace', 20);
-    const qf2 = $('mlbbQfAvatar2');
-    if(qf2) qf2.innerHTML = getCuteAvatarSvg('parrot_green', 20);
   }
 
   // 10. Daftar Tingkatan Rank Tier & Ikon Badge Vektor Unik
@@ -4347,6 +4343,11 @@
     const reviveModal = el.reviveModal || $('reviveModal');
     if(reviveModal) reviveModal.classList.add('hidden');
 
+    if (typeof stopSearchingRadar === 'function') stopSearchingRadar();
+    if (window.multiplayerEngine && window.multiplayerEngine.matchStatus === 'QUEUED') {
+      window.multiplayerEngine.cancelMatch();
+    }
+
     if (activeDialogResolver) {
       const res = activeDialogResolver;
       activeDialogResolver = null;
@@ -4369,7 +4370,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '19.0';
+  const GAME_VERSION = '20.0';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -4423,8 +4424,8 @@
     }
   }
 
-  // Interval pengecekan otomatis setiap 20 detik & saat tab aktif
-  setInterval(checkForGameUpdate, 20000);
+  // Interval pengecekan otomatis setiap 3 jam (10800000 ms) & saat tab aktif
+  setInterval(checkForGameUpdate, 10800000);
   window.addEventListener('focus', checkForGameUpdate);
   document.addEventListener('visibilitychange', () => {
     if(document.visibilityState === 'visible') checkForGameUpdate();
@@ -4716,8 +4717,8 @@
 
     // Clear immediate danger: push nearby pipes ahead and vaporize enemies across the widescreen
     pipes.forEach(p => {
-      if(p.x > bird.x - 100 && p.x < bird.x + 260) {
-        p.x += 260;
+      if(p.x > bird.x - 100 && p.x < bird.x + 520) {
+        p.x += 520;
       }
     });
     enemies.forEach(e => {
@@ -4792,8 +4793,9 @@
     graceTimer = 0;
     spawn = 0; flyerSpawn = 0; trailSpawn = 0;
     powerupSpawnTimer = 0; enemySpawnTimer = 0; cloudSpawnTimer = 0;
-    groundX = 0; shake = 0; started = false; lastGapY = 300;
-    el.over.classList.remove('visible');
+    groundX = 0; shake = 0; started = false; lastGapY = 150;
+    if(el.over) { el.over.classList.add('hidden'); el.over.classList.remove('visible'); }
+    if(el.mpOverModal) el.mpOverModal.classList.add('hidden');
     if(el.reviveModal) el.reviveModal.classList.add('hidden');
     clearInterval(reviveTimerInterval);
     reviveTimerInterval = null;
@@ -5891,11 +5893,16 @@
       bird.vy = Math.min(420, bird.vy + 850 * dt);
       bird.y += bird.vy * dt;
       bird.angle = Math.min(1.6, bird.angle + 3 * dt);
+      // Ground clamping - prevent bird from sinking underground
+      const maxGroundY = H - GROUND - bird.r;
+      if(bird.y >= maxGroundY) { bird.y = maxGroundY; bird.vy = 0; }
       babyBirds[0].x += (bird.x - 22 - babyBirds[0].x) * 8 * dt;
       babyBirds[0].y += (bird.y - 18 - babyBirds[0].y) * 8 * dt;
+      babyBirds[0].y = Math.min(maxGroundY, babyBirds[0].y);
       babyBirds[0].angle = bird.angle * 0.7;
       babyBirds[1].x += (bird.x - 26 - babyBirds[1].x) * 8 * dt;
       babyBirds[1].y += (bird.y + 18 - babyBirds[1].y) * 8 * dt;
+      babyBirds[1].y = Math.min(maxGroundY, babyBirds[1].y);
       overTimer -= dt;
       const isModalOpen = (el.over && !el.over.classList.contains('hidden')) || (el.mpOverModal && !el.mpOverModal.classList.contains('hidden'));
       if(overTimer <= 0 && !isModalOpen) showOver();
@@ -5989,7 +5996,8 @@
     }
 
     // Dynamic Player Bird Surge forward on screen during Dash & Rocket
-    const targetBirdX = (dashTimer > 0 || activePowerups.rocket > 0) ? Math.min(138, 90 + ((dashTimer > 0 ? dashTimer : 0.3) / 0.35) * 48) : 90;
+    const baseBirdX = 130;
+    const targetBirdX = (dashTimer > 0 || activePowerups.rocket > 0) ? Math.min(185, baseBirdX + ((dashTimer > 0 ? dashTimer : 0.3) / 0.35) * 55) : baseBirdX;
     bird.x += (targetBirdX - bird.x) * Math.min(1, dt * 10);
 
     for(const img of dashAfterimages) img.alpha -= dt * 3.5;
@@ -6040,7 +6048,7 @@
     // Race Mode 3-Second Auto-Respawn Recovery
     if(isRespawningRace) {
       raceRespawnTimer -= dt;
-      bird.y = 260 + Math.sin(Date.now() / 180) * 6;
+      bird.y = 150 + Math.sin(Date.now() / 180) * 6;
       bird.vy = 0;
       bird.angle = 0;
       if(raceRespawnTimer <= 0) {
@@ -11220,7 +11228,8 @@
       return;
     }
 
-    el.over.classList.add('visible');
+
+    // showModal handles all display logic - no need for .visible class
     el.finalScore.textContent = score;
     el.finalBest.textContent = best;
     const nb = score >= best && score > 0;
@@ -12129,7 +12138,7 @@
 
     // Visual celebration: Gold coin confetti & floating text
     const fxX = (typeof bird !== 'undefined' && bird && Number.isFinite(bird.x)) ? bird.x : 90;
-    const fxY = (typeof bird !== 'undefined' && bird && Number.isFinite(bird.y)) ? bird.y : 260;
+    const fxY = (typeof bird !== 'undefined' && bird && Number.isFinite(bird.y)) ? bird.y : 150;
     makeParticles(fxX, fxY, 25, '#fbbf24');
     makeParticles(fxX, fxY, 15, '#fde047');
     floatingTexts.push({
@@ -12619,9 +12628,10 @@
   let mpSearchStartTime = 0;
 
   function startSearchingRadar() {
-    // Tampilkan radar visual interaktif langsung di dalam modal Quick Match
+    // Tampilkan radar visual di modal serta status pencarian yang selalu terlihat di atas layar.
     if(el.mpQuickInitialBox) el.mpQuickInitialBox.classList.add('hidden');
     if(el.mpQuickSearchingBox) el.mpQuickSearchingBox.classList.remove('hidden');
+    if(el.mpSearchingBar) el.mpSearchingBar.classList.remove('hidden');
 
     mpSearchStartTime = Date.now();
     if(mpSearchInterval) clearInterval(mpSearchInterval);
@@ -12631,8 +12641,10 @@
       const ss = String(elapsedSec % 60).padStart(2, '0');
       const timeStr = `${mm}:${ss}`;
       if(el.mpModalSearchTimer) el.mpModalSearchTimer.textContent = timeStr;
+      if(el.mpSearchTimerText) el.mpSearchTimerText.textContent = timeStr;
     }, 1000);
     if(el.mpModalSearchTimer) el.mpModalSearchTimer.textContent = '00:00';
+    if(el.mpSearchTimerText) el.mpSearchTimerText.textContent = '00:00';
   }
 
   function stopSearchingRadar() {
@@ -12640,6 +12652,7 @@
       clearInterval(mpSearchInterval);
       mpSearchInterval = null;
     }
+    if(el.mpSearchingBar) el.mpSearchingBar.classList.add('hidden');
     if(el.mpQuickSearchingBox) el.mpQuickSearchingBox.classList.add('hidden');
     if(el.mpQuickInitialBox) el.mpQuickInitialBox.classList.remove('hidden');
   }
@@ -12907,6 +12920,11 @@
     if(el.mpViewQuick) el.mpViewQuick.classList.toggle('hidden', tab !== 'quick');
     if(el.mpViewCreate) el.mpViewCreate.classList.toggle('hidden', tab !== 'create');
     if(el.mpViewJoin) el.mpViewJoin.classList.toggle('hidden', tab !== 'join');
+
+    // The lobby sidebar must always mirror the real Social list, not a cached placeholder.
+    if(tab === 'quick' && window.socialService && typeof window.socialService.renderLobbyFriends === 'function') {
+      window.socialService.renderLobbyFriends();
+    }
   }
 
   bindClick(el.modeMultiplayerBtn, () => {
@@ -12965,6 +12983,20 @@
     } else {
       el.mpQuickDescText.textContent = `Mencari ${selectedMpPlayerCount} pemain untuk bertanding bertahan hidup (Last Bird Standing)!`;
     }
+
+    // Keep the visual lobby in sync with the selected party size and profile.
+    const lobbyName = $('mpLobbyMyName');
+    const lobbyAvatar = $('mpLobbyMyAvatar');
+    const lobbyBird = $('mpLobbySlotMyBird');
+    const avatarMarkup = getCuteAvatarSvg(gpProfile.avatar || 'chick_yellow', 42);
+    if(lobbyName) lobbyName.textContent = gpProfile.gamerTag || 'SKY PLAYER';
+    if(lobbyAvatar) lobbyAvatar.innerHTML = avatarMarkup;
+    if(lobbyBird) lobbyBird.innerHTML = avatarMarkup;
+    const extraSlots = document.querySelectorAll('.mp-extra-slot');
+    extraSlots.forEach((slot, index) => {
+      const slotNumber = index + 3;
+      slot.classList.toggle('hidden', selectedMpPlayerCount < slotNumber);
+    });
   }
 
   if(el.mpGameModeGroup) {
@@ -12990,6 +13022,8 @@
       };
     });
   }
+
+  updateMpQuickMatchTexts();
 
   bindClick(el.mpTabQuickBtn, () => { audio.click(); switchMpTab('quick'); });
   bindClick(el.mpTabCreateBtn, () => {

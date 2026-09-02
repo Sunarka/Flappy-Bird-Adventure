@@ -13,17 +13,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=19.5">
-  <link rel="stylesheet" href="css/modern-icons.css?v=19.5">
-  <link rel="stylesheet" href="css/shop.css?v=19.5">
-  <link rel="stylesheet" href="css/shop-extra.css?v=19.5">
-  <link rel="stylesheet" href="css/mode-picker.css?v=19.5">
-  <link rel="stylesheet" href="css/store.css?v=19.5">
-  <link rel="stylesheet" href="css/ranked.css?v=19.5">
-  <link rel="stylesheet" href="css/multiplayer.css?v=19.5">
-  <link rel="stylesheet" href="css/social.css?v=19.5">
-  <link rel="stylesheet" href="css/splash.css?v=19.5">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=19.5">
+  <link rel="stylesheet" href="css/style.css?v=20.0">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.0">
+  <link rel="stylesheet" href="css/shop.css?v=20.0">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.0">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.0">
+  <link rel="stylesheet" href="css/store.css?v=20.0">
+  <link rel="stylesheet" href="css/ranked.css?v=20.0">
+  <link rel="stylesheet" href="css/social.css?v=20.0">
+  <link rel="stylesheet" href="css/splash.css?v=20.0">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.0">
+  <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.0">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -33,11 +34,6 @@
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3613614202318317"
     crossorigin="anonymous">
   </script>
-
-  <!-- ========================================================= -->
-  <!-- 2. GOOGLE AD PLACEMENT API & GPT (H5 GAMES REWARDED ADS)  -->
-  <!-- ========================================================= -->
-  <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
   <script async src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
   <script>
     window.googletag = window.googletag || { cmd: [] };
@@ -308,16 +304,7 @@
         <span class="right-header-arrow">›</span>
       </div>
       <div class="mlbb-friends-quick-list" id="mlbbFriendsQuickList">
-        <div class="mlbb-quick-friend-item">
-          <div class="mlbb-qf-avatar" id="mlbbQfAvatar1"></div>
-          <div class="mlbb-qf-name">SkyPilot</div>
-          <div class="mlbb-qf-status"></div>
-        </div>
-        <div class="mlbb-quick-friend-item">
-          <div class="mlbb-qf-avatar" id="mlbbQfAvatar2"></div>
-          <div class="mlbb-qf-name">AeroAce</div>
-          <div class="mlbb-qf-status"></div>
-        </div>
+        <div class="mlbb-quick-friends-empty">Belum ada teman</div>
       </div>
     </aside>
 
@@ -694,6 +681,8 @@
           <button class="primary gp-btn" id="gpAuthActionBtn" type="button">SIMPAN & MAINKAN RANK</button>
           <button class="secondary" id="gpSignOutBtn" type="button">KELUAR / GANTI AKUN</button>
         </div>
+      </section>
+
       <!-- AVATAR PICKER MODAL (PILIH PROFIL) -->
       <section id="avatarPickerModal" class="modal avatar-picker-modal hidden" role="dialog" aria-modal="true">
         <button class="close" data-close>×</button>
@@ -846,6 +835,16 @@
 
       <!-- 1v1 MULTIPLAYER ROOM & MATCHMAKING MODAL -->
       <section id="multiplayerModal" class="modal mp-modal hidden" role="dialog" aria-modal="true">
+        <!-- Status pencarian muncul sebagai banner di bagian atas lobby. -->
+        <div id="mpSearchingBar" class="mp-searching-bar hidden" role="status" aria-live="polite">
+          <div class="mp-search-spinner" aria-hidden="true"></div>
+          <div class="mp-search-info">
+            <span class="mp-search-title">MENCARI PEMAIN...</span>
+            <span class="mp-search-estimate">Estimasi <b id="mpSearchEstimateText">00:10</b></span>
+            <span class="mp-search-timer" id="mpSearchTimerText">00:00</span>
+          </div>
+          <button class="mp-search-cancel-btn" id="mpCancelSearchBtn" type="button" aria-label="Batalkan pencarian">×</button>
+        </div>
         <button class="close" data-close>×</button>
         <div class="mp-header">
           <div class="mp-icon-badge">
@@ -888,6 +887,26 @@
 
         <!-- TAB 1: QUICK MATCH -->
         <div class="mp-view" id="mpViewQuick">
+          <div class="mp-lobby-stage" aria-label="Lobby pencarian multiplayer">
+            <aside class="mp-player-banner">
+              <div class="mp-player-rank">SKY<br><b>ACE</b></div>
+              <div class="mp-player-avatar" id="mpLobbyMyAvatar"><img src="assets/icons/birds/classic.svg" alt="Avatar pemain"></div>
+              <div class="mp-player-name" id="mpLobbyMyName">SKY PLAYER</div>
+              <div class="mp-player-status"><span></span> SIAP BERTANDING</div>
+            </aside>
+            <div class="mp-team-slots">
+              <div class="mp-team-slot is-you"><div class="mp-slot-number">01</div><div class="mp-slot-bird" id="mpLobbySlotMyBird"><img src="assets/icons/birds/classic.svg" alt="Burung pemain"></div><b>KAMU</b><small>LEADER · SIAP</small></div>
+              <div class="mp-team-slot"><div class="mp-slot-number">02</div><div class="mp-slot-bird">+</div><b>UNDANG TEMAN</b><small>SLOT TERBUKA</small></div>
+              <div class="mp-team-slot mp-extra-slot"><div class="mp-slot-number">03</div><div class="mp-slot-bird">+</div><b>MENUNGGU</b><small>UNTUK 3P / 4P</small></div>
+              <div class="mp-team-slot mp-extra-slot"><div class="mp-slot-number">04</div><div class="mp-slot-bird">+</div><b>MENUNGGU</b><small>UNTUK 4P</small></div>
+            </div>
+            <aside class="mp-friends-panel">
+              <div class="mp-friends-title">TEMAN <span id="mpLobbyFriendCount">0</span></div>
+              <div id="mpLobbyFriendsList" class="mp-lobby-friends-list">
+                <div class="mp-friends-empty">Memuat teman...</div>
+              </div>
+            </aside>
+          </div>
           <div class="mp-quick-box" id="mpQuickInitialBox">
             <div class="mp-quick-title" id="mpQuickTitleText">SURVIVAL MATCHMAKING</div>
             <p class="mp-quick-desc" id="mpQuickDescText">Mencari 2 pemain untuk bertanding bertahan hidup!</p>
@@ -932,7 +951,7 @@
                   <div class="mp-slot-avatar mlbb-avatar" id="mpHostAvatar"></div>
                 </div>
                 <div class="mlbb-podium-name" id="mpHostName">HOST</div>
-                <div class="mlbb-podium-role host">HOST (LEADER)</div>
+                <div class="mlbb-podium-role host" id="mpHostRoleBadge">HOST (LEADER)</div>
                 <div class="mlbb-podium-status ready">READY ✅</div>
               </div>
 
@@ -1274,12 +1293,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=19.5"></script>
-  <script src="js/admob-config.js?v=19.5"></script>
-  <script src="js/shop-data.js?v=19.5"></script>
-  <script src="js/audio.js?v=19.5"></script>
-  <script src="js/multiplayer.js?v=19.5"></script>
-  <script src="js/social.js?v=19.5"></script>
-  <script src="js/script.js?v=19.5"></script>
+  <script src="js/firebase-config.js?v=20.0"></script>
+  <script src="js/admob-config.js?v=20.0"></script>
+  <script src="js/shop-data.js?v=20.0"></script>
+  <script src="js/audio.js?v=20.0"></script>
+  <script src="js/multiplayer.js?v=20.0"></script>
+  <script src="js/social.js?v=20.0"></script>
+  <script src="js/script.js?v=20.0"></script>
 </body>
 </html>

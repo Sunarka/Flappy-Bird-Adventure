@@ -432,6 +432,21 @@
   transition: all 0.15s;
 }
 
+button.mlbb-quick-friend-item {
+  width: 100%;
+  margin: 0;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+}
+
+.mlbb-quick-friends-empty {
+  padding: 8px 4px;
+  color: #94a3b8;
+  text-align: center;
+  font: 800 8px/1.35 'Trebuchet MS', Arial, sans-serif;
+}
+
 .mlbb-quick-friend-item:hover {
   background: rgba(56, 189, 248, 0.25);
   border-color: rgba(56, 189, 248, 0.4);

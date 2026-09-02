@@ -13,6 +13,10 @@
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 24px rgba(56, 189, 248, 0.2);
 }
 
+/* Profile shares the Social modal's design system but keeps its own content. */
+.friend-profile-modal{width:min(520px,92vw);max-height:min(560px,86vh);padding:16px 14px!important;border:2px solid #25c4f7!important;border-radius:20px!important;background:linear-gradient(155deg,#162d52,#09162d 70%)!important;box-shadow:0 20px 52px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.12)!important}
+.friend-profile-modal .close{top:12px;right:12px;width:31px;height:31px;margin:0;border-radius:50%;background:#e7f6ff;color:#285071;font-size:21px;line-height:26px}.profile-scrollable-content{padding:1px 3px 4px}.friend-profile-hero{padding:10px;border-radius:13px}.friend-showcase-box{border-radius:12px}.friend-stats-grid{gap:8px}.friend-stat-box{border-radius:10px}.gp-buttons{gap:8px}.gp-buttons button{min-height:38px!important}
+
 .social-header {
   display: flex;
   align-items: center;
@@ -862,3 +866,7 @@
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.15); }
 }
+
+/* Final profile sizing override: keep this after all Social/Profile rules. */
+.friend-profile-modal{width:min(520px,92vw)!important;max-height:min(560px,86vh)!important;padding:16px 14px!important;border:2px solid #25c4f7!important;border-radius:20px!important;background:linear-gradient(155deg,#162d52,#09162d 70%)!important;box-shadow:0 20px 52px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.12)!important}
+.friend-profile-modal .close{top:12px!important;right:12px!important;width:31px!important;height:31px!important;margin:0!important;border-radius:50%!important;background:#e7f6ff!important;color:#285071!important;font-size:21px!important;line-height:26px!important}.profile-scrollable-content{padding:1px 3px 4px}.friend-profile-hero{padding:10px;border-radius:13px}.friend-showcase-box{border-radius:12px}.friend-stats-grid{gap:8px}.friend-stat-box{border-radius:10px}.gp-buttons{gap:8px}.gp-buttons button{min-height:38px!important}

@@ -523,6 +523,8 @@
             });
             this.friends = friendsList;
             this.renderFriendsList();
+            this.renderLobbyFriends();
+            this.renderQuickFriends();
           }, err => {
             console.warn('[SocialService] Error listening to friends:', err.message);
           });
@@ -738,8 +740,9 @@
               avatar: this.myProfile.avatar || 'chick_yellow',
               skin: (window.progress && window.progress.selected) || 'classic'
             };
-            window.multiplayerEngine.createRoom(roomCode, hostData);
-            await this.sendRoomInvite(friend.friendKey, roomCode);
+            window.multiplayerEngine.createRoom(hostData);
+            const actualRoomCode = window.multiplayerEngine.currentRoom.code;
+            await this.sendRoomInvite(friend.friendKey, actualRoomCode);
             inviteBtn.textContent = 'Terkirim! ✅';
             setTimeout(() => { inviteBtn.textContent = '⚔️ Ajak Main'; }, 2000);
             
@@ -1016,6 +1019,57 @@
       }
     }
 
+    renderLobbyFriends() {
+      const container = document.getElementById('mpLobbyFriendsList');
+      const count = document.getElementById('mpLobbyFriendCount');
+      if (!container) return;
+      if (count) count.textContent = String(this.friends.length);
+      if (!this.friends.length) {
+        container.innerHTML = '<div class="mp-friends-empty">Belum ada teman. Tambahkan teman dari menu Sosial.</div>';
+        return;
+      }
+      const avatar = (id) => typeof window.getCuteAvatarSvg === 'function'
+        ? window.getCuteAvatarSvg(id || 'chick_yellow', 30)
+        : '🐥';
+      container.innerHTML = this.friends.slice(0, 4).map(friend => `
+        <div class="mp-friend-row" data-friend-key="${friend.friendKey}">
+          <span class="mp-friend-avatar">${avatar(friend.avatar)}</span>
+          <div><b>${this.escapeHtml(friend.name || 'Teman')}</b><small>TERHUBUNG</small></div>
+          <button type="button" class="mp-lobby-invite" aria-label="Lihat profil ${this.escapeHtml(friend.name || 'teman')}">i</button>
+        </div>`).join('');
+      container.querySelectorAll('.mp-lobby-invite').forEach(btn => {
+        btn.onclick = () => {
+          const key = btn.closest('.mp-friend-row')?.dataset.friendKey;
+          const friend = this.friends.find(item => item.friendKey === key);
+          if (friend) this.openFriendProfile(friend);
+        };
+      });
+    }
+
+    renderQuickFriends() {
+      const container = document.getElementById('mlbbFriendsQuickList');
+      if (!container) return;
+      if (!this.friends.length) {
+        container.innerHTML = '<div class="mlbb-quick-friends-empty">Belum ada teman</div>';
+        return;
+      }
+      const avatar = (id) => typeof window.getCuteAvatarSvg === 'function'
+        ? window.getCuteAvatarSvg(id || 'chick_yellow', 28)
+        : '🐥';
+      container.innerHTML = this.friends.slice(0, 2).map(friend => `
+        <button class="mlbb-quick-friend-item" type="button" data-friend-key="${friend.friendKey}" title="Lihat profil ${this.escapeHtml(friend.name || 'teman')}">
+          <span class="mlbb-qf-avatar">${avatar(friend.avatar)}</span>
+          <span class="mlbb-qf-name">${this.escapeHtml(friend.name || 'Teman')}</span>
+          <span class="mlbb-qf-status" aria-label="Terhubung"></span>
+        </button>`).join('');
+      container.querySelectorAll('.mlbb-quick-friend-item').forEach(button => {
+        button.onclick = () => {
+          const friend = this.friends.find(item => item.friendKey === button.dataset.friendKey);
+          if (friend) this.openFriendProfile(friend);
+        };
+      });
+    }
+
     renderFriendsList() {
       const container = document.getElementById('socialFriendsList');
       if (!container) return;
@@ -1091,8 +1145,9 @@
               avatar: this.myProfile.avatar || 'chick_yellow',
               skin: (window.progress && window.progress.selected) || 'classic'
             };
-            window.multiplayerEngine.createRoom(roomCode, hostData);
-            await this.sendRoomInvite(key, roomCode);
+            window.multiplayerEngine.createRoom(hostData);
+            const actualRoomCode = window.multiplayerEngine.currentRoom.code;
+            await this.sendRoomInvite(key, actualRoomCode);
             btn.textContent = 'Terkirim! ✅';
             setTimeout(() => { btn.textContent = '⚔️ Ajak'; }, 2000);
             

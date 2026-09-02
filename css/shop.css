@@ -74,4 +74,9 @@
 
 .shop-modal > button.primary{margin:8px auto 0;width:170px;min-height:38px;padding:9px 12px;font-size:14px;flex-shrink:0}
 
+/* Unified compact panel sizing. */
+.shop-modal{width:min(500px,92vw);height:min(540px,86vh);padding:18px 16px 16px;border:0;border-radius:22px;background:#f4f8fc;box-shadow:0 18px 0 #2b5a78,0 30px 58px rgba(0,0,0,.42)}
+.shop-modal .close{top:12px;right:12px;width:31px;height:31px;margin:0;border-radius:50%;background:#e2f4fc;color:#285071;font-size:21px;line-height:26px;box-shadow:0 2px 8px rgba(40,80,113,.16)}
+.shop-header{margin-bottom:10px}.shop-modal h2{font-size:21px}.shop-showcase-stage{height:94px;border-radius:13px}.skin-list{gap:10px;padding-bottom:14px}
+
 .setting:has(select){padding-top:4px}.setting select{appearance:none;min-width:112px;padding:9px 31px 9px 12px;border:1px solid #b8d9e6;border-radius:10px;background:#f7fcff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23285578' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8'/%3E%3C/svg%3E") no-repeat right 11px center;background-size:12px 8px;box-shadow:0 2px 5px #3a75921c;color:#285778;font:900 11px Trebuchet MS,Arial;letter-spacing:.4px;cursor:pointer;outline:none}.setting select:hover{border-color:#72bdd8;background-color:#fff}.setting select:focus-visible{border-color:#3a9ac0;box-shadow:0 0 0 3px #74caed55}.setting select option{background:#fff;color:#285778;font-weight:700}

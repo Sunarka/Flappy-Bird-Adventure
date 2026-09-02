@@ -93,7 +93,14 @@
     }
 
     connect(profile) {
+      if (profile) {
+        this.myProfile = { ...profile, id: this.localPlayerId };
+      }
+      
       if (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) {
+        if (this.ws.readyState === WebSocket.OPEN && profile) {
+           this.send({ type: 'UPDATE_PROFILE', profile: this.myProfile });
+        }
         return;
       }
 
@@ -512,7 +519,7 @@
             hat: data.guest.hat,
             outfit: data.guest.outfit,
             tier: data.guest.tier || 'GOLD',
-            y: 280, vy: 0, rot: 0, score: 0, lives: 3, isAlive: true, isDashing: false, targetY: 280, lastUpdate: Date.now()
+            y: 150, vy: 0, rot: 0, score: 0, lives: 3, isAlive: true, isDashing: false, targetY: 150, lastUpdate: Date.now()
           });
           this.emit('player_joined', { player: data.guest, playersList: this.currentRoom.playersList });
         }
@@ -641,7 +648,7 @@
                 hat: data.host.hat,
                 outfit: data.host.outfit,
                 tier: data.host.tier || 'GOLD',
-                y: 280, vy: 0, rot: 0, score: 0, lives: 3, isAlive: true, isDashing: false, targetY: 280, lastUpdate: Date.now()
+                y: 150, vy: 0, rot: 0, score: 0, lives: 3, isAlive: true, isDashing: false, targetY: 150, lastUpdate: Date.now()
               });
               docRef.update({
                 guest: this.myProfile,
@@ -794,8 +801,8 @@
         const botBooster = BOT_BOOSTERS[Math.floor(Math.random() * BOT_BOOSTERS.length)];
         const hasBabies = Math.random() < 0.75;
         const botBabyBirds = hasBabies ? [
-          { id: 0, x: 90 - 22, y: 280 - 18, r: 8.5, wing: 0, color: '#facc15', wingColor: '#eab308', blushColor: '#fda4af', state: 'following' },
-          { id: 1, x: 90 - 26, y: 280 + 18, r: 8.5, wing: 0, color: '#38bdf8', wingColor: '#0284c7', blushColor: '#fda4af', state: 'following' }
+          { id: 0, x: 130 - 22, y: 150 - 18, r: 8.5, wing: 0, color: '#facc15', wingColor: '#eab308', blushColor: '#fda4af', state: 'following' },
+          { id: 1, x: 130 - 26, y: 150 + 18, r: 8.5, wing: 0, color: '#38bdf8', wingColor: '#0284c7', blushColor: '#fda4af', state: 'following' }
         ] : [];
 
         this.opponents.set(fakeOpponent.id, {
@@ -809,7 +816,7 @@
           booster: botBooster,
           hasShield: botBooster === 'shield',
           babyBirds: botBabyBirds,
-          y: 280 + (idx * 20),
+          y: 150 + (idx * 16),
           vy: 0,
           rot: 0,
           score: 0,
@@ -818,7 +825,7 @@
           graceTimer: 0,
           isAlive: true,
           isDashing: false,
-          targetY: 280 + (idx * 20),
+          targetY: 150 + (idx * 16),
           lastUpdate: Date.now(),
           isSimulatedBot: true,
           botTargetScore: targetMaxScore,
@@ -1010,7 +1017,7 @@
           }
 
           // Fall to ground if dead in Survival Mode
-          if (op.targetY < 540) {
+          if (op.targetY < 300) {
             op.vy = (op.vy || 0) + 850 * dt;
             op.targetY += op.vy * dt;
             op.rot = Math.min(1.5, (op.rot || 0) + 4 * dt);
@@ -1062,11 +1069,11 @@
             });
           }
 
-          let idealY = 250;
+          let idealY = 140;
           if (nextPipe) {
             idealY = nextPipe.gapY + nextPipe.gapSize / 2;
           } else {
-            idealY = 240 + Math.sin(Date.now() / 500) * 35;
+            idealY = 140 + Math.sin(Date.now() / 500) * 25;
           }
 
           op.botFlapCooldown = (op.botFlapCooldown || 0) - dt;
@@ -1137,12 +1144,12 @@
             op.targetY = 25;
             op.vy = 80;
           }
-          if (op.targetY > 520) {
+          if (op.targetY > 290) {
             if ((op.lives || 3) > 1) {
               op.lives = (op.lives || 3) - 1;
               op.graceTimer = 1.6;
               op.vy = -340;
-              op.targetY = 460;
+              op.targetY = 250;
               this.emit('opponent_state', {
                 playerId: op.id,
                 y: op.y, vy: op.vy, rot: op.rot,
@@ -1152,7 +1159,7 @@
               });
             } else {
               op.lives = 0;
-              op.targetY = 520;
+              op.targetY = 290;
               op.isAlive = false;
               this.emit('opponent_died', { playerId: op.id, finalScore: op.score || 0 });
               return;
@@ -1246,17 +1253,17 @@
             ctx.fillStyle = '#f43f5e';
             ctx.textAlign = 'left';
             const distBehind = Math.max(1, Math.round(Math.abs(drawX - birdX) / 8));
-            ctx.fillText(`◀ ${op.name || 'Rival'} (${distBehind}m)`, 6, Math.max(70, Math.min(480, drawY)));
+            ctx.fillText(`◀ ${op.name || 'Rival'} (${distBehind}m)`, 6, Math.max(70, Math.min(330, drawY)));
             ctx.restore();
             return;
           }
-          if (drawX > 380 && op.isAlive) {
+          if (drawX > 660 && op.isAlive) {
             ctx.save();
             ctx.font = 'bold 9.5px "Trebuchet MS", Arial, sans-serif';
             ctx.fillStyle = '#38bdf8';
             ctx.textAlign = 'right';
             const distAhead = Math.max(1, Math.round(Math.abs(drawX - birdX) / 8));
-            ctx.fillText(`${op.name || 'Rival'} (+${distAhead}m) ▶`, 354, Math.max(70, Math.min(480, drawY)));
+            ctx.fillText(`${op.name || 'Rival'} (+${distAhead}m) ▶`, 628, Math.max(70, Math.min(330, drawY)));
             ctx.restore();
             return;
           }
