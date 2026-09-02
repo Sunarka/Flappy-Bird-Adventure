@@ -8,147 +8,289 @@
   'use strict';
 
   // ==========================================
-  // CUTE FEATHER RUSH BIRD EMOTES SVG CATALOG
+  // CUTE FEATHER RUSH BIRD EMOTES SVG CATALOG (ULTRA HIGH POLISH)
   // ==========================================
   const CUTE_BIRD_EMOTES = [
     {
       id: 'bird_wave',
-      title: 'Salam / Halo',
-      render: (s = 36) => `
-        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
-          <circle cx="18" cy="18" r="16" fill="#fef08a" stroke="#facc15" stroke-width="1.5"/>
-          <ellipse cx="11" cy="17" rx="3" ry="4.5" fill="#facc15"/>
-          <ellipse cx="27" cy="12" rx="4.5" ry="2.5" transform="rotate(-35 27 12)" fill="#eab308"/>
-          <circle cx="14" cy="14" r="2.2" fill="#0f172a"/>
-          <circle cx="14.8" cy="13.2" r="0.8" fill="#fff"/>
-          <circle cx="21" cy="14" r="2.2" fill="#0f172a"/>
-          <circle cx="21.8" cy="13.2" r="0.8" fill="#fff"/>
-          <circle cx="11" cy="19" r="2" fill="#f43f5e" opacity="0.6"/>
-          <circle cx="24" cy="19" r="2" fill="#f43f5e" opacity="0.6"/>
-          <polygon points="17,17 21,17 19,21" fill="#f97316"/>
+      title: 'Halo! / Waving',
+      render: (s = 40) => `
+        <svg viewBox="0 0 44 44" width="${s}" height="${s}" style="display:block">
+          <defs>
+            <linearGradient id="gWave" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fef08a"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+            <radialGradient id="gBlush"><stop offset="0%" stop-color="#fb7185" stop-opacity="0.85"/><stop offset="100%" stop-color="#fb7185" stop-opacity="0"/></radialGradient>
+          </defs>
+          <!-- Feather Tuft on Head -->
+          <path d="M 21 4 Q 22 0 25 2 Q 23 6 22 8 Z" fill="#f59e0b"/>
+          <path d="M 19 6 Q 19 1 22 4 Q 21 8 20 9 Z" fill="#eab308"/>
+          <!-- Body -->
+          <circle cx="22" cy="24" r="17" fill="url(#gWave)" stroke="#d97706" stroke-width="1.6"/>
+          <!-- Left Wing -->
+          <ellipse cx="7" cy="25" rx="4" ry="6" fill="#f59e0b"/>
+          <!-- Waving Right Wing -->
+          <g transform="translate(37, 16) rotate(-35)">
+            <ellipse cx="0" cy="0" rx="6.5" ry="3.5" fill="#eab308" stroke="#d97706" stroke-width="1.2"/>
+            <!-- Motion Lines -->
+            <path d="M 4 -6 Q 7 -3 5 2" stroke="#38bdf8" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+            <path d="M 7 -4 Q 10 -1 8 4" stroke="#38bdf8" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          </g>
+          <!-- Kawaii Sparkling Eyes -->
+          <ellipse cx="16" cy="20" rx="3.2" ry="4" fill="#0f172a"/>
+          <circle cx="17.2" cy="18.2" r="1.3" fill="#ffffff"/>
+          <circle cx="15.2" cy="21.5" r="0.7" fill="#ffffff"/>
+          <ellipse cx="27" cy="20" rx="3.2" ry="4" fill="#0f172a"/>
+          <circle cx="28.2" cy="18.2" r="1.3" fill="#ffffff"/>
+          <circle cx="26.2" cy="21.5" r="0.7" fill="#ffffff"/>
+          <!-- Soft Rosy Blush -->
+          <circle cx="12" cy="25" r="4" fill="url(#gBlush)"/>
+          <circle cx="31" cy="25" r="4" fill="url(#gBlush)"/>
+          <!-- Happy Open Beak -->
+          <path d="M 18 22 Q 21.5 19 25 22 Q 21.5 28 18 22 Z" fill="#ea580c"/>
+          <polygon points="18.5,22 24.5,22 21.5,26" fill="#f97316"/>
+          <path d="M 20 23.5 Q 21.5 25 23 23.5" fill="#fb7185"/>
         </svg>
       `
     },
     {
       id: 'bird_cool',
       title: 'Keren / Sunglasses',
-      render: (s = 36) => `
-        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
-          <circle cx="18" cy="18" r="16" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
-          <ellipse cx="8" cy="19" rx="3.5" ry="4" fill="#0284c7"/>
-          <ellipse cx="28" cy="19" rx="3.5" ry="4" fill="#0284c7"/>
-          <rect x="9" y="11" width="8" height="7" rx="2" fill="#0f172a"/>
-          <rect x="19" y="11" width="8" height="7" rx="2" fill="#0f172a"/>
-          <line x1="16" y1="13" x2="20" y2="13" stroke="#0f172a" stroke-width="2"/>
-          <polygon points="16,20 21,20 18.5,23.5" fill="#f97316"/>
+      render: (s = 40) => `
+        <svg viewBox="0 0 44 44" width="${s}" height="${s}" style="display:block">
+          <defs>
+            <linearGradient id="gCool" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0284c7"/></linearGradient>
+            <linearGradient id="gShades" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#020617"/></linearGradient>
+          </defs>
+          <path d="M 20 4 Q 22 0 24 3 Q 22 7 21 9 Z" fill="#0284c7"/>
+          <circle cx="22" cy="24" r="17" fill="url(#gCool)" stroke="#0369a1" stroke-width="1.6"/>
+          <ellipse cx="6" cy="26" rx="3.5" ry="5.5" fill="#0284c7"/>
+          <ellipse cx="38" cy="26" rx="3.5" ry="5.5" fill="#0284c7"/>
+          <!-- Dark Glossy Ray-Ban Sunglasses -->
+          <rect x="9" y="15" width="11" height="9" rx="3" fill="url(#gShades)" stroke="#0f172a" stroke-width="1.2"/>
+          <rect x="23" y="15" width="11" height="9" rx="3" fill="url(#gShades)" stroke="#0f172a" stroke-width="1.2"/>
+          <line x1="19" y1="18" x2="24" y2="18" stroke="#0f172a" stroke-width="2.5"/>
+          <!-- White Glare Lines on Shades -->
+          <line x1="11" y1="17" x2="17" y2="22" stroke="#38bdf8" stroke-width="1.3" opacity="0.85" stroke-linecap="round"/>
+          <line x1="25" y1="17" x2="31" y2="22" stroke="#38bdf8" stroke-width="1.3" opacity="0.85" stroke-linecap="round"/>
+          <!-- Sparkle Star on Glass Rim -->
+          <polygon points="34,14 35,16 37,17 35,18 34,20 33,18 31,17 33,16" fill="#fef08a"/>
+          <!-- Smug Smirk Beak -->
+          <polygon points="18.5,25 25.5,25 21,29" fill="#f97316" stroke="#c2410c" stroke-width="0.8"/>
         </svg>
       `
     },
     {
       id: 'bird_rage',
       title: 'Ajak Perang / Duel',
-      render: (s = 36) => `
-        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
-          <circle cx="18" cy="18" r="16" fill="#ef4444" stroke="#b91c1c" stroke-width="1.5"/>
-          <path d="M4 14 Q18 9 32 14" stroke="#991b1b" stroke-width="4" fill="none"/>
-          <polygon points="30,12 35,8 33,14" fill="#991b1b"/>
-          <polygon points="12,13 17,16 12,16" fill="#0f172a"/>
-          <polygon points="24,13 19,16 24,16" fill="#0f172a"/>
-          <polygon points="16,18 20,18 18,22" fill="#ea580c"/>
-        </svg>
-      `
-    },
-    {
-      id: 'bird_fire',
-      title: 'Membara / Phoenix',
-      render: (s = 36) => `
-        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
-          <path d="M12 6 Q15 0 18 5 Q21 0 24 6" fill="#f59e0b"/>
-          <circle cx="18" cy="19" r="15" fill="#f97316" stroke="#ea580c" stroke-width="1.5"/>
-          <circle cx="13" cy="16" r="2.5" fill="#fef08a"/>
-          <circle cx="23" cy="16" r="2.5" fill="#fef08a"/>
-          <polygon points="16,19 20,19 18,23" fill="#facc15"/>
+      render: (s = 40) => `
+        <svg viewBox="0 0 44 44" width="${s}" height="${s}" style="display:block">
+          <defs>
+            <linearGradient id="gRage" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f87171"/><stop offset="100%" stop-color="#dc2626"/></linearGradient>
+          </defs>
+          <!-- Red Battle Bandana -->
+          <path d="M 6 15 Q 22 7 38 15 L 37 19 Q 22 12 7 19 Z" fill="#991b1b"/>
+          <polygon points="36,16 43,11 40,19" fill="#7f1d1d"/>
+          <polygon points="37,18 42,22 39,20" fill="#991b1b"/>
+          <!-- Body -->
+          <circle cx="22" cy="24" r="17" fill="url(#gRage)" stroke="#991b1b" stroke-width="1.6"/>
+          <!-- Angry Furrowed Eyebrows -->
+          <line x1="12" y1="17" x2="20" y2="20" stroke="#450a0a" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="32" y1="17" x2="24" y2="20" stroke="#450a0a" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Fierce Anime Eyes -->
+          <polygon points="13,19 19,22 15,25" fill="#0f172a"/>
+          <circle cx="16" cy="22" r="1" fill="#fef08a"/>
+          <polygon points="31,19 25,22 29,25" fill="#0f172a"/>
+          <circle cx="28" cy="22" r="1" fill="#fef08a"/>
+          <!-- Steaming Angry Mark 💢 -->
+          <path d="M 10 9 L 10 13 M 8 11 L 12 11" stroke="#facc15" stroke-width="2" stroke-linecap="round"/>
+          <!-- Clenched Battle Beak -->
+          <polygon points="18,24 26,24 22,29" fill="#ea580c" stroke="#7c2d12" stroke-width="1"/>
+          <!-- Crossed Mini Swords -->
+          <line x1="15" y1="34" x2="29" y2="34" stroke="#facc15" stroke-width="2" stroke-linecap="round"/>
         </svg>
       `
     },
     {
       id: 'bird_love',
       title: 'Cinta / Heart Eyes',
-      render: (s = 36) => `
-        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
-          <circle cx="18" cy="18" r="16" fill="#f472b6" stroke="#db2777" stroke-width="1.5"/>
-          <path d="M11 13 A 2 2 0 0 0 13 15 L 13 17 L 11 15 A 2 2 0 0 0 11 13" fill="#e11d48"/>
-          <path d="M13 13 A 2 2 0 0 1 15 15 L 13 17 L 11 15 A 2 2 0 0 1 13 13" fill="#e11d48"/>
-          <path d="M21 13 A 2 2 0 0 0 23 15 L 23 17 L 21 15 A 2 2 0 0 0 21 13" fill="#e11d48"/>
-          <path d="M23 13 A 2 2 0 0 1 25 15 L 23 17 L 21 15 A 2 2 0 0 1 23 13" fill="#e11d48"/>
-          <circle cx="9" cy="20" r="2.5" fill="#fda4af"/>
-          <circle cx="27" cy="20" r="2.5" fill="#fda4af"/>
-          <polygon points="16,19 20,19 18,22" fill="#fb923c"/>
+      render: (s = 40) => `
+        <svg viewBox="0 0 44 44" width="${s}" height="${s}" style="display:block">
+          <defs>
+            <linearGradient id="gLove" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f472b6"/><stop offset="100%" stop-color="#db2777"/></linearGradient>
+          </defs>
+          <!-- Floating Heart Bubbles -->
+          <path d="M 33 6 A 2.2 2.2 0 0 0 35 9 L 35 11 L 33 9 A 2.2 2.2 0 0 0 33 6" fill="#f43f5e"/>
+          <path d="M 35 6 A 2.2 2.2 0 0 1 37 9 L 35 11 L 33 9 A 2.2 2.2 0 0 1 35 6" fill="#f43f5e"/>
+          <path d="M 8 9 A 1.8 1.8 0 0 0 10 11 L 10 13 L 8 11 A 1.8 1.8 0 0 0 8 9" fill="#fb7185"/>
+          <path d="M 10 9 A 1.8 1.8 0 0 1 12 11 L 10 13 L 8 11 A 1.8 1.8 0 0 1 10 9" fill="#fb7185"/>
+          <!-- Body -->
+          <circle cx="22" cy="24" r="17" fill="url(#gLove)" stroke="#be185d" stroke-width="1.6"/>
+          <!-- Heart Shaped Eyes -->
+          <g transform="translate(16, 20)">
+            <path d="M -3 -3 A 2.6 2.6 0 0 0 0 0 L 0 3 L -3 0 A 2.6 2.6 0 0 0 -3 -3" fill="#e11d48"/>
+            <path d="M 0 -3 A 2.6 2.6 0 0 1 3 0 L 0 3 L -3 0 A 2.6 2.6 0 0 1 0 -3" fill="#e11d48"/>
+            <circle cx="1.2" cy="-1.2" r="0.8" fill="#ffffff"/>
+          </g>
+          <g transform="translate(28, 20)">
+            <path d="M -3 -3 A 2.6 2.6 0 0 0 0 0 L 0 3 L -3 0 A 2.6 2.6 0 0 0 -3 -3" fill="#e11d48"/>
+            <path d="M 0 -3 A 2.6 2.6 0 0 1 3 0 L 0 3 L -3 0 A 2.6 2.6 0 0 1 0 -3" fill="#e11d48"/>
+            <circle cx="1.2" cy="-1.2" r="0.8" fill="#ffffff"/>
+          </g>
+          <!-- Sweet Blush -->
+          <circle cx="10" cy="26" r="3.5" fill="#fda4af" opacity="0.8"/>
+          <circle cx="34" cy="26" r="3.5" fill="#fda4af" opacity="0.8"/>
+          <!-- Beak -->
+          <polygon points="19,23 25,23 22,27" fill="#fb923c" stroke="#c2410c" stroke-width="0.8"/>
         </svg>
       `
     },
     {
       id: 'bird_king',
       title: 'Juara / Crown King',
-      render: (s = 36) => `
-        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
-          <polygon points="12,10 14,4 18,7 22,4 24,10" fill="#facc15" stroke="#b45309" stroke-width="1"/>
-          <circle cx="18" cy="20" r="15" fill="#fef08a" stroke="#eab308" stroke-width="1.5"/>
-          <path d="M11 16 Q14 13 17 16" stroke="#0f172a" stroke-width="2" fill="none"/>
-          <path d="M19 16 Q22 13 25 16" stroke="#0f172a" stroke-width="2" fill="none"/>
-          <polygon points="16,19 20,19 18,23" fill="#f97316"/>
+      render: (s = 40) => `
+        <svg viewBox="0 0 44 44" width="${s}" height="${s}" style="display:block">
+          <defs>
+            <linearGradient id="gKing" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fde047"/><stop offset="100%" stop-color="#ca8a04"/></linearGradient>
+            <linearGradient id="gCrown" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fef08a"/><stop offset="100%" stop-color="#d97706"/></linearGradient>
+          </defs>
+          <!-- Royal 3D Golden Crown with Gems -->
+          <polygon points="13,13 15,4 22,9 29,4 31,13" fill="url(#gCrown)" stroke="#78350f" stroke-width="1.2"/>
+          <circle cx="15" cy="4" r="1.5" fill="#ef4444"/>
+          <circle cx="22" cy="9" r="1.8" fill="#3b82f6"/>
+          <circle cx="29" cy="4" r="1.5" fill="#10b981"/>
+          <!-- Body -->
+          <circle cx="22" cy="25" r="16" fill="url(#gKing)" stroke="#a16207" stroke-width="1.6"/>
+          <!-- Proud Left Eye -->
+          <ellipse cx="16" cy="22" rx="3.2" ry="4" fill="#0f172a"/>
+          <circle cx="17.2" cy="20.2" r="1.3" fill="#ffffff"/>
+          <!-- Playful Wink Right Eye -->
+          <path d="M 25 22 Q 28 18 31 22" stroke="#0f172a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+          <!-- Proud Champion Smile Beak -->
+          <polygon points="18,24 26,24 22,29" fill="#f97316" stroke="#c2410c" stroke-width="0.8"/>
+          <!-- Golden Medal Sparkles -->
+          <polygon points="9,30 10,32 12,33 10,34 9,36 8,34 6,33 8,32" fill="#facc15"/>
         </svg>
       `
     },
     {
       id: 'bird_cry',
       title: 'Nangis / Kalah',
-      render: (s = 36) => `
-        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
-          <circle cx="18" cy="18" r="16" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
-          <path d="M11 16 Q14 13 16 16" stroke="#475569" stroke-width="2" fill="none"/>
-          <path d="M20 16 Q22 13 25 16" stroke="#475569" stroke-width="2" fill="none"/>
-          <ellipse cx="13" cy="22" rx="2" ry="4" fill="#38bdf8"/>
-          <ellipse cx="23" cy="22" rx="2" ry="4" fill="#38bdf8"/>
-          <polygon points="16,22 20,22 18,19" fill="#f97316"/>
+      render: (s = 40) => `
+        <svg viewBox="0 0 44 44" width="${s}" height="${s}" style="display:block">
+          <defs>
+            <linearGradient id="gCry" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e0f2fe"/><stop offset="100%" stop-color="#7dd3fc"/></linearGradient>
+          </defs>
+          <!-- Body -->
+          <circle cx="22" cy="24" r="17" fill="url(#gCry)" stroke="#0284c7" stroke-width="1.6"/>
+          <!-- Weeping Closed Eyes -->
+          <path d="M 12 20 Q 16 16 19 20" stroke="#0369a1" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+          <path d="M 25 20 Q 28 16 32 20" stroke="#0369a1" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+          <!-- Dual Gushing Waterfalls of Glowing Tears -->
+          <path d="M 13 21 Q 11 28 12 36 Q 14 38 15 36 Q 16 28 14 21 Z" fill="#38bdf8" opacity="0.9"/>
+          <path d="M 31 21 Q 33 28 32 36 Q 30 38 29 36 Q 28 28 30 21 Z" fill="#38bdf8" opacity="0.9"/>
+          <!-- Trembling Sad Mouth / Open Beak -->
+          <path d="M 18 24 Q 22 21 26 24 L 25 28 Q 22 30 19 28 Z" fill="#ea580c"/>
+          <ellipse cx="22" cy="27" rx="2" ry="1.5" fill="#f43f5e"/>
+        </svg>
+      `
+    },
+    {
+      id: 'bird_star',
+      title: 'Kagum / Star Eyes',
+      render: (s = 40) => `
+        <svg viewBox="0 0 44 44" width="${s}" height="${s}" style="display:block">
+          <defs>
+            <linearGradient id="gStar" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fef08a"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+          </defs>
+          <circle cx="22" cy="24" r="17" fill="url(#gStar)" stroke="#d97706" stroke-width="1.6"/>
+          <!-- Big Glowing Golden Star Eyes -->
+          <g transform="translate(16, 20)">
+            <polygon points="0,-4.5 1.4,-1.4 4.5,0 1.4,1.4 0,4.5 -1.4,1.4 -4.5,0 -1.4,-1.4" fill="#facc15" stroke="#b45309" stroke-width="0.8"/>
+            <circle cx="0" cy="0" r="1" fill="#ffffff"/>
+          </g>
+          <g transform="translate(28, 20)">
+            <polygon points="0,-4.5 1.4,-1.4 4.5,0 1.4,1.4 0,4.5 -1.4,1.4 -4.5,0 -1.4,-1.4" fill="#facc15" stroke="#b45309" stroke-width="0.8"/>
+            <circle cx="0" cy="0" r="1" fill="#ffffff"/>
+          </g>
+          <!-- Wide Joyful Open Beak :D -->
+          <path d="M 17 23 Q 22 20 27 23 Q 22 31 17 23 Z" fill="#ea580c"/>
+          <path d="M 19 24 Q 22 29 25 24" fill="#fb7185"/>
+          <!-- Sparkle Cheeks -->
+          <circle cx="11" cy="26" r="3" fill="#fb7185" opacity="0.6"/>
+          <circle cx="33" cy="26" r="3" fill="#fb7185" opacity="0.6"/>
+        </svg>
+      `
+    },
+    {
+      id: 'bird_fire',
+      title: 'Membara / Phoenix',
+      render: (s = 40) => `
+        <svg viewBox="0 0 44 44" width="${s}" height="${s}" style="display:block">
+          <defs>
+            <linearGradient id="gFire" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fdba74"/><stop offset="100%" stop-color="#ea580c"/></linearGradient>
+            <linearGradient id="gFlames" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fef08a"/><stop offset="100%" stop-color="#dc2626"/></linearGradient>
+          </defs>
+          <!-- Spiky Blazing Fire Crest -->
+          <polygon points="12,12 15,2 22,7 29,2 32,12" fill="url(#gFlames)"/>
+          <polygon points="16,10 22,4 28,10" fill="#fef08a"/>
+          <!-- Body -->
+          <circle cx="22" cy="25" r="16" fill="url(#gFire)" stroke="#c2410c" stroke-width="1.6"/>
+          <!-- Piercing Cyan Glow Energy Eyes -->
+          <circle cx="16" cy="22" r="3.5" fill="#06b6d4"/>
+          <circle cx="16" cy="22" r="1.8" fill="#0f172a"/>
+          <circle cx="17" cy="21" r="0.8" fill="#ffffff"/>
+          <circle cx="28" cy="22" r="3.5" fill="#06b6d4"/>
+          <circle cx="28" cy="22" r="1.8" fill="#0f172a"/>
+          <circle cx="29" cy="21" r="0.8" fill="#ffffff"/>
+          <!-- Golden Sharp Beak -->
+          <polygon points="18,24 26,24 22,29" fill="#facc15" stroke="#ca8a04" stroke-width="0.8"/>
         </svg>
       `
     },
     {
       id: 'bird_rich',
-      title: 'Kaya / Golden Coin',
-      render: (s = 36) => `
-        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
-          <circle cx="18" cy="18" r="16" fill="#fef08a" stroke="#ca8a04" stroke-width="1.5"/>
-          <polygon points="13,12 14,14 16,14 14.5,15.5 15,17.5 13,16 11,17.5 11.5,15.5 10,14 12,14" fill="#eab308"/>
-          <polygon points="23,12 24,14 26,14 24.5,15.5 25,17.5 23,16 21,17.5 21.5,15.5 20,14 22,14" fill="#eab308"/>
-          <polygon points="16,18 20,18 18,21" fill="#f97316"/>
-          <circle cx="18" cy="26" r="5" fill="#facc15" stroke="#b45309" stroke-width="1"/>
-        </svg>
-      `
-    },
-    {
-      id: 'bird_rocket',
-      title: 'Roket / Meluncur',
-      render: (s = 36) => `
-        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
-          <polygon points="8,26 3,32 12,29" fill="#ef4444"/>
-          <circle cx="20" cy="16" r="15" fill="#a855f7" stroke="#7e22ce" stroke-width="1.5"/>
-          <ellipse cx="23" cy="14" rx="7" ry="5" fill="#38bdf8" stroke="#0284c7" stroke-width="1"/>
-          <polygon points="26,17 31,18 27,20" fill="#f97316"/>
+      title: 'Kaya / Koin Emas',
+      render: (s = 40) => `
+        <svg viewBox="0 0 44 44" width="${s}" height="${s}" style="display:block">
+          <defs>
+            <linearGradient id="gRich" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fef08a"/><stop offset="100%" stop-color="#eab308"/></linearGradient>
+            <linearGradient id="gCoin" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fef08a"/><stop offset="100%" stop-color="#ca8a04"/></linearGradient>
+          </defs>
+          <circle cx="22" cy="23" r="16" fill="url(#gRich)" stroke="#a16207" stroke-width="1.6"/>
+          <!-- Sparkle Dollar / Star Eyes -->
+          <g transform="translate(16, 18)">
+            <polygon points="0,-3.5 1,-1 3.5,0 1,1 0,3.5 -1,1 -3.5,0 -1,-1" fill="#ca8a04"/>
+          </g>
+          <g transform="translate(28, 18)">
+            <polygon points="0,-3.5 1,-1 3.5,0 1,1 0,3.5 -1,1 -3.5,0 -1,-1" fill="#ca8a04"/>
+          </g>
+          <polygon points="19,21 25,21 22,25" fill="#f97316"/>
+          <!-- Hugging Huge Gold Coin with Star -->
+          <circle cx="22" cy="32" r="8" fill="url(#gCoin)" stroke="#78350f" stroke-width="1.3"/>
+          <polygon points="22,27 23.5,30.5 27,31 24.5,33 25.5,36.5 22,34.5 18.5,36.5 19.5,33 17,31 20.5,30.5" fill="#fef08a"/>
         </svg>
       `
     },
     {
       id: 'bird_gg',
-      title: 'GG / Jempol Mantap',
-      render: (s = 36) => `
-        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
-          <circle cx="18" cy="18" r="16" fill="#4ade80" stroke="#16a34a" stroke-width="1.5"/>
-          <circle cx="13" cy="14" r="2.2" fill="#0f172a"/>
-          <path d="M20 14 Q23 11 26 14" stroke="#0f172a" stroke-width="2.2" fill="none"/>
-          <polygon points="16,18 20,18 18,22" fill="#f97316"/>
-          <circle cx="27" cy="22" r="5" fill="#22c55e" stroke="#15803d" stroke-width="1"/>
+      title: 'GG / Mantap!',
+      render: (s = 40) => `
+        <svg viewBox="0 0 44 44" width="${s}" height="${s}" style="display:block">
+          <defs>
+            <linearGradient id="gGG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#86efac"/><stop offset="100%" stop-color="#22c55e"/></linearGradient>
+          </defs>
+          <circle cx="20" cy="24" r="16" fill="url(#gGG)" stroke="#15803d" stroke-width="1.6"/>
+          <!-- Happy Anime Left Eye -->
+          <ellipse cx="14" cy="20" rx="3.2" ry="4" fill="#0f172a"/>
+          <circle cx="15.2" cy="18.2" r="1.3" fill="#ffffff"/>
+          <!-- Wink Right Eye -->
+          <path d="M 23 20 Q 26 16 29 20" stroke="#0f172a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+          <!-- Cheerful Beak -->
+          <polygon points="17,23 23,23 20,27" fill="#f97316" stroke="#c2410c" stroke-width="0.8"/>
+          <!-- Big Cartoon Thumbs Up Badge -->
+          <g transform="translate(33, 26)">
+            <circle cx="0" cy="0" r="7" fill="#fef08a" stroke="#d97706" stroke-width="1.4"/>
+            <text x="0" y="3.5" font-size="9" font-weight="900" fill="#78350f" text-anchor="middle">👍</text>
+          </g>
         </svg>
       `
     }
