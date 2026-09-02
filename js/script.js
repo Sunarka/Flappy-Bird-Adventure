@@ -3121,14 +3121,41 @@
     const primaryKey = gpProfile.primaryKey;
     if(gpProfile.googleUid || gpProfile.email) {
       const accountsMap = storage.get('skyFlappyAccountsMap', {});
+      const tierObj = typeof getRankTier === 'function' ? getRankTier(rankedBest) : { name: 'BRONZE I' };
       const accData = {
         primaryKey: primaryKey,
         uid: gpProfile.googleUid || '',
         gamerTag: gpProfile.gamerTag,
+        name: gpProfile.gamerTag,
         avatar: gpProfile.avatar,
+        tier: tierObj.name || 'BRONZE I',
         nameChangesDone: gpProfile.nameChangesDone || 0,
         rankedBest: rankedBest || 0,
+        classicBest: classicBest || 0,
+        score: rankedBest || 0,
         coins: progress.coins || 0,
+        loadout: {
+          bird: progress.selected || 'classic',
+          pet: progress.selectedPet || 'pip_peep',
+          aura: progress.selectedAura || 'default',
+          hat: progress.selectedHat || 'none',
+          outfit: progress.selectedOutfit || 'none',
+          pipe: progress.selectedPipe || 'green',
+          background: progress.selectedBackground || 'sky',
+          music: progress.selectedMusic || 'happy',
+          booster: progress.selectedBooster || 'none'
+        },
+        unlocked: {
+          bird: progress.unlocked || ['classic'],
+          pet: progress.petUnlocked || ['pip_peep'],
+          aura: progress.auraUnlocked || ['default'],
+          hat: progress.hatUnlocked || ['none'],
+          outfit: progress.outfitUnlocked || ['none'],
+          pipe: progress.pipeUnlocked || ['green'],
+          background: progress.backgroundUnlocked || ['sky'],
+          music: progress.musicUnlocked || ['happy'],
+          booster: progress.boosterUnlocked || ['none']
+        },
         email: gpProfile.email,
         authProvider: gpProfile.authProvider || 'google',
         updatedAt: new Date().toISOString()
@@ -3138,7 +3165,7 @@
       storage.set('skyFlappyAccountsMap', accountsMap);
 
       // Simpan ke Firestore Cloud dengan Primary Key
-      if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.saveUserProfile === 'function' && gpProfile.googleUid) {
+      if(!isApplyingCloudSync && window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.saveUserProfile === 'function' && (gpProfile.googleUid || gpProfile.isLoggedIn)) {
         window.FirebaseLeaderboard.saveUserProfile(primaryKey, accData);
       }
     }
@@ -11098,63 +11125,70 @@
     }
   }
 
+  let isApplyingCloudSync = false;
+
   function applyCloudProfile(cloudProfile) {
     if(!cloudProfile) return;
-    if(cloudProfile.gamerTag) gpProfile.gamerTag = cloudProfile.gamerTag;
-    if(cloudProfile.avatar) gpProfile.avatar = cloudProfile.avatar;
-    if(typeof cloudProfile.nameChangesDone === 'number') gpProfile.nameChangesDone = cloudProfile.nameChangesDone;
-    
-    // 1. Sync Rank / Scores
-    if(typeof cloudProfile.rankedBest === 'number' && cloudProfile.rankedBest > rankedBest) {
-      rankedBest = cloudProfile.rankedBest;
-      storage.set('skyFlappyRankedBest', rankedBest);
-    }
-    if(typeof cloudProfile.classicBest === 'number' && cloudProfile.classicBest > classicBest) {
-      classicBest = cloudProfile.classicBest;
-      storage.set('skyFlappyBest', classicBest);
-    }
+    isApplyingCloudSync = true;
+    try {
+      if(cloudProfile.gamerTag) gpProfile.gamerTag = cloudProfile.gamerTag;
+      if(cloudProfile.avatar) gpProfile.avatar = cloudProfile.avatar;
+      if(typeof cloudProfile.nameChangesDone === 'number') gpProfile.nameChangesDone = cloudProfile.nameChangesDone;
+      
+      // 1. Sync Rank / Scores
+      if(typeof cloudProfile.rankedBest === 'number' && cloudProfile.rankedBest > rankedBest) {
+        rankedBest = cloudProfile.rankedBest;
+        storage.set('skyFlappyRankedBest', rankedBest);
+      }
+      if(typeof cloudProfile.classicBest === 'number' && cloudProfile.classicBest > classicBest) {
+        classicBest = cloudProfile.classicBest;
+        storage.set('skyFlappyBest', classicBest);
+      }
 
-    // 2. Sync Coins
-    if(typeof cloudProfile.coins === 'number' && cloudProfile.coins > (progress.coins || 0)) {
-      progress.coins = cloudProfile.coins;
-    }
+      // 2. Sync Coins
+      if(typeof cloudProfile.coins === 'number' && cloudProfile.coins > (progress.coins || 0)) {
+        progress.coins = cloudProfile.coins;
+      }
 
-    // 3. Sync Loadout (Equipped bird, pet, aura, hat, outfit, pipe, background, music, booster)
-    if(cloudProfile.loadout) {
-      const l = cloudProfile.loadout;
-      if(l.bird && skins[l.bird]) progress.selected = l.bird;
-      if(l.pet && petsCatalog[l.pet]) progress.selectedPet = l.pet;
-      if(l.aura && auras[l.aura]) progress.selectedAura = l.aura;
-      if(l.hat && hats[l.hat]) progress.selectedHat = l.hat;
-      if(l.outfit && outfits[l.outfit]) progress.selectedOutfit = l.outfit;
-      if(l.pipe && pipeSkins[l.pipe]) progress.selectedPipe = l.pipe;
-      if(l.background && backgrounds[l.background]) progress.selectedBackground = l.background;
-      if(l.music && tracks[l.music]) progress.selectedMusic = l.music;
-      if(l.booster && boosters[l.booster]) progress.selectedBooster = l.booster;
-    }
+      // 3. Sync Loadout (Equipped bird, pet, aura, hat, outfit, pipe, background, music, booster)
+      if(cloudProfile.loadout) {
+        const l = cloudProfile.loadout;
+        if(l.bird && skins[l.bird]) progress.selected = l.bird;
+        if(l.pet && petsCatalog[l.pet]) progress.selectedPet = l.pet;
+        if(l.aura && auras[l.aura]) progress.selectedAura = l.aura;
+        if(l.hat && (hats[l.hat] || l.hat === 'none')) progress.selectedHat = l.hat;
+        if(l.outfit && (outfits[l.outfit] || l.outfit === 'none')) progress.selectedOutfit = l.outfit;
+        if(l.pipe && pipeSkins[l.pipe]) progress.selectedPipe = l.pipe;
+        if(l.background && backgrounds[l.background]) progress.selectedBackground = l.background;
+        if(l.music && tracks[l.music]) progress.selectedMusic = l.music;
+        if(l.booster && (boosters[l.booster] || l.booster === 'none')) progress.selectedBooster = l.booster;
+      }
 
-    // 4. Merge Unlocked Inventories
-    if(cloudProfile.unlocked) {
-      const u = cloudProfile.unlocked;
-      const mergeArr = (currentArr, cloudArr) => Array.from(new Set([...(currentArr || []), ...(cloudArr || [])]));
-      if(Array.isArray(u.bird)) progress.unlocked = mergeArr(progress.unlocked, u.bird);
-      if(Array.isArray(u.pet)) progress.petUnlocked = mergeArr(progress.petUnlocked, u.pet);
-      if(Array.isArray(u.aura)) progress.auraUnlocked = mergeArr(progress.auraUnlocked, u.aura);
-      if(Array.isArray(u.hat)) progress.hatUnlocked = mergeArr(progress.hatUnlocked, u.hat);
-      if(Array.isArray(u.outfit)) progress.outfitUnlocked = mergeArr(progress.outfitUnlocked, u.outfit);
-      if(Array.isArray(u.pipe)) progress.pipeUnlocked = mergeArr(progress.pipeUnlocked, u.pipe);
-      if(Array.isArray(u.background)) progress.backgroundUnlocked = mergeArr(progress.backgroundUnlocked, u.background);
-      if(Array.isArray(u.music)) progress.musicUnlocked = mergeArr(progress.musicUnlocked, u.music);
-      if(Array.isArray(u.booster)) progress.boosterUnlocked = mergeArr(progress.boosterUnlocked, u.booster);
-    }
+      // 4. Merge Unlocked Inventories
+      if(cloudProfile.unlocked) {
+        const u = cloudProfile.unlocked;
+        const mergeArr = (currentArr, cloudArr) => Array.from(new Set([...(currentArr || []), ...(cloudArr || [])]));
+        if(Array.isArray(u.bird)) progress.unlocked = mergeArr(progress.unlocked, u.bird);
+        if(Array.isArray(u.pet)) progress.petUnlocked = mergeArr(progress.petUnlocked, u.pet);
+        if(Array.isArray(u.aura)) progress.auraUnlocked = mergeArr(progress.auraUnlocked, u.aura);
+        if(Array.isArray(u.hat)) progress.hatUnlocked = mergeArr(progress.hatUnlocked, u.hat);
+        if(Array.isArray(u.outfit)) progress.outfitUnlocked = mergeArr(progress.outfitUnlocked, u.outfit);
+        if(Array.isArray(u.pipe)) progress.pipeUnlocked = mergeArr(progress.pipeUnlocked, u.pipe);
+        if(Array.isArray(u.background)) progress.backgroundUnlocked = mergeArr(progress.backgroundUnlocked, u.background);
+        if(Array.isArray(u.music)) progress.musicUnlocked = mergeArr(progress.musicUnlocked, u.music);
+        if(Array.isArray(u.booster)) progress.boosterUnlocked = mergeArr(progress.boosterUnlocked, u.booster);
+      }
 
-    if(typeof applyPetSkin === 'function') applyPetSkin();
-    persistProgress();
-    updateCoins();
-    saveGPProfile();
-    syncGPProfileUI();
-    if(typeof updateRankUI === 'function') updateRankUI();
-    if(typeof renderShop === 'function') renderShop();
+      if(typeof applyPetSkin === 'function') applyPetSkin();
+      persistProgress();
+      updateCoins();
+      storage.set('skyFlappyGPProfile', gpProfile);
+      syncGPProfileUI();
+      if(typeof updateRankUI === 'function') updateRankUI();
+      if(typeof renderShop === 'function') renderShop();
+    } finally {
+      isApplyingCloudSync = false;
+    }
   }
 
   async function syncCloudProfile(user, providerName = 'google') {
