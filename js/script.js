@@ -8076,6 +8076,94 @@
     ctx.restore();
   }
 
+  function drawCoin(coin) {
+    ctx.save();
+    ctx.translate(coin.x, coin.y);
+
+    const spin = coin.spin !== undefined ? coin.spin : (performance.now() / 150);
+    const spinScale = Math.cos(spin); // Animasi rotasi horizontal 3D
+    const absScale = Math.max(0.08, Math.abs(spinScale));
+
+    // 1. Pendaran Kilau Emas Luar
+    ctx.shadowColor = 'rgba(251, 191, 36, 0.65)';
+    ctx.shadowBlur = 6;
+
+    // 2. Ketebalan Tepi Koin 3D (Rim Depth)
+    const edgeOffset = (1 - absScale) * (spinScale >= 0 ? -2.2 : 2.2);
+    ctx.fillStyle = '#b45309';
+    ctx.beginPath();
+    ctx.ellipse(edgeOffset, 0, coin.r * absScale, coin.r, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 3. Gradasi Permukaan Emas Dinamis
+    const coinGrad = ctx.createLinearGradient(-coin.r * absScale, -coin.r, coin.r * absScale, coin.r);
+    coinGrad.addColorStop(0, '#fef08a');
+    coinGrad.addColorStop(0.3, '#f59e0b');
+    coinGrad.addColorStop(0.7, '#d97706');
+    coinGrad.addColorStop(1, '#78350f');
+
+    ctx.fillStyle = coinGrad;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, coin.r * absScale, coin.r, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // 4. Lingkaran & Lambang Emboss Bagian Dalam
+    if(absScale > 0.3) {
+      ctx.strokeStyle = '#fef08a';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, (coin.r - 2.8) * absScale, coin.r - 2.8, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Lambang Tengah Koin
+      ctx.fillStyle = '#fef9c3';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 3.2 * absScale, 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Efek Kilatan Bintang Berkilau saat Berputar
+      if(Math.abs(Math.sin(spin * 2)) > 0.82) {
+        ctx.fillStyle = '#ffffff';
+        drawCanvasSparkle(ctx, 0, 0, Math.max(3, 5 * absScale));
+      }
+    }
+
+    ctx.restore();
+  }
+
+  function drawFlyer(flyer) {
+    ctx.save();
+    ctx.translate(flyer.x, flyer.y);
+    ctx.scale(-1, 1);
+    ctx.fillStyle = '#e85d50';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, flyer.r, flyer.r * .72, 0, 0, 7);
+    ctx.fill();
+    ctx.fillStyle = '#c83f43';
+    ctx.save();
+    ctx.rotate(Math.sin(flyer.wing || 0) * .55);
+    ctx.beginPath();
+    ctx.ellipse(-4, -8, 10, 5, -.45, 0, 7);
+    ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(6, -5, 4, 0, 7);
+    ctx.fill();
+    ctx.fillStyle = '#16365d';
+    ctx.beginPath();
+    ctx.arc(7, -5, 1.5, 0, 7);
+    ctx.fill();
+    ctx.fillStyle = '#ffbe45';
+    ctx.beginPath();
+    ctx.moveTo(14, 0);
+    ctx.lineTo(23, 4);
+    ctx.lineTo(14, 7);
+    ctx.fill();
+    ctx.restore();
+  }
+
   function drawGround() {
     const y = H - GROUND;
     const bg = backgrounds[progress.selectedBackground] || backgrounds.sky;
