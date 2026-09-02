@@ -697,6 +697,11 @@
     if(!catalog[progress[selectedKey]]) progress[selectedKey] = free;
   }
 
+  function persistProgress() {
+    storage.set('skyFlappyProgress', progress);
+  }
+  window.persistProgress = persistProgress;
+
   let currentMode = 'classic'; // 'classic' | 'ranked'
   let classicBest = storage.get('skyFlappyBest', 0);
   let rankedBest = storage.get('skyFlappyRankedBest', 0);
@@ -4389,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.12';
+  const GAME_VERSION = '20.13';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
