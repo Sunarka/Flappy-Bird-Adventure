@@ -12911,6 +12911,40 @@
     _showErrBanner('JS ERROR: ' + e.message + '\n  at ' + (e.filename || '') + ':' + e.lineno);
   });
 
+  // Auto Request Fullscreen and Lock Landscape on First User Gesture
+  function requestAutoLandscapeFullscreen() {
+    try {
+      const docEl = document.documentElement;
+      const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+      if(req && !document.fullscreenElement && !document.webkitFullscreenElement) {
+        const p = req.call(docEl);
+        if(p && p.catch) p.catch(() => {});
+      }
+      if(screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(() => {});
+      }
+    } catch(_) {}
+  }
+
+  function checkOrientationPrompt() {
+    const prompt = document.getElementById('rotatePrompt');
+    if(!prompt) return;
+    const isMobilePortrait = window.innerWidth < window.innerHeight && window.innerWidth <= 768;
+    prompt.classList.toggle('hidden', !isMobilePortrait);
+  }
+
+  window.addEventListener('resize', checkOrientationPrompt);
+  window.addEventListener('orientationchange', checkOrientationPrompt);
+  setTimeout(checkOrientationPrompt, 200);
+
+  const rotateBtn = document.getElementById('rotateFullscreenBtn');
+  if(rotateBtn) {
+    rotateBtn.addEventListener('click', () => {
+      requestAutoLandscapeFullscreen();
+      setTimeout(checkOrientationPrompt, 300);
+    });
+  }
+
   // Standard Game Splash Screen Controller (App Logo -> Dev Studio Logo)
   function initSplashScreen() {
     const splash = document.getElementById('appSplashScreen');
@@ -12926,12 +12960,14 @@
     function finishSplash() {
       if(isDone) return;
       isDone = true;
+      requestAutoLandscapeFullscreen();
       clearTimeout(timer1);
       clearTimeout(timer2);
 
       splash.classList.add('fade-out');
       setTimeout(() => {
         splash.style.display = 'none';
+        checkOrientationPrompt();
         if(settings.music && audio) {
           audio.lobbyMusic();
         }
@@ -12950,10 +12986,16 @@
       finishSplash();
     }, 2800);
 
-    // Tap anywhere on splash to skip immediately
+    // Tap anywhere on splash to skip immediately & trigger fullscreen landscape
     splash.addEventListener('click', () => {
       finishSplash();
     });
+
+    // Also trigger on first global touch
+    window.addEventListener('touchstart', function onFirstTouch() {
+      requestAutoLandscapeFullscreen();
+      window.removeEventListener('touchstart', onFirstTouch);
+    }, { passive: true });
   }
 
   try {

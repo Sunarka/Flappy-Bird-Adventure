@@ -99,3 +99,68 @@
   text-transform: uppercase;
   pointer-events: none;
 }
+
+/* =========================================================
+   ROTATE PROMPT (MOBILE PORTRAIT ONLY)
+   ========================================================= */
+.rotate-prompt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(10, 24, 43, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  color: #fff;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+@keyframes rotatePhoneAnim {
+  0%, 20% { transform: rotate(0deg); }
+  50%, 70% { transform: rotate(-90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.rotate-phone-icon {
+  animation: rotatePhoneAnim 2.4s ease-in-out infinite;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 12px rgba(250, 204, 21, 0.4));
+}
+
+.rotate-prompt-title {
+  font: 900 18px 'Trebuchet MS', Arial, sans-serif;
+  color: #facc15;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.rotate-prompt-sub {
+  font: 600 13px 'Trebuchet MS', Arial, sans-serif;
+  color: #cbd5e1;
+  max-width: 280px;
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+.rotate-fullscreen-btn {
+  width: auto !important;
+  padding: 10px 24px !important;
+  font-size: 13px !important;
+}
+
+/* Show rotate prompt only on mobile portrait screens */
+@media (orientation: portrait) and (max-width: 768px) {
+  .rotate-prompt-overlay:not(.hidden) {
+    display: flex !important;
+  }
+}
+@media (orientation: landscape) {
+  .rotate-prompt-overlay {
+    display: none !important;
+  }
+}

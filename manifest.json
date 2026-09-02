@@ -1,0 +1,24 @@
+{
+  "name": "Feather Rush: Sky Adventure",
+  "short_name": "Feather Rush",
+  "description": "Feather Rush Sky Adventure 16:9 Landscape Widescreen Game",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0a182b",
+  "theme_color": "#77cef2",
+  "icons": [
+    {
+      "src": "assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
