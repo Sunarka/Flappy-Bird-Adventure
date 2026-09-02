@@ -281,12 +281,17 @@ button:focus-visible {
   border-radius: clamp(16px, 4vw, 22px);
   padding: 14px 16px;
   text-align: center;
-  box-shadow: 0 10px 0 #2e6684, 0 20px 36px rgba(7, 24, 41, 0.6);
-  animation: modalIn .22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 10px 0 #2e6684, 0 20px 40px rgba(7, 24, 41, 0.7);
+  animation: modalIn .24s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: default;
   scrollbar-width: thin;
   scrollbar-color: rgba(2, 132, 199, 0.4) transparent;
   margin: auto !important;
+}
+
+@keyframes modalIn {
+  0% { opacity: 0; transform: scale(0.92) translateY(12px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .modal:not(.hidden) {
@@ -295,10 +300,9 @@ button:focus-visible {
 }
 
 .modal h2 {
-  margin: 0 0 clamp(12px, 2vh, 18px);
+  margin: 0 0 clamp(10px, 2vh, 16px);
   color: #1d4f78;
-  font-size: clamp(18px, 4.5vw, 24px);
-  letter-spacing: 1px;
+  font-size: clamp(16px, 4vw, 22px);
 }
 
 .modal button {
@@ -310,18 +314,11 @@ button:focus-visible {
   position: absolute;
   top: 10px;
   right: 10px;
-  margin: 0 !important;
   width: 30px;
   height: 30px;
-  min-height: 30px;
   border-radius: 50%;
-  background: #e2f1f8;
-  color: #1e4c70;
-  font-size: 20px;
-  line-height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #e2f4fc;
+  color: #285071;
   border: none;
   cursor: pointer;
   transition: all .15s;

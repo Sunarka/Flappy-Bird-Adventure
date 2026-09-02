@@ -401,45 +401,55 @@
 
 .friend-showcase-box {
   position: relative;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   margin-bottom: 6px;
-  border: 1.5px solid rgba(56, 189, 248, 0.4);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
-  background: #020617;
+  border: 1.5px solid rgba(56, 189, 248, 0.45);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6), inset 0 0 16px rgba(56, 189, 248, 0.1);
+  background: radial-gradient(circle at 50% 30%, #0c1a30 0%, #020617 100%);
 }
 
 .friend-showcase-canvas {
   width: 100%;
-  height: 65px !important;
+  height: 95px !important;
   display: block;
 }
 
 .friend-showcase-tag {
   position: absolute;
-  bottom: 4px;
-  left: 6px;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  bottom: 5px;
+  left: 8px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.4);
   color: #38bdf8;
-  font-size: 0.62rem;
-  font-weight: 800;
-  padding: 1px 6px;
-  border-radius: 4px;
-  backdrop-filter: blur(6px);
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 5px;
+  backdrop-filter: blur(8px);
   pointer-events: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .friend-profile-avatar-box {
-  width: 44px !important;
-  height: 44px !important;
+  width: 46px !important;
+  height: 46px !important;
   border-radius: 50%;
   background: radial-gradient(circle, #38bdf8 0%, #0284c7 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.5), inset 0 0 4px rgba(255, 255, 255, 0.6);
+  border: 2px solid #7dd3fc;
   flex-shrink: 0;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+
+.friend-profile-avatar-box:hover {
+  transform: scale(1.06);
 }
 
 .friend-profile-info {
@@ -449,75 +459,89 @@
 }
 
 .friend-profile-name {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 900;
   color: #fff;
   letter-spacing: -0.3px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .friend-profile-rank-badge {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  background: rgba(245, 158, 11, 0.15);
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  color: #fbbf24;
-  padding: 2px 7px;
+  gap: 4px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(217, 119, 6, 0.15) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.6);
+  color: #fef08a;
+  padding: 2px 9px;
   border-radius: 9999px;
-  font-size: 0.7rem;
-  font-weight: 800;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.4px;
   margin-top: 2px;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
 }
 
-/* Stats 2x2 Grid */
+/* Stats 2x2 Grid with Glow */
 .friend-stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  margin-bottom: 6px;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .friend-stat-box {
-  background: rgba(30, 41, 59, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 5px 6px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 10px;
+  padding: 8px 10px;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: all 0.15s ease;
+}
+
+.friend-stat-box:hover {
+  border-color: rgba(56, 189, 248, 0.5);
+  transform: translateY(-1px);
 }
 
 .friend-stat-label {
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   color: #94a3b8;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
-  margin-bottom: 1px;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
 }
 
 .friend-stat-val {
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   font-weight: 900;
   color: #38bdf8;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
 }
 
 .friend-stat-val.gold {
   color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
 }
 
 .friend-stat-val.green {
   color: #4ade80;
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
 }
 
 /* Equipped & Inventory Showcase */
 .friend-section-title {
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: #94a3b8;
+  font-size: 0.74rem;
+  font-weight: 900;
+  color: #7dd3fc;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
+  letter-spacing: 0.6px;
+  margin: 6px 0 4px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
 }
 
 /* Equipped Items 2x2 Grid */
@@ -532,15 +556,23 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 5px 8px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 9px;
+  padding: 6px 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: all 0.15s ease;
+}
+
+.friend-item-pill:hover {
+  border-color: rgba(56, 189, 248, 0.6);
+  transform: translateY(-1px);
 }
 
 .friend-item-pill-icon {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
 }
 
 .friend-item-pill-info {
@@ -551,14 +583,15 @@
 .friend-item-pill-title {
   font-size: 0.62rem;
   color: #94a3b8;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .friend-item-pill-val {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 900;
-  color: #f8fafc;
+  color: #38bdf8;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -568,29 +601,37 @@
 .friend-inventory-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 4px;
+  gap: 6px;
   margin-bottom: 8px;
 }
 
 .friend-inv-stat {
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 4px 2px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 9px;
+  padding: 6px 4px;
   text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: all 0.15s ease;
+}
+
+.friend-inv-stat:hover {
+  border-color: rgba(56, 189, 248, 0.5);
+  transform: translateY(-1px);
 }
 
 .friend-inv-num {
-  font-size: 0.85rem;
+  font-size: 0.92rem;
   font-weight: 900;
   color: #38bdf8;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.35);
 }
 
 .friend-inv-label {
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   color: #94a3b8;
   font-weight: 700;
-  margin-top: 1px;
+  margin-top: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
