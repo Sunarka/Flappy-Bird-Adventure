@@ -3452,10 +3452,21 @@
     const elEqHat = $('myEquippedHat');
     const elEqAura = $('myEquippedAura');
 
-    if(elEqBird) elEqBird.textContent = (progress.selected || 'classic').toUpperCase();
-    if(elEqPet) elEqPet.textContent = (progress.selectedPet || 'none').toUpperCase();
-    if(elEqHat) elEqHat.textContent = (progress.selectedHat || 'none').toUpperCase();
-    if(elEqAura) elEqAura.textContent = (progress.selectedAura || 'none').toUpperCase();
+    const getCosmeticName = (cat, id) => {
+      if(!id || id === 'none') return 'NONE';
+      if(cat === 'bird' && skins[id]) return skins[id].name;
+      if(cat === 'pet' && petsCatalog[id]) return (petsCatalog[id].name || '').split(' (')[0];
+      if(cat === 'hat' && hats[id]) return hats[id].name;
+      if(cat === 'aura' && auras[id]) return auras[id].name;
+      return String(id).replace(/[-_]+/g, ' ').toUpperCase();
+    };
+    if(elEqBird) elEqBird.textContent = getCosmeticName('bird', progress.selected || 'classic');
+    if(elEqPet) elEqPet.textContent = getCosmeticName('pet', progress.selectedPet || 'none');
+    if(elEqHat) elEqHat.textContent = getCosmeticName('hat', progress.selectedHat || 'none');
+    if(elEqAura) elEqAura.textContent = getCosmeticName('aura', progress.selectedAura || 'none');
+    
+    
+    
 
     // Populate Owned Cosmetics Count
     const elCountBird = $('mySkinCount');
@@ -4378,7 +4389,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.10';
+  const GAME_VERSION = '20.11';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 

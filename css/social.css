@@ -389,8 +389,8 @@
 
 .profile-scrollable-content {
   overflow-y: auto;
-  padding-right: 4px;
-  max-height: 275px !important;
+  padding-right: 2px;
+  max-height: 255px !important;
   scrollbar-width: thin;
 }
 
@@ -1023,4 +1023,32 @@
 .friend-profile-modal .close:active {
   transform: translateY(2px) scale(0.95) !important;
   box-shadow: 0 1px 0 #991b1b !important;
+}
+
+.profile-top-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  margin-bottom: 4px;
+}
+
+.profile-top-row .friend-profile-hero {
+  flex: 1.1;
+  margin: 0;
+  min-width: 0;
+  padding: 6px 8px;
+  max-width: none;
+}
+
+.profile-top-row .friend-showcase-box {
+  flex: 0.9;
+  margin: 0;
+  min-width: 0;
+  width: auto !important;
+  height: 85px !important;
+}
+
+.profile-top-row .friend-showcase-canvas {
+  width: 100% !important;
+  height: 85px !important;
 }

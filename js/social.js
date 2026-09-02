@@ -796,10 +796,14 @@
 
             // Loadout
             const l = data.loadout || {};
-            document.getElementById('fpEquippedBird').textContent = l.bird ? l.bird.toUpperCase() : 'CLASSIC';
-            document.getElementById('fpEquippedPet').textContent = l.pet ? l.pet.toUpperCase() : 'NONE';
-            document.getElementById('fpEquippedHat').textContent = l.hat ? l.hat.toUpperCase() : 'NONE';
-            document.getElementById('fpEquippedAura').textContent = l.aura ? l.aura.toUpperCase() : 'NONE';
+            const fmt = (v, d) => (v && v !== 'none') ? String(v).replace(/[-_]+/g, ' ').toUpperCase() : d;
+            document.getElementById('fpEquippedBird').textContent = fmt(l.bird, 'CLASSIC');
+            document.getElementById('fpEquippedPet').textContent = fmt(l.pet, 'NONE');
+            document.getElementById('fpEquippedHat').textContent = fmt(l.hat, 'NONE');
+            document.getElementById('fpEquippedAura').textContent = fmt(l.aura, 'NONE');
+            
+            
+            
 
             // Unlocked counts
             const u = data.unlocked || {};

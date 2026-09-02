@@ -13,18 +13,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.10">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.10">
-  <link rel="stylesheet" href="css/shop.css?v=20.10">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.10">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.10">
-  <link rel="stylesheet" href="css/store.css?v=20.10">
-  <link rel="stylesheet" href="css/ranked.css?v=20.10">
-  <link rel="stylesheet" href="css/social.css?v=20.10">
-  <link rel="stylesheet" href="css/splash.css?v=20.10">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.10">
+  <link rel="stylesheet" href="css/style.css?v=20.11">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.11">
+  <link rel="stylesheet" href="css/shop.css?v=20.11">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.11">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.11">
+  <link rel="stylesheet" href="css/store.css?v=20.11">
+  <link rel="stylesheet" href="css/ranked.css?v=20.11">
+  <link rel="stylesheet" href="css/social.css?v=20.11">
+  <link rel="stylesheet" href="css/splash.css?v=20.11">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.11">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.10">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.11">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -577,29 +577,31 @@
           </button>
         </div>
 
-        <!-- TAB 1: RINGKASAN PROFIL (Overview, Avatar, Live Canvas, Equipped items) -->
+        <!-- TAB 1: RINGKASAN PROFIL (Side-by-Side Top Row & 2x2 Equipped Items) -->
         <div class="profile-tab-panel active" id="profileTabOverview">
           <div class="profile-scrollable-content">
-            <!-- Hero Banner -->
-            <div class="friend-profile-hero">
-              <div class="friend-profile-avatar-box" id="gpAvatarWrap" role="button" tabindex="0" title="Klik untuk memilih foto profil imut">
-                <div id="gpAvatar"></div>
-                <div class="gp-avatar-edit-btn" id="gpChangeAvatarBtn" role="button" tabindex="0" title="Ganti Avatar"><svg viewBox="0 0 24 24" width="11" height="11"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#ffffff"/></svg></div>
-              </div>
-              <div class="friend-profile-info" style="flex:1;">
-                <div class="gp-gamertag-row" style="margin-bottom:4px;">
-                  <input type="text" id="gpGamerTagInput" maxlength="16" placeholder="Nama Gamer" value="SkyPlayer" style="background:rgba(15,23,42,0.85);border:1.5px solid rgba(56,189,248,0.4);border-radius:10px;padding:4px 10px;color:#fff;font-weight:900;font-size:1.1rem;width:100%;max-width:200px;">
+            <!-- Row 1: Profile Info (Left) + Live Showcase Stage (Right) Side-by-Side -->
+            <div class="profile-top-row">
+              <div class="friend-profile-hero">
+                <div class="friend-profile-avatar-box" id="gpAvatarWrap" role="button" tabindex="0" title="Klik untuk memilih foto profil imut">
+                  <div id="gpAvatar"></div>
+                  <div class="gp-avatar-edit-btn" id="gpChangeAvatarBtn" role="button" tabindex="0" title="Ganti Avatar"><svg viewBox="0 0 24 24" width="11" height="11"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#ffffff"/></svg></div>
                 </div>
-                <div class="gp-name-cost-hint" id="gpNameCostHint" style="font-size:0.75rem;margin-bottom:3px;">1x Ganti Nama: GRATIS</div>
-                <div class="friend-profile-rank-badge" id="gpTierBadge">BRONZE I</div>
-                <div style="font-size:0.72rem;color:#94a3b8;margin-top:3px;" id="gpUserEmail">acc_...</div>
+                <div class="friend-profile-info" style="flex:1;min-width:0;">
+                  <div class="gp-gamertag-row" style="margin-bottom:2px;">
+                    <input type="text" id="gpGamerTagInput" maxlength="16" placeholder="Nama Gamer" value="SkyPlayer" style="background:rgba(9,20,39,0.9);border:1.5px solid #204470;border-radius:8px;padding:3px 8px;color:#fff;font-weight:900;font-size:0.95rem;width:100%;max-width:160px;">
+                  </div>
+                  <div class="gp-name-cost-hint" id="gpNameCostHint" style="font-size:0.7rem;margin-bottom:2px;">1x Ganti Nama: GRATIS</div>
+                  <div class="friend-profile-rank-badge" id="gpTierBadge">BRONZE I</div>
+                  <div style="font-size:0.68rem;color:#94a3b8;margin-top:2px;" id="gpUserEmail">acc_...</div>
+                </div>
               </div>
-            </div>
 
-            <!-- Live Animated Canvas Showcase Box (Full Height & Crisp!) -->
-            <div class="friend-showcase-box" style="margin-bottom:6px;">
-              <canvas id="myProfileShowcaseCanvas" width="240" height="80" class="friend-showcase-canvas"></canvas>
-              <div class="friend-showcase-tag">PREVIEW PERLENGKAPAN LIVE</div>
+              <!-- Live Character Showcase Stage (Right Half) -->
+              <div class="friend-showcase-box">
+                <canvas id="myProfileShowcaseCanvas" width="200" height="85" class="friend-showcase-canvas"></canvas>
+                <div class="friend-showcase-tag">PREVIEW LIVE</div>
+              </div>
             </div>
 
             <!-- Equipped Loadout 4 Items -->
@@ -1319,12 +1321,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.10"></script>
-  <script src="js/admob-config.js?v=20.10"></script>
-  <script src="js/shop-data.js?v=20.10"></script>
-  <script src="js/audio.js?v=20.10"></script>
-  <script src="js/multiplayer.js?v=20.10"></script>
-  <script src="js/social.js?v=20.10"></script>
-  <script src="js/script.js?v=20.10"></script>
+  <script src="js/firebase-config.js?v=20.11"></script>
+  <script src="js/admob-config.js?v=20.11"></script>
+  <script src="js/shop-data.js?v=20.11"></script>
+  <script src="js/audio.js?v=20.11"></script>
+  <script src="js/multiplayer.js?v=20.11"></script>
+  <script src="js/social.js?v=20.11"></script>
+  <script src="js/script.js?v=20.11"></script>
 </body>
 </html>
