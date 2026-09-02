@@ -596,6 +596,96 @@
       }
     }
 
+
+    async sendLobbyInvite(friend, roomCode) {
+      if (!this.db || !friend || !friend.friendKey) {
+        if (typeof window.showGameDialog === 'function') {
+          window.showGameDialog({
+            title: 'Undangan Disalin!',
+            html: `<p>Bagikan kode room <b style="color:#facc15;">#${roomCode}</b> ke <b>${friend ? friend.name : 'teman'}</b>!</p>`,
+            type: 'info'
+          });
+        }
+        return;
+      }
+      try {
+        await this.db.collection('flappy_game_invites').add({
+          fromKey: this.myKey,
+          fromName: this.myProfile?.gamerTag || 'Teman',
+          fromAvatar: this.myProfile?.avatar || 'chick_yellow',
+          toKey: friend.friendKey,
+          roomCode: String(roomCode),
+          mode: window.selectedMpGameMode || 'survival',
+          status: 'pending',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log('[SocialService] Game invite sent to:', friend.name);
+      } catch (err) {
+        console.warn('[SocialService] Error sending game invite:', err.message);
+      }
+    }
+
+    handleIncomingGameInvite(invite) {
+      if (!invite || !invite.roomCode || invite.fromKey === this.myKey) return;
+      const toast = document.getElementById('mlbbIncomingInviteToast');
+      const senderName = document.getElementById('mlbbInviteSenderName');
+      const senderAvatar = document.getElementById('mlbbInviteSenderAvatar');
+      const roomCodeEl = document.getElementById('mlbbInviteRoomCode');
+      const rejectBtn = document.getElementById('mlbbInviteRejectBtn');
+      const acceptBtn = document.getElementById('mlbbInviteAcceptBtn');
+
+      if (!toast) return;
+
+      if (window.audio && window.audio.win) window.audio.win();
+
+      if (senderName) senderName.textContent = invite.fromName || 'Teman';
+      if (roomCodeEl) roomCodeEl.textContent = '#' + invite.roomCode;
+      if (senderAvatar) {
+        senderAvatar.innerHTML = typeof window.getCuteAvatarSvg === 'function'
+          ? window.getCuteAvatarSvg(invite.fromAvatar || 'chick_yellow', 24)
+          : '🎮';
+      }
+
+      toast.classList.remove('hidden');
+
+      // Auto dismiss after 18 seconds
+      const autoDismiss = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 18000);
+
+      if (rejectBtn) {
+        rejectBtn.onclick = async () => {
+          clearTimeout(autoDismiss);
+          toast.classList.add('hidden');
+          if (this.db && invite.id) {
+            try { await this.db.collection('flappy_game_invites').doc(invite.id).update({ status: 'rejected' }); } catch(_) {}
+          }
+        };
+      }
+
+      if (acceptBtn) {
+        acceptBtn.onclick = async () => {
+          clearTimeout(autoDismiss);
+          toast.classList.add('hidden');
+          if (this.db && invite.id) {
+            try { await this.db.collection('flappy_game_invites').doc(invite.id).update({ status: 'accepted' }); } catch(_) {}
+          }
+          // Join room immediately!
+          if (window.multiplayerEngine) {
+            if (typeof window.showModal === 'function') {
+              const mpModal = document.getElementById('multiplayerModal');
+              if (mpModal) window.showModal(mpModal);
+            }
+            window.multiplayerEngine.joinRoom(invite.roomCode, {
+              name: this.myProfile?.gamerTag || 'SkyPlayer',
+              avatar: this.myProfile?.avatar || 'chick_yellow',
+              skin: window.progress?.selected || 'classic'
+            });
+          }
+        };
+      }
+    }
+
     stopListeners() {
       if (this.friendReqUnsub) { this.friendReqUnsub(); this.friendReqUnsub = null; }
       if (this.friendsUnsub) { this.friendsUnsub(); this.friendsUnsub = null; }
@@ -1072,6 +1162,9 @@
           const friend = this.friends.find(item => item.friendKey === key);
           const roomCode = document.getElementById('mpCreatedCodeBadge')?.textContent || '';
           
+          if (typeof this.sendLobbyInvite === 'function') {
+            this.sendLobbyInvite(friend, roomCode);
+          }
           btn.textContent = 'TERKIRIM ✓';
           btn.style.background = '#0284c7';
           btn.style.borderColor = '#38bdf8';

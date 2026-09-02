@@ -13,18 +13,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.20">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.20">
-  <link rel="stylesheet" href="css/shop.css?v=20.20">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.20">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.20">
-  <link rel="stylesheet" href="css/store.css?v=20.20">
-  <link rel="stylesheet" href="css/ranked.css?v=20.20">
-  <link rel="stylesheet" href="css/social.css?v=20.20">
-  <link rel="stylesheet" href="css/splash.css?v=20.20">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.20">
+  <link rel="stylesheet" href="css/style.css?v=20.21">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.21">
+  <link rel="stylesheet" href="css/shop.css?v=20.21">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.21">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.21">
+  <link rel="stylesheet" href="css/store.css?v=20.21">
+  <link rel="stylesheet" href="css/ranked.css?v=20.21">
+  <link rel="stylesheet" href="css/social.css?v=20.21">
+  <link rel="stylesheet" href="css/splash.css?v=20.21">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.21">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.20">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.21">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -51,7 +51,6 @@
 <body>
   <!-- Standard Minimalist Game Splash Screen (Black Background) -->
   <div id="appSplashScreen" class="app-splash-screen" role="dialog" aria-modal="true" aria-label="Intro Screen">
-    <!-- Stage 1: App Game Logo -->
     <div id="splashStageApp" class="splash-stage active">
       <div class="splash-app-logo-wrap">
         <img class="splash-app-logo-img" src="assets/logo.png" alt="Feather Rush Logo" />
@@ -90,6 +89,18 @@
       <div id="powerupHud" class="powerup-hud"></div>
     </div>
     <!-- Live 1v1 Battle HUD with Player & Rival Profiles, Rank & 3 Hearts -->
+        <!-- MLBB REAL-TIME INCOMING GAME INVITE POPUP -->
+    <div id="mlbbIncomingInviteToast" class="mlbb-invite-toast hidden" role="alert">
+      <div class="mlbb-it-avatar" id="mlbbInviteSenderAvatar"></div>
+      <div class="mlbb-it-content">
+        <div class="mlbb-it-title">UNDANGAN MABAR!</div>
+        <div class="mlbb-it-desc"><b id="mlbbInviteSenderName">Teman</b> mengundangmu ke Room <span id="mlbbInviteRoomCode">#0000</span></div>
+      </div>
+      <div class="mlbb-it-actions">
+        <button class="mlbb-it-btn reject" id="mlbbInviteRejectBtn" type="button">TOLAK</button>
+        <button class="mlbb-it-btn accept" id="mlbbInviteAcceptBtn" type="button">TERIMA ▶</button>
+      </div>
+    </div>
     <div id="mpBattleHud" class="mp-battle-hud hidden">
       <!-- Player Profile Widget (Top Left) -->
       <div class="mp-hud-card player" id="mpMyHudCard">
