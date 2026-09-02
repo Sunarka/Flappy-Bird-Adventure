@@ -1,4 +1,4 @@
-﻿/**
+/**
  * =========================================================
  * FEATHER RUSH: SOCIAL, FRIENDLIST, CHAT & MULTIPLAYER INVITES
  * =========================================================
@@ -30,27 +30,44 @@
         this.db = firebase.firestore();
         this.isInitialized = true;
         console.log('[SocialService] Firestore Social Module initialized.');
-      } else {
-        console.warn('[SocialService] Firebase SDK not ready yet.');
       }
     }
 
+    getMyKeys() {
+      const keys = [];
+      if (this.myKey) keys.push(this.myKey);
+      if (this.myProfile && this.myProfile.googleUid) {
+        keys.push(this.myProfile.googleUid);
+        keys.push('acc_' + this.myProfile.googleUid);
+      }
+      if (this.myKey && this.myKey.startsWith('acc_')) {
+        keys.push(this.myKey.replace(/^acc_/, ''));
+      }
+      return Array.from(new Set(keys.filter(Boolean)));
+    }
+
     setAccount(primaryKey, profile) {
+      if (!this.db && typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) {
+        this.db = firebase.firestore();
+        this.isInitialized = true;
+      }
       this.myKey = primaryKey;
-      this.myProfile = profile;
-      if (this.isInitialized && this.myKey) {
+      this.myProfile = profile || {};
+      if (this.db && this.myKey) {
         this.startListeners();
+        this.refreshRequests();
       }
     }
 
     startListeners() {
       if (!this.db || !this.myKey) return;
       this.stopListeners();
+      const myKeys = this.getMyKeys();
 
-      // 1. Listen for incoming Friend Requests
+      // 1. Listen for incoming Friend Requests (Multi-Key Support)
       try {
         this.friendReqUnsub = this.db.collection('flappy_friend_requests')
-          .where('toKey', '==', this.myKey)
+          .where('toKey', 'in', myKeys.slice(0, 10))
           .where('status', '==', 'pending')
           .onSnapshot(snap => {
             const requests = [];
@@ -63,19 +80,21 @@
           }, err => {
             console.warn('[SocialService] Error listening to requests:', err.message);
           });
-      } catch(e) {}
+      } catch(e) {
+        console.warn('[SocialService] Init request listener failed:', e.message);
+      }
 
       // 2. Listen for Friends List
       try {
         this.friendsUnsub = this.db.collection('flappy_friends')
-          .where('users', 'array-contains', this.myKey)
+          .where('users', 'array-contains-any', myKeys.slice(0, 10))
           .onSnapshot(snap => {
             const friendsList = [];
             snap.forEach(doc => {
               const data = doc.id ? doc.data() : null;
               if (data && data.profiles) {
                 // Temukan profile teman (selain myKey)
-                const otherKey = data.users.find(k => k !== this.myKey);
+                const otherKey = data.users.find(k => !myKeys.includes(k));
                 if (otherKey && data.profiles[otherKey]) {
                   friendsList.push({
                     friendKey: otherKey,
@@ -90,18 +109,20 @@
           }, err => {
             console.warn('[SocialService] Error listening to friends:', err.message);
           });
-      } catch(e) {}
+      } catch(e) {
+        console.warn('[SocialService] Init friends listener failed:', e.message);
+      }
 
       // 3. Listen for Multiplayer Invites
       try {
         this.invitesUnsub = this.db.collection('flappy_invites')
-          .where('toKey', '==', this.myKey)
+          .where('toKey', 'in', myKeys.slice(0, 10))
           .where('status', '==', 'pending')
           .onSnapshot(snap => {
             snap.forEach(doc => {
               const invite = { id: doc.id, ...doc.data() };
-              // Hanya tampilkan jika belum lewat dari 30 detik
-              if (Date.now() - (invite.timestamp || 0) < 30000) {
+              // Hanya tampilkan jika belum lewat dari 35 detik
+              if (Date.now() - (invite.timestamp || 0) < 35000) {
                 if (!this.activeInvites[doc.id]) {
                   this.activeInvites[doc.id] = true;
                   this.showInviteToast(invite);
@@ -111,7 +132,29 @@
           }, err => {
             console.warn('[SocialService] Error listening to invites:', err.message);
           });
-      } catch(e) {}
+      } catch(e) {
+        console.warn('[SocialService] Init invites listener failed:', e.message);
+      }
+    }
+
+    async refreshRequests() {
+      if (!this.db || !this.myKey) return;
+      const myKeys = this.getMyKeys();
+      try {
+        const snap = await this.db.collection('flappy_friend_requests')
+          .where('toKey', 'in', myKeys.slice(0, 10))
+          .where('status', '==', 'pending')
+          .get();
+        const requests = [];
+        snap.forEach(doc => {
+          requests.push({ id: doc.id, ...doc.data() });
+        });
+        this.friendRequests = requests;
+        this.updateBadgeUI();
+        this.renderRequestsList();
+      } catch(e) {
+        console.warn('[SocialService] Refresh requests error:', e.message);
+      }
     }
 
     stopListeners() {

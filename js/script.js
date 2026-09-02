@@ -11533,6 +11533,7 @@
       audio.click();
       if(window.socialService && gpProfile) {
         window.socialService.setAccount(gpProfile.primaryKey, gpProfile);
+        window.socialService.refreshRequests();
       }
       showModal(socialModal);
     });
@@ -11548,7 +11549,10 @@
 
   if(tabFriendsBtn) tabFriendsBtn.onclick = () => switchSocialTab(tabFriendsBtn, panelFriends);
   if(tabSearchBtn) tabSearchBtn.onclick = () => switchSocialTab(tabSearchBtn, panelSearch);
-  if(tabReqBtn) tabReqBtn.onclick = () => switchSocialTab(tabReqBtn, panelRequests);
+  if(tabReqBtn) tabReqBtn.onclick = () => {
+    switchSocialTab(tabReqBtn, panelRequests);
+    if(window.socialService) window.socialService.refreshRequests();
+  };
 
   // Social Search Controller
   const socialSearchInput = $('socialSearchInput');
