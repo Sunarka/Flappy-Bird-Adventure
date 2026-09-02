@@ -3071,6 +3071,7 @@
     }
     return cuteAvatarsCatalog[0].render(size);
   }
+  window.getCuteAvatarSvg = getCuteAvatarSvg;
 
   function getPrimaryAccountKey() {
     if (gpProfile && gpProfile.googleUid) {
@@ -4094,6 +4095,8 @@
       res(true);
     }
   }
+  window.showModal = showModal;
+  window.closeModal = closeModal;
   function setState(next) {
     state = next;
     el.menu.classList.toggle('hidden', next !== State.MENU);

@@ -1,6 +1,6 @@
-/**
+﻿/**
  * =========================================================
- * FEATHER RUSH: SOCIAL, FRIENDLIST, CHAT & MULTIPLAYER INVITES
+ * FEATHER RUSH: SOCIAL, FRIENDLIST, CHAT, PROFILE & MULTIPLAYER INVITES
  * =========================================================
  */
 
@@ -173,11 +173,12 @@
       try {
         const snap = await this.db.collection('flappy_leaderboard').limit(50).get();
         const results = [];
+        const myKeys = this.getMyKeys();
         snap.forEach(doc => {
           const p = doc.data();
           const pName = (p.name || p.gamerTag || '').toLowerCase();
           const pKey = p.primaryKey || ('acc_' + p.uid);
-          if (pKey !== this.myKey && (pName.includes(cleanQuery) || pKey.toLowerCase().includes(cleanQuery))) {
+          if (!myKeys.includes(pKey) && (pName.includes(cleanQuery) || pKey.toLowerCase().includes(cleanQuery))) {
             const isAlreadyFriend = this.friends.some(f => f.friendKey === pKey);
             const isReqPending = this.friendRequests.some(r => r.fromKey === pKey);
             results.push({
@@ -202,10 +203,9 @@
     // 2. KIRIM & TERIMA PERMINTAAN PERTEMANAN
     // ==========================================
     async sendFriendRequest(targetKey, targetName, targetAvatar, targetTier) {
-      if (!this.db || !this.myKey || this.myKey === targetKey) return { success: false, msg: 'Invalid target' };
+      if (!this.db || !this.myKey || this.myKey === targetKey) return { success: false, msg: 'Target tidak valid' };
 
       try {
-        // Cek apakah sudah pernah kirim
         const existing = await this.db.collection('flappy_friend_requests')
           .where('fromKey', '==', this.myKey)
           .where('toKey', '==', targetKey)
@@ -242,7 +242,6 @@
         });
 
         if (accept && reqData) {
-          // Buat doc di flappy_friends
           const docId = [this.myKey, reqData.fromKey].sort().join('_');
           await this.db.collection('flappy_friends').doc(docId).set({
             users: [this.myKey, reqData.fromKey],
@@ -277,7 +276,106 @@
     }
 
     // ==========================================
-    // 3. 1-ON-1 DIRECT CHAT
+    // 3. LIHAT PROFIL DETAIL TEMAN / VIEW FRIEND PROFILE
+    // ==========================================
+    async openFriendProfile(friend) {
+      const modal = document.getElementById('friendProfileModal');
+      if (!modal) return;
+
+      const getAv = (id, s) => {
+        if (typeof window.getCuteAvatarSvg === 'function') return window.getCuteAvatarSvg(id, s);
+        return '🦅';
+      };
+
+      // Set initial data
+      document.getElementById('fpAvatarBox').innerHTML = getAv(friend.avatar || 'chick_yellow', 52);
+      document.getElementById('fpName').textContent = friend.name || 'Gamer';
+      document.getElementById('fpRankBadge').textContent = `🏆 ${friend.tier || 'BRONZE I'}`;
+      document.getElementById('fpUid').textContent = `ID: ${friend.friendKey || 'acc_...'}`;
+
+      // Open modal
+      if (typeof window.showModal === 'function') {
+        window.showModal(modal);
+      } else {
+        modal.classList.remove('hidden');
+      }
+
+      // Bind action buttons in profile
+      const chatBtn = document.getElementById('fpChatBtn');
+      const inviteBtn = document.getElementById('fpInviteBtn');
+      const removeBtn = document.getElementById('fpRemoveBtn');
+
+      if (chatBtn) {
+        chatBtn.onclick = () => {
+          this.openDirectChat(friend);
+        };
+      }
+
+      if (inviteBtn) {
+        inviteBtn.onclick = async () => {
+          if (window.multiplayerEngine) {
+            inviteBtn.textContent = 'Mengirim...';
+            const roomCode = Math.random().toString(36).substring(2, 6).toUpperCase();
+            const hostData = {
+              name: this.myProfile.gamerTag || 'SkyPlayer',
+              avatar: this.myProfile.avatar || 'chick_yellow',
+              skin: (window.progress && window.progress.selected) || 'classic'
+            };
+            window.multiplayerEngine.createRoom(roomCode, hostData);
+            await this.sendRoomInvite(friend.friendKey, roomCode);
+            inviteBtn.textContent = 'Terkirim! ✅';
+            setTimeout(() => { inviteBtn.textContent = '⚔️ Ajak Main'; }, 2000);
+            
+            const mpModal = document.getElementById('multiplayerModal');
+            if (mpModal && typeof window.showModal === 'function') {
+              window.showModal(mpModal);
+            }
+          }
+        };
+      }
+
+      if (removeBtn) {
+        removeBtn.onclick = () => {
+          if (confirm(`Yakin ingin menghapus ${friend.name} dari pertemanan?`)) {
+            this.removeFriend(friend.friendKey);
+            if (typeof window.closeModal === 'function') window.closeModal();
+          }
+        };
+      }
+
+      // Fetch fresh stats from Firestore Leaderboard
+      if (this.db && friend.friendKey) {
+        try {
+          const docSnap = await this.db.collection('flappy_leaderboard').doc(friend.friendKey).get();
+          if (docSnap.exists) {
+            const data = docSnap.data();
+            document.getElementById('fpCasualScore').textContent = data.casualBest || data.score || '0';
+            document.getElementById('fpRankPoints').textContent = `${data.rankedBest || data.score || 0} PTS`;
+            document.getElementById('fpMpWins').textContent = `${data.mpWins || 0} MENANG`;
+            document.getElementById('fpCoins').textContent = `${data.coins || 0} 🪙`;
+
+            // Loadout
+            const l = data.loadout || {};
+            document.getElementById('fpEquippedBird').textContent = l.bird ? l.bird.toUpperCase() : 'CLASSIC';
+            document.getElementById('fpEquippedPet').textContent = l.pet ? l.pet.toUpperCase() : 'NONE';
+            document.getElementById('fpEquippedHat').textContent = l.hat ? l.hat.toUpperCase() : 'NONE';
+            document.getElementById('fpEquippedAura').textContent = l.aura ? l.aura.toUpperCase() : 'NONE';
+
+            // Unlocked counts
+            const u = data.unlocked || {};
+            document.getElementById('fpSkinCount').textContent = `${(Array.isArray(u.bird) ? u.bird.length : 1)} Milik`;
+            document.getElementById('fpPetCount').textContent = `${(Array.isArray(u.pet) ? u.pet.length : 0)} Milik`;
+            document.getElementById('fpHatCount').textContent = `${(Array.isArray(u.hat) ? u.hat.length : 0)} Milik`;
+            document.getElementById('fpAuraCount').textContent = `${(Array.isArray(u.aura) ? u.aura.length : 0)} Milik`;
+          }
+        } catch(e) {
+          console.warn('[SocialService] Error fetching friend profile stats:', e.message);
+        }
+      }
+    }
+
+    // ==========================================
+    // 4. 1-ON-1 DIRECT CHAT
     // ==========================================
     openDirectChat(friend) {
       this.activeChatFriend = friend;
@@ -287,11 +385,15 @@
       const nameEl = document.getElementById('chatPartnerName');
       const avatarEl = document.getElementById('chatPartnerAvatar');
       if (nameEl) nameEl.textContent = friend.name || 'Teman';
-      if (avatarEl && typeof getCuteAvatarSvg === 'function') {
-        avatarEl.innerHTML = getCuteAvatarSvg(friend.avatar || 'chick_yellow', 36);
+      if (avatarEl && typeof window.getCuteAvatarSvg === 'function') {
+        avatarEl.innerHTML = window.getCuteAvatarSvg(friend.avatar || 'chick_yellow', 36);
       }
 
-      if (typeof showModal === 'function') showModal(modal);
+      if (typeof window.showModal === 'function') {
+        window.showModal(modal);
+      } else {
+        modal.classList.remove('hidden');
+      }
 
       const channelId = [this.myKey, friend.friendKey].sort().join('_');
       this.listenMessages(channelId);
@@ -354,7 +456,7 @@
     }
 
     // ==========================================
-    // 4. UNDANGAN MULTIPLAYER / ROOM INVITES
+    // 5. UNDANGAN MULTIPLAYER / ROOM INVITES
     // ==========================================
     async sendRoomInvite(friendKey, roomCode) {
       if (!this.db || !this.myKey || !friendKey || !roomCode) return false;
@@ -379,19 +481,35 @@
       const container = document.getElementById('socialInviteToastContainer');
       if (!container) return;
 
+      // Play audio notification chime
+      if (window.audio && typeof window.audio.win === 'function') {
+        try { window.audio.win(); } catch(_) {}
+      }
+
+      const getAv = (id, s) => {
+        if (typeof window.getCuteAvatarSvg === 'function') return window.getCuteAvatarSvg(id, s);
+        return '🦅';
+      };
+
       const toast = document.createElement('div');
       toast.className = 'social-invite-toast';
       toast.innerHTML = `
         <div class="invite-toast-header">
-          <span class="invite-toast-icon">🎮</span>
-          <div class="invite-toast-title">Undangan Multiplayer!</div>
+          <div class="invite-toast-left">
+            <div class="invite-toast-avatar">${getAv(invite.fromAvatar || 'chick_yellow', 32)}</div>
+            <div>
+              <div class="invite-toast-title">${this.escapeHtml(invite.fromName)}</div>
+              <div style="font-size:0.75rem;color:#94a3b8;">Ajak Mabar Multiplayer</div>
+            </div>
+          </div>
+          <span class="invite-toast-room-pill">#${invite.roomCode}</span>
         </div>
         <div class="invite-toast-msg">
-          <b>${this.escapeHtml(invite.fromName)}</b> mengundangmu bertanding di Room: <b>#${invite.roomCode}</b>!
+          Temanmu mengajak bertanding di Room: <b>#${invite.roomCode}</b>! Siap terbang?
         </div>
         <div class="invite-toast-actions">
-          <button class="invite-btn-accept" data-code="${invite.roomCode}">GABUNG SEKARANG</button>
-          <button class="invite-btn-decline">TOLAK</button>
+          <button class="invite-btn-accept" data-code="${invite.roomCode}">🎮 GABUNG SEKARANG</button>
+          <button class="invite-btn-decline">✕ NANTI</button>
         </div>
       `;
 
@@ -401,12 +519,10 @@
         if (this.db) {
           this.db.collection('flappy_invites').doc(invite.id).update({ status: 'accepted' });
         }
-        // Gabung ke room secara langsung
         if (window.multiplayerEngine) {
           const mpModal = document.getElementById('multiplayerModal');
-          if (mpModal && typeof showModal === 'function') {
-            if (typeof closeModal === 'function') closeModal();
-            showModal(mpModal);
+          if (mpModal && typeof window.showModal === 'function') {
+            window.showModal(mpModal);
           }
           window.multiplayerEngine.joinRoom(invite.roomCode, {
             name: this.myProfile.gamerTag || 'SkyPlayer',
@@ -426,14 +542,14 @@
 
       container.appendChild(toast);
 
-      // Auto dismiss after 20s
+      // Auto dismiss after 25s
       setTimeout(() => {
         if (toast.parentElement) toast.remove();
-      }, 20000);
+      }, 25000);
     }
 
     // ==========================================
-    // 5. UI RENDERING & TAB CONTROLS
+    // 6. UI RENDERING & TAB CONTROLS
     // ==========================================
     updateBadgeUI() {
       const badge = document.getElementById('socialBadgeCount');
@@ -471,12 +587,17 @@
         return;
       }
 
+      const getAv = (id, s) => {
+        if (typeof window.getCuteAvatarSvg === 'function') return window.getCuteAvatarSvg(id, s);
+        return '🦅';
+      };
+
       let html = '';
       this.friends.forEach(f => {
-        const svg = typeof getCuteAvatarSvg === 'function' ? getCuteAvatarSvg(f.avatar, 40) : '';
+        const svg = getAv(f.avatar, 38);
         html += `
           <div class="social-player-card" data-key="${f.friendKey}">
-            <div class="social-player-info">
+            <div class="social-player-info btn-view-profile" data-key="${f.friendKey}" title="Klik untuk lihat profil lengkap">
               <div class="social-player-avatar">
                 ${svg}
                 <div class="social-status-dot"></div>
@@ -487,7 +608,7 @@
               </div>
             </div>
             <div class="social-card-actions">
-              <button class="social-action-btn btn-dm-chat" title="Chat" data-key="${f.friendKey}">💬</button>
+              <button class="social-action-btn btn-dm-chat" title="Kirim Chat" data-key="${f.friendKey}">💬</button>
               <button class="social-action-btn success btn-invite-room" title="Ajak Main Multiplayer" data-key="${f.friendKey}">⚔️ Ajak</button>
               <button class="social-action-btn danger btn-remove-friend" title="Hapus Teman" data-key="${f.friendKey}">✕</button>
             </div>
@@ -496,9 +617,19 @@
       });
       container.innerHTML = html;
 
+      // Bind Click on Player info to View Full Profile
+      container.querySelectorAll('.btn-view-profile').forEach(card => {
+        card.onclick = () => {
+          const key = card.getAttribute('data-key');
+          const friend = this.friends.find(f => f.friendKey === key);
+          if (friend) this.openFriendProfile(friend);
+        };
+      });
+
       // Bind actions
       container.querySelectorAll('.btn-dm-chat').forEach(btn => {
-        btn.onclick = () => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
           const key = btn.getAttribute('data-key');
           const friend = this.friends.find(f => f.friendKey === key);
           if (friend) this.openDirectChat(friend);
@@ -506,9 +637,9 @@
       });
 
       container.querySelectorAll('.btn-invite-room').forEach(btn => {
-        btn.onclick = async () => {
+        btn.onclick = async (e) => {
+          e.stopPropagation();
           const key = btn.getAttribute('data-key');
-          // Buat room multiplayer otomatis jika belum ada room
           if (window.multiplayerEngine) {
             btn.textContent = 'Mengirim...';
             const roomCode = Math.random().toString(36).substring(2, 6).toUpperCase();
@@ -522,20 +653,20 @@
             btn.textContent = 'Terkirim! ✅';
             setTimeout(() => { btn.textContent = '⚔️ Ajak'; }, 2000);
             
-            // Buka modal multiplayer
             const mpModal = document.getElementById('multiplayerModal');
-            if (mpModal && typeof showModal === 'function') {
-              if (typeof closeModal === 'function') closeModal();
-              showModal(mpModal);
+            if (mpModal && typeof window.showModal === 'function') {
+              window.showModal(mpModal);
             }
           }
         };
       });
 
       container.querySelectorAll('.btn-remove-friend').forEach(btn => {
-        btn.onclick = () => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
           const key = btn.getAttribute('data-key');
-          if (confirm('Yakin ingin menghapus teman ini dari daftar?')) {
+          const friend = this.friends.find(f => f.friendKey === key);
+          if (confirm(`Yakin ingin menghapus ${friend ? friend.name : 'teman ini'} dari daftar?`)) {
             this.removeFriend(key);
           }
         };
@@ -556,9 +687,14 @@
         return;
       }
 
+      const getAv = (id, s) => {
+        if (typeof window.getCuteAvatarSvg === 'function') return window.getCuteAvatarSvg(id, s);
+        return '🦅';
+      };
+
       let html = '';
       this.friendRequests.forEach(req => {
-        const svg = typeof getCuteAvatarSvg === 'function' ? getCuteAvatarSvg(req.fromAvatar, 40) : '';
+        const svg = getAv(req.fromAvatar, 38);
         html += `
           <div class="social-player-card">
             <div class="social-player-info">

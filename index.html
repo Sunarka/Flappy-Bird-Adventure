@@ -6,16 +6,16 @@
   <meta name="theme-color" content="#77cef2">
   <title>Feather Rush</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=17.2">
-  <link rel="stylesheet" href="css/modern-icons.css?v=17.2">
-  <link rel="stylesheet" href="css/shop.css?v=17.2">
-  <link rel="stylesheet" href="css/shop-extra.css?v=17.2">
-  <link rel="stylesheet" href="css/mode-picker.css?v=17.2">
-  <link rel="stylesheet" href="css/store.css?v=17.2">
-  <link rel="stylesheet" href="css/ranked.css?v=17.2">
-  <link rel="stylesheet" href="css/multiplayer.css?v=17.2">
-  <link rel="stylesheet" href="css/social.css?v=17.2">
-  <link rel="stylesheet" href="css/splash.css?v=17.2">
+  <link rel="stylesheet" href="css/style.css?v=17.3">
+  <link rel="stylesheet" href="css/modern-icons.css?v=17.3">
+  <link rel="stylesheet" href="css/shop.css?v=17.3">
+  <link rel="stylesheet" href="css/shop-extra.css?v=17.3">
+  <link rel="stylesheet" href="css/mode-picker.css?v=17.3">
+  <link rel="stylesheet" href="css/store.css?v=17.3">
+  <link rel="stylesheet" href="css/ranked.css?v=17.3">
+  <link rel="stylesheet" href="css/multiplayer.css?v=17.3">
+  <link rel="stylesheet" href="css/social.css?v=17.3">
+  <link rel="stylesheet" href="css/splash.css?v=17.3">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -963,6 +963,97 @@
         </form>
       </section>
 
+      <!-- FRIEND DETAILED PROFILE MODAL -->
+      <section id="friendProfileModal" class="modal friend-profile-modal hidden" role="dialog" aria-modal="true" aria-label="Profil Teman">
+        <button class="close" data-close>×</button>
+        
+        <div class="profile-scrollable-content">
+          <!-- Hero Banner -->
+          <div class="friend-profile-hero">
+            <div class="friend-profile-avatar-box" id="fpAvatarBox"></div>
+            <div class="friend-profile-info">
+              <div class="friend-profile-name" id="fpName">GamerTag</div>
+              <div class="friend-profile-rank-badge" id="fpRankBadge">🏆 BRONZE I</div>
+              <div style="font-size:0.75rem;color:#94a3b8;margin-top:2px;" id="fpUid">ID: acc_...</div>
+            </div>
+          </div>
+
+          <!-- Career Statistics 2x2 Grid -->
+          <div class="friend-section-title">📊 STATISTIK BERMAIN</div>
+          <div class="friend-stats-grid">
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Rekor Casual</div>
+              <div class="friend-stat-val" id="fpCasualScore">0</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Poin Ranked</div>
+              <div class="friend-stat-val gold" id="fpRankPoints">0 PTS</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Menang Multiplayer</div>
+              <div class="friend-stat-val green" id="fpMpWins">0 MENANG</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Total Koin</div>
+              <div class="friend-stat-val gold" id="fpCoins">0 🪙</div>
+            </div>
+          </div>
+
+          <!-- Equipped Loadout Showcase -->
+          <div class="friend-section-title">✨ PERLENGKAPAN SAAT INI</div>
+          <div class="friend-loadout-showcase">
+            <div class="friend-loadout-item">
+              <div class="friend-loadout-item-icon">🦅</div>
+              <div class="friend-loadout-item-type">BURUNG</div>
+              <div class="friend-loadout-item-name" id="fpEquippedBird">Classic</div>
+            </div>
+            <div class="friend-loadout-item">
+              <div class="friend-loadout-item-icon">🐥</div>
+              <div class="friend-loadout-item-type">PET</div>
+              <div class="friend-loadout-item-name" id="fpEquippedPet">None</div>
+            </div>
+            <div class="friend-loadout-item">
+              <div class="friend-loadout-item-icon">🎩</div>
+              <div class="friend-loadout-item-type">TOPI</div>
+              <div class="friend-loadout-item-name" id="fpEquippedHat">None</div>
+            </div>
+            <div class="friend-loadout-item">
+              <div class="friend-loadout-item-icon">✨</div>
+              <div class="friend-loadout-item-type">AURA</div>
+              <div class="friend-loadout-item-name" id="fpEquippedAura">None</div>
+            </div>
+          </div>
+
+          <!-- Unlocked Cosmetics Breakdown -->
+          <div class="friend-section-title">🎒 KOLEKSI & INVENTORI</div>
+          <div class="friend-stats-grid">
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Skin Burung</div>
+              <div class="friend-stat-val" id="fpSkinCount">1 Dimiliki</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Pet Pendamping</div>
+              <div class="friend-stat-val" id="fpPetCount">0 Dimiliki</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Topi & Mahkota</div>
+              <div class="friend-stat-val" id="fpHatCount">0 Dimiliki</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Aura Jejak</div>
+              <div class="friend-stat-val" id="fpAuraCount">0 Dimiliki</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="friend-profile-actions">
+          <button class="social-action-btn" id="fpChatBtn" style="flex:1;justify-content:center;padding:10px;" type="button">💬 Kirim Chat</button>
+          <button class="social-action-btn success" id="fpInviteBtn" style="flex:1;justify-content:center;padding:10px;" type="button">⚔️ Ajak Main</button>
+          <button class="social-action-btn danger" id="fpRemoveBtn" style="padding:10px 14px;" type="button" title="Hapus Teman">✕</button>
+        </div>
+      </section>
+
     </div>
 
     <!-- Floating Interactive Multiplayer Invite Toast Container -->
@@ -991,12 +1082,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=17.2"></script>
-  <script src="js/admob-config.js?v=17.2"></script>
-  <script src="js/shop-data.js?v=17.2"></script>
-  <script src="js/audio.js?v=17.2"></script>
-  <script src="js/multiplayer.js?v=17.2"></script>
-  <script src="js/social.js?v=17.2"></script>
-  <script src="js/script.js?v=17.2"></script>
+  <script src="js/firebase-config.js?v=17.3"></script>
+  <script src="js/admob-config.js?v=17.3"></script>
+  <script src="js/shop-data.js?v=17.3"></script>
+  <script src="js/audio.js?v=17.3"></script>
+  <script src="js/multiplayer.js?v=17.3"></script>
+  <script src="js/social.js?v=17.3"></script>
+  <script src="js/script.js?v=17.3"></script>
 </body>
 </html>
