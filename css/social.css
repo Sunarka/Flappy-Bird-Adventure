@@ -335,10 +335,56 @@
   flex-direction: column !important;
 }
 
+.profile-tabs {
+  display: flex;
+  background: rgba(15, 23, 42, 0.75);
+  padding: 3px;
+  border-radius: 10px;
+  gap: 4px;
+  margin-bottom: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.profile-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-weight: 800;
+  font-size: 0.72rem;
+  padding: 5px 6px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 26px;
+}
+
+.profile-tab-btn.active {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+}
+
+.profile-tab-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.profile-tab-panel.hidden {
+  display: none !important;
+}
+
 .profile-scrollable-content {
   overflow-y: auto;
   padding-right: 4px;
-  max-height: 285px !important;
+  max-height: 220px !important;
   scrollbar-width: thin;
 }
 

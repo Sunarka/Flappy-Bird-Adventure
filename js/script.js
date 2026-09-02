@@ -4370,7 +4370,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.2';
+  const GAME_VERSION = '20.3';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -11454,6 +11454,7 @@
   bindClick(el.topProfileBtn, () => {
     audio.click();
     syncGPProfileUI();
+    switchProfileTab('overview');
     showModal(el.googlePlayModal);
   });
   bindClick('playRankedFromModalBtn', () => {
@@ -11476,6 +11477,26 @@
 
   bindClick(el.gpChangeAvatarBtn, openAvatarPicker);
   bindClick(el.gpAvatarWrap, openAvatarPicker);
+
+  // Profile Modal Tab Switching (Ringkasan, Statistik, Akun & Login)
+  function switchProfileTab(tabName) {
+    const tabs = {
+      overview: { btn: $('profileTabOverviewBtn'), panel: $('profileTabOverview') },
+      stats: { btn: $('profileTabStatsBtn'), panel: $('profileTabStats') },
+      account: { btn: $('profileTabAccountBtn'), panel: $('profileTabAccount') }
+    };
+    Object.keys(tabs).forEach(k => {
+      const t = tabs[k];
+      if (t.btn) t.btn.classList.toggle('active', k === tabName);
+      if (t.panel) {
+        t.panel.classList.toggle('hidden', k !== tabName);
+        t.panel.classList.toggle('active', k === tabName);
+      }
+    });
+  }
+  bindClick('profileTabOverviewBtn', () => { audio.click(); switchProfileTab('overview'); });
+  bindClick('profileTabStatsBtn', () => { audio.click(); switchProfileTab('stats'); });
+  bindClick('profileTabAccountBtn', () => { audio.click(); switchProfileTab('account'); });
 
   // =========================================================
   // CUSTOM IN-GAME NOTIFICATION & CONFIRMATION DIALOG (PRO)
