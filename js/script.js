@@ -4315,9 +4315,9 @@
     const layer = el.layer || $('modalLayer');
     if(layer) {
       layer.classList.remove('hidden');
-      layer.querySelectorAll('.modal').forEach(x => {
+      document.querySelectorAll('.modal').forEach(x => {
         x.classList.add('hidden');
-        x.style.display = '';
+        x.style.display = 'none';
       });
     }
     modalEl.classList.remove('hidden');
@@ -4331,17 +4331,17 @@
     const layer = el.layer || $('modalLayer');
     if(layer) {
       layer.classList.add('hidden');
-      layer.querySelectorAll('.modal').forEach(x => {
+      document.querySelectorAll('.modal').forEach(x => {
         x.classList.add('hidden');
-        x.style.display = '';
+        x.style.display = 'none';
       });
     }
     const dialog = el.gameDialogModal || $('gameDialogModal');
-    if(dialog) dialog.classList.add('hidden');
+    if(dialog) { dialog.classList.add('hidden'); dialog.style.display = 'none'; }
     const mpModal = el.multiplayerModal || $('multiplayerModal');
-    if(mpModal) mpModal.classList.add('hidden');
+    if(mpModal) { mpModal.classList.add('hidden'); mpModal.style.display = 'none'; }
     const reviveModal = el.reviveModal || $('reviveModal');
-    if(reviveModal) reviveModal.classList.add('hidden');
+    if(reviveModal) { reviveModal.classList.add('hidden'); reviveModal.style.display = 'none'; }
 
     if (typeof stopSearchingRadar === 'function') stopSearchingRadar();
     if (window.multiplayerEngine && window.multiplayerEngine.matchStatus === 'QUEUED') {
@@ -4370,7 +4370,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.1';
+  const GAME_VERSION = '20.2';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 

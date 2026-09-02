@@ -75,7 +75,21 @@ canvas {
   padding-top: clamp(6px, 2vh, 12px);
 }
 
-.hidden {
+.hidden,
+.modal.hidden,
+.modal-layer.hidden,
+.shop-modal.hidden,
+.social-modal.hidden,
+.friend-profile-modal.hidden,
+.ranked-modal.hidden,
+.mp-modal.hidden,
+.avatar-picker-modal.hidden,
+.direct-chat-modal.hidden,
+.how-modal.hidden,
+.tier-roadmap-modal.hidden,
+.revive-modal.hidden,
+.game-dialog-modal.hidden,
+.mp-over-modal.hidden {
   display: none !important;
 }
 

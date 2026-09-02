@@ -3,7 +3,9 @@
 .home-wallet{margin-top:7px;padding:7px 13px;border-radius:99px;background:#ffffffb8;color:#285778;font-size:12px;font-weight:900;letter-spacing:1px}
 
 /* Shop Modal Mobile Friendly & Fixed Height for Landscape Mode */
-.shop-modal{position:relative;padding:10px 14px 8px !important;width:min(560px,94vw) !important;height:min(340px,94vh) !important;max-height:min(340px,94vh) !important;display:flex !important;flex-direction:column !important;box-sizing:border-box;overflow:hidden !important;border:0;border-radius:18px;background:#f4f8fc;box-shadow:0 14px 0 #2b5a78,0 24px 50px rgba(0,0,0,.5)}
+.shop-modal{position:relative;padding:10px 14px 8px !important;width:min(560px,94vw) !important;height:min(340px,94vh) !important;max-height:min(340px,94vh) !important;box-sizing:border-box;overflow:hidden !important;border:0;border-radius:18px;background:#f4f8fc;box-shadow:0 14px 0 #2b5a78,0 24px 50px rgba(0,0,0,.5)}
+.shop-modal.hidden{display:none !important}
+.shop-modal:not(.hidden){display:flex !important;flex-direction:column !important}
 .shop-modal .close{top:10px;right:10px;width:30px;height:30px;margin:0;border-radius:50%;background:#e2f4fc;color:#285071;font-size:20px;line-height:26px;box-shadow:0 2px 6px rgba(40,80,113,.16)}
 .shop-header{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;margin-bottom:4px}
 .shop-modal h2{margin:0;font:900 16px 'Trebuchet MS',Arial,sans-serif;color:#16365d;letter-spacing:0.5px}
