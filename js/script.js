@@ -47,6 +47,9 @@
     langIdBtn:$('langIdBtn'), langEnBtn:$('langEnBtn'), settingsModalTitle:$('settingsModalTitle'),
     txtSettingLanguage:$('txtSettingLanguage'), txtSettingSound:$('txtSettingSound'), txtSettingMusic:$('txtSettingMusic'),
     txtSettingDifficulty:$('txtSettingDifficulty'), settingsOkBtn:$('settingsOkBtn'),
+    shopBtn:$('shopBtn'), howBtn:$('howBtn'), settingsBtn:$('settingsBtn'),
+    resumeBtn:$('resumeBtn'), restartBtn:$('restartBtn'), homeBtn:$('homeBtn'),
+    replayBtn:$('replayBtn'), overHomeBtn:$('overHomeBtn'), lobbyFeedbackBtn:$('lobbyFeedbackBtn'),
     shopCanvas:$('shopCanvas'), showcaseLabel:$('showcaseLabel'), tabPrev:$('tabPrev'), tabNext:$('tabNext'),
     modeClassicBtn:$('modeClassicBtn'), modeRankedBtn:$('modeRankedBtn'), modeBestLabel:$('modeBestLabel'),
     playBtn:$('playBtn'), rankedLeaderboardBtn:$('rankedLeaderboardBtn'),
@@ -146,20 +149,75 @@
       playClassic: 'PLAY CLASSIC',
       playRanked: 'PLAY RANKED (EXTREME)',
       playMp: 'BUKA LOBI MULTIPLAYER',
-      tapToFly: 'KETUK / SPASI UNTUK TERBANG',
+      rankedBest: 'RANKED BEST',
+      classicBest: 'CLASSIC BEST',
+      tapToFly: 'Ketuk / SPASI untuk Terbang • SHIFT / D untuk Dash',
       getReady: 'BERSIAPLAH!',
       gameOver: 'PERMAINAN BERAKHIR',
       score: 'SKOR',
       best: 'TERBAIK',
+      newBest: 'REKOR BARU!',
       replayBtn: 'MAIN LAGI',
       shopBtn: 'SKIN & TOKO',
       howTitle: 'CARA BERMAIN',
-      reviveTitle: 'NYAWA HABIS!',
-      reviveSub: 'Gunakan 10 Koin atau Tonton Iklan untuk Lanjut!',
-      reviveCoinBtn: 'PAKAI 10 KOIN',
-      reviveAdBtn: 'NONTON IKLAN (+1 NYAWA)',
-      giveUpBtn: 'MENYERAH',
-      rewardAdBtn: '+25 KOIN GRATIS'
+      settingsBtn: 'PENGATURAN',
+      rankings: 'LEADERBOARD',
+      feedbackBtn: 'PENGADUAN',
+      understood: 'MENGERTI',
+      coins: 'KOIN',
+      pausedTitle: 'GAME DIJEDA',
+      resumeBtn: 'LANJUTKAN',
+      restartBtn: 'ULANGI',
+      homeBtn: 'MENU UTAMA',
+      reviveTitle: 'LANJUTKAN?',
+      reviveSub: 'Gunakan Koin untuk Bangkit & Lanjut Main!',
+      reviveCost: 'BIAYA REVIVE:',
+      reviveCoinBtn: 'REVIVE SEKARANG',
+      giveUpBtn: 'LEWATKAN (GAME OVER)',
+      rewardAdBtn: '+25 KOIN 🪙',
+      // Shop categories
+      catBird: 'BURUNG',
+      catPet: 'PETS',
+      catBooster: 'BOOSTER',
+      catAura: 'JEJAK',
+      catHat: 'TOPI',
+      catOutfit: 'PAKAIAN',
+      catPipe: 'PIPA',
+      catBg: 'LATAR',
+      catMusic: 'MUSIK',
+      equip: 'EQUIP',
+      equipped: 'TERPASANG',
+      buy: 'BELI',
+      // Multiplayer
+      mpLobbyTitle: 'LOBI MULTIPLAYER',
+      mpQuickMatch: 'CARI LAWAN',
+      mpCreateRoom: 'BUAT ROOM',
+      mpJoinRoom: 'GABUNG ROOM',
+      mpQuickFind: 'CARI LAWAN OTOMATIS',
+      mpStartMatch: 'MULAI BERTANDING SEKARANG!',
+      mpReady: 'SAYA SIAP! (READY)',
+      mpWaitingRival: 'MENUNGGU LAWAN READY...',
+      mpRematch: 'MAIN LAGI (REMATCH)',
+      mpVictory: 'VICTORY',
+      mpDefeat: 'KALAH',
+      mpFallen: 'TERJATUH',
+      // Google / Account
+      signInGoogle: 'MASUK DENGAN GOOGLE',
+      signInFb: 'MASUK DENGAN FACEBOOK',
+      playGuest: 'MAIN SEBAGAI TAMU',
+      gpSavePlay: 'SIMPAN & MAINKAN RANK',
+      gpSignOut: 'KELUAR / GANTI AKUN',
+      gpStatus: 'LOGIN AKUN GOOGLE & FACEBOOK',
+      gpLoginDesc: 'Hubungkan akun Anda untuk menyimpan Rank, Skor Tertinggi, dan bertanding di Leaderboard Global!',
+      // How to play instructions
+      inst1Title: 'KONTROL KEYBOARD & DASH',
+      inst1Desc: '<b>SPACE / PANAH ATAS</b> untuk Flap.<br><b>SHIFT / D / E / F</b> untuk Skill Dash!',
+      inst2Title: 'LAYAR SENTUH (HP)',
+      inst2Desc: 'Di ponsel / HP, cukup tap layar untuk terbang.',
+      inst3Title: 'HINDARI RINTANGAN',
+      inst3Desc: 'Hindari tiang, burung musuh, dan petir.',
+      inst4Title: 'SKILL POWER-UP',
+      inst4Desc: 'Ambil Shield, Magnet, Freeze, Star, & Rocket!'
     },
     en: {
       settingsTitle: 'SETTINGS',
@@ -171,43 +229,207 @@
       playClassic: 'PLAY CLASSIC',
       playRanked: 'PLAY RANKED (EXTREME)',
       playMp: 'OPEN MULTIPLAYER LOBBY',
-      tapToFly: 'TAP / SPACE TO FLY',
+      rankedBest: 'RANKED BEST',
+      classicBest: 'CLASSIC BEST',
+      tapToFly: 'Tap / SPACE to Flap • SHIFT / D to Dash',
       getReady: 'GET READY!',
       gameOver: 'GAME OVER',
       score: 'SCORE',
       best: 'BEST',
+      newBest: 'NEW BEST!',
       replayBtn: 'PLAY AGAIN',
       shopBtn: 'SKIN & SHOP',
       howTitle: 'HOW TO PLAY',
-      reviveTitle: 'OUT OF LIVES!',
-      reviveSub: 'Use 10 Coins or Watch an Ad to Revive!',
-      reviveCoinBtn: 'USE 10 COINS',
-      reviveAdBtn: 'WATCH AD (+1 LIFE)',
-      giveUpBtn: 'GIVE UP',
-      rewardAdBtn: '+25 FREE COINS'
+      settingsBtn: 'SETTINGS',
+      rankings: 'LEADERBOARD',
+      feedbackBtn: 'FEEDBACK',
+      understood: 'GOT IT',
+      coins: 'COINS',
+      pausedTitle: 'GAME PAUSED',
+      resumeBtn: 'RESUME',
+      restartBtn: 'RESTART',
+      homeBtn: 'MAIN MENU',
+      reviveTitle: 'CONTINUE?',
+      reviveSub: 'Use Coins to Revive & Keep Flying!',
+      reviveCost: 'REVIVE COST:',
+      reviveCoinBtn: 'REVIVE NOW',
+      giveUpBtn: 'GIVE UP (GAME OVER)',
+      rewardAdBtn: '+25 COINS 🪙',
+      // Shop categories
+      catBird: 'BIRD',
+      catPet: 'PETS',
+      catBooster: 'BOOSTERS',
+      catAura: 'AURAS',
+      catHat: 'HATS',
+      catOutfit: 'OUTFITS',
+      catPipe: 'PIPES',
+      catBg: 'BG',
+      catMusic: 'MUSIC',
+      equip: 'EQUIP',
+      equipped: 'EQUIPPED',
+      buy: 'BUY',
+      // Multiplayer
+      mpLobbyTitle: 'MULTIPLAYER LOBBY',
+      mpQuickMatch: 'QUICK MATCH',
+      mpCreateRoom: 'CREATE ROOM',
+      mpJoinRoom: 'JOIN ROOM',
+      mpQuickFind: 'FIND OPPONENT',
+      mpStartMatch: 'START MATCH NOW!',
+      mpReady: 'I AM READY!',
+      mpWaitingRival: 'WAITING FOR OPPONENT...',
+      mpRematch: 'PLAY AGAIN (REMATCH)',
+      mpVictory: 'VICTORY',
+      mpDefeat: 'DEFEATED',
+      mpFallen: 'FALLEN',
+      // Google / Account
+      signInGoogle: 'SIGN IN WITH GOOGLE',
+      signInFb: 'SIGN IN WITH FACEBOOK',
+      playGuest: 'PLAY AS GUEST',
+      gpSavePlay: 'SAVE & PLAY RANKED',
+      gpSignOut: 'SIGN OUT / SWITCH ACCOUNT',
+      gpStatus: 'SIGN IN WITH GOOGLE & FACEBOOK',
+      gpLoginDesc: 'Connect your account to save your Rank, High Scores, and compete on the Global Leaderboards!',
+      // How to play instructions
+      inst1Title: 'KEYBOARD & DASH CONTROLS',
+      inst1Desc: '<b>SPACE / UP ARROW</b> to Flap wings.<br><b>SHIFT / D / E / F</b> for Warp Dash Skill!',
+      inst2Title: 'TOUCH SCREEN (MOBILE)',
+      inst2Desc: 'On mobile phones or tablets, simply tap the screen to fly.',
+      inst3Title: 'AVOID OBSTACLES',
+      inst3Desc: 'Dodge pipe collisions, rival hazards, and lightning.',
+      inst4Title: 'SUPER POWER-UPS',
+      inst4Desc: 'Collect Shield, Magnet, Freeze, Star, & Rocket!'
     }
   };
 
   function applyLanguage(lang) {
     const t = i18n[lang] || i18n.id;
+    
+    // Settings Modal
     if(el.settingsModalTitle) el.settingsModalTitle.textContent = t.settingsTitle;
     if(el.txtSettingLanguage) el.txtSettingLanguage.textContent = t.language;
     if(el.txtSettingSound) el.txtSettingSound.textContent = t.soundEffects;
     if(el.txtSettingMusic) el.txtSettingMusic.textContent = t.music;
     if(el.txtSettingDifficulty) el.txtSettingDifficulty.textContent = t.difficulty;
     if(el.settingsOkBtn) el.settingsOkBtn.textContent = t.okBtn;
-    if(el.lobbyAdmobRewardBtn) el.lobbyAdmobRewardBtn.textContent = t.rewardAdBtn;
-    if(el.reviveGiveUpBtn) el.reviveGiveUpBtn.textContent = t.giveUpBtn;
     
-    // Update active lang buttons
+    // Main Menu Buttons & Badges
+    if(el.shopBtn) el.shopBtn.textContent = t.shopBtn;
+    if(el.howBtn) el.howBtn.textContent = t.howTitle;
+    if(el.settingsBtn) el.settingsBtn.textContent = t.settingsBtn;
+    if(el.rankedLeaderboardBtn) {
+      const span = el.rankedLeaderboardBtn.querySelector('span:last-child');
+      if(span) span.textContent = t.rankings;
+    }
+    if(el.lobbyFeedbackBtn) {
+      const span = el.lobbyFeedbackBtn.querySelector('span');
+      if(span) span.textContent = t.feedbackBtn;
+    }
+    if(el.lobbyAdmobRewardBtn) {
+      const span = el.lobbyAdmobRewardBtn.querySelector('span');
+      if(span) span.textContent = t.rewardAdBtn;
+    }
+
+    // Ready Screen
+    const readyH2 = document.querySelector('#ready h2');
+    if(readyH2) readyH2.textContent = t.getReady;
+    const readyP = document.querySelector('#ready p');
+    if(readyP) readyP.innerHTML = t.tapToFly;
+
+    // How To Play Modal
+    const howH2 = document.querySelector('#howModal h2');
+    if(howH2) howH2.textContent = t.howTitle;
+    const howBtn = document.querySelector('#howModal button.primary');
+    if(howBtn) howBtn.textContent = t.understood;
+    const instItems = document.querySelectorAll('#howModal .inst-item');
+    if(instItems && instItems.length >= 4) {
+      const s1 = instItems[0].querySelector('.inst-content');
+      if(s1) s1.innerHTML = `<strong>${t.inst1Title}</strong><p>${t.inst1Desc}</p>`;
+      const s2 = instItems[1].querySelector('.inst-content');
+      if(s2) s2.innerHTML = `<strong>${t.inst2Title}</strong><p>${t.inst2Desc}</p>`;
+      const s3 = instItems[2].querySelector('.inst-content');
+      if(s3) s3.innerHTML = `<strong>${t.inst3Title}</strong><p>${t.inst3Desc}</p>`;
+      const s4 = instItems[3].querySelector('.inst-content');
+      if(s4) s4.innerHTML = `<strong>${t.inst4Title}</strong><p>${t.inst4Desc}</p>`;
+    }
+
+    // Pause Modal
+    const pauseH2 = document.querySelector('#pauseModal h2');
+    if(pauseH2) pauseH2.textContent = t.pausedTitle;
+    if(el.resumeBtn) el.resumeBtn.textContent = t.resumeBtn;
+    if(el.restartBtn) el.restartBtn.textContent = t.restartBtn;
+    if(el.homeBtn) el.homeBtn.textContent = t.homeBtn;
+
+    // Game Over Modal
+    const overH2 = document.querySelector('#overModal h2');
+    if(overH2) overH2.textContent = t.gameOver;
+    if(el.newBest) el.newBest.textContent = t.newBest;
+    if(el.replayBtn) el.replayBtn.textContent = t.replayBtn;
+    if(el.overHomeBtn) el.overHomeBtn.textContent = t.homeBtn;
+
+    // Revive Modal
+    const reviveH2 = document.querySelector('#reviveModal h2');
+    if(reviveH2) reviveH2.textContent = t.reviveTitle;
+    const reviveSub = document.querySelector('.revive-subtitle');
+    if(reviveSub) reviveSub.textContent = t.reviveSub;
+    const reviveCostInfo = document.querySelector('.revive-cost-info span');
+    if(reviveCostInfo) reviveCostInfo.textContent = t.reviveCost;
+    if(el.reviveConfirmBtn) {
+      const span = el.reviveConfirmBtn.querySelector('span:last-child');
+      if(span) span.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" style="vertical-align:middle;margin-right:4px;"><polygon points="13,2 4,14 11,14 9,22 20,10 13,10" fill="#ffffff"/></svg>${t.reviveCoinBtn}`;
+    }
+    if(el.reviveGiveUpBtn) el.reviveGiveUpBtn.textContent = t.giveUpBtn;
+
+    // Shop Modal Category Tabs
+    if(el.shopTabs) {
+      const catMap = {
+        bird: t.catBird, pet: t.catPet, booster: t.catBooster,
+        aura: t.catAura, hat: t.catHat, outfit: t.catOutfit,
+        pipe: t.catPipe, background: t.catBg, music: t.catMusic
+      };
+      el.shopTabs.querySelectorAll('[data-shop-category]').forEach(btn => {
+        const cat = btn.dataset.shopCategory;
+        if(catMap[cat]) btn.textContent = catMap[cat];
+      });
+    }
+
+    // Google Play / Account Modal
+    if(el.googleSignInBtnText) el.googleSignInBtnText.textContent = t.signInGoogle;
+    if(el.facebookSignInBtnText) el.facebookSignInBtnText.textContent = t.signInFb;
+    if(el.guestSignInBtn) el.guestSignInBtn.textContent = t.playGuest;
+    if(el.gpAuthActionBtn) el.gpAuthActionBtn.textContent = t.gpSavePlay;
+    if(el.gpSignOutBtn) el.gpSignOutBtn.textContent = t.gpSignOut;
+    if(el.gpOnlineStatus) el.gpOnlineStatus.textContent = t.gpStatus;
+    const gpDesc = document.querySelector('.gp-login-desc');
+    if(gpDesc) gpDesc.textContent = t.gpLoginDesc;
+
+    // Multiplayer Lobby
+    if(el.mpTabQuickBtn) el.mpTabQuickBtn.textContent = t.mpQuickMatch;
+    if(el.mpTabCreateBtn) el.mpTabCreateBtn.textContent = t.mpCreateRoom;
+    if(el.mpTabJoinBtn) el.mpTabJoinBtn.textContent = t.mpJoinRoom;
+    if(el.mpQuickFindBtn) el.mpQuickFindBtn.textContent = t.mpQuickFind;
+    if(el.mpRematchBtn) el.mpRematchBtn.textContent = t.mpRematch;
+    if(el.mpOverHomeBtn) el.mpOverHomeBtn.textContent = t.homeBtn;
+
+    // Update active lang buttons in Settings
     if(el.langIdBtn) el.langIdBtn.classList.toggle('active', lang === 'id');
     if(el.langEnBtn) el.langEnBtn.classList.toggle('active', lang === 'en');
 
-    // Update play button text based on current mode
+    // Update play button and mode label
     if(el.playBtn) {
-      if(currentMode === 'multiplayer') el.playBtn.textContent = t.playMp;
-      else if(currentMode === 'ranked') el.playBtn.textContent = t.playRanked;
-      else el.playBtn.textContent = t.playClassic;
+      if(currentMode === 'multiplayer') {
+        el.playBtn.textContent = t.playMp;
+        if(el.modeBestLabel) el.modeBestLabel.textContent = 'MULTIPLAYER';
+      } else if(currentMode === 'ranked') {
+        el.playBtn.textContent = t.playRanked;
+        if(el.modeBestLabel) el.modeBestLabel.textContent = t.rankedBest;
+      } else {
+        el.playBtn.textContent = t.playClassic;
+        if(el.modeBestLabel) el.modeBestLabel.textContent = t.classicBest;
+      }
+    }
+
+    if(typeof renderSkinGrid === 'function' && el.skinList && el.skinList.children.length > 0) {
+      renderSkinGrid();
     }
   }
 
@@ -2143,14 +2365,15 @@
       const iconSvg = getShopItemSvg(shopCategory, id, item);
       const desc = item.desc || '';
 
+      const t = i18n[settings.language || 'id'] || i18n.id;
       let actionHtml = '';
       if(selected) {
-        actionHtml = `<span class="skin-cost equipped">EQUIPPED</span>`;
+        actionHtml = `<span class="skin-cost equipped">${t.equipped}</span>`;
       } else if(unlocked || item.cost === 0) {
-        actionHtml = `<button class="skin-cost-btn use-btn" data-action="use" data-product="${id}" type="button">EQUIP</button>`;
+        actionHtml = `<button class="skin-cost-btn use-btn" data-action="use" data-product="${id}" type="button">${t.equip}</button>`;
       } else {
         const canAfford = progress.coins >= item.cost;
-        actionHtml = `<button class="skin-cost-btn buy-btn ${canAfford ? '' : 'cant-afford'}" data-action="buy" data-product="${id}" type="button"><svg viewBox="0 0 16 16" width="12" height="12" class="mini-coin-svg"><circle cx="8" cy="8" r="6.5" fill="#fbbf24" stroke="#d97706" stroke-width="1.2"/><text x="8" y="11" text-anchor="middle" font-size="8" font-weight="900" fill="#92400e">$</text></svg> BUY ${item.cost}</button>`;
+        actionHtml = `<button class="skin-cost-btn buy-btn ${canAfford ? '' : 'cant-afford'}" data-action="buy" data-product="${id}" type="button"><svg viewBox="0 0 16 16" width="12" height="12" class="mini-coin-svg"><circle cx="8" cy="8" r="6.5" fill="#fbbf24" stroke="#d97706" stroke-width="1.2"/><text x="8" y="11" text-anchor="middle" font-size="8" font-weight="900" fill="#92400e">$</text></svg> ${t.buy} ${item.cost}</button>`;
       }
 
       return `<div class="skin-card rarity-${rarity} ${selected ? 'selected ' : ''}${isPreviewing ? 'previewing ' : ''}${isPlayingPreview ? 'playing-preview ' : ''}${unlocked ? '' : 'locked'}" data-card-product="${id}" style="--body:${body};--wing:${wing};--beak:${item.beak||body};--cap:${cap};--edge:${edge};--top:${top};--bottom:${bottom};--color:${color}">` +
