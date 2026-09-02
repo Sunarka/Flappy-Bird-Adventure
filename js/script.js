@@ -3952,6 +3952,19 @@
       if(el.modeBestLabel) el.modeBestLabel.textContent = 'CLASSIC BEST';
     }
     
+    // Highlight active card in Mode Selection Drawer
+    const cClassic = $('cardModeClassic');
+    const cRanked = $('cardModeRanked');
+    const cMp = $('cardModeMultiplayer');
+    if(cClassic) cClassic.classList.toggle('active', mode === 'classic');
+    if(cRanked) cRanked.classList.toggle('active', mode === 'ranked');
+    if(cMp) cMp.classList.toggle('active', mode === 'multiplayer');
+
+    const statClassic = $('mlbbClassicBestStat');
+    if(statClassic) statClassic.textContent = progress.highScore || 0;
+    const statRanked = $('mlbbRankedPtsStat');
+    if(statRanked) statRanked.textContent = `${gpProfile.rankedBest || progress.rankedScore || 0} PTS`;
+
     // Tampilkan tombol Leaderboard HANYA di mode Ranked
     if(el.rankedLeaderboardBtn) {
       el.rankedLeaderboardBtn.classList.toggle('hidden', mode !== 'ranked');
@@ -11177,14 +11190,82 @@
     if(elTarget) elTarget.onclick = handler;
   };
 
-  // Mode Selection & Play Handlers
-  bindClick(el.modeClassicBtn, () => setMode('classic'));
-  bindClick(el.modeRankedBtn, () => setMode('ranked'));
+  // MLBB Mode Selection Slide-Up Drawer Controller
+  function openModeDrawer() {
+    const drawer = $('mlbbModeDrawer');
+    if(!drawer) return;
+    audio.click();
+    drawer.classList.remove('hidden');
+
+    const statClassic = $('mlbbClassicBestStat');
+    if(statClassic) statClassic.textContent = progress.highScore || 0;
+    const statRanked = $('mlbbRankedPtsStat');
+    if(statRanked) statRanked.textContent = `${gpProfile.rankedBest || progress.rankedScore || 0} PTS`;
+  }
+
+  function closeModeDrawer() {
+    const drawer = $('mlbbModeDrawer');
+    if(!drawer) return;
+    drawer.classList.add('hidden');
+  }
+
+  // Open drawer on click or drag up
   bindClick('mlbbCycleModeBtn', () => {
-    if(currentMode === 'classic') setMode('ranked');
-    else if(currentMode === 'ranked') setMode('multiplayer');
-    else setMode('classic');
+    openModeDrawer();
   });
+
+  bindClick('mlbbDrawerCloseBtn', () => {
+    audio.click();
+    closeModeDrawer();
+  });
+
+  bindClick('mlbbDrawerBackdrop', () => {
+    closeModeDrawer();
+  });
+
+  // Select card handlers
+  ['classic', 'ranked', 'multiplayer'].forEach(m => {
+    const card = $(m === 'classic' ? 'cardModeClassic' : (m === 'ranked' ? 'cardModeRanked' : 'cardModeMultiplayer'));
+    if(card) {
+      card.addEventListener('click', () => {
+        setMode(m);
+        setTimeout(closeModeDrawer, 180);
+      });
+    }
+  });
+
+  // Touch drag up from mode button to open drawer
+  let touchStartY = 0;
+  const modeBtn = $('mlbbCycleModeBtn');
+  if(modeBtn) {
+    modeBtn.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    modeBtn.addEventListener('touchend', (e) => {
+      const touchEndY = e.changedTouches[0].clientY;
+      if(touchStartY - touchEndY > 20) { // Swiped up by 20px
+        openModeDrawer();
+      }
+    }, { passive: true });
+  }
+
+  // Touch drag down on drawer header to close
+  const drawerHandle = $('mlbbDrawerHandleBar');
+  if(drawerHandle) {
+    let handleStartY = 0;
+    drawerHandle.addEventListener('touchstart', (e) => {
+      handleStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    drawerHandle.addEventListener('touchend', (e) => {
+      const handleEndY = e.changedTouches[0].clientY;
+      if(handleEndY - handleStartY > 25) { // Swiped down
+        audio.click();
+        closeModeDrawer();
+      }
+    }, { passive: true });
+  }
 
   bindClick('topAddCoinBtn', () => {
     audio.click();

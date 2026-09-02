@@ -13,17 +13,17 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=18.3">
-  <link rel="stylesheet" href="css/modern-icons.css?v=18.3">
-  <link rel="stylesheet" href="css/shop.css?v=18.3">
-  <link rel="stylesheet" href="css/shop-extra.css?v=18.3">
-  <link rel="stylesheet" href="css/mode-picker.css?v=18.3">
-  <link rel="stylesheet" href="css/store.css?v=18.3">
-  <link rel="stylesheet" href="css/ranked.css?v=18.3">
-  <link rel="stylesheet" href="css/multiplayer.css?v=18.3">
-  <link rel="stylesheet" href="css/social.css?v=18.3">
-  <link rel="stylesheet" href="css/splash.css?v=18.3">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=18.3">
+  <link rel="stylesheet" href="css/style.css?v=18.4">
+  <link rel="stylesheet" href="css/modern-icons.css?v=18.4">
+  <link rel="stylesheet" href="css/shop.css?v=18.4">
+  <link rel="stylesheet" href="css/shop-extra.css?v=18.4">
+  <link rel="stylesheet" href="css/mode-picker.css?v=18.4">
+  <link rel="stylesheet" href="css/store.css?v=18.4">
+  <link rel="stylesheet" href="css/ranked.css?v=18.4">
+  <link rel="stylesheet" href="css/multiplayer.css?v=18.4">
+  <link rel="stylesheet" href="css/social.css?v=18.4">
+  <link rel="stylesheet" href="css/splash.css?v=18.4">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=18.4">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -364,14 +364,14 @@
 
         <!-- Big Iconic MLBB Match Button Dock -->
         <div class="mlbb-match-dock">
-          <!-- Mode Switcher Pill -->
-          <div class="mlbb-mode-pill-btn" id="mlbbCycleModeBtn" role="button" tabindex="0" title="Klik untuk Ganti Mode">
+          <!-- Mode Switcher Pill (Tap or Drag Up to open drawer) -->
+          <div class="mlbb-mode-pill-btn" id="mlbbCycleModeBtn" role="button" tabindex="0" title="Klik atau Tarik ke Atas untuk Pilih Mode">
             <span class="mode-tag-icon" id="mlbbModeTagIcon">🎮</span>
             <div class="mode-tag-info">
-              <span class="mode-tag-sub">MODE GAME</span>
+              <span class="mode-tag-sub">MODE GAME (TARIK KE ATAS ▲)</span>
               <span class="mode-tag-name" id="mlbbCurrentModeName">CLASSIC</span>
             </div>
-            <span class="mode-tag-arrow">↻</span>
+            <span class="mode-tag-arrow">▲</span>
           </div>
 
           <!-- Big Glowing Start Match Button -->
@@ -385,6 +385,67 @@
           </button>
         </div>
       </footer>
+
+      <!-- MLBB MODE SELECTION BOTTOM DRAWER (SLIDE UP ON TAP / DRAG UP) -->
+      <div id="mlbbModeDrawer" class="mlbb-mode-drawer hidden" role="dialog" aria-modal="true" aria-label="Pilih Mode Permainan">
+        <div class="mlbb-drawer-backdrop" id="mlbbDrawerBackdrop"></div>
+        <div class="mlbb-drawer-panel" id="mlbbDrawerPanel">
+          <!-- Drawer Header & Drag Handle -->
+          <div class="mlbb-drawer-handle-bar" id="mlbbDrawerHandleBar">
+            <div class="mlbb-drawer-handle"></div>
+            <div class="mlbb-drawer-title">PILIH MODE PERMAINAN</div>
+            <button class="mlbb-drawer-close" id="mlbbDrawerCloseBtn" type="button" aria-label="Tutup">✕</button>
+          </div>
+
+          <!-- 3 Big Interactive Mode Cards Track -->
+          <div class="mlbb-mode-cards-track" id="mlbbModeCardsTrack">
+            <!-- 1. CLASSIC MODE -->
+            <div class="mlbb-mode-card active" id="cardModeClassic" data-mode="classic" role="button" tabindex="0">
+              <div class="mlbb-mc-glow"></div>
+              <div class="mlbb-mc-badge casual">CASUAL</div>
+              <div class="mlbb-mc-art">
+                <span class="mlbb-mc-icon">🎮</span>
+              </div>
+              <div class="mlbb-mc-title">CLASSIC</div>
+              <div class="mlbb-mc-desc">Mode santai latihan terbang tanpa tekanan peringkat. Kumpulkan koin dan rekor tertinggi!</div>
+              <div class="mlbb-mc-stats">
+                <span>Rekor: <b id="mlbbClassicBestStat">0</b></span>
+              </div>
+              <button class="mlbb-mc-select-btn" type="button">PILIH MODE</button>
+            </div>
+
+            <!-- 2. RANKED MODE -->
+            <div class="mlbb-mode-card" id="cardModeRanked" data-mode="ranked" role="button" tabindex="0">
+              <div class="mlbb-mc-glow"></div>
+              <div class="mlbb-mc-badge ranked">EXTREME RANK</div>
+              <div class="mlbb-mc-art">
+                <span class="mlbb-mc-icon">🏆</span>
+              </div>
+              <div class="mlbb-mc-title">RANKED</div>
+              <div class="mlbb-mc-desc">Kompetisi peringkat global dengan rintangan ekstrem pipa bergerak, cuaca badai, dan poin tier!</div>
+              <div class="mlbb-mc-stats">
+                <span>Poin Rank: <b id="mlbbRankedPtsStat">0 PTS</b></span>
+              </div>
+              <button class="mlbb-mc-select-btn" type="button">PILIH MODE</button>
+            </div>
+
+            <!-- 3. MULTIPLAYER 1v1 -->
+            <div class="mlbb-mode-card" id="cardModeMultiplayer" data-mode="multiplayer" role="button" tabindex="0">
+              <div class="mlbb-mc-glow"></div>
+              <div class="mlbb-mc-badge mp">1v1 BATTLE</div>
+              <div class="mlbb-mc-art">
+                <span class="mlbb-mc-icon">⚔️</span>
+              </div>
+              <div class="mlbb-mc-title">MULTIPLAYER</div>
+              <div class="mlbb-mc-desc">Tanding duel 1 lawan 1 langsung (real-time) dengan teman atau rival acak di seluruh dunia!</div>
+              <div class="mlbb-mc-stats">
+                <span>Koneksi: <b>Cloudflare WS</b></span>
+              </div>
+              <button class="mlbb-mc-select-btn" type="button">PILIH MODE</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
     <section id="ready" class="screen hidden">
       <h2>GET READY!</h2>
@@ -1184,12 +1245,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=18.3"></script>
-  <script src="js/admob-config.js?v=18.3"></script>
-  <script src="js/shop-data.js?v=18.3"></script>
-  <script src="js/audio.js?v=18.3"></script>
-  <script src="js/multiplayer.js?v=18.3"></script>
-  <script src="js/social.js?v=18.3"></script>
-  <script src="js/script.js?v=18.3"></script>
+  <script src="js/firebase-config.js?v=18.4"></script>
+  <script src="js/admob-config.js?v=18.4"></script>
+  <script src="js/shop-data.js?v=18.4"></script>
+  <script src="js/audio.js?v=18.4"></script>
+  <script src="js/multiplayer.js?v=18.4"></script>
+  <script src="js/social.js?v=18.4"></script>
+  <script src="js/script.js?v=18.4"></script>
 </body>
 </html>
