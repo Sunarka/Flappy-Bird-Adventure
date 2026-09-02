@@ -4394,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.13';
+  const GAME_VERSION = '20.14';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -8281,7 +8281,7 @@
     }
   }
 
-  function drawCuteLobbyChick(targetCtx, x, y, bodyColor, wingColor, angle, dir = 1) {
+  function drawCuteLobbyChick(targetCtx, x, y, bodyColor, wingColor, angle, dir = 1, accessory = 'ribbon') {
     targetCtx.save();
     targetCtx.translate(x, y);
     targetCtx.scale(dir, 1);
@@ -8634,18 +8634,24 @@
       ctx.restore();
     }
 
-    // --- Mascot 2 & 3: Two Adorable Baby Chicks Waddling & Hopping ---
-    // Chick 1 (Left chick)
-    const chick1X = mainBirdX - 52 + Math.sin(lobbyTime * 2) * 8;
-    const chick1Hop = Math.abs(Math.sin(lobbyTime * 4 + 1)) * 9;
-    const chick1Y = H - GROUND - 14 - chick1Hop;
-    drawCuteLobbyChick(ctx, chick1X, chick1Y, '#facc15', '#f59e0b', Math.sin(lobbyTime * 4) * 0.1, 1);
+    // --- Mascot 2 & 3: Equipped Pet Companion Duo Waddling & Hopping ---
+    const activePetId = progress.selectedPet || 'pip_peep';
+    if(activePetId !== 'none') {
+      const pData = petsCatalog[activePetId] || petsCatalog.pip_peep;
+      if(pData && pData.baby1 && pData.baby2) {
+        // Pet Baby 1 (Left pet)
+        const chick1X = mainBirdX - 52 + Math.sin(lobbyTime * 2) * 8;
+        const chick1Hop = Math.abs(Math.sin(lobbyTime * 4 + 1)) * 9;
+        const chick1Y = H - GROUND - 14 - chick1Hop;
+        drawCuteLobbyChick(ctx, chick1X, chick1Y, pData.baby1.color, pData.baby1.wingColor, Math.sin(lobbyTime * 4) * 0.1, 1, pData.baby1.accessory);
 
-    // Chick 2 (Right chick)
-    const chick2X = mainBirdX + 54 + Math.sin(lobbyTime * 2 + 2) * 8;
-    const chick2Hop = Math.abs(Math.sin(lobbyTime * 4 + 2.5)) * 9;
-    const chick2Y = H - GROUND - 14 - chick2Hop;
-    drawCuteLobbyChick(ctx, chick2X, chick2Y, '#38bdf8', '#0284c7', Math.sin(lobbyTime * 4 + 2) * 0.1, -1);
+        // Pet Baby 2 (Right pet)
+        const chick2X = mainBirdX + 54 + Math.sin(lobbyTime * 2 + 2) * 8;
+        const chick2Hop = Math.abs(Math.sin(lobbyTime * 4 + 2.5)) * 9;
+        const chick2Y = H - GROUND - 14 - chick2Hop;
+        drawCuteLobbyChick(ctx, chick2X, chick2Y, pData.baby2.color, pData.baby2.wingColor, Math.sin(lobbyTime * 4 + 2) * 0.1, -1, pData.baby2.accessory);
+      }
+    }
 
     // --- Mascot 4: Fluttering Golden Butterfly ---
     const bfX = mainBirdX + Math.cos(lobbyTime * 2.2) * 75;
@@ -11411,14 +11417,48 @@
     "Gunakan skill Dash saat rintangan sempit!",
     "Beli skin dan pet imut di Toko Shop!"
   ];
+
+  let speechBubbleTimer = null;
+  let speechBubbleVisible = false;
+
+  function cycleSpeechBubble() {
+    const speechEl = $('mlbbHeroSpeech');
+    if(!speechEl) return;
+
+    if(speechBubbleVisible) {
+      speechEl.classList.remove('active');
+      speechBubbleVisible = false;
+      clearTimeout(speechBubbleTimer);
+      speechBubbleTimer = setTimeout(cycleSpeechBubble, 6500 + Math.random() * 3500);
+    } else {
+      if(state === State.MENU) {
+        const q = birdQuotes[Math.floor(Math.random() * birdQuotes.length)];
+        speechEl.textContent = `"${q}"`;
+        speechEl.classList.add('active');
+        speechBubbleVisible = true;
+        clearTimeout(speechBubbleTimer);
+        speechBubbleTimer = setTimeout(cycleSpeechBubble, 4500);
+      } else {
+        speechEl.classList.remove('active');
+        speechBubbleVisible = false;
+      }
+    }
+  }
+
   bindClick('mlbbHeroSpeech', () => {
     audio.click();
     const speechEl = $('mlbbHeroSpeech');
     if(speechEl) {
       const q = birdQuotes[Math.floor(Math.random() * birdQuotes.length)];
       speechEl.textContent = `"${q}"`;
+      speechEl.classList.add('active');
+      speechBubbleVisible = true;
+      clearTimeout(speechBubbleTimer);
+      speechBubbleTimer = setTimeout(cycleSpeechBubble, 4500);
     }
   });
+
+  setTimeout(cycleSpeechBubble, 2000);
 
   bindClick(el.menuRankedCard, () => {
     audio.click();
