@@ -6,15 +6,15 @@
   <meta name="theme-color" content="#77cef2">
   <title>Feather Rush</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=16.1">
-  <link rel="stylesheet" href="css/modern-icons.css?v=16.1">
-  <link rel="stylesheet" href="css/shop.css?v=16.1">
-  <link rel="stylesheet" href="css/shop-extra.css?v=16.1">
-  <link rel="stylesheet" href="css/mode-picker.css?v=16.1">
-  <link rel="stylesheet" href="css/store.css?v=16.1">
-  <link rel="stylesheet" href="css/ranked.css?v=16.1">
-  <link rel="stylesheet" href="css/multiplayer.css?v=16.1">
-  <link rel="stylesheet" href="css/splash.css?v=16.1">
+  <link rel="stylesheet" href="css/style.css?v=16.2">
+  <link rel="stylesheet" href="css/modern-icons.css?v=16.2">
+  <link rel="stylesheet" href="css/shop.css?v=16.2">
+  <link rel="stylesheet" href="css/shop-extra.css?v=16.2">
+  <link rel="stylesheet" href="css/mode-picker.css?v=16.2">
+  <link rel="stylesheet" href="css/store.css?v=16.2">
+  <link rel="stylesheet" href="css/ranked.css?v=16.2">
+  <link rel="stylesheet" href="css/multiplayer.css?v=16.2">
+  <link rel="stylesheet" href="css/splash.css?v=16.2">
 
   <!-- ========================================================= -->
   <!-- GOOGLE AD MANAGER (GAM), GPT & IMA REWARDED ADS SDK       -->
@@ -368,7 +368,42 @@
         </div>
         <button class="primary" data-close>MENGERTI</button>
       </section>
-      <section id="settingsModal" class="modal hidden" role="dialog" aria-modal="true"><button class="close" data-close>×</button><h2>SETTINGS</h2><label class="setting"><span>Sound Effects</span><input type="checkbox" id="soundToggle"><i aria-hidden="true"></i></label><label class="setting"><span>Music</span><input type="checkbox" id="musicToggle"><i aria-hidden="true"></i></label><label class="setting"><span>Difficulty</span><div class="difficulty-dropdown"><button type="button" class="difficulty-btn" id="difficultyBtn"><span id="difficultyValue">Normal</span><span class="arrow-icon">▼</span></button><div class="difficulty-menu hidden" id="difficultyMenu"><div class="diff-option" data-diff="easy">Easy</div><div class="diff-option selected" data-diff="normal">Normal</div><div class="diff-option" data-diff="hard">Hard</div></div></div></label><button class="primary" data-close>OK</button></section>
+      <section id="settingsModal" class="modal hidden" role="dialog" aria-modal="true">
+        <button class="close" data-close>×</button>
+        <h2 id="settingsModalTitle">PENGATURAN</h2>
+        <label class="setting">
+          <span id="txtSettingLanguage">Bahasa / Language</span>
+          <div class="lang-switch-group">
+            <button type="button" class="lang-btn active" id="langIdBtn" data-lang="id">🇮🇩 ID</button>
+            <button type="button" class="lang-btn" id="langEnBtn" data-lang="en">🇬🇧 EN</button>
+          </div>
+        </label>
+        <label class="setting">
+          <span id="txtSettingSound">Sound Effects</span>
+          <input type="checkbox" id="soundToggle">
+          <i aria-hidden="true"></i>
+        </label>
+        <label class="setting">
+          <span id="txtSettingMusic">Music</span>
+          <input type="checkbox" id="musicToggle">
+          <i aria-hidden="true"></i>
+        </label>
+        <label class="setting">
+          <span id="txtSettingDifficulty">Difficulty</span>
+          <div class="difficulty-dropdown">
+            <button type="button" class="difficulty-btn" id="difficultyBtn">
+              <span id="difficultyValue">Normal</span>
+              <span class="arrow-icon">▼</span>
+            </button>
+            <div class="difficulty-menu hidden" id="difficultyMenu">
+              <div class="diff-option" data-diff="easy">Easy</div>
+              <div class="diff-option selected" data-diff="normal">Normal</div>
+              <div class="diff-option" data-diff="hard">Hard</div>
+            </div>
+          </div>
+        </label>
+        <button class="primary" id="settingsOkBtn" data-close>OK</button>
+      </section>
       
       <!-- COMPLETE SHOP MODAL WITH LIVE SHOWCASE -->
       <section id="shopModal" class="modal shop-modal hidden" role="dialog" aria-modal="true">
@@ -882,11 +917,11 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=16.1"></script>
-  <script src="js/admob-config.js?v=16.1"></script>
-  <script src="js/shop-data.js?v=16.1"></script>
-  <script src="js/audio.js?v=16.1"></script>
-  <script src="js/multiplayer.js?v=16.1"></script>
-  <script src="js/script.js?v=16.1"></script>
+  <script src="js/firebase-config.js?v=16.2"></script>
+  <script src="js/admob-config.js?v=16.2"></script>
+  <script src="js/shop-data.js?v=16.2"></script>
+  <script src="js/audio.js?v=16.2"></script>
+  <script src="js/multiplayer.js?v=16.2"></script>
+  <script src="js/script.js?v=16.2"></script>
 </body>
 </html>

@@ -44,6 +44,9 @@
     coinHud:$('coinHud'), coinCount:$('coinCount'), shopCoins:$('shopCoins'), shopTabs:$('shopTabs'),
     skinList:$('skinList'), powerupHud:$('powerupHud'), livesHud:$('livesHud'), soundToggle:$('soundToggle'), musicToggle:$('musicToggle'),
     difficultyBtn:$('difficultyBtn'), difficultyValue:$('difficultyValue'), difficultyMenu:$('difficultyMenu'),
+    langIdBtn:$('langIdBtn'), langEnBtn:$('langEnBtn'), settingsModalTitle:$('settingsModalTitle'),
+    txtSettingLanguage:$('txtSettingLanguage'), txtSettingSound:$('txtSettingSound'), txtSettingMusic:$('txtSettingMusic'),
+    txtSettingDifficulty:$('txtSettingDifficulty'), settingsOkBtn:$('settingsOkBtn'),
     shopCanvas:$('shopCanvas'), showcaseLabel:$('showcaseLabel'), tabPrev:$('tabPrev'), tabNext:$('tabNext'),
     modeClassicBtn:$('modeClassicBtn'), modeRankedBtn:$('modeRankedBtn'), modeBestLabel:$('modeBestLabel'),
     playBtn:$('playBtn'), rankedLeaderboardBtn:$('rankedLeaderboardBtn'),
@@ -129,7 +132,84 @@
     get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} }
   };
-  const settings = storage.get('skyFlappySettings', { sound:true, music:true, difficulty:'normal' });
+  const settings = storage.get('skyFlappySettings', { sound:true, music:true, difficulty:'normal', language:'id' });
+  if(!settings.language) settings.language = 'id';
+
+  const i18n = {
+    id: {
+      settingsTitle: 'PENGATURAN',
+      language: 'Bahasa / Language',
+      soundEffects: 'Efek Suara',
+      music: 'Musik Latar',
+      difficulty: 'Tingkat Kesulitan',
+      okBtn: 'SIMPAN / OK',
+      playClassic: 'PLAY CLASSIC',
+      playRanked: 'PLAY RANKED (EXTREME)',
+      playMp: 'BUKA LOBI MULTIPLAYER',
+      tapToFly: 'KETUK / SPASI UNTUK TERBANG',
+      getReady: 'BERSIAPLAH!',
+      gameOver: 'PERMAINAN BERAKHIR',
+      score: 'SKOR',
+      best: 'TERBAIK',
+      replayBtn: 'MAIN LAGI',
+      shopBtn: 'SKIN & TOKO',
+      howTitle: 'CARA BERMAIN',
+      reviveTitle: 'NYAWA HABIS!',
+      reviveSub: 'Gunakan 10 Koin atau Tonton Iklan untuk Lanjut!',
+      reviveCoinBtn: 'PAKAI 10 KOIN',
+      reviveAdBtn: 'NONTON IKLAN (+1 NYAWA)',
+      giveUpBtn: 'MENYERAH',
+      rewardAdBtn: '+25 KOIN GRATIS'
+    },
+    en: {
+      settingsTitle: 'SETTINGS',
+      language: 'Language / Bahasa',
+      soundEffects: 'Sound Effects',
+      music: 'Background Music',
+      difficulty: 'Difficulty',
+      okBtn: 'SAVE / OK',
+      playClassic: 'PLAY CLASSIC',
+      playRanked: 'PLAY RANKED (EXTREME)',
+      playMp: 'OPEN MULTIPLAYER LOBBY',
+      tapToFly: 'TAP / SPACE TO FLY',
+      getReady: 'GET READY!',
+      gameOver: 'GAME OVER',
+      score: 'SCORE',
+      best: 'BEST',
+      replayBtn: 'PLAY AGAIN',
+      shopBtn: 'SKIN & SHOP',
+      howTitle: 'HOW TO PLAY',
+      reviveTitle: 'OUT OF LIVES!',
+      reviveSub: 'Use 10 Coins or Watch an Ad to Revive!',
+      reviveCoinBtn: 'USE 10 COINS',
+      reviveAdBtn: 'WATCH AD (+1 LIFE)',
+      giveUpBtn: 'GIVE UP',
+      rewardAdBtn: '+25 FREE COINS'
+    }
+  };
+
+  function applyLanguage(lang) {
+    const t = i18n[lang] || i18n.id;
+    if(el.settingsModalTitle) el.settingsModalTitle.textContent = t.settingsTitle;
+    if(el.txtSettingLanguage) el.txtSettingLanguage.textContent = t.language;
+    if(el.txtSettingSound) el.txtSettingSound.textContent = t.soundEffects;
+    if(el.txtSettingMusic) el.txtSettingMusic.textContent = t.music;
+    if(el.txtSettingDifficulty) el.txtSettingDifficulty.textContent = t.difficulty;
+    if(el.settingsOkBtn) el.settingsOkBtn.textContent = t.okBtn;
+    if(el.lobbyAdmobRewardBtn) el.lobbyAdmobRewardBtn.textContent = t.rewardAdBtn;
+    if(el.reviveGiveUpBtn) el.reviveGiveUpBtn.textContent = t.giveUpBtn;
+    
+    // Update active lang buttons
+    if(el.langIdBtn) el.langIdBtn.classList.toggle('active', lang === 'id');
+    if(el.langEnBtn) el.langEnBtn.classList.toggle('active', lang === 'en');
+
+    // Update play button text based on current mode
+    if(el.playBtn) {
+      if(currentMode === 'multiplayer') el.playBtn.textContent = t.playMp;
+      else if(currentMode === 'ranked') el.playBtn.textContent = t.playRanked;
+      else el.playBtn.textContent = t.playClassic;
+    }
+  }
 
   // 1. Skin Burung (Nama Lengkap) - ALL FREE FOR TESTING
   const skins = {
@@ -11239,6 +11319,7 @@
       el.sound.innerHTML = settings.sound ? '<svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path class="sound-wave w1" d="M15 9.25a4 4 0 0 1 0 5.5"/><path class="sound-wave w2" d="M17.5 6.75a7.5 7.5 0 0 1 0 10.5"/></svg>' : '<svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="m15 10 5 5m0-5-5 5" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/></svg>';
       el.sound.setAttribute('aria-label', settings.sound ? 'Matikan suara' : 'Nyalakan suara');
     }
+    applyLanguage(settings.language || 'id');
     updateMusicUI();
     persist();
     if(!settings.music) {
@@ -11253,6 +11334,21 @@
   function closeDifficulty() {
     if(el.difficultyMenu) el.difficultyMenu.classList.add('hidden');
     if(el.difficultyBtn) el.difficultyBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  if(el.langIdBtn) {
+    el.langIdBtn.onclick = () => {
+      settings.language = 'id';
+      audio.click();
+      syncSettings();
+    };
+  }
+  if(el.langEnBtn) {
+    el.langEnBtn.onclick = () => {
+      settings.language = 'en';
+      audio.click();
+      syncSettings();
+    };
   }
 
   if(el.soundToggle) el.soundToggle.onchange = e => { settings.sound = e.target.checked; syncSettings(); };
