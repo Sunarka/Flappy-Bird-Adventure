@@ -6,16 +6,16 @@
   <meta name="theme-color" content="#77cef2">
   <title>Feather Rush</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=17.6">
-  <link rel="stylesheet" href="css/modern-icons.css?v=17.6">
-  <link rel="stylesheet" href="css/shop.css?v=17.6">
-  <link rel="stylesheet" href="css/shop-extra.css?v=17.6">
-  <link rel="stylesheet" href="css/mode-picker.css?v=17.6">
-  <link rel="stylesheet" href="css/store.css?v=17.6">
-  <link rel="stylesheet" href="css/ranked.css?v=17.6">
-  <link rel="stylesheet" href="css/multiplayer.css?v=17.6">
-  <link rel="stylesheet" href="css/social.css?v=17.6">
-  <link rel="stylesheet" href="css/splash.css?v=17.6">
+  <link rel="stylesheet" href="css/style.css?v=17.7">
+  <link rel="stylesheet" href="css/modern-icons.css?v=17.7">
+  <link rel="stylesheet" href="css/shop.css?v=17.7">
+  <link rel="stylesheet" href="css/shop-extra.css?v=17.7">
+  <link rel="stylesheet" href="css/mode-picker.css?v=17.7">
+  <link rel="stylesheet" href="css/store.css?v=17.7">
+  <link rel="stylesheet" href="css/ranked.css?v=17.7">
+  <link rel="stylesheet" href="css/multiplayer.css?v=17.7">
+  <link rel="stylesheet" href="css/social.css?v=17.7">
+  <link rel="stylesheet" href="css/splash.css?v=17.7">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -457,77 +457,127 @@
         <div class="skin-list" id="skinList"></div>
       </section>
 
-      <!-- Google Play Games Profile & Cloud Save Modal -->
-      <!-- Google Sign-In & Ranked Profile Modal -->
-      <section id="googlePlayModal" class="modal google-play-modal hidden" role="dialog" aria-modal="true">
+      <!-- Google Play / Profile Modal (Now Full Featured Like Friend Profile Modal) -->
+      <section id="googleAuthModal" class="modal friend-profile-modal hidden" role="dialog" aria-modal="true" aria-label="Profil Akun">
         <button class="close" data-close>×</button>
-        <div class="gp-header">
-          <div class="gp-icon-badge">
-            <svg viewBox="0 0 48 48" width="26" height="26">
-              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-            </svg>
-          </div>
-          <div class="gp-titles">
-            <h2>GOOGLE SIGN-IN</h2>
-            <p class="gp-status" id="gpOnlineStatus">LOGIN AKUN GOOGLE & FACEBOOK</p>
-          </div>
-        </div>
-
-        <!-- Login Prompt (When Not Logged In) -->
-        <div id="googleSignInPrompt" class="gp-google-login-box">
-          <p class="gp-login-desc">Hubungkan akun Anda untuk menyimpan Rank, Skor Tertinggi, dan bertanding di Leaderboard Global!</p>
-
-          <!-- 1. Google Account Login -->
-          <button id="googleSignInBtn" class="google-sign-in-btn" type="button">
-            <svg class="google-icon" viewBox="0 0 48 48" width="20" height="20">
-              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-            </svg>
-            <span id="googleSignInBtnText">LOGIN DENGAN GOOGLE</span>
-          </button>
-
-          <!-- 2. Facebook Login -->
-          <button id="facebookSignInBtn" class="facebook-sign-in-btn" type="button">
-            <svg class="facebook-icon" viewBox="0 0 24 24" width="20" height="20">
-              <path fill="#ffffff" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-            <span id="facebookSignInBtnText">LOGIN DENGAN FACEBOOK</span>
-          </button>
-
-          <div class="gp-divider"><span>ATAU</span></div>
-          <button id="guestSignInBtn" class="secondary gp-guest-btn" type="button">MASUK SEBAGAI TAMU (CUSTOM NICKNAME)</button>
-        </div>
-
-        <!-- Google User Profile Card (When Logged In) -->
-        <div id="googleProfileCard" class="gp-profile-card">
-          <div class="gp-avatar-wrap" id="gpAvatarWrap" role="button" tabindex="0" title="Klik untuk memilih foto profil imut">
-            <div class="gp-avatar" id="gpAvatar"></div>
-            <div class="gp-avatar-edit-btn" id="gpChangeAvatarBtn" role="button" tabindex="0" title="Ganti Avatar"><svg viewBox="0 0 24 24" width="11" height="11"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#ffffff"/></svg></div>
-          </div>
-          <div class="gp-info">
-            <div class="gp-gamertag-row">
-              <input type="text" id="gpGamerTagInput" maxlength="16" placeholder="Nama Gamer" value="SkyPlayer">
+        
+        <div class="profile-scrollable-content">
+          <!-- Hero Banner -->
+          <div class="friend-profile-hero">
+            <div class="friend-profile-avatar-box" id="gpAvatarWrap" role="button" tabindex="0" title="Klik untuk memilih foto profil imut">
+              <div id="gpAvatar"></div>
+              <div class="gp-avatar-edit-btn" id="gpChangeAvatarBtn" role="button" tabindex="0" title="Ganti Avatar"><svg viewBox="0 0 24 24" width="11" height="11"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#ffffff"/></svg></div>
             </div>
-            <div class="gp-name-cost-hint" id="gpNameCostHint">1x Ganti Nama: GRATIS</div>
-            <div class="gp-id" id="gpUserEmail">user@gmail.com</div>
-            <div class="gp-stats-row">
-              <span>Tier: <b id="gpTierBadge" class="tier-badge gold">BRONZE</b></span>
-              <span>Ranked Best: <b id="gpRankedBest">0</b> Pts</span>
+            <div class="friend-profile-info" style="flex:1;">
+              <div class="gp-gamertag-row" style="margin-bottom:4px;">
+                <input type="text" id="gpGamerTagInput" maxlength="16" placeholder="Nama Gamer" value="SkyPlayer" style="background:rgba(15,23,42,0.85);border:1.5px solid rgba(56,189,248,0.4);border-radius:10px;padding:4px 10px;color:#fff;font-weight:900;font-size:1.1rem;width:100%;max-width:200px;">
+              </div>
+              <div class="gp-name-cost-hint" id="gpNameCostHint" style="font-size:0.75rem;margin-bottom:3px;">1x Ganti Nama: GRATIS</div>
+              <div class="friend-profile-rank-badge" id="gpTierBadge">🏆 BRONZE I</div>
+              <div style="font-size:0.72rem;color:#94a3b8;margin-top:3px;" id="gpUserEmail">acc_...</div>
             </div>
           </div>
+
+          <!-- Live Animated Canvas Showcase Box (Same as Shop & Friend Profile) -->
+          <div class="friend-showcase-box">
+            <canvas id="myProfileShowcaseCanvas" width="360" height="120" class="friend-showcase-canvas"></canvas>
+            <div class="friend-showcase-tag">✨ PREVIEW PERLENGKAPAN LIVE</div>
+          </div>
+
+          <!-- Career Statistics 2x2 Grid -->
+          <div class="friend-section-title">📊 STATISTIK BERMAIN</div>
+          <div class="friend-stats-grid">
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Rekor Casual</div>
+              <div class="friend-stat-val" id="myCasualScore">0</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Poin Ranked</div>
+              <div class="friend-stat-val gold" id="myRankPoints">0 PTS</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Menang Multiplayer</div>
+              <div class="friend-stat-val green" id="myMpWins">0 MENANG</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Total Koin</div>
+              <div class="friend-stat-val" style="color:#f59e0b;" id="myCoins">0 🪙</div>
+            </div>
+          </div>
+
+          <!-- Equipped Loadout 4 Items -->
+          <div class="friend-section-title">🎒 PERLENGKAPAN SAAT INI</div>
+          <div class="friend-equipped-grid">
+            <div class="friend-item-pill">
+              <div class="friend-item-pill-icon">🦅</div>
+              <div class="friend-item-pill-info">
+                <div class="friend-item-pill-title">Skin Burung</div>
+                <div class="friend-item-pill-val" id="myEquippedBird">CLASSIC</div>
+              </div>
+            </div>
+            <div class="friend-item-pill">
+              <div class="friend-item-pill-icon">🐥</div>
+              <div class="friend-item-pill-info">
+                <div class="friend-item-pill-title">Pet Pendamping</div>
+                <div class="friend-item-pill-val" id="myEquippedPet">NONE</div>
+              </div>
+            </div>
+            <div class="friend-item-pill">
+              <div class="friend-item-pill-icon">🎩</div>
+              <div class="friend-item-pill-info">
+                <div class="friend-item-pill-title">Topi / Aksesoris</div>
+                <div class="friend-item-pill-val" id="myEquippedHat">NONE</div>
+              </div>
+            </div>
+            <div class="friend-item-pill">
+              <div class="friend-item-pill-icon">✨</div>
+              <div class="friend-item-pill-info">
+                <div class="friend-item-pill-title">Aura Ekor</div>
+                <div class="friend-item-pill-val" id="myEquippedAura">NONE</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inventory Counts -->
+          <div class="friend-section-title">📦 KOLEKSI KOSMETIK MILIK</div>
+          <div class="friend-inventory-grid">
+            <div class="friend-inv-stat">
+              <div class="friend-inv-num" id="mySkinCount">1 Milik</div>
+              <div class="friend-inv-label">Skin Burung</div>
+            </div>
+            <div class="friend-inv-stat">
+              <div class="friend-inv-num" id="myPetCount">0 Milik</div>
+              <div class="friend-inv-label">Pet Pendamping</div>
+            </div>
+            <div class="friend-inv-stat">
+              <div class="friend-inv-num" id="myHatCount">0 Milik</div>
+              <div class="friend-inv-label">Topi & Baju</div>
+            </div>
+            <div class="friend-inv-stat">
+              <div class="friend-inv-num" id="myAuraCount">0 Milik</div>
+              <div class="friend-inv-label">Efek Aura</div>
+            </div>
+          </div>
+
+          <!-- Login Prompt (When Not Logged In) -->
+          <div id="googleSignInPrompt" class="gp-google-login-box" style="margin-top:12px;">
+            <p class="gp-login-desc" style="font-size:0.8rem;margin-bottom:8px;">Hubungkan akun Google/Facebook untuk menyimpan progres ke Cloud:</p>
+            <button id="googleSignInBtn" class="google-sign-in-btn" type="button" style="margin-bottom:6px;">
+              <svg class="google-icon" viewBox="0 0 48 48" width="18" height="18"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+              <span id="googleSignInBtnText">LOGIN DENGAN GOOGLE</span>
+            </button>
+            <button id="facebookSignInBtn" class="facebook-sign-in-btn" type="button">
+              <svg class="facebook-icon" viewBox="0 0 24 24" width="18" height="18"><path fill="#ffffff" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              <span id="facebookSignInBtnText">LOGIN DENGAN FACEBOOK</span>
+            </button>
+          </div>
         </div>
 
-        <div class="gp-buttons">
+        <!-- Bottom Action Buttons -->
+        <div class="gp-buttons" style="margin-top:10px;">
           <button class="primary gp-btn" id="gpAuthActionBtn" type="button">SIMPAN & MAINKAN RANK</button>
           <button class="secondary" id="gpSignOutBtn" type="button">KELUAR / GANTI AKUN</button>
         </div>
-      </section>
-
       <!-- AVATAR PICKER MODAL (PILIH PROFIL) -->
       <section id="avatarPickerModal" class="modal avatar-picker-modal hidden" role="dialog" aria-modal="true">
         <button class="close" data-close>×</button>
@@ -1079,12 +1129,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=17.6"></script>
-  <script src="js/admob-config.js?v=17.6"></script>
-  <script src="js/shop-data.js?v=17.6"></script>
-  <script src="js/audio.js?v=17.6"></script>
-  <script src="js/multiplayer.js?v=17.6"></script>
-  <script src="js/social.js?v=17.6"></script>
-  <script src="js/script.js?v=17.6"></script>
+  <script src="js/firebase-config.js?v=17.7"></script>
+  <script src="js/admob-config.js?v=17.7"></script>
+  <script src="js/shop-data.js?v=17.7"></script>
+  <script src="js/audio.js?v=17.7"></script>
+  <script src="js/multiplayer.js?v=17.7"></script>
+  <script src="js/social.js?v=17.7"></script>
+  <script src="js/script.js?v=17.7"></script>
 </body>
 </html>

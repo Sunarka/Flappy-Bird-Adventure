@@ -54,7 +54,7 @@
     modeClassicBtn:$('modeClassicBtn'), modeRankedBtn:$('modeRankedBtn'), modeBestLabel:$('modeBestLabel'),
     playBtn:$('playBtn'), rankedLeaderboardBtn:$('rankedLeaderboardBtn'),
     topProfileBtn:$('topProfileBtn'), topProfileAvatar:$('topProfileAvatar'), topProfileName:$('topProfileName'), topProfileTier:$('topProfileTier'),
-    googlePlayModal:$('googlePlayModal'), gpOnlineStatus:$('gpOnlineStatus'), gpAvatarWrap:$('gpAvatarWrap'), gpAvatar:$('gpAvatar'),
+    googlePlayModal:$('googleAuthModal') || $('googlePlayModal'), gpOnlineStatus:$('gpOnlineStatus'), gpAvatarWrap:$('gpAvatarWrap'), gpAvatar:$('gpAvatar'),
     gpChangeAvatarBtn:$('gpChangeAvatarBtn'), gpGamerTagInput:$('gpGamerTagInput'), gpNameCostHint:$('gpNameCostHint'), gpTierBadge:$('gpTierBadge'),
     gpRankedBest:$('gpRankedBest'), gpAuthActionBtn:$('gpAuthActionBtn'), gpSwitchAccountBtn:$('gpSwitchAccountBtn'),
     googleSignInPrompt:$('googleSignInPrompt'), googleProfileCard:$('googleProfileCard'),
@@ -1827,8 +1827,11 @@
   let friendShowcaseTrailTimer = 0;
   let friendShowcaseLoadout = { bird: 'classic', pet: 'none', hat: 'none', outfit: 'none', aura: 'none', background: 'sky', pipe: 'green' };
 
-  function startFriendShowcase(loadout) {
+  let friendShowcaseTargetCanvasId = 'fpShowcaseCanvas';
+
+  function startFriendShowcase(loadout, canvasId) {
     if(loadout) friendShowcaseLoadout = Object.assign({ bird: 'classic', pet: 'none', hat: 'none', outfit: 'none', aura: 'none', background: 'sky', pipe: 'green' }, loadout);
+    friendShowcaseTargetCanvasId = canvasId || 'fpShowcaseCanvas';
     friendShowcaseRunning = true;
     friendShowcaseParticles = [];
     requestAnimationFrame(renderFriendShowcaseFrame);
@@ -1839,7 +1842,7 @@
   }
 
   function renderFriendShowcaseFrame() {
-    const canvas = $('fpShowcaseCanvas');
+    const canvas = $(friendShowcaseTargetCanvasId) || $('fpShowcaseCanvas') || $('myProfileShowcaseCanvas');
     if(!friendShowcaseRunning || !canvas) return;
     const sCtx = canvas.getContext('2d');
     const sW = canvas.width, sH = canvas.height;
@@ -3419,6 +3422,52 @@
     if(el.gpTierBadge) {
       el.gpTierBadge.innerHTML = `<span class="tier-icon-inline">${tier.iconSvg}</span> ${tier.name}`;
       el.gpTierBadge.style.color = tier.color;
+    }
+
+    // Populate Career Statistics (Same as Friend Profile)
+    const elCasual = $('myCasualScore');
+    const elRank = $('myRankPoints');
+    const elMp = $('myMpWins');
+    const elCoins = $('myCoins');
+
+    if(elCasual) elCasual.textContent = progress.highScore || 0;
+    if(elRank) elRank.textContent = `${gpProfile.rankedBest || progress.rankedScore || 0} PTS`;
+    if(elMp) elMp.textContent = `${progress.mpWins || 0} MENANG`;
+    if(elCoins) elCoins.textContent = `${progress.coins || 0} 🪙`;
+
+    // Populate Equipped Loadout
+    const elEqBird = $('myEquippedBird');
+    const elEqPet = $('myEquippedPet');
+    const elEqHat = $('myEquippedHat');
+    const elEqAura = $('myEquippedAura');
+
+    if(elEqBird) elEqBird.textContent = (progress.selected || 'classic').toUpperCase();
+    if(elEqPet) elEqPet.textContent = (progress.selectedPet || 'none').toUpperCase();
+    if(elEqHat) elEqHat.textContent = (progress.selectedHat || 'none').toUpperCase();
+    if(elEqAura) elEqAura.textContent = (progress.selectedAura || 'none').toUpperCase();
+
+    // Populate Owned Cosmetics Count
+    const elCountBird = $('mySkinCount');
+    const elCountPet = $('myPetCount');
+    const elCountHat = $('myHatCount');
+    const elCountAura = $('myAuraCount');
+
+    if(elCountBird) elCountBird.textContent = `${(progress.unlocked ? progress.unlocked.length : 1)} Milik`;
+    if(elCountPet) elCountPet.textContent = `${(progress.petUnlocked ? progress.petUnlocked.length : 0)} Milik`;
+    if(elCountHat) elCountHat.textContent = `${((progress.hatUnlocked ? progress.hatUnlocked.length : 0) + (progress.outfitUnlocked ? progress.outfitUnlocked.length : 0))} Milik`;
+    if(elCountAura) elCountAura.textContent = `${(progress.auraUnlocked ? progress.auraUnlocked.length : 0)} Milik`;
+
+    // Trigger 60FPS Live Animated Equipment Canvas Showcase
+    if(typeof startFriendShowcase === 'function') {
+      startFriendShowcase({
+        bird: progress.selected || 'classic',
+        pet: progress.selectedPet || 'none',
+        hat: progress.selectedHat || 'none',
+        outfit: progress.selectedOutfit || 'none',
+        aura: progress.selectedAura || 'none',
+        background: progress.selectedBackground || 'sky',
+        pipe: progress.selectedPipe || 'green'
+      }, 'myProfileShowcaseCanvas');
     }
 
     // Update Widget Profil Pojok Kiri Atas
