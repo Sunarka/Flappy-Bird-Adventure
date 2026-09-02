@@ -4394,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.17';
+  const GAME_VERSION = '20.18';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
