@@ -3416,6 +3416,14 @@
       el.gpOnlineStatus.textContent = isLogged ? `TERHUBUNG: ${gpProfile.email || gpProfile.gamerTag}` : 'BELUM LOGIN (AKUN GOOGLE)';
       el.gpOnlineStatus.className = 'gp-status ' + (isLogged ? 'online' : 'offline');
     }
+
+    if(window.socialService) {
+      if(isLogged && gpProfile.primaryKey) {
+        window.socialService.setAccount(gpProfile.primaryKey, gpProfile);
+      } else {
+        window.socialService.clearAccount();
+      }
+    }
     
     if(el.gpAuthActionBtn) {
       el.gpAuthActionBtn.textContent = isLogged ? 'SIMPAN PERUBAHAN' : 'LOGIN GOOGLE SEKARANG';
@@ -4370,7 +4378,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.6';
+  const GAME_VERSION = '20.7';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -11877,7 +11885,11 @@
     gpProfile.isGoogle = false;
     gpProfile.email = '';
     gpProfile.googleUid = null;
+    gpProfile.primaryKey = null;
     storage.set('skyFlappyGPProfile', gpProfile);
+    if(window.socialService) {
+      window.socialService.clearAccount();
+    }
     syncGPProfileUI();
   });
 

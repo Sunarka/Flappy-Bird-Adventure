@@ -468,12 +468,32 @@
         this.db = firebase.firestore();
         this.isInitialized = true;
       }
+      if (!primaryKey || !profile || !profile.isLoggedIn) {
+        this.clearAccount();
+        return;
+      }
+      if (this.myKey && this.myKey !== primaryKey) {
+        this.stopListeners();
+        this.friends = [];
+        this.friendRequests = [];
+      }
       this.myKey = primaryKey;
       this.myProfile = profile || {};
-      if (this.db && this.myKey) {
-        this.startListeners();
-        this.refreshRequests();
-      }
+      this.startListeners();
+      this.refreshRequests();
+    }
+
+    clearAccount() {
+      this.stopListeners();
+      this.myKey = null;
+      this.myProfile = null;
+      this.friends = [];
+      this.friendRequests = [];
+      this.activeInvites = {};
+      this.renderFriendsList();
+      this.renderLobbyFriends();
+      this.renderQuickFriends();
+      this.updateBadgeUI();
     }
 
     startListeners() {
