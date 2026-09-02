@@ -1,3 +1,14 @@
+
+.hidden,
+.mp-team-slot.hidden,
+.mlbb-podium-card.hidden,
+.mlbb-room-vs-emblem.hidden,
+.mp-modal.hidden,
+.mp-view.hidden,
+.mp-quick-searching-box.hidden,
+.mp-searching-bar.hidden {
+  display: none !important;
+}
 /* =========================================================
    FLAPPY BIRD: CLOUDFLARE MULTIPLAYER LOBBY (COMPACT NO-SCROLL STUDIO THEME)
    ========================================================= */

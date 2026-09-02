@@ -4394,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.19';
+  const GAME_VERSION = '20.20';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -13002,6 +13002,7 @@
   }
 
   function switchMpTab(tab) {
+    updateMpSlotVisibility(selectedMpPlayerCount || 2);
     if(el.mpTabQuickBtn) el.mpTabQuickBtn.classList.toggle('active', tab === 'quick');
     if(el.mpTabCreateBtn) el.mpTabCreateBtn.classList.toggle('active', tab === 'create');
     if(el.mpTabJoinBtn) el.mpTabJoinBtn.classList.toggle('active', tab === 'join');
@@ -13095,24 +13096,41 @@
         btn.classList.add('active');
         selectedMpGameMode = btn.dataset.gamemode || 'survival';
         updateMpQuickMatchTexts();
+  updateMpSlotVisibility(selectedMpPlayerCount || 2);
       };
     });
   }
 
   function updateMpSlotVisibility(count) {
+    const c = Number(count) || 2;
     // 1. Quick match slots
     const qSlot3 = $('mpQuickSlot3');
     const qSlot4 = $('mpQuickSlot4');
-    if (qSlot3) qSlot3.classList.toggle('hidden', count < 3);
-    if (qSlot4) qSlot4.classList.toggle('hidden', count < 4);
+    if (qSlot3) {
+      if (c >= 3) { qSlot3.classList.remove('hidden'); qSlot3.style.display = 'flex'; }
+      else { qSlot3.classList.add('hidden'); qSlot3.style.display = 'none'; }
+    }
+    if (qSlot4) {
+      if (c >= 4) { qSlot4.classList.remove('hidden'); qSlot4.style.display = 'flex'; }
+      else { qSlot4.classList.add('hidden'); qSlot4.style.display = 'none'; }
+    }
 
     // 2. Buat Room Podium slots
     const rSlot3 = $('mpSlotCard3');
     const rSlot4 = $('mpSlotCard4');
     const vsEmblem = $('mpRoomVsEmblem');
-    if (rSlot3) rSlot3.classList.toggle('hidden', count < 3);
-    if (rSlot4) rSlot4.classList.toggle('hidden', count < 4);
-    if (vsEmblem) vsEmblem.classList.toggle('hidden', count > 2);
+    if (rSlot3) {
+      if (c >= 3) { rSlot3.classList.remove('hidden'); rSlot3.style.display = 'flex'; }
+      else { rSlot3.classList.add('hidden'); rSlot3.style.display = 'none'; }
+    }
+    if (rSlot4) {
+      if (c >= 4) { rSlot4.classList.remove('hidden'); rSlot4.style.display = 'flex'; }
+      else { rSlot4.classList.add('hidden'); rSlot4.style.display = 'none'; }
+    }
+    if (vsEmblem) {
+      if (c === 2) { vsEmblem.classList.remove('hidden'); vsEmblem.style.display = 'block'; }
+      else { vsEmblem.classList.add('hidden'); vsEmblem.style.display = 'none'; }
+    }
 
     // Re-render lobby friends if socialService is loaded
     if (window.socialService && typeof window.socialService.renderLobbyFriends === 'function') {
