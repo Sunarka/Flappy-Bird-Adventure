@@ -485,7 +485,7 @@ button.mlbb-quick-friend-item {
 /* --- 4. CENTER HERO CONTENT & SPEECH BUBBLE --- */
 .mlbb-center-content {
   position: absolute;
-  bottom: 96px;
+  bottom: 142px;
   left: 50%;
   top: auto;
   transform: translateX(-50%);
