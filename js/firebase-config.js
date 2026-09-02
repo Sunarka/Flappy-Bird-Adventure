@@ -73,12 +73,16 @@ class FirebaseLeaderboardService {
       avatar: player.avatar || 'chick_yellow',
       loadout: {
         bird: player.loadout?.bird || 'classic',
+        pet: player.loadout?.pet || 'pip_peep',
         aura: player.loadout?.aura || 'default',
         hat: player.loadout?.hat || 'none',
         outfit: player.loadout?.outfit || 'none',
         pipe: player.loadout?.pipe || 'green',
-        background: player.loadout?.background || 'sky'
+        background: player.loadout?.background || 'sky',
+        music: player.loadout?.music || 'happy',
+        booster: player.loadout?.booster || 'none'
       },
+      unlocked: player.unlocked || {},
       updatedAt: (typeof firebase !== 'undefined' && firebase.firestore?.FieldValue)
         ? firebase.firestore.FieldValue.serverTimestamp()
         : new Date().toISOString()
@@ -96,11 +100,12 @@ class FirebaseLeaderboardService {
             await docRef.set(payload, { merge: true });
             console.log('[Firebase] Score updated for Primary Key:', primaryKey, payload.score);
           } else {
-            // Update nama & kosmetik tanpa menurunkan highscore
+            // Update nama, pet, & kosmetik tanpa menurunkan highscore
             await docRef.set({
               name: payload.name,
               avatar: payload.avatar,
               loadout: payload.loadout,
+              unlocked: payload.unlocked,
               updatedAt: payload.updatedAt
             }, { merge: true });
           }
@@ -251,10 +256,23 @@ class FirebaseLeaderboardService {
         return {
           gamerTag: d.name || d.gamerTag,
           avatar: d.avatar,
+          tier: d.tier || 'BRONZE I',
           rankedBest: typeof d.score === 'number' ? d.score : (d.rankedBest || 0),
+          classicBest: typeof d.classicBest === 'number' ? d.classicBest : 0,
           coins: d.coins || 0,
           nameChangesDone: d.nameChangesDone || 0,
-          loadout: d.loadout || {}
+          loadout: {
+            bird: d.loadout?.bird || 'classic',
+            pet: d.loadout?.pet || 'pip_peep',
+            aura: d.loadout?.aura || 'default',
+            hat: d.loadout?.hat || 'none',
+            outfit: d.loadout?.outfit || 'none',
+            pipe: d.loadout?.pipe || 'green',
+            background: d.loadout?.background || 'sky',
+            music: d.loadout?.music || 'happy',
+            booster: d.loadout?.booster || 'none'
+          },
+          unlocked: d.unlocked || {}
         };
       }
 
@@ -267,10 +285,23 @@ class FirebaseLeaderboardService {
           return {
             gamerTag: d2.name || d2.gamerTag,
             avatar: d2.avatar,
+            tier: d2.tier || 'BRONZE I',
             rankedBest: typeof d2.score === 'number' ? d2.score : (d2.rankedBest || 0),
+            classicBest: typeof d2.classicBest === 'number' ? d2.classicBest : 0,
             coins: d2.coins || 0,
             nameChangesDone: d2.nameChangesDone || 0,
-            loadout: d2.loadout || {}
+            loadout: {
+              bird: d2.loadout?.bird || 'classic',
+              pet: d2.loadout?.pet || 'pip_peep',
+              aura: d2.loadout?.aura || 'default',
+              hat: d2.loadout?.hat || 'none',
+              outfit: d2.loadout?.outfit || 'none',
+              pipe: d2.loadout?.pipe || 'green',
+              background: d2.loadout?.background || 'sky',
+              music: d2.loadout?.music || 'happy',
+              booster: d2.loadout?.booster || 'none'
+            },
+            unlocked: d2.unlocked || {}
           };
         }
       }
@@ -295,10 +326,23 @@ class FirebaseLeaderboardService {
         uid: data.uid || cleanKey.replace(/^acc_/, ''),
         name: String(data.gamerTag || data.name || 'SkyPlayer').slice(0, 20),
         avatar: data.avatar || 'chick_yellow',
+        tier: data.tier || 'BRONZE I',
         nameChangesDone: data.nameChangesDone || 0,
-        score: typeof data.rankedBest === 'number' ? data.rankedBest : (data.score || 0),
-        coins: data.coins || 0,
-        loadout: data.loadout || {},
+        score: typeof data.rankedBest === 'number' ? data.rankedBest : (typeof data.score === 'number' ? data.score : 0),
+        classicBest: typeof data.classicBest === 'number' ? data.classicBest : 0,
+        coins: typeof data.coins === 'number' ? data.coins : 0,
+        loadout: {
+          bird: data.loadout?.bird || 'classic',
+          pet: data.loadout?.pet || 'pip_peep',
+          aura: data.loadout?.aura || 'default',
+          hat: data.loadout?.hat || 'none',
+          outfit: data.loadout?.outfit || 'none',
+          pipe: data.loadout?.pipe || 'green',
+          background: data.loadout?.background || 'sky',
+          music: data.loadout?.music || 'happy',
+          booster: data.loadout?.booster || 'none'
+        },
+        unlocked: data.unlocked || {},
         updatedAt: (typeof firebase !== 'undefined' && firebase.firestore?.FieldValue)
           ? firebase.firestore.FieldValue.serverTimestamp()
           : new Date().toISOString()
@@ -326,10 +370,23 @@ class FirebaseLeaderboardService {
           callback({
             gamerTag: d.name || d.gamerTag,
             avatar: d.avatar,
+            tier: d.tier || 'BRONZE I',
             rankedBest: typeof d.score === 'number' ? d.score : (d.rankedBest || 0),
+            classicBest: typeof d.classicBest === 'number' ? d.classicBest : 0,
             coins: d.coins || 0,
             nameChangesDone: d.nameChangesDone || 0,
-            loadout: d.loadout || {}
+            loadout: {
+              bird: d.loadout?.bird || 'classic',
+              pet: d.loadout?.pet || 'pip_peep',
+              aura: d.loadout?.aura || 'default',
+              hat: d.loadout?.hat || 'none',
+              outfit: d.loadout?.outfit || 'none',
+              pipe: d.loadout?.pipe || 'green',
+              background: d.loadout?.background || 'sky',
+              music: d.loadout?.music || 'happy',
+              booster: d.loadout?.booster || 'none'
+            },
+            unlocked: d.unlocked || {}
           });
         }
       }, err => {
