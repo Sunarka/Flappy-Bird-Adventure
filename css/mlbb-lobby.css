@@ -485,7 +485,7 @@ button.mlbb-quick-friend-item {
 /* --- 4. CENTER HERO CONTENT & SPEECH BUBBLE --- */
 .mlbb-center-content {
   position: absolute;
-  bottom: 142px;
+  bottom: 168px;
   left: 50%;
   top: auto;
   transform: translateX(-50%);
@@ -709,22 +709,18 @@ button.mlbb-quick-friend-item {
 }
 
 /* =========================================================
-   6. MLBB MODE SELECTION SLIDE-UP DRAWER & 3D CARDS
+   6. MLBB MODE SELECTION MODAL DRAWER & 3D CARDS
    ========================================================= */
 .mlbb-mode-drawer {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(180deg, #142442 0%, #0c172c 100%);
-  border-top: 2px solid #254a78;
-  border-radius: 20px 20px 0 0;
-  padding: 16px 20px 20px;
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
-  z-index: 50;
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  color: #ffffff;
+  inset: 0;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 1000 !important;
+  pointer-events: auto !important;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 .mlbb-mode-drawer.hidden {
@@ -738,8 +734,8 @@ button.mlbb-quick-friend-item {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   opacity: 1;
-  transition: opacity 0.3s ease;
-  animation: drawerFadeIn 0.25s ease-out;
+  transition: opacity 0.25s ease;
+  animation: drawerFadeIn 0.2s ease-out;
 }
 
 @keyframes drawerFadeIn {
@@ -751,17 +747,18 @@ button.mlbb-quick-friend-item {
   position: relative;
   width: min(580px, 96vw);
   max-height: min(320px, 94vh);
-  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-  border: 2px solid #38bdf8;
-  border-radius: 18px;
+  background: linear-gradient(180deg, #142442 0%, #0c172c 100%) !important;
+  border: 2px solid #254a78 !important;
+  border-radius: 18px !important;
   padding: 8px 14px 10px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 24px rgba(56, 189, 248, 0.35);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.75), inset 0 1.5px 0 rgba(255, 255, 255, 0.15) !important;
   display: flex;
   flex-direction: column;
-  animation: drawerPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: drawerPopIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-sizing: border-box;
   overflow: hidden;
   z-index: 2;
+  color: #ffffff;
 }
 
 @keyframes drawerPopIn {
