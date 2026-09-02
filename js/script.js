@@ -174,7 +174,7 @@
       reviveCost: 'BIAYA REVIVE:',
       reviveCoinBtn: 'REVIVE SEKARANG',
       giveUpBtn: 'LEWATKAN (GAME OVER)',
-      rewardAdBtn: '+25 KOIN 🪙',
+      rewardAdBtn: '+25 KOIN',
       // Shop categories
       catBird: 'BURUNG',
       catPet: 'PETS',
@@ -254,7 +254,7 @@
       reviveCost: 'REVIVE COST:',
       reviveCoinBtn: 'REVIVE NOW',
       giveUpBtn: 'GIVE UP (GAME OVER)',
-      rewardAdBtn: '+25 COINS 🪙',
+      rewardAdBtn: '+25 COINS',
       // Shop categories
       catBird: 'BIRD',
       catPet: 'PETS',
@@ -3436,7 +3436,7 @@
     if(elCasual) elCasual.textContent = progress.highScore || 0;
     if(elRank) elRank.textContent = `${gpProfile.rankedBest || progress.rankedScore || 0} PTS`;
     if(elMp) elMp.textContent = `${progress.mpWins || 0} MENANG`;
-    if(elCoins) elCoins.textContent = `${progress.coins || 0} 🪙`;
+    if(elCoins) elCoins.textContent = `${progress.coins || 0}`;
 
     // Populate Equipped Loadout
     const elEqBird = $('myEquippedBird');
@@ -3498,7 +3498,7 @@
           elAvatar.innerHTML = getCuteAvatarSvg('chick_yellow', 38);
         }
         if(elName) elName.textContent = 'GUEST';
-        if(elTierIcon) elTierIcon.innerHTML = '🏆';
+        if(elTierIcon) elTierIcon.innerHTML = '';
         if(elTierNum) elTierNum.textContent = '0';
         if(elXpFill) elXpFill.style.width = '30%';
       }
@@ -3930,19 +3930,19 @@
 
     if(mode === 'multiplayer') {
       if(modeNameEl) modeNameEl.textContent = 'MULTIPLAYER';
-      if(modeIconEl) modeIconEl.textContent = '⚔️';
+      if(modeIconEl) modeIconEl.textContent = '';
       if(startModeLabelEl) startModeLabelEl.textContent = '1v1 BATTLE';
-      if(el.playBtn) el.playBtn.innerHTML = `<div class="start-btn-shine"></div><div class="start-btn-text-wrap"><span class="start-btn-label">TANDING</span><span class="start-btn-mode">MULTIPLAYER</span></div><span class="start-btn-arrow">⚔️</span>`;
+      if(el.playBtn) el.playBtn.innerHTML = `<div class="start-btn-shine"></div><div class="start-btn-text-wrap"><span class="start-btn-label">TANDING</span><span class="start-btn-mode">MULTIPLAYER</span></div><span class="start-btn-arrow">▶</span>`;
       if(el.modeBestLabel) el.modeBestLabel.textContent = 'MULTIPLAYER';
     } else if(mode === 'ranked') {
       if(modeNameEl) modeNameEl.textContent = 'RANKED';
-      if(modeIconEl) modeIconEl.textContent = '🏆';
+      if(modeIconEl) modeIconEl.textContent = '';
       if(startModeLabelEl) startModeLabelEl.textContent = 'EXTREME PTS';
-      if(el.playBtn) el.playBtn.innerHTML = `<div class="start-btn-shine"></div><div class="start-btn-text-wrap"><span class="start-btn-label">MAIN RANK</span><span class="start-btn-mode">EXTREME</span></div><span class="start-btn-arrow">🏆</span>`;
+      if(el.playBtn) el.playBtn.innerHTML = `<div class="start-btn-shine"></div><div class="start-btn-text-wrap"><span class="start-btn-label">MAIN RANK</span><span class="start-btn-mode">EXTREME</span></div><span class="start-btn-arrow">▶</span>`;
       if(el.modeBestLabel) el.modeBestLabel.textContent = 'RANKED BEST';
     } else {
       if(modeNameEl) modeNameEl.textContent = 'CLASSIC';
-      if(modeIconEl) modeIconEl.textContent = '🎮';
+      if(modeIconEl) modeIconEl.textContent = '';
       if(startModeLabelEl) startModeLabelEl.textContent = 'CASUAL';
       if(el.playBtn) el.playBtn.innerHTML = `<div class="start-btn-shine"></div><div class="start-btn-text-wrap"><span class="start-btn-label">MULAI</span><span class="start-btn-mode">CLASSIC</span></div><span class="start-btn-arrow">▶</span>`;
       if(el.modeBestLabel) el.modeBestLabel.textContent = 'CLASSIC BEST';
@@ -4370,7 +4370,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.4';
+  const GAME_VERSION = '20.5';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -4382,7 +4382,7 @@
       notif.style.cssText = 'position:fixed;top:12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#0284c7,#0369a1);border:1.5px solid #38bdf8;color:#fff;padding:8px 16px;border-radius:99px;font:900 12px/1.4 Trebuchet MS,Arial,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,0.8),0 0 16px rgba(56,189,248,0.5);z-index:9999999;display:flex;align-items:center;gap:8px;animation:modalIn .25s ease-out;pointer-events:none;';
       document.body.appendChild(notif);
     }
-    notif.innerHTML = `<span>🚀</span> <span>${msg}</span>`;
+    notif.innerHTML = `<span>${msg}</span>`;
   }
 
   async function checkForGameUpdate() {
@@ -4837,10 +4837,10 @@
       el.dashBtn.classList.toggle('holding', !!isHoldingDash);
 
       const keyHint = el.dashBtn.querySelector('.dash-key-hint');
-      if(keyHint) keyHint.textContent = '🔥 TAHAN (HOLD)';
+      if(keyHint) keyHint.textContent = 'TAHAN (HOLD)';
 
       if(el.dashCooldownText) {
-        el.dashCooldownText.textContent = isHoldingDash ? 'BOOSTING! ⚡' : 'NITRO BOOST';
+        el.dashCooldownText.textContent = isHoldingDash ? 'BOOSTING!' : 'NITRO BOOST';
       }
       if(el.dashRingProgress) {
         el.dashRingProgress.style.strokeDashoffset = '0';
@@ -5179,7 +5179,7 @@
       makeParticles(px, py, 24, '#ef4444');
       makeParticles(px, py, 14, '#fda4af');
     } else if(type === 'zap') {
-      // ⚡ THUNDER ZAP: Serang semua lawan dengan petir halilintar bercabang & stun mereka!
+      // THUNDER ZAP: Serang semua lawan dengan petir halilintar bercabang & stun mereka!
       shake = 0.5;
       audio.hit();
       shockwaves.push({ x: bird.x, y: bird.y, r: 10, maxR: 140, color: '#fde047', life: 0.65, maxLife: 0.65 });
@@ -5213,7 +5213,7 @@
         window.multiplayerEngine.strikeOpponentsWithZap();
       }
     } else if(type === 'missile') {
-      // 🚀 HOMING MISSILE: Luncurkan roket pelacak ke lawan terdepan!
+      // HOMING MISSILE: Luncurkan roket pelacak ke lawan terdepan!
       audio.dash();
       shake = 0.28;
       shockwaves.push({ x: bird.x, y: bird.y, r: 6, maxR: 55, color: '#f97316', life: 0.35, maxLife: 0.35 });
@@ -5228,7 +5228,7 @@
       makeParticles(bird.x + 10, bird.y, 24, '#f97316');
       makeParticles(bird.x + 10, bird.y, 14, '#fde047');
     } else if(type === 'trap') {
-      // 🍌 BANANA / OIL TRAP: Jatuhkan jebakan licin di belakang pemain!
+      // BANANA / OIL TRAP: Jatuhkan jebakan licin di belakang pemain!
       audio.click();
       raceTraps.push({
         x: bird.x - 30,
@@ -5239,7 +5239,7 @@
       });
       makeParticles(bird.x - 20, bird.y, 16, '#facc15');
     } else if(type === 'bomb') {
-      // 💣 MEGA BOMB: Luncurkan bom bola api raksasa ke depan!
+      // MEGA BOMB: Luncurkan bom bola api raksasa ke depan!
       audio.rocketSmash();
       shake = 0.4;
       shockwaves.push({ x: bird.x, y: bird.y, r: 8, maxR: 70, color: '#ef4444', life: 0.4, maxLife: 0.4 });
@@ -5254,7 +5254,7 @@
       makeParticles(bird.x + 10, bird.y, 28, '#ef4444');
       makeParticles(bird.x + 10, bird.y, 18, '#f97316');
     } else if(type === 'tornado') {
-      // 🌪️ TORNADO GUST: Luncurkan angin topan badai ke depan!
+      // TORNADO GUST: Luncurkan angin topan badai ke depan!
       audio.dash();
       shake = 0.35;
       shockwaves.push({ x: bird.x, y: bird.y, r: 12, maxR: 85, color: '#38bdf8', life: 0.45, maxLife: 0.45 });
@@ -5269,7 +5269,7 @@
       makeParticles(bird.x + 10, bird.y, 30, '#38bdf8');
       makeParticles(bird.x + 10, bird.y, 18, '#e0f2fe');
     } else if(type === 'freeze') {
-      // ❄️ BLIZZARD FREEZE: Bekukan semua lawan di arena menjadi es kristal!
+      // BLIZZARD FREEZE: Bekukan semua lawan di arena menjadi es kristal!
       shake = 0.4;
       audio.hit();
       shockwaves.push({ x: bird.x, y: bird.y, r: 12, maxR: 140, color: '#67e8f9', life: 0.65, maxLife: 0.65 });
@@ -5302,12 +5302,12 @@
       rocket: { text: isStarter ? 'NOS TURBO BLAST': '+NOS ROCKET BOOST', color: '#ea580c' },
       heart:  { text: '+1 EXTRA LIFE!', color: '#ef4444' },
       extra_life: { text: 'STARTER EXTRA LIFE', color: '#ef4444' },
-      zap:    { text: '⚡ THUNDER ZAP! ENEMIES STUNNED! ⚡', color: '#fde047' },
-      missile:{ text: '🚀 HOMING MISSILE LAUNCHED! 💥', color: '#f97316' },
-      trap:   { text: '🍌 BANANA TRAP DROPPED! 🍌', color: '#facc15' },
-      bomb:   { text: '💣 MEGA BOMB LAUNCHED! 💥', color: '#ef4444' },
-      tornado:{ text: '🌪️ TORNADO CYCLONE GUST! 🌪️', color: '#38bdf8' },
-      freeze: { text: '❄️ BLIZZARD ICE FREEZE! ❄️', color: '#67e8f9' }
+      zap:    { text: 'THUNDER ZAP! ENEMIES STUNNED!', color: '#fde047' },
+      missile:{ text: 'HOMING MISSILE LAUNCHED!', color: '#f97316' },
+      trap:   { text: 'BANANA TRAP DROPPED!', color: '#facc15' },
+      bomb:   { text: 'MEGA BOMB LAUNCHED!', color: '#ef4444' },
+      tornado:{ text: 'TORNADO CYCLONE GUST!', color: '#38bdf8' },
+      freeze: { text: 'BLIZZARD ICE FREEZE!', color: '#67e8f9' }
     }[type] || { text: '+POWER-UP!', color: '#fff' };
 
     // 1. Expanding Shockwaves
@@ -5824,7 +5824,7 @@
     makeParticles(bird.x, bird.y, 30, '#ef4444');
     floatingTexts.push({
       x: bird.x, y: bird.y - 28,
-      text: '💀 TERJATUH! RESPAWN DALAM 3s...',
+      text: 'TERJATUH! RESPAWN DALAM 3s...',
       color: '#f87171',
       vy: -50, life: 1.5, maxLife: 1.5
     });
@@ -6061,7 +6061,7 @@
         makeParticles(bird.x, bird.y, 30, '#38bdf8');
         floatingTexts.push({
           x: bird.x, y: bird.y - 24,
-          text: '⚡ RESPAWNED! GASPOLL! ⚡',
+          text: 'RESPAWNED! GASPOLL!',
           color: '#38bdf8',
           vy: -60, life: 1.0, maxLife: 1.0
         });
@@ -6152,7 +6152,7 @@
             makeParticles(hitOp.curX, hitOp.y, 28, '#ef4444');
             floatingTexts.push({
               x: hitOp.curX, y: hitOp.y - 24,
-              text: '🚀 MISSILE DIRECT HIT!',
+              text: 'MISSILE DIRECT HIT!',
               color: '#ef4444',
               vy: -60, life: 0.9, maxLife: 0.9
             });
@@ -6187,7 +6187,7 @@
           makeParticles(t.x, t.y, 20, '#facc15');
           floatingTexts.push({
             x: hitOp.curX, y: hitOp.y - 20,
-            text: '🍌 SLIPPED ON BANANA!',
+            text: 'SLIPPED ON BANANA!',
             color: '#facc15',
             vy: -50, life: 0.8, maxLife: 0.8
           });
@@ -6261,7 +6261,7 @@
             makeParticles(hitOp.curX, hitOp.y, 20, '#fde047');
             floatingTexts.push({
               x: hitOp.curX, y: hitOp.y - 26,
-              text: '💣 MEGA BOMB EXPLOSION! 💥',
+              text: 'MEGA BOMB EXPLOSION!',
               color: '#ef4444',
               vy: -60, life: 1.0, maxLife: 1.0
             });
@@ -6321,7 +6321,7 @@
             makeParticles(hitOp.curX, hitOp.y, 25, '#38bdf8');
             floatingTexts.push({
               x: hitOp.curX, y: hitOp.y - 24,
-              text: '🌪️ SWEPT BY TORNADO! 🌪️',
+              text: 'SWEPT BY TORNADO!',
               color: '#38bdf8',
               vy: -55, life: 0.9, maxLife: 0.9
             });
@@ -6943,7 +6943,7 @@
       ctx.closePath();
       ctx.fill();
     } else if(p.type === 'zap') {
-      // ⚡ Thunder Zap Lightning Icon
+      // Thunder Zap Lightning Icon
       ctx.fillStyle = '#fde047';
       ctx.beginPath();
       ctx.moveTo(2, -9);
@@ -6958,7 +6958,7 @@
       ctx.lineWidth = 1.2;
       ctx.stroke();
     } else if(p.type === 'missile') {
-      // 🚀 Red Shell Homing Missile Icon
+      // Red Shell Homing Missile Icon
       ctx.save();
       ctx.rotate(-Math.PI / 4);
       ctx.fillStyle = '#dc2626';
@@ -6976,7 +6976,7 @@
       ctx.fillRect(-4, 6, 8, 3);
       ctx.restore();
     } else if(p.type === 'trap') {
-      // 🍌 Slippery Banana Peel Icon
+      // Slippery Banana Peel Icon
       ctx.fillStyle = '#facc15';
       ctx.beginPath();
       ctx.arc(0, 2, 6, 0, Math.PI);
@@ -6987,7 +6987,7 @@
       ctx.lineWidth = 1.2;
       ctx.stroke();
     } else if(p.type === 'bomb') {
-      // 💣 Mega Bomb Cannonball Icon
+      // Mega Bomb Cannonball Icon
       ctx.fillStyle = '#1e293b';
       ctx.beginPath();
       ctx.arc(0, 2, 7, 0, Math.PI * 2);
@@ -7004,7 +7004,7 @@
       ctx.arc(2.5, -8.5, 0.9, 0, Math.PI * 2);
       ctx.fill();
     } else if(p.type === 'tornado') {
-      // 🌪️ Tornado Wind Vortex Icon
+      // Tornado Wind Vortex Icon
       ctx.strokeStyle = '#38bdf8';
       ctx.lineWidth = 2.2;
       ctx.beginPath();
@@ -7020,7 +7020,7 @@
       ctx.ellipse(0, 7, 1.5, 0.8, 0, 0, Math.PI * 2);
       ctx.stroke();
     } else if(p.type === 'freeze') {
-      // ❄️ Blizzard Subzero Freeze Icon
+      // Blizzard Subzero Freeze Icon
       ctx.strokeStyle = '#67e8f9';
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -8203,11 +8203,11 @@
           ctx.font = '900 12px "Trebuchet MS", Arial';
           ctx.fillStyle = '#fca5a5';
           ctx.textAlign = 'center';
-          ctx.fillText('💀 TERJATUH! RESPAWNING...', W/2, 148);
+          ctx.fillText('TERJATUH! RESPAWNING...', W/2, 148);
 
           ctx.font = '900 18px "Trebuchet MS", Arial';
           ctx.fillStyle = '#fde047';
-          ctx.fillText(`⚡ ${Math.max(1, Math.ceil(raceRespawnTimer))} DETIK ⚡`, W/2, 168);
+          ctx.fillText(`${Math.max(1, Math.ceil(raceRespawnTimer))} DETIK`, W/2, 168);
           ctx.restore();
         }
 
@@ -8579,7 +8579,7 @@
 
     // Floating Cute Emote Bubble above Main Bird (Hearts, Music, Sparkles)
     if(lobbyTime > nextLobbyEmoteTime) {
-      const emotes = ['❤️', '⭐', '♪', '🌸', '✨', '👑', '🎉', '💖'];
+      const emotes = ['★', '✦', '♪', '◆', '●', '▲'];
       lobbyEmotes.push({
         x: mainBirdX + (Math.random() - 0.5) * 18,
         y: mainBirdY - 26,
@@ -11919,7 +11919,7 @@
           if(el.gpGamerTagInput) el.gpGamerTagInput.value = oldName;
           showGameDialog({
             title: 'Koin Tidak Cukup',
-            html: `<p>Koin Anda tidak cukup untuk mengganti nama gamer!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya Ganti Nama:</span><b>🪙 ${cost} Koin</b></div><div class="dialog-info-row"><span>Saldo Anda:</span><b style="color:#f87171;">🪙 ${progress.coins} Koin</b></div></div><p style="font-size:11px;color:#94a3b8;margin-top:6px;">Kumpulkan koin dengan bermain game di Mode Classic / Ranked!</p>`,
+            html: `<p>Koin Anda tidak cukup untuk mengganti nama gamer!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya Ganti Nama:</span><b>${cost} Koin</b></div><div class="dialog-info-row"><span>Saldo Anda:</span><b style="color:#f87171;">${progress.coins} Koin</b></div></div><p style="font-size:11px;color:#94a3b8;margin-top:6px;">Kumpulkan koin dengan bermain game di Mode Classic / Ranked!</p>`,
             type: 'coin',
             confirmText: 'MENGERTI'
           });
@@ -11928,7 +11928,7 @@
 
         const ok = await showGameDialog({
           title: 'Konfirmasi Ganti Nama',
-          html: `<p>Apakah Anda yakin ingin mengganti nama gamer menjadi <b>"${newName}"</b>?</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya:</span><b>🪙 ${cost} Koin</b></div><div class="dialog-info-row"><span>Sisa Saldo:</span><b>🪙 ${progress.coins - cost} Koin</b></div></div>`,
+          html: `<p>Apakah Anda yakin ingin mengganti nama gamer menjadi <b>"${newName}"</b>?</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya:</span><b>${cost} Koin</b></div><div class="dialog-info-row"><span>Sisa Saldo:</span><b>${progress.coins - cost} Koin</b></div></div>`,
           type: 'coin',
           confirmText: `GANTI NAMA (-${cost} KOIN)`,
           cancelText: 'BATAL'
@@ -11946,7 +11946,7 @@
         saveGPProfile();
         showGameDialog({
           title: 'Nama Berhasil Diubah',
-          html: `<p>Nama gamer berhasil diubah menjadi <b>"${newName}"</b>!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya:</span><b>🪙 -${cost} Koin</b></div><div class="dialog-info-row"><span>Sisa Koin:</span><b>🪙 ${progress.coins} Koin</b></div></div>`,
+          html: `<p>Nama gamer berhasil diubah menjadi <b>"${newName}"</b>!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya:</span><b>-${cost} Koin</b></div><div class="dialog-info-row"><span>Sisa Koin:</span><b>${progress.coins} Koin</b></div></div>`,
           type: 'success',
           confirmText: 'SELESAI'
         });
@@ -12056,13 +12056,13 @@
     if(!socialSearchInput || !socialSearchResults || !window.socialService) return;
     const query = socialSearchInput.value.trim();
     if(query.length < 2) {
-      socialSearchResults.innerHTML = '<div class="social-empty-state"><div class="social-empty-icon">⚠️</div><div>Ketik minimal 2 karakter untuk mencari.</div></div>';
+      socialSearchResults.innerHTML = '<div class="social-empty-state"><div class="social-empty-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="#f59e0b"><path d="M12 2L1 21h22L12 2zm0 3.8L20.2 19H3.8L12 5.8zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg></div><div>Ketik minimal 2 karakter untuk mencari.</div></div>';
       return;
     }
-    socialSearchResults.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:24px;">Sedang mencari pemain... 🔍</div>';
+    socialSearchResults.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:24px;">Sedang mencari pemain...</div>';
     const results = await window.socialService.searchPlayers(query);
     if(results.length === 0) {
-      socialSearchResults.innerHTML = '<div class="social-empty-state"><div class="social-empty-icon">🔍</div><div>Pemain tidak ditemukan. Pastikan GamerTag sudah benar!</div></div>';
+      socialSearchResults.innerHTML = '<div class="social-empty-state"><div class="social-empty-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="#38bdf8"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div>Pemain tidak ditemukan. Pastikan GamerTag sudah benar!</div></div>';
       return;
     }
 
@@ -12075,12 +12075,12 @@
             <div class="social-player-avatar">${svg}</div>
             <div class="social-player-meta">
               <div class="social-player-name">${window.socialService.escapeHtml(p.name)}</div>
-              <div class="social-player-tier">🏆 ${p.tier}</div>
+              <div class="social-player-tier">${p.tier}</div>
             </div>
           </div>
           <div class="social-card-actions">
-            ${p.isFriend ? '<span style="color:#22c55e;font-weight:700;font-size:0.8rem;padding:6px 10px;">✓ Teman</span>' :
-              p.isPending ? '<span style="color:#f59e0b;font-weight:700;font-size:0.8rem;padding:6px 10px;">⌛ Menunggu</span>' :
+            ${p.isFriend ? '<span style="color:#22c55e;font-weight:700;font-size:0.8rem;padding:6px 10px;">Teman</span>' :
+              p.isPending ? '<span style="color:#f59e0b;font-weight:700;font-size:0.8rem;padding:6px 10px;">Menunggu</span>' :
               `<button class="social-action-btn success btn-send-add" data-key="${p.key}" data-name="${p.name}" data-avatar="${p.avatar}" data-tier="${p.tier}">+ Tambah</button>`}
           </div>
         </div>
@@ -12098,7 +12098,7 @@
         const tier = btn.getAttribute('data-tier');
         const res = await window.socialService.sendFriendRequest(key, name, avatar, tier);
         if(res.success) {
-          btn.textContent = 'Terkirim! ✓';
+          btn.textContent = 'Terkirim!';
           btn.classList.remove('success');
         } else {
           btn.textContent = 'Gagal';
@@ -12165,7 +12165,7 @@
     floatingTexts.push({
       x: fxX,
       y: fxY - 25,
-      text: `+${amount} KOIN BERHASIL DIKLAIM! 🪙`,
+      text: `+${amount} KOIN BERHASIL DIKLAIM!`,
       color: '#fbbf24',
       vy: -55,
       life: 1.3,
@@ -12389,23 +12389,23 @@
         btn.disabled = true;
         btn.style.opacity = '0.7';
         btn.style.pointerEvents = 'none';
-        if(span) span.textContent = isIndo ? '⏳ MEMUAT...' : '⏳ LOADING...';
+        if(span) span.textContent = isIndo ? 'MEMUAT...' : 'LOADING...';
       } else if(stateType === 'NOT_AVAILABLE') {
         btn.disabled = true;
         btn.style.opacity = '0.75';
         btn.style.pointerEvents = 'none';
-        if(span) span.textContent = isIndo ? '🚫 IKLAN TIDAK TERSEDIA' : '🚫 AD NOT AVAILABLE';
+        if(span) span.textContent = isIndo ? 'IKLAN TIDAK TERSEDIA' : 'AD NOT AVAILABLE';
       } else if(stateType === 'COOLDOWN') {
         btn.disabled = true;
         btn.style.opacity = '0.75';
         btn.style.pointerEvents = 'none';
-        if(span) span.textContent = isIndo ? `🕒 TUNGGU (${this.cooldownRemaining}s)` : `🕒 TRY AGAIN (${this.cooldownRemaining}s)`;
+        if(span) span.textContent = isIndo ? `TUNGGU (${this.cooldownRemaining}s)` : `TRY AGAIN (${this.cooldownRemaining}s)`;
       } else {
         // NORMAL
         btn.disabled = false;
         btn.style.opacity = '1';
         btn.style.pointerEvents = 'auto';
-        if(span) span.textContent = isIndo ? '+25 KOIN 🪙' : '+25 COINS 🪙';
+        if(span) span.textContent = isIndo ? '+25 KOIN' : '+25 COINS';
       }
     },
 
@@ -12840,7 +12840,7 @@
       if(data.isReady) {
         audio.win();
         if(el.mpGuestStatusBadge) {
-          el.mpGuestStatusBadge.textContent = 'READY ✅';
+          el.mpGuestStatusBadge.textContent = 'READY';
           el.mpGuestStatusBadge.className = 'mlbb-podium-status ready';
         }
         if(isHost && el.mpHostStartGameBtn) {

@@ -13,7 +13,7 @@
   const CUTE_BIRD_EMOTES = [
     {
       id: 'bird_plead',
-      title: '🥺 Muka Imut / Pleading',
+      title: 'Muka Imut / Pleading',
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
@@ -74,7 +74,7 @@
     },
     {
       id: 'bird_joy',
-      title: '😂 Ketawa Ngakak / Tears of Joy',
+      title: 'Ketawa Ngakak / Tears of Joy',
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
@@ -115,7 +115,7 @@
     },
     {
       id: 'bird_love',
-      title: '🥰 Jatuh Cinta / In Love',
+      title: 'Jatuh Cinta / In Love',
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
@@ -155,7 +155,7 @@
     },
     {
       id: 'bird_cool',
-      title: '😎 Keren / Sunglasses',
+      title: 'Keren / Sunglasses',
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
@@ -192,7 +192,7 @@
     },
     {
       id: 'bird_cry',
-      title: '😭 Nangis Kejer / Loud Cry',
+      title: 'Nangis Kejer / Loud Cry',
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
@@ -225,7 +225,7 @@
     },
     {
       id: 'bird_rage',
-      title: '😡 Marah / Rage',
+      title: 'Marah / Rage',
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
@@ -237,7 +237,7 @@
             </radialGradient>
           </defs>
           <circle cx="25" cy="27" r="20" fill="url(#e_rage_body)"/>
-          <!-- Angry Vein 💢 -->
+          <!-- Angry Vein -->
           <g transform="translate(34, 11) scale(0.9)">
             <path d="M 0 3 C 2 0, 6 0, 8 3 C 8 5, 8 7, 6 9 C 8 11, 8 13, 6 15 C 3 15, 1 13, 0 11" fill="none" stroke="#fff59d" stroke-width="2" stroke-linecap="round"/>
           </g>
@@ -259,7 +259,7 @@
     },
     {
       id: 'bird_party',
-      title: '🥳 Pesta / Party Time',
+      title: 'Pesta / Party Time',
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
@@ -298,7 +298,7 @@
     },
     {
       id: 'bird_money',
-      title: '🤑 Sultan / Dollar Eyes',
+      title: 'Sultan / Dollar Eyes',
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
@@ -335,7 +335,7 @@
     },
     {
       id: 'bird_king',
-      title: '👑 Raja / Crown King',
+      title: 'Raja / Crown King',
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
@@ -373,7 +373,7 @@
     },
     {
       id: 'bird_sleep',
-      title: '😴 Mengantuk / Zzz',
+      title: 'Mengantuk / Zzz',
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
@@ -703,13 +703,13 @@
 
       const getAv = (id, s) => {
         if (typeof window.getCuteAvatarSvg === 'function') return window.getCuteAvatarSvg(id, s);
-        return '🦅';
+        return (typeof window.getCuteAvatarSvg === 'function') ? window.getCuteAvatarSvg('chick_yellow', s || 38) : '';
       };
 
       // Set initial data
       document.getElementById('fpAvatarBox').innerHTML = getAv(friend.avatar || 'chick_yellow', 52);
       document.getElementById('fpName').textContent = friend.name || 'Gamer';
-      document.getElementById('fpRankBadge').textContent = `🏆 ${friend.tier || 'BRONZE I'}`;
+      document.getElementById('fpRankBadge').textContent = `${friend.tier || 'BRONZE I'}`;
       document.getElementById('fpUid').textContent = `ID: ${friend.friendKey || 'acc_...'}`;
 
       // Open modal
@@ -743,8 +743,8 @@
             window.multiplayerEngine.createRoom(hostData);
             const actualRoomCode = window.multiplayerEngine.currentRoom.code;
             await this.sendRoomInvite(friend.friendKey, actualRoomCode);
-            inviteBtn.textContent = 'Terkirim! ✅';
-            setTimeout(() => { inviteBtn.textContent = '⚔️ Ajak Main'; }, 2000);
+            inviteBtn.textContent = 'Terkirim!';
+            setTimeout(() => { inviteBtn.textContent = 'Ajak Main'; }, 2000);
             
             const mpModal = document.getElementById('multiplayerModal');
             if (mpModal && typeof window.showModal === 'function') {
@@ -772,7 +772,7 @@
             document.getElementById('fpCasualScore').textContent = data.casualBest || data.score || '0';
             document.getElementById('fpRankPoints').textContent = `${data.rankedBest || data.score || 0} PTS`;
             document.getElementById('fpMpWins').textContent = `${data.mpWins || 0} MENANG`;
-            document.getElementById('fpCoins').textContent = `${data.coins || 0} 🪙`;
+            document.getElementById('fpCoins').textContent = `${data.coins || 0}`;
 
             // Loadout
             const l = data.loadout || {};
@@ -847,7 +847,7 @@
             if (!container) return;
             container.innerHTML = '';
             if (snap.empty) {
-              container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:40px 10px;">Belum ada pesan. Kirim stiker burung imut ke temanmu! 🐥✨</div>';
+              container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:40px 10px;">Belum ada pesan. Kirim stiker burung imut ke temanmu!</div>';
               return;
             }
             snap.forEach(doc => {
@@ -934,7 +934,7 @@
 
       const getAv = (id, s) => {
         if (typeof window.getCuteAvatarSvg === 'function') return window.getCuteAvatarSvg(id, s);
-        return '🦅';
+        return (typeof window.getCuteAvatarSvg === 'function') ? window.getCuteAvatarSvg('chick_yellow', s || 38) : '';
       };
 
       const toast = document.createElement('div');
@@ -954,8 +954,8 @@
           Temanmu mengajak bertanding di Room: <b>#${invite.roomCode}</b>! Siap terbang?
         </div>
         <div class="invite-toast-actions">
-          <button class="invite-btn-accept" data-code="${invite.roomCode}">🎮 GABUNG SEKARANG</button>
-          <button class="invite-btn-decline">✕ NANTI</button>
+          <button class="invite-btn-accept" data-code="${invite.roomCode}">GABUNG SEKARANG</button>
+          <button class="invite-btn-decline">NANTI</button>
         </div>
       `;
 
@@ -1030,7 +1030,7 @@
       }
       const avatar = (id) => typeof window.getCuteAvatarSvg === 'function'
         ? window.getCuteAvatarSvg(id || 'chick_yellow', 30)
-        : '🐥';
+        : 'chick_yellow';
       container.innerHTML = this.friends.slice(0, 4).map(friend => `
         <div class="mp-friend-row" data-friend-key="${friend.friendKey}">
           <span class="mp-friend-avatar">${avatar(friend.avatar)}</span>
@@ -1055,7 +1055,7 @@
       }
       const avatar = (id) => typeof window.getCuteAvatarSvg === 'function'
         ? window.getCuteAvatarSvg(id || 'chick_yellow', 28)
-        : '🐥';
+        : 'chick_yellow';
       container.innerHTML = this.friends.slice(0, 2).map(friend => `
         <button class="mlbb-quick-friend-item" type="button" data-friend-key="${friend.friendKey}" title="Lihat profil ${this.escapeHtml(friend.name || 'teman')}">
           <span class="mlbb-qf-avatar">${avatar(friend.avatar)}</span>
@@ -1077,7 +1077,7 @@
       if (this.friends.length === 0) {
         container.innerHTML = `
           <div class="social-empty-state">
-            <div class="social-empty-icon">👥</div>
+            <div class="social-empty-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="#38bdf8"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
             <div>Belum ada teman. Cari teman baru di tab <b>Cari Teman</b>!</div>
           </div>
         `;
@@ -1086,7 +1086,7 @@
 
       const getAv = (id, s) => {
         if (typeof window.getCuteAvatarSvg === 'function') return window.getCuteAvatarSvg(id, s);
-        return '🦅';
+        return (typeof window.getCuteAvatarSvg === 'function') ? window.getCuteAvatarSvg('chick_yellow', s || 38) : '';
       };
 
       let html = '';
@@ -1101,13 +1101,13 @@
               </div>
               <div class="social-player-meta">
                 <div class="social-player-name">${this.escapeHtml(f.name)}</div>
-                <div class="social-player-tier">🏆 ${f.tier || 'BRONZE I'}</div>
+                <div class="social-player-tier">${f.tier || "BRONZE I"}</div>
               </div>
             </div>
             <div class="social-card-actions">
-              <button class="social-action-btn btn-dm-chat" title="Kirim Chat" data-key="${f.friendKey}">💬</button>
-              <button class="social-action-btn success btn-invite-room" title="Ajak Main Multiplayer" data-key="${f.friendKey}">⚔️ Ajak</button>
-              <button class="social-action-btn danger btn-remove-friend" title="Hapus Teman" data-key="${f.friendKey}">✕</button>
+              <button class="social-action-btn btn-dm-chat" title="Kirim Chat" data-key="${f.friendKey}">Chat</button>
+              <button class="social-action-btn success btn-invite-room" title="Ajak Main Multiplayer" data-key="${f.friendKey}">Ajak</button>
+              <button class="social-action-btn danger btn-remove-friend" title="Hapus Teman" data-key="${f.friendKey}">&times;</button>
             </div>
           </div>
         `;
@@ -1148,8 +1148,8 @@
             window.multiplayerEngine.createRoom(hostData);
             const actualRoomCode = window.multiplayerEngine.currentRoom.code;
             await this.sendRoomInvite(key, actualRoomCode);
-            btn.textContent = 'Terkirim! ✅';
-            setTimeout(() => { btn.textContent = '⚔️ Ajak'; }, 2000);
+            btn.textContent = 'Terkirim!';
+            setTimeout(() => { btn.textContent = 'Ajak'; }, 2000);
             
             const mpModal = document.getElementById('multiplayerModal');
             if (mpModal && typeof window.showModal === 'function') {
@@ -1178,7 +1178,7 @@
       if (this.friendRequests.length === 0) {
         container.innerHTML = `
           <div class="social-empty-state">
-            <div class="social-empty-icon">📬</div>
+            <div class="social-empty-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="#38bdf8"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
             <div>Tidak ada permintaan pertemanan masuk.</div>
           </div>
         `;
@@ -1187,7 +1187,7 @@
 
       const getAv = (id, s) => {
         if (typeof window.getCuteAvatarSvg === 'function') return window.getCuteAvatarSvg(id, s);
-        return '🦅';
+        return (typeof window.getCuteAvatarSvg === 'function') ? window.getCuteAvatarSvg('chick_yellow', s || 38) : '';
       };
 
       let html = '';
@@ -1199,12 +1199,12 @@
               <div class="social-player-avatar">${svg}</div>
               <div class="social-player-meta">
                 <div class="social-player-name">${this.escapeHtml(req.fromName)}</div>
-                <div class="social-player-tier">🏆 ${req.fromTier || 'BRONZE I'}</div>
+                <div class="social-player-tier">${req.fromTier || "BRONZE I"}</div>
               </div>
             </div>
             <div class="social-card-actions">
-              <button class="social-action-btn success btn-req-accept" data-req-id="${req.id}">✓ Terima</button>
-              <button class="social-action-btn danger btn-req-reject" data-req-id="${req.id}">✕ Tolak</button>
+              <button class="social-action-btn success btn-req-accept" data-req-id="${req.id}">Terima</button>
+              <button class="social-action-btn danger btn-req-reject" data-req-id="${req.id}">Tolak</button>
             </div>
           </div>
         `;
