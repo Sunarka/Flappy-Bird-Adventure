@@ -11513,134 +11513,288 @@
   });
 
   // =========================================================
-  // ADMOB REWARDED VIDEO ADS SYSTEM (WATCH AD -> GET +25 COINS)
+  // CENTRALIZED COIN MANAGEMENT SYSTEM
   // =========================================================
-  let admobAdTimer = null;
-
-  function showAdmobRewardedAd() {
-    if(audio) audio.click();
-
-    // Buka modal pemutar video hadiah seketika (0ms delay)
-    openFallbackAdPlayerModal();
-
-    // Trigger Google AdMob SDK jika aktif
-    if(typeof window.showGoogleAdMobRewarded === 'function') {
-      try {
-        window.showGoogleAdMobRewarded(
-          (rewardAmount) => {
-            grantAdmobCoinReward(rewardAmount || 25);
-          },
-          () => {}
-        );
-      } catch(_) {}
-    }
-  }
-
-  function openFallbackAdPlayerModal() {
-    const modal = $('admobRewardModal') || el.admobRewardModal;
-    if(!modal) return;
-
-    showModal(modal);
-
-    const videoEl = $('admobVideoElement');
-    if(videoEl) {
-      videoEl.currentTime = 0;
-      videoEl.play().catch(() => {});
-    }
-
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch(_) {}
-
-    const closeBtn = $('admobCloseBtn') || el.admobCloseBtn;
-    const timerCount = $('admobTimerCount') || el.admobTimerCount;
-    const progressFill = $('admobProgressFill') || el.admobProgressFill;
-
-    if(closeBtn) closeBtn.classList.add('hidden');
-    if(timerCount) timerCount.textContent = '5s';
-    if(progressFill) progressFill.style.width = '0%';
-
-    clearInterval(admobAdTimer);
-    const startTime = Date.now();
-    const duration = 5000;
-
-    admobAdTimer = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const progressRatio = Math.min(1, elapsed / duration);
-      const remainingSecs = Math.max(0, Math.ceil((duration - elapsed) / 1000));
-
-      if(progressFill) progressFill.style.width = (progressRatio * 100) + '%';
-      if(timerCount) timerCount.textContent = remainingSecs + 's';
-
-      if(elapsed >= duration) {
-        clearInterval(admobAdTimer);
-        admobAdTimer = null;
-        if(timerCount) timerCount.textContent = 'SELESAI! ✅';
-        if(closeBtn) closeBtn.classList.remove('hidden');
-        if(audio && typeof audio.win === 'function') audio.win();
-      }
-    }, 100);
-  }
-
-  function grantAdmobCoinReward(amount = 25) {
+  function addCoins(amount, reason = 'reward') {
+    if(!amount || amount <= 0) return;
     progress.coins = (progress.coins || 0) + amount;
     persistProgress();
     updateCoins();
-    if(audio && typeof audio.coin === 'function') audio.coin();
-    else if(audio && typeof audio.win === 'function') audio.win();
+    if(typeof saveCloudSave === 'function') saveCloudSave();
+    if(audio) audio.win();
 
-    // Gold coin particles & floating text popup!
+    // Visual celebration: Gold coin confetti & floating text
     const fxX = (typeof bird !== 'undefined' && bird && Number.isFinite(bird.x)) ? bird.x : 90;
     const fxY = (typeof bird !== 'undefined' && bird && Number.isFinite(bird.y)) ? bird.y : 260;
-    makeParticles(fxX, fxY, 35, '#fbbf24');
-    makeParticles(fxX, fxY, 20, '#fde047');
+    makeParticles(fxX, fxY, 25, '#fbbf24');
+    makeParticles(fxX, fxY, 15, '#fde047');
     floatingTexts.push({
       x: fxX,
-      y: fxY - 30,
+      y: fxY - 25,
       text: `+${amount} KOIN BERHASIL DIKLAIM! 🪙`,
       color: '#fbbf24',
       vy: -55,
-      life: 1.2,
-      maxLife: 1.2
+      life: 1.3,
+      maxLife: 1.3
     });
+  }
 
-    // Sync to Firebase Firestore if logged in
-    if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.saveUserData === 'function') {
-      window.FirebaseLeaderboard.saveUserData(gpProfile, progress, classicBest, rankedBest);
+  // =========================================================
+  // REWARD AD MANAGER (OFFICIAL GOOGLE ADSENSE / H5 ADBREAK REWARDED ADS)
+  // =========================================================
+  const RewardAdManager = {
+    DEBUG: true, // Ubah ke false untuk production mute
+    isInitialized: false,
+    isLoading: false,
+    isAdPlaying: false,
+    cooldownRemaining: 0,
+    cooldownTimer: null,
+    currentSessionToken: null,
+    rewardGrantedForSession: false,
+    adConfigReady: false,
+
+    log(...args) {
+      if(this.DEBUG) console.log('[RewardAdManager]', ...args);
+    },
+    warn(...args) {
+      if(this.DEBUG) console.warn('[RewardAdManager]', ...args);
+    },
+    error(...args) {
+      if(this.DEBUG) console.error('[RewardAdManager]', ...args);
+    },
+
+    initialize() {
+      if(this.isInitialized) return;
+      this.isInitialized = true;
+      this.log('Initializing Google AdSense / H5 Games Rewarded Ads...');
+
+      // Inisialisasi Google H5 Games Ads API adConfig jika tersedia
+      if(typeof window.adConfig === 'function') {
+        try {
+          window.adConfig({
+            preloadAdBreaks: 'on',
+            sound: 'on',
+            onReady: () => {
+              this.adConfigReady = true;
+              this.log('Reward ad available: Google H5 Games AdSense API is Ready.');
+            }
+          });
+        } catch(err) {
+          this.warn('adConfig init error:', err.message);
+        }
+      }
+
+      this.updateButtonState('NORMAL');
+    },
+
+    isAvailable() {
+      if(this.isLoading || this.isAdPlaying || this.cooldownRemaining > 0) return false;
+      return true;
+    },
+
+    show() {
+      if(!this.isAvailable()) {
+        this.log('Ad unavailable or in cooldown:', this.cooldownRemaining, 'seconds remaining');
+        return;
+      }
+
+      this.isLoading = true;
+      this.isAdPlaying = true;
+      this.rewardGrantedForSession = false;
+      this.currentSessionToken = 'ad_session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+      const sessionToken = this.currentSessionToken;
+
+      this.updateButtonState('LOADING');
+      this.log('Reward ad started. Session Token:', sessionToken);
+
+      // 1. Google H5 Games Ads API (adBreak)
+      if(typeof window.adBreak === 'function') {
+        let rewardGivenInBreak = false;
+        try {
+          window.adBreak({
+            type: 'reward',
+            name: 'rewarded_coin_ad',
+            beforeAd: () => {
+              this.log('Reward ad started (muting background music)');
+              if(audio) audio.stopMusic();
+            },
+            afterAd: () => {
+              this.log('Reward ad completed (lifecycle ended)');
+              if(state === State.MENU && settings.music && audio) audio.lobbyMusic();
+            },
+            beforeReward: (showAdFn) => {
+              this.log('beforeReward prompt acknowledged. Showing ad...');
+              showAdFn();
+            },
+            adViewed: () => {
+              this.log('Reward ad completed: adViewed event received from Google!');
+              rewardGivenInBreak = true;
+              if(this.currentSessionToken === sessionToken && !this.rewardGrantedForSession) {
+                this.handleReward(25, sessionToken);
+              }
+            },
+            adDismissed: () => {
+              this.log('Ad dismissed before reward requirements were met');
+              this.handleError('User dismissed ad before completion');
+            },
+            adBreakDone: (placementInfo) => {
+              const status = placementInfo ? placementInfo.breakStatus : 'unknown';
+              this.log('adBreakDone lifecycle finished with status:', status);
+              this.isAdPlaying = false;
+              this.isLoading = false;
+              if(!rewardGivenInBreak && !this.rewardGrantedForSession) {
+                this.handleError('Ad break status: ' + status);
+              } else {
+                this.startCooldown(15);
+              }
+            }
+          });
+          return;
+        } catch(adBreakErr) {
+          this.warn('adBreak invocation error:', adBreakErr.message);
+        }
+      }
+
+      // 2. Google Publisher Tag (GPT) Out-of-page Rewarded Ads
+      if(window.googletag && window.googletag.pubads) {
+        try {
+          let gptRewardedSlot = null;
+          window.googletag.cmd.push(() => {
+            if(window.googletag.enums && window.googletag.enums.OutOfPageFormat && window.googletag.enums.OutOfPageFormat.REWARDED) {
+              gptRewardedSlot = window.googletag.defineOutOfPageSlot('/6774733814/rewarded', window.googletag.enums.OutOfPageFormat.REWARDED);
+              if(gptRewardedSlot) {
+                gptRewardedSlot.addService(window.googletag.pubads());
+                window.googletag.pubads().addEventListener('rewardedSlotGranted', (event) => {
+                  this.log('Reward granted: GPT rewardedSlotGranted event received from Google!', event);
+                  if(this.currentSessionToken === sessionToken && !this.rewardGrantedForSession) {
+                    this.handleReward(25, sessionToken);
+                  }
+                });
+                window.googletag.pubads().addEventListener('rewardedSlotClosed', () => {
+                  this.log('Reward ad closed.');
+                  this.isAdPlaying = false;
+                  this.isLoading = false;
+                  this.startCooldown(15);
+                });
+                window.googletag.display(gptRewardedSlot);
+                return;
+              }
+            }
+          });
+        } catch(gptErr) {
+          this.warn('GPT rewarded slot error:', gptErr.message);
+        }
+      }
+
+      // 3. Jika iklan belum siap atau tidak tersedia dari Google AdSense
+      this.log('Ad unavailable: No active Google AdSense rewarded provider returned an ad.');
+      this.handleError('Iklan belum tersedia, coba lagi nanti.');
+    },
+
+    handleReward(amount, sessionToken) {
+      if(this.rewardGrantedForSession || this.currentSessionToken !== sessionToken) {
+        this.warn('Duplicate reward attempt prevented for session token:', sessionToken);
+        return;
+      }
+      this.rewardGrantedForSession = true;
+      this.log('Reward granted: Adding +' + amount + ' coins to player account.');
+      addCoins(amount, 'google_rewarded_ad');
+    },
+
+    handleError(reason) {
+      this.warn('Ad error:', reason);
+      this.isAdPlaying = false;
+      this.isLoading = false;
+      this.rewardGrantedForSession = false;
+      this.updateButtonState('NOT_AVAILABLE');
+
+      // Tampilkan pesan mengambang ramah pengguna
+      const isEn = settings.language === 'en';
+      const msg = isEn ? 'Ad not available right now, please try again later.' : 'Iklan belum tersedia, coba lagi nanti.';
+      floatingTexts.push({
+        x: W / 2,
+        y: H - 110,
+        text: msg,
+        color: '#f87171',
+        vy: -35,
+        life: 2.2,
+        maxLife: 2.2
+      });
+
+      setTimeout(() => {
+        if(this.cooldownRemaining <= 0) {
+          this.updateButtonState('NORMAL');
+        }
+      }, 3500);
+    },
+
+    startCooldown(seconds = 15) {
+      this.cooldownRemaining = seconds;
+      this.updateButtonState('COOLDOWN');
+      clearInterval(this.cooldownTimer);
+      this.cooldownTimer = setInterval(() => {
+        this.cooldownRemaining--;
+        if(this.cooldownRemaining <= 0) {
+          clearInterval(this.cooldownTimer);
+          this.cooldownTimer = null;
+          this.updateButtonState('NORMAL');
+        } else {
+          this.updateButtonState('COOLDOWN');
+        }
+      }, 1000);
+    },
+
+    updateButtonState(stateType) {
+      const btn = $('lobbyAdmobRewardBtn') || el.lobbyAdmobRewardBtn;
+      if(!btn) return;
+
+      const span = btn.querySelector('span');
+      const isIndo = settings.language !== 'en';
+
+      if(stateType === 'LOADING') {
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+        btn.style.pointerEvents = 'none';
+        if(span) span.textContent = isIndo ? '⏳ MEMUAT...' : '⏳ LOADING...';
+      } else if(stateType === 'NOT_AVAILABLE') {
+        btn.disabled = true;
+        btn.style.opacity = '0.75';
+        btn.style.pointerEvents = 'none';
+        if(span) span.textContent = isIndo ? '🚫 IKLAN TIDAK TERSEDIA' : '🚫 AD NOT AVAILABLE';
+      } else if(stateType === 'COOLDOWN') {
+        btn.disabled = true;
+        btn.style.opacity = '0.75';
+        btn.style.pointerEvents = 'none';
+        if(span) span.textContent = isIndo ? `🕒 TUNGGU (${this.cooldownRemaining}s)` : `🕒 TRY AGAIN (${this.cooldownRemaining}s)`;
+      } else {
+        // NORMAL
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.pointerEvents = 'auto';
+        if(span) span.textContent = isIndo ? '+25 KOIN 🪙' : '+25 COINS 🪙';
+      }
+    },
+
+    reset() {
+      this.isLoading = false;
+      this.isAdPlaying = false;
+      this.rewardGrantedForSession = false;
+      this.currentSessionToken = null;
+      clearInterval(this.cooldownTimer);
+      this.cooldownTimer = null;
+      this.cooldownRemaining = 0;
+      this.updateButtonState('NORMAL');
     }
-  }
+  };
 
-  function claimAdmobReward() {
-    closeModal();
-    clearInterval(admobAdTimer);
-    admobAdTimer = null;
-    grantAdmobCoinReward(25);
-  }
+  // Inisialisasi RewardAdManager
+  RewardAdManager.initialize();
 
-  window.showAdmobRewardedAd = showAdmobRewardedAd;
-  window.claimAdmobReward = claimAdmobReward;
-
+  // Hubungkan tombol reward lobi dengan proteksi double-click
   const btnAdmob = $('lobbyAdmobRewardBtn') || el.lobbyAdmobRewardBtn;
   if(btnAdmob) {
-    btnAdmob.onclick = (e) => {
-      if(e) e.stopPropagation();
-      showAdmobRewardedAd();
-    };
-    btnAdmob.addEventListener('pointerup', (e) => {
-      if(e) e.stopPropagation();
-      showAdmobRewardedAd();
-    });
-  }
-
-  const btnClaim = $('admobCloseBtn') || el.admobCloseBtn;
-  if(btnClaim) {
-    btnClaim.onclick = (e) => {
-      if(e) e.stopPropagation();
-      claimAdmobReward();
-    };
-    btnClaim.addEventListener('pointerup', (e) => {
-      if(e) e.stopPropagation();
-      claimAdmobReward();
+    bindClick(btnAdmob, () => {
+      RewardAdManager.show();
     });
   }
 
