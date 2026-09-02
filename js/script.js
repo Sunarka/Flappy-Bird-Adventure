@@ -4321,9 +4321,11 @@
       layer.classList.remove('hidden');
       layer.querySelectorAll('.modal').forEach(x => {
         x.classList.add('hidden');
+        x.style.display = '';
       });
     }
     modalEl.classList.remove('hidden');
+    modalEl.style.display = 'flex';
   }
   function closeModal() {
     if(audio && typeof audio.stopPreview === 'function') audio.stopPreview();
@@ -4335,6 +4337,7 @@
       layer.classList.add('hidden');
       layer.querySelectorAll('.modal').forEach(x => {
         x.classList.add('hidden');
+        x.style.display = '';
       });
     }
     const dialog = el.gameDialogModal || $('gameDialogModal');
