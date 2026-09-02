@@ -384,7 +384,7 @@
 .profile-scrollable-content {
   overflow-y: auto;
   padding-right: 4px;
-  max-height: 220px !important;
+  max-height: 275px !important;
   scrollbar-width: thin;
 }
 

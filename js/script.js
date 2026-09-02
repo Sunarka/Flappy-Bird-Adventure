@@ -3418,7 +3418,7 @@
     }
     
     if(el.gpAuthActionBtn) {
-      el.gpAuthActionBtn.textContent = isLogged ? 'SIMPAN & MAINKAN RANK' : 'LOGIN GOOGLE SEKARANG';
+      el.gpAuthActionBtn.textContent = isLogged ? 'SIMPAN PERUBAHAN' : 'LOGIN GOOGLE SEKARANG';
     }
     
     const tier = getRankTier(rankedBest);
@@ -4370,7 +4370,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.5';
+  const GAME_VERSION = '20.6';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
