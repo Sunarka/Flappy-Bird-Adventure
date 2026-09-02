@@ -4313,7 +4313,9 @@
   }
 
   function showModal(modal) {
-    const modalEl = typeof modal === 'string' ? $(modal) : modal;
+    if(!modal) return;
+    const modalEl = typeof modal === 'string' ? $(modal) : (modal instanceof HTMLElement ? modal : $(modal?.id));
+    if(!modalEl) return;
     const layer = el.layer || $('modalLayer');
     if(layer) {
       layer.classList.remove('hidden');
@@ -4321,7 +4323,7 @@
         x.classList.add('hidden');
       });
     }
-    if(modalEl) modalEl.classList.remove('hidden');
+    modalEl.classList.remove('hidden');
   }
   function closeModal() {
     if(audio && typeof audio.stopPreview === 'function') audio.stopPreview();
@@ -4335,8 +4337,13 @@
         x.classList.add('hidden');
       });
     }
-    if (el.gameDialogModal) el.gameDialogModal.classList.add('hidden');
-    if (el.multiplayerModal) el.multiplayerModal.classList.add('hidden');
+    const dialog = el.gameDialogModal || $('gameDialogModal');
+    if(dialog) dialog.classList.add('hidden');
+    const mpModal = el.multiplayerModal || $('multiplayerModal');
+    if(mpModal) mpModal.classList.add('hidden');
+    const reviveModal = el.reviveModal || $('reviveModal');
+    if(reviveModal) reviveModal.classList.add('hidden');
+
     if (activeDialogResolver) {
       const res = activeDialogResolver;
       activeDialogResolver = null;
@@ -4345,6 +4352,15 @@
   }
   window.showModal = showModal;
   window.closeModal = closeModal;
+
+  const modalLayerEl = $('modalLayer');
+  if(modalLayerEl) {
+    modalLayerEl.addEventListener('click', (e) => {
+      if(e.target === modalLayerEl) {
+        closeModal();
+      }
+    });
+  }
   function setState(next) {
     state = next;
     el.menu.classList.toggle('hidden', next !== State.MENU);
