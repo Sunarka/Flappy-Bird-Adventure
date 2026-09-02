@@ -4361,8 +4361,75 @@
       }
     });
   }
+  // =========================================================
+  // SMART AUTO-REFRESH & UPDATE DETECTOR (v19.0)
+  // Auto detects new versions deployed on GitHub Pages.
+  // NEVER refreshes during active gameplay (only in Lobby/Menu).
+  // =========================================================
+  const GAME_VERSION = '19.0';
+  let pendingUpdateAvailable = false;
+  let isUpdatingNow = false;
+
+  function showUpdateNotification(msg) {
+    let notif = document.getElementById('autoUpdateToast');
+    if(!notif) {
+      notif = document.createElement('div');
+      notif.id = 'autoUpdateToast';
+      notif.style.cssText = 'position:fixed;top:12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#0284c7,#0369a1);border:1.5px solid #38bdf8;color:#fff;padding:8px 16px;border-radius:99px;font:900 12px/1.4 Trebuchet MS,Arial,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,0.8),0 0 16px rgba(56,189,248,0.5);z-index:9999999;display:flex;align-items:center;gap:8px;animation:modalIn .25s ease-out;pointer-events:none;';
+      document.body.appendChild(notif);
+    }
+    notif.innerHTML = `<span>🚀</span> <span>${msg}</span>`;
+  }
+
+  async function checkForGameUpdate() {
+    if(isUpdatingNow) return;
+    try {
+      const res = await fetch(`version.json?_t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+      });
+      if(!res.ok) return;
+      const data = await res.json();
+      if(data && data.version && data.version !== GAME_VERSION) {
+        if(state === State.MENU) {
+          isUpdatingNow = true;
+          showUpdateNotification(`Versi baru v${data.version} terdeteksi! Memuat pembaruan...`);
+          setTimeout(() => {
+            window.location.reload(true);
+          }, 1200);
+        } else {
+          // Jangan ganggu pemain yang sedang aktif bermain
+          pendingUpdateAvailable = true;
+        }
+      }
+    } catch(err) {
+      // Offline or fetch failed, silently ignore
+    }
+  }
+
+  // Cek update saat kembali ke MENU / LOBBY
+  function checkPendingUpdateOnMenu() {
+    if(pendingUpdateAvailable && !isUpdatingNow) {
+      isUpdatingNow = true;
+      showUpdateNotification('Game selesai! Menerapkan versi terbaru...');
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 1000);
+    }
+  }
+
+  // Interval pengecekan otomatis setiap 20 detik & saat tab aktif
+  setInterval(checkForGameUpdate, 20000);
+  window.addEventListener('focus', checkForGameUpdate);
+  document.addEventListener('visibilitychange', () => {
+    if(document.visibilityState === 'visible') checkForGameUpdate();
+  });
+
   function setState(next) {
     state = next;
+    if(next === State.MENU) {
+      checkPendingUpdateOnMenu();
+    }
     el.menu.classList.toggle('hidden', next !== State.MENU);
     el.ready.classList.toggle('hidden', next !== State.READY);
     el.hud.classList.toggle('hidden', next === State.MENU);
