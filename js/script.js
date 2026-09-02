@@ -4394,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.18';
+  const GAME_VERSION = '20.19';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -13010,8 +13010,7 @@
     if(el.mpViewCreate) el.mpViewCreate.classList.toggle('hidden', tab !== 'create');
     if(el.mpViewJoin) el.mpViewJoin.classList.toggle('hidden', tab !== 'join');
 
-    // The lobby sidebar must always mirror the real Social list, not a cached placeholder.
-    if(tab === 'quick' && window.socialService && typeof window.socialService.renderLobbyFriends === 'function') {
+    if(window.socialService && typeof window.socialService.renderLobbyFriends === 'function') {
       window.socialService.renderLobbyFriends();
     }
   }
@@ -13100,6 +13099,27 @@
     });
   }
 
+  function updateMpSlotVisibility(count) {
+    // 1. Quick match slots
+    const qSlot3 = $('mpQuickSlot3');
+    const qSlot4 = $('mpQuickSlot4');
+    if (qSlot3) qSlot3.classList.toggle('hidden', count < 3);
+    if (qSlot4) qSlot4.classList.toggle('hidden', count < 4);
+
+    // 2. Buat Room Podium slots
+    const rSlot3 = $('mpSlotCard3');
+    const rSlot4 = $('mpSlotCard4');
+    const vsEmblem = $('mpRoomVsEmblem');
+    if (rSlot3) rSlot3.classList.toggle('hidden', count < 3);
+    if (rSlot4) rSlot4.classList.toggle('hidden', count < 4);
+    if (vsEmblem) vsEmblem.classList.toggle('hidden', count > 2);
+
+    // Re-render lobby friends if socialService is loaded
+    if (window.socialService && typeof window.socialService.renderLobbyFriends === 'function') {
+      window.socialService.renderLobbyFriends();
+    }
+  }
+
   if(el.mpPlayerCountGroup) {
     el.mpPlayerCountGroup.querySelectorAll('.mp-player-count-pill').forEach(btn => {
       btn.onclick = () => {
@@ -13108,6 +13128,7 @@
         btn.classList.add('active');
         selectedMpPlayerCount = Number(btn.dataset.count) || 2;
         updateMpQuickMatchTexts();
+        updateMpSlotVisibility(selectedMpPlayerCount);
       };
     });
   }

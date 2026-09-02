@@ -1049,23 +1049,46 @@
       if (!container) return;
       if (count) count.textContent = String(this.friends.length);
       if (!this.friends.length) {
-        container.innerHTML = '<div class="mp-friends-empty">Belum ada teman. Tambahkan teman dari menu Sosial.</div>';
+        container.innerHTML = '<div class="mp-friends-empty">Belum ada teman.<br>Tambah teman di menu Sosial!</div>';
         return;
       }
       const avatar = (id) => typeof window.getCuteAvatarSvg === 'function'
-        ? window.getCuteAvatarSvg(id || 'chick_yellow', 30)
+        ? window.getCuteAvatarSvg(id || 'chick_yellow', 20)
         : 'chick_yellow';
-      container.innerHTML = this.friends.slice(0, 4).map(friend => `
+      container.innerHTML = this.friends.map(friend => `
         <div class="mp-friend-row" data-friend-key="${friend.friendKey}">
           <span class="mp-friend-avatar">${avatar(friend.avatar)}</span>
-          <div><b>${this.escapeHtml(friend.name || 'Teman')}</b><small>TERHUBUNG</small></div>
-          <button type="button" class="mp-lobby-invite" aria-label="Lihat profil ${this.escapeHtml(friend.name || 'teman')}">i</button>
+          <div class="mp-friend-info">
+            <b>${this.escapeHtml(friend.name || 'Teman')}</b>
+            <small>● ONLINE</small>
+          </div>
+          <button type="button" class="mp-lobby-invite-btn" title="Undang mabar">+ UNDANG</button>
         </div>`).join('');
-      container.querySelectorAll('.mp-lobby-invite').forEach(btn => {
+
+      container.querySelectorAll('.mp-lobby-invite-btn').forEach(btn => {
         btn.onclick = () => {
+          if (window.audio && window.audio.click) window.audio.click();
           const key = btn.closest('.mp-friend-row')?.dataset.friendKey;
           const friend = this.friends.find(item => item.friendKey === key);
-          if (friend) this.openFriendProfile(friend);
+          const roomCode = document.getElementById('mpCreatedCodeBadge')?.textContent || '';
+          
+          btn.textContent = 'TERKIRIM ✓';
+          btn.style.background = '#0284c7';
+          btn.style.borderColor = '#38bdf8';
+          setTimeout(() => {
+            btn.textContent = '+ UNDANG';
+            btn.style.background = '';
+            btn.style.borderColor = '';
+          }, 2500);
+
+          if (typeof window.showGameDialog === 'function') {
+            window.showGameDialog({
+              title: 'Undangan Terkirim!',
+              html: `<p>Undangan mabar telah dikirim ke <b>${friend ? friend.name : 'Teman'}</b>!` +
+                    (roomCode && roomCode !== '----' ? `<br>Kode Room: <b style="color:#facc15;">#${roomCode}</b></p>` : `</p>`),
+              type: 'success'
+            });
+          }
         };
       });
     }

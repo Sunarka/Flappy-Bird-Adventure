@@ -13,18 +13,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.18">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.18">
-  <link rel="stylesheet" href="css/shop.css?v=20.18">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.18">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.18">
-  <link rel="stylesheet" href="css/store.css?v=20.18">
-  <link rel="stylesheet" href="css/ranked.css?v=20.18">
-  <link rel="stylesheet" href="css/social.css?v=20.18">
-  <link rel="stylesheet" href="css/splash.css?v=20.18">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.18">
+  <link rel="stylesheet" href="css/style.css?v=20.19">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.19">
+  <link rel="stylesheet" href="css/shop.css?v=20.19">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.19">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.19">
+  <link rel="stylesheet" href="css/store.css?v=20.19">
+  <link rel="stylesheet" href="css/ranked.css?v=20.19">
+  <link rel="stylesheet" href="css/social.css?v=20.19">
+  <link rel="stylesheet" href="css/splash.css?v=20.19">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.19">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.18">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.19">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -861,9 +861,11 @@
         </div>
       </section>
 
-      <!-- 1v1 MULTIPLAYER ROOM & MATCHMAKING MODAL -->
+            <!-- 1v1 MULTIPLAYER ROOM & MATCHMAKING MODAL -->
       <section id="multiplayerModal" class="modal mp-modal hidden" role="dialog" aria-modal="true">
-        <!-- Status pencarian muncul sebagai banner di bagian atas lobby. -->
+        <button class="close" data-close>×</button>
+        
+        <!-- Status pencarian banner -->
         <div id="mpSearchingBar" class="mp-searching-bar hidden" role="status" aria-live="polite">
           <div class="mp-search-spinner" aria-hidden="true"></div>
           <div class="mp-search-info">
@@ -873,17 +875,24 @@
           </div>
           <button class="mp-search-cancel-btn" id="mpCancelSearchBtn" type="button" aria-label="Batalkan pencarian">×</button>
         </div>
-        <button class="close" data-close>×</button>
+
+        <!-- Top Header with Integrated Tabs -->
         <div class="mp-header">
           <div class="mp-icon-badge">
-            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M14.5 17.5L3 6V3h3l11.5 11.5-3 3zM14.5 6.5l3-3 3.5 3.5-3 3-3.5-3.5zM6.5 14.5l-3.5 3.5 3 3 3.5-3.5-3-3z" fill="#ffffff"/></svg>
+            <svg viewBox="0 0 24 24" width="16" height="16"><path d="M14.5 17.5L3 6V3h3l11.5 11.5-3 3zM14.5 6.5l3-3 3.5 3.5-3 3-3.5-3.5zM6.5 14.5l-3.5 3.5 3 3 3.5-3.5-3-3z" fill="#ffffff"/></svg>
           </div>
           <div class="mp-titles">
             <h2>MULTIPLAYER LOBBY</h2>
             <div class="mp-status-indicator">
               <span class="mp-dot"></span>
-              <span id="mpServerStatusText">CLOUDFLARE RELAY ONLINE</span>
+              <span id="mpServerStatusText">ONLINE</span>
             </div>
+          </div>
+          <!-- Integrated Tabs -->
+          <div class="mp-tabs">
+            <button class="mp-tab-btn active" id="mpTabQuickBtn" type="button">CARI LAWAN</button>
+            <button class="mp-tab-btn" id="mpTabCreateBtn" type="button">BUAT ROOM</button>
+            <button class="mp-tab-btn" id="mpTabJoinBtn" type="button">GABUNG ROOM</button>
           </div>
         </div>
 
@@ -906,134 +915,159 @@
           </div>
         </div>
 
-        <!-- Mode Tabs: Quick Match, Buat Room, Gabung Room -->
-        <div class="mp-tabs">
-          <button class="mp-tab-btn active" id="mpTabQuickBtn" type="button">QUICK MATCH</button>
-          <button class="mp-tab-btn" id="mpTabCreateBtn" type="button">BUAT ROOM</button>
-          <button class="mp-tab-btn" id="mpTabJoinBtn" type="button">GABUNG ROOM</button>
-        </div>
-
-        <!-- TAB 1: QUICK MATCH -->
-        <div class="mp-view" id="mpViewQuick">
-          <div class="mp-lobby-stage" aria-label="Lobby pencarian multiplayer">
-            <aside class="mp-player-banner">
-              <div class="mp-player-rank">SKY<br><b>ACE</b></div>
-              <div class="mp-player-avatar" id="mpLobbyMyAvatar"><img src="assets/icons/birds/classic.svg" alt="Avatar pemain"></div>
-              <div class="mp-player-name" id="mpLobbyMyName">SKY PLAYER</div>
-              <div class="mp-player-status"><span></span> SIAP BERTANDING</div>
-            </aside>
-            <div class="mp-team-slots">
-              <div class="mp-team-slot is-you"><div class="mp-slot-number">01</div><div class="mp-slot-bird" id="mpLobbySlotMyBird"><img src="assets/icons/birds/classic.svg" alt="Burung pemain"></div><b>KAMU</b><small>LEADER · SIAP</small></div>
-              <div class="mp-team-slot"><div class="mp-slot-number">02</div><div class="mp-slot-bird">+</div><b>UNDANG TEMAN</b><small>SLOT TERBUKA</small></div>
-              <div class="mp-team-slot mp-extra-slot"><div class="mp-slot-number">03</div><div class="mp-slot-bird">+</div><b>MENUNGGU</b><small>UNTUK 3P / 4P</small></div>
-              <div class="mp-team-slot mp-extra-slot"><div class="mp-slot-number">04</div><div class="mp-slot-bird">+</div><b>MENUNGGU</b><small>UNTUK 4P</small></div>
-            </div>
-            <aside class="mp-friends-panel">
-              <div class="mp-friends-title">TEMAN <span id="mpLobbyFriendCount">0</span></div>
-              <div id="mpLobbyFriendsList" class="mp-lobby-friends-list">
-                <div class="mp-friends-empty">Memuat teman...</div>
-              </div>
-            </aside>
-          </div>
-          <div class="mp-quick-box" id="mpQuickInitialBox">
-            <div class="mp-quick-title" id="mpQuickTitleText">SURVIVAL MATCHMAKING</div>
-            <p class="mp-quick-desc" id="mpQuickDescText">Mencari 2 pemain untuk bertanding bertahan hidup!</p>
-            <button class="primary mp-btn-find" id="mpQuickFindBtn" type="button">CARI LAWAN SEKARANG</button>
-          </div>
-          <!-- Active Searching Radar View Inside Modal -->
-          <div class="mp-quick-searching-box hidden" id="mpQuickSearchingBox">
-            <div class="mp-radar-scanner">
-              <div class="mp-radar-circle"></div>
-              <div class="mp-radar-circle c2"></div>
-              <div class="mp-radar-sweep"></div>
-              <div class="mp-radar-dot"></div>
-            </div>
-            <div class="mp-quick-search-title" id="mpQuickSearchTitle">MENCARI PEMAIN ONLINE...</div>
-            <div class="mp-quick-search-timer" id="mpModalSearchTimer">00:01</div>
-            <p class="mp-quick-search-status" id="mpQuickSearchStatus">Menghubungkan ke lawan online...</p>
-            <button class="secondary mp-btn-cancel-search" id="mpModalCancelSearchBtn" type="button">BATALKAN PENCARIAN</button>
-          </div>
-        </div>
-
-        <!-- TAB 2: ROOM LOBBY (HOST & GUEST - MLBB 1v1 PODIUM STYLE) -->
-        <div class="mp-view hidden" id="mpViewCreate">
-          <div class="mp-room-box mlbb-room-style">
-            <div class="mlbb-room-top-header">
-              <div class="mlbb-room-code-tag">
-                <span class="mlbb-room-code-label">KODE ROOM:</span>
-                <span class="mp-code-badge mlbb-code-glow" id="mpCreatedCodeBadge">----</span>
-                <button class="mp-btn-copy" id="mpCopyCodeBtn" type="button" title="Salin Kode Room">SALIN</button>
-              </div>
-              <div class="mlbb-room-ping-tag">
-                <span class="ping-dot"></span>
-                <span>ROOM LIVE</span>
-              </div>
-            </div>
-
-            <!-- MLBB 1v1 Battle Clash Arena Podium -->
-            <div class="mlbb-room-clash-arena">
-              <!-- Left Podium: Host (Player 1) -->
-              <div class="mlbb-podium-card host" id="mpHostSlotCard">
-                <div class="mlbb-podium-crown"><svg viewBox="0 0 24 24" width="14" height="14" fill="#facc15"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1z"/></svg></div>
-                <div class="mlbb-podium-avatar-wrap">
-                  <div class="mp-slot-avatar mlbb-avatar" id="mpHostAvatar"></div>
+        <!-- MAIN DUAL-PANE BODY (ARENA ON LEFT, MLBB FRIEND INVITE LIST ON RIGHT) -->
+        <div class="mp-body-dual-pane">
+          <!-- LEFT PANE: ARENA & TABS -->
+          <div class="mp-left-pane">
+            <!-- TAB 1: QUICK MATCH -->
+            <div class="mp-view" id="mpViewQuick">
+              <div class="mp-team-slots" id="mpQuickTeamSlots">
+                <div class="mp-team-slot is-you" id="mpQuickSlot1">
+                  <div class="mp-slot-number">01</div>
+                  <div class="mp-slot-bird" id="mpLobbySlotMyBird"><img src="assets/icons/birds/classic.svg" alt="Kamu"></div>
+                  <b id="mpLobbyMyName">KAMU</b>
+                  <small>LEADER · READY</small>
                 </div>
-                <div class="mlbb-podium-name" id="mpHostName">HOST</div>
-                <div class="mlbb-podium-role host" id="mpHostRoleBadge">HOST (LEADER)</div>
-                <div class="mlbb-podium-status ready">READY</div>
+                <div class="mp-team-slot" id="mpQuickSlot2">
+                  <div class="mp-slot-number">02</div>
+                  <div class="mp-slot-bird">+</div>
+                  <b>SLOT 2</b>
+                  <small>MENUNGGU...</small>
+                </div>
+                <div class="mp-team-slot hidden" id="mpQuickSlot3">
+                  <div class="mp-slot-number">03</div>
+                  <div class="mp-slot-bird">+</div>
+                  <b>SLOT 3</b>
+                  <small>MENUNGGU...</small>
+                </div>
+                <div class="mp-team-slot hidden" id="mpQuickSlot4">
+                  <div class="mp-slot-number">04</div>
+                  <div class="mp-slot-bird">+</div>
+                  <b>SLOT 4</b>
+                  <small>MENUNGGU...</small>
+                </div>
               </div>
 
-              <!-- Center Clash Emblem (VS) -->
-              <div class="mlbb-room-vs-emblem">
-                <span class="mlbb-vs-icon">VS</span>
-                <span class="mlbb-vs-text">VS</span>
+              <div class="mp-quick-box" id="mpQuickInitialBox">
+                <div class="mp-quick-info">
+                  <span class="mp-quick-title" id="mpQuickTitleText">SURVIVAL MATCHMAKING</span>
+                  <span class="mp-quick-desc" id="mpQuickDescText">Mencari lawan online...</span>
+                </div>
+                <button class="primary mp-btn-find" id="mpQuickFindBtn" type="button">CARI LAWAN ▶</button>
               </div>
 
-              <!-- Right Podium: Rival / Guest (Player 2) -->
-              <div class="mlbb-podium-card guest" id="mpGuestSlotCard">
-                <div class="mlbb-podium-avatar-wrap">
-                  <div class="mp-slot-avatar mlbb-avatar guest" id="mpGuestAvatar">
-                    <span class="mlbb-waiting-pulse">+</span>
+              <!-- Active Searching Radar View Inside Modal -->
+              <div class="mp-quick-searching-box hidden" id="mpQuickSearchingBox">
+                <div class="mp-radar-scanner">
+                  <div class="mp-radar-circle"></div>
+                  <div class="mp-radar-circle c2"></div>
+                  <div class="mp-radar-sweep"></div>
+                  <div class="mp-radar-dot"></div>
+                </div>
+                <div class="mp-quick-search-title" id="mpQuickSearchTitle">MENCARI LAWAN ONLINE...</div>
+                <div class="mp-quick-search-timer" id="mpModalSearchTimer">00:01</div>
+                <button class="secondary mp-btn-cancel-search" id="mpModalCancelSearchBtn" type="button">BATALKAN</button>
+              </div>
+            </div>
+
+            <!-- TAB 2: BUAT ROOM (PODIUM ARENA) -->
+            <div class="mp-view hidden" id="mpViewCreate">
+              <div class="mlbb-room-top-header">
+                <div class="mlbb-room-code-tag">
+                  <span class="mlbb-room-code-label">KODE ROOM:</span>
+                  <span class="mp-code-badge mlbb-code-glow" id="mpCreatedCodeBadge">----</span>
+                  <button class="mp-btn-copy" id="mpCopyCodeBtn" type="button" title="Salin Kode">SALIN</button>
+                </div>
+                <div class="mlbb-room-ping-tag">
+                  <span class="ping-dot"></span>
+                  <span>ROOM AKTIF</span>
+                </div>
+              </div>
+
+              <!-- MLBB Clash Arena Podiums (Dynamic 2, 3, or 4 slots) -->
+              <div class="mlbb-room-clash-arena" id="mlbbRoomClashArena">
+                <!-- Slot 1: Host -->
+                <div class="mlbb-podium-card host" id="mpHostSlotCard">
+                  <div class="mlbb-podium-crown"><svg viewBox="0 0 24 24" width="12" height="12" fill="#facc15"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1z"/></svg></div>
+                  <div class="mlbb-podium-avatar-wrap">
+                    <div class="mp-slot-avatar mlbb-avatar" id="mpHostAvatar"></div>
                   </div>
+                  <div class="mlbb-podium-name" id="mpHostName">HOST</div>
+                  <div class="mlbb-podium-role host" id="mpHostRoleBadge">HOST (LEADER)</div>
+                  <div class="mlbb-podium-status ready">READY</div>
                 </div>
-                <div class="mlbb-podium-name" id="mpGuestName">Menunggu Lawan...</div>
-                <div class="mlbb-podium-role guest" id="mpGuestRoleBadge">SLOT 2</div>
-                <div class="mlbb-podium-status waiting" id="mpGuestStatusBadge">MENUNGGU...</div>
+
+                <!-- Center VS Emblem (Visible in 2P mode) -->
+                <div class="mlbb-room-vs-emblem" id="mpRoomVsEmblem">VS</div>
+
+                <!-- Slot 2: Guest -->
+                <div class="mlbb-podium-card guest" id="mpGuestSlotCard">
+                  <div class="mlbb-podium-avatar-wrap">
+                    <div class="mp-slot-avatar mlbb-avatar guest" id="mpGuestAvatar">
+                      <span class="mlbb-waiting-pulse">+</span>
+                    </div>
+                  </div>
+                  <div class="mlbb-podium-name" id="mpGuestName">Menunggu Lawan...</div>
+                  <div class="mlbb-podium-role guest" id="mpGuestRoleBadge">SLOT 2</div>
+                  <div class="mlbb-podium-status waiting" id="mpGuestStatusBadge">MENUNGGU...</div>
+                </div>
+
+                <!-- Slot 3: Guest (Dynamic) -->
+                <div class="mlbb-podium-card guest hidden" id="mpSlotCard3">
+                  <div class="mlbb-podium-avatar-wrap">
+                    <div class="mp-slot-avatar mlbb-avatar guest" id="mpSlotAvatar3">
+                      <span class="mlbb-waiting-pulse">+</span>
+                    </div>
+                  </div>
+                  <div class="mlbb-podium-name" id="mpSlotName3">Menunggu...</div>
+                  <div class="mlbb-podium-role guest" id="mpSlotRoleBadge3">SLOT 3</div>
+                  <div class="mlbb-podium-status waiting" id="mpSlotStatus3">MENUNGGU...</div>
+                </div>
+
+                <!-- Slot 4: Guest (Dynamic) -->
+                <div class="mlbb-podium-card guest hidden" id="mpSlotCard4">
+                  <div class="mlbb-podium-avatar-wrap">
+                    <div class="mp-slot-avatar mlbb-avatar guest" id="mpSlotAvatar4">
+                      <span class="mlbb-waiting-pulse">+</span>
+                    </div>
+                  </div>
+                  <div class="mlbb-podium-name" id="mpSlotName4">Menunggu...</div>
+                  <div class="mlbb-podium-role guest" id="mpSlotRoleBadge4">SLOT 4</div>
+                  <div class="mlbb-podium-status waiting" id="mpSlotStatus4">MENUNGGU...</div>
+                </div>
               </div>
 
-              <!-- Optional 3P & 4P Slots for larger lobbies -->
-              <div class="mp-slot-card hidden" id="mpSlotCard3">
-                <div class="mp-slot-avatar" id="mpSlotAvatar3">?</div>
-                <span class="mp-slot-name" id="mpSlotName3">Pemain 3</span>
-                <span class="mp-slot-role" id="mpSlotRoleBadge3">SLOT 3</span>
-              </div>
-              <div class="mp-slot-card hidden" id="mpSlotCard4">
-                <div class="mp-slot-avatar" id="mpSlotAvatar4">?</div>
-                <span class="mp-slot-name" id="mpSlotName4">Pemain 4</span>
-                <span class="mp-slot-role" id="mpSlotRoleBadge4">SLOT 4</span>
-              </div>
+              <!-- Action Buttons -->
+              <button class="primary mlbb-room-start-btn" id="mpHostStartGameBtn" type="button" disabled>
+                <div class="start-btn-shine"></div>
+                <span>MENUNGGU LAWAN BERGABUNG...</span>
+              </button>
+              
+              <button class="primary mlbb-room-ready-btn hidden" id="mpGuestReadyBtn" type="button">
+                <div class="start-btn-shine"></div>
+                <span>SAYA SIAP! (READY)</span>
+              </button>
             </div>
 
-            <!-- Host Action Button -->
-            <button class="primary mlbb-room-start-btn" id="mpHostStartGameBtn" type="button" disabled>
-              <div class="start-btn-shine"></div>
-              <span>MENUNGGU LAWAN BERGABUNG...</span>
-            </button>
-            
-            <!-- Guest Action Button (Toggle Ready) -->
-            <button class="primary mlbb-room-ready-btn hidden" id="mpGuestReadyBtn" type="button">
-              <div class="start-btn-shine"></div>
-              <span>SAYA SIAP! (READY)</span>
-            </button>
+            <!-- TAB 3: GABUNG ROOM -->
+            <div class="mp-view hidden" id="mpViewJoin">
+              <div class="mp-room-box">
+                <span class="mp-join-label">MASUKKAN 4-DIGIT KODE ROOM TEMAN:</span>
+                <input type="number" class="mp-code-input" id="mpJoinCodeInput" placeholder="Contoh: 7821" maxlength="4">
+                <button class="primary" id="mpJoinRoomBtn" type="button">GABUNG ROOM ▶</button>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <!-- TAB 3: GABUNG ROOM -->
-        <div class="mp-view hidden" id="mpViewJoin">
-          <div class="mp-room-box">
-            <span style="font-size:12px;font-weight:700;color:#cbd5e1;">MASUKKAN 4-DIGIT KODE ROOM TEMAN:</span>
-            <input type="number" class="mp-code-input" id="mpJoinCodeInput" placeholder="Contoh: 7821" maxlength="4">
-            <button class="primary" id="mpJoinRoomBtn" type="button" style="margin:0;background:linear-gradient(135deg,#8b5cf6 0%,#6366f1 100%);">GABUNG ROOM</button>
+          <!-- RIGHT PANE: MLBB FRIEND INVITE SIDEBAR -->
+          <div class="mp-friends-panel" id="mpLobbyFriendsPanel">
+            <div class="mp-friends-header">
+              <span>TEMAN (<b id="mpLobbyFriendCount">0</b>)</span>
+              <span class="mp-friends-sub">UNDANG MABAR</span>
+            </div>
+            <div id="mpLobbyFriendsList" class="mp-lobby-friends-list">
+              <div class="mp-friends-empty">Memuat daftar teman...</div>
+            </div>
           </div>
         </div>
       </section>
@@ -1321,12 +1355,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.18"></script>
-  <script src="js/admob-config.js?v=20.18"></script>
-  <script src="js/shop-data.js?v=20.18"></script>
-  <script src="js/audio.js?v=20.18"></script>
-  <script src="js/multiplayer.js?v=20.18"></script>
-  <script src="js/social.js?v=20.18"></script>
-  <script src="js/script.js?v=20.18"></script>
+  <script src="js/firebase-config.js?v=20.19"></script>
+  <script src="js/admob-config.js?v=20.19"></script>
+  <script src="js/shop-data.js?v=20.19"></script>
+  <script src="js/audio.js?v=20.19"></script>
+  <script src="js/multiplayer.js?v=20.19"></script>
+  <script src="js/social.js?v=20.19"></script>
+  <script src="js/script.js?v=20.19"></script>
 </body>
 </html>
