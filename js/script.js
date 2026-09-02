@@ -11396,6 +11396,14 @@
     if(currentMode === 'multiplayer') {
       audio.click();
       showModal(el.multiplayerModal);
+      switchMpTab('create');
+      if(window.multiplayerEngine) {
+        window.multiplayerEngine.createRoom({
+          name: gpProfile.gamerTag || 'SkyPlayer',
+          avatar: gpProfile.avatar || 'chick_yellow',
+          skin: progress.selected || 'classic'
+        });
+      }
       return;
     }
     if(currentMode === 'ranked' && !gpProfile.isLoggedIn) {
@@ -11407,10 +11415,14 @@
   });
   bindClick('rankedLeaderboardBtn', () => {
     audio.click();
-    updateRankedLeaderboardUI();
-    renderLeaderboardList();
-    switchLeaderboardTab('global');
     showModal(el.rankedModal);
+    try {
+      updateRankedLeaderboardUI();
+      renderLeaderboardList();
+      switchLeaderboardTab('global');
+    } catch(err) {
+      console.warn('[Leaderboard UI Render Warning]:', err);
+    }
   });
   bindClick(el.lbTabGlobalBtn, () => {
     audio.click();
