@@ -4394,6 +4394,7 @@
         if(state === State.MENU) {
           isUpdatingNow = true;
           showUpdateNotification(`Versi baru v${data.version} terdeteksi! Memuat pembaruan...`);
+          try { sessionStorage.setItem('feather_skip_splash', '1'); } catch(e){}
           setTimeout(() => {
             window.location.reload(true);
           }, 1200);
@@ -4412,6 +4413,7 @@
     if(pendingUpdateAvailable && !isUpdatingNow) {
       isUpdatingNow = true;
       showUpdateNotification('Game selesai! Menerapkan versi terbaru...');
+      try { sessionStorage.setItem('feather_skip_splash', '1'); } catch(e){}
       setTimeout(() => {
         window.location.reload(true);
       }, 1000);
@@ -13185,6 +13187,23 @@
   function initSplashScreen() {
     const splash = document.getElementById('appSplashScreen');
     if(!splash) return;
+
+    // Jika auto-refresh / skip requested, langsung lewati splash screen tanpa animasi
+    let shouldSkipSplash = false;
+    try {
+      shouldSkipSplash = sessionStorage.getItem('feather_skip_splash') === '1' || window.location.search.includes('skip_splash=1');
+      sessionStorage.removeItem('feather_skip_splash');
+    } catch(e){}
+
+    if(shouldSkipSplash) {
+      splash.style.display = 'none';
+      requestAutoLandscapeFullscreen();
+      checkOrientationPrompt();
+      if(settings.music && audio) {
+        audio.lobbyMusic();
+      }
+      return;
+    }
 
     const stageApp = document.getElementById('splashStageApp');
     const stageDev = document.getElementById('splashStageDev');
