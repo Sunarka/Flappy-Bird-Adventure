@@ -2056,6 +2056,7 @@
       const selected = progress[selectedKey] === id;
       const isPreviewing = previewLoadout[shopCategory] === id;
       const isPlayingPreview = shopCategory === 'music' && audio.previewTrackId === id;
+      const rarity = item.rarity || 'common';
       const body = item.body || item.top || item.color || '#e2e8f0';
       const wing = item.wing || item.bottom || item.color || '#94a3b8';
       const cap = item.cap || body, edge = item.edge || wing, top = item.top || body, bottom = item.bottom || wing, color = item.color || body;
@@ -2072,7 +2073,8 @@
         actionHtml = `<button class="skin-cost-btn buy-btn ${canAfford ? '' : 'cant-afford'}" data-action="buy" data-product="${id}" type="button"><svg viewBox="0 0 16 16" width="12" height="12" class="mini-coin-svg"><circle cx="8" cy="8" r="6.5" fill="#fbbf24" stroke="#d97706" stroke-width="1.2"/><text x="8" y="11" text-anchor="middle" font-size="8" font-weight="900" fill="#92400e">$</text></svg> BUY ${item.cost}</button>`;
       }
 
-      return `<div class="skin-card ${selected ? 'selected ' : ''}${isPreviewing ? 'previewing ' : ''}${isPlayingPreview ? 'playing-preview ' : ''}${unlocked ? '' : 'locked'}" data-card-product="${id}" style="--body:${body};--wing:${wing};--beak:${item.beak||body};--cap:${cap};--edge:${edge};--top:${top};--bottom:${bottom};--color:${color}">` +
+      return `<div class="skin-card rarity-${rarity} ${selected ? 'selected ' : ''}${isPreviewing ? 'previewing ' : ''}${isPlayingPreview ? 'playing-preview ' : ''}${unlocked ? '' : 'locked'}" data-card-product="${id}" style="--body:${body};--wing:${wing};--beak:${item.beak||body};--cap:${cap};--edge:${edge};--top:${top};--bottom:${bottom};--color:${color}">` +
+        `<span class="rarity-badge rarity-${rarity}">${rarity.toUpperCase()}</span>` +
         `<span class="skin-preview ${previewClass}">${iconSvg}</span>` +
         `<span class="skin-name">${item.name}</span>` +
         `<span class="skin-desc">${desc}</span>` +
@@ -7969,142 +7971,159 @@
 
   function drawHills() {
     const bg = backgrounds[progress.selectedBackground] || backgrounds.sky;
-    ctx.fillStyle = bg.hill;
+    const hillBase = bg.hill || '#75bb9b';
+    const yBase = H - GROUND;
+
+    // Back Mountain Silhouette with atmospheric depth
+    ctx.save();
+    ctx.fillStyle = hillBase;
+    ctx.globalAlpha = 0.55;
     ctx.beginPath();
-    ctx.moveTo(0, H - GROUND - 45);
-    for(let x = 0; x <= W; x += 45) ctx.quadraticCurveTo(x + 20, H - GROUND - 105 + (x % 90 ? 22 : 0), x + 45, H - GROUND - 45);
-    ctx.lineTo(W, H - GROUND);
-    ctx.lineTo(0, H - GROUND);
+    ctx.moveTo(0, yBase - 65);
+    for(let x = 0; x <= W; x += 50) {
+      ctx.quadraticCurveTo(x + 25, yBase - 130 + (x % 100 ? 30 : -10), x + 50, yBase - 65);
+    }
+    ctx.lineTo(W, yBase);
+    ctx.lineTo(0, yBase);
+    ctx.closePath();
     ctx.fill();
-    ctx.fillStyle = '#4aa474';
+
+    // Front Lush Hill with gradient shading
+    ctx.globalAlpha = 0.95;
+    const hillGrad = ctx.createLinearGradient(0, yBase - 85, 0, yBase);
+    hillGrad.addColorStop(0, hillBase);
+    hillGrad.addColorStop(1, bg.groundBase || '#3f2e18');
+    ctx.fillStyle = hillGrad;
     ctx.beginPath();
-    ctx.moveTo(0, H - GROUND - 20);
-    for(let x = 0; x <= W; x += 55) ctx.quadraticCurveTo(x + 30, H - GROUND - 68, x + 55, H - GROUND - 20);
-    ctx.lineTo(W, H - GROUND);
-    ctx.lineTo(0, H - GROUND);
+    ctx.moveTo(0, yBase - 30);
+    for(let x = 0; x <= W; x += 40) {
+      ctx.quadraticCurveTo(x + 20, yBase - 78, x + 40, yBase - 30);
+    }
+    ctx.lineTo(W, yBase);
+    ctx.lineTo(0, yBase);
+    ctx.closePath();
     ctx.fill();
+
+    // Atmospheric Hill Rim Highlight
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.28)';
+    ctx.lineWidth = 1.8;
+    ctx.stroke();
+    ctx.restore();
   }
 
   function drawPipe(p) {
-    const cap = 11, skin = pipeSkins[progress.selectedPipe] || pipeSkins.green;
+    const cap = 14, skin = pipeSkins[progress.selectedPipe] || pipeSkins.green;
+    const px = p.x, pw = p.w;
+    const topH = p.gapY - cap;
+    const botY = p.gapY + p.gapSize;
+    const botH = H - GROUND - botY - cap;
+
     ctx.save();
-    ctx.fillStyle = skin.body;
-    rr(p.x, 0, p.w, p.gapY - cap, 5);
-    rr(p.x, p.gapY + p.gapSize + cap, p.w, H - (p.gapY + p.gapSize + cap), 5);
-    ctx.fillStyle = skin.wing;
-    ctx.fillRect(p.x + 5, 0, 12, p.gapY - cap);
-    ctx.fillRect(p.x + 5, p.gapY + p.gapSize + cap, 12, H);
-    ctx.fillStyle = skin.edge;
-    ctx.fillRect(p.x + p.w - 8, 0, 8, p.gapY - cap);
-    ctx.fillRect(p.x + p.w - 8, p.gapY + p.gapSize + cap, 8, H);
-    ctx.fillStyle = skin.cap;
-    rr(p.x - 5, p.gapY - cap, p.w + 10, cap, 3);
-    rr(p.x - 5, p.gapY + p.gapSize, p.w + 10, cap, 3);
-    ctx.restore();
-  }
 
-  function drawCoin(coin) {
-    ctx.save();
-    ctx.translate(coin.x, coin.y);
+    // 1. Pipe Body Gradient (Top & Bottom)
+    const pipeGrad = ctx.createLinearGradient(px, 0, px + pw, 0);
+    pipeGrad.addColorStop(0, skin.edge || '#216c4d');
+    pipeGrad.addColorStop(0.2, skin.body || '#287a55');
+    pipeGrad.addColorStop(0.5, skin.wing || '#3dbb68');
+    pipeGrad.addColorStop(0.8, skin.body || '#287a55');
+    pipeGrad.addColorStop(1, skin.edge || '#216c4d');
 
-    const spinScale = Math.cos(coin.spin); // Animasi rotasi horizontal 3D
-    const absScale = Math.max(0.08, Math.abs(spinScale));
-
-    // 1. Pendaran Kilau Emas Luar
-    ctx.shadowColor = 'rgba(251, 191, 36, 0.65)';
-    ctx.shadowBlur = 6;
-
-    // 2. Ketebalan Tepi Koin 3D (Rim Depth)
-    const edgeOffset = (1 - absScale) * (spinScale >= 0 ? -2.2 : 2.2);
-    ctx.fillStyle = '#b45309';
-    ctx.beginPath();
-    ctx.ellipse(edgeOffset, 0, coin.r * absScale, coin.r, 0, 0, Math.PI * 2);
+    ctx.fillStyle = pipeGrad;
+    _rrPath(ctx, px, 0, pw, topH, 4);
+    ctx.fill();
+    _rrPath(ctx, px, botY + cap, pw, Math.max(10, botH), 4);
     ctx.fill();
 
-    // 3. Gradasi Permukaan Emas Dinamis
-    const coinGrad = ctx.createLinearGradient(-coin.r * absScale, -coin.r, coin.r * absScale, coin.r);
-    coinGrad.addColorStop(0, '#fef08a');
-    coinGrad.addColorStop(0.3, '#f59e0b');
-    coinGrad.addColorStop(0.7, '#d97706');
-    coinGrad.addColorStop(1, '#78350f');
+    // 2. Vertical Specular Light Streak
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.32)';
+    ctx.fillRect(px + 6, 0, 7, topH);
+    ctx.fillRect(px + 6, botY + cap, 7, Math.max(10, botH));
 
-    ctx.fillStyle = coinGrad;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, coin.r * absScale, coin.r, 0, 0, Math.PI * 2);
+    // 3. Pipe Caps (Collar Rims)
+    const capGrad = ctx.createLinearGradient(px - 4, 0, px + pw + 4, 0);
+    capGrad.addColorStop(0, skin.edge || '#216c4d');
+    capGrad.addColorStop(0.3, skin.cap || '#53d878');
+    capGrad.addColorStop(0.6, '#ffffff');
+    capGrad.addColorStop(0.7, skin.cap || '#53d878');
+    capGrad.addColorStop(1, skin.edge || '#216c4d');
+
+    // Top Cap
+    ctx.fillStyle = capGrad;
+    ctx.shadowColor = skin.cap || '#53d878';
+    ctx.shadowBlur = 6;
+    _rrPath(ctx, px - 4, topH, pw + 8, cap, 4);
+    ctx.fill();
+
+    // Bottom Cap
+    _rrPath(ctx, px - 4, botY, pw + 8, cap, 4);
     ctx.fill();
     ctx.shadowBlur = 0;
 
-    // 4. Lingkaran & Lambang Emboss Bagian Dalam
-    if(absScale > 0.3) {
-      ctx.strokeStyle = '#fef08a';
-      ctx.lineWidth = 1.2;
+    // 4. Glowing Neon Center Rings for Cyber / Anime pipes
+    if(skin.name.includes('NEON') || skin.name.includes('TORII') || skin.name.includes('CYBER')) {
+      const pulse = 0.5 + Math.sin(performance.now() / 200) * 0.4;
+      ctx.strokeStyle = skin.cap || '#38bdf8';
+      ctx.lineWidth = 2.5;
+      ctx.globalAlpha = pulse;
       ctx.beginPath();
-      ctx.ellipse(0, 0, (coin.r - 2.8) * absScale, coin.r - 2.8, 0, 0, Math.PI * 2);
+      ctx.moveTo(px - 3, topH + cap / 2);
+      ctx.lineTo(px + pw + 3, topH + cap / 2);
+      ctx.moveTo(px - 3, botY + cap / 2);
+      ctx.lineTo(px + pw + 3, botY + cap / 2);
       ctx.stroke();
-
-      // Lambang Tengah Koin
-      ctx.fillStyle = '#fef9c3';
-      ctx.beginPath();
-      ctx.ellipse(0, 0, 3.2 * absScale, 5, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Efek Kilatan Bintang Berkilau saat Berputar
-      if(Math.abs(Math.sin(coin.spin * 2)) > 0.82) {
-        ctx.fillStyle = '#ffffff';
-        drawCanvasSparkle(ctx, 0, 0, Math.max(3, 5 * absScale));
-      }
     }
 
-    ctx.restore();
-  }
-
-  function drawFlyer(flyer) {
-    ctx.save();
-    ctx.translate(flyer.x, flyer.y);
-    ctx.scale(-1, 1);
-    ctx.fillStyle = '#e85d50';
-    ctx.beginPath();
-    ctx.ellipse(0, 0, flyer.r, flyer.r * .72, 0, 0, 7);
-    ctx.fill();
-    ctx.fillStyle = '#c83f43';
-    ctx.save();
-    ctx.rotate(Math.sin(flyer.wing) * .55);
-    ctx.beginPath();
-    ctx.ellipse(-4, -8, 10, 5, -.45, 0, 7);
-    ctx.fill();
-    ctx.restore();
-    ctx.fillStyle = '#fff';
-    ctx.beginPath();
-    ctx.arc(6, -5, 4, 0, 7);
-    ctx.fill();
-    ctx.fillStyle = '#16365d';
-    ctx.beginPath();
-    ctx.arc(7, -5, 1.5, 0, 7);
-    ctx.fill();
-    ctx.fillStyle = '#ffbe45';
-    ctx.beginPath();
-    ctx.moveTo(14, 0);
-    ctx.lineTo(23, 4);
-    ctx.lineTo(14, 7);
-    ctx.fill();
     ctx.restore();
   }
 
   function drawGround() {
     const y = H - GROUND;
-    ctx.fillStyle = '#46b65c';
-    ctx.fillRect(0, y, W, 9);
-    ctx.fillStyle = '#b57a45';
-    ctx.fillRect(0, y + 9, W, GROUND);
-    ctx.fillStyle = '#e6ad5a';
-    ctx.fillRect(0, y + 11, W, 5);
-    ctx.fillStyle = '#8b5939';
-    for(let x = -groundX; x < W; x += 30) {
-      ctx.fillRect(x, y + 28, 13, 3);
-      ctx.fillRect(x + 16, y + 54, 9, 3);
+    const bg = backgrounds[progress.selectedBackground] || backgrounds.sky;
+    const gBase = bg.groundBase || '#b57a45';
+    const gTop = bg.groundTop || '#46b65c';
+    const gStripe = bg.groundStripe || '#e6ad5a';
+
+    ctx.save();
+
+    // 1. Lush Grass Border Top
+    ctx.fillStyle = gTop;
+    ctx.fillRect(0, y, W, 10);
+
+    // 2. Animated Swaying Grass Tufts
+    ctx.fillStyle = gTop;
+    for(let x = -groundX; x < W + 30; x += 16) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + 5, y - 6);
+      ctx.lineTo(x + 10, y);
+      ctx.closePath();
+      ctx.fill();
     }
-    ctx.fillStyle = '#72df6c';
-    for(let x = -groundX; x < W; x += 15) ctx.fillRect(x, y - 4, 6, 5);
+
+    // 3. Ground Earth Bed (Smooth Multi-tone Gradient)
+    const earthGrad = ctx.createLinearGradient(0, y + 10, 0, H);
+    earthGrad.addColorStop(0, gBase);
+    earthGrad.addColorStop(1, '#1e1006');
+    ctx.fillStyle = earthGrad;
+    ctx.fillRect(0, y + 10, W, GROUND - 10);
+
+    // 4. Decorative Soil Sedimentary Line
+    ctx.fillStyle = gStripe;
+    ctx.fillRect(0, y + 12, W, 4);
+
+    // 5. Soil Pebbles & Strata Details
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.22)';
+    for(let x = -groundX; x < W + 40; x += 32) {
+      ctx.fillRect(x + 4, y + 26, 12, 4);
+      ctx.fillRect(x + 20, y + 50, 8, 3);
+      ctx.fillRect(x + 10, y + 68, 14, 3);
+    }
+
+    // 6. Ground Highlight Trim
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+    ctx.fillRect(0, y, W, 2);
+
+    ctx.restore();
   }
 
   // Universal Draw Helpers (Works on game ctx and shop showcase ctx)
@@ -9716,16 +9735,38 @@
       drawCapeBackTo(targetCtx, opt.wing || 0, outfitId);
     }
 
-    // 2. Tail feathers
-    targetCtx.fillStyle = '#de7c24';
+    // 1. Ambient Skin Glow Aura (Soft Halo)
+    if(skin.glow) {
+      targetCtx.shadowColor = skin.glow;
+      targetCtx.shadowBlur = 10;
+    }
+
+    // 2. Tail feathers with double layers
+    targetCtx.fillStyle = skin.wing || '#de7c24';
     targetCtx.beginPath();
     targetCtx.ellipse(-18, 3, 11, 8, 0, 0, 7);
     targetCtx.fill();
-
-    // 3. Bird Body
     targetCtx.fillStyle = skin.body;
     targetCtx.beginPath();
+    targetCtx.ellipse(-16, 2, 7, 5, 0.2, 0, 7);
+    targetCtx.fill();
+
+    // 3. Volumetric Bird Body (Spherical 3D Light Highlight)
+    const bodyGrad = targetCtx.createRadialGradient(-4, -5, 2, 0, 0, 20);
+    bodyGrad.addColorStop(0, '#ffffff');
+    bodyGrad.addColorStop(0.3, skin.body);
+    bodyGrad.addColorStop(0.85, skin.body);
+    bodyGrad.addColorStop(1, skin.wing || skin.body);
+    targetCtx.fillStyle = bodyGrad;
+    targetCtx.beginPath();
     targetCtx.ellipse(0, 0, 19, 15, 0, 0, 7);
+    targetCtx.fill();
+    targetCtx.shadowBlur = 0;
+
+    // 3b. Rosy Cheeks (Cute Blush)
+    targetCtx.fillStyle = 'rgba(244, 114, 182, 0.42)';
+    targetCtx.beginPath();
+    targetCtx.ellipse(3, 4, 4.5, 3.2, 0, 0, 7);
     targetCtx.fill();
 
     // 4. Clothes / Shirts / Vests / Dresses covering body
@@ -9733,26 +9774,49 @@
 
     // 5. Belly light (only when not wearing full body outfits)
     if(outfitId === 'none' || outfitId === 'cape') {
-      targetCtx.fillStyle = '#fff1af';
+      const bellyGrad = targetCtx.createLinearGradient(-8, 2, -2, 10);
+      bellyGrad.addColorStop(0, '#ffffff');
+      bellyGrad.addColorStop(0.6, '#fff1af');
+      bellyGrad.addColorStop(1, '#fde047');
+      targetCtx.fillStyle = bellyGrad;
       targetCtx.beginPath();
-      targetCtx.ellipse(-5, 5, 7, 4, .2, 0, 7);
+      targetCtx.ellipse(-5, 5, 7.5, 4.5, .2, 0, 7);
       targetCtx.fill();
     }
 
     // 6. Front Outfit Accessories (Ties, Bowties, Medallions, Badges, Necklaces, Ribbons)
     drawOutfitFrontTo(targetCtx, outfitId);
 
-    // 7. Wing with animated flap
-    targetCtx.fillStyle = skin.wing;
+    // 7. Wing with animated dynamic flap and layered feathers
     targetCtx.save();
     targetCtx.translate(-4, 4);
-    targetCtx.rotate((opt.wing || 0) > 0 ? -0.45 : 0.05);
+    const flapAngle = (opt.wing || 0) > 0 ? -0.45 : 0.08;
+    targetCtx.rotate(flapAngle);
+
+    // Main Wing Body
+    const wingGrad = targetCtx.createLinearGradient(-10, -5, 10, 8);
+    wingGrad.addColorStop(0, skin.body);
+    wingGrad.addColorStop(0.5, skin.wing);
+    wingGrad.addColorStop(1, '#991b1b');
+    targetCtx.fillStyle = wingGrad;
     targetCtx.beginPath();
-    targetCtx.ellipse(0, 0, 10, 7, -0.2, 0, 7);
+    targetCtx.ellipse(0, 0, 11, 7.5, -0.2, 0, 7);
     targetCtx.fill();
-    targetCtx.fillStyle = 'rgba(255,255,255,0.3)';
+
+    // Wing Feather Details
+    targetCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+    targetCtx.lineWidth = 1.2;
     targetCtx.beginPath();
-    targetCtx.ellipse(-1, -1, 7, 4, -0.2, 0, 7);
+    targetCtx.moveTo(-6, -2);
+    targetCtx.quadraticCurveTo(0, -1, 7, -3);
+    targetCtx.moveTo(-4, 2);
+    targetCtx.quadraticCurveTo(2, 3, 8, 1);
+    targetCtx.stroke();
+
+    // Wing Top Specular Sheen
+    targetCtx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+    targetCtx.beginPath();
+    targetCtx.ellipse(-2, -2, 6, 3, -0.2, 0, 7);
     targetCtx.fill();
     targetCtx.restore();
 

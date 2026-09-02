@@ -32,6 +32,17 @@
 .skin-card.locked{opacity:.94}
 .skin-card.locked:hover{opacity:1}
 
+/* Rarity Badges & Tier Glows */
+.rarity-badge{position:absolute;top:5px;left:6px;font:900 7.5px/1 Arial,sans-serif;padding:2px 5px;border-radius:4px;letter-spacing:0.4px;text-transform:uppercase;z-index:2}
+.rarity-badge.rarity-common{background:#e2e8f0;color:#475569}
+.rarity-badge.rarity-rare{background:#e0f2fe;color:#0284c7;border:1px solid #bae6fd}
+.rarity-badge.rarity-epic{background:#f3e8ff;color:#9333ea;border:1px solid #e9d5ff}
+.rarity-badge.rarity-legendary{background:#fef3c7;color:#b45309;border:1px solid #fde68a}
+.rarity-badge.rarity-mythic{background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;box-shadow:0 1px 4px rgba(236,72,153,0.4)}
+
+.skin-card.rarity-legendary{border-color:#fde68a;background:linear-gradient(180deg,#fffdf7 0%,#fef9ee 100%)}
+.skin-card.rarity-mythic{border-color:#fbcfe8;background:linear-gradient(180deg,#fdf4ff 0%,#faf5ff 100%);box-shadow:0 2px 8px rgba(168,85,247,0.1)}
+
 .skin-name{font-size:10.5px;font-weight:900;margin:4px 0 2px;color:#1e3a5f;text-align:center;line-height:1.25;white-space:normal;word-break:break-word;max-width:100%}
 .skin-desc{font-size:8.5px;font-weight:600;color:#64748b;margin:0 0 10px;text-align:center;line-height:1.25;white-space:normal;word-break:break-word;max-width:100%;flex-grow:1}
 

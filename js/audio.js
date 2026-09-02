@@ -76,12 +76,19 @@
     playTone(freq, dur, type, volume, slide=0) {
       try {
         this.init();
+        if(!this.ctx) return;
         const t = this.ctx.currentTime, o = this.ctx.createOscillator(), g = this.ctx.createGain();
         o.type = type;
-        o.frequency.setValueAtTime(freq, t);
-        o.frequency.exponentialRampToValueAtTime(Math.max(20, freq + slide), t + dur);
-        g.gain.setValueAtTime(volume, t);
-        g.gain.exponentialRampToValueAtTime(.001, t + dur);
+        o.frequency.setValueAtTime(Math.max(20, freq), t);
+        if(slide !== 0) {
+          o.frequency.exponentialRampToValueAtTime(Math.max(20, freq + slide), t + dur);
+        }
+        // Smooth click-free ADSR Envelope
+        const attack = Math.min(0.015, dur * 0.15);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.linearRampToValueAtTime(volume, t + attack);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
         o.connect(g).connect(this.ctx.destination);
         o.start(t);
         o.stop(t + dur);
