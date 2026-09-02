@@ -26,14 +26,14 @@
 
 /* --- Multiplayer Lobby Modal (Modern Ocean & Sky Blue Glass) --- */
 .mp-modal {
-  width: min(330px, 94vw) !important;
-  max-height: min(540px, 88vh) !important;
-  background: linear-gradient(180deg, #0f172a 0%, #0c4a6e 50%, #075985 100%) !important;
+  width: min(480px, 94vw) !important;
+  max-height: min(340px, 92vh) !important;
+  background: linear-gradient(180deg, #0f172a 0%, #0a1f3a 50%, #051329 100%) !important;
   border: 2px solid #38bdf8 !important;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 26px rgba(56, 189, 248, 0.25) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85), 0 0 30px rgba(56, 189, 248, 0.35) !important;
   color: #ffffff !important;
-  padding: 18px 14px 16px !important;
-  border-radius: 20px !important;
+  padding: 12px 16px 14px !important;
+  border-radius: 18px !important;
   overflow: hidden !important;
 }
 
@@ -1479,3 +1479,240 @@
 
 
 
+
+/* =========================================================
+   MLBB CUSTOM ROOM 1v1 PODIUM & CLASH ARENA STYLES
+   ========================================================= */
+.mp-room-box.mlbb-room-style {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mlbb-room-top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+.mlbb-room-code-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mlbb-room-code-label {
+  font: 900 10px 'Trebuchet MS', Arial, sans-serif;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+
+.mlbb-code-glow {
+  font: 900 13px 'Trebuchet MS', Arial, monospace !important;
+  color: #facc15 !important;
+  text-shadow: 0 0 8px rgba(250, 204, 21, 0.6) !important;
+}
+
+.mlbb-room-ping-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font: 800 9px 'Trebuchet MS', Arial, sans-serif;
+  color: #4ade80;
+}
+
+/* 1v1 Arena Podium Grid */
+.mlbb-room-clash-arena {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: radial-gradient(circle at center, rgba(30, 58, 138, 0.4) 0%, rgba(15, 23, 42, 0.8) 70%);
+  border: 1.5px solid rgba(56, 189, 248, 0.3);
+  border-radius: 14px;
+  padding: 10px 12px;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Left & Right Podium Cards */
+.mlbb-podium-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 8px 6px;
+  position: relative;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.mlbb-podium-card.host {
+  border-color: #facc15;
+  box-shadow: 0 0 14px rgba(250, 204, 21, 0.25);
+}
+
+.mlbb-podium-card.guest {
+  border-color: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+}
+
+.mlbb-podium-crown {
+  position: absolute;
+  top: -8px;
+  left: 6px;
+  font-size: 13px;
+  transform: rotate(-15deg);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+}
+
+.mlbb-podium-avatar-wrap {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.mp-slot-avatar.mlbb-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0f172a;
+  border: 2px solid #facc15;
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mp-slot-avatar.mlbb-avatar.guest {
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.mlbb-waiting-pulse {
+  font-size: 24px;
+  color: #38bdf8;
+  animation: pulseWait 1.5s infinite;
+}
+
+@keyframes pulseWait {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+.mlbb-podium-name {
+  font: 900 11px 'Trebuchet MS', Arial, sans-serif;
+  color: #ffffff;
+  max-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.mlbb-podium-role {
+  font: 900 8px 'Trebuchet MS', Arial, sans-serif;
+  border-radius: 4px;
+  padding: 1px 6px;
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+}
+
+.mlbb-podium-role.host {
+  background: rgba(250, 204, 21, 0.2);
+  color: #fde047;
+  border: 1px solid rgba(250, 204, 21, 0.4);
+}
+
+.mlbb-podium-role.guest {
+  background: rgba(56, 189, 248, 0.2);
+  color: #7dd3fc;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.mlbb-podium-status {
+  font: 900 9px 'Trebuchet MS', Arial, sans-serif;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.mlbb-podium-status.ready {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.15);
+}
+
+.mlbb-podium-status.waiting {
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Center Clash VS Emblem */
+.mlbb-room-vs-emblem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+}
+
+.mlbb-vs-icon {
+  font-size: 20px;
+  filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.6));
+}
+
+.mlbb-vs-text {
+  font: 900 14px 'Trebuchet MS', Impact, sans-serif;
+  color: #facc15;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.8), 0 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* MLBB Room Action Buttons */
+.mlbb-room-start-btn {
+  width: 100% !important;
+  background: linear-gradient(135deg, #facc15 0%, #ea580c 100%) !important;
+  border: 1.5px solid #fef08a !important;
+  border-radius: 10px !important;
+  color: #1e1006 !important;
+  font: 900 12px 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 8px 0 !important;
+  min-height: 38px !important;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.5) !important;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.mlbb-room-start-btn:disabled {
+  background: #334155 !important;
+  border-color: #475569 !important;
+  color: #94a3b8 !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+}
+
+.mlbb-room-ready-btn {
+  width: 100% !important;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  border: 1.5px solid #38bdf8 !important;
+  border-radius: 10px !important;
+  color: #ffffff !important;
+  font: 900 12px 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 8px 0 !important;
+  min-height: 38px !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.5) !important;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
