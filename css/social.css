@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    FEATHER RUSH: SOCIAL, FRIENDLIST, CHAT & MULTIPLAYER INVITES
    ========================================================= */
 
@@ -297,7 +297,7 @@
 }
 
 /* =========================================================
-   FRIEND DETAILED PROFILE MODAL
+   FRIEND DETAILED PROFILE MODAL & SHOWCASE
    ========================================================= */
 .friend-profile-modal {
   max-width: 440px;
@@ -327,7 +327,38 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 14px;
+  margin-bottom: 12px;
+}
+
+.friend-showcase-box {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
   margin-bottom: 14px;
+  border: 1.5px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(56, 189, 248, 0.25);
+  background: #020617;
+}
+
+.friend-showcase-canvas {
+  width: 100%;
+  height: 120px;
+  display: block;
+}
+
+.friend-showcase-tag {
+  position: absolute;
+  bottom: 6px;
+  left: 8px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 6px;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
 }
 
 .friend-profile-avatar-box {
@@ -467,7 +498,7 @@
 }
 
 /* =========================================================
-   DIRECT CHAT MODAL
+   DIRECT CHAT MODAL & CUTE BIRD EMOTES
    ========================================================= */
 .direct-chat-modal {
   max-width: 420px;
@@ -479,7 +510,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 480px;
+  height: 500px;
   max-height: 85vh;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 24px rgba(56, 189, 248, 0.3);
 }
@@ -554,28 +585,45 @@
   text-align: right;
 }
 
-.chat-quick-emojis {
+/* Cute Bird Emotes Bar */
+.chat-bird-emotes-bar {
   display: flex;
-  gap: 6px;
-  padding: 6px 12px;
+  gap: 8px;
+  padding: 8px 12px;
   background: #1e293b;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   overflow-x: auto;
 }
 
-.quick-emoji-btn {
-  background: transparent;
-  border: none;
-  font-size: 1.25rem;
+.bird-emote-btn {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 10px;
   cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 6px;
-  transition: transform 0.1s;
+  padding: 4px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
 }
 
-.quick-emoji-btn:hover {
-  transform: scale(1.2);
-  background: rgba(255, 255, 255, 0.1);
+.bird-emote-btn:hover {
+  transform: scale(1.15);
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+}
+
+.bird-sticker-img {
+  width: 44px;
+  height: 44px;
+  display: block;
+  animation: bounceInEmote 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes bounceInEmote {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .chat-input-bar {

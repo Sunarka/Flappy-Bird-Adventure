@@ -1819,6 +1819,165 @@
     showcaseRunning = false;
   }
 
+  // ==========================================
+  // FRIEND PROFILE 60FPS LIVE SHOWCASE RENDERER
+  // ==========================================
+  let friendShowcaseRunning = false;
+  let friendShowcaseParticles = [];
+  let friendShowcaseTrailTimer = 0;
+  let friendShowcaseLoadout = { bird: 'classic', pet: 'none', hat: 'none', outfit: 'none', aura: 'none', background: 'sky', pipe: 'green' };
+
+  function startFriendShowcase(loadout) {
+    if(loadout) friendShowcaseLoadout = Object.assign({ bird: 'classic', pet: 'none', hat: 'none', outfit: 'none', aura: 'none', background: 'sky', pipe: 'green' }, loadout);
+    friendShowcaseRunning = true;
+    friendShowcaseParticles = [];
+    requestAnimationFrame(renderFriendShowcaseFrame);
+  }
+
+  function stopFriendShowcase() {
+    friendShowcaseRunning = false;
+  }
+
+  function renderFriendShowcaseFrame() {
+    const canvas = $('fpShowcaseCanvas');
+    if(!friendShowcaseRunning || !canvas) return;
+    const sCtx = canvas.getContext('2d');
+    const sW = canvas.width, sH = canvas.height;
+
+    // 1. Background Sky Gradient
+    const bg = backgrounds[friendShowcaseLoadout.background] || backgrounds.sky;
+    const sky = sCtx.createLinearGradient(0, 0, 0, sH);
+    sky.addColorStop(0, bg.top);
+    sky.addColorStop(1, bg.bottom);
+    sCtx.fillStyle = sky;
+    sCtx.fillRect(0, 0, sW, sH);
+
+    // Mini Clouds
+    const now = performance.now();
+    const cloud1X = ((now / 70) % (sW + 70)) - 35;
+    const cloud2X = (((now / 100) + 150) % (sW + 70)) - 35;
+    sCtx.fillStyle = 'rgba(255,255,255,0.45)';
+    sCtx.beginPath();
+    sCtx.arc(cloud1X, 20, 11, 0, 7);
+    sCtx.arc(cloud1X + 10, 16, 14, 0, 7);
+    sCtx.arc(cloud1X + 22, 20, 10, 0, 7);
+    sCtx.fill();
+
+    sCtx.beginPath();
+    sCtx.arc(cloud2X, 32, 9, 0, 7);
+    sCtx.arc(cloud2X + 8, 29, 11, 0, 7);
+    sCtx.arc(cloud2X + 18, 32, 8, 0, 7);
+    sCtx.fill();
+
+    // Mini Hills
+    sCtx.fillStyle = bg.hill;
+    sCtx.beginPath();
+    sCtx.moveTo(0, sH - 20);
+    for(let x = 0; x <= sW; x += 35) sCtx.quadraticCurveTo(x + 18, sH - 36 + (x % 70 ? 10 : 0), x + 35, sH - 20);
+    sCtx.lineTo(sW, sH);
+    sCtx.lineTo(0, sH);
+    sCtx.fill();
+
+    // 2. Mini Ground
+    sCtx.fillStyle = '#46b65c';
+    sCtx.fillRect(0, sH - 18, sW, 5);
+    sCtx.fillStyle = '#b57a45';
+    sCtx.fillRect(0, sH - 13, sW, 13);
+    sCtx.fillStyle = '#e6ad5a';
+    sCtx.fillRect(0, sH - 11, sW, 2);
+
+    // 3. Mini Pipe on Right Side
+    const pipeSkin = pipeSkins[friendShowcaseLoadout.pipe] || pipeSkins.green;
+    const pX = sW - 60, pW = 28, gapY = 16, gapSize = 36, cap = 5;
+    sCtx.save();
+    sCtx.fillStyle = pipeSkin.body;
+    rrTo(sCtx, pX, 0, pW, gapY - cap, 3);
+    rrTo(sCtx, pX, gapY + gapSize + cap, pW, sH - (gapY + gapSize + cap) - 18, 3);
+    sCtx.fillStyle = pipeSkin.cap;
+    rrTo(sCtx, pX - 3, gapY - cap, pW + 6, cap, 2);
+    rrTo(sCtx, pX - 3, gapY + gapSize, pW + 6, cap, 2);
+    sCtx.restore();
+
+    // 4. Showcase Aura Trail Spawner & Particles
+    friendShowcaseTrailTimer += 0.033;
+    if(friendShowcaseTrailTimer > 0.05) {
+      friendShowcaseTrailTimer = 0;
+      const bX = 145, bY = 52 + Math.sin(now / 240) * 4;
+      const auraId = friendShowcaseLoadout.aura || 'default';
+      const colors = auraId === 'fire' ? ['#ff3b00', '#ffd000'] :
+                     auraId === 'rainbow' ? ['hsl(' + ((now * 0.5) % 360) + ', 100%, 65%)'] :
+                     auraId === 'galaxy' ? ['#c77dff', '#48cae4'] :
+                     auraId === 'neon' ? ['#00f5d4', '#fee440'] :
+                     auraId === 'bubble' ? ['#a0e7e5'] :
+                     auraId === 'hearts' ? ['#ff4d6d', '#ff758f'] :
+                     auraId === 'golden' ? ['#ffd700', '#fff066'] : ['#ffd74c'];
+      const col = colors[Math.floor(Math.random() * colors.length)];
+      friendShowcaseParticles.push({
+        x: bX - 16, y: bY + 3 + (Math.random() - .5) * 6,
+        vx: -60 - Math.random() * 30, vy: (Math.random() - .5) * 20,
+        life: 0.45, maxLife: 0.45, color: col, size: 3.5 + Math.random() * 3,
+        type: auraId === 'fire' ? 'flame' : auraId === 'bubble' ? 'bubble' : auraId === 'hearts' ? 'heart' : auraId === 'golden' ? 'coin' : 'star'
+      });
+    }
+
+    for(const q of friendShowcaseParticles) {
+      q.x += q.vx * 0.033;
+      q.y += q.vy * 0.033;
+      q.life -= 0.033;
+      drawAuraParticleTo(sCtx, q);
+    }
+    friendShowcaseParticles = friendShowcaseParticles.filter(q => q.life > 0);
+
+    // 5. Bird Preview
+    const bX = 145, bY = 52 + Math.sin(now / 240) * 4;
+    const bAngle = Math.sin(now / 240) * 0.06;
+    const bWing = Math.sin(now / 120) > 0 ? 0.2 : 0;
+    renderCustomBird(sCtx, {
+      x: bX, y: bY, angle: bAngle, wing: bWing,
+      skinId: friendShowcaseLoadout.bird || 'classic',
+      hatId: friendShowcaseLoadout.hat || 'none',
+      outfitId: friendShowcaseLoadout.outfit || 'none',
+      opacity: 1
+    });
+
+    // 5b. Pet Companion Preview
+    if(friendShowcaseLoadout.pet && friendShowcaseLoadout.pet !== 'none') {
+      const pSkin = petsCatalog[friendShowcaseLoadout.pet] || petsCatalog.pip_peep;
+      if(pSkin && pSkin.baby1 && pSkin.baby2) {
+        drawBabyBird({
+          x: bX - 24,
+          y: bY - 14 + Math.sin(now / 220) * 3,
+          r: 7.2,
+          wing: now / 90,
+          angle: 0,
+          state: 'follow',
+          color: pSkin.baby1.color,
+          wingColor: pSkin.baby1.wingColor,
+          blushColor: pSkin.baby1.blushColor,
+          accessory: pSkin.baby1.accessory
+        }, sCtx);
+
+        drawBabyBird({
+          x: bX - 28,
+          y: bY + 14 + Math.sin(now / 240 + Math.PI) * 3,
+          r: 6.8,
+          wing: now / 90,
+          angle: 0,
+          state: 'follow',
+          color: pSkin.baby2.color,
+          wingColor: pSkin.baby2.wingColor,
+          blushColor: pSkin.baby2.blushColor,
+          accessory: pSkin.baby2.accessory
+        }, sCtx);
+      }
+    }
+
+    if(friendShowcaseRunning) requestAnimationFrame(renderFriendShowcaseFrame);
+  }
+
+  window.startFriendShowcase = startFriendShowcase;
+  window.stopFriendShowcase = stopFriendShowcase;
+
   function renderShopShowcaseFrame() {
     if(!showcaseRunning || !el.shopCanvas) return;
     const sCtx = el.shopCanvas.getContext('2d');
@@ -4080,6 +4239,7 @@
     if(audio && typeof audio.stopPreview === 'function') audio.stopPreview();
     if(typeof stopShopShowcase === 'function') stopShopShowcase();
     if(typeof stopChampionSpotlight === 'function') stopChampionSpotlight();
+    if(typeof stopFriendShowcase === 'function') stopFriendShowcase();
     const layer = el.layer || $('modalLayer');
     if(layer) {
       layer.classList.add('hidden');

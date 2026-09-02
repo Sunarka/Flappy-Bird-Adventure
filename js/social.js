@@ -1,4 +1,4 @@
-﻿/**
+/**
  * =========================================================
  * FEATHER RUSH: SOCIAL, FRIENDLIST, CHAT, PROFILE & MULTIPLAYER INVITES
  * =========================================================
@@ -6,6 +6,153 @@
 
 (function(window) {
   'use strict';
+
+  // ==========================================
+  // CUTE FEATHER RUSH BIRD EMOTES SVG CATALOG
+  // ==========================================
+  const CUTE_BIRD_EMOTES = [
+    {
+      id: 'bird_wave',
+      title: 'Salam / Halo',
+      render: (s = 36) => `
+        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
+          <circle cx="18" cy="18" r="16" fill="#fef08a" stroke="#facc15" stroke-width="1.5"/>
+          <ellipse cx="11" cy="17" rx="3" ry="4.5" fill="#facc15"/>
+          <ellipse cx="27" cy="12" rx="4.5" ry="2.5" transform="rotate(-35 27 12)" fill="#eab308"/>
+          <circle cx="14" cy="14" r="2.2" fill="#0f172a"/>
+          <circle cx="14.8" cy="13.2" r="0.8" fill="#fff"/>
+          <circle cx="21" cy="14" r="2.2" fill="#0f172a"/>
+          <circle cx="21.8" cy="13.2" r="0.8" fill="#fff"/>
+          <circle cx="11" cy="19" r="2" fill="#f43f5e" opacity="0.6"/>
+          <circle cx="24" cy="19" r="2" fill="#f43f5e" opacity="0.6"/>
+          <polygon points="17,17 21,17 19,21" fill="#f97316"/>
+        </svg>
+      `
+    },
+    {
+      id: 'bird_cool',
+      title: 'Keren / Sunglasses',
+      render: (s = 36) => `
+        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
+          <circle cx="18" cy="18" r="16" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+          <ellipse cx="8" cy="19" rx="3.5" ry="4" fill="#0284c7"/>
+          <ellipse cx="28" cy="19" rx="3.5" ry="4" fill="#0284c7"/>
+          <rect x="9" y="11" width="8" height="7" rx="2" fill="#0f172a"/>
+          <rect x="19" y="11" width="8" height="7" rx="2" fill="#0f172a"/>
+          <line x1="16" y1="13" x2="20" y2="13" stroke="#0f172a" stroke-width="2"/>
+          <polygon points="16,20 21,20 18.5,23.5" fill="#f97316"/>
+        </svg>
+      `
+    },
+    {
+      id: 'bird_rage',
+      title: 'Ajak Perang / Duel',
+      render: (s = 36) => `
+        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
+          <circle cx="18" cy="18" r="16" fill="#ef4444" stroke="#b91c1c" stroke-width="1.5"/>
+          <path d="M4 14 Q18 9 32 14" stroke="#991b1b" stroke-width="4" fill="none"/>
+          <polygon points="30,12 35,8 33,14" fill="#991b1b"/>
+          <polygon points="12,13 17,16 12,16" fill="#0f172a"/>
+          <polygon points="24,13 19,16 24,16" fill="#0f172a"/>
+          <polygon points="16,18 20,18 18,22" fill="#ea580c"/>
+        </svg>
+      `
+    },
+    {
+      id: 'bird_fire',
+      title: 'Membara / Phoenix',
+      render: (s = 36) => `
+        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
+          <path d="M12 6 Q15 0 18 5 Q21 0 24 6" fill="#f59e0b"/>
+          <circle cx="18" cy="19" r="15" fill="#f97316" stroke="#ea580c" stroke-width="1.5"/>
+          <circle cx="13" cy="16" r="2.5" fill="#fef08a"/>
+          <circle cx="23" cy="16" r="2.5" fill="#fef08a"/>
+          <polygon points="16,19 20,19 18,23" fill="#facc15"/>
+        </svg>
+      `
+    },
+    {
+      id: 'bird_love',
+      title: 'Cinta / Heart Eyes',
+      render: (s = 36) => `
+        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
+          <circle cx="18" cy="18" r="16" fill="#f472b6" stroke="#db2777" stroke-width="1.5"/>
+          <path d="M11 13 A 2 2 0 0 0 13 15 L 13 17 L 11 15 A 2 2 0 0 0 11 13" fill="#e11d48"/>
+          <path d="M13 13 A 2 2 0 0 1 15 15 L 13 17 L 11 15 A 2 2 0 0 1 13 13" fill="#e11d48"/>
+          <path d="M21 13 A 2 2 0 0 0 23 15 L 23 17 L 21 15 A 2 2 0 0 0 21 13" fill="#e11d48"/>
+          <path d="M23 13 A 2 2 0 0 1 25 15 L 23 17 L 21 15 A 2 2 0 0 1 23 13" fill="#e11d48"/>
+          <circle cx="9" cy="20" r="2.5" fill="#fda4af"/>
+          <circle cx="27" cy="20" r="2.5" fill="#fda4af"/>
+          <polygon points="16,19 20,19 18,22" fill="#fb923c"/>
+        </svg>
+      `
+    },
+    {
+      id: 'bird_king',
+      title: 'Juara / Crown King',
+      render: (s = 36) => `
+        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
+          <polygon points="12,10 14,4 18,7 22,4 24,10" fill="#facc15" stroke="#b45309" stroke-width="1"/>
+          <circle cx="18" cy="20" r="15" fill="#fef08a" stroke="#eab308" stroke-width="1.5"/>
+          <path d="M11 16 Q14 13 17 16" stroke="#0f172a" stroke-width="2" fill="none"/>
+          <path d="M19 16 Q22 13 25 16" stroke="#0f172a" stroke-width="2" fill="none"/>
+          <polygon points="16,19 20,19 18,23" fill="#f97316"/>
+        </svg>
+      `
+    },
+    {
+      id: 'bird_cry',
+      title: 'Nangis / Kalah',
+      render: (s = 36) => `
+        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
+          <circle cx="18" cy="18" r="16" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+          <path d="M11 16 Q14 13 16 16" stroke="#475569" stroke-width="2" fill="none"/>
+          <path d="M20 16 Q22 13 25 16" stroke="#475569" stroke-width="2" fill="none"/>
+          <ellipse cx="13" cy="22" rx="2" ry="4" fill="#38bdf8"/>
+          <ellipse cx="23" cy="22" rx="2" ry="4" fill="#38bdf8"/>
+          <polygon points="16,22 20,22 18,19" fill="#f97316"/>
+        </svg>
+      `
+    },
+    {
+      id: 'bird_rich',
+      title: 'Kaya / Golden Coin',
+      render: (s = 36) => `
+        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
+          <circle cx="18" cy="18" r="16" fill="#fef08a" stroke="#ca8a04" stroke-width="1.5"/>
+          <polygon points="13,12 14,14 16,14 14.5,15.5 15,17.5 13,16 11,17.5 11.5,15.5 10,14 12,14" fill="#eab308"/>
+          <polygon points="23,12 24,14 26,14 24.5,15.5 25,17.5 23,16 21,17.5 21.5,15.5 20,14 22,14" fill="#eab308"/>
+          <polygon points="16,18 20,18 18,21" fill="#f97316"/>
+          <circle cx="18" cy="26" r="5" fill="#facc15" stroke="#b45309" stroke-width="1"/>
+        </svg>
+      `
+    },
+    {
+      id: 'bird_rocket',
+      title: 'Roket / Meluncur',
+      render: (s = 36) => `
+        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
+          <polygon points="8,26 3,32 12,29" fill="#ef4444"/>
+          <circle cx="20" cy="16" r="15" fill="#a855f7" stroke="#7e22ce" stroke-width="1.5"/>
+          <ellipse cx="23" cy="14" rx="7" ry="5" fill="#38bdf8" stroke="#0284c7" stroke-width="1"/>
+          <polygon points="26,17 31,18 27,20" fill="#f97316"/>
+        </svg>
+      `
+    },
+    {
+      id: 'bird_gg',
+      title: 'GG / Jempol Mantap',
+      render: (s = 36) => `
+        <svg viewBox="0 0 36 36" width="${s}" height="${s}">
+          <circle cx="18" cy="18" r="16" fill="#4ade80" stroke="#16a34a" stroke-width="1.5"/>
+          <circle cx="13" cy="14" r="2.2" fill="#0f172a"/>
+          <path d="M20 14 Q23 11 26 14" stroke="#0f172a" stroke-width="2.2" fill="none"/>
+          <polygon points="16,18 20,18 18,22" fill="#f97316"/>
+          <circle cx="27" cy="22" r="5" fill="#22c55e" stroke="#15803d" stroke-width="1"/>
+        </svg>
+      `
+    }
+  ];
 
   class SocialService {
     constructor() {
@@ -23,6 +170,24 @@
       this.activeInvites = {};
 
       this.init();
+      this.initBirdEmotesBar();
+    }
+
+    initBirdEmotesBar() {
+      const bar = document.getElementById('chatBirdEmotesBar');
+      if (!bar) return;
+      bar.innerHTML = '';
+      CUTE_BIRD_EMOTES.forEach(emote => {
+        const btn = document.createElement('button');
+        btn.className = 'bird-emote-btn';
+        btn.type = 'button';
+        btn.title = emote.title;
+        btn.innerHTML = emote.render(30);
+        btn.onclick = () => {
+          this.sendMessage(`[BIRD_EMOTE:${emote.id}]`);
+        };
+        bar.appendChild(btn);
+      });
     }
 
     init() {
@@ -366,7 +531,18 @@
             document.getElementById('fpSkinCount').textContent = `${(Array.isArray(u.bird) ? u.bird.length : 1)} Milik`;
             document.getElementById('fpPetCount').textContent = `${(Array.isArray(u.pet) ? u.pet.length : 0)} Milik`;
             document.getElementById('fpHatCount').textContent = `${(Array.isArray(u.hat) ? u.hat.length : 0)} Milik`;
-            document.getElementById('fpAuraCount').textContent = `${(Array.isArray(u.aura) ? u.aura.length : 0)} Milik`;
+            // Update live showcase with friend's exact equipped skins & pets!
+            if (typeof window.startFriendShowcase === 'function') {
+              window.startFriendShowcase({
+                bird: l.bird || friend.avatar || 'classic',
+                pet: l.pet || 'none',
+                hat: l.hat || 'none',
+                outfit: l.outfit || 'none',
+                aura: l.aura || 'none',
+                background: l.background || 'sky',
+                pipe: l.pipe || 'green'
+              });
+            }
           }
         } catch(e) {
           console.warn('[SocialService] Error fetching friend profile stats:', e.message);
@@ -375,7 +551,7 @@
     }
 
     // ==========================================
-    // 4. 1-ON-1 DIRECT CHAT
+    // 4. 1-ON-1 DIRECT CHAT & CUTE BIRD STICKERS
     // ==========================================
     openDirectChat(friend) {
       this.activeChatFriend = friend;
@@ -388,6 +564,8 @@
       if (avatarEl && typeof window.getCuteAvatarSvg === 'function') {
         avatarEl.innerHTML = window.getCuteAvatarSvg(friend.avatar || 'chick_yellow', 36);
       }
+
+      this.initBirdEmotesBar();
 
       if (typeof window.showModal === 'function') {
         window.showModal(modal);
@@ -414,7 +592,7 @@
             if (!container) return;
             container.innerHTML = '';
             if (snap.empty) {
-              container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:40px 10px;">Belum ada pesan. Kirim salam atau emoji ke temanmu! 👋✨</div>';
+              container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:40px 10px;">Belum ada pesan. Kirim stiker burung imut ke temanmu! 🐥✨</div>';
               return;
             }
             snap.forEach(doc => {
@@ -422,10 +600,23 @@
               const isMe = msg.senderKey === this.myKey;
               const timeStr = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
               
+              let contentHtml = '';
+              if (typeof msg.text === 'string' && msg.text.startsWith('[BIRD_EMOTE:')) {
+                const emoteId = msg.text.replace('[BIRD_EMOTE:', '').replace(']', '').trim();
+                const foundEmote = CUTE_BIRD_EMOTES.find(e => e.id === emoteId);
+                if (foundEmote) {
+                  contentHtml = `<div class="bird-sticker-img" title="${foundEmote.title}">${foundEmote.render(44)}</div>`;
+                } else {
+                  contentHtml = `<div>${this.escapeHtml(msg.text)}</div>`;
+                }
+              } else {
+                contentHtml = `<div>${this.escapeHtml(msg.text)}</div>`;
+              }
+
               const bubble = document.createElement('div');
               bubble.className = `chat-msg-bubble ${isMe ? 'outgoing' : 'incoming'}`;
               bubble.innerHTML = `
-                <div>${this.escapeHtml(msg.text)}</div>
+                ${contentHtml}
                 <div class="chat-msg-time">${timeStr}</div>
               `;
               container.appendChild(bubble);
