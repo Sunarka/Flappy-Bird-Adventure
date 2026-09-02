@@ -798,7 +798,7 @@
 
   // Active power-up states
   const activePowerups = { shield: false, magnet: 0, slow: 0, star: 0, rocket: 0 };
-  const bird = { x:104, y:280, vy:0, r:16, wing:0, angle:0, dead:false };
+  const bird = { x:130, y:150, vy:0, r:16, wing:0, angle:0, dead:false };
 
   // Audio Engine with Full Synthesizer
   const audio = {
@@ -5871,7 +5871,8 @@
   function update(dt) {
     cloudX = (cloudX + 10 * dt) % W;
     if(state === State.READY) {
-      bird.y = 285 + Math.sin(performance.now() / 250) * 7;
+      bird.x = 130;
+      bird.y = 150 + Math.sin(performance.now() / 250) * 6;
       bird.wing = .1;
       babyBirds[0].x = bird.x - 22;
       babyBirds[0].y = bird.y - 18 + Math.sin(performance.now() / 220) * 4;
@@ -8497,12 +8498,16 @@
     // Swaying Daisy Flowers & Tulips on Grass
     const flowerSpots = [
       { x: 25, y: H - GROUND - 4, color: '#f43f5e' },
-      { x: 55, y: H - GROUND - 6, color: '#fbbf24' },
-      { x: 110, y: H - GROUND - 5, color: '#ec4899' },
-      { x: 155, y: H - GROUND - 6, color: '#a855f7' },
-      { x: 230, y: H - GROUND - 4, color: '#38bdf8' },
-      { x: 285, y: H - GROUND - 6, color: '#fbbf24' },
-      { x: 335, y: H - GROUND - 5, color: '#f43f5e' }
+      { x: 65, y: H - GROUND - 6, color: '#fbbf24' },
+      { x: 120, y: H - GROUND - 5, color: '#ec4899' },
+      { x: 180, y: H - GROUND - 6, color: '#a855f7' },
+      { x: 240, y: H - GROUND - 4, color: '#38bdf8' },
+      { x: 310, y: H - GROUND - 6, color: '#fbbf24' },
+      { x: 380, y: H - GROUND - 5, color: '#f43f5e' },
+      { x: 440, y: H - GROUND - 6, color: '#ec4899' },
+      { x: 510, y: H - GROUND - 4, color: '#38bdf8' },
+      { x: 570, y: H - GROUND - 6, color: '#fbbf24' },
+      { x: 615, y: H - GROUND - 5, color: '#f43f5e' }
     ];
     flowerSpots.forEach((f, idx) => {
       const sway = Math.sin(lobbyTime * 3 + idx * 1.5) * 3;
