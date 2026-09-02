@@ -6,15 +6,16 @@
   <meta name="theme-color" content="#77cef2">
   <title>Feather Rush</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="css/style.css?v=16.8">
-  <link rel="stylesheet" href="css/modern-icons.css?v=16.8">
-  <link rel="stylesheet" href="css/shop.css?v=16.8">
-  <link rel="stylesheet" href="css/shop-extra.css?v=16.8">
-  <link rel="stylesheet" href="css/mode-picker.css?v=16.8">
-  <link rel="stylesheet" href="css/store.css?v=16.8">
-  <link rel="stylesheet" href="css/ranked.css?v=16.8">
-  <link rel="stylesheet" href="css/multiplayer.css?v=16.8">
-  <link rel="stylesheet" href="css/splash.css?v=16.8">
+  <link rel="stylesheet" href="css/style.css?v=17.1">
+  <link rel="stylesheet" href="css/modern-icons.css?v=17.1">
+  <link rel="stylesheet" href="css/shop.css?v=17.1">
+  <link rel="stylesheet" href="css/shop-extra.css?v=17.1">
+  <link rel="stylesheet" href="css/mode-picker.css?v=17.1">
+  <link rel="stylesheet" href="css/store.css?v=17.1">
+  <link rel="stylesheet" href="css/ranked.css?v=17.1">
+  <link rel="stylesheet" href="css/multiplayer.css?v=17.1">
+  <link rel="stylesheet" href="css/social.css?v=17.1">
+  <link rel="stylesheet" href="css/splash.css?v=17.1">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -304,6 +305,10 @@
       </button>
 
       <button class="secondary" id="shopBtn">SHOP</button>
+      <button class="secondary btn-social-lobby" id="socialBtn" type="button">
+        <span>TEMAN & SOSIAL</span>
+        <span class="social-notification-badge" id="socialBadgeCount" style="display:none;">0</span>
+      </button>
       <button class="secondary" id="howBtn">HOW TO PLAY</button>
       <button class="secondary" id="settingsBtn">SETTINGS</button>
 
@@ -866,7 +871,102 @@
         <button class="secondary" id="overHomeBtn">HOME</button>
       </section>
 
+      <!-- SOCIAL & FRIENDLIST MODAL -->
+      <section id="socialModal" class="modal social-modal hidden" role="dialog" aria-modal="true" aria-label="Teman dan Sosial">
+        <button class="close" data-close>×</button>
+        <div class="social-header">
+          <div class="social-title-wrap">
+            <div class="social-title-icon">👥</div>
+            <div class="social-title" id="socialModalTitle">TEMAN & SOSIAL</div>
+          </div>
+        </div>
+
+        <!-- Social Tabs -->
+        <div class="social-tabs">
+          <button class="social-tab-btn active" id="tabFriendsBtn" type="button">
+            <span>Daftar Teman</span>
+          </button>
+          <button class="social-tab-btn" id="tabSearchBtn" type="button">
+            <span>Cari Teman</span>
+          </button>
+          <button class="social-tab-btn" id="tabReqBtn" type="button">
+            <span>Permintaan</span>
+            <span class="social-tab-badge" id="socialReqTabBadge" style="display:none;">0</span>
+          </button>
+        </div>
+
+        <!-- Panel 1: Daftar Teman -->
+        <div class="social-tab-panel active" id="panelFriends">
+          <div id="socialFriendsList">
+            <div class="social-empty-state">
+              <div class="social-empty-icon">👥</div>
+              <div>Belum ada teman. Cari teman baru di tab <b>Cari Teman</b>!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Cari Teman -->
+        <div class="social-tab-panel" id="panelSearch">
+          <div class="social-search-bar">
+            <input type="text" id="socialSearchInput" class="social-search-input" placeholder="Ketik GamerTag teman..." maxlength="20">
+            <button id="socialSearchBtn" class="social-search-btn" type="button">CARI</button>
+          </div>
+          <div id="socialSearchResults">
+            <div class="social-empty-state">
+              <div class="social-empty-icon">🔍</div>
+              <div>Ketik nama teman untuk mulai mencari.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 3: Permintaan Masuk -->
+        <div class="social-tab-panel" id="panelRequests">
+          <div id="socialRequestsList">
+            <div class="social-empty-state">
+              <div class="social-empty-icon">📬</div>
+              <div>Tidak ada permintaan pertemanan masuk.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1-ON-1 DIRECT CHAT MODAL -->
+      <section id="directChatModal" class="modal direct-chat-modal hidden" role="dialog" aria-modal="true" aria-label="Direct Chat">
+        <div class="direct-chat-header">
+          <div class="chat-partner-info">
+            <div class="chat-partner-avatar" id="chatPartnerAvatar"></div>
+            <div class="chat-partner-name" id="chatPartnerName">Teman</div>
+          </div>
+          <button class="close" data-close>×</button>
+        </div>
+
+        <div class="chat-messages-container" id="chatMessagesContainer">
+          <div style="text-align:center;color:#94a3b8;padding:20px;">Memuat pesan...</div>
+        </div>
+
+        <!-- Quick Emojis -->
+        <div class="chat-quick-emojis">
+          <button class="quick-emoji-btn" type="button">👋</button>
+          <button class="quick-emoji-btn" type="button">🎮</button>
+          <button class="quick-emoji-btn" type="button">⚔️</button>
+          <button class="quick-emoji-btn" type="button">🔥</button>
+          <button class="quick-emoji-btn" type="button">😎</button>
+          <button class="quick-emoji-btn" type="button">🏆</button>
+          <button class="quick-emoji-btn" type="button">🚀</button>
+          <button class="quick-emoji-btn" type="button">❤️</button>
+        </div>
+
+        <!-- Input Bar -->
+        <form class="chat-input-bar" id="chatForm">
+          <input type="text" id="chatInput" class="chat-input" placeholder="Tulis pesan..." maxlength="120" autocomplete="off">
+          <button type="submit" class="chat-send-btn">KIRIM</button>
+        </form>
+      </section>
+
     </div>
+
+    <!-- Floating Interactive Multiplayer Invite Toast Container -->
+    <div id="socialInviteToastContainer" class="social-invite-toast-container"></div>
   </main>
   <!-- Background music: managed dynamically via audio controller -->
   <audio id="bgMusic" loop preload="none"></audio>
@@ -891,11 +991,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=16.8"></script>
-  <script src="js/admob-config.js?v=16.8"></script>
-  <script src="js/shop-data.js?v=16.8"></script>
-  <script src="js/audio.js?v=16.8"></script>
-  <script src="js/multiplayer.js?v=16.8"></script>
-  <script src="js/script.js?v=16.8"></script>
+  <script src="js/firebase-config.js?v=17.1"></script>
+  <script src="js/admob-config.js?v=17.1"></script>
+  <script src="js/shop-data.js?v=17.1"></script>
+  <script src="js/audio.js?v=17.1"></script>
+  <script src="js/multiplayer.js?v=17.1"></script>
+  <script src="js/social.js?v=17.1"></script>
+  <script src="js/script.js?v=17.1"></script>
 </body>
 </html>

@@ -1,0 +1,535 @@
+﻿/* =========================================================
+   FEATHER RUSH: SOCIAL, FRIENDLIST, CHAT & MULTIPLAYER INVITES
+   ========================================================= */
+
+.social-modal {
+  max-width: 440px;
+  width: 95%;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 20px;
+  padding: 20px;
+  color: #f8fafc;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 24px rgba(56, 189, 248, 0.2);
+}
+
+.social-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 12px;
+}
+
+.social-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.social-title-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #38bdf8, #0284c7);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.social-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* Tabs */
+.social-tabs {
+  display: flex;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.social-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.social-tab-btn.active {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+}
+
+.social-tab-badge {
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 1px 6px;
+  border-radius: 9999px;
+}
+
+/* Tab Panels */
+.social-tab-panel {
+  display: none;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.social-tab-panel.active {
+  display: block;
+}
+
+/* Custom Scrollbar */
+.social-tab-panel::-webkit-scrollbar,
+.chat-messages-container::-webkit-scrollbar {
+  width: 5px;
+}
+.social-tab-panel::-webkit-scrollbar-thumb,
+.chat-messages-container::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.3);
+  border-radius: 4px;
+}
+
+/* Search Bar */
+.social-search-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.social-search-input {
+  flex: 1;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  outline: none;
+}
+
+.social-search-input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.social-search-btn {
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  padding: 0 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.social-search-btn:active {
+  transform: scale(0.96);
+}
+
+/* Friend / Player Card */
+.social-player-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.social-player-card:hover {
+  border-color: rgba(56, 189, 248, 0.3);
+  transform: translateY(-1px);
+}
+
+.social-player-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.social-player-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.social-status-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #1e293b;
+  background: #22c55e;
+}
+.social-status-dot.offline {
+  background: #94a3b8;
+}
+
+.social-player-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.social-player-name {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.social-player-tier {
+  font-size: 0.75rem;
+  color: #f59e0b;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.social-card-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.social-action-btn {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.social-action-btn:hover {
+  background: #0284c7;
+  color: #fff;
+}
+
+.social-action-btn.danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+.social-action-btn.danger:hover {
+  background: #dc2626;
+  color: #fff;
+}
+
+.social-action-btn.success {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #4ade80;
+}
+
+.social-action-btn.success:hover {
+  background: #16a34a;
+  color: #fff;
+}
+
+.social-empty-state {
+  text-align: center;
+  padding: 36px 12px;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+.social-empty-icon {
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+}
+
+/* =========================================================
+   DIRECT CHAT MODAL
+   ========================================================= */
+.direct-chat-modal {
+  max-width: 420px;
+  width: 95%;
+  background: #0f172a;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 20px;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 480px;
+  max-height: 85vh;
+}
+
+.direct-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #1e293b;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-partner-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-partner-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.chat-partner-name {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.chat-messages-container {
+  flex: 1;
+  padding: 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: radial-gradient(circle at 50% 10%, #1e293b 0%, #0f172a 100%);
+}
+
+.chat-msg-bubble {
+  max-width: 78%;
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.chat-msg-bubble.incoming {
+  align-self: flex-start;
+  background: #334155;
+  color: #f8fafc;
+  border-bottom-left-radius: 2px;
+}
+
+.chat-msg-bubble.outgoing {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #fff;
+  border-bottom-right-radius: 2px;
+}
+
+.chat-msg-time {
+  font-size: 0.68rem;
+  opacity: 0.65;
+  margin-top: 2px;
+  text-align: right;
+}
+
+.chat-quick-emojis {
+  display: flex;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #1e293b;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-x: auto;
+}
+
+.quick-emoji-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 6px;
+  transition: transform 0.1s;
+}
+
+.quick-emoji-btn:hover {
+  transform: scale(1.2);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.chat-input-bar {
+  display: flex;
+  padding: 10px 12px;
+  background: #1e293b;
+  gap: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  background: #0f172a;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #fff;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.chat-send-btn {
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  padding: 0 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* =========================================================
+   INTERACTIVE MULTIPLAYER INVITE TOAST / POPUP
+   ========================================================= */
+.social-invite-toast-container {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  width: 90%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.social-invite-toast {
+  pointer-events: auto;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 2px solid #38bdf8;
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7), 0 0 20px rgba(56, 189, 248, 0.4);
+  animation: slideDownToast 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@keyframes slideDownToast {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.invite-toast-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.invite-toast-icon {
+  font-size: 1.3rem;
+}
+
+.invite-toast-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #fff;
+}
+
+.invite-toast-msg {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.invite-toast-msg b {
+  color: #38bdf8;
+}
+
+.invite-toast-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.invite-btn-accept {
+  flex: 1;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  border: none;
+  color: #fff;
+  font-weight: 800;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.invite-btn-decline {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+/* Social Notification Pill Button */
+.btn-social-lobby {
+  position: relative;
+}
+
+.social-notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  border: 2px solid #0f172a;
+  animation: pulseBadge 1.5s infinite;
+}
+
+@keyframes pulseBadge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}

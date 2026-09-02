@@ -11290,6 +11290,10 @@
         }
       });
     }
+
+    if(window.socialService) {
+      window.socialService.setAccount(primaryKey, gpProfile);
+    }
   }
 
   async function performGoogleSignIn() {
@@ -11511,6 +11515,139 @@
       el.mpAudioToggleBtn.classList.toggle('muted', !settings.sound);
     }
   });
+
+  // =========================================================
+  // SOCIAL, FRIENDLIST & CHAT UI CONTROLLERS
+  // =========================================================
+  const btnSocial = $('socialBtn');
+  const socialModal = $('socialModal');
+  const tabFriendsBtn = $('tabFriendsBtn');
+  const tabSearchBtn = $('tabSearchBtn');
+  const tabReqBtn = $('tabReqBtn');
+  const panelFriends = $('panelFriends');
+  const panelSearch = $('panelSearch');
+  const panelRequests = $('panelRequests');
+
+  if(btnSocial) {
+    bindClick(btnSocial, () => {
+      audio.click();
+      if(window.socialService && gpProfile) {
+        window.socialService.setAccount(gpProfile.primaryKey, gpProfile);
+      }
+      showModal(socialModal);
+    });
+  }
+
+  function switchSocialTab(activeBtn, activePanel) {
+    [tabFriendsBtn, tabSearchBtn, tabReqBtn].forEach(b => { if(b) b.classList.remove('active'); });
+    [panelFriends, panelSearch, panelRequests].forEach(p => { if(p) p.classList.remove('active'); });
+    if(activeBtn) activeBtn.classList.add('active');
+    if(activePanel) activePanel.classList.add('active');
+    audio.click();
+  }
+
+  if(tabFriendsBtn) tabFriendsBtn.onclick = () => switchSocialTab(tabFriendsBtn, panelFriends);
+  if(tabSearchBtn) tabSearchBtn.onclick = () => switchSocialTab(tabSearchBtn, panelSearch);
+  if(tabReqBtn) tabReqBtn.onclick = () => switchSocialTab(tabReqBtn, panelRequests);
+
+  // Social Search Controller
+  const socialSearchInput = $('socialSearchInput');
+  const socialSearchBtn = $('socialSearchBtn');
+  const socialSearchResults = $('socialSearchResults');
+
+  async function executeSocialSearch() {
+    if(!socialSearchInput || !socialSearchResults || !window.socialService) return;
+    const query = socialSearchInput.value.trim();
+    if(query.length < 2) {
+      socialSearchResults.innerHTML = '<div class="social-empty-state"><div class="social-empty-icon">⚠️</div><div>Ketik minimal 2 karakter untuk mencari.</div></div>';
+      return;
+    }
+    socialSearchResults.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:24px;">Sedang mencari pemain... 🔍</div>';
+    const results = await window.socialService.searchPlayers(query);
+    if(results.length === 0) {
+      socialSearchResults.innerHTML = '<div class="social-empty-state"><div class="social-empty-icon">🔍</div><div>Pemain tidak ditemukan. Pastikan GamerTag sudah benar!</div></div>';
+      return;
+    }
+
+    let html = '';
+    results.forEach(p => {
+      const svg = typeof getCuteAvatarSvg === 'function' ? getCuteAvatarSvg(p.avatar, 40) : '';
+      html += `
+        <div class="social-player-card">
+          <div class="social-player-info">
+            <div class="social-player-avatar">${svg}</div>
+            <div class="social-player-meta">
+              <div class="social-player-name">${window.socialService.escapeHtml(p.name)}</div>
+              <div class="social-player-tier">🏆 ${p.tier}</div>
+            </div>
+          </div>
+          <div class="social-card-actions">
+            ${p.isFriend ? '<span style="color:#22c55e;font-weight:700;font-size:0.8rem;padding:6px 10px;">✓ Teman</span>' :
+              p.isPending ? '<span style="color:#f59e0b;font-weight:700;font-size:0.8rem;padding:6px 10px;">⌛ Menunggu</span>' :
+              `<button class="social-action-btn success btn-send-add" data-key="${p.key}" data-name="${p.name}" data-avatar="${p.avatar}" data-tier="${p.tier}">+ Tambah</button>`}
+          </div>
+        </div>
+      `;
+    });
+    socialSearchResults.innerHTML = html;
+
+    socialSearchResults.querySelectorAll('.btn-send-add').forEach(btn => {
+      btn.onclick = async () => {
+        btn.disabled = true;
+        btn.textContent = 'Mengirim...';
+        const key = btn.getAttribute('data-key');
+        const name = btn.getAttribute('data-name');
+        const avatar = btn.getAttribute('data-avatar');
+        const tier = btn.getAttribute('data-tier');
+        const res = await window.socialService.sendFriendRequest(key, name, avatar, tier);
+        if(res.success) {
+          btn.textContent = 'Terkirim! ✓';
+          btn.classList.remove('success');
+        } else {
+          btn.textContent = 'Gagal';
+          alert(res.msg);
+        }
+      };
+    });
+  }
+
+  if(socialSearchBtn) socialSearchBtn.onclick = executeSocialSearch;
+  if(socialSearchInput) {
+    socialSearchInput.onkeydown = (e) => {
+      if(e.key === 'Enter') {
+        e.preventDefault();
+        executeSocialSearch();
+      }
+    };
+  }
+
+  // Direct Chat Form & Quick Emojis
+  const chatForm = $('chatForm');
+  const chatInput = $('chatInput');
+  if(chatForm && chatInput) {
+    chatForm.onsubmit = (e) => {
+      e.preventDefault();
+      const text = chatInput.value.trim();
+      if(text && window.socialService) {
+        window.socialService.sendMessage(text);
+        chatInput.value = '';
+      }
+    };
+  }
+
+  document.querySelectorAll('.quick-emoji-btn').forEach(emojiBtn => {
+    emojiBtn.onclick = () => {
+      const emoji = emojiBtn.textContent.trim();
+      if(emoji && window.socialService) {
+        window.socialService.sendMessage(emoji);
+      }
+    };
+  });
+
+  // Startup initialization of Social Service Account
+  if(window.socialService && gpProfile && gpProfile.primaryKey) {
+    window.socialService.setAccount(gpProfile.primaryKey, gpProfile);
+  }
 
   // =========================================================
   // CENTRALIZED COIN MANAGEMENT SYSTEM
