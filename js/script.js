@@ -4626,20 +4626,20 @@
     // Restore Lives: Ranked mode -> 3 lives, Classic mode -> 1 life
     lives = currentMode === 'ranked' ? 3 : 1;
 
-    // Clear immediate danger: push nearby pipes ahead and vaporize enemies on screen
+    // Clear immediate danger: push nearby pipes ahead and vaporize enemies across the widescreen
     pipes.forEach(p => {
-      if(p.x > bird.x - 70 && p.x < bird.x + 140) {
-        p.x += 160;
+      if(p.x > bird.x - 100 && p.x < bird.x + 260) {
+        p.x += 260;
       }
     });
     enemies.forEach(e => {
-      if(e.x > bird.x - 60 && e.x < bird.x + 240) {
+      if(e.x > bird.x - 100 && e.x < bird.x + 360) {
         e.dead = true;
         e.x = -999;
       }
     });
     flyers.forEach(f => {
-      if(f.x > bird.x - 60 && f.x < bird.x + 240) {
+      if(f.x > bird.x - 100 && f.x < bird.x + 360) {
         f.dead = true;
         f.x = -999;
       }
@@ -4649,14 +4649,15 @@
       c.timer = 0.01;
     });
 
-    // Reset Bird safely
-    bird.y = 275;
-    bird.vy = -140;
+    // Reset Bird safely to the center of the 360px landscape screen
+    bird.x = 130;
+    bird.y = 150;
+    bird.vy = -180;
     bird.angle = 0;
     bird.dead = false;
 
-    // Grant 2.5s Grace Invulnerability & Shield
-    graceTimer = 2.5;
+    // Grant 3.0s Grace Invulnerability & Shield
+    graceTimer = 3.0;
     activePowerups.shield = true;
     activePowerups.shieldCount = 1;
     activePowerups.shieldType = 'standard';
@@ -12895,7 +12896,7 @@
   bindClick(el.mpTabCreateBtn, () => {
     audio.click();
     switchMpTab('create');
-    if(window.multiplayerEngine && (!window.multiplayerEngine.currentRoom || !window.multiplayerEngine.currentRoom.isHost)) {
+    if(window.multiplayerEngine) {
       window.multiplayerEngine.createRoom({
         name: gpProfile.gamerTag || 'SkyPlayer',
         avatar: gpProfile.avatar || 'chick_yellow',
