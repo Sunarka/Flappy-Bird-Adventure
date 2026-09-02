@@ -315,7 +315,7 @@
     // Main Menu Buttons & Badges
     if(el.shopBtn) el.shopBtn.textContent = t.shopBtn;
     if(el.howBtn) el.howBtn.textContent = t.howTitle;
-    if(el.settingsBtn) el.settingsBtn.textContent = t.settingsBtn;
+    if(el.settingsBtn) el.settingsBtn.setAttribute('title', t.settingsBtn);
     if(el.rankedLeaderboardBtn) {
       const span = el.rankedLeaderboardBtn.querySelector('span:last-child');
       if(span) span.textContent = t.rankings;
@@ -1908,7 +1908,7 @@
     friendShowcaseTrailTimer += 0.033;
     if(friendShowcaseTrailTimer > 0.05) {
       friendShowcaseTrailTimer = 0;
-      const bX = 145, bY = 52 + Math.sin(now / 240) * 4;
+      const bX = 120, bY = 38 + Math.sin(now / 240) * 4;
       const auraId = friendShowcaseLoadout.aura || 'default';
       const colors = auraId === 'fire' ? ['#ff3b00', '#ffd000'] :
                      auraId === 'rainbow' ? ['hsl(' + ((now * 0.5) % 360) + ', 100%, 65%)'] :
@@ -1935,7 +1935,7 @@
     friendShowcaseParticles = friendShowcaseParticles.filter(q => q.life > 0);
 
     // 5. Bird Preview
-    const bX = 145, bY = 52 + Math.sin(now / 240) * 4;
+    const bX = 120, bY = 38 + Math.sin(now / 240) * 4;
     const bAngle = Math.sin(now / 240) * 0.06;
     const bWing = Math.sin(now / 120) > 0 ? 0.2 : 0;
     renderCustomBird(sCtx, {
@@ -4378,7 +4378,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.9';
+  const GAME_VERSION = '20.10';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 

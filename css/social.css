@@ -401,24 +401,28 @@
   background: linear-gradient(180deg, #182c4e 0%, #12213d 100%);
   border: 1.5px solid #254b7a;
   border-radius: 12px;
-  padding: 6px 10px;
-  margin-bottom: 6px;
+  padding: 6px 12px;
+  margin: 0 auto 6px;
+  max-width: 420px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .friend-showcase-box {
   position: relative;
+  width: 240px !important;
+  height: 80px !important;
+  margin: 0 auto 6px !important;
   border-radius: 12px;
   overflow: hidden;
-  margin-bottom: 6px;
   border: 2px solid #2563eb;
   box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
   background: radial-gradient(circle at 50% 30%, #173663 0%, #0b1c36 100%);
+  flex-shrink: 0;
 }
 
 .friend-showcase-canvas {
-  width: 100%;
-  height: 95px !important;
+  width: 240px !important;
+  height: 80px !important;
   display: block;
 }
 
