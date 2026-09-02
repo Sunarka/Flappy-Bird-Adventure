@@ -1,16 +1,16 @@
 /* =========================================================
-   FEATHER RUSH: SOCIAL, FRIENDLIST, CHAT & MULTIPLAYER INVITES (CLEAN ELEGANT WHITE THEME)
+   FEATHER RUSH: SOCIAL, FRIENDLIST, CHAT & MULTIPLAYER (HANDCRAFTED ARCADE THEME)
    ========================================================= */
 
 .social-modal {
   width: min(540px, 94vw) !important;
   max-height: min(340px, 94vh) !important;
-  background: #ffffff !important;
-  border: 1.5px solid #e2e8f0 !important;
+  background: linear-gradient(180deg, #142442 0%, #0c172c 100%) !important;
+  border: 2px solid #254a78 !important;
   border-radius: 18px !important;
   padding: 10px 14px 8px !important;
-  color: #0f172a !important;
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12), 0 4px 16px rgba(15, 23, 42, 0.06) !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65), inset 0 1.5px 0 rgba(255, 255, 255, 0.15) !important;
   overflow: hidden !important;
 }
 
@@ -27,8 +27,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
-  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 6px;
+  border-bottom: 1.5px solid rgba(37, 74, 120, 0.7);
   padding-bottom: 6px;
 }
 
@@ -41,8 +41,10 @@
 .social-title-icon {
   width: 26px;
   height: 26px;
-  background: linear-gradient(135deg, #0284c7, #0369a1);
-  border-radius: 7px;
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+  border: 1px solid #7dd3fc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,33 +53,34 @@
 
 .social-title {
   font-size: 1rem;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.2px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 /* Tabs */
 .social-tabs {
   display: flex;
-  background: #f1f5f9;
+  background: #091427;
   padding: 3px;
   border-radius: 10px;
   gap: 4px;
-  margin-bottom: 8px;
-  border: 1px solid #e2e8f0;
+  margin-bottom: 6px;
+  border: 1.5px solid #1c355a;
 }
 
 .social-tab-btn {
   flex: 1;
   background: transparent;
   border: none;
-  color: #64748b;
+  color: #94a3b8;
   font-weight: 800;
   font-size: 0.75rem;
   padding: 5px 8px;
   border-radius: 7px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.18s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,9 +89,10 @@
 }
 
 .social-tab-btn.active {
-  background: #ffffff;
-  color: #0284c7;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  border: 1px solid #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 2px 0 #075985;
 }
 
 .social-tab-badge {
@@ -98,6 +102,7 @@
   font-weight: 900;
   padding: 1px 5px;
   border-radius: 9999px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 /* Tab Panels */
@@ -122,7 +127,7 @@
 .social-tab-panel::-webkit-scrollbar-thumb,
 .chat-messages-container::-webkit-scrollbar-thumb,
 .profile-scrollable-content::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #254a78;
   border-radius: 4px;
 }
 
@@ -130,32 +135,32 @@
 .social-search-bar {
   display: flex;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .social-search-input {
   flex: 1;
-  background: #f8fafc;
-  border: 1.5px solid #cbd5e1;
+  background: #091427;
+  border: 1.5px solid #204470;
   border-radius: 10px;
   padding: 8px 12px;
-  color: #0f172a;
+  color: #ffffff;
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: 700;
   outline: none;
 }
 
 .social-search-input:focus {
-  border-color: #0284c7;
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
 }
 
 .social-search-btn {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  border: none;
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  border: 1.5px solid #38bdf8;
+  box-shadow: 0 3px 0 #075985;
   color: #fff;
-  font-weight: 700;
+  font-weight: 900;
   padding: 0 16px;
   border-radius: 10px;
   cursor: pointer;
@@ -163,7 +168,8 @@
 }
 
 .social-search-btn:active {
-  transform: scale(0.96);
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #075985;
 }
 
 /* Friend / Player Card */
@@ -171,20 +177,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #182c4e 0%, #12213d 100%);
+  border: 1.5px solid #254b7a;
   border-radius: 12px;
   padding: 8px 12px;
   margin-bottom: 8px;
-  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition: all 0.18s ease;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .social-player-card:hover {
-  border-color: #0284c7;
+  border-color: #38bdf8;
   transform: translateY(-1.5px);
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4), 0 0 10px rgba(56, 189, 248, 0.2);
 }
 
 .social-player-info {
@@ -204,8 +210,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f1f5f9;
-  border: 1.5px solid #bae6fd;
+  background: #091427;
+  border: 2px solid #38bdf8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .social-status-dot {
@@ -215,12 +222,12 @@
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  border: 2px solid #ffffff;
+  border: 2px solid #142442;
   background: #22c55e;
-  box-shadow: 0 0 4px rgba(34, 197, 94, 0.6);
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
 }
 .social-status-dot.offline {
-  background: #94a3b8;
+  background: #64748b;
   box-shadow: none;
 }
 
@@ -230,9 +237,9 @@
 }
 
 .social-player-name {
-  font-weight: 800;
+  font-weight: 900;
   font-size: 0.95rem;
-  color: #0f172a;
+  color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -243,8 +250,8 @@
 
 .social-player-tier {
   font-size: 0.76rem;
-  color: #d97706;
-  font-weight: 800;
+  color: #facc15;
+  font-weight: 900;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -259,10 +266,11 @@
 }
 
 .social-action-btn {
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
-  color: #0284c7;
-  font-weight: 700;
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  border: 1.5px solid #38bdf8;
+  box-shadow: 0 2px 0 #075985;
+  color: #ffffff;
+  font-weight: 800;
   font-size: 0.8rem;
   padding: 6px 10px;
   border-radius: 8px;
@@ -274,37 +282,32 @@
 }
 
 .social-action-btn:hover {
-  background: #0284c7;
-  color: #fff;
-  transform: scale(1.04);
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+.social-action-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 #075985;
 }
 
 .social-action-btn.danger {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #dc2626;
-}
-
-.social-action-btn.danger:hover {
-  background: #dc2626;
-  color: #fff;
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+  border-color: #f87171;
+  box-shadow: 0 2px 0 #991b1b;
+  color: #ffffff;
 }
 
 .social-action-btn.success {
-  background: #f0fdf4;
-  border-color: #bbf7d0;
-  color: #16a34a;
-}
-
-.social-action-btn.success:hover {
-  background: #16a34a;
-  color: #fff;
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+  border-color: #4ade80;
+  box-shadow: 0 2px 0 #166534;
+  color: #ffffff;
 }
 
 .social-empty-state {
   text-align: center;
   padding: 32px 12px;
-  color: #64748b;
+  color: #94a3b8;
   font-size: 0.88rem;
 }
 .social-empty-icon {
@@ -313,17 +316,17 @@
 }
 
 /* =========================================================
-   FRIEND DETAILED PROFILE MODAL & SHOWCASE (CLEAN WHITE)
+   FRIEND DETAILED PROFILE MODAL & SHOWCASE (HANDCRAFTED ARCADE)
    ========================================================= */
 .friend-profile-modal {
   width: min(560px, 94vw) !important;
   max-width: 560px !important;
-  background: #ffffff !important;
-  border: 1.5px solid #e2e8f0 !important;
+  background: linear-gradient(180deg, #142442 0%, #0c172c 100%) !important;
+  border: 2px solid #254a78 !important;
   border-radius: 18px !important;
   padding: 10px 14px 8px !important;
-  color: #0f172a !important;
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12), 0 4px 16px rgba(15, 23, 42, 0.06) !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65), inset 0 1.5px 0 rgba(255, 255, 255, 0.15) !important;
   max-height: min(340px, 94vh) !important;
   overflow: hidden !important;
 }
@@ -339,12 +342,12 @@
 
 .profile-tabs {
   display: flex;
-  background: #f1f5f9;
+  background: #091427;
   padding: 3px;
   border-radius: 10px;
   gap: 4px;
   margin-bottom: 6px;
-  border: 1px solid #e2e8f0;
+  border: 1.5px solid #1c355a;
   flex-shrink: 0;
 }
 
@@ -352,13 +355,13 @@
   flex: 1;
   background: transparent;
   border: none;
-  color: #64748b;
+  color: #94a3b8;
   font-weight: 800;
   font-size: 0.72rem;
   padding: 5px 6px;
   border-radius: 7px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.18s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -367,9 +370,10 @@
 }
 
 .profile-tab-btn.active {
-  background: #ffffff;
-  color: #0284c7;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  border: 1px solid #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 2px 0 #075985;
 }
 
 .profile-tab-panel {
@@ -394,11 +398,12 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #182c4e 0%, #12213d 100%);
+  border: 1.5px solid #254b7a;
   border-radius: 12px;
   padding: 6px 10px;
   margin-bottom: 6px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .friend-showcase-box {
@@ -406,9 +411,9 @@
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 6px;
-  border: 1.5px solid #bae6fd;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.04);
-  background: linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 100%);
+  border: 2px solid #2563eb;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
+  background: radial-gradient(circle at 50% 30%, #173663 0%, #0b1c36 100%);
 }
 
 .friend-showcase-canvas {
@@ -421,9 +426,9 @@
   position: absolute;
   bottom: 5px;
   left: 8px;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid #bae6fd;
-  color: #0369a1;
+  background: rgba(11, 28, 54, 0.9);
+  border: 1px solid #38bdf8;
+  color: #7dd3fc;
   font-size: 0.65rem;
   font-weight: 900;
   letter-spacing: 0.4px;
@@ -431,19 +436,19 @@
   border-radius: 5px;
   backdrop-filter: blur(8px);
   pointer-events: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .friend-profile-avatar-box {
   width: 46px !important;
   height: 46px !important;
   border-radius: 50%;
-  background: radial-gradient(circle, #e0f2fe 0%, #bae6fd 100%);
+  background: radial-gradient(circle, #38bdf8 0%, #0284c7 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
-  border: 2px solid #0284c7;
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  border: 2px solid #7dd3fc;
   flex-shrink: 0;
   position: relative;
   cursor: pointer;
@@ -463,17 +468,18 @@
 .friend-profile-name {
   font-size: 1.05rem;
   font-weight: 900;
-  color: #0f172a;
-  letter-spacing: -0.3px;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .friend-profile-rank-badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: #fef3c7;
-  border: 1px solid #fcd34d;
-  color: #92400e;
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.25) 0%, rgba(217, 119, 6, 0.2) 100%);
+  border: 1px solid #facc15;
+  color: #fef08a;
   padding: 2px 8px;
   border-radius: 9999px;
   font-size: 0.72rem;
@@ -491,23 +497,23 @@
 }
 
 .friend-stat-box {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: #11203b;
+  border: 1.5px solid #1e385f;
   border-radius: 10px;
   padding: 8px 10px;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transition: all 0.15s ease;
 }
 
 .friend-stat-box:hover {
-  border-color: #0284c7;
+  border-color: #38bdf8;
   transform: translateY(-1px);
 }
 
 .friend-stat-label {
   font-size: 0.68rem;
-  color: #64748b;
+  color: #93c5fd;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.4px;
@@ -517,22 +523,25 @@
 .friend-stat-val {
   font-size: 1.15rem;
   font-weight: 900;
-  color: #0284c7;
+  color: #38bdf8;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
 }
 
 .friend-stat-val.gold {
-  color: #d97706;
+  color: #facc15;
+  text-shadow: 0 0 8px rgba(250, 204, 21, 0.4);
 }
 
 .friend-stat-val.green {
-  color: #16a34a;
+  color: #4ade80;
+  text-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
 }
 
 /* Equipped & Inventory Showcase */
 .friend-section-title {
   font-size: 0.74rem;
   font-weight: 900;
-  color: #0369a1;
+  color: #7dd3fc;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 6px 0 4px;
@@ -553,16 +562,16 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: #11203b;
+  border: 1.5px solid #1e385f;
   border-radius: 9px;
   padding: 6px 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   transition: all 0.15s ease;
 }
 
 .friend-item-pill:hover {
-  border-color: #0284c7;
+  border-color: #38bdf8;
   transform: translateY(-1px);
 }
 
@@ -578,7 +587,7 @@
 
 .friend-item-pill-title {
   font-size: 0.62rem;
-  color: #64748b;
+  color: #93c5fd;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -587,7 +596,7 @@
 .friend-item-pill-val {
   font-size: 0.82rem;
   font-weight: 900;
-  color: #0f172a;
+  color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -602,29 +611,29 @@
 }
 
 .friend-inv-stat {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: #11203b;
+  border: 1.5px solid #1e385f;
   border-radius: 9px;
   padding: 6px 4px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   transition: all 0.15s ease;
 }
 
 .friend-inv-stat:hover {
-  border-color: #0284c7;
+  border-color: #38bdf8;
   transform: translateY(-1px);
 }
 
 .friend-inv-num {
   font-size: 0.92rem;
   font-weight: 900;
-  color: #0284c7;
+  color: #38bdf8;
 }
 
 .friend-inv-label {
   font-size: 0.62rem;
-  color: #64748b;
+  color: #93c5fd;
   font-weight: 700;
   margin-top: 2px;
   white-space: nowrap;
@@ -637,7 +646,7 @@
   display: flex;
   gap: 6px;
   margin-top: 6px;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid rgba(37, 74, 120, 0.7);
   padding-top: 6px;
 }
 
@@ -657,19 +666,19 @@
 }
 
 /* =========================================================
-   DIRECT CHAT MODAL & CUTE BIRD EMOTES (CLEAN WHITE)
+   DIRECT CHAT MODAL & CUTE BIRD EMOTES
    ========================================================= */
 .direct-chat-modal {
   width: min(500px, 94vw) !important;
   max-width: 500px !important;
   height: min(340px, 94vh) !important;
   max-height: min(340px, 94vh) !important;
-  background: #ffffff !important;
-  border: 1.5px solid #e2e8f0 !important;
+  background: linear-gradient(180deg, #142442 0%, #0c172c 100%) !important;
+  border: 2px solid #254a78 !important;
   border-radius: 18px !important;
   padding: 0 !important;
   overflow: hidden !important;
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.15) !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7) !important;
 }
 
 .direct-chat-modal.hidden {
@@ -686,8 +695,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
+  background: #182c4e;
+  border-bottom: 1.5px solid #254b7a;
 }
 
 .chat-partner-info {
@@ -706,9 +715,9 @@
 }
 
 .chat-partner-name {
-  font-weight: 800;
+  font-weight: 900;
   font-size: 0.95rem;
-  color: #0f172a;
+  color: #ffffff;
 }
 
 .chat-messages-container {
@@ -718,7 +727,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background: #f8fafc;
+  background: #0c172c;
 }
 
 .chat-msg-bubble {
@@ -732,19 +741,18 @@
 
 .chat-msg-bubble.incoming {
   align-self: flex-start;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  color: #0f172a;
+  background: #182c4e;
+  border: 1px solid #254b7a;
+  color: #f1f5f9;
   border-bottom-left-radius: 2px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .chat-msg-bubble.outgoing {
   align-self: flex-end;
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  border: 1px solid #38bdf8;
   color: #fff;
   border-bottom-right-radius: 2px;
-  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
 }
 
 .chat-msg-time {
@@ -759,8 +767,8 @@
   display: flex;
   gap: 6px;
   padding: 6px 10px;
-  background: #ffffff;
-  border-top: 1px solid #e2e8f0;
+  background: #142442;
+  border-top: 1.5px solid #254a78;
   overflow-x: auto;
   scrollbar-width: thin;
 }
@@ -768,8 +776,8 @@
 .bird-emote-btn {
   width: 40px;
   height: 40px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #091427;
+  border: 1.5px solid #204470;
   border-radius: 10px;
   cursor: pointer;
   padding: 2px;
@@ -777,13 +785,13 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: transform 0.18s ease, border-color 0.18s, background 0.18s;
+  transition: transform 0.18s ease, border-color 0.18s;
 }
 
 .bird-emote-btn:hover {
   transform: scale(1.12) translateY(-2px);
-  border-color: #0284c7;
-  background: #f0f9ff;
+  border-color: #38bdf8;
+  background: #182c4e;
 }
 
 .bird-sticker-img {
@@ -802,39 +810,39 @@
 .chat-input-bar {
   display: flex;
   padding: 8px 10px;
-  background: #ffffff;
-  border-top: 1px solid #e2e8f0;
+  background: #142442;
+  border-top: 1.5px solid #254a78;
   gap: 6px;
 }
 
 .chat-input {
   flex: 1;
-  background: #f8fafc;
-  border: 1px solid #cbd5e1;
+  background: #091427;
+  border: 1.5px solid #204470;
   border-radius: 10px;
   padding: 6px 10px;
-  color: #0f172a;
+  color: #ffffff;
   font-size: 0.85rem;
   outline: none;
 }
 
 .chat-input:focus {
-  border-color: #0284c7;
-  background: #ffffff;
+  border-color: #38bdf8;
 }
 
 .chat-send-btn {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  border: none;
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  border: 1.5px solid #38bdf8;
+  box-shadow: 0 2px 0 #075985;
   color: #fff;
-  font-weight: 700;
+  font-weight: 800;
   padding: 0 14px;
   border-radius: 10px;
   cursor: pointer;
 }
 
 /* =========================================================
-   PREMIUM MULTIPLAYER INVITE TOAST / POPUP (CLEAN WHITE)
+   PREMIUM MULTIPLAYER INVITE TOAST / POPUP
    ========================================================= */
 .social-invite-toast-container {
   position: fixed;
@@ -852,11 +860,11 @@
 
 .social-invite-toast {
   pointer-events: auto;
-  background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  background: linear-gradient(180deg, #182c4e 0%, #12213d 100%);
+  border: 2px solid #38bdf8;
   border-radius: 16px;
   padding: 12px 14px;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15), 0 4px 12px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 20px rgba(56, 189, 248, 0.35);
   animation: slideDownToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   flex-direction: column;
@@ -890,23 +898,23 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
+  background: #0284c7;
+  border: 1.5px solid #7dd3fc;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .invite-toast-title {
-  font-weight: 800;
+  font-weight: 900;
   font-size: 0.95rem;
-  color: #0f172a;
+  color: #ffffff;
 }
 
 .invite-toast-room-pill {
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
-  color: #0284c7;
+  background: rgba(56, 189, 248, 0.2);
+  border: 1px solid #38bdf8;
+  color: #7dd3fc;
   padding: 2px 8px;
   border-radius: 6px;
   font-weight: 800;
@@ -915,12 +923,12 @@
 
 .invite-toast-msg {
   font-size: 0.85rem;
-  color: #475569;
+  color: #cbd5e1;
   line-height: 1.4;
 }
 
 .invite-toast-msg b {
-  color: #0284c7;
+  color: #38bdf8;
 }
 
 .invite-toast-actions {
@@ -930,27 +938,32 @@
 
 .invite-btn-accept {
   flex: 1;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  border: none;
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+  border: 1.5px solid #4ade80;
+  box-shadow: 0 3px 0 #166534;
   color: #fff;
-  font-weight: 800;
+  font-weight: 900;
   padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.88rem;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
   transition: transform 0.15s;
 }
 
 .invite-btn-accept:hover {
-  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+.invite-btn-accept:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #166534;
 }
 
 .invite-btn-decline {
-  background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  color: #475569;
-  font-weight: 700;
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+  border: 1.5px solid #475569;
+  box-shadow: 0 3px 0 #0f172a;
+  color: #cbd5e1;
+  font-weight: 800;
   padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
@@ -972,7 +985,7 @@
   font-weight: 900;
   padding: 2px 6px;
   border-radius: 9999px;
-  border: 2px solid #ffffff;
+  border: 2px solid #142442;
   animation: pulseBadge 1.5s infinite;
 }
 
@@ -981,7 +994,7 @@
   50% { transform: scale(1.15); }
 }
 
-/* Clean Overrides */
+/* Chunky Close Button */
 .friend-profile-modal .close {
   top: 8px !important;
   right: 8px !important;
@@ -989,14 +1002,21 @@
   height: 28px !important;
   margin: 0 !important;
   border-radius: 50% !important;
-  background: #f1f5f9 !important;
-  color: #64748b !important;
+  background: linear-gradient(180deg, #f87171 0%, #ef4444 100%) !important;
+  color: #ffffff !important;
+  border: 1.5px solid #b91c1c !important;
+  box-shadow: 0 2.5px 0 #991b1b !important;
   font-size: 18px !important;
-  line-height: 24px !important;
-  border: 1px solid #e2e8f0 !important;
+  line-height: 22px !important;
+  transition: all 0.15s ease !important;
 }
 
 .friend-profile-modal .close:hover {
-  background: #ef4444 !important;
-  color: #ffffff !important;
+  transform: rotate(90deg) scale(1.08) !important;
+  filter: brightness(1.15) !important;
+}
+
+.friend-profile-modal .close:active {
+  transform: translateY(2px) scale(0.95) !important;
+  box-shadow: 0 1px 0 #991b1b !important;
 }
