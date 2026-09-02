@@ -1731,11 +1731,14 @@
   };
 
   function persist() { storage.set('skyFlappySettings', settings); }
-  function persistProgress() { storage.set('skyFlappyProgress', progress); }
   function updateCoins() {
-    el.coinHud.innerHTML = 'COINS <b>' + progress.coins + '</b>';
-    el.coinCount.textContent = progress.coins;
-    el.shopCoins.textContent = progress.coins;
+    if(el.coinHud) el.coinHud.innerHTML = 'COINS <b>' + progress.coins + '</b>';
+    if(el.coinCount) el.coinCount.textContent = progress.coins;
+    if(el.shopCoins) el.shopCoins.textContent = progress.coins;
+    const topCoinEl = $('topCoinVal');
+    if(topCoinEl) topCoinEl.textContent = progress.coins;
+    const topRankEl = $('topRankVal');
+    if(topRankEl) topRankEl.textContent = `${gpProfile.rankedBest || progress.rankedScore || 0}`;
   }
 
   function playBackgroundMusic() {
@@ -3500,6 +3503,11 @@
         if(elXpFill) elXpFill.style.width = '30%';
       }
     }
+
+    const qf1 = $('mlbbQfAvatar1');
+    if(qf1) qf1.innerHTML = getCuteAvatarSvg('eagle_ace', 20);
+    const qf2 = $('mlbbQfAvatar2');
+    if(qf2) qf2.innerHTML = getCuteAvatarSvg('parrot_green', 20);
   }
 
   // 10. Daftar Tingkatan Rank Tier & Ikon Badge Vektor Unik
@@ -3920,14 +3928,27 @@
     if(el.modeRankedBtn) el.modeRankedBtn.classList.toggle('active', mode === 'ranked');
     if(el.modeMultiplayerBtn) el.modeMultiplayerBtn.classList.toggle('active', mode === 'multiplayer');
 
+    const modeNameEl = $('mlbbCurrentModeName');
+    const modeIconEl = $('mlbbModeTagIcon');
+    const startModeLabelEl = $('mlbbStartBtnModeLabel');
+
     if(mode === 'multiplayer') {
-      el.playBtn.textContent = 'BUKA LOBI MULTIPLAYER';
+      if(modeNameEl) modeNameEl.textContent = 'MULTIPLAYER';
+      if(modeIconEl) modeIconEl.textContent = '⚔️';
+      if(startModeLabelEl) startModeLabelEl.textContent = '1v1 BATTLE';
+      if(el.playBtn) el.playBtn.innerHTML = `<div class="start-btn-shine"></div><div class="start-btn-text-wrap"><span class="start-btn-label">TANDING</span><span class="start-btn-mode">MULTIPLAYER</span></div><span class="start-btn-arrow">⚔️</span>`;
       if(el.modeBestLabel) el.modeBestLabel.textContent = 'MULTIPLAYER';
     } else if(mode === 'ranked') {
-      el.playBtn.textContent = 'PLAY RANKED (EXTREME)';
+      if(modeNameEl) modeNameEl.textContent = 'RANKED';
+      if(modeIconEl) modeIconEl.textContent = '🏆';
+      if(startModeLabelEl) startModeLabelEl.textContent = 'EXTREME PTS';
+      if(el.playBtn) el.playBtn.innerHTML = `<div class="start-btn-shine"></div><div class="start-btn-text-wrap"><span class="start-btn-label">MAIN RANK</span><span class="start-btn-mode">EXTREME</span></div><span class="start-btn-arrow">🏆</span>`;
       if(el.modeBestLabel) el.modeBestLabel.textContent = 'RANKED BEST';
     } else {
-      el.playBtn.textContent = 'PLAY CLASSIC';
+      if(modeNameEl) modeNameEl.textContent = 'CLASSIC';
+      if(modeIconEl) modeIconEl.textContent = '🎮';
+      if(startModeLabelEl) startModeLabelEl.textContent = 'CASUAL';
+      if(el.playBtn) el.playBtn.innerHTML = `<div class="start-btn-shine"></div><div class="start-btn-text-wrap"><span class="start-btn-label">MULAI</span><span class="start-btn-mode">CLASSIC</span></div><span class="start-btn-arrow">▶</span>`;
       if(el.modeBestLabel) el.modeBestLabel.textContent = 'CLASSIC BEST';
     }
     
@@ -4317,10 +4338,17 @@
     el.ready.classList.toggle('hidden', next !== State.READY);
     el.hud.classList.toggle('hidden', next === State.MENU);
     if(el.topProfileBtn) el.topProfileBtn.classList.toggle('hidden', next !== State.MENU);
-    
-    // Sembunyikan coinHud & powerupHud saat layar GET READY agar tidak menumpuk di teks instruksi
-    if(el.coinHud) el.coinHud.classList.toggle('hidden', next === State.READY || next === State.MENU);
-    if(el.powerupHud) el.powerupHud.classList.toggle('hidden', next === State.READY || next === State.MENU);
+    const leftDock = $('mlbbLeftDock');
+    const rightDock = $('mlbbRightDock');
+    const coinPill = $('topCoinPill');
+    const rankPill = $('topRankPill');
+    const lbBtn = $('rankedLeaderboardBtn');
+
+    if(leftDock) leftDock.classList.toggle('hidden', next !== State.MENU);
+    if(rightDock) rightDock.classList.toggle('hidden', next !== State.MENU);
+    if(coinPill) coinPill.classList.toggle('hidden', next !== State.MENU);
+    if(rankPill) rankPill.classList.toggle('hidden', next !== State.MENU);
+    if(lbBtn) lbBtn.classList.toggle('hidden', next !== State.MENU);
 
     if(currentMode === 'ranked') {
       el.coinHud.innerHTML = 'RANKED MATCH <b>EXTREME</b>';
@@ -11152,6 +11180,38 @@
   // Mode Selection & Play Handlers
   bindClick(el.modeClassicBtn, () => setMode('classic'));
   bindClick(el.modeRankedBtn, () => setMode('ranked'));
+  bindClick('mlbbCycleModeBtn', () => {
+    if(currentMode === 'classic') setMode('ranked');
+    else if(currentMode === 'ranked') setMode('multiplayer');
+    else setMode('classic');
+  });
+
+  bindClick('topAddCoinBtn', () => {
+    audio.click();
+    showLobbyAdmobRewardModal();
+  });
+
+  bindClick('mlbbEventCard', () => {
+    audio.click();
+    showModal(el.shop);
+  });
+
+  const birdQuotes = [
+    "Ayo kepakkan sayap dan taklukkan langit!",
+    "Siap menembus rekor terbaik hari ini?",
+    "Ajak teman mabar 1v1 sekarang!",
+    "Gunakan skill Dash saat rintangan sempit!",
+    "Beli skin dan pet imut di Toko Shop!"
+  ];
+  bindClick('mlbbHeroSpeech', () => {
+    audio.click();
+    const speechEl = $('mlbbHeroSpeech');
+    if(speechEl) {
+      const q = birdQuotes[Math.floor(Math.random() * birdQuotes.length)];
+      speechEl.textContent = `"${q}"`;
+    }
+  });
+
   bindClick(el.menuRankedCard, () => {
     audio.click();
     renderTierRoadmap();

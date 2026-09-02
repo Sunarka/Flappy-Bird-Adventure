@@ -13,16 +13,17 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=18.1">
-  <link rel="stylesheet" href="css/modern-icons.css?v=18.1">
-  <link rel="stylesheet" href="css/shop.css?v=18.1">
-  <link rel="stylesheet" href="css/shop-extra.css?v=18.1">
-  <link rel="stylesheet" href="css/mode-picker.css?v=18.1">
-  <link rel="stylesheet" href="css/store.css?v=18.1">
-  <link rel="stylesheet" href="css/ranked.css?v=18.1">
-  <link rel="stylesheet" href="css/multiplayer.css?v=18.1">
-  <link rel="stylesheet" href="css/social.css?v=18.1">
-  <link rel="stylesheet" href="css/splash.css?v=18.1">
+  <link rel="stylesheet" href="css/style.css?v=18.2">
+  <link rel="stylesheet" href="css/modern-icons.css?v=18.2">
+  <link rel="stylesheet" href="css/shop.css?v=18.2">
+  <link rel="stylesheet" href="css/shop-extra.css?v=18.2">
+  <link rel="stylesheet" href="css/mode-picker.css?v=18.2">
+  <link rel="stylesheet" href="css/store.css?v=18.2">
+  <link rel="stylesheet" href="css/ranked.css?v=18.2">
+  <link rel="stylesheet" href="css/multiplayer.css?v=18.2">
+  <link rel="stylesheet" href="css/social.css?v=18.2">
+  <link rel="stylesheet" href="css/splash.css?v=18.2">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=18.2">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -218,37 +219,109 @@
       <div class="mp-vs-footer-hint">PERSIAPKAN DIRIMU!</div>
     </section>
 
-    <!-- Modern MLBB Style Square Top-Left Profile Widget -->
-    <div class="top-profile-wrapper mlbb-style" id="topProfileBtn" role="button" tabindex="0" title="Buka Profil / Akun">
-      <div class="top-profile-frame">
-        <div class="top-profile-avatar" id="topProfileAvatar"></div>
-        <div class="top-profile-frame-crown">👑</div>
-      </div>
-      <div class="top-profile-info">
-        <div class="top-profile-name" id="topProfileName">SkyPlayer</div>
-        <div class="top-profile-sub">
-          <span class="top-profile-tier-icon" id="topProfileTierIcon">🏆</span>
-          <span class="top-profile-tier-num" id="topProfileTierNum">0</span>
-          <div class="top-profile-xp-bar">
-            <div class="top-profile-xp-fill" id="topProfileXpFill" style="width: 50%;"></div>
+    <!-- TOP BAR (HEADER NAVIGATION) -->
+    <header class="mlbb-top-bar" id="mlbbTopBar">
+      <!-- 1. Top-Left Profile Widget -->
+      <div class="top-profile-wrapper mlbb-style" id="topProfileBtn" role="button" tabindex="0" title="Buka Profil / Akun">
+        <div class="top-profile-frame">
+          <div class="top-profile-avatar" id="topProfileAvatar"></div>
+          <div class="top-profile-frame-crown">👑</div>
+        </div>
+        <div class="top-profile-info">
+          <div class="top-profile-name" id="topProfileName">SkyPlayer</div>
+          <div class="top-profile-sub">
+            <span class="top-profile-tier-icon" id="topProfileTierIcon">🏆</span>
+            <span class="top-profile-tier-num" id="topProfileTierNum">0</span>
+            <div class="top-profile-xp-bar">
+              <div class="top-profile-xp-fill" id="topProfileXpFill" style="width: 50%;"></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Modern Simple Top-Right Action Controls -->
-    <div class="top-actions">
-      <button id="soundBtn" class="action-glass-btn sound-btn" type="button" aria-label="Toggle Suara" title="Suara Game">
-        <svg class="btn-svg" viewBox="0 0 24 24"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path class="sound-wave w1" d="M15 9.25a4 4 0 0 1 0 5.5"/><path class="sound-wave w2" d="M17.5 6.75a7.5 7.5 0 0 1 0 10.5"/></svg>
+      <!-- 2. Top-Center/Right Currency & Status -->
+      <div class="mlbb-top-resources">
+        <div class="mlbb-res-pill coins" id="topCoinPill" title="Koin Emas">
+          <span class="mlbb-res-icon">🪙</span>
+          <span class="mlbb-res-val" id="topCoinVal">0</span>
+          <button class="mlbb-res-add-btn" id="topAddCoinBtn" title="Dapatkan Koin Gratis!">+</button>
+        </div>
+        <div class="mlbb-res-pill points" id="topRankPill" title="Poin Ranked">
+          <span class="mlbb-res-icon">💎</span>
+          <span class="mlbb-res-val" id="topRankVal">0</span>
+        </div>
+      </div>
+
+      <!-- 3. Top-Right Action Controls -->
+      <div class="top-actions mlbb-actions">
+        <button id="rankedLeaderboardBtn" class="action-glass-btn" type="button" aria-label="Leaderboard" title="Leaderboard Global">
+          <svg class="btn-svg" viewBox="0 0 24 24"><path d="M7 4 H17 V10 C17 13.5 14.5 15.5 12 15.5 C9.5 15.5 7 10 Z" fill="#f59e0b"/><path d="M7 6 H4 C3 6 2 7 2 8 C2 10.5 4 12 6.5 12 H7" fill="none" stroke="#f59e0b" stroke-width="1.8"/><path d="M17 6 H20 C21 6 22 7 22 8 C22 10.5 20 12 17.5 12 H17" fill="none" stroke="#f59e0b" stroke-width="1.8"/></svg>
+        </button>
+        <button id="soundBtn" class="action-glass-btn sound-btn" type="button" aria-label="Toggle Suara" title="Suara Game">
+          <svg class="btn-svg" viewBox="0 0 24 24"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path class="sound-wave w1" d="M15 9.25a4 4 0 0 1 0 5.5"/><path class="sound-wave w2" d="M17.5 6.75a7.5 7.5 0 0 1 0 10.5"/></svg>
+        </button>
+        <button id="musicBtn" class="action-glass-btn music-btn" type="button" aria-label="Toggle Musik" title="Musik Latar">
+          <svg class="btn-svg" viewBox="0 0 24 24"><path d="M9 18V6l9-2v12"/><path d="M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3ZM18 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z"/></svg>
+        </button>
+        <button id="settingsBtn" class="action-glass-btn" type="button" aria-label="Pengaturan" title="Pengaturan">
+          <svg class="btn-svg" viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" fill="#ffffff"/><path d="M19.4 13a7.8 7.8 0 0 0 0-2l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.5a.5.5 0 0 0-.6-.2l-2.5 1a7.8 7.8 0 0 0-1.8-1l-.4-2.6a.5.5 0 0 0-.5-.4h-4a.5.5 0 0 0-.5.4l-.4 2.6a7.8 7.8 0 0 0-1.8 1l-2.5-1a.5.5 0 0 0-.6.2l-2 3.5a.5.5 0 0 0 .1.6L4.6 11a7.8 7.8 0 0 0 0 2l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.5a.5.5 0 0 0 .6.2l2.5-1a7.8 7.8 0 0 0 1.8 1l.4 2.6a.5.5 0 0 0 .5.4h4a.5.5 0 0 0 .5-.4l.4-2.6a7.8 7.8 0 0 0 1.8-1l2.5 1a.5.5 0 0 0 .6-.2l2-3.5a.5.5 0 0 0-.1-.6L19.4 13Z" fill="none" stroke="#ffffff" stroke-width="1.5"/></svg>
+        </button>
+        <button id="pauseBtn" class="action-glass-btn pause-btn hidden" type="button" aria-label="Jeda Permainan" title="Pause Game">
+          <svg class="btn-svg" viewBox="0 0 24 24"><path d="M8.5 6.75v10.5M15.5 6.75v10.5"/></svg>
+        </button>
+        <div class="mlbb-ping-badge" title="Status Sinyal">
+          <span class="ping-dot"></span>
+          <span class="ping-text">24ms</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- LEFT SIDEBAR (EVENT PASS & QUICK ACTIONS) -->
+    <aside class="mlbb-left-dock" id="mlbbLeftDock">
+      <div class="mlbb-event-card" id="mlbbEventCard" role="button" tabindex="0" title="Buka Toko & Koleksi">
+        <div class="mlbb-event-badge">SEASON 1</div>
+        <div class="mlbb-event-title">SKY PASS</div>
+        <div class="mlbb-event-sub">GRATIS HADIAH</div>
+      </div>
+
+      <button class="mlbb-side-btn" id="shopBtn" type="button" title="Toko Skin & Koleksi">
+        <span class="side-btn-icon">🛒</span>
+        <span class="side-btn-label">SHOP</span>
       </button>
-      <button id="musicBtn" class="action-glass-btn music-btn" type="button" aria-label="Toggle Musik" title="Musik Latar">
-        <svg class="btn-svg" viewBox="0 0 24 24"><path d="M9 18V6l9-2v12"/><path d="M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3ZM18 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z"/></svg>
+
+      <button class="mlbb-side-btn" id="lobbyAdmobRewardBtn" type="button" title="Tonton Iklan Dapat +25 Koin Gratis!">
+        <span class="side-btn-icon">🎁</span>
+        <span class="side-btn-label">+25 KOIN</span>
       </button>
-      <button id="pauseBtn" class="action-glass-btn pause-btn hidden" type="button" aria-label="Jeda Permainan" title="Pause Game">
-        <svg class="btn-svg" viewBox="0 0 24 24"><path d="M8.5 6.75v10.5M15.5 6.75v10.5"/></svg>
-      </button>
-    </div>
-    <!-- Active Dash Skill Button (Pojok Kiri Bawah) -->
+
+      <a class="mlbb-side-btn" id="lobbyFeedbackBtn" href="https://forms.gle" target="_blank" rel="noopener noreferrer" title="Pengaduan & Masukan Game">
+        <span class="side-btn-icon">💬</span>
+        <span class="side-btn-label">MASUKAN</span>
+      </a>
+    </aside>
+
+    <!-- RIGHT SIDEBAR (ONLINE FRIENDS QUICK DOCK) -->
+    <aside class="mlbb-right-dock" id="mlbbRightDock">
+      <div class="mlbb-right-header" id="socialBtn" role="button" tabindex="0" title="Buka Daftar Teman & Chat">
+        <span class="right-header-title">TEMAN</span>
+        <span class="social-notification-badge" id="socialBadgeCount" style="display:none;">0</span>
+        <span class="right-header-arrow">›</span>
+      </div>
+      <div class="mlbb-friends-quick-list" id="mlbbFriendsQuickList">
+        <div class="mlbb-quick-friend-item">
+          <div class="mlbb-qf-avatar" id="mlbbQfAvatar1"></div>
+          <div class="mlbb-qf-name">SkyPilot</div>
+          <div class="mlbb-qf-status"></div>
+        </div>
+        <div class="mlbb-quick-friend-item">
+          <div class="mlbb-qf-avatar" id="mlbbQfAvatar2"></div>
+          <div class="mlbb-qf-name">AeroAce</div>
+          <div class="mlbb-qf-status"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Active Dash Skill Button (Pojok Kiri Bawah saat main) -->
     <button id="dashBtn" class="dash-button hidden" aria-label="Skill Dash Ke Depan (Tombol SHIFT / D)" type="button" title="Skill Dash (Tekan SHIFT atau D)">
       <span class="dash-key-hint">SHIFT / D</span>
       <svg class="dash-cooldown-ring" viewBox="0 0 48 48">
@@ -262,100 +335,56 @@
         <span id="dashCooldownText" class="dash-timer-text">READY</span>
       </div>
     </button>
-    <section id="menu" class="screen menu-screen">
-      <!-- Simple Modern Game Brand Header -->
-      <div class="simple-brand-header">
-        <h1 class="simple-brand-title">
-          <span class="brand-flappy">Feather</span><span class="brand-bird">Rush</span>
-        </h1>
-        <div class="simple-brand-tag">SKY ADVENTURE</div>
-      </div>
 
-      <!-- Mode Selector: Classic vs Ranked vs Multiplayer -->
-      <div class="mode-selector" id="modeSelector">
-        <button class="mode-pill active" id="modeClassicBtn" data-mode="classic" type="button">
-          <span class="mode-badge">CASUAL</span>
-          <span class="mode-title">CLASSIC</span>
-        </button>
-        <button class="mode-pill" id="modeRankedBtn" data-mode="ranked" type="button">
-          <span class="mode-badge ranked">ONLINE</span>
-          <span class="mode-title-row">
-            <span class="mode-rank-pill-icon" id="modeRankPillIcon"></span>
-            <span class="mode-title">RANKED</span>
-          </span>
-        </button>
-        <button class="mode-pill" id="modeMultiplayerBtn" data-mode="multiplayer" type="button">
-          <span class="mode-badge mp">ONLINE</span>
-          <span class="mode-title-row">
-            <span class="mode-title">MULTIPLAYER</span>
-          </span>
-        </button>
-      </div>
-
-      <!-- Menu Ranked Status Banner (Klik untuk lihat daftar tier & poin) -->
-      <div class="menu-ranked-card hidden" id="menuRankedCard" role="button" tabindex="0" title="Klik untuk melihat daftar tier & target poin">
-        <div class="menu-rank-header">
-          <div class="menu-rank-icon" id="menuRankIcon"></div>
-          <div class="menu-rank-text">
-            <div class="menu-rank-title" id="menuRankTitle">BRONZE TIER</div>
-            <div class="menu-rank-sub" id="menuRankSub">Ranked Best: <b>0 pts</b></div>
-          </div>
-          <span class="rank-card-tap-hint">INFO TIER ›</span>
-        </div>
-        <div class="menu-rank-bar-wrap">
-          <div class="menu-rank-labels">
-            <span id="menuRankCurPts">0 / 25 PTS</span>
-            <span id="menuRankTargetPts">25 Poin lagi ke SILVER!</span>
-          </div>
-          <div class="menu-rank-bar">
-            <div class="menu-rank-fill" id="menuRankFill" style="width: 0%;"></div>
-          </div>
+    <!-- LOBBY SCREEN (MLBB AUTHENTIC OVERLAY) -->
+    <section id="menu" class="screen menu-screen mlbb-layout">
+      <!-- Center Hero Speech Bubble -->
+      <div class="mlbb-center-content">
+        <div class="mlbb-speech-bubble" id="mlbbHeroSpeech">
+          "Ayo kepakkan sayap dan taklukkan langit!"
         </div>
       </div>
 
-      <button class="primary" id="playBtn">PLAY CLASSIC</button>
-
-      <!-- Dedicated Ranked Leaderboard & Google Play Buttons (Hidden in Classic Mode) -->
-      <button class="secondary btn-rank-lb hidden" id="rankedLeaderboardBtn" type="button">
-        <span class="trophy-badge-icon">
-          <svg viewBox="0 0 24 24" width="20" height="20">
-            <path d="M7 4 H17 V10 C17 13.5 14.5 15.5 12 15.5 C9.5 15.5 7 13.5 7 10 Z" fill="#f59e0b" stroke="#d97706" stroke-width="1.2"/>
-            <path d="M7 6 H4 C3 6 2 7 2 8 C2 10.5 4 12 6.5 12 H7" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M17 6 H20 C21 6 22 7 22 8 C22 10.5 20 12 17.5 12 H17" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M10 15.5 V18 H14 V15.5" fill="none" stroke="#d97706" stroke-width="1.5"/>
-            <rect x="8" y="18" width="8" height="3" rx="1" fill="#b45309"/>
-            <polygon points="12,6.5 13.2,9 15.8,9.3 13.8,11 14.4,13.5 12,12.1 9.6,13.5 10.2,11 8.2,9.3 10.8,9" fill="#fef08a"/>
-          </svg>
-        </span>
-        <span>LEADERBOARD</span>
-      </button>
-
-      <button class="secondary" id="shopBtn">SHOP</button>
-      <button class="secondary btn-social-lobby" id="socialBtn" type="button">
-        <span>TEMAN & SOSIAL</span>
-        <span class="social-notification-badge" id="socialBadgeCount" style="display:none;">0</span>
-      </button>
-      <button class="secondary" id="howBtn">HOW TO PLAY</button>
-      <button class="secondary" id="settingsBtn">SETTINGS</button>
-
-      <!-- Bottom-Left Action Bar: Feedback + AdMob Rewarded Ads -->
-      <div class="lobby-bottom-left-bar">
-        <a id="lobbyFeedbackBtn" class="lobby-action-pill feedback" href="https://forms.gle" target="_blank" rel="noopener noreferrer" title="Pengaduan & Masukan Game (Google Form)" aria-label="Pengaduan Game">
-          <svg class="pill-icon" viewBox="0 0 24 24">
-            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/>
-          </svg>
-          <span>PENGADUAN</span>
-        </a>
-
-        <button id="lobbyAdmobRewardBtn" class="lobby-action-pill admob-reward" type="button" title="Tonton Iklan Dapat +25 Koin Gratis!" aria-label="Tonton Iklan Dapat Koin">
-          <svg class="pill-icon coin-ad-icon" viewBox="0 0 24 24">
-            <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12zm-11-2l6-4-6-4v8z"/>
-          </svg>
-          <span>+25 KOIN 🪙</span>
-        </button>
+      <!-- Hidden standard pills for JS compatibility -->
+      <div style="display:none;">
+        <button id="modeClassicBtn" data-mode="classic"></button>
+        <button id="modeRankedBtn" data-mode="ranked"></button>
+        <button id="modeMultiplayerBtn" data-mode="multiplayer"></button>
+        <span id="coinCount">0</span>
       </div>
 
-      <div class="home-wallet">COINS <b id="coinCount">0</b></div>
+      <!-- BOTTOM BAR (NAVIGATION DOCK & BIG MATCH DOCK) -->
+      <footer class="mlbb-bottom-bar">
+        <div class="mlbb-bottom-nav">
+          <button class="mlbb-nav-pill" id="howBtn" type="button" title="Cara Bermain">
+            <span class="nav-icon">📖</span>
+            <span class="nav-label">PANDUAN</span>
+          </button>
+        </div>
+
+        <!-- Big Iconic MLBB Match Button Dock -->
+        <div class="mlbb-match-dock">
+          <!-- Mode Switcher Pill -->
+          <div class="mlbb-mode-pill-btn" id="mlbbCycleModeBtn" role="button" tabindex="0" title="Klik untuk Ganti Mode">
+            <span class="mode-tag-icon" id="mlbbModeTagIcon">🎮</span>
+            <div class="mode-tag-info">
+              <span class="mode-tag-sub">MODE GAME</span>
+              <span class="mode-tag-name" id="mlbbCurrentModeName">CLASSIC</span>
+            </div>
+            <span class="mode-tag-arrow">↻</span>
+          </div>
+
+          <!-- Big Glowing Start Match Button -->
+          <button class="mlbb-start-match-btn" id="playBtn" type="button">
+            <div class="start-btn-shine"></div>
+            <div class="start-btn-text-wrap">
+              <span class="start-btn-label">MULAI</span>
+              <span class="start-btn-mode" id="mlbbStartBtnModeLabel">CLASSIC</span>
+            </div>
+            <span class="start-btn-arrow">▶</span>
+          </button>
+        </div>
+      </footer>
     </section>
     <section id="ready" class="screen hidden">
       <h2>GET READY!</h2>
@@ -1155,12 +1184,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=18.1"></script>
-  <script src="js/admob-config.js?v=18.1"></script>
-  <script src="js/shop-data.js?v=18.1"></script>
-  <script src="js/audio.js?v=18.1"></script>
-  <script src="js/multiplayer.js?v=18.1"></script>
-  <script src="js/social.js?v=18.1"></script>
-  <script src="js/script.js?v=18.1"></script>
+  <script src="js/firebase-config.js?v=18.2"></script>
+  <script src="js/admob-config.js?v=18.2"></script>
+  <script src="js/shop-data.js?v=18.2"></script>
+  <script src="js/audio.js?v=18.2"></script>
+  <script src="js/multiplayer.js?v=18.2"></script>
+  <script src="js/social.js?v=18.2"></script>
+  <script src="js/script.js?v=18.2"></script>
 </body>
 </html>
