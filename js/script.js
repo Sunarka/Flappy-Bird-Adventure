@@ -5891,7 +5891,7 @@
       babyBirds[1].x += (bird.x - 26 - babyBirds[1].x) * 8 * dt;
       babyBirds[1].y += (bird.y + 18 - babyBirds[1].y) * 8 * dt;
       overTimer -= dt;
-      const isModalOpen = el.over.classList.contains('visible') || (el.mpOverModal && !el.mpOverModal.classList.contains('hidden'));
+      const isModalOpen = (el.over && !el.over.classList.contains('hidden')) || (el.mpOverModal && !el.mpOverModal.classList.contains('hidden'));
       if(overTimer <= 0 && !isModalOpen) showOver();
       return;
     }
@@ -11406,7 +11406,6 @@
     goReady();
   });
   bindClick('rankedLeaderboardBtn', () => {
-    if(currentMode !== 'ranked') return;
     audio.click();
     updateRankedLeaderboardUI();
     renderLeaderboardList();
@@ -12737,19 +12736,18 @@
       if(el.mpHostName) el.mpHostName.textContent = (gpProfile.gamerTag || 'Host') + ' (KAMU)';
       if(el.mpHostAvatar) el.mpHostAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 36);
       if(el.mpHostRoleBadge) el.mpHostRoleBadge.textContent = 'HOST (LEADER)';
-      if(el.mpGuestName) el.mpGuestName.textContent = 'Menunggu Teman...';
-      if(el.mpGuestAvatar) el.mpGuestAvatar.innerHTML = '⏳';
+      if(el.mpGuestName) el.mpGuestName.textContent = 'Menunggu Lawan...';
+      if(el.mpGuestAvatar) el.mpGuestAvatar.innerHTML = '<span class="mlbb-waiting-pulse">+</span>';
       if(el.mpGuestSlotCard) el.mpGuestSlotCard.classList.remove('occupied');
       if(el.mpGuestStatusBadge) {
-        el.mpGuestStatusBadge.textContent = 'GUEST';
-        el.mpGuestStatusBadge.style.background = '#475569';
+        el.mpGuestStatusBadge.textContent = 'MENUNGGU...';
+        el.mpGuestStatusBadge.className = 'mlbb-podium-status waiting';
       }
       if(el.mpHostStartGameBtn) {
         el.mpHostStartGameBtn.classList.remove('hidden');
         el.mpHostStartGameBtn.disabled = true;
         el.mpHostStartGameBtn.style.opacity = '0.6';
-        el.mpHostStartGameBtn.style.background = '#64748b';
-        el.mpHostStartGameBtn.textContent = 'MENUNGGU LAWAN...';
+        el.mpHostStartGameBtn.innerHTML = '<div class="start-btn-shine"></div><span>MENUNGGU LAWAN BERGABUNG...</span>';
       }
       if(el.mpGuestReadyBtn) el.mpGuestReadyBtn.classList.add('hidden');
       switchMpTab('create');
@@ -12765,13 +12763,12 @@
       }
       if(el.mpGuestStatusBadge) {
         el.mpGuestStatusBadge.textContent = 'BELUM READY';
-        el.mpGuestStatusBadge.style.background = '#eab308';
+        el.mpGuestStatusBadge.className = 'mlbb-podium-status waiting';
       }
       if(el.mpHostStartGameBtn) {
         el.mpHostStartGameBtn.disabled = true;
         el.mpHostStartGameBtn.style.opacity = '0.6';
-        el.mpHostStartGameBtn.style.background = '#64748b';
-        el.mpHostStartGameBtn.textContent = 'MENUNGGU LAWAN READY...';
+        el.mpHostStartGameBtn.innerHTML = '<div class="start-btn-shine"></div><span>MENUNGGU LAWAN READY...</span>';
       }
       floatingTexts.push({
         x: 180, y: 120,
@@ -12788,25 +12785,23 @@
         audio.win();
         if(el.mpGuestStatusBadge) {
           el.mpGuestStatusBadge.textContent = 'READY ✅';
-          el.mpGuestStatusBadge.style.background = '#22c55e';
+          el.mpGuestStatusBadge.className = 'mlbb-podium-status ready';
         }
         if(isHost && el.mpHostStartGameBtn) {
           el.mpHostStartGameBtn.disabled = false;
           el.mpHostStartGameBtn.style.opacity = '1';
-          el.mpHostStartGameBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
-          el.mpHostStartGameBtn.textContent = 'MULAI BERTANDING SEKARANG!';
+          el.mpHostStartGameBtn.innerHTML = '<div class="start-btn-shine"></div><span>MULAI PERTANDINGAN ▶</span>';
         }
       } else {
         audio.click();
         if(el.mpGuestStatusBadge) {
           el.mpGuestStatusBadge.textContent = 'BELUM READY';
-          el.mpGuestStatusBadge.style.background = '#eab308';
+          el.mpGuestStatusBadge.className = 'mlbb-podium-status waiting';
         }
         if(isHost && el.mpHostStartGameBtn) {
           el.mpHostStartGameBtn.disabled = true;
           el.mpHostStartGameBtn.style.opacity = '0.6';
-          el.mpHostStartGameBtn.style.background = '#64748b';
-          el.mpHostStartGameBtn.textContent = 'MENUNGGU LAWAN READY...';
+          el.mpHostStartGameBtn.innerHTML = '<div class="start-btn-shine"></div><span>MENUNGGU LAWAN READY...</span>';
         }
       }
     });
@@ -12830,14 +12825,13 @@
       if(el.mpGuestSlotCard) el.mpGuestSlotCard.classList.add('occupied');
       if(el.mpGuestStatusBadge) {
         el.mpGuestStatusBadge.textContent = 'BELUM READY';
-        el.mpGuestStatusBadge.style.background = '#eab308';
+        el.mpGuestStatusBadge.className = 'mlbb-podium-status waiting';
       }
 
       if(el.mpHostStartGameBtn) el.mpHostStartGameBtn.classList.add('hidden');
       if(el.mpGuestReadyBtn) {
         el.mpGuestReadyBtn.classList.remove('hidden');
-        el.mpGuestReadyBtn.textContent = 'SAYA SIAP! (READY)';
-        el.mpGuestReadyBtn.style.background = 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)';
+        el.mpGuestReadyBtn.innerHTML = '<div class="start-btn-shine"></div><span>SAYA SIAP! (READY)</span>';
       }
     });
 
