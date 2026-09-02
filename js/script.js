@@ -6010,8 +6010,9 @@
     // Update 2 Anak Burung Pelindung (Baby Guardian Combat AI)
     updateBabyBirds(dt, speed, slowFactor);
 
-    // Update Pipes & Rocket/Dash Smasher
-    for(const p of pipes) {
+    // Update Pipes & Rocket/Dash Smasher (In-place reverse traversal without Array allocation)
+    for(let i = pipes.length - 1; i >= 0; i--) {
+      const p = pipes[i];
       p.x -= speed * dt;
       if(!p.passed && p.x + p.w < bird.x - bird.r) { p.passed = true; addScore(); }
       if(collide(p)) {
@@ -6019,9 +6020,9 @@
           // Roket NOS / Warp Dash menghancurkan pipa di depannya seketika!
           if(!p.smashed) {
             p.smashed = true;
-            makeParticles(p.x + p.w / 2, bird.y, 24, dashTimer > 0 ? '#38bdf8' : '#ea580c');
-            makeParticles(p.x + p.w / 2, bird.y, 14, '#fde047');
-            shake = 0.25;
+            makeParticles(p.x + p.w / 2, bird.y, 16, dashTimer > 0 ? '#38bdf8' : '#ea580c');
+            makeParticles(p.x + p.w / 2, bird.y, 8, '#fde047');
+            shake = 0.22;
             audio.rocketSmash();
             if(!p.passed) { p.passed = true; addScore(); }
           }
@@ -6029,21 +6030,31 @@
           handleHit(null);
         }
       }
-    }
-    pipes = pipes.filter(p => p.x + p.w > -8);
-
-    // Update Flyers
-    for(const flyer of flyers) {
-      flyer.x -= (speed * flyer.speed + 45 * slowFactor) * dt;
-      flyer.wing += dt * 12;
-      if(!flyer.dead && Math.hypot(bird.x - flyer.x, bird.y - flyer.y) < bird.r * .72 + flyer.r * .72) {
-        handleHit(flyer);
+      if(p.x + p.w <= -8) {
+        pipes.splice(i, 1);
       }
     }
-    flyers = flyers.filter(flyer => flyer.x + flyer.r > -10 && !flyer.dead);
 
-    // Update Enemies (Enemy Bird & Bee Swarm with randomized trajectory)
-    for(const e of enemies) {
+    // Update Flyers (AABB Broadphase early-exit + In-place cleanup)
+    for(let i = flyers.length - 1; i >= 0; i--) {
+      const flyer = flyers[i];
+      flyer.x -= (speed * flyer.speed + 45 * slowFactor) * dt;
+      flyer.wing += dt * 12;
+      const dx = bird.x - flyer.x;
+      if(Math.abs(dx) < 32) {
+        const dy = bird.y - flyer.y;
+        if(Math.abs(dy) < 32 && !flyer.dead && Math.hypot(dx, dy) < bird.r * .72 + flyer.r * .72) {
+          handleHit(flyer);
+        }
+      }
+      if(flyer.x + flyer.r <= -10 || flyer.dead) {
+        flyers.splice(i, 1);
+      }
+    }
+
+    // Update Enemies (Enemy Bird & Bee Swarm with randomized trajectory + In-place cleanup)
+    for(let i = enemies.length - 1; i >= 0; i--) {
+      const e = enemies[i];
       e.x -= (speed * e.speed) * dt;
       e.wing += dt * 16;
       e.time += dt;
@@ -6062,22 +6073,29 @@
         e.y = Math.max(75, Math.min(H - GROUND - 45, e.y + Math.sin(e.wobble) * 28 * dt));
       }
 
-      if(!e.dead && Math.hypot(bird.x - e.x, bird.y - e.y) < bird.r * .72 + e.r * .72) {
-        handleHit(e);
+      const dx = bird.x - e.x;
+      if(Math.abs(dx) < 32) {
+        const dy = bird.y - e.y;
+        if(Math.abs(dy) < 32 && !e.dead && Math.hypot(dx, dy) < bird.r * .72 + e.r * .72) {
+          handleHit(e);
+        }
+      }
+      if(e.x + e.r <= -15 || e.dead) {
+        enemies.splice(i, 1);
       }
     }
-    enemies = enemies.filter(e => e.x + e.r > -15 && !e.dead);
 
     // Update Storm Clouds
-    for(const c of stormClouds) {
+    for(let i = stormClouds.length - 1; i >= 0; i--) {
+      const c = stormClouds[i];
       c.timer -= dt;
       if(c.phase === 'warn') {
         if(c.timer <= 0) {
           c.phase = 'strike';
           c.timer = 0.38;
           audio.thunder();
-          shake = 0.22;
-          makeParticles(c.targetX, H - GROUND - 8, 16, '#fde047');
+          shake = 0.2;
+          makeParticles(c.targetX, H - GROUND - 8, 12, '#fde047');
         }
       } else if(c.phase === 'strike') {
         // Lightning bolt collision check
@@ -6089,50 +6107,70 @@
           c.timer = 0.55;
         }
       }
+      if(c.phase === 'fade' && c.timer <= 0) {
+        stormClouds.splice(i, 1);
+      }
     }
-    stormClouds = stormClouds.filter(c => c.phase !== 'fade' || c.timer > 0);
 
     // Update Power-Up Pickups
-    for(const p of powerups) {
+    for(let i = powerups.length - 1; i >= 0; i--) {
+      const p = powerups[i];
       p.x -= speed * dt;
       p.bob += dt * 3;
       p.rot += dt * 2;
-      if(Math.hypot(bird.x - p.x, bird.y - (p.y + Math.sin(p.bob) * 5)) < bird.r + p.r) {
-        p.collected = true;
-        activatePowerup(p.type, p.x, p.y, false);
+      const dx = bird.x - p.x;
+      if(Math.abs(dx) < 32) {
+        const dy = bird.y - (p.y + Math.sin(p.bob) * 5);
+        if(Math.abs(dy) < 32 && Math.hypot(dx, dy) < bird.r + p.r) {
+          p.collected = true;
+          activatePowerup(p.type, p.x, p.y, false);
+        }
+      }
+      if(p.collected || p.x + p.r <= -15) {
+        powerups.splice(i, 1);
       }
     }
-    powerups = powerups.filter(p => !p.collected && p.x + p.r > -15);
 
     // Update Coins (Magnet & Rocket Attraction) - HANYA DI MODE CLASSIC
-    for(const coin of coins) {
+    for(let i = coins.length - 1; i >= 0; i--) {
+      const coin = coins[i];
       coin.x -= speed * dt;
       coin.spin += dt * 7;
 
       // Magnet pull & Rocket auto-vacuum
       if(activePowerups.magnet > 0 || activePowerups.rocket > 0) {
-        const dist = Math.hypot(bird.x - coin.x, bird.y - coin.y);
+        const dx = bird.x - coin.x;
+        const dy = bird.y - coin.y;
         const maxDist = activePowerups.rocket > 0 ? 320 : 170;
-        if(dist < maxDist) {
-          const pullSpeed = (1 - dist / maxDist) * 480 + 150;
-          const angle = Math.atan2(bird.y - coin.y, bird.x - coin.x);
-          coin.x += Math.cos(angle) * pullSpeed * dt;
-          coin.y += Math.sin(angle) * pullSpeed * dt;
+        if(Math.abs(dx) < maxDist && Math.abs(dy) < maxDist) {
+          const dist = Math.hypot(dx, dy);
+          if(dist < maxDist) {
+            const pullSpeed = (1 - dist / maxDist) * 480 + 150;
+            const angle = Math.atan2(dy, dx);
+            coin.x += Math.cos(angle) * pullSpeed * dt;
+            coin.y += Math.sin(angle) * pullSpeed * dt;
+          }
         }
       }
 
-      if(Math.hypot(bird.x - coin.x, bird.y - coin.y) < bird.r + coin.r) {
-        coin.collected = true;
-        if(currentMode !== 'ranked') {
-          progress.coins++;
-          persistProgress();
-          updateCoins();
+      const dx = bird.x - coin.x;
+      if(Math.abs(dx) < 28) {
+        const dy = bird.y - coin.y;
+        if(Math.abs(dy) < 28 && Math.hypot(dx, dy) < bird.r + coin.r) {
+          coin.collected = true;
+          if(currentMode !== 'ranked') {
+            progress.coins++;
+            persistProgress();
+            updateCoins();
+          }
+          makeParticles(coin.x, coin.y, 8, '#ffe56b');
+          audio.score();
         }
-        makeParticles(coin.x, coin.y, 12, '#ffe56b');
-        audio.score();
+      }
+      if(coin.collected || coin.x + coin.r <= -8) {
+        coins.splice(i, 1);
       }
     }
-    coins = coins.filter(coin => !coin.collected && coin.x + coin.r > -8);
 
     if(bird.y - bird.r < 0) {
       bird.y = bird.r + 2;
@@ -6144,7 +6182,9 @@
     groundX = (groundX + speed * dt) % 30;
 
     skinTrail(dt);
-    for(const q of particles) {
+    // In-place particle updates without new array creation
+    for(let i = particles.length - 1; i >= 0; i--) {
+      const q = particles[i];
       q.x += q.vx * dt;
       q.y += q.vy * dt;
       if(q.rot !== undefined && q.vRot) q.rot += q.vRot * dt;
@@ -6152,8 +6192,10 @@
       if(q.wobble !== undefined) q.wobble += 5 * dt;
       if(q.type !== 'flame' && q.type !== 'bubble' && q.type !== 'lightning') q.vy += 90 * dt;
       q.life -= dt;
+      if(q.life <= 0) {
+        particles.splice(i, 1);
+      }
     }
-    particles = particles.filter(q => q.life > 0);
   }
 
   // Helper: gambar rounded rect path pakai arcTo (100% kompatibel semua browser)
@@ -12298,9 +12340,45 @@
     document._gameErrDiv.textContent = msg;
   }
 
+  // Performance & FPS Diagnostics (Internal benchmark: window.__getGameFPS())
+  let _fpsFrameCount = 0, _fpsLastCheck = performance.now(), _currentCalculatedFPS = 60;
+  window.__getGameFPS = function() { return Math.round(_currentCalculatedFPS); };
+
+  // Page Visibility API: Auto-pause & battery saver when tab is in background
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (state === State.PLAYING && currentMode !== 'multiplayer') {
+        pause();
+      }
+      if (audio) {
+        audio.stopMusic();
+        audio.stopFileMusic();
+      }
+    } else {
+      last = performance.now(); // Reset delta clock to prevent jump on tab focus
+      if (state === State.PLAYING && settings.music && audio) {
+        playBackgroundMusic();
+      } else if (state === State.MENU && settings.music && audio) {
+        audio.lobbyMusic();
+      }
+    }
+  });
+
   function loop(t) {
-    const dt = Math.min(.033, (t - last) / 1000 || 0);
+    // 1. Consistent DeltaTime calculation across 60Hz/90Hz/120Hz/144Hz displays
+    if(!last) last = t;
+    const rawDt = (t - last) / 1000;
+    const dt = Math.min(0.033, Math.max(0.001, rawDt));
     last = t;
+
+    // FPS Meter (Internal accumulator)
+    _fpsFrameCount++;
+    if(t - _fpsLastCheck >= 1000) {
+      _currentCalculatedFPS = (_fpsFrameCount * 1000) / (t - _fpsLastCheck);
+      _fpsFrameCount = 0;
+      _fpsLastCheck = t;
+    }
+
     try {
       update(dt);
     } catch(err) {

@@ -92,6 +92,13 @@
         o.connect(g).connect(this.ctx.destination);
         o.start(t);
         o.stop(t + dur);
+        // Memory-leak prevention: disconnect audio nodes on completion
+        o.onended = () => {
+          try {
+            o.disconnect();
+            g.disconnect();
+          } catch(e) {}
+        };
       } catch(_) {}
     },
 
