@@ -6,7 +6,11 @@
 .mp-modal.hidden,
 .mp-view.hidden,
 .mp-quick-searching-box.hidden,
-.mp-searching-bar.hidden {
+.mp-searching-bar.hidden,
+.mp-multi-hud.hidden,
+.mp-battle-hud.hidden,
+.mp-race-bar-wrap.hidden,
+.mlbb-invite-toast.hidden {
   display: none !important;
 }
 /* =========================================================

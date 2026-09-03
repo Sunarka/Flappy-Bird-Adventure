@@ -3985,10 +3985,10 @@
     const statRanked = $('mlbbRankedPtsStat');
     if(statRanked) statRanked.textContent = `${gpProfile.rankedBest || progress.rankedScore || 0} PTS`;
 
-    // Tampilkan tombol Leaderboard HANYA di mode Ranked
+    // Tombol Leaderboard SELALU tampil di semua mode permainan
     if(el.rankedLeaderboardBtn) {
-      el.rankedLeaderboardBtn.classList.toggle('hidden', mode !== 'ranked');
-      el.rankedLeaderboardBtn.style.display = mode === 'ranked' ? 'flex' : 'none';
+      el.rankedLeaderboardBtn.classList.remove('hidden');
+      el.rankedLeaderboardBtn.style.display = 'flex';
     }
 
     updateMenuRankedUI();
@@ -4394,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.23';
+  const GAME_VERSION = '20.24';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
