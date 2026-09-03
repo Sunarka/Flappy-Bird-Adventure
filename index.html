@@ -21,18 +21,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.60">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.60">
-  <link rel="stylesheet" href="css/shop.css?v=20.60">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.60">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.60">
-  <link rel="stylesheet" href="css/store.css?v=20.60">
-  <link rel="stylesheet" href="css/ranked.css?v=20.60">
-  <link rel="stylesheet" href="css/social.css?v=20.60">
-  <link rel="stylesheet" href="css/splash.css?v=20.60">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.60">
+  <link rel="stylesheet" href="css/style.css?v=20.61">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.61">
+  <link rel="stylesheet" href="css/shop.css?v=20.61">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.61">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.61">
+  <link rel="stylesheet" href="css/store.css?v=20.61">
+  <link rel="stylesheet" href="css/ranked.css?v=20.61">
+  <link rel="stylesheet" href="css/social.css?v=20.61">
+  <link rel="stylesheet" href="css/splash.css?v=20.61">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.61">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.60">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.61">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -1057,6 +1057,7 @@
 
       <!-- REVIVE MODAL (CONTINUE RUN WITH COINS) -->
       <section id="reviveModal" class="modal revive-modal hidden" role="dialog" aria-modal="true">
+        <button class="close" id="reviveCloseBtn" data-close aria-label="Lewatkan Revive">×</button>
         <div class="revive-header">
           <span class="revive-heart-icon"><svg viewBox="0 0 24 24" width="28" height="28"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#ec4899" stroke="#be185d" stroke-width="1.5"/></svg></span>
           <h2>LANJUTKAN?</h2>
@@ -1082,6 +1083,7 @@
 
       <!-- CUSTOM IN-GAME NOTIFICATION & CONFIRMATION DIALOG -->
       <section id="gameDialogModal" class="modal game-dialog-modal hidden" role="dialog" aria-modal="true">
+        <button class="close" data-close>×</button>
         <div class="dialog-icon-wrap" id="dialogIconWrap"></div>
         <h2 id="dialogTitle" class="dialog-title">PEMBERITAHUAN</h2>
         <div id="dialogBody" class="dialog-body"></div>
@@ -1295,6 +1297,7 @@
 
       <!-- 1v1 MULTIPLAYER BATTLE OVER MODAL -->
       <section id="mpOverModal" class="modal mp-over-modal hidden" role="dialog" aria-modal="true">
+        <button class="close" data-close>×</button>
         <div class="mp-over-header" id="mpOverHeader">
           <div class="mp-over-badge victory" id="mpOverBadge">VICTORY</div>
           <p class="mp-over-sub" id="mpOverSub">Kamu berhasil mengalahkan lawan!</p>
@@ -1340,6 +1343,7 @@
 
       <!-- PAUSE MODAL -->
       <section id="pauseModal" class="modal hidden" role="dialog" aria-modal="true">
+        <button class="close" id="pauseCloseBtn" data-close aria-label="Resume Game">×</button>
         <h2>GAME PAUSED</h2>
         <button class="primary" id="resumeBtn" type="button">RESUME</button>
         <button class="secondary" id="restartBtn" type="button">RESTART</button>
@@ -1347,6 +1351,7 @@
       </section>
 
       <section id="overModal" class="modal hidden" role="dialog" aria-modal="true">
+        <button class="close" id="overCloseBtn" data-close aria-label="Home">×</button>
         <h2>GAME OVER</h2>
         <div class="results">
           <div>SCORE<strong id="finalScore">0</strong></div>
@@ -1690,12 +1695,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.60"></script>
-  <script src="js/admob-config.js?v=20.60"></script>
-  <script src="js/shop-data.js?v=20.60"></script>
-  <script src="js/audio.js?v=20.60"></script>
-  <script src="js/multiplayer.js?v=20.60"></script>
-  <script src="js/social.js?v=20.60"></script>
-  <script src="js/script.js?v=20.60"></script>
+  <script src="js/firebase-config.js?v=20.61"></script>
+  <script src="js/admob-config.js?v=20.61"></script>
+  <script src="js/shop-data.js?v=20.61"></script>
+  <script src="js/audio.js?v=20.61"></script>
+  <script src="js/multiplayer.js?v=20.61"></script>
+  <script src="js/social.js?v=20.61"></script>
+  <script src="js/script.js?v=20.61"></script>
 </body>
 </html>

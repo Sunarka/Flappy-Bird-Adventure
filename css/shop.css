@@ -10,32 +10,39 @@
 .shop-modal.hidden{display:none !important}
 .shop-modal:not(.hidden){display:flex !important;flex-direction:column !important}
 .shop-modal .close {
+  position: absolute !important;
   top: 8px !important;
   right: 8px !important;
-  width: 22px !important;
-  height: 22px !important;
+  width: 26px !important;
+  height: 26px !important;
+  min-width: 26px !important;
+  min-height: 26px !important;
   margin: 0 !important;
-  border-radius: 6px !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: #cbd5e1 !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  box-shadow: none !important;
-  font-size: 14px !important;
+  border-radius: 7px !important;
+  background: rgba(239, 68, 68, 0.22) !important;
+  color: #fca5a5 !important;
+  border: 1.5px solid rgba(239, 68, 68, 0.6) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45) !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
   line-height: 1 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   cursor: pointer !important;
+  z-index: 99999 !important;
   transition: all .15s ease !important;
 }
 .shop-modal .close:hover {
   background: #ef4444 !important;
-  border-color: #f87171 !important;
+  border-color: #fca5a5 !important;
   color: #ffffff !important;
-  transform: scale(1.05) !important;
+  transform: scale(1.12) !important;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.75) !important;
 }
 .shop-modal .close:active {
-  transform: scale(0.95) !important;
+  transform: scale(0.92) !important;
+  background: #dc2626 !important;
 }
 .shop-header {
   display: flex !important;

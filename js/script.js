@@ -4835,7 +4835,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.60';
+  const GAME_VERSION = '20.61';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -12739,6 +12739,17 @@
   bindClick('settingsBtn', () => { audio.click(); showModal(el.settings); });
   bindClick('shopBtn', () => { audio.click(); syncPreviewLoadout(); updateCoins(); renderShop(); showModal(el.shop); startShopShowcase(); });
   document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => { audio.click(); closeModal(); });
+  document.addEventListener('click', e => {
+    const closeBtn = e.target.closest('[data-close]');
+    if(closeBtn) {
+      if(audio && audio.click) audio.click();
+      if(closeBtn.id === 'pauseCloseBtn') {
+        resume();
+      } else {
+        closeModal();
+      }
+    }
+  });
   if(el.layer) {
     el.layer.addEventListener('pointerdown', e => {
       if(e.target === el.layer) {
@@ -12753,6 +12764,9 @@
       }
     });
   }
+  bindClick('pauseCloseBtn', resume);
+  bindClick('overCloseBtn', home);
+  bindClick('reviveCloseBtn', () => { if(el.reviveGiveUp) el.reviveGiveUp.click(); else closeModal(); });
   bindClick('resumeBtn', resume);
   bindClick('restartBtn', goReady);
   bindClick('homeBtn', home);
