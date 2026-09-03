@@ -1779,7 +1779,9 @@
     const button = el.musicBtn;
     if(!button) return;
     button.classList.toggle('muted', !settings.music);
-    button.innerHTML = settings.music ? '<svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l9-2v12"/><path d="M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3ZM18 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z"/></svg>' : '<svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l9-2v12"/><path d="M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3ZM18 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z"/><path d="m4 4 16 16" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/></svg>';
+    button.innerHTML = settings.music ? 
+      '<svg class="btn-svg music-svg" viewBox="0 0 24 24" width="19" height="19"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h6V3h-8z" fill="currentColor"/><circle cx="10" cy="17" r="3" fill="currentColor"/></svg>' : 
+      '<svg class="btn-svg music-svg" viewBox="0 0 24 24" width="19" height="19"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h6V3h-8z" fill="currentColor"/><circle cx="10" cy="17" r="3" fill="currentColor"/><path d="m4 4 16 16" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/></svg>';
     button.setAttribute('aria-label', settings.music ? 'Matikan musik' : 'Nyalakan musik');
   }
 
@@ -4690,7 +4692,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.55';
+  const GAME_VERSION = '20.56';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -13114,7 +13116,9 @@
     }
     if(el.sound) {
       el.sound.classList.toggle('muted', !settings.sound);
-      el.sound.innerHTML = settings.sound ? '<svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path class="sound-wave w1" d="M15 9.25a4 4 0 0 1 0 5.5"/><path class="sound-wave w2" d="M17.5 6.75a7.5 7.5 0 0 1 0 10.5"/></svg>' : '<svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="m15 10 5 5m0-5-5 5" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/></svg>';
+      el.sound.innerHTML = settings.sound ? 
+        '<svg class="btn-svg sound-svg" viewBox="0 0 24 24" width="19" height="19"><path d="M3 9.5v5h4l5 4.5v-14l-5 4.5H3z" fill="currentColor"/><path class="sound-wave w1" d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="sound-wave w2" d="M18.5 5.5a9 9 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' : 
+        '<svg class="btn-svg sound-svg" viewBox="0 0 24 24" width="19" height="19"><path d="M3 9.5v5h4l5 4.5v-14l-5 4.5H3z" fill="currentColor"/><path d="m16 9 5 5m0-5-5 5" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/></svg>';
       el.sound.setAttribute('aria-label', settings.sound ? 'Matikan suara' : 'Nyalakan suara');
     }
     applyLanguage(settings.language || 'id');

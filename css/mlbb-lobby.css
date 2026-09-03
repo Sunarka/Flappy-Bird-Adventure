@@ -206,45 +206,62 @@
 .mlbb-res-pill {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: linear-gradient(180deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  gap: 7px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.98) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
   border-radius: 99px;
-  padding: 3px 10px 3px 8px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-  font: 900 12.5px 'Trebuchet MS', Arial, sans-serif;
+  height: 32px;
+  padding: 0 11px 0 9px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
   cursor: default;
+  transition: all 0.2s ease;
+}
+
+.mlbb-res-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.35);
 }
 
 .mlbb-res-pill.coins {
-  border-color: rgba(245, 158, 11, 0.4);
+  border-color: rgba(245, 158, 11, 0.6);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 10px rgba(245, 158, 11, 0.18), inset 0 1px 1px rgba(254, 240, 138, 0.35);
 }
 
 .mlbb-res-pill.coins .mlbb-res-val {
-  font: 900 12px/1 'Trebuchet MS', Arial, sans-serif;
-  color: #fef08a;
-  letter-spacing: 0.3px;
+  font: 900 13px/1 'Trebuchet MS', Arial, sans-serif;
+  color: #fbbf24;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.55);
 }
 
 .mlbb-res-pill.points {
-  border-color: rgba(56, 189, 248, 0.4);
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 10px rgba(56, 189, 248, 0.22), inset 0 1px 1px rgba(186, 230, 253, 0.35);
 }
 
 .mlbb-res-pill.points .mlbb-res-val {
-  font: 900 12px/1 'Trebuchet MS', Arial, sans-serif;
-  color: #fef08a;
-  letter-spacing: 0.3px;
+  font: 900 13px/1 'Trebuchet MS', Arial, sans-serif;
+  color: #38bdf8;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+.mlbb-res-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
 }
 
 .mlbb-res-add-btn {
-  width: 17px;
-  height: 17px;
-  min-height: 17px;
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
   border-radius: 50%;
   background: linear-gradient(135deg, #fde047 0%, #ea580c 100%);
-  border: 1px solid #fff;
+  border: 1.5px solid #ffffff;
   color: #1e1006;
   font: 900 12px/1 Arial;
   display: flex;
@@ -252,13 +269,14 @@
   justify-content: center;
   padding: 0;
   cursor: pointer;
-  box-shadow: 0 0 6px #facc15;
+  box-shadow: 0 0 8px rgba(250, 204, 21, 0.8);
   margin-left: 3px;
-  transition: transform 0.15s;
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .mlbb-res-add-btn:hover {
-  transform: scale(1.15) rotate(90deg);
+  transform: scale(1.22) rotate(90deg);
+  box-shadow: 0 0 12px #facc15;
 }
 
 .mlbb-actions {
@@ -266,40 +284,126 @@
   inset: auto !important;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   height: 38px;
 }
 
 .action-glass-btn {
-  width: 34px;
-  height: 34px;
-  min-height: 34px;
-  border-radius: 10px;
-  background: rgba(15, 23, 42, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  width: 35px;
+  height: 35px;
+  min-height: 35px;
+  border-radius: 11px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.98) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-  transition: all 0.18s;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   padding: 0;
+  color: #e2e8f0;
 }
 
 .action-glass-btn:hover {
-  transform: translateY(-2px);
-  background: rgba(30, 41, 59, 0.95);
-  border-color: #38bdf8;
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4), 0 0 10px rgba(56, 189, 248, 0.4);
+  transform: translateY(-2.5px) scale(1.06);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.action-glass-btn:active {
+  transform: translateY(1px) scale(0.96);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .action-glass-btn .btn-svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-  color: #f8fafc;
+  width: 19px;
+  height: 19px;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.action-glass-btn:hover .btn-svg {
+  transform: scale(1.12);
+}
+
+/* 1. Golden Champion Leaderboard Button */
+.action-glass-btn.leaderboard-btn,
+#rankedLeaderboardBtn {
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.25) 0%, rgba(180, 83, 9, 0.35) 100%), rgba(15, 23, 42, 0.9) !important;
+  border: 1.5px solid rgba(251, 191, 36, 0.55) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 12px rgba(245, 158, 11, 0.28), inset 0 1px 1px rgba(254, 240, 138, 0.45) !important;
+}
+
+.action-glass-btn.leaderboard-btn:hover,
+#rankedLeaderboardBtn:hover {
+  border-color: #fde047 !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 18px rgba(245, 158, 11, 0.6), inset 0 1px 2px rgba(254, 240, 138, 0.6) !important;
+}
+
+.action-glass-btn .trophy-svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+/* 2. Sound Button */
+.action-glass-btn.sound-btn {
+  color: #38bdf8;
+}
+
+.action-glass-btn.sound-btn:hover {
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), 0 0 14px rgba(56, 189, 248, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+}
+
+.action-glass-btn.sound-btn.muted {
+  color: #94a3b8;
+  opacity: 0.68;
+}
+
+.action-glass-btn.sound-btn.muted:hover {
+  opacity: 1;
+  border-color: #ef4444;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+/* 3. Music Button */
+.action-glass-btn.music-btn {
+  color: #f472b6;
+}
+
+.action-glass-btn.music-btn:hover {
+  border-color: rgba(244, 114, 182, 0.6);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), 0 0 14px rgba(244, 114, 182, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+}
+
+.action-glass-btn.music-btn.muted {
+  color: #94a3b8;
+  opacity: 0.68;
+}
+
+.action-glass-btn.music-btn.muted:hover {
+  opacity: 1;
+  border-color: #ef4444;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+/* 4. Settings Button */
+.action-glass-btn.settings-btn,
+#settingsBtn {
+  color: #cbd5e1;
+}
+
+.action-glass-btn.settings-btn:hover,
+#settingsBtn:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), 0 0 14px rgba(255, 255, 255, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+#settingsBtn:hover .btn-svg {
+  transform: rotate(45deg) scale(1.12);
 }
 
 .mlbb-ping-badge {
