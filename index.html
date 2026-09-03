@@ -13,18 +13,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.22">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.22">
-  <link rel="stylesheet" href="css/shop.css?v=20.22">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.22">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.22">
-  <link rel="stylesheet" href="css/store.css?v=20.22">
-  <link rel="stylesheet" href="css/ranked.css?v=20.22">
-  <link rel="stylesheet" href="css/social.css?v=20.22">
-  <link rel="stylesheet" href="css/splash.css?v=20.22">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.22">
+  <link rel="stylesheet" href="css/style.css?v=20.23">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.23">
+  <link rel="stylesheet" href="css/shop.css?v=20.23">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.23">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.23">
+  <link rel="stylesheet" href="css/store.css?v=20.23">
+  <link rel="stylesheet" href="css/ranked.css?v=20.23">
+  <link rel="stylesheet" href="css/social.css?v=20.23">
+  <link rel="stylesheet" href="css/splash.css?v=20.23">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.23">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.22">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.23">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -1375,17 +1375,212 @@
       d.textContent += 'JS ERROR [' + shortSrc + ':' + line + ']: ' + msg + '\n';
       return false;
     };
+        </div>
+
+        <!-- Social Tabs -->
+        <div class="social-tabs">
+          <button class="social-tab-btn active" id="tabFriendsBtn" type="button">
+            <span>Daftar Teman</span>
+          </button>
+          <button class="social-tab-btn" id="tabSearchBtn" type="button">
+            <span>Cari Teman</span>
+          </button>
+          <button class="social-tab-btn" id="tabReqBtn" type="button">
+            <span>Permintaan</span>
+            <span class="social-tab-badge" id="socialReqTabBadge" style="display:none;">0</span>
+          </button>
+        </div>
+
+        <!-- Panel 1: Daftar Teman -->
+        <div class="social-tab-panel active" id="panelFriends">
+          <div id="socialFriendsList">
+            <div class="social-empty-state">
+              <div class="social-empty-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+              <div>Belum ada teman. Cari teman baru di tab <b>Cari Teman</b>!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Cari Teman -->
+        <div class="social-tab-panel" id="panelSearch">
+          <div class="social-search-bar">
+            <input type="text" id="socialSearchInput" class="social-search-input" placeholder="Ketik GamerTag teman..." maxlength="20">
+            <button id="socialSearchBtn" class="social-search-btn" type="button">CARI</button>
+          </div>
+          <div id="socialSearchResults">
+            <div class="social-empty-state">
+              <div class="social-empty-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="#38bdf8"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div>
+              <div>Ketik nama teman untuk mulai mencari.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 3: Permintaan Masuk -->
+        <div class="social-tab-panel" id="panelRequests">
+          <div id="socialRequestsList">
+            <div class="social-empty-state">
+              <div class="social-empty-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="#38bdf8"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+              <div>Tidak ada permintaan pertemanan masuk.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1-ON-1 DIRECT CHAT MODAL -->
+      <section id="directChatModal" class="modal direct-chat-modal hidden" role="dialog" aria-modal="true" aria-label="Direct Chat">
+        <div class="direct-chat-header">
+          <div class="chat-partner-info">
+            <div class="chat-partner-avatar" id="chatPartnerAvatar"></div>
+            <div class="chat-partner-name" id="chatPartnerName">Teman</div>
+          </div>
+          <button class="close" data-close>×</button>
+        </div>
+
+        <div class="chat-messages-container" id="chatMessagesContainer">
+          <div style="text-align:center;color:#94a3b8;padding:20px;">Memuat pesan...</div>
+        </div>
+
+        <!-- Cute Feather Rush Bird Emotes -->
+        <div class="chat-bird-emotes-bar" id="chatBirdEmotesBar"></div>
+
+        <!-- Input Bar -->
+        <form class="chat-input-bar" id="chatForm">
+          <input type="text" id="chatInput" class="chat-input" placeholder="Tulis pesan..." maxlength="120" autocomplete="off">
+          <button type="submit" class="chat-send-btn">KIRIM</button>
+        </form>
+      </section>
+
+      <!-- FRIEND DETAILED PROFILE MODAL -->
+      <section id="friendProfileModal" class="modal friend-profile-modal hidden" role="dialog" aria-modal="true" aria-label="Profil Teman">
+        <button class="close" data-close>×</button>
+        
+        <div class="profile-scrollable-content">
+          <!-- Hero Banner -->
+          <div class="friend-profile-hero">
+            <div class="friend-profile-avatar-box" id="fpAvatarBox"></div>
+            <div class="friend-profile-info">
+              <div class="friend-profile-name" id="fpName">GamerTag</div>
+              <div class="friend-profile-rank-badge" id="fpRankBadge">BRONZE I</div>
+              <div style="font-size:0.75rem;color:#94a3b8;margin-top:2px;" id="fpUid">ID: acc_...</div>
+            </div>
+          </div>
+
+          <!-- Live Animated Canvas Showcase Box (Same as Shop) -->
+          <div class="friend-showcase-box">
+            <canvas id="fpShowcaseCanvas" width="240" height="80" class="friend-showcase-canvas"></canvas>
+            <div class="friend-showcase-tag">PREVIEW PERLENGKAPAN LIVE</div>
+          </div>
+
+          <!-- Career Statistics 2x2 Grid -->
+          <div class="friend-section-title">STATISTIK BERMAIN</div>
+          <div class="friend-stats-grid">
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Rekor Casual</div>
+              <div class="friend-stat-val" id="fpCasualScore">0</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Poin Ranked</div>
+              <div class="friend-stat-val gold" id="fpRankPoints">0 PTS</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Menang Multiplayer</div>
+              <div class="friend-stat-val green" id="fpMpWins">0 MENANG</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Total Koin</div>
+              <div class="friend-stat-val gold" id="fpCoins">0</div>
+            </div>
+          </div>
+
+          <!-- Equipped Loadout Showcase -->
+          <div class="friend-section-title">PERLENGKAPAN SAAT INI</div>
+          <div class="friend-loadout-showcase">
+            <div class="friend-loadout-item">
+              <div class="friend-loadout-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#38bdf8"><path d="M22 2C14 2 8 8 8 16c0 1.1.9 2 2 2h1c0-1.1.9-2 2-2 1.66 0 3-1.34 3-3V9c2 0 4-1 6-7z"/></svg></div>
+              <div class="friend-loadout-item-type">BURUNG</div>
+              <div class="friend-loadout-item-name" id="fpEquippedBird">Classic</div>
+            </div>
+            <div class="friend-loadout-item">
+              <div class="friend-loadout-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#fbbf24"><path d="M12 2a5 5 0 0 0-5 5c0 1.5.7 2.8 1.7 3.7A8 8 0 0 0 4 18v2h16v-2a8 8 0 0 0-4.7-7.3A5 5 0 0 0 17 7a5 5 0 0 0-5-5z"/></svg></div>
+              <div class="friend-loadout-item-type">PET</div>
+              <div class="friend-loadout-item-name" id="fpEquippedPet">None</div>
+            </div>
+            <div class="friend-loadout-item">
+              <div class="friend-loadout-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#c084fc"><path d="M5 16V9a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v7h2a1 1 0 0 1 1 1v2H2v-2a1 1 0 0 1 1-1h2z"/></svg></div>
+              <div class="friend-loadout-item-type">TOPI</div>
+              <div class="friend-loadout-item-name" id="fpEquippedHat">None</div>
+            </div>
+            <div class="friend-loadout-item">
+              <div class="friend-loadout-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#f43f5e"><path d="M12 2l2.4 7.2h7.6l-6.1 4.5 2.3 7.3-6.2-4.6-6.2 4.6 2.3-7.3-6.1-4.5h7.6z"/></svg></div>
+              <div class="friend-loadout-item-type">AURA</div>
+              <div class="friend-loadout-item-name" id="fpEquippedAura">None</div>
+            </div>
+          </div>
+
+          <!-- Unlocked Cosmetics Breakdown -->
+          <div class="friend-section-title">KOLEKSI & INVENTORI</div>
+          <div class="friend-stats-grid">
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Skin Burung</div>
+              <div class="friend-stat-val" id="fpSkinCount">1 Dimiliki</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Pet Pendamping</div>
+              <div class="friend-stat-val" id="fpPetCount">0 Dimiliki</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Topi & Mahkota</div>
+              <div class="friend-stat-val" id="fpHatCount">0 Dimiliki</div>
+            </div>
+            <div class="friend-stat-box">
+              <div class="friend-stat-label">Aura Jejak</div>
+              <div class="friend-stat-val" id="fpAuraCount">0 Dimiliki</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="friend-profile-actions">
+          <button class="social-action-btn" id="fpChatBtn" style="flex:1;justify-content:center;padding:10px;" type="button">Kirim Chat</button>
+          <button class="social-action-btn success" id="fpInviteBtn" style="flex:1;justify-content:center;padding:10px;" type="button">Ajak Main</button>
+          <button class="social-action-btn danger" id="fpRemoveBtn" style="padding:10px 14px;" type="button" title="Hapus Teman">&times;</button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Floating Interactive Multiplayer Invite Toast Container -->
+    <div id="socialInviteToastContainer" class="social-invite-toast-container"></div>
+  </main>
+  <!-- Background music: managed dynamically via audio controller -->
+  <audio id="bgMusic" loop preload="none"></audio>
+  <!-- Early global error catcher - runs BEFORE any game script -->
+  <script>
+    window._earlyErrors = [];
+    window.onerror = function(msg, src, line, col, err) {
+      window._earlyErrors.push({msg, src, line, col});
+      var d = document.getElementById('_earlyErrBanner');
+      if(!d) {
+        d = document.createElement('div');
+        d.id = '_earlyErrBanner';
+        d.style.cssText = 'position:fixed;top:0;left:0;right:0;background:rgba(180,0,0,0.97);color:#fff;font:bold 12px monospace;padding:10px;z-index:999999;word-break:break-all;white-space:pre-wrap;max-height:40vh;overflow:auto';
+        document.body.appendChild(d);
+      }
+      var shortSrc = (src || '').replace(/.*\//, '');
+      d.textContent += 'JS ERROR [' + shortSrc + ':' + line + ']: ' + msg + '\n';
+      return false;
+    };
   </script>
   <!-- Firebase App, Auth & Firestore Web SDK (Compat version for pure vanilla client) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.22"></script>
-  <script src="js/admob-config.js?v=20.22"></script>
-  <script src="js/shop-data.js?v=20.22"></script>
-  <script src="js/audio.js?v=20.22"></script>
-  <script src="js/multiplayer.js?v=20.22"></script>
-  <script src="js/social.js?v=20.22"></script>
-  <script src="js/script.js?v=20.22"></script>
+  <script src="js/firebase-config.js?v=20.23"></script>
+  <script src="js/admob-config.js?v=20.23"></script>
+  <script src="js/shop-data.js?v=20.23"></script>
+  <script src="js/audio.js?v=20.23"></script>
+  <script src="js/multiplayer.js?v=20.23"></script>
+  <script src="js/social.js?v=20.23"></script>
+  <script src="js/script.js?v=20.23"></script>
 </body>
 </html>

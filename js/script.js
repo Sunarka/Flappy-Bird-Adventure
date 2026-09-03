@@ -4394,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.22';
+  const GAME_VERSION = '20.23';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -12717,9 +12717,10 @@
   let mpSearchStartTime = 0;
 
   function startSearchingRadar() {
-    // Tutup modal agar pemain kembali ke lobi utama dan tampilkan banner matchmaking MLBB melayang di atas layar
+    // Tutup modal agar pemain kembali ke lobi utama dan tampilkan banner matchmaking MLBB melayang dari atas
     closeModal();
-    if(el.mpSearchingBar) el.mpSearchingBar.classList.remove('hidden');
+    const searchingBar = $('mpSearchingBar');
+    if(searchingBar) searchingBar.classList.remove('hidden');
 
     mpSearchStartTime = Date.now();
     if(mpSearchInterval) clearInterval(mpSearchInterval);
@@ -12728,11 +12729,11 @@
       const mm = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
       const ss = String(elapsedSec % 60).padStart(2, '0');
       const timeStr = `${mm}:${ss}`;
-      if(el.mpModalSearchTimer) el.mpModalSearchTimer.textContent = timeStr;
-      if(el.mpSearchTimerText) el.mpSearchTimerText.textContent = timeStr;
+      const timerEl = $('mpSearchTimerText');
+      if(timerEl) timerEl.textContent = timeStr;
     }, 1000);
-    if(el.mpModalSearchTimer) el.mpModalSearchTimer.textContent = '00:00';
-    if(el.mpSearchTimerText) el.mpSearchTimerText.textContent = '00:00';
+    const timerEl = $('mpSearchTimerText');
+    if(timerEl) timerEl.textContent = '00:00';
   }
 
   function stopSearchingRadar() {
@@ -12740,9 +12741,8 @@
       clearInterval(mpSearchInterval);
       mpSearchInterval = null;
     }
-    if(el.mpSearchingBar) el.mpSearchingBar.classList.add('hidden');
-    if(el.mpQuickSearchingBox) el.mpQuickSearchingBox.classList.add('hidden');
-    if(el.mpQuickInitialBox) el.mpQuickInitialBox.classList.remove('hidden');
+    const searchingBar = $('mpSearchingBar');
+    if(searchingBar) searchingBar.classList.add('hidden');
   }
 
   let versusClashTimer = null;
@@ -13019,14 +13019,16 @@
     setMode('multiplayer');
   });
 
-  bindClick(el.mpCancelSearchBtn, () => {
+  bindClick('mpCancelSearchBtn', () => {
     audio.click();
     stopSearchingRadar();
     if(window.multiplayerEngine) {
       window.multiplayerEngine.cancelMatch();
     }
-    showModal(el.mpModal);
-    switchMpTab('quick');
+    if(el.mpModal) {
+      showModal(el.mpModal);
+      switchMpTab('quick');
+    }
   });
 
   bindClick(el.mpModalCancelSearchBtn, () => {
