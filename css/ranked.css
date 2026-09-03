@@ -691,7 +691,7 @@
 .portrait-canvas-box {
   position: relative;
   width: 100%;
-  height: 60px;
+  height: 80px;
   background: radial-gradient(circle at 50% 40%, #1e3a8a 0%, #090d16 100%);
   border: 1.5px solid rgba(250, 204, 21, 0.6);
   border-radius: 8px;
@@ -705,6 +705,101 @@
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.champion-view-profile-btn {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  border: 1px solid #38bdf8;
+  color: #ffffff;
+  border-radius: 6px;
+  font: 900 9.5px 'Trebuchet MS', Arial, sans-serif;
+  padding: 3px 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: all 0.15s ease;
+}
+
+.champion-view-profile-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+  transform: scale(1.04);
+}
+
+/* TOP RANK MASTER PREVIEW CARD (TAB 2) */
+.top-rank-preview-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 27, 75, 0.85) 100%);
+  border: 1.5px solid #c084fc;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 12px rgba(192, 132, 252, 0.3);
+}
+
+.tr-avatar-box {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: #0f172a;
+  border: 2px solid #facc15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tr-crown-badge {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  font-size: 13px;
+  transform: rotate(-15deg);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+}
+
+.tr-info-box {
+  flex: 1;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.tr-badge-label {
+  font: 900 8px 'Trebuchet MS', Arial, sans-serif;
+  color: #facc15;
+  letter-spacing: 0.8px;
+}
+
+.tr-master-name {
+  font: 900 12.5px 'Trebuchet MS', Arial, sans-serif;
+  color: #ffffff;
+}
+
+.tr-master-tier {
+  font: 800 10px 'Trebuchet MS', Arial, sans-serif;
+  color: #c084fc;
+}
+
+.tr-profile-btn {
+  background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+  border: 1px solid #c084fc;
+  color: #ffffff;
+  border-radius: 6px;
+  font: 900 10px 'Trebuchet MS', Arial, sans-serif;
+  padding: 5px 10px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: all 0.15s ease;
+}
+
+.tr-profile-btn:hover {
+  background: #c084fc;
+  color: #0f172a;
+  transform: scale(1.05);
 }
 
 /* Portrait Flash Sparks */

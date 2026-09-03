@@ -409,6 +409,67 @@
           this.playTone(notes[step], .38, 'sawtooth', .042, -20);
           this.playTone(notes[step] * 0.707, .42, 'sine', .048, -10);
         }, 145);
+      } else if(skinId === 'goku_ssj') {
+        // Super Saiyan Ki Depletion & Epic Defeat Brass
+        this.playTone(784, .3, 'sawtooth', .08, -100);
+        this.playTone(196, .5, 'sawtooth', .09, -40);
+        const notes = [784, 740, 659, 587, 523, 440, 392, 330, 220, 110];
+        this.deathTimer = setInterval(() => {
+          step++;
+          if(step >= notes.length) { clearInterval(this.deathTimer); this.deathTimer = null; return; }
+          this.playTone(notes[step], .28, 'sawtooth', .06, -30);
+          this.playTone(notes[step] * 1.5, .15, 'square', .035, 10);
+        }, 130);
+      } else if(skinId === 'gojo_bird') {
+        // Celestial Void / Limitless Hollow Resonance
+        this.playTone(1760, .45, 'sine', .07, -400);
+        this.playTone(440, .6, 'sine', .08, 0);
+        const notes = [1396, 1244, 1046, 880, 698, 587, 440, 349, 220];
+        this.deathTimer = setInterval(() => {
+          step++;
+          if(step >= notes.length) { clearInterval(this.deathTimer); this.deathTimer = null; return; }
+          this.playTone(notes[step], .4, 'sine', .065, 0);
+          this.playTone(notes[step] * 2, .25, 'triangle', .03, 10);
+        }, 140);
+      } else if(skinId === 'naruto_bird') {
+        // Shinobi Sadness and Sorrow Bamboo Flute Cadence
+        this.playTone(659, .35, 'triangle', .07, 0);
+        const notes = [659, 587, 523, 440, 392, 330, 293, 220];
+        this.deathTimer = setInterval(() => {
+          step++;
+          if(step >= notes.length) { clearInterval(this.deathTimer); this.deathTimer = null; return; }
+          this.playTone(notes[step], .38, 'triangle', .065, step === notes.length - 1 ? -40 : 0);
+          if(step % 2 === 1) this.playTone(notes[step] / 2, .4, 'sine', .04, 0);
+        }, 160);
+      } else if(skinId === 'tanjiro_bird') {
+        // Hinokami Kagura Flame Extinguish & Koto Defeat Melody
+        this.playTone(880, .25, 'sawtooth', .065, 20);
+        const notes = [880, 784, 698, 659, 587, 523, 440, 349, 262];
+        this.deathTimer = setInterval(() => {
+          step++;
+          if(step >= notes.length) { clearInterval(this.deathTimer); this.deathTimer = null; return; }
+          this.playTone(notes[step], .3, 'triangle', .06, -15);
+          this.playTone(notes[step] * 0.75, .2, 'sine', .035, 0);
+        }, 145);
+      } else if(skinId === 'luffy_bird') {
+        // Cartoon Rubber Stretch & Snap Boing Defeat
+        this.playTone(330, .15, 'sine', .08, 200);
+        setTimeout(() => this.playTone(660, .2, 'triangle', .08, -350), 120);
+        const notes = [587, 523, 440, 392, 330, 262, 196, 131];
+        this.deathTimer = setInterval(() => {
+          step++;
+          if(step >= notes.length) { clearInterval(this.deathTimer); this.deathTimer = null; return; }
+          this.playTone(notes[step], .2, 'square', .05, step % 2 === 0 ? 50 : -60);
+        }, 130);
+      } else {
+        // Default Comic Retro Descending Jingle
+        const notes = [523, 494, 440, 349, 262, 196];
+        this.playTone(notes[0], .2, 'square', .055, -20);
+        this.deathTimer = setInterval(() => {
+          step++;
+          if(step >= notes.length) { clearInterval(this.deathTimer); this.deathTimer = null; return; }
+          this.playTone(notes[step], .22, 'square', .05, step === notes.length - 1 ? -60 : -15);
+        }, 160);
       }
     },
 

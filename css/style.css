@@ -1249,3 +1249,76 @@ button:focus-visible {
   background: #475569 !important;
   color: #fff !important;
 }
+
+/* SETTINGS MODAL DIFFICULTY DROPDOWN (DARK MLBB SCI-FI STYLE) */
+.difficulty-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.difficulty-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  min-width: 120px !important;
+  height: 32px !important;
+  padding: 4px 12px !important;
+  background: #0f172a !important;
+  border: 1.5px solid #38bdf8 !important;
+  border-radius: 8px !important;
+  color: #f8fafc !important;
+  font: 800 11px/1 'Trebuchet MS', Arial, sans-serif !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.15s ease !important;
+}
+
+.difficulty-btn:hover {
+  background: #1e293b !important;
+  border-color: #7dd3fc !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.35) !important;
+}
+
+.difficulty-menu {
+  position: absolute !important;
+  top: calc(100% + 4px) !important;
+  right: 0 !important;
+  width: 120px !important;
+  background: #0f172a !important;
+  border: 1.5px solid #38bdf8 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 12px rgba(56, 189, 248, 0.25) !important;
+  z-index: 99999 !important;
+  padding: 4px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.difficulty-menu.hidden {
+  display: none !important;
+}
+
+.diff-option {
+  padding: 8px 10px !important;
+  font: 800 11px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #94a3b8 !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+  text-align: left !important;
+  background: transparent !important;
+}
+
+.diff-option:hover {
+  background: #1e293b !important;
+  color: #38bdf8 !important;
+}
+
+.diff-option.selected {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+

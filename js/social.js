@@ -119,37 +119,47 @@
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
-            <radialGradient id="e_love_body" cx="35%" cy="30%" r="68%">
-              <stop offset="0%" stop-color="#fce4ec"/>
-              <stop offset="30%" stop-color="#f48fb1"/>
-              <stop offset="75%" stop-color="#ec407a"/>
+            <radialGradient id="e_love_chick" cx="35%" cy="30%" r="68%">
+              <stop offset="0%" stop-color="#fff9c4"/>
+              <stop offset="35%" stop-color="#fbc02d"/>
+              <stop offset="80%" stop-color="#f57f17"/>
+              <stop offset="100%" stop-color="#e65100"/>
+            </radialGradient>
+            <radialGradient id="e_heart_eye" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#ff8da1"/>
+              <stop offset="45%" stop-color="#ff1744"/>
               <stop offset="100%" stop-color="#c2185b"/>
             </radialGradient>
-            <radialGradient id="e_heart_grad" cx="35%" cy="30%" r="70%">
-              <stop offset="0%" stop-color="#ff8a80"/>
-              <stop offset="40%" stop-color="#ff1744"/>
-              <stop offset="100%" stop-color="#b71c1c"/>
-            </radialGradient>
           </defs>
-          <circle cx="25" cy="27" r="20" fill="url(#e_love_body)"/>
-          <!-- Orbiting 3D Hearts -->
-          <g transform="translate(8, 12) scale(0.95)">
-            <path d="M 0 3 A 3 3 0 0 0 4.5 7 L 7 10 L 9.5 7 A 3 3 0 0 0 14 3 A 3.5 3.5 0 0 0 7 1 A 3.5 3.5 0 0 0 0 3 Z" fill="url(#e_heart_grad)"/>
+          <!-- Feather Crest -->
+          <path d="M 23 7 Q 25 1 29 4 Q 26 9 24 11 Z" fill="#f57f17"/>
+          <path d="M 20 9 Q 21 3 25 6 Q 24 11 22 13 Z" fill="#fbc02d"/>
+          <!-- Body -->
+          <circle cx="25" cy="27" r="20" fill="url(#e_love_chick)"/>
+          <ellipse cx="25" cy="14" rx="14" ry="6.5" fill="url(#e_plead_glint)"/>
+          <!-- Wings -->
+          <ellipse cx="7" cy="29" rx="4.5" ry="6.5" transform="rotate(15 7 29)" fill="#f57f17" opacity="0.9"/>
+          <ellipse cx="43" cy="29" rx="4.5" ry="6.5" transform="rotate(-15 43 29)" fill="#f57f17" opacity="0.9"/>
+          <!-- Deep Pink Rosy Cheeks -->
+          <circle cx="12" cy="31" r="5.2" fill="#ff1744" opacity="0.55"/>
+          <circle cx="38" cy="31" r="5.2" fill="#ff1744" opacity="0.55"/>
+          <!-- Big Glossy Heart Eyes -->
+          <g transform="translate(11, 16) scale(0.95)">
+            <path d="M 6 3 A 3.2 3.2 0 0 0 0.5 7.5 L 6 13 L 11.5 7.5 A 3.2 3.2 0 0 0 6 3 Z" fill="url(#e_heart_eye)"/>
+            <circle cx="4" cy="5.5" r="1.3" fill="#ffffff"/>
+            <circle cx="8" cy="7.5" r="0.7" fill="#ffffff"/>
           </g>
-          <g transform="translate(34, 8) scale(1.1)">
-            <path d="M 0 3 A 3 3 0 0 0 4.5 7 L 7 10 L 9.5 7 A 3 3 0 0 0 14 3 A 3.5 3.5 0 0 0 7 1 A 3.5 3.5 0 0 0 0 3 Z" fill="url(#e_heart_grad)"/>
+          <g transform="translate(27, 16) scale(0.95)">
+            <path d="M 6 3 A 3.2 3.2 0 0 0 0.5 7.5 L 6 13 L 11.5 7.5 A 3.2 3.2 0 0 0 6 3 Z" fill="url(#e_heart_eye)"/>
+            <circle cx="4" cy="5.5" r="1.3" fill="#ffffff"/>
+            <circle cx="8" cy="7.5" r="0.7" fill="#ffffff"/>
           </g>
-          <g transform="translate(38, 32) scale(0.8)">
-            <path d="M 0 3 A 3 3 0 0 0 4.5 7 L 7 10 L 9.5 7 A 3 3 0 0 0 14 3 A 3.5 3.5 0 0 0 7 1 A 3.5 3.5 0 0 0 0 3 Z" fill="url(#e_heart_grad)"/>
-          </g>
-          <!-- Blissful Curved Eyes -->
-          <path d="M 14 23 Q 19 17 23 23" fill="none" stroke="#4a148c" stroke-width="2.6" stroke-linecap="round"/>
-          <path d="M 27 23 Q 31 17 36 23" fill="none" stroke="#4a148c" stroke-width="2.6" stroke-linecap="round"/>
-          <!-- Bright Blush -->
-          <circle cx="12" cy="29" r="5" fill="#ff1744" opacity="0.5"/>
-          <circle cx="38" cy="29" r="5" fill="#ff1744" opacity="0.5"/>
-          <!-- Cute Smiling Beak -->
-          <polygon points="21,27 29,27 25,32" fill="#ffa726" stroke="#e65100" stroke-width="1"/>
+          <!-- Floating Mini Hearts -->
+          <path d="M 7 10 A 1.8 1.8 0 0 0 3.5 12.5 L 7 16 L 10.5 12.5 A 1.8 1.8 0 0 0 7 10 Z" fill="#ff4081"/>
+          <path d="M 43 8 A 2.2 2.2 0 0 0 39 11 L 43 15 L 47 11 A 2.2 2.2 0 0 0 43 8 Z" fill="#ff4081"/>
+          <!-- Happy Smiling Beak with Tongue -->
+          <path d="M 20 28 Q 25 25 30 28 Q 25 36 20 28 Z" fill="url(#e_beak_grad)" stroke="#bf360c" stroke-width="0.8"/>
+          <path d="M 22 30 Q 25 35 28 30 Z" fill="#ff5252"/>
         </svg>
       `
     },
@@ -159,34 +169,41 @@
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
-            <radialGradient id="e_cool_body" cx="35%" cy="30%" r="68%">
-              <stop offset="0%" stop-color="#e0f7fa"/>
-              <stop offset="30%" stop-color="#26c6da"/>
-              <stop offset="75%" stop-color="#0097a7"/>
-              <stop offset="100%" stop-color="#006064"/>
+            <radialGradient id="e_cool_chick" cx="35%" cy="30%" r="68%">
+              <stop offset="0%" stop-color="#fff9c4"/>
+              <stop offset="35%" stop-color="#fbc02d"/>
+              <stop offset="80%" stop-color="#f57f17"/>
+              <stop offset="100%" stop-color="#e65100"/>
             </radialGradient>
-            <linearGradient id="e_cool_lens" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#334155"/>
-              <stop offset="40%" stop-color="#0f172a"/>
+            <linearGradient id="e_cool_glass" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#1e293b"/>
+              <stop offset="50%" stop-color="#0f172a"/>
               <stop offset="100%" stop-color="#020617"/>
             </linearGradient>
           </defs>
-          <circle cx="25" cy="27" r="20" fill="url(#e_cool_body)"/>
-          <ellipse cx="25" cy="14" rx="14" ry="6" fill="url(#e_plead_glint)"/>
+          <!-- Feather Crest -->
+          <path d="M 23 7 Q 25 1 29 4 Q 26 9 24 11 Z" fill="#f57f17"/>
+          <path d="M 20 9 Q 21 3 25 6 Q 24 11 22 13 Z" fill="#fbc02d"/>
+          <!-- Body -->
+          <circle cx="25" cy="27" r="20" fill="url(#e_cool_chick)"/>
+          <ellipse cx="25" cy="14" rx="14" ry="6.5" fill="url(#e_plead_glint)"/>
           <!-- Wings -->
-          <ellipse cx="6" cy="30" rx="4" ry="6" fill="#00838f"/>
-          <ellipse cx="44" cy="30" rx="4" ry="6" fill="#00838f"/>
-          <!-- 3D Sleek Sunglasses -->
-          <path d="M 9 20 C 9 17, 23 17, 23 21 C 23 27, 10 27, 9 20 Z" fill="url(#e_cool_lens)" stroke="#0f172a" stroke-width="1.4"/>
-          <path d="M 27 21 C 27 17, 41 17, 41 20 C 40 27, 27 27, 27 21 Z" fill="url(#e_cool_lens)" stroke="#0f172a" stroke-width="1.4"/>
-          <path d="M 22 20 Q 25 18 28 20" stroke="#0f172a" stroke-width="2.5" fill="none"/>
-          <!-- White Specular Glare Bars -->
-          <polygon points="12,18 15,18 11,26 8,26" fill="#38bdf8" opacity="0.85"/>
-          <polygon points="30,18 33,18 29,26 26,26" fill="#38bdf8" opacity="0.85"/>
-          <!-- Star Sparkle on Lens Frame -->
-          <polygon points="41,18 42,20 44,21 42,22 41,24 40,22 38,21 40,20" fill="#fff59d"/>
+          <ellipse cx="7" cy="29" rx="4.5" ry="6.5" transform="rotate(15 7 29)" fill="#f57f17" opacity="0.9"/>
+          <ellipse cx="43" cy="29" rx="4.5" ry="6.5" transform="rotate(-15 43 29)" fill="#f57f17" opacity="0.9"/>
+          <!-- Cheeks -->
+          <circle cx="13" cy="31" r="4.5" fill="#ff4081" opacity="0.4"/>
+          <circle cx="37" cy="31" r="4.5" fill="#ff4081" opacity="0.4"/>
+          <!-- Sleek Black Sunglasses with Cyan Glare -->
+          <path d="M 9 20 C 9 17, 23 17, 23 21 C 23 27, 10 27, 9 20 Z" fill="url(#e_cool_glass)" stroke="#020617" stroke-width="1.3"/>
+          <path d="M 27 21 C 27 17, 41 17, 41 20 C 40 27, 27 27, 27 21 Z" fill="url(#e_cool_glass)" stroke="#020617" stroke-width="1.3"/>
+          <line x1="22" y1="20" x2="28" y2="20" stroke="#020617" stroke-width="2.5"/>
+          <!-- Specular Glare Bars -->
+          <polygon points="12,18 15,18 11,26 8,26" fill="#38bdf8" opacity="0.9"/>
+          <polygon points="30,18 33,18 29,26 26,26" fill="#38bdf8" opacity="0.9"/>
+          <!-- Star Twinkle -->
+          <polygon points="41,18 42,20 44,21 42,22 41,24 40,22 38,21 40,20" fill="#fef08a"/>
           <!-- Smug Smirk Beak -->
-          <polygon points="20,29 29,27 24,33" fill="#ffa726" stroke="#e65100" stroke-width="1"/>
+          <path d="M 20 28 Q 26 25 31 29 Q 25 35 20 28 Z" fill="url(#e_beak_grad)" stroke="#bf360c" stroke-width="0.8"/>
         </svg>
       `
     },
@@ -196,30 +213,42 @@
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
-            <radialGradient id="e_cry_body" cx="35%" cy="30%" r="68%">
-              <stop offset="0%" stop-color="#f0fdf4"/>
-              <stop offset="35%" stop-color="#bae6fd"/>
-              <stop offset="80%" stop-color="#38bdf8"/>
-              <stop offset="100%" stop-color="#0284c7"/>
+            <radialGradient id="e_cry_chick" cx="35%" cy="30%" r="68%">
+              <stop offset="0%" stop-color="#fff9c4"/>
+              <stop offset="35%" stop-color="#fbc02d"/>
+              <stop offset="80%" stop-color="#f57f17"/>
+              <stop offset="100%" stop-color="#e65100"/>
             </radialGradient>
-            <linearGradient id="e_waterfall" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#e0f2fe"/>
-              <stop offset="30%" stop-color="#38bdf8"/>
+            <linearGradient id="e_chick_waterfall" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#bae6fd"/>
+              <stop offset="40%" stop-color="#38bdf8"/>
               <stop offset="100%" stop-color="#0284c7"/>
             </linearGradient>
           </defs>
-          <circle cx="25" cy="27" r="20" fill="url(#e_cry_body)"/>
-          <!-- Closed Weeping Eyes -->
-          <path d="M 12 21 Q 17 16 21 21" stroke="#0369a1" stroke-width="3.2" fill="none" stroke-linecap="round"/>
-          <path d="M 29 21 Q 33 16 38 21" stroke="#0369a1" stroke-width="3.2" fill="none" stroke-linecap="round"/>
-          <!-- Cascading Waterfalls of Tears with Splash -->
-          <rect x="13.5" y="22" width="6" height="22" rx="3" fill="url(#e_waterfall)" opacity="0.95"/>
-          <ellipse cx="16.5" cy="44" rx="4.5" ry="2" fill="#38bdf8"/>
-          <rect x="30.5" y="22" width="6" height="22" rx="3" fill="url(#e_waterfall)" opacity="0.95"/>
-          <ellipse cx="33.5" cy="44" rx="4.5" ry="2" fill="#38bdf8"/>
-          <!-- Wide Open Wailing Beak -->
-          <path d="M 19 28 Q 25 24 31 28 Q 25 39 19 28 Z" fill="#7f1d1d" stroke="#450a0a" stroke-width="1"/>
-          <ellipse cx="25" cy="34" rx="3" ry="2" fill="#f43f5e"/>
+          <!-- Feather Crest -->
+          <path d="M 23 7 Q 25 1 29 4 Q 26 9 24 11 Z" fill="#f57f17"/>
+          <path d="M 20 9 Q 21 3 25 6 Q 24 11 22 13 Z" fill="#fbc02d"/>
+          <!-- Body -->
+          <circle cx="25" cy="27" r="20" fill="url(#e_cry_chick)"/>
+          <ellipse cx="25" cy="14" rx="14" ry="6.5" fill="url(#e_plead_glint)"/>
+          <!-- Wings Drooping in Sadness -->
+          <ellipse cx="6" cy="32" rx="4.5" ry="6.5" transform="rotate(35 6 32)" fill="#f57f17" opacity="0.9"/>
+          <ellipse cx="44" cy="32" rx="4.5" ry="6.5" transform="rotate(-35 44 32)" fill="#f57f17" opacity="0.9"/>
+          <!-- Arched Weeping Closed Eyelids -->
+          <path d="M 12 21 Q 17 15 22 21" stroke="#334155" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+          <path d="M 28 21 Q 33 15 38 21" stroke="#334155" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+          <!-- Cascading Comic Tears with Droplet Splashes -->
+          <path d="M 14 22 L 14 42 Q 17 44 20 42 L 20 22 Z" fill="url(#e_chick_waterfall)" opacity="0.95"/>
+          <ellipse cx="17" cy="43" rx="4.5" ry="2" fill="#38bdf8"/>
+          <circle cx="10" cy="28" r="2.2" fill="#38bdf8"/>
+          <circle cx="8" cy="36" r="1.4" fill="#7dd3fc"/>
+          <path d="M 30 22 L 30 42 Q 33 44 36 42 L 36 22 Z" fill="url(#e_chick_waterfall)" opacity="0.95"/>
+          <ellipse cx="33" cy="43" rx="4.5" ry="2" fill="#38bdf8"/>
+          <circle cx="40" cy="28" r="2.2" fill="#38bdf8"/>
+          <circle cx="42" cy="36" r="1.4" fill="#7dd3fc"/>
+          <!-- Wide Open Wailing Beak with Trembling Tongue -->
+          <path d="M 19 27 Q 25 24 31 27 Q 25 39 19 27 Z" fill="#7f1d1d" stroke="#bf360c" stroke-width="0.8"/>
+          <ellipse cx="25" cy="34" rx="3.2" ry="2.2" fill="#ff5252"/>
         </svg>
       `
     },
@@ -229,31 +258,42 @@
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
-            <radialGradient id="e_rage_body" cx="35%" cy="30%" r="68%">
-              <stop offset="0%" stop-color="#ffcdd2"/>
-              <stop offset="30%" stop-color="#ef5350"/>
-              <stop offset="75%" stop-color="#d32f2f"/>
-              <stop offset="100%" stop-color="#b71c1c"/>
+            <radialGradient id="e_rage_chick" cx="35%" cy="30%" r="68%">
+              <stop offset="0%" stop-color="#fff9c4"/>
+              <stop offset="35%" stop-color="#fbc02d"/>
+              <stop offset="75%" stop-color="#ef4444"/>
+              <stop offset="100%" stop-color="#b91c1c"/>
             </radialGradient>
           </defs>
-          <circle cx="25" cy="27" r="20" fill="url(#e_rage_body)"/>
-          <!-- Angry Vein -->
-          <g transform="translate(34, 11) scale(0.9)">
-            <path d="M 0 3 C 2 0, 6 0, 8 3 C 8 5, 8 7, 6 9 C 8 11, 8 13, 6 15 C 3 15, 1 13, 0 11" fill="none" stroke="#fff59d" stroke-width="2" stroke-linecap="round"/>
+          <!-- Feather Crest Raised in Anger -->
+          <path d="M 23 6 Q 26 0 30 3 Q 27 9 24 11 Z" fill="#dc2626"/>
+          <path d="M 19 8 Q 20 2 25 5 Q 23 11 21 13 Z" fill="#ea580c"/>
+          <!-- Puffed-up Angry Body -->
+          <circle cx="25" cy="27" r="20" fill="url(#e_rage_chick)"/>
+          <ellipse cx="25" cy="14" rx="14" ry="6.5" fill="url(#e_plead_glint)"/>
+          <!-- Angry Vein Symbol 💢 -->
+          <g transform="translate(34, 10) scale(0.9)">
+            <path d="M 0 3 C 2 0, 6 0, 8 3 C 8 5, 8 7, 6 9 C 8 11, 8 13, 6 15 C 3 15, 1 13, 0 11" fill="none" stroke="#fef08a" stroke-width="2.2" stroke-linecap="round"/>
           </g>
-          <!-- Furrowed Fierce Eyebrows -->
-          <line x1="12" y1="18" x2="22" y2="22" stroke="#212121" stroke-width="3.5" stroke-linecap="round"/>
-          <line x1="38" y1="18" x2="28" y2="22" stroke="#212121" stroke-width="3.5" stroke-linecap="round"/>
-          <!-- Fierce Glaring Eyes -->
-          <circle cx="18" cy="24" r="3.5" fill="#ffffff"/>
-          <circle cx="18.5" cy="24" r="1.8" fill="#000000"/>
-          <circle cx="32" cy="24" r="3.5" fill="#ffffff"/>
-          <circle cx="31.5" cy="24" r="1.8" fill="#000000"/>
-          <!-- Steaming Nose / Cheek Puffs -->
-          <circle cx="11" cy="33" r="3" fill="#ffffff" opacity="0.6"/>
-          <circle cx="39" cy="33" r="3" fill="#ffffff" opacity="0.6"/>
-          <!-- Clenched Sharp Beak -->
-          <polygon points="19,28 31,28 25,35" fill="#ffa726" stroke="#b71c1c" stroke-width="1.2"/>
+          <!-- Slanted Determined Angry Brow Lines -->
+          <line x1="12" y1="17" x2="22" y2="21" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+          <line x1="38" y1="17" x2="28" y2="21" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+          <!-- Cute Glaring Eyes -->
+          <g transform="translate(17, 24)">
+            <ellipse cx="0" cy="0" rx="4.5" ry="5.5" fill="#0f172a"/>
+            <circle cx="-1" cy="-1.5" r="1.8" fill="#ffffff"/>
+          </g>
+          <g transform="translate(33, 24)">
+            <ellipse cx="0" cy="0" rx="4.5" ry="5.5" fill="#0f172a"/>
+            <circle cx="-1" cy="-1.5" r="1.8" fill="#ffffff"/>
+          </g>
+          <!-- Flushed Red Pouty Cheeks & Steam Puffs -->
+          <circle cx="11" cy="32" r="5" fill="#dc2626" opacity="0.6"/>
+          <circle cx="39" cy="32" r="5" fill="#dc2626" opacity="0.6"/>
+          <circle cx="6" cy="27" r="2.2" fill="#ffffff" opacity="0.75"/>
+          <circle cx="44" cy="27" r="2.2" fill="#ffffff" opacity="0.75"/>
+          <!-- Determined Pouty Beak -->
+          <polygon points="19,27 31,27 25,34" fill="url(#e_beak_grad)" stroke="#991b1b" stroke-width="1"/>
         </svg>
       `
     },
@@ -263,36 +303,44 @@
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
-            <radialGradient id="e_party_body" cx="35%" cy="30%" r="68%">
+            <radialGradient id="e_party_chick" cx="35%" cy="30%" r="68%">
               <stop offset="0%" stop-color="#fff9c4"/>
               <stop offset="35%" stop-color="#fbc02d"/>
               <stop offset="80%" stop-color="#f57f17"/>
               <stop offset="100%" stop-color="#e65100"/>
             </radialGradient>
-            <linearGradient id="e_hat_grad" x1="0" y1="0" x2="1" y2="1">
+            <linearGradient id="e_cone_hat" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#ec4899"/>
-              <stop offset="50%" stop-color="#8b5cf6"/>
-              <stop offset="100%" stop-color="#3b82f6"/>
+              <stop offset="50%" stop-color="#a855f7"/>
+              <stop offset="100%" stop-color="#38bdf8"/>
             </linearGradient>
           </defs>
-          <!-- Cone Party Hat with Pom-pom -->
-          <polygon points="17,16 25,1 33,16" fill="url(#e_hat_grad)" stroke="#4c1d95" stroke-width="1"/>
-          <circle cx="25" cy="1" r="2.5" fill="#fef08a" stroke="#eab308" stroke-width="0.8"/>
-          <circle cx="21" cy="10" r="1.2" fill="#facc15"/>
-          <circle cx="28" cy="12" r="1.2" fill="#38bdf8"/>
           <!-- Body -->
-          <circle cx="25" cy="28" r="19" fill="url(#e_party_body)"/>
-          <!-- Confetti Burst Stars -->
-          <polygon points="6,12 8,15 11,15 8.5,17.5 9.5,20.5 7,19 4.5,20.5 5.5,17.5 3,15 6,15" fill="#ec4899"/>
-          <polygon points="43,12 44.5,14.5 47,14.5 45,16.5 45.8,19 43.8,17.8 41.8,19 42.5,16.5 40.5,14.5 43,14.5" fill="#38bdf8"/>
-          <!-- Happy Winking Eyes -->
-          <ellipse cx="17" cy="24" rx="2.8" ry="3.5" fill="#0f172a"/>
-          <circle cx="18" cy="22.5" r="1.2" fill="#ffffff"/>
-          <path d="M 29 24 Q 33 20 37 24" stroke="#0f172a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-          <!-- Party Horn Blower in Beak -->
-          <polygon points="21,28 29,28 25,33" fill="#ffa726" stroke="#e65100" stroke-width="0.8"/>
-          <path d="M 25 31 Q 31 35 37 32 Q 41 30 43 33" fill="none" stroke="#ec4899" stroke-width="3.5" stroke-linecap="round"/>
-          <circle cx="43" cy="33" r="1.8" fill="#facc15"/>
+          <circle cx="25" cy="27" r="20" fill="url(#e_party_chick)"/>
+          <ellipse cx="25" cy="14" rx="14" ry="6.5" fill="url(#e_plead_glint)"/>
+          <!-- Festive Striped Party Cone Hat -->
+          <polygon points="18,15 25,1 32,15" fill="url(#e_cone_hat)" stroke="#6b21a8" stroke-width="0.8"/>
+          <circle cx="25" cy="1" r="2.8" fill="#facc15" stroke="#eab308" stroke-width="0.8"/>
+          <!-- Wings Dancing -->
+          <ellipse cx="6" cy="27" rx="4.5" ry="6.5" transform="rotate(-20 6 27)" fill="#f57f17" opacity="0.9"/>
+          <ellipse cx="44" cy="27" rx="4.5" ry="6.5" transform="rotate(20 44 27)" fill="#f57f17" opacity="0.9"/>
+          <!-- Cheerful Rosy Cheeks -->
+          <circle cx="13" cy="31" r="4.5" fill="#ff4081" opacity="0.45"/>
+          <circle cx="37" cy="31" r="4.5" fill="#ff4081" opacity="0.45"/>
+          <!-- Left Sparkling Anime Eye -->
+          <g transform="translate(17, 24)">
+            <ellipse cx="0" cy="0" rx="5" ry="6.2" fill="#0f172a"/>
+            <circle cx="-1.5" cy="-2" r="2.2" fill="#ffffff"/>
+            <circle cx="1.8" cy="2" r="1.1" fill="#ffffff"/>
+          </g>
+          <!-- Right Cute Winking Eye -->
+          <path d="M 28 24 Q 33 19 38 24" stroke="#0f172a" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+          <!-- Party Blower Horn in Beak & Confetti Stars -->
+          <path d="M 20 28 Q 25 25 30 28 Q 25 35 20 28 Z" fill="url(#e_beak_grad)" stroke="#bf360c" stroke-width="0.8"/>
+          <path d="M 27 30 Q 34 34 40 31 Q 44 28 47 31" fill="none" stroke="#ec4899" stroke-width="3.2" stroke-linecap="round"/>
+          <circle cx="47" cy="31" r="2" fill="#facc15"/>
+          <polygon points="5,13 6.5,15.5 9,15.5 7,17.5 7.8,20 5.8,18.8 3.8,20 4.5,17.5 2.5,15.5 5,15.5" fill="#ec4899"/>
+          <polygon points="43,11 44.5,13.5 47,13.5 45,15.5 45.8,18 43.8,16.8 41.8,18 42.5,15.5 40.5,13.5 43,13.5" fill="#38bdf8"/>
         </svg>
       `
     },
@@ -302,34 +350,52 @@
       render: (s = 42) => `
         <svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block">
           <defs>
-            <radialGradient id="e_money_body" cx="35%" cy="30%" r="68%">
-              <stop offset="0%" stop-color="#f0fdf4"/>
-              <stop offset="35%" stop-color="#86efac"/>
-              <stop offset="80%" stop-color="#22c55e"/>
-              <stop offset="100%" stop-color="#15803d"/>
+            <radialGradient id="e_money_chick" cx="35%" cy="30%" r="68%">
+              <stop offset="0%" stop-color="#fff9c4"/>
+              <stop offset="35%" stop-color="#fbc02d"/>
+              <stop offset="80%" stop-color="#f57f17"/>
+              <stop offset="100%" stop-color="#e65100"/>
             </radialGradient>
-            <linearGradient id="e_gold_coin" x1="0" y1="0" x2="1" y2="1">
+            <linearGradient id="e_dollar_gem" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#bbf7d0"/>
+              <stop offset="40%" stop-color="#22c55e"/>
+              <stop offset="100%" stop-color="#15803d"/>
+            </linearGradient>
+            <linearGradient id="e_gold_coin_chick" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#fef08a"/>
               <stop offset="50%" stop-color="#facc15"/>
               <stop offset="100%" stop-color="#ca8a04"/>
             </linearGradient>
           </defs>
-          <circle cx="25" cy="27" r="20" fill="url(#e_money_body)"/>
-          <ellipse cx="25" cy="14" rx="14" ry="6" fill="url(#e_plead_glint)"/>
-          <!-- Dollar Signs $ in Eyes -->
-          <g transform="translate(18, 23)">
-            <text x="0" y="3" font-family="Arial, sans-serif" font-size="11" font-weight="900" fill="#14532d" text-anchor="middle">$</text>
+          <!-- Feather Crest -->
+          <path d="M 23 7 Q 25 1 29 4 Q 26 9 24 11 Z" fill="#f57f17"/>
+          <path d="M 20 9 Q 21 3 25 6 Q 24 11 22 13 Z" fill="#fbc02d"/>
+          <!-- Body -->
+          <circle cx="25" cy="27" r="20" fill="url(#e_money_chick)"/>
+          <ellipse cx="25" cy="14" rx="14" ry="6.5" fill="url(#e_plead_glint)"/>
+          <!-- Wings -->
+          <ellipse cx="7" cy="29" rx="4.5" ry="6.5" transform="rotate(15 7 29)" fill="#f57f17" opacity="0.9"/>
+          <ellipse cx="43" cy="29" rx="4.5" ry="6.5" transform="rotate(-15 43 29)" fill="#f57f17" opacity="0.9"/>
+          <!-- Cheeks with Dollar Green Tint -->
+          <circle cx="13" cy="31" r="4.5" fill="#22c55e" opacity="0.35"/>
+          <circle cx="37" cy="31" r="4.5" fill="#22c55e" opacity="0.35"/>
+          <!-- Sparkling Dollar Gem Eyes [$] [$] -->
+          <g transform="translate(17, 24)">
+            <ellipse cx="0" cy="0" rx="6" ry="7" fill="url(#e_dollar_gem)" stroke="#14532d" stroke-width="0.8"/>
+            <text x="0" y="3.5" font-family="'Trebuchet MS', Arial, sans-serif" font-size="9.5" font-weight="900" fill="#ffffff" text-anchor="middle">$</text>
+            <circle cx="-2.5" cy="-3.5" r="1.2" fill="#ffffff"/>
           </g>
-          <g transform="translate(32, 23)">
-            <text x="0" y="3" font-family="Arial, sans-serif" font-size="11" font-weight="900" fill="#14532d" text-anchor="middle">$</text>
+          <g transform="translate(33, 24)">
+            <ellipse cx="0" cy="0" rx="6" ry="7" fill="url(#e_dollar_gem)" stroke="#14532d" stroke-width="0.8"/>
+            <text x="0" y="3.5" font-family="'Trebuchet MS', Arial, sans-serif" font-size="9.5" font-weight="900" fill="#ffffff" text-anchor="middle">$</text>
+            <circle cx="-2.5" cy="-3.5" r="1.2" fill="#ffffff"/>
           </g>
-          <!-- Open Laughing Beak with Green Dollar Tongue -->
-          <polygon points="19,28 31,28 25,35" fill="#ffa726" stroke="#e65100" stroke-width="1"/>
-          <path d="M 22 30 Q 25 39 28 30 Z" fill="#4ade80" stroke="#16a34a" stroke-width="1"/>
-          <line x1="25" y1="30" x2="25" y2="36" stroke="#15803d" stroke-width="0.8"/>
-          <!-- Floating Gold Coins -->
-          <circle cx="9" cy="14" r="4" fill="url(#e_gold_coin)" stroke="#a16207" stroke-width="0.8"/>
-          <circle cx="41" cy="14" r="4" fill="url(#e_gold_coin)" stroke="#a16207" stroke-width="0.8"/>
+          <!-- Floating Gold Coins with Sparkles -->
+          <circle cx="8" cy="13" r="3.5" fill="url(#e_gold_coin_chick)" stroke="#a16207" stroke-width="0.8"/>
+          <circle cx="42" cy="13" r="3.5" fill="url(#e_gold_coin_chick)" stroke="#a16207" stroke-width="0.8"/>
+          <!-- Big Grinning Beak with Golden Sparkle -->
+          <path d="M 20 29 Q 25 26 30 29 Q 25 37 20 29 Z" fill="url(#e_beak_grad)" stroke="#bf360c" stroke-width="0.8"/>
+          <circle cx="25" cy="31" r="1.8" fill="#fef08a"/>
         </svg>
       `
     },
@@ -494,6 +560,7 @@
             modal.classList.remove('hidden');
           }
           this.switchLobbyChatTab(this.currentChatTab || 'global');
+          this.clearGlobalChatBadge();
         };
       }
 
@@ -536,6 +603,16 @@
       }
     }
 
+    clearGlobalChatBadge() {
+      this.unreadGlobalCount = 0;
+      this.lastSeenGlobalTime = Date.now();
+      const b = document.getElementById('lobbyChatUnreadBadge');
+      if (b) {
+        b.textContent = '0';
+        b.classList.add('hidden');
+      }
+    }
+
     switchLobbyChatTab(tab) {
       this.currentChatTab = tab;
       const tabGlobal = document.getElementById('mlbbChatTabGlobalBtn');
@@ -552,6 +629,7 @@
       if (bodyFriends) bodyFriends.classList.toggle('hidden', tab !== 'friends');
 
       if (tab === 'global') {
+        this.clearGlobalChatBadge();
         if (title) title.textContent = 'OBROLAN GLOBAL';
         if (subtitle) subtitle.textContent = 'Semua pemain online di server';
         if (input) input.placeholder = 'Ketik pesan ke Obrolan Global...';
@@ -611,6 +689,26 @@
               const lastMsg = messages[messages.length - 1];
               const cleanText = (lastMsg.text || '').startsWith('[BIRD_EMOTE:') ? 'Stiker Burung 🐣' : lastMsg.text;
               snippet.innerHTML = `<span class="mlbb-chat-ch">[Global]</span> <b>${this.escapeHtml(lastMsg.senderName || 'Player')}:</b> ${this.escapeHtml(cleanText)}`;
+            }
+
+            // Unread badge logic
+            const modal = document.getElementById('mlbbChatModal');
+            const isViewingGlobal = modal && !modal.classList.contains('hidden') && this.currentChatTab === 'global';
+            if (isViewingGlobal) {
+              this.clearGlobalChatBadge();
+            } else if (messages.length > 0) {
+              const lastMsg = messages[messages.length - 1];
+              if (lastMsg && lastMsg.senderKey !== this.myKey) {
+                const lastSeen = this.lastSeenGlobalTime || 0;
+                if (!lastMsg.timestamp || lastMsg.timestamp > lastSeen) {
+                  this.unreadGlobalCount = (this.unreadGlobalCount || 0) + 1;
+                  const b = document.getElementById('lobbyChatUnreadBadge');
+                  if (b) {
+                    b.textContent = this.unreadGlobalCount > 99 ? '99+' : String(this.unreadGlobalCount);
+                    b.classList.remove('hidden');
+                  }
+                }
+              }
             }
 
             // Render messages in modal
@@ -716,6 +814,22 @@
       if (targetBar) {
         targetBar.textContent = `Obrolan Privat: ${friend.name || 'Teman'}`;
       }
+      // Clear unread for this friend
+      if (this.myKey && friend && friend.friendKey) {
+        const channelId = [this.myKey, friend.friendKey].sort().join('_');
+        localStorage.setItem('last_read_chat_' + channelId, String(Date.now()));
+        if (this.unreadFriendMessages && this.unreadFriendMessages[friend.friendKey]) {
+          delete this.unreadFriendMessages[friend.friendKey];
+          this.unreadFriendMessagesCount = Math.max(0, (this.unreadFriendMessagesCount || 1) - 1);
+          this.updateBadgeUI();
+          this.renderQuickFriends();
+          const tabDot = document.getElementById('mlbbChatFriendUnreadDot');
+          if (tabDot) {
+            if (this.unreadFriendMessagesCount > 0) tabDot.classList.remove('hidden');
+            else tabDot.classList.add('hidden');
+          }
+        }
+      }
       this.renderChatFriendsList();
       this.listenFriendLobbyMessages(friend);
     }
@@ -762,7 +876,7 @@
                 <div class="mlbb-gm-avatar">${avSvg}</div>
                 <div class="mlbb-gm-content">
                   <div class="mlbb-gm-meta">
-                    <span class="mlbb-gm-name">${this.escapeHtml(isMe ? 'Kamu' : (friend.name || 'Teman'))}</span>
+                    <span class="mlbb-gm-name">${this.escapeHtml(isMe ? (this.myProfile.gamerTag || 'Saya') : (friend.name || 'Teman'))}</span>
                     <span class="mlbb-gm-time">${timeStr}</span>
                   </div>
                   <div class="mlbb-gm-bubble">${contentHtml}</div>
@@ -771,13 +885,17 @@
               container.appendChild(row);
             });
             container.scrollTop = container.scrollHeight;
+          }, err => {
+            console.warn('[SocialService] Friend chat error:', err.message);
           });
-      } catch(e) {}
+      } catch(e) {
+        console.warn('[SocialService] Init friend chat error:', e.message);
+      }
     }
 
     async sendCurrentChatMessage(text) {
-      if (!text || !text.trim()) return;
-      if (!this.myProfile || !this.myProfile.isLoggedIn) {
+      if (!this.db || !this.myKey || !text || !text.trim()) return;
+      if (this.myProfile && this.myProfile.isGuest) {
         if (typeof window.showGameDialog === 'function') {
           window.showGameDialog({
             title: 'Login Dulu',
@@ -805,6 +923,13 @@
               text: text.trim(),
               timestamp: Date.now()
             });
+          // Update parent document with participants & timestamp for notification triggers
+          await this.db.collection('flappy_direct_chats').doc(channelId).set({
+            lastMessage: text.trim(),
+            lastSenderKey: this.myKey,
+            lastTimestamp: Date.now(),
+            participants: [this.myKey, this.activeFriendChat.friendKey]
+          }, { merge: true });
           if (window.audio && typeof window.audio.click === 'function') window.audio.click();
         } catch(e) {
           console.warn('[SocialService] Send friend chat error:', e.message);
@@ -939,6 +1064,38 @@
       } catch(e) {
         console.warn('[SocialService] Init invites listener failed:', e.message);
       }
+
+      // 4. Listen for Direct Messages from Friends
+      try {
+        this.directChatsUnsub = this.db.collection('flappy_direct_chats')
+          .where('participants', 'array-contains-any', myKeys.slice(0, 10))
+          .onSnapshot(snap => {
+            let unreadCount = 0;
+            this.unreadFriendMessages = {};
+            snap.forEach(doc => {
+              const d = doc.data();
+              if (d && d.lastSenderKey && !myKeys.includes(d.lastSenderKey)) {
+                const lastRead = localStorage.getItem('last_read_chat_' + doc.id) || 0;
+                if (d.lastTimestamp && d.lastTimestamp > Number(lastRead)) {
+                  unreadCount++;
+                  this.unreadFriendMessages[d.lastSenderKey] = true;
+                }
+              }
+            });
+            this.unreadFriendMessagesCount = unreadCount;
+            this.updateBadgeUI();
+            this.renderQuickFriends();
+            const tabDot = document.getElementById('mlbbChatFriendUnreadDot');
+            if (tabDot) {
+              if (unreadCount > 0) tabDot.classList.remove('hidden');
+              else tabDot.classList.add('hidden');
+            }
+          }, err => {
+            console.warn('[SocialService] Error listening to direct chats:', err.message);
+          });
+      } catch(e) {
+        console.warn('[SocialService] Init direct chats listener failed:', e.message);
+      }
     }
 
     async refreshRequests() {
@@ -1056,6 +1213,7 @@
       if (this.friendsUnsub) { this.friendsUnsub(); this.friendsUnsub = null; }
       if (this.invitesUnsub) { this.invitesUnsub(); this.invitesUnsub = null; }
       if (this.activeChatUnsub) { this.activeChatUnsub(); this.activeChatUnsub = null; }
+      if (this.directChatsUnsub) { this.directChatsUnsub(); this.directChatsUnsub = null; }
     }
 
     // ==========================================
@@ -1479,18 +1637,21 @@
     updateBadgeUI() {
       const badge = document.getElementById('socialBadgeCount');
       const tabBadge = document.getElementById('socialReqTabBadge');
-      const count = this.friendRequests.length;
+      const friendReqs = (this.friendRequests && this.friendRequests.length) || 0;
+      const unreadMsgs = this.unreadFriendMessagesCount || 0;
+      const total = friendReqs + unreadMsgs;
+
       if (badge) {
-        if (count > 0) {
-          badge.textContent = count;
-          badge.style.display = 'block';
+        if (total > 0) {
+          badge.textContent = total > 99 ? '99+' : String(total);
+          badge.style.display = 'flex';
         } else {
           badge.style.display = 'none';
         }
       }
       if (tabBadge) {
-        if (count > 0) {
-          tabBadge.textContent = count;
+        if (friendReqs > 0) {
+          tabBadge.textContent = String(friendReqs);
           tabBadge.style.display = 'inline-block';
         } else {
           tabBadge.style.display = 'none';
@@ -1561,16 +1722,30 @@
       const avatar = (id) => typeof window.getCuteAvatarSvg === 'function'
         ? window.getCuteAvatarSvg(id || 'chick_yellow', 28)
         : 'chick_yellow';
-      container.innerHTML = this.friends.slice(0, 2).map(friend => `
-        <button class="mlbb-quick-friend-item" type="button" data-friend-key="${friend.friendKey}" title="Lihat profil ${this.escapeHtml(friend.name || 'teman')}">
+      container.innerHTML = this.friends.slice(0, 2).map(friend => {
+        const hasUnread = this.unreadFriendMessages && this.unreadFriendMessages[friend.friendKey];
+        return `
+        <button class="mlbb-quick-friend-item" type="button" data-friend-key="${friend.friendKey}" title="Obrolan / Profil ${this.escapeHtml(friend.name || 'teman')}">
           <span class="mlbb-qf-avatar">${avatar(friend.avatar)}</span>
           <span class="mlbb-qf-name">${this.escapeHtml(friend.name || 'Teman')}</span>
-          <span class="mlbb-qf-status" aria-label="Terhubung"></span>
-        </button>`).join('');
+          ${hasUnread ? '<span class="friend-unread-dot" title="Pesan baru!"></span>' : '<span class="mlbb-qf-status" aria-label="Terhubung"></span>'}
+        </button>`;
+      }).join('');
       container.querySelectorAll('.mlbb-quick-friend-item').forEach(button => {
         button.onclick = () => {
           const friend = this.friends.find(item => item.friendKey === button.dataset.friendKey);
-          if (friend) this.openFriendProfile(friend);
+          if (!friend) return;
+          const hasUnread = this.unreadFriendMessages && this.unreadFriendMessages[friend.friendKey];
+          if (hasUnread) {
+            // Open direct chat modal immediately and select this friend
+            const modal = document.getElementById('mlbbChatModal');
+            if (typeof window.showModal === 'function') window.showModal(modal);
+            else if (modal) modal.classList.remove('hidden');
+            this.switchLobbyChatTab('friends');
+            this.selectFriendForLobbyChat(friend);
+          } else {
+            this.openFriendProfile(friend);
+          }
         };
       });
     }

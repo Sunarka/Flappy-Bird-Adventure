@@ -3537,16 +3537,21 @@
       el.gpTierBadge.style.color = tier.color;
     }
 
-    // Populate Career Statistics (Same as Friend Profile)
+    // Populate Career Statistics (Accurate Local & Cloud Stats)
     const elCasual = $('myCasualScore');
     const elRank = $('myRankPoints');
     const elMp = $('myMpWins');
     const elCoins = $('myCoins');
 
-    if(elCasual) elCasual.textContent = progress.highScore || 0;
-    if(elRank) elRank.textContent = `${gpProfile.rankedBest || progress.rankedScore || 0} PTS`;
-    if(elMp) elMp.textContent = `${progress.mpWins || 0} MENANG`;
-    if(elCoins) elCoins.textContent = `${progress.coins || 0}`;
+    const userCasual = classicBest || storage.get('skyFlappyClassicBest', 0) || progress.highScore || 0;
+    const userRanked = rankedBest || storage.get('skyFlappyRankedBest', 0) || gpProfile.rankedBest || 0;
+    const userMp = progress.mpWins || storage.get('skyFlappyMpWins', 0) || 0;
+    const userCoins = (typeof progress.coins === 'number') ? progress.coins : (storage.get('skyFlappyCoins', 0));
+
+    if(elCasual) elCasual.textContent = userCasual;
+    if(elRank) elRank.textContent = `${userRanked} PTS`;
+    if(elMp) elMp.textContent = `${userMp} MENANG`;
+    if(elCoins) elCoins.textContent = `${userCoins}`;
 
     // Populate Equipped Loadout
     const elEqBird = $('myEquippedBird');
@@ -3566,20 +3571,27 @@
     if(elEqPet) elEqPet.textContent = getCosmeticName('pet', progress.selectedPet || 'none');
     if(elEqHat) elEqHat.textContent = getCosmeticName('hat', progress.selectedHat || 'none');
     if(elEqAura) elEqAura.textContent = getCosmeticName('aura', progress.selectedAura || 'none');
-    
-    
-    
 
-    // Populate Owned Cosmetics Count
+    // Populate Owned Cosmetics Count with Total Catalog Comparison
     const elCountBird = $('mySkinCount');
     const elCountPet = $('myPetCount');
     const elCountHat = $('myHatCount');
     const elCountAura = $('myAuraCount');
 
-    if(elCountBird) elCountBird.textContent = `${(progress.unlocked ? progress.unlocked.length : 1)} Milik`;
-    if(elCountPet) elCountPet.textContent = `${(progress.petUnlocked ? progress.petUnlocked.length : 0)} Milik`;
-    if(elCountHat) elCountHat.textContent = `${((progress.hatUnlocked ? progress.hatUnlocked.length : 0) + (progress.outfitUnlocked ? progress.outfitUnlocked.length : 0))} Milik`;
-    if(elCountAura) elCountAura.textContent = `${(progress.auraUnlocked ? progress.auraUnlocked.length : 0)} Milik`;
+    const totalSkins = Object.keys(skins).length;
+    const totalPets = Object.keys(petsCatalog).length;
+    const totalHats = Object.keys(hats).length + Object.keys(outfits).length;
+    const totalAuras = Object.keys(auras).length;
+
+    const ownedSkins = (progress.unlocked ? progress.unlocked.length : 1);
+    const ownedPets = (progress.petUnlocked ? progress.petUnlocked.length : 0);
+    const ownedHats = ((progress.hatUnlocked ? progress.hatUnlocked.length : 0) + (progress.outfitUnlocked ? progress.outfitUnlocked.length : 0));
+    const ownedAuras = (progress.auraUnlocked ? progress.auraUnlocked.length : 0);
+
+    if(elCountBird) elCountBird.textContent = `${ownedSkins} / ${totalSkins} Milik`;
+    if(elCountPet) elCountPet.textContent = `${ownedPets} / ${totalPets} Milik`;
+    if(elCountHat) elCountHat.textContent = `${ownedHats} / ${totalHats} Milik`;
+    if(elCountAura) elCountAura.textContent = `${ownedAuras} / ${totalAuras} Milik`;
 
     // Trigger 60FPS Live Animated Equipment Canvas Showcase
     if(typeof startFriendShowcase === 'function') {
@@ -3594,23 +3606,49 @@
       }, 'myProfileShowcaseCanvas');
     }
 
-    // Update Widget Profil Pojok Kiri Atas
-    // Update Widget Profil Pojok Kiri Atas (Square MLBB Frame Style)
+    // Update Widget Profil Pojok Kiri Atas (Square MLBB Frame Style with Dynamic Rank Borders)
     if(el.topProfileBtn) {
       const elAvatar = $('topProfileAvatar');
+      const elCrown = el.topProfileBtn.querySelector('.top-profile-frame-crown');
       const elName = $('topProfileName');
       const elTierIcon = $('topProfileTierIcon');
       const elTierNum = $('topProfileTierNum');
       const elXpFill = $('topProfileXpFill');
 
+      const currentScore = userRanked;
+      const playerTier = getRankTier(currentScore);
+
+      // Apply dynamic rank border class to the avatar frame
+      if(elAvatar) {
+        elAvatar.className = 'top-profile-avatar rank-border-' + playerTier.id;
+      }
+      
+      // Update crown based on rank tier
+      if(elCrown) {
+        if(playerTier.id === 'bronze') {
+          elCrown.innerHTML = '';
+        } else if(playerTier.id === 'silver') {
+          elCrown.innerHTML = `<svg viewBox="0 0 24 24" width="13" height="13" fill="#cbd5e1"><polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/></svg>`;
+        } else if(playerTier.id === 'gold') {
+          elCrown.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="#facc15"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1z"/></svg>`;
+        } else if(playerTier.id === 'platinum') {
+          elCrown.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="#2dd4bf"><path d="M12 2L4 7l8 13 8-13-8-7z"/></svg>`;
+        } else if(playerTier.id === 'diamond') {
+          elCrown.innerHTML = `<svg viewBox="0 0 24 24" width="15" height="15" fill="#38bdf8"><path d="M12 2L2 9l10 13L22 9 12 2zm0 3.5L18.5 9 12 18.2 5.5 9 12 5.5z"/></svg>`;
+        } else {
+          // Master / Grandmaster: Mythic glowing crown with ruby
+          elCrown.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 16L3 4l5.5 5L12 2l3.5 7L21 4l-2 12H5z" fill="#c084fc"/><circle cx="12" cy="11" r="2.5" fill="#ef4444"/><circle cx="6" cy="9" r="1.5" fill="#facc15"/><circle cx="18" cy="9" r="1.5" fill="#facc15"/></svg>`;
+        }
+      }
+
       if(isLogged) {
         if(elAvatar) elAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 38);
         if(elName) elName.textContent = gpProfile.gamerTag || 'Player';
-        if(elTierIcon) elTierIcon.innerHTML = tier.iconSvg;
-        if(elTierNum) elTierNum.textContent = rankedBest;
+        if(elTierIcon) elTierIcon.innerHTML = playerTier.iconSvg;
+        if(elTierNum) elTierNum.textContent = currentScore;
         if(elXpFill) {
-          const tierRange = Math.max(1, tier.maxScore - tier.minScore);
-          const currentInTier = Math.max(0, rankedBest - tier.minScore);
+          const tierRange = Math.max(1, playerTier.maxScore - playerTier.minScore);
+          const currentInTier = Math.max(0, currentScore - playerTier.minScore);
           const pct = Math.min(100, Math.max(12, Math.round((currentInTier / tierRange) * 100)));
           elXpFill.style.width = pct + '%';
         }
@@ -3619,8 +3657,8 @@
           elAvatar.innerHTML = getCuteAvatarSvg('chick_yellow', 38);
         }
         if(elName) elName.textContent = 'GUEST';
-        if(elTierIcon) elTierIcon.innerHTML = '';
-        if(elTierNum) elTierNum.textContent = '0';
+        if(elTierIcon) elTierIcon.innerHTML = playerTier.iconSvg;
+        if(elTierNum) elTierNum.textContent = String(currentScore);
         if(elXpFill) elXpFill.style.width = '30%';
       }
     }
@@ -3794,39 +3832,39 @@
     return uniqueList;
   }
 
-  // Default Leaderboard Data (Top 25 Dummy Players with Varied Anime & Cute Avatars)
+  // Default Leaderboard Data (Top 25 High-Scoring Dummy Champions from Master to Bronze)
   const defaultLeaderboard = [
-    { rank: 1, name: 'SkyKing_Legend', score: 284, tier: 'GRANDMASTER', avatar: 'gojo_satoru', loadout: { bird: 'phoenix', aura: 'galaxy', hat: 'crown', outfit: 'cape', pipe: 'gold', background: 'sunset' } },
-    { rank: 2, name: 'CyberValkyrie', score: 241, tier: 'MASTER I', avatar: 'robo_mecha', loadout: { bird: 'cyber', aura: 'fire', hat: 'tiara', outfit: 'goldchain', pipe: 'neon', background: 'space' } },
-    { rank: 3, name: 'GoldenFalcon_99', score: 198, tier: 'DIAMOND I', avatar: 'goku_saiyan', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset' } },
-    { rank: 4, name: 'ShadowDrifter', score: 165, tier: 'DIAMOND III', avatar: 'ninja_shadow', loadout: { bird: 'night', aura: 'neon', hat: 'cowboy', outfit: 'badge', pipe: 'green', background: 'forest' } },
-    { rank: 5, name: 'SakuraWing', score: 142, tier: 'PLATINUM I', avatar: 'pink_sakura', loadout: { bird: 'rose', aura: 'hearts', hat: 'flowercrown', outfit: 'princessdress', pipe: 'candy', background: 'sky' } },
-    { rank: 6, name: 'PixelAce', score: 128, tier: 'PLATINUM II', avatar: 'luffy_mugiwara', loadout: { bird: 'mint', aura: 'rainbow', hat: 'cap', outfit: 'redtie', pipe: 'green', background: 'sky' } },
-    { rank: 7, name: 'FrostGuardian', score: 110, tier: 'GOLD I', avatar: 'penguin_tux', loadout: { bird: 'classic', aura: 'bubble', hat: 'beanie', outfit: 'fairy', pipe: 'neon', background: 'space' } },
-    { rank: 8, name: 'LunaKnight', score: 98, tier: 'GOLD II', avatar: 'owl_scholar', loadout: { bird: 'night', aura: 'galaxy', hat: 'witch', outfit: 'cape', pipe: 'cyber', background: 'space' } },
-    { rank: 9, name: 'BlazeRaptor', score: 89, tier: 'GOLD III', avatar: 'dragon_pyro', loadout: { bird: 'phoenix', aura: 'fire', hat: 'bandana', outfit: 'leather_jacket', pipe: 'lava', background: 'sunset' } },
-    { rank: 10, name: 'StarGazer_X', score: 78, tier: 'SILVER I', avatar: 'astro_space', loadout: { bird: 'cyber', aura: 'neon', hat: 'astronaut_helmet', outfit: 'space_suit', pipe: 'neon', background: 'space' } },
-    { rank: 11, name: 'MysticOwl', score: 71, tier: 'SILVER I', avatar: 'naruto_sage', loadout: { bird: 'mint', aura: 'bubble', hat: 'wizard_hat', outfit: 'scarf', pipe: 'ice', background: 'forest' } },
-    { rank: 12, name: 'NeonNinja', score: 64, tier: 'SILVER II', avatar: 'fox_kitsune', loadout: { bird: 'night', aura: 'neon', hat: 'shinobi_plate', outfit: 'akatsuki_cloak', pipe: 'bamboo', background: 'konoha' } },
-    { rank: 13, name: 'ThunderBird_7', score: 58, tier: 'SILVER II', avatar: 'king_royal', loadout: { bird: 'classic', aura: 'super_saiyan', hat: 'saiyan_hair', outfit: 'goku_gi', pipe: 'torii', background: 'namek' } },
-    { rank: 14, name: 'EchoPhantom', score: 52, tier: 'SILVER III', avatar: 'ghost_spook', loadout: { bird: 'ghost', aura: 'domain_expansion', hat: 'gojo_blindfold', outfit: 'jujutsu_coat', pipe: 'green', background: 'sunset' } },
-    { rank: 15, name: 'AquaFin', score: 46, tier: 'SILVER III', avatar: 'froggy_kero', loadout: { bird: 'mint', aura: 'bubble', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'candy', background: 'sky' } },
-    { rank: 16, name: 'CrimsonBeak', score: 40, tier: 'BRONZE I', avatar: 'tanjiro_slayer', loadout: { bird: 'classic', aura: 'fire', hat: 'tanjiro_earrings', outfit: 'tanjiro_haori', pipe: 'torii', background: 'wano' } },
-    { rank: 17, name: 'CloudChaser', score: 35, tier: 'BRONZE I', avatar: 'nezuko_chan', loadout: { bird: 'rose', aura: 'hearts', hat: 'chopper_hat', outfit: 'hoodie', pipe: 'candy', background: 'sky' } },
-    { rank: 18, name: 'SolarFlare_88', score: 30, tier: 'BRONZE I', avatar: 'phoenix_blaze', loadout: { bird: 'phoenix', aura: 'golden', hat: 'hokage_hat', outfit: 'scout_cape', pipe: 'gold', background: 'sunset' } },
-    { rank: 19, name: 'VortexWing', score: 25, tier: 'BRONZE II', avatar: 'levi_scout', loadout: { bird: 'cyber', aura: 'rainbow', hat: 'cap', outfit: 'badge', pipe: 'neon', background: 'space' } },
-    { rank: 20, name: 'VelvetCrow', score: 20, tier: 'BRONZE II', avatar: 'anya_forger', loadout: { bird: 'night', aura: 'none', hat: 'catears', outfit: 'kimono', pipe: 'green', background: 'forest' } },
-    { rank: 21, name: 'SwiftSparrow', score: 16, tier: 'BRONZE II', avatar: 'cat_neko', loadout: { bird: 'classic', aura: 'none', hat: 'cowboy', outfit: 'none', pipe: 'green', background: 'sky' } },
-    { rank: 22, name: 'StormRider', score: 12, tier: 'BRONZE III', avatar: 'bunny_fluff', loadout: { bird: 'mint', aura: 'none', hat: 'beanie', outfit: 'none', pipe: 'green', background: 'sky' } },
-    { rank: 23, name: 'NovaPebble', score: 9, tier: 'BRONZE III', avatar: 'panda_bamboo', loadout: { bird: 'classic', aura: 'none', hat: 'none', outfit: 'scarf', pipe: 'green', background: 'sky' } },
-    { rank: 24, name: 'DawnFlapper', score: 6, tier: 'BRONZE III', avatar: 'chick_yellow', loadout: { bird: 'rose', aura: 'none', hat: 'none', outfit: 'none', pipe: 'green', background: 'sky' } },
-    { rank: 25, name: 'RookieFeather', score: 3, tier: 'BRONZE III', avatar: 'froggy_kero', loadout: { bird: 'classic', aura: 'none', hat: 'none', outfit: 'none', pipe: 'green', background: 'sky' } }
+    { rank: 1, name: 'SkyKing_God', score: 1480, tier: 'MASTER', avatar: 'gojo_satoru', loadout: { bird: 'phoenix', aura: 'galaxy', hat: 'crown', outfit: 'cape', pipe: 'gold', background: 'sunset' } },
+    { rank: 2, name: 'Shadow_Slayer', score: 1290, tier: 'MASTER', avatar: 'ninja_shadow', loadout: { bird: 'shadow', aura: 'neon', hat: 'shinobi_plate', outfit: 'akatsuki_cloak', pipe: 'neon', background: 'forest' } },
+    { rank: 3, name: 'CyberValkyrie_Prime', score: 1120, tier: 'MASTER', avatar: 'robo_mecha', loadout: { bird: 'cyber', aura: 'fire', hat: 'tiara', outfit: 'goldchain', pipe: 'neon', background: 'space' } },
+    { rank: 4, name: 'Phoenix_Emperor', score: 960, tier: 'MASTER', avatar: 'phoenix_blaze', loadout: { bird: 'phoenix', aura: 'golden', hat: 'crown', outfit: 'cape', pipe: 'gold', background: 'sunset' } },
+    { rank: 5, name: 'Goku_UltraInstinct', score: 840, tier: 'MASTER', avatar: 'goku_saiyan', loadout: { bird: 'goku_ssj', aura: 'super_saiyan', hat: 'saiyan_hair', outfit: 'goku_gi', pipe: 'torii', background: 'namek' } },
+    { rank: 6, name: 'Dragon_Sovereign', score: 720, tier: 'MASTER', avatar: 'dragon_pyro', loadout: { bird: 'dragon', aura: 'fire', hat: 'crown', outfit: 'leather_jacket', pipe: 'lava', background: 'sunset' } },
+    { rank: 7, name: 'GoldenFalcon_99', score: 610, tier: 'MASTER', avatar: 'king_royal', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset' } },
+    { rank: 8, name: 'Shinobi_Hokage', score: 520, tier: 'MASTER', avatar: 'naruto_sage', loadout: { bird: 'naruto_bird', aura: 'neon', hat: 'hokage_hat', outfit: 'scout_cape', pipe: 'bamboo', background: 'konoha' } },
+    { rank: 9, name: 'Levi_Ackerman', score: 450, tier: 'MASTER', avatar: 'levi_scout', loadout: { bird: 'night', aura: 'galaxy', hat: 'bandana', outfit: 'scout_cape', pipe: 'green', background: 'forest' } },
+    { rank: 10, name: 'Luffy_Gear5', score: 380, tier: 'MASTER', avatar: 'luffy_mugiwara', loadout: { bird: 'luffy_bird', aura: 'rainbow', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'candy', background: 'sky' } },
+    { rank: 11, name: 'SakuraWing', score: 310, tier: 'DIAMOND', avatar: 'pink_sakura', loadout: { bird: 'rose', aura: 'hearts', hat: 'flowercrown', outfit: 'princessdress', pipe: 'candy', background: 'sky' } },
+    { rank: 12, name: 'FrostGuardian', score: 260, tier: 'DIAMOND', avatar: 'penguin_tux', loadout: { bird: 'classic', aura: 'bubble', hat: 'beanie', outfit: 'fairy', pipe: 'neon', background: 'space' } },
+    { rank: 13, name: 'BlazeRaptor', score: 220, tier: 'DIAMOND', avatar: 'tanjiro_slayer', loadout: { bird: 'tanjiro_bird', aura: 'fire', hat: 'tanjiro_earrings', outfit: 'tanjiro_haori', pipe: 'torii', background: 'wano' } },
+    { rank: 14, name: 'StarGazer_X', score: 180, tier: 'PLATINUM', avatar: 'astro_space', loadout: { bird: 'cyber', aura: 'neon', hat: 'astronaut_helmet', outfit: 'space_suit', pipe: 'neon', background: 'space' } },
+    { rank: 15, name: 'NeonNinja', score: 150, tier: 'PLATINUM', avatar: 'fox_kitsune', loadout: { bird: 'night', aura: 'neon', hat: 'cowboy', outfit: 'badge', pipe: 'green', background: 'forest' } },
+    { rank: 16, name: 'EchoPhantom', score: 125, tier: 'PLATINUM', avatar: 'ghost_spook', loadout: { bird: 'gojo_bird', aura: 'domain_expansion', hat: 'gojo_blindfold', outfit: 'jujutsu_coat', pipe: 'green', background: 'sunset' } },
+    { rank: 17, name: 'ThunderBird_7', score: 105, tier: 'PLATINUM', avatar: 'nezuko_chan', loadout: { bird: 'mint', aura: 'rainbow', hat: 'cap', outfit: 'redtie', pipe: 'green', background: 'sky' } },
+    { rank: 18, name: 'AquaFin', score: 88, tier: 'GOLD', avatar: 'froggy_kero', loadout: { bird: 'mint', aura: 'bubble', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'candy', background: 'sky' } },
+    { rank: 19, name: 'MysticOwl', score: 75, tier: 'GOLD', avatar: 'owl_scholar', loadout: { bird: 'night', aura: 'galaxy', hat: 'witch', outfit: 'cape', pipe: 'cyber', background: 'space' } },
+    { rank: 20, name: 'CrimsonBeak', score: 62, tier: 'GOLD', avatar: 'cat_neko', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset' } },
+    { rank: 21, name: 'CloudChaser', score: 48, tier: 'SILVER', avatar: 'bunny_fluff', loadout: { bird: 'rose', aura: 'hearts', hat: 'chopper_hat', outfit: 'hoodie', pipe: 'candy', background: 'sky' } },
+    { rank: 22, name: 'SolarFlare_88', score: 38, tier: 'SILVER', avatar: 'panda_bamboo', loadout: { bird: 'classic', aura: 'none', hat: 'none', outfit: 'scarf', pipe: 'green', background: 'sky' } },
+    { rank: 23, name: 'VortexWing', score: 28, tier: 'SILVER', avatar: 'anya_forger', loadout: { bird: 'cyber', aura: 'none', hat: 'cap', outfit: 'badge', pipe: 'neon', background: 'space' } },
+    { rank: 24, name: 'VelvetCrow', score: 19, tier: 'BRONZE', avatar: 'chick_yellow', loadout: { bird: 'night', aura: 'none', hat: 'none', outfit: 'none', pipe: 'green', background: 'forest' } },
+    { rank: 25, name: 'SwiftSparrow', score: 10, tier: 'BRONZE', avatar: 'froggy_kero', loadout: { bird: 'classic', aura: 'none', hat: 'none', outfit: 'none', pipe: 'green', background: 'sky' } }
   ];
 
-  let leaderboardData = sanitizeLeaderboard(storage.get('skyFlappyLeaderboard_v6', defaultLeaderboard));
+  let leaderboardData = sanitizeLeaderboard(storage.get('skyFlappyLeaderboard_v7', defaultLeaderboard));
   if(!leaderboardData || leaderboardData.length < 25) {
     leaderboardData = sanitizeLeaderboard([...defaultLeaderboard]);
-    storage.set('skyFlappyLeaderboard_v6', leaderboardData);
+    storage.set('skyFlappyLeaderboard_v7', leaderboardData);
   }
 
   let selectedSpotlightPlayer = leaderboardData[0];
@@ -4121,6 +4159,67 @@
     championShowcaseRunning = false;
   }
 
+  function openLeaderboardPlayerProfile(player) {
+    if(!player) return;
+    if(audio && audio.click) audio.click();
+    const modal = $('friendProfileModal');
+    if(!modal) return;
+
+    const pScore = player.score || 0;
+    const pTier = getRankTier(pScore);
+    const lo = player.loadout || {};
+
+    const elAv = $('fpAvatarBox');
+    const elName = $('fpName');
+    const elRank = $('fpRankBadge');
+    const elUid = $('fpUid');
+
+    if(elAv) elAv.innerHTML = getCuteAvatarSvg(player.avatar || 'chick_yellow', 52);
+    if(elName) elName.textContent = player.name || 'Gamer';
+    if(elRank) {
+      elRank.textContent = `${pTier.name} TIER`;
+      elRank.style.color = pTier.color;
+    }
+    if(elUid) elUid.textContent = `ID: ${player.id || 'usr_' + Math.abs(hashCode(player.name || 'bot'))}`;
+
+    // Career Statistics
+    const elCasual = $('fpCasualScore');
+    const elRankPts = $('fpRankPoints');
+    const elMp = $('fpMpWins');
+    const elCoins = $('fpCoins');
+
+    if(elCasual) elCasual.textContent = Math.round(pScore * 0.85);
+    if(elRankPts) elRankPts.textContent = `${pScore} PTS`;
+    if(elMp) elMp.textContent = `${Math.max(1, Math.round(pScore / 30))} MENANG`;
+    if(elCoins) elCoins.textContent = `${pScore * 14 + 280}`;
+
+    // Loadout names
+    const fmt = (v, d) => (v && v !== 'none') ? String(v).replace(/[-_]+/g, ' ').toUpperCase() : d;
+    if($('fpEquippedBird')) $('fpEquippedBird').textContent = fmt(lo.bird, 'CLASSIC');
+    if($('fpEquippedPet')) $('fpEquippedPet').textContent = fmt(lo.pet, 'NONE');
+    if($('fpEquippedHat')) $('fpEquippedHat').textContent = fmt(lo.hat, 'NONE');
+    if($('fpEquippedAura')) $('fpEquippedAura').textContent = fmt(lo.aura, 'NONE');
+
+    // Live animated showcase canvas in profile modal
+    if(typeof startFriendShowcase === 'function') {
+      startFriendShowcase({
+        bird: lo.bird || 'classic',
+        pet: lo.pet || 'none',
+        hat: lo.hat || 'none',
+        outfit: lo.outfit || 'none',
+        aura: lo.aura || 'none',
+        background: lo.background || 'sunset',
+        pipe: lo.pipe || 'green'
+      }, 'fpShowcaseCanvas');
+    }
+
+    // Hide remove friend button for dummy / leaderboard players not in friend list
+    const removeBtn = $('fpRemoveBtn');
+    if(removeBtn) removeBtn.style.display = 'none';
+
+    showModal(modal);
+  }
+
   function updateChampionDetailsUI(p) {
     if(!p || !el.championGamerTag) return;
     const rankNum = p.rank || (leaderboardData.findIndex(x => x.name === p.name) + 1) || 1;
@@ -4130,7 +4229,17 @@
       el.championTier.textContent = p.tier || getRankTier(p.score).name;
       el.championTier.classList.add('hidden');
     }
-    el.spotlightTitle.textContent = rankNum === 1 ? '#1 WORLD CHAMPION' : '#' + rankNum + ' RANKED SPOTLIGHT';
+    if(el.spotlightTitle) {
+      el.spotlightTitle.textContent = rankNum === 1 ? '#1 WORLD CHAMPION' : '#' + rankNum + ' RANKED SPOTLIGHT';
+    }
+
+    const viewBtn = $('championViewProfileBtn');
+    if(viewBtn) {
+      viewBtn.onclick = (e) => {
+        e.stopPropagation();
+        openLeaderboardPlayerProfile(p);
+      };
+    }
 
     const lo = p.loadout || {};
     const skinName = (skins[lo.bird] || skins.classic).name;
@@ -4169,6 +4278,34 @@
     if(!el.rankedModal) return;
     const tier = getRankTier(rankedBest);
 
+    // 0. Update Top Rank 1 Master Preview Banner (Tab 2)
+    leaderboardData = sanitizeLeaderboard(leaderboardData);
+    const rankSorted = [...leaderboardData].sort((a, b) => {
+      const tA = getRankTier(a.score);
+      const tB = getRankTier(b.score);
+      if(tB.minScore !== tA.minScore) return tB.minScore - tA.minScore;
+      return b.score - a.score;
+    });
+    const topMaster = rankSorted[0] || leaderboardData[0];
+    const topMasterTier = getRankTier(topMaster.score);
+
+    const elTrAv = $('trMasterAvatar');
+    const elTrName = $('trMasterName');
+    const elTrTier = $('trMasterTier');
+    const elTrBtn = $('trMasterProfileBtn');
+
+    if(elTrAv) elTrAv.innerHTML = getCuteAvatarSvg(topMaster.avatar, 26);
+    if(elTrName) elTrName.textContent = topMaster.name;
+    if(elTrTier) {
+      elTrTier.innerHTML = `<span class="tier-icon-inline">${topMasterTier.iconSvg}</span> ${topMasterTier.name} TIER (${topMaster.score} PTS)`;
+      elTrTier.style.color = topMasterTier.color;
+    }
+    if(elTrBtn) {
+      elTrBtn.onclick = () => {
+        openLeaderboardPlayerProfile(topMaster);
+      };
+    }
+
     // 1. Render My Personal Rank Progression Card
     let nextInfo = '';
     if(tier.nextTier) {
@@ -4197,13 +4334,6 @@
 
     // 2. Render Top 25 Highest Rank Tiers Leaderboard (Hanya Rank/Tier, Tanpa Score)
     if(el.leaderboardRankList) {
-      leaderboardData = sanitizeLeaderboard(leaderboardData);
-      const rankSorted = [...leaderboardData].sort((a, b) => {
-        const tA = getRankTier(a.score);
-        const tB = getRankTier(b.score);
-        if(tB.minScore !== tA.minScore) return tB.minScore - tA.minScore;
-        return b.score - a.score;
-      });
       const top25Ranks = rankSorted.slice(0, 25);
 
       let rankHtml = '';
@@ -4215,7 +4345,7 @@
         const playerTier = getRankTier(p.score);
 
         rankHtml += `
-          <div class="lb-row${userClass}">
+          <div class="lb-row${userClass}" data-player-name="${p.name}" style="cursor:pointer;" title="Klik untuk lihat profil ${p.name}">
             <span class="lb-rank ${rankClass}">${rankBadge}</span>
             <span class="lb-player"><span class="lb-av-circle">${getCuteAvatarSvg(p.avatar, 24)}</span> ${p.name}</span>
             <span class="lb-tier" style="color: ${playerTier.color}; justify-content: flex-end;">
@@ -4226,6 +4356,14 @@
         `;
       });
       el.leaderboardRankList.innerHTML = rankHtml;
+
+      el.leaderboardRankList.querySelectorAll('.lb-row').forEach(row => {
+        row.onclick = () => {
+          const pName = row.dataset.playerName;
+          const player = leaderboardData.find(p => p.name === pName);
+          if(player) openLeaderboardPlayerProfile(player);
+        };
+      });
     }
   }
 
@@ -4317,8 +4455,9 @@
         const pName = row.dataset.playerName;
         const player = leaderboardData.find(p => p.name === pName);
         if(player) {
-          audio.click();
+          if(audio && audio.click) audio.click();
           startChampionSpotlight(player);
+          openLeaderboardPlayerProfile(player);
           renderLeaderboardList();
         }
       };
@@ -4327,6 +4466,11 @@
 
   function renderChampionPortraitFrame() {
     if(!championShowcaseRunning || !el.championCanvas) return;
+    // Dynamically match internal resolution to CSS display size so it is NEVER squished or gepeng
+    if(el.championCanvas.clientWidth > 0 && (el.championCanvas.width !== el.championCanvas.clientWidth || el.championCanvas.height !== el.championCanvas.clientHeight)) {
+      el.championCanvas.width = el.championCanvas.clientWidth;
+      el.championCanvas.height = el.championCanvas.clientHeight;
+    }
     const cCtx = el.championCanvas.getContext('2d');
     const cW = el.championCanvas.width, cH = el.championCanvas.height;
     const p = selectedSpotlightPlayer || leaderboardData[0];
@@ -4377,11 +4521,14 @@
     rrTo(cCtx, pX - 2, gapY + gapSize, pW + 4, cap, 2);
     cCtx.restore();
 
+    // Centered bird coordinates with natural idle flight bobbing
+    const bX = Math.round(cW * 0.44);
+    const bY = Math.round(cH * 0.48) + Math.sin(now / 220) * 3.5;
+
     // 3. Aura Trail Particles
     championTrailTimer += 0.033;
     if(championTrailTimer > 0.045) {
       championTrailTimer = 0;
-      const bX = 105, bY = 38 + Math.sin(now / 220) * 4;
       const auraId = lo.aura || 'galaxy';
       const colors = auraId === 'fire' ? ['#ff3b00', '#ffd000'] :
                      auraId === 'rainbow' ? ['hsl(' + ((now * 0.5) % 360) + ', 100%, 65%)'] :
@@ -4408,8 +4555,7 @@
     championParticles = championParticles.filter(q => q.life > 0);
 
     // 4. Bird Render (Champion Loadout)
-    const bX = 110, bY = 38 + Math.sin(now / 220) * 4;
-    const bAngle = Math.sin(now / 220) * 0.06;
+    const bAngle = Math.sin(now / 220) * 0.05;
     const bWing = Math.sin(now / 110) > 0 ? 0.2 : 0;
     renderCustomBird(cCtx, {
       x: bX, y: bY, angle: bAngle, wing: bWing,
@@ -4506,7 +4652,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.52';
+  const GAME_VERSION = '20.53';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -8377,6 +8523,9 @@
   let lobbyPetals = [];
   let lobbyEmotes = [];
   let nextLobbyEmoteTime = 0;
+  let lobbyBirdBounce = 0;
+  let lobbyChick1Bounce = 0;
+  let lobbyChick2Bounce = 0;
 
   function initLobbyParticles() {
     lobbyPetals = [];
@@ -8398,53 +8547,92 @@
   function drawCuteLobbyChick(targetCtx, x, y, bodyColor, wingColor, angle, dir = 1, accessory = 'ribbon') {
     targetCtx.save();
     targetCtx.translate(x, y);
-    targetCtx.scale(dir, 1);
+    // Squishy gentle breathing scale
+    const breath = 1 + Math.sin(lobbyTime * 4.5) * 0.04;
+    targetCtx.scale(dir * breath, (2 - breath));
     targetCtx.rotate(angle);
 
-    // Soft Shadow
+    // Soft Ambient Shadow
     targetCtx.fillStyle = 'rgba(0,0,0,0.18)';
     targetCtx.beginPath();
     targetCtx.ellipse(0, 14, 10, 3.5, 0, 0, Math.PI * 2);
     targetCtx.fill();
 
-    // Round Chubby Body
-    targetCtx.fillStyle = bodyColor;
+    // Round Chubby Body with Soft Radial 3D Lighting
+    const bGrad = targetCtx.createRadialGradient(-3, -3, 2, 0, 0, 12);
+    bGrad.addColorStop(0, '#ffffff');
+    bGrad.addColorStop(0.35, bodyColor);
+    bGrad.addColorStop(1, wingColor);
+    targetCtx.fillStyle = bGrad;
     targetCtx.beginPath();
     targetCtx.arc(0, 0, 11.5, 0, Math.PI * 2);
     targetCtx.fill();
 
-    // Rosy Blush Cheeks
-    targetCtx.fillStyle = 'rgba(244, 114, 182, 0.65)';
+    // Rosy Anime Blush Cheeks with Hatching
+    targetCtx.fillStyle = 'rgba(251, 113, 133, 0.7)';
     targetCtx.beginPath();
-    targetCtx.arc(4, 3, 3, 0, Math.PI * 2);
+    targetCtx.ellipse(4.5, 3.2, 3.5, 2.5, 0, 0, Math.PI * 2);
     targetCtx.fill();
+    targetCtx.strokeStyle = '#f43f5e';
+    targetCtx.lineWidth = 0.8;
+    targetCtx.beginPath();
+    targetCtx.moveTo(3.5, 2.2); targetCtx.lineTo(2.5, 4.2);
+    targetCtx.moveTo(5.2, 2.2); targetCtx.lineTo(4.2, 4.2);
+    targetCtx.stroke();
 
-    // Cute Big Shiny Eye
+    // Kawaii Sparkling Boba Eye (Double Glint)
     targetCtx.fillStyle = '#0f172a';
     targetCtx.beginPath();
-    targetCtx.arc(4, -2, 2.8, 0, Math.PI * 2);
+    targetCtx.arc(4, -2.5, 3.2, 0, Math.PI * 2);
     targetCtx.fill();
     targetCtx.fillStyle = '#ffffff';
     targetCtx.beginPath();
-    targetCtx.arc(5, -3, 1.1, 0, Math.PI * 2);
+    targetCtx.arc(5.2, -3.8, 1.4, 0, Math.PI * 2);
+    targetCtx.arc(2.8, -1.4, 0.8, 0, Math.PI * 2);
     targetCtx.fill();
 
     // Tiny Orange Beak
     targetCtx.fillStyle = '#f97316';
     targetCtx.beginPath();
-    targetCtx.moveTo(8, -1);
-    targetCtx.lineTo(13, 1);
-    targetCtx.lineTo(8, 3);
+    targetCtx.moveTo(8, -1.2);
+    targetCtx.lineTo(13.5, 0.8);
+    targetCtx.lineTo(8, 2.8);
     targetCtx.closePath();
     targetCtx.fill();
 
     // Flapping Little Wing
+    const wFlap = Math.sin(lobbyTime * 8) * 0.2;
+    targetCtx.save();
+    targetCtx.translate(-4, 2);
+    targetCtx.rotate(wFlap);
     targetCtx.fillStyle = wingColor;
     targetCtx.beginPath();
-    targetCtx.ellipse(-4, 2, 5.5, 3.5, 0.2, 0, Math.PI * 2);
+    targetCtx.ellipse(0, 0, 6, 4, 0.1, 0, Math.PI * 2);
     targetCtx.fill();
+    targetCtx.restore();
 
-    // Tiny Feet
+    // Head Accessories (Ribbon or Flower)
+    if(accessory === 'ribbon') {
+      targetCtx.fillStyle = '#f472b6';
+      targetCtx.beginPath();
+      targetCtx.moveTo(0, -11); targetCtx.lineTo(-4, -15); targetCtx.lineTo(0, -13); targetCtx.closePath();
+      targetCtx.moveTo(0, -11); targetCtx.lineTo(4, -15); targetCtx.lineTo(0, -13); targetCtx.closePath();
+      targetCtx.fill();
+      targetCtx.fillStyle = '#fbcfe8';
+      targetCtx.beginPath(); targetCtx.arc(0, -12, 1.4, 0, Math.PI * 2); targetCtx.fill();
+    } else if(accessory === 'flower') {
+      targetCtx.fillStyle = '#f472b6';
+      for(let a = 0; a < 5; a++) {
+        const rad = (a * Math.PI * 2) / 5;
+        targetCtx.beginPath();
+        targetCtx.arc(Math.cos(rad) * 2.8, -13 + Math.sin(rad) * 2.8, 1.5, 0, Math.PI * 2);
+        targetCtx.fill();
+      }
+      targetCtx.fillStyle = '#fef08a';
+      targetCtx.beginPath(); targetCtx.arc(0, -13, 1.3, 0, Math.PI * 2); targetCtx.fill();
+    }
+
+    // Tiny Orange Feet
     targetCtx.strokeStyle = '#ea580c';
     targetCtx.lineWidth = 1.6;
     targetCtx.beginPath();
@@ -8687,13 +8875,19 @@
       ctx.restore();
     });
 
+    // Update Interactive Mascot Tap Bounce Timers
+    if(lobbyBirdBounce > 0) lobbyBirdBounce = Math.max(0, lobbyBirdBounce - dt);
+    if(lobbyChick1Bounce > 0) lobbyChick1Bounce = Math.max(0, lobbyChick1Bounce - dt);
+    if(lobbyChick2Bounce > 0) lobbyChick2Bounce = Math.max(0, lobbyChick2Bounce - dt);
+
     // 9. CUTE ANIMATED BIRDS & COMPANIONS (HAPPY LOBBY MASCOTS)
     // --- Mascot 1: Main Custom Player Bird (Cheering on the ground) ---
     const mainBirdX = W / 2;
-    const mainBirdHop = Math.abs(Math.sin(lobbyTime * 3.5)) * 14;
+    const birdInteractiveHop = Math.sin((1 - lobbyBirdBounce / 0.5) * Math.PI) * 24;
+    const mainBirdHop = Math.abs(Math.sin(lobbyTime * 3.5)) * 14 + (lobbyBirdBounce > 0 ? birdInteractiveHop : 0);
     const mainBirdY = H - GROUND - 22 - mainBirdHop;
-    const mainBirdAngle = Math.sin(lobbyTime * 3.5) * 0.12;
-    const mainBirdWing = Math.sin(lobbyTime * 10) * 8;
+    const mainBirdAngle = Math.sin(lobbyTime * 3.5) * 0.12 + (lobbyBirdBounce > 0 ? Math.sin(lobbyBirdBounce * 25) * 0.22 : 0);
+    const mainBirdWing = (lobbyBirdBounce > 0 ? 14 : Math.sin(lobbyTime * 10) * 8);
 
     renderCustomBird(ctx, {
       x: mainBirdX,
@@ -8754,16 +8948,20 @@
       const pData = petsCatalog[activePetId] || petsCatalog.pip_peep;
       if(pData && pData.baby1 && pData.baby2) {
         // Pet Baby 1 (Left pet)
+        const chick1InteractiveHop = Math.sin((1 - lobbyChick1Bounce / 0.5) * Math.PI) * 18;
         const chick1X = mainBirdX - 52 + Math.sin(lobbyTime * 2) * 8;
-        const chick1Hop = Math.abs(Math.sin(lobbyTime * 4 + 1)) * 9;
+        const chick1Hop = Math.abs(Math.sin(lobbyTime * 4 + 1)) * 9 + (lobbyChick1Bounce > 0 ? chick1InteractiveHop : 0);
         const chick1Y = H - GROUND - 14 - chick1Hop;
-        drawCuteLobbyChick(ctx, chick1X, chick1Y, pData.baby1.color, pData.baby1.wingColor, Math.sin(lobbyTime * 4) * 0.1, 1, pData.baby1.accessory);
+        const chick1Angle = lobbyChick1Bounce > 0 ? (1 - lobbyChick1Bounce / 0.5) * Math.PI * 2 : Math.sin(lobbyTime * 4) * 0.1;
+        drawCuteLobbyChick(ctx, chick1X, chick1Y, pData.baby1.color, pData.baby1.wingColor, chick1Angle, 1, pData.baby1.accessory);
 
         // Pet Baby 2 (Right pet)
+        const chick2InteractiveHop = Math.sin((1 - lobbyChick2Bounce / 0.5) * Math.PI) * 18;
         const chick2X = mainBirdX + 54 + Math.sin(lobbyTime * 2 + 2) * 8;
-        const chick2Hop = Math.abs(Math.sin(lobbyTime * 4 + 2.5)) * 9;
+        const chick2Hop = Math.abs(Math.sin(lobbyTime * 4 + 2.5)) * 9 + (lobbyChick2Bounce > 0 ? chick2InteractiveHop : 0);
         const chick2Y = H - GROUND - 14 - chick2Hop;
-        drawCuteLobbyChick(ctx, chick2X, chick2Y, pData.baby2.color, pData.baby2.wingColor, Math.sin(lobbyTime * 4 + 2) * 0.1, -1, pData.baby2.accessory);
+        const chick2Angle = lobbyChick2Bounce > 0 ? -(1 - lobbyChick2Bounce / 0.5) * Math.PI * 2 : Math.sin(lobbyTime * 4 + 2) * 0.1;
+        drawCuteLobbyChick(ctx, chick2X, chick2Y, pData.baby2.color, pData.baby2.wingColor, chick2Angle, -1, pData.baby2.accessory);
       }
     }
 
@@ -10731,11 +10929,18 @@
     targetCtx.fill();
     targetCtx.shadowBlur = 0;
 
-    // 3b. Rosy Cheeks (Cute Blush)
-    targetCtx.fillStyle = 'rgba(244, 114, 182, 0.42)';
+    // 3b. Rosy Cheeks (Cute Chibi Blush with Anime Hatching)
+    targetCtx.fillStyle = 'rgba(251, 113, 133, 0.55)';
     targetCtx.beginPath();
-    targetCtx.ellipse(3, 4, 4.5, 3.2, 0, 0, 7);
+    targetCtx.ellipse(4, 3.5, 5.2, 3.6, 0, 0, Math.PI * 2);
     targetCtx.fill();
+    targetCtx.strokeStyle = '#f43f5e';
+    targetCtx.lineWidth = 1;
+    targetCtx.beginPath();
+    targetCtx.moveTo(2.5, 1.8); targetCtx.lineTo(1.2, 4.8);
+    targetCtx.moveTo(4.8, 1.8); targetCtx.lineTo(3.5, 4.8);
+    targetCtx.moveTo(7.0, 2.0); targetCtx.lineTo(5.8, 4.8);
+    targetCtx.stroke();
 
     // 4. Clothes / Shirts / Vests / Dresses covering body
     drawOutfitBodyTo(targetCtx, outfitId);
@@ -10878,8 +11083,43 @@
       targetCtx.stroke();
     }
 
-    // 9. Eye (Special customized high-detail eyes for Anime Characters)
-    if(opt.skinId === 'gojo_bird') {
+    // 9. Eye (Knockout "X" when dead, specialized eyes for Anime characters, cute boba for others)
+    if(opt.isDead || (opt.isPlayer && window.bird && window.bird.dead)) {
+      // Comical Cartoon Knockout "X" Eyes
+      targetCtx.save();
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.beginPath();
+      targetCtx.arc(6, -7, 6.8, 0, Math.PI * 2);
+      targetCtx.fill();
+      targetCtx.strokeStyle = '#0f172a';
+      targetCtx.lineWidth = 1.3;
+      targetCtx.stroke();
+
+      // Bold Comic Red X Mark
+      targetCtx.strokeStyle = '#ef4444';
+      targetCtx.lineWidth = 2.6;
+      targetCtx.lineCap = 'round';
+      targetCtx.beginPath();
+      targetCtx.moveTo(2.5, -10.5); targetCtx.lineTo(9.5, -3.5);
+      targetCtx.moveTo(9.5, -10.5); targetCtx.lineTo(2.5, -3.5);
+      targetCtx.stroke();
+
+      // Dizzy Floating Stars & Swirl above head
+      const now = performance.now();
+      const rot = (now / 180) % (Math.PI * 2);
+      targetCtx.strokeStyle = '#facc15';
+      targetCtx.lineWidth = 1.5;
+      targetCtx.beginPath();
+      for(let a = 0; a < Math.PI * 2; a += 0.25) {
+        const r = 3 + a * 1.1;
+        const sx = 5 + Math.cos(a + rot) * r;
+        const sy = -19 + Math.sin(a + rot) * (r * 0.4);
+        if(a === 0) targetCtx.moveTo(sx, sy);
+        else targetCtx.lineTo(sx, sy);
+      }
+      targetCtx.stroke();
+      targetCtx.restore();
+    } else if(opt.skinId === 'gojo_bird') {
       // SATORU GOJO'S FAMOUS CELESTIAL GLOWING SKY-BLUE SIX EYES
       targetCtx.save();
       targetCtx.shadowColor = '#00f5d4';
@@ -10965,18 +11205,30 @@
       targetCtx.arc(9, -8, 1, 0, Math.PI * 2);
       targetCtx.fill();
     } else {
-      // Classic Eye
-      targetCtx.fillStyle = '#fff';
+      // Super Cute Chibi Anime Boba Eye with Triple Gloss Sparkle
+      targetCtx.fillStyle = '#ffffff';
       targetCtx.beginPath();
-      targetCtx.arc(6, -7, 6, 0, 7);
+      targetCtx.arc(6, -7, 6.8, 0, Math.PI * 2);
       targetCtx.fill();
-      targetCtx.fillStyle = '#193550';
+      targetCtx.strokeStyle = 'rgba(15, 23, 42, 0.4)';
+      targetCtx.lineWidth = 1.2;
+      targetCtx.stroke();
+
+      const irisGrad = targetCtx.createLinearGradient(6, -12, 6, -1);
+      irisGrad.addColorStop(0, '#0f172a');
+      irisGrad.addColorStop(0.7, '#1e293b');
+      irisGrad.addColorStop(1, '#0284c7');
+      targetCtx.fillStyle = irisGrad;
       targetCtx.beginPath();
-      targetCtx.arc(8, -7, 2.4, 0, 7);
+      targetCtx.arc(7.2, -6.8, 4.6, 0, Math.PI * 2);
       targetCtx.fill();
-      targetCtx.fillStyle = '#fff';
+
+      // Triple Gloss Sparkle Highlights (Anime Style)
+      targetCtx.fillStyle = '#ffffff';
       targetCtx.beginPath();
-      targetCtx.arc(9, -8, 1, 0, 7);
+      targetCtx.arc(9.2, -8.6, 1.8, 0, Math.PI * 2);
+      targetCtx.arc(5.8, -5.2, 1.0, 0, Math.PI * 2);
+      targetCtx.arc(9.0, -4.6, 0.6, 0, Math.PI * 2);
       targetCtx.fill();
     }
 
@@ -11143,7 +11395,9 @@
 
     renderCustomBird(ctx, {
       x: bird.x, y: bird.y, angle: bird.angle, wing: bird.wing,
-      skinId, hatId, outfitId, opacity
+      skinId, hatId, outfitId, opacity,
+      isDead: !!bird.dead,
+      isPlayer: true
     });
 
     ctx.save();
@@ -12920,6 +13174,77 @@
   canvas.addEventListener('pointerdown', e => {
     if(e.target.closest('#dashBtn')) return;
     e.preventDefault();
+
+    // INTERACTIVE LOBBY MASCOT TAPPING (Burung & Pet Interaktif saat di Lobi)
+    if(state === State.MENU) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const clickX = (e.clientX - rect.left) * scaleX;
+      const clickY = (e.clientY - rect.top) * scaleY;
+
+      const mainBirdX = W / 2;
+      const mainBirdY = H - GROUND - 22;
+      const chick1X = mainBirdX - 52;
+      const chick1Y = H - GROUND - 14;
+      const chick2X = mainBirdX + 54;
+      const chick2Y = H - GROUND - 14;
+
+      // 1. Klik Burung Utama di Lobi -> Lompat Gembira, Keluar Hati & Sparkles, Mainkan Bunyi Imut
+      if(Math.hypot(clickX - mainBirdX, clickY - mainBirdY) < 45) {
+        lobbyBirdBounce = 0.5;
+        if(audio && audio.point) audio.point();
+        const cuteEmotes = ['💖', '✨', '🌸', '💕', '⭐', '🥰'];
+        for(let i = 0; i < 6; i++) {
+          lobbyEmotes.push({
+            x: mainBirdX + (Math.random() - 0.5) * 28,
+            y: mainBirdY - 24,
+            text: cuteEmotes[i % cuteEmotes.length],
+            life: 1.6,
+            maxLife: 1.6,
+            vy: -35 - Math.random() * 30
+          });
+        }
+        return;
+      }
+
+      // 2. Klik Pet Anak Burung Kiri -> Lompat Salto, Keluar Nada Musik & Bintang
+      if(Math.hypot(clickX - chick1X, clickY - chick1Y) < 32) {
+        lobbyChick1Bounce = 0.5;
+        if(audio && audio.click) audio.click();
+        const chickEmotes = ['🐥', '🎶', '✨', '💛', '🌟'];
+        for(let i = 0; i < 4; i++) {
+          lobbyEmotes.push({
+            x: chick1X + (Math.random() - 0.5) * 18,
+            y: chick1Y - 18,
+            text: chickEmotes[i % chickEmotes.length],
+            life: 1.5,
+            maxLife: 1.5,
+            vy: -32 - Math.random() * 25
+          });
+        }
+        return;
+      }
+
+      // 3. Klik Pet Anak Burung Kanan -> Lompat Salto Balik, Keluar Nada Musik & Hati
+      if(Math.hypot(clickX - chick2X, clickY - chick2Y) < 32) {
+        lobbyChick2Bounce = 0.5;
+        if(audio && audio.click) audio.click();
+        const chickEmotes = ['🐣', '🎵', '✨', '💙', '⭐'];
+        for(let i = 0; i < 4; i++) {
+          lobbyEmotes.push({
+            x: chick2X + (Math.random() - 0.5) * 18,
+            y: chick2Y - 18,
+            text: chickEmotes[i % chickEmotes.length],
+            life: 1.5,
+            maxLife: 1.5,
+            vy: -32 - Math.random() * 25
+          });
+        }
+        return;
+      }
+    }
+
     flap();
   });
   el.ready.addEventListener('pointerdown', e => {

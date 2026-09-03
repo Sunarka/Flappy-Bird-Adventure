@@ -21,18 +21,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.52">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.52">
-  <link rel="stylesheet" href="css/shop.css?v=20.52">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.52">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.52">
-  <link rel="stylesheet" href="css/store.css?v=20.52">
-  <link rel="stylesheet" href="css/ranked.css?v=20.52">
-  <link rel="stylesheet" href="css/social.css?v=20.52">
-  <link rel="stylesheet" href="css/splash.css?v=20.52">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.52">
+  <link rel="stylesheet" href="css/style.css?v=20.53">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.53">
+  <link rel="stylesheet" href="css/shop.css?v=20.53">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.53">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.53">
+  <link rel="stylesheet" href="css/store.css?v=20.53">
+  <link rel="stylesheet" href="css/ranked.css?v=20.53">
+  <link rel="stylesheet" href="css/social.css?v=20.53">
+  <link rel="stylesheet" href="css/splash.css?v=20.53">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.53">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.52">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.53">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -400,9 +400,10 @@
       <!-- BOTTOM BAR (NAVIGATION DOCK & BIG MATCH DOCK) -->
       <footer class="mlbb-bottom-bar">
         <div class="mlbb-bottom-nav">
-          <button class="mlbb-nav-pill" id="lobbyChatBtn" type="button" title="Chat Global & Teman">
+          <button class="mlbb-nav-pill" id="lobbyChatBtn" type="button" title="Chat Global & Teman" style="position:relative;">
             <span class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg></span>
             <span class="nav-label">CHAT</span>
+            <span class="chat-unread-badge hidden" id="lobbyChatUnreadBadge">0</span>
           </button>
         </div>
 
@@ -884,27 +885,25 @@
 
         <!-- TAB 1: TOP 25 POIN TERTINGGI VIEW (Hanya Poin, Tanpa Tier) -->
         <div id="lbGlobalView" class="lb-tab-content active">
-          <!-- TOP 1 CHAMPION GOLDEN PORTRAIT SPOTLIGHT -->
+          <!-- TOP 1 CHAMPION GOLDEN PORTRAIT SPOTLIGHT (NO DISTORTION) -->
           <div class="champion-spotlight" id="championSpotlight">
             <div class="portrait-frame">
-              <div class="portrait-header">
-                <span class="laurel-wreath">TOP 1</span>
-                <span class="portrait-title" id="spotlightTitle">#1 WORLD CHAMPION</span>
-                <span class="laurel-wreath">TOP 1</span>
-              </div>
               <!-- Portrait Canvas with Golden Border -->
               <div class="portrait-canvas-box">
                 <div class="portrait-flash-spark" id="portraitSpark1"></div>
                 <div class="portrait-flash-spark" id="portraitSpark2"></div>
-                <canvas id="championCanvas" width="280" height="90" aria-label="Potret Burung Juara 1"></canvas>
+                <canvas id="championCanvas" width="400" height="90" aria-label="Potret Burung Juara 1"></canvas>
               </div>
               <!-- Champion Details & Equipped Cosmetics from Shop (No Booster) -->
               <div class="champion-meta">
                 <div class="champion-main-info">
-                  <strong id="championGamerTag">SkyKing_Legend</strong>
-                  <span class="champion-score">SCORE <b id="championScore">284</b></span>
+                  <strong id="championGamerTag">SkyKing_God</strong>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span class="champion-score">SCORE <b id="championScore">1480</b></span>
+                    <button type="button" class="champion-view-profile-btn" id="championViewProfileBtn" title="Lihat Profil Lengkap">PROFIL ↗</button>
+                  </div>
                 </div>
-                <div class="champion-tier hidden" id="championTier">GRANDMASTER TIER</div>
+                <div class="champion-tier hidden" id="championTier">MASTER TIER</div>
                 <div class="champion-loadout-tags" id="championLoadoutTags">
                   <!-- Injected via JavaScript -->
                 </div>
@@ -927,6 +926,20 @@
 
         <!-- TAB 2: TOP 25 RANK TERTINGGI VIEW (Hanya Tier, Tanpa Score) -->
         <div id="lbTiersView" class="lb-tab-content hidden">
+          <!-- TOP 1 RANK MASTER PREVIEW BANNER -->
+          <div class="top-rank-preview-card" id="topRankPreviewCard">
+            <div class="tr-avatar-box">
+              <span id="trMasterAvatar"></span>
+              <span class="tr-crown-badge">👑</span>
+            </div>
+            <div class="tr-info-box">
+              <div class="tr-badge-label">JUARA 1 TIER TERTINGGI</div>
+              <div class="tr-master-name" id="trMasterName">SkyKing_God</div>
+              <div class="tr-master-tier" id="trMasterTier">MASTER TIER</div>
+            </div>
+            <button type="button" class="tr-profile-btn" id="trMasterProfileBtn">PROFIL ↗</button>
+          </div>
+
           <!-- My Personal Rank Progression Card -->
           <div class="my-rank-card" id="myRankCard">
             <!-- Injected via JavaScript with big Rank SVG, progress bar, points to rank up -->
@@ -1556,12 +1569,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.52"></script>
-  <script src="js/admob-config.js?v=20.52"></script>
-  <script src="js/shop-data.js?v=20.52"></script>
-  <script src="js/audio.js?v=20.52"></script>
-  <script src="js/multiplayer.js?v=20.52"></script>
-  <script src="js/social.js?v=20.52"></script>
-  <script src="js/script.js?v=20.52"></script>
+  <script src="js/firebase-config.js?v=20.53"></script>
+  <script src="js/admob-config.js?v=20.53"></script>
+  <script src="js/shop-data.js?v=20.53"></script>
+  <script src="js/audio.js?v=20.53"></script>
+  <script src="js/multiplayer.js?v=20.53"></script>
+  <script src="js/social.js?v=20.53"></script>
+  <script src="js/script.js?v=20.53"></script>
 </body>
 </html>
