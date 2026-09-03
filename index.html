@@ -15,18 +15,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.43">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.43">
-  <link rel="stylesheet" href="css/shop.css?v=20.43">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.43">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.43">
-  <link rel="stylesheet" href="css/store.css?v=20.43">
-  <link rel="stylesheet" href="css/ranked.css?v=20.43">
-  <link rel="stylesheet" href="css/social.css?v=20.43">
-  <link rel="stylesheet" href="css/splash.css?v=20.43">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.43">
+  <link rel="stylesheet" href="css/style.css?v=20.44">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.44">
+  <link rel="stylesheet" href="css/shop.css?v=20.44">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.44">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.44">
+  <link rel="stylesheet" href="css/store.css?v=20.44">
+  <link rel="stylesheet" href="css/ranked.css?v=20.44">
+  <link rel="stylesheet" href="css/social.css?v=20.44">
+  <link rel="stylesheet" href="css/splash.css?v=20.44">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.44">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.43">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.44">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -250,6 +250,17 @@
 
       <div class="mp-vs-footer-hint">PERSIAPKAN DIRIMU!</div>
     </section>
+
+    <!-- Floating Matchmaking Radar Banner (Lobby Top Notification) -->
+    <div id="mpSearchingBar" class="mp-searching-bar hidden" role="status" aria-live="polite">
+      <div class="mp-search-spinner" aria-hidden="true"></div>
+      <div class="mp-search-info">
+        <span class="mp-search-title">MENCARI PEMAIN...</span>
+        <span class="mp-search-estimate">Estimasi <b id="mpSearchEstimateText">00:03</b></span>
+        <span class="mp-search-timer" id="mpSearchTimerText">00:00</span>
+      </div>
+      <button class="mp-search-cancel-btn" id="mpCancelSearchBtn" type="button" aria-label="Batalkan pencarian">×</button>
+    </div>
 
     <!-- TOP BAR (HEADER NAVIGATION) -->
     <header class="mlbb-top-bar" id="mlbbTopBar">
@@ -993,17 +1004,6 @@
       <section id="multiplayerModal" class="modal mp-modal hidden" role="dialog" aria-modal="true">
         <button class="close" data-close>×</button>
         
-        <!-- Status pencarian banner -->
-        <div id="mpSearchingBar" class="mp-searching-bar hidden" role="status" aria-live="polite">
-          <div class="mp-search-spinner" aria-hidden="true"></div>
-          <div class="mp-search-info">
-            <span class="mp-search-title">MENCARI PEMAIN...</span>
-            <span class="mp-search-estimate">Estimasi <b id="mpSearchEstimateText">00:10</b></span>
-            <span class="mp-search-timer" id="mpSearchTimerText">00:00</span>
-          </div>
-          <button class="mp-search-cancel-btn" id="mpCancelSearchBtn" type="button" aria-label="Batalkan pencarian">×</button>
-        </div>
-
         <!-- Top Header with Integrated Tabs -->
         <div class="mp-header">
           <div class="mp-icon-badge">
@@ -1548,12 +1548,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.43"></script>
-  <script src="js/admob-config.js?v=20.43"></script>
-  <script src="js/shop-data.js?v=20.43"></script>
-  <script src="js/audio.js?v=20.43"></script>
-  <script src="js/multiplayer.js?v=20.43"></script>
-  <script src="js/social.js?v=20.43"></script>
-  <script src="js/script.js?v=20.43"></script>
+  <script src="js/firebase-config.js?v=20.44"></script>
+  <script src="js/admob-config.js?v=20.44"></script>
+  <script src="js/shop-data.js?v=20.44"></script>
+  <script src="js/audio.js?v=20.44"></script>
+  <script src="js/multiplayer.js?v=20.44"></script>
+  <script src="js/social.js?v=20.44"></script>
+  <script src="js/script.js?v=20.44"></script>
 </body>
 </html>

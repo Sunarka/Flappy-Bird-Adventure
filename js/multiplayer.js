@@ -708,8 +708,8 @@
         this.send({ type: 'QUICK_MATCH', profile: this.myProfile, gameMode: this.gameMode, maxPlayers: this.maxPlayers });
       }
 
-      // Auto-Bot Fallback Timer: Random 7 sampai 11 detik jika belum ada pemain online asli, mulai dengan AI Bot!
-      const botWaitMs = Math.floor(7000 + Math.random() * 4000); // 7s - 11s
+      // Auto-Bot Fallback Timer: 2.2 sampai 3.2 detik jika belum ada pemain online asli, mulai dengan AI Bot!
+      const botWaitMs = Math.floor(2200 + Math.random() * 1000); // 2.2s - 3.2s
       this.botFallbackTimer = setTimeout(() => {
         if (this.matchStatus === 'QUEUED') {
           this.spawnBotMatch();
@@ -718,7 +718,7 @@
     }
 
     spawnBotMatch() {
-      if (this.matchStatus !== 'QUEUED') return;
+      if (this.matchStatus !== 'QUEUED' && this.matchStatus !== 'IN_ROOM' && this.matchStatus !== 'IDLE') return;
 
       const BOT_PREFIXES = ['Sky', 'Cyber', 'Shadow', 'Aero', 'Dragon', 'Neko', 'Vortex', 'Phoenix', 'Star', 'Ghost', 'Quantum', 'Lunar', 'Pixel', 'Hyper', 'Nova', 'Falcon', 'Alpha', 'Mega', 'Blaze', 'Storm', 'Frost', 'Apex', 'Turbo', 'Kitsune', 'Mecha', 'Zen', 'Pyro', 'Cosmo', 'Mystic', 'Iron', 'Thunder'];
       const BOT_SUFFIXES = ['Flapper', 'Master', 'Hunter', 'Knight', 'Striker', 'Rider', 'Wing', 'Ace', 'Pro', 'Lord', 'King', 'Ninja', 'Pilot', 'Viper', 'Beast', 'Hawk', 'Slayer', 'Legend', 'Samurai', 'Hero'];

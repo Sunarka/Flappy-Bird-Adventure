@@ -1146,3 +1146,216 @@
 .mp-search-cancel-btn:active {
   transform: translateY(1px) !important;
 }
+
+/* ========================================================= */
+/* CINEMATIC 1V1 VERSUS CLASH SCREEN                         */
+/* ========================================================= */
+.mp-versus-screen {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: radial-gradient(circle at center, rgba(15, 23, 42, 0.96) 0%, rgba(2, 6, 23, 0.98) 100%) !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  overflow: hidden !important;
+  pointer-events: auto !important;
+  animation: mpVersusFadeIn 0.25s ease-out !important;
+}
+
+.mp-versus-screen.hidden {
+  display: none !important;
+}
+
+@keyframes mpVersusFadeIn {
+  from { opacity: 0; transform: scale(1.05); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.mp-vs-header {
+  position: absolute;
+  top: 18px;
+  text-align: center;
+}
+
+.mp-vs-title-badge {
+  font: 900 13px 'Trebuchet MS', Arial, sans-serif;
+  letter-spacing: 2px;
+  color: #facc15;
+  background: rgba(250, 204, 21, 0.12);
+  border: 1px solid rgba(250, 204, 21, 0.4);
+  padding: 4px 18px;
+  border-radius: 20px;
+  box-shadow: 0 0 16px rgba(250, 204, 21, 0.3);
+}
+
+.mp-vs-arena {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 30px !important;
+  width: 100% !important;
+  max-width: 520px !important;
+}
+
+.mp-fighter-card {
+  width: 150px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.4);
+  border-radius: 14px;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
+  transition: all 0.3s;
+}
+
+.mp-fighter-card.left {
+  animation: fighterSlideInLeft 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.mp-fighter-card.right {
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 20px rgba(239, 68, 68, 0.2);
+  animation: fighterSlideInRight 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes fighterSlideInLeft {
+  from { opacity: 0; transform: translateX(-80px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fighterSlideInRight {
+  from { opacity: 0; transform: translateX(80px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.mp-fighter-avatar-wrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.8);
+  border: 2px solid #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+.mp-fighter-card.right .mp-fighter-avatar-wrap {
+  border-color: #ef4444;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+.mp-fighter-name {
+  font: 900 12px 'Trebuchet MS', Arial, sans-serif;
+  color: #f8fafc;
+  margin-bottom: 3px;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mp-fighter-tag {
+  font: 800 8.5px 'Trebuchet MS', Arial, sans-serif;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.mp-fighter-tag.rival {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.mp-vs-center-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: vsBadgePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes vsBadgePop {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.3); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.mp-vs-text {
+  font: 900 28px/1 'Trebuchet MS', Arial, sans-serif;
+  color: #facc15;
+  text-shadow: 0 0 16px rgba(250, 204, 21, 0.8), 0 4px 10px rgba(0, 0, 0, 0.8);
+  font-style: italic;
+}
+
+.mp-vs-footer-hint {
+  position: absolute;
+  bottom: 20px;
+  font: 800 10.5px 'Trebuchet MS', Arial, sans-serif;
+  letter-spacing: 1.5px;
+  color: #94a3b8;
+  animation: pulseHint 1s ease-in-out infinite alternate;
+}
+
+@keyframes pulseHint {
+  from { opacity: 0.5; }
+  to { opacity: 1; color: #facc15; }
+}
+
+/* ========================================================= */
+/* ARENA COUNTDOWN OVERLAY (3... 2... 1... GO!)             */
+/* ========================================================= */
+.arena-countdown-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 10001 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: none !important;
+  background: rgba(0, 0, 0, 0.25) !important;
+}
+
+.arena-countdown-overlay.hidden {
+  display: none !important;
+}
+
+.arena-countdown-number {
+  font: 900 68px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #ffffff !important;
+  text-shadow: 0 0 25px rgba(255, 255, 255, 0.9), 0 6px 18px rgba(0, 0, 0, 0.9) !important;
+  animation: numPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.arena-countdown-number.num-3 { color: #38bdf8 !important; text-shadow: 0 0 30px #38bdf8 !important; }
+.arena-countdown-number.num-2 { color: #facc15 !important; text-shadow: 0 0 30px #facc15 !important; }
+.arena-countdown-number.num-1 { color: #fb923c !important; text-shadow: 0 0 30px #fb923c !important; }
+.arena-countdown-number.num-go {
+  font-size: 78px !important;
+  color: #22c55e !important;
+  text-shadow: 0 0 35px #22c55e, 0 0 60px rgba(34, 197, 94, 0.6) !important;
+  animation: goFlash 0.8s ease-out forwards !important;
+}
+
+@keyframes numPop {
+  0% { transform: scale(0.3); opacity: 0; }
+  40% { transform: scale(1.25); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes goFlash {
+  0% { transform: scale(0.5); opacity: 0; }
+  35% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1.1); opacity: 0.9; }
+}

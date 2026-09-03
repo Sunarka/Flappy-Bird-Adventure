@@ -4503,7 +4503,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.43';
+  const GAME_VERSION = '20.44';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -11589,13 +11589,14 @@
     if(currentMode === 'multiplayer') {
       audio.click();
       showModal(el.multiplayerModal);
-      switchMpTab('create');
+      switchMpTab('quick');
+      startSearchingRadar();
       if(window.multiplayerEngine) {
-        window.multiplayerEngine.createRoom({
+        window.multiplayerEngine.quickMatch({
           name: gpProfile.gamerTag || 'SkyPlayer',
           avatar: gpProfile.avatar || 'chick_yellow',
           skin: progress.selected || 'classic'
-        });
+        }, selectedMpGameMode, selectedMpPlayerCount);
       }
       return;
     }
@@ -13086,9 +13087,9 @@
       }
       if(el.mpHostStartGameBtn) {
         el.mpHostStartGameBtn.classList.remove('hidden');
-        el.mpHostStartGameBtn.disabled = true;
-        el.mpHostStartGameBtn.style.opacity = '0.6';
-        el.mpHostStartGameBtn.innerHTML = '<div class="start-btn-shine"></div><span>MENUNGGU LAWAN BERGABUNG...</span>';
+        el.mpHostStartGameBtn.disabled = false;
+        el.mpHostStartGameBtn.style.opacity = '1';
+        el.mpHostStartGameBtn.innerHTML = '<div class="start-btn-shine"></div><span>MULAI DENGAN BOT (1v1) ▶</span>';
       }
       if(el.mpGuestReadyBtn) el.mpGuestReadyBtn.classList.add('hidden');
       switchMpTab('create');
@@ -13459,7 +13460,12 @@
   bindClick(el.mpHostStartGameBtn, () => {
     audio.click();
     if(window.multiplayerEngine) {
-      window.multiplayerEngine.startRoomGame();
+      const hasGuest = window.multiplayerEngine.currentRoom && window.multiplayerEngine.currentRoom.playersList && window.multiplayerEngine.currentRoom.playersList.length > 1;
+      if(hasGuest) {
+        window.multiplayerEngine.startRoomGame();
+      } else {
+        window.multiplayerEngine.spawnBotMatch();
+      }
     }
   });
 
