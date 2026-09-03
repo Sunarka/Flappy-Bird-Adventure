@@ -4394,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.24';
+  const GAME_VERSION = '20.25';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -12719,8 +12719,11 @@
   function startSearchingRadar() {
     // Tutup modal agar pemain kembali ke lobi utama dan tampilkan banner matchmaking MLBB melayang dari atas
     closeModal();
-    const searchingBar = $('mpSearchingBar');
-    if(searchingBar) searchingBar.classList.remove('hidden');
+    const searchingBar = document.getElementById('mpSearchingBar');
+    if(searchingBar) {
+      searchingBar.classList.remove('hidden');
+      searchingBar.style.display = 'flex';
+    }
 
     mpSearchStartTime = Date.now();
     if(mpSearchInterval) clearInterval(mpSearchInterval);
@@ -12729,10 +12732,10 @@
       const mm = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
       const ss = String(elapsedSec % 60).padStart(2, '0');
       const timeStr = `${mm}:${ss}`;
-      const timerEl = $('mpSearchTimerText');
+      const timerEl = document.getElementById('mpSearchTimerText');
       if(timerEl) timerEl.textContent = timeStr;
     }, 1000);
-    const timerEl = $('mpSearchTimerText');
+    const timerEl = document.getElementById('mpSearchTimerText');
     if(timerEl) timerEl.textContent = '00:00';
   }
 
@@ -12741,8 +12744,11 @@
       clearInterval(mpSearchInterval);
       mpSearchInterval = null;
     }
-    const searchingBar = $('mpSearchingBar');
-    if(searchingBar) searchingBar.classList.add('hidden');
+    const searchingBar = document.getElementById('mpSearchingBar');
+    if(searchingBar) {
+      searchingBar.classList.add('hidden');
+      searchingBar.style.display = 'none';
+    }
   }
 
   let versusClashTimer = null;
