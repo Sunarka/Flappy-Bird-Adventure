@@ -43,42 +43,12 @@
   display: none !important;
 }
 
-/* Close Button (Top-Right Chunky Red Arcade) */
-.mp-modal .close {
-  position: absolute !important;
-  top: 6px !important;
-  right: 6px !important;
-  left: auto !important;
-  width: 24px !important;
-  height: 24px !important;
-  margin: 0 !important;
-  border-radius: 50% !important;
-  background: linear-gradient(180deg, #f87171 0%, #ef4444 100%) !important;
-  color: #ffffff !important;
-  border: 1.5px solid #b91c1c !important;
-  box-shadow: 0 2px 0 #991b1b !important;
-  font-size: 15px !important;
-  line-height: 19px !important;
-  cursor: pointer !important;
-  z-index: 100 !important;
-  transition: all 0.15s !important;
-}
-
-.mp-modal .close:hover {
-  transform: rotate(90deg) scale(1.08) !important;
-  filter: brightness(1.15) !important;
-}
-.mp-modal .close:active {
-  transform: translateY(1px) scale(0.95) !important;
-  box-shadow: 0 1px 0 #991b1b !important;
-}
-
-/* 1. Header Bar with Integrated Tabs */
+/* Header Bar with Integrated Tabs */
 .mp-header {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
-  padding: 0 28px 4px 0 !important;
+  padding: 0 34px 4px 0 !important;
   margin: 0 0 4px 0 !important;
   border-bottom: 1.5px solid rgba(37, 74, 120, 0.7) !important;
   flex-shrink: 0 !important;
