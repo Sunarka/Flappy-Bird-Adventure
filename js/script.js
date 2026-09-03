@@ -2546,66 +2546,68 @@
         actionHtml = `<button class="skin-cost-btn buy-btn ${canAfford ? '' : 'cant-afford'}" data-action="buy" data-product="${id}" type="button"><svg viewBox="0 0 16 16" width="12" height="12" class="mini-coin-svg"><circle cx="8" cy="8" r="6.5" fill="#fbbf24" stroke="#d97706" stroke-width="1.2"/><text x="8" y="11" text-anchor="middle" font-size="8" font-weight="900" fill="#92400e">$</text></svg> ${t.buy} ${item.cost}</button>`;
       }
 
-      // Info button SVG (No emojis)
-      const infoBtnHtml = desc ? `<button type="button" class="card-flip-info-btn" title="Detail Kemampuan" data-info-target="${id}">
-        <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+      // Exclamation Mark Logo Button - ONLY on items with descriptions/skills
+      const hasDesc = !!(desc && desc.trim().length > 0);
+      const exclamationBtnHtml = hasDesc ? `<button type="button" class="card-exclamation-btn" title="Detail Efek & Kemampuan" data-card-flip-btn="${id}">
+        <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor">
+          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/>
         </svg>
       </button>` : '';
 
       return `<div class="skin-card-wrap" data-card-product="${id}">` +
         `<div class="skin-card-inner">` +
-        `  <!-- FRONT OF CARD (Clean, Professional, No wall of text) -->` +
+        `  <!-- FRONT FACE: Clean, symmetrical, handcrafted -->` +
         `  <div class="skin-card skin-card-front rarity-${rarity} ${selected ? 'selected ' : ''}${isPreviewing ? 'previewing ' : ''}${isPlayingPreview ? 'playing-preview ' : ''}${unlocked ? '' : 'locked'}" style="--body:${body};--wing:${wing};--beak:${item.beak||body};--cap:${cap};--edge:${edge};--top:${top};--bottom:${bottom};--color:${color}">` +
         `    <span class="rarity-badge rarity-${rarity}">${rarity.toUpperCase()}</span>` +
-        infoBtnHtml +
+        exclamationBtnHtml +
         `    <span class="skin-preview ${previewClass}">${iconSvg}</span>` +
         `    <span class="skin-name" title="${item.name}">${item.name}</span>` +
         actionHtml +
         `  </div>` +
-        `  <!-- BACK OF CARD (Clean 3D Flipped Description with ONE SVG Close button) -->` +
+        `  <!-- BACK FACE: Authentic RPG-Style Card Back (Only for flip) -->` +
         `  <div class="skin-card-back rarity-${rarity}">` +
         `    <div class="card-back-header">` +
         `      <div class="card-back-title" title="${item.name}">${item.name}</div>` +
-        `      <button type="button" class="card-back-close-btn" title="Tutup">` +
-        `        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">` +
+        `      <button type="button" class="card-back-close-btn" title="Tutup Detail" data-card-flip-close="${id}">` +
+        `        <svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">` +
         `          <path d="M18 6L6 18M6 6l12 12"/>` +
         `        </svg>` +
         `      </button>` +
         `    </div>` +
-        `    <div class="card-back-badge">EFEK / KEMAMPUAN</div>` +
-        `    <div class="card-back-desc-scroll">` +
+        `    <div class="card-back-badge">KEMAMPUAN / EFEK</div>` +
+        `    <div class="card-back-desc-box">` +
         `      <p class="card-back-desc-text">${desc || 'Item kosmetik eksklusif Feather Rush.'}</p>` +
         `    </div>` +
-        `    <div class="card-back-tap-hint">Ketuk untuk kembali ↩</div>` +
+        `    <div class="card-back-flip-hint">KLIK KARTU UNTUK KEMBALI</div>` +
         `  </div>` +
         `</div>` +
         `</div>`;
     }).join('');
 
-    // Klik Kartu Depan -> Preview tampilan & suara
+    // Klik Kartu Depan -> Preview item & update live description banner
     el.skinList.querySelectorAll('.skin-card-wrap').forEach(wrap => {
       const front = wrap.querySelector('.skin-card-front');
-      const infoBtn = wrap.querySelector('.card-flip-info-btn');
+      const exBtn = wrap.querySelector('.card-exclamation-btn');
       const closeBtn = wrap.querySelector('.card-back-close-btn');
       const back = wrap.querySelector('.skin-card-back');
 
       if(front) {
         front.onclick = (e) => {
-          if(e.target.closest('.skin-cost-btn') || e.target.closest('.card-flip-info-btn')) return;
+          if(e.target.closest('.skin-cost-btn') || e.target.closest('.card-exclamation-btn')) return;
           previewProduct(wrap.dataset.cardProduct);
         };
       }
 
-      // Flip ke belakang saat klik info icon
-      if(infoBtn) {
-        infoBtn.onclick = (e) => {
+      // Flip ke belakang saat klik tanda seru
+      if(exBtn) {
+        exBtn.onclick = (e) => {
           e.stopPropagation();
           audio.click();
           el.skinList.querySelectorAll('.skin-card-wrap.flipped').forEach(w => {
             if(w !== wrap) w.classList.remove('flipped');
           });
           wrap.classList.add('flipped');
+          previewProduct(wrap.dataset.cardProduct);
         };
       }
 
@@ -2641,6 +2643,15 @@
     if(!item) return;
     previewLoadout[shopCategory] = id;
     updateShowcaseLabel();
+
+    // Update Live Shop Item Banner
+    const bTitle = $('shopItemBannerTitle');
+    const bDesc = $('shopItemBannerDesc');
+    if(bTitle) bTitle.textContent = item.name;
+    if(bDesc) {
+      bDesc.textContent = item.desc ? item.desc : 'Item kosmetik eksklusif Feather Rush.';
+      bDesc.style.color = item.desc ? '#fef08a' : '#94a3b8';
+    }
 
     if(shopCategory === 'music') {
       audio.previewMusic(id);
@@ -4465,7 +4476,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.39';
+  const GAME_VERSION = '20.40';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
