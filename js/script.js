@@ -3980,6 +3980,21 @@
     if(cRanked) cRanked.classList.toggle('active', mode === 'ranked');
     if(cMp) cMp.classList.toggle('active', mode === 'multiplayer');
 
+    // Update indie mode pills
+    const pClassic = $('modePillClassic');
+    const pRanked = $('modePillRanked');
+    const pMp = $('modePillMp');
+    if(pClassic) pClassic.classList.toggle('active', mode === 'classic');
+    if(pRanked) pRanked.classList.toggle('active', mode === 'ranked');
+    if(pMp) pMp.classList.toggle('active', mode === 'multiplayer');
+
+    const playWord = document.querySelector('.indie-hero-play-btn .play-word');
+    if(playWord) {
+      if(mode === 'multiplayer') playWord.textContent = '1v1 BATTLE';
+      else if(mode === 'ranked') playWord.textContent = 'MAIN RANKED';
+      else playWord.textContent = 'MAIN SEKARANG';
+    }
+
     const statClassic = $('mlbbClassicBestStat');
     if(statClassic) statClassic.textContent = progress.highScore || 0;
     const statRanked = $('mlbbRankedPtsStat');
@@ -4394,7 +4409,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.32';
+  const GAME_VERSION = '20.33';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -5119,6 +5134,8 @@
     el.score.textContent = score;
     best = currentMode === 'ranked' ? rankedBest : classicBest;
     if(el.best) el.best.textContent = best;
+    const mbVal = $('menuBestVal');
+    if(mbVal) mbVal.textContent = best;
     if(el.modeBestLabel) {
       el.modeBestLabel.textContent = currentMode === 'ranked' ? 'RANKED BEST' : 'CLASSIC BEST';
     }
@@ -13718,4 +13735,13 @@
     } else {
       performGachaPull(1, true);
     }
+  });
+
+  // Bind Indie Mode Switcher Pills
+  bindClick('modePillClassic', () => setMode('classic'));
+  bindClick('modePillRanked', () => setMode('ranked'));
+  bindClick('modePillMp', () => setMode('multiplayer'));
+  bindClick('overLeaderboardBtn', () => {
+    audio.click();
+    showModal(el.rankedModal);
   });

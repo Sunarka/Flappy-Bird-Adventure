@@ -783,3 +783,452 @@ button:focus-visible {
   transform: translateY(-1px);
 }
 
+
+/* =========================================================
+   FEATHER RUSH — COMPLETE HANDCRAFTED INDIE GAME STYLES
+   Clean, Modern, Simple, Polished (No AI-Clutter / No Neon)
+   ========================================================= */
+
+/* Typography & Base Variables */
+:root {
+  --indie-bg: #77cef2;
+  --indie-dark: #0f172a;
+  --indie-navy: #1e293b;
+  --indie-slate: #334155;
+  --indie-cream: #fef3c7;
+  --indie-gold: #f59e0b;
+  --indie-gold-dark: #b45309;
+  --indie-coral: #ea580c;
+  --indie-green: #16a34a;
+  --indie-white: #ffffff;
+  --indie-font: 'Trebuchet MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 1. TOP HEADER NAVIGATION */
+.indie-header {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 8px 14px !important;
+  z-index: 50 !important;
+  pointer-events: auto !important;
+}
+
+.indie-player-pill {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: rgba(15, 23, 42, 0.75) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 20px !important;
+  padding: 3px 10px 3px 4px !important;
+  cursor: pointer !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  transition: transform 0.15s ease, background 0.15s ease !important;
+}
+
+.indie-player-pill:hover {
+  transform: translateY(-1px) !important;
+  background: rgba(15, 23, 42, 0.9) !important;
+}
+
+.indie-player-avatar {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  background: #facc15 !important;
+  border: 1.5px solid #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.indie-player-avatar svg, .indie-player-avatar img {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.indie-player-name {
+  font: 900 11px/1.1 var(--indie-font) !important;
+  color: #fff !important;
+  max-width: 90px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.indie-player-tier-sub {
+  font: 800 8px/1 var(--indie-font) !important;
+  color: #facc15 !important;
+  letter-spacing: 0.3px !important;
+}
+
+.indie-coins-pill {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: rgba(15, 23, 42, 0.75) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.4) !important;
+  border-radius: 16px !important;
+  padding: 3px 8px !important;
+  font: 900 11px/1 var(--indie-font) !important;
+  color: #fbbf24 !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+}
+
+.indie-coin-add-btn {
+  background: #f59e0b !important;
+  border: none !important;
+  border-radius: 50% !important;
+  width: 14px !important;
+  height: 14px !important;
+  color: #78350f !important;
+  font: 900 11px/1 Arial !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+}
+
+.indie-top-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.indie-glass-btn {
+  width: 28px !important;
+  height: 28px !important;
+  background: rgba(15, 23, 42, 0.75) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  transition: transform 0.15s ease, background 0.15s ease !important;
+  padding: 0 !important;
+}
+
+.indie-glass-btn:hover {
+  transform: translateY(-1px) !important;
+  background: rgba(30, 41, 59, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.indie-ping-badge {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: rgba(15, 23, 42, 0.6) !important;
+  border-radius: 6px !important;
+  padding: 3px 6px !important;
+  font: 700 8px/1 var(--indie-font) !important;
+  color: #94a3b8 !important;
+}
+
+/* 2. MAIN MENU (HERO & PLAY HUB) */
+.indie-menu-screen {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 44px 16px 10px !important;
+  pointer-events: none !important;
+}
+
+.indie-hero-section {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  margin-top: 4px !important;
+}
+
+.indie-game-title {
+  font: 900 clamp(24px, 5.5vw, 36px)/1 var(--indie-font) !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+  letter-spacing: 1px !important;
+  text-shadow: 0 3px 0 #0f172a, 0 6px 14px rgba(0, 0, 0, 0.35) !important;
+}
+
+.indie-high-score-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid rgba(245, 158, 11, 0.5) !important;
+  border-radius: 12px !important;
+  padding: 3px 10px !important;
+  margin-top: 5px !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25) !important;
+}
+
+.indie-high-score-tag .tag-icon { font-size: 11px !important; }
+.indie-high-score-tag .tag-label { font: 800 8.5px/1 var(--indie-font) !important; color: #cbd5e1 !important; }
+.indie-high-score-tag .tag-val { font: 900 11px/1 var(--indie-font) !important; color: #fbbf24 !important; }
+
+/* Center-Bottom Action Hub */
+.indie-play-hub {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-bottom: 4px !important;
+  pointer-events: auto !important;
+}
+
+.indie-mode-pills {
+  display: flex !important;
+  gap: 4px !important;
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 14px !important;
+  padding: 3px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+.indie-mode-pill {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 10px !important;
+  color: #94a3b8 !important;
+  font: 900 9px/1 var(--indie-font) !important;
+  padding: 5px 12px !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.indie-mode-pill:hover {
+  color: #ffffff !important;
+}
+
+.indie-mode-pill.active {
+  background: #f59e0b !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 0 #b45309 !important;
+}
+
+.indie-hero-play-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%) !important;
+  border: 2px solid #86efac !important;
+  border-radius: 14px !important;
+  box-shadow: 0 5px 0 #14532d, 0 10px 22px rgba(22, 163, 74, 0.4) !important;
+  padding: 9px 28px !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+}
+
+.indie-hero-play-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 7px 0 #14532d, 0 14px 26px rgba(22, 163, 74, 0.5) !important;
+}
+
+.indie-hero-play-btn:active {
+  transform: translateY(3px) !important;
+  box-shadow: 0 2px 0 #14532d !important;
+}
+
+.play-triangle { font-size: 13px !important; }
+.play-word { font: 900 13px/1 var(--indie-font) !important; letter-spacing: 0.5px !important; }
+
+/* 3. UNIFIED BOTTOM NAVIGATION DOCK */
+.indie-bottom-nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  background: rgba(15, 23, 42, 0.88) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 14px !important;
+  padding: 4px 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  pointer-events: auto !important;
+  max-width: 96vw !important;
+}
+
+.indie-nav-btn {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  background: transparent !important;
+  border: none !important;
+  color: #cbd5e1 !important;
+  padding: 4px 8px !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease !important;
+  min-width: 44px !important;
+}
+
+.indie-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+}
+
+.indie-nav-icon {
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+
+.indie-nav-label {
+  font: 800 7px/1 var(--indie-font) !important;
+  letter-spacing: 0.2px !important;
+}
+
+.indie-nav-btn.highlight-gacha {
+  color: #facc15 !important;
+}
+
+.indie-nav-btn.highlight-donate {
+  color: #f97316 !important;
+}
+
+/* 4. CLEAN IN-GAME SCORE DISPLAY */
+.hud-center-score {
+  font: 900 44px/1 var(--indie-font) !important;
+  color: #ffffff !important;
+  text-shadow: 0 3px 0 #0f172a, 0 6px 12px rgba(0, 0, 0, 0.4) !important;
+  letter-spacing: 1px !important;
+}
+
+/* 5. REWORKED GAME OVER SCREEN */
+.indie-over-modal {
+  width: min(340px, 92vw) !important;
+  max-width: 340px !important;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+  border: 2px solid #475569 !important;
+  border-radius: 16px !important;
+  padding: 14px 16px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75) !important;
+  text-align: center !important;
+  color: #f1f5f9 !important;
+}
+
+.over-title {
+  font: 900 16px/1 var(--indie-font) !important;
+  color: #facc15 !important;
+  margin: 0 0 10px !important;
+  letter-spacing: 0.8px !important;
+}
+
+.over-score-board {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-around !important;
+  background: rgba(15, 23, 42, 0.7) !important;
+  border: 1px solid #334155 !important;
+  border-radius: 12px !important;
+  padding: 10px 8px !important;
+  margin-bottom: 12px !important;
+}
+
+.over-score-col {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  flex: 1 !important;
+}
+
+.over-score-divider {
+  width: 1px !important;
+  height: 36px !important;
+  background: #334155 !important;
+}
+
+.over-score-board .score-label {
+  font: 800 8.5px/1 var(--indie-font) !important;
+  color: #94a3b8 !important;
+  margin-bottom: 3px !important;
+}
+
+.over-score-board .score-number {
+  font: 900 24px/1 var(--indie-font) !important;
+  color: #ffffff !important;
+}
+
+.over-score-board .score-number.best {
+  color: #fbbf24 !important;
+}
+
+.new-best-pill {
+  background: #ef4444 !important;
+  color: #fff !important;
+  font: 900 7px/1 var(--indie-font) !important;
+  padding: 2px 6px !important;
+  border-radius: 6px !important;
+  margin-top: 3px !important;
+  animation: pulse 1s infinite alternate !important;
+}
+
+.over-actions-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.indie-btn {
+  font: 900 11px/1 var(--indie-font) !important;
+  padding: 10px 14px !important;
+  border-radius: 10px !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.12s ease !important;
+}
+
+.indie-btn.primary.hero {
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%) !important;
+  border: 1.5px solid #86efac !important;
+  box-shadow: 0 3px 0 #14532d !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  padding: 11px 16px !important;
+}
+
+.indie-btn.primary.hero:active {
+  transform: translateY(2px) !important;
+  box-shadow: 0 1px 0 #14532d !important;
+}
+
+.over-secondary-row {
+  display: flex !important;
+  gap: 6px !important;
+}
+
+.indie-btn.secondary {
+  flex: 1 !important;
+  background: #334155 !important;
+  border: 1px solid #475569 !important;
+  color: #cbd5e1 !important;
+  padding: 7px 8px !important;
+}
+
+.indie-btn.secondary:hover {
+  background: #475569 !important;
+  color: #fff !important;
+}
