@@ -3499,6 +3499,9 @@
     if(el.gpAvatar) {
       el.gpAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 52);
     }
+    if(el.gpGamerTagInput && document.activeElement !== el.gpGamerTagInput) {
+      el.gpGamerTagInput.value = gpProfile.gamerTag || 'SkyPlayer';
+    }
     if(el.gpUserEmail) el.gpUserEmail.textContent = gpProfile.email ? gpProfile.email : (gpProfile.gamerTag || 'Akun Pemain');
     if(el.gpRankedBest) el.gpRankedBest.textContent = rankedBest;
     
@@ -4503,7 +4506,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.45';
+  const GAME_VERSION = '20.46';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -11641,6 +11644,9 @@
   bindClick(el.topProfileBtn, () => {
     audio.click();
     syncGPProfileUI();
+    if(el.gpGamerTagInput) {
+      el.gpGamerTagInput.value = gpProfile.gamerTag || 'SkyPlayer';
+    }
     switchProfileTab('overview');
     showModal(el.googlePlayModal);
   });
@@ -12097,6 +12103,8 @@
         gpProfile.gamerTag = newName;
         gpProfile.nameChangesDone = 1;
         saveGPProfile();
+        if(typeof saveCloudSave === 'function') saveCloudSave();
+        syncGPProfileUI();
         showGameDialog({
           title: 'Nama Berhasil Diubah',
           html: `<p>Nama gamer Anda berhasil diubah menjadi:</p><div class="dialog-info-card"><div class="dialog-info-row"><span>GamerTag:</span><b>${newName}</b></div><div class="dialog-info-row"><span>Biaya:</span><b style="color:#4ade80;">GRATIS (1x)</b></div></div>`,
@@ -12135,6 +12143,8 @@
         updateCoins();
         persistProgress();
         saveGPProfile();
+        if(typeof saveCloudSave === 'function') saveCloudSave();
+        syncGPProfileUI();
         showGameDialog({
           title: 'Nama Berhasil Diubah',
           html: `<p>Nama gamer berhasil diubah menjadi <b>"${newName}"</b>!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya:</span><b>-${cost} Koin</b></div><div class="dialog-info-row"><span>Sisa Koin:</span><b>${progress.coins} Koin</b></div></div>`,
@@ -12190,6 +12200,7 @@
       gpProfile.gamerTag = newName;
       gpProfile.nameChangesDone = 1;
       saveGPProfile();
+      if(typeof saveCloudSave === 'function') saveCloudSave();
       syncGPProfileUI();
       showGameDialog({
         title: 'Nama Berhasil Diubah!',
@@ -12230,6 +12241,7 @@
       updateCoins();
       persistProgress();
       saveGPProfile();
+      if(typeof saveCloudSave === 'function') saveCloudSave();
       syncGPProfileUI();
       showGameDialog({
         title: 'Nama Berhasil Diubah!',
