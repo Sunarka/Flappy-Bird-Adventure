@@ -3536,7 +3536,7 @@
     }
 
     if(el.gpOnlineStatus) {
-      el.gpOnlineStatus.textContent = isLogged ? `🟢 TERHUBUNG KE CLOUD (${gpProfile.email || gpProfile.gamerTag})` : '⚪ MODE LOKAL / TAMU';
+      el.gpOnlineStatus.textContent = isLogged ? `TERHUBUNG KE CLOUD (${gpProfile.email || gpProfile.gamerTag})` : 'MODE LOKAL / TAMU';
       el.gpOnlineStatus.className = 'gp-status-pill ' + (isLogged ? 'online' : 'offline');
     }
 
@@ -4835,7 +4835,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.59';
+  const GAME_VERSION = '20.60';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -13472,7 +13472,7 @@
       if(Math.hypot(clickX - mainBirdX, clickY - mainBirdY) < 45) {
         lobbyBirdBounce = 0.5;
         if(audio && audio.point) audio.point();
-        const cuteEmotes = ['💖', '✨', '🌸', '💕', '⭐', '🥰'];
+        const cuteEmotes = ['★', '✦', '♪', '✧', '♦', '♥'];
         for(let i = 0; i < 6; i++) {
           lobbyEmotes.push({
             x: mainBirdX + (Math.random() - 0.5) * 28,
@@ -13490,7 +13490,7 @@
       if(Math.hypot(clickX - chick1X, clickY - chick1Y) < 32) {
         lobbyChick1Bounce = 0.5;
         if(audio && audio.click) audio.click();
-        const chickEmotes = ['🐥', '🎶', '✨', '💛', '🌟'];
+        const chickEmotes = ['★', '✦', '♪', '✧'];
         for(let i = 0; i < 4; i++) {
           lobbyEmotes.push({
             x: chick1X + (Math.random() - 0.5) * 18,
@@ -13508,7 +13508,7 @@
       if(Math.hypot(clickX - chick2X, clickY - chick2Y) < 32) {
         lobbyChick2Bounce = 0.5;
         if(audio && audio.click) audio.click();
-        const chickEmotes = ['🐣', '🎵', '✨', '💙', '⭐'];
+        const chickEmotes = ['★', '✦', '♪', '✧'];
         for(let i = 0; i < 4; i++) {
           lobbyEmotes.push({
             x: chick2X + (Math.random() - 0.5) * 18,
@@ -14287,36 +14287,36 @@
   // =========================================================
   const gachaPool = [
     // Mythic Tier (2%)
-    { type:'skin', id:'goku_ssj', name:'Super Saiyan Goku', rarity:'mythic', icon:'⚡' },
-    { type:'skin', id:'gojo_bird', name:'Honored One Gojo', rarity:'mythic', icon:'👁️' },
-    { type:'skin', id:'tanjiro_bird', name:'Demon Slayer Bird', rarity:'mythic', icon:'🗡️' },
-    { type:'aura', id:'gear_fifth', name:'Sun God Nika Gear 5', rarity:'mythic', icon:'☀️' },
-    { type:'aura', id:'domain_expansion', name:'Domain Infinity Void', rarity:'mythic', icon:'🌌' },
+    { type:'skin', id:'goku_ssj', name:'Super Saiyan Goku', rarity:'mythic' },
+    { type:'skin', id:'gojo_bird', name:'Honored One Gojo', rarity:'mythic' },
+    { type:'skin', id:'tanjiro_bird', name:'Demon Slayer Bird', rarity:'mythic' },
+    { type:'aura', id:'gear_fifth', name:'Sun God Nika Gear 5', rarity:'mythic' },
+    { type:'aura', id:'domain_expansion', name:'Domain Infinity Void', rarity:'mythic' },
     // Legendary Tier (10%)
-    { type:'skin', id:'phoenix', name:'Phoenix Fire', rarity:'legendary', icon:'🔥' },
-    { type:'skin', id:'angel', name:'Holy Angel', rarity:'legendary', icon:'👼' },
-    { type:'skin', id:'dragon', name:'Flame Dragon', rarity:'legendary', icon:'🐉' },
-    { type:'aura', id:'golden', name:'Golden Dust Aura', rarity:'legendary', icon:'✨' },
-    { type:'hat', id:'crown', name:'Royal Crown', rarity:'legendary', icon:'👑' },
+    { type:'skin', id:'phoenix', name:'Phoenix Fire', rarity:'legendary' },
+    { type:'skin', id:'angel', name:'Holy Angel', rarity:'legendary' },
+    { type:'skin', id:'dragon', name:'Flame Dragon', rarity:'legendary' },
+    { type:'aura', id:'golden', name:'Golden Dust Aura', rarity:'legendary' },
+    { type:'hat', id:'crown', name:'Royal Crown', rarity:'legendary' },
     // Epic Tier (18%)
-    { type:'skin', id:'cyber', name:'Cyber Neon', rarity:'epic', icon:'👾' },
-    { type:'skin', id:'mecha', name:'Mecha Cyborg', rarity:'epic', icon:'🤖' },
-    { type:'aura', id:'galaxy', name:'Cosmic Galaxy Aura', rarity:'epic', icon:'🪐' },
-    { type:'aura', id:'neon', name:'Electric Lightning', rarity:'epic', icon:'⚡' },
-    { type:'hat', id:'pirate', name:'Pirate Captain Hat', rarity:'epic', icon:'🏴‍☠️' },
+    { type:'skin', id:'cyber', name:'Cyber Neon', rarity:'epic' },
+    { type:'skin', id:'mecha', name:'Mecha Cyborg', rarity:'epic' },
+    { type:'aura', id:'galaxy', name:'Cosmic Galaxy Aura', rarity:'epic' },
+    { type:'aura', id:'neon', name:'Electric Lightning', rarity:'epic' },
+    { type:'hat', id:'pirate', name:'Pirate Captain Hat', rarity:'epic' },
     // Rare Tier (30%)
-    { type:'skin', id:'rose', name:'Rose Pink Bird', rarity:'rare', icon:'🌸' },
-    { type:'skin', id:'mint', name:'Mint Green Bird', rarity:'rare', icon:'🍃' },
-    { type:'skin', id:'night', name:'Night Sky Bird', rarity:'rare', icon:'🌙' },
-    { type:'aura', id:'fire', name:'Fire Blaze Aura', rarity:'rare', icon:'🔥' },
-    { type:'hat', id:'tophat', name:'Magic Top Hat', rarity:'rare', icon:'🎩' },
-    { type:'hat', id:'cowboy', name:'Cowboy Leather', rarity:'rare', icon:'🤠' },
+    { type:'skin', id:'rose', name:'Rose Pink Bird', rarity:'rare' },
+    { type:'skin', id:'mint', name:'Mint Green Bird', rarity:'rare' },
+    { type:'skin', id:'night', name:'Night Sky Bird', rarity:'rare' },
+    { type:'aura', id:'fire', name:'Fire Blaze Aura', rarity:'rare' },
+    { type:'hat', id:'tophat', name:'Magic Top Hat', rarity:'rare' },
+    { type:'hat', id:'cowboy', name:'Cowboy Leather', rarity:'rare' },
     // Common Tier (40%)
-    { type:'coins', id:'coin_pack', name:'Kantong 40 Koin', rarity:'common', icon:'💰', amount:40 },
-    { type:'coins', id:'coin_jackpot', name:'Pundi 60 Koin', rarity:'common', icon:'💎', amount:60 },
-    { type:'hat', id:'cap', name:'Baseball Snapback', rarity:'common', icon:'🧢' },
-    { type:'hat', id:'party', name:'Party Cone Hat', rarity:'common', icon:'🎉' },
-    { type:'hat', id:'beanie', name:'Winter Beanie', rarity:'common', icon:'🧶' }
+    { type:'coins', id:'coin_pack', name:'Kantong 40 Koin', rarity:'common', amount:40 },
+    { type:'coins', id:'coin_jackpot', name:'Pundi 60 Koin', rarity:'common', amount:60 },
+    { type:'hat', id:'cap', name:'Baseball Snapback', rarity:'common' },
+    { type:'hat', id:'party', name:'Party Cone Hat', rarity:'common' },
+    { type:'hat', id:'beanie', name:'Winter Beanie', rarity:'common' }
   ];
 
   function openGachaModal() {
@@ -14408,6 +14408,23 @@
   }
   window.triggerGachaFreeAd = triggerGachaFreeAd;
 
+  function getGachaItemSvg(item) {
+    if(!item) return '<svg viewBox="0 0 24 24" width="28" height="28" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+    if(item.type === 'coins') {
+      return '<svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="6" fill="#fbbf24"/><text x="12" y="15.5" font-size="10" font-weight="900" text-anchor="middle" fill="#78350f" font-family="Arial">G</text></svg>';
+    }
+    if(item.type === 'skin') {
+      return '<svg viewBox="0 0 24 24" width="28" height="28" fill="#38bdf8"><path d="M22 2C14 2 8 8 8 16c0 1.1.9 2 2 2h1c0-1.1.9-2 2-2 1.66 0 3-1.34 3-3V9c2 0 4-1 6-7z"/></svg>';
+    }
+    if(item.type === 'hat') {
+      return '<svg viewBox="0 0 24 24" width="28" height="28" fill="#c084fc"><path d="M5 16V9a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v7h2a1 1 0 0 1 1 1v2H2v-2a1 1 0 0 1 1-1h2z"/></svg>';
+    }
+    if(item.type === 'aura') {
+      return '<svg viewBox="0 0 24 24" width="28" height="28" fill="#f43f5e"><path d="M12 2l2.4 7.2h7.6l-6.1 4.5 2.3 7.3-6.2-4.6-6.2 4.6 2.3-7.3-6.1-4.5h7.6z"/></svg>';
+    }
+    return '<svg viewBox="0 0 24 24" width="28" height="28" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+  }
+
   function renderGachaResults(results) {
     const resModal = $('gachaResultModal');
     const grid = $('gachaCardsGrid');
@@ -14418,7 +14435,7 @@
       const card = document.createElement('div');
       card.className = `gacha-card-item ${res.rarity}`;
       card.innerHTML = `
-        <div class="gacha-card-icon">${res.icon || '🎁'}</div>
+        <div class="gacha-card-icon">${getGachaItemSvg(res)}</div>
         <div class="gacha-card-name" title="${res.name}">${res.name}</div>
         <div class="gacha-card-tag ${res.isNew ? 'new' : 'dup'}">${res.isNew ? 'BARU!' : '+25 KOIN'}</div>
       `;

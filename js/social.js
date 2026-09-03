@@ -687,7 +687,7 @@
             // Update snippet on bottom nav
             if (messages.length > 0 && snippet) {
               const lastMsg = messages[messages.length - 1];
-              const cleanText = (lastMsg.text || '').startsWith('[BIRD_EMOTE:') ? 'Stiker Burung 🐣' : lastMsg.text;
+              const cleanText = (lastMsg.text || '').startsWith('[BIRD_EMOTE:') ? 'Pesan' : lastMsg.text;
               snippet.innerHTML = `<span class="mlbb-chat-ch">[Global]</span> <b>${this.escapeHtml(lastMsg.senderName || 'Player')}:</b> ${this.escapeHtml(cleanText)}`;
             }
 
@@ -737,7 +737,7 @@
                 
                 const avSvg = typeof window.getCuteAvatarSvg === 'function'
                   ? window.getCuteAvatarSvg(msg.senderAvatar || 'chick_yellow', 24)
-                  : '🐥';
+                  : '<svg viewBox="0 0 24 24" width="24" height="24" fill="#38bdf8"><circle cx="12" cy="12" r="10"/></svg>';
 
                 row.innerHTML = `
                   <div class="mlbb-gm-avatar" title="Lihat Profil ${this.escapeHtml(msg.senderName || 'Pemain')}">
@@ -1165,7 +1165,7 @@
       if (senderAvatar) {
         senderAvatar.innerHTML = typeof window.getCuteAvatarSvg === 'function'
           ? window.getCuteAvatarSvg(invite.fromAvatar || 'chick_yellow', 24)
-          : '🎮';
+          : '<svg viewBox="0 0 24 24" width="24" height="24" fill="#38bdf8"><circle cx="12" cy="12" r="10"/></svg>';
       }
 
       toast.classList.remove('hidden');
