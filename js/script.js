@@ -705,9 +705,18 @@
   }
   window.persistProgress = persistProgress;
 
+  if(typeof progress.mpWins !== 'number') progress.mpWins = Number(storage.get('skyFlappyMpWins', 0)) || 0;
+
   let currentMode = 'classic'; // 'classic' | 'ranked'
-  let classicBest = storage.get('skyFlappyBest', 0);
-  let rankedBest = storage.get('skyFlappyRankedBest', 0);
+  let classicBest = Math.max(
+    Number(storage.get('skyFlappyClassicBest', 0)) || 0,
+    Number(storage.get('skyFlappyBest', 0)) || 0,
+    Number(progress.highScore) || 0
+  );
+  let rankedBest = Math.max(
+    Number(storage.get('skyFlappyRankedBest', 0)) || 0,
+    Number(progress.rankedScore) || 0
+  );
   let best = classicBest, state = State.MENU, last = 0, started = false, score = 0,
       pipes = [], coins = [], flyers = [], particles = [],
       powerups = [], enemies = [], stormClouds = [],
@@ -3543,10 +3552,35 @@
     const elMp = $('myMpWins');
     const elCoins = $('myCoins');
 
-    const userCasual = classicBest || storage.get('skyFlappyClassicBest', 0) || progress.highScore || 0;
-    const userRanked = rankedBest || storage.get('skyFlappyRankedBest', 0) || gpProfile.rankedBest || 0;
-    const userMp = progress.mpWins || storage.get('skyFlappyMpWins', 0) || 0;
-    const userCoins = (typeof progress.coins === 'number') ? progress.coins : (storage.get('skyFlappyCoins', 0));
+    const userCasual = Math.max(
+      Number(classicBest) || 0,
+      Number(storage.get('skyFlappyClassicBest', 0)) || 0,
+      Number(storage.get('skyFlappyBest', 0)) || 0,
+      Number(progress.highScore) || 0,
+      Number(gpProfile.classicBest) || 0
+    );
+    const userRanked = Math.max(
+      Number(rankedBest) || 0,
+      Number(storage.get('skyFlappyRankedBest', 0)) || 0,
+      Number(gpProfile.rankedBest) || 0,
+      Number(progress.rankedScore) || 0
+    );
+    const userMp = Math.max(
+      Number(progress.mpWins) || 0,
+      Number(storage.get('skyFlappyMpWins', 0)) || 0,
+      Number(gpProfile.mpWins) || 0
+    );
+    const userCoins = (typeof progress.coins === 'number') ? progress.coins : (Number(storage.get('skyFlappyCoins', 0)) || 0);
+
+    // Backfill state agar selalu konsisten
+    classicBest = userCasual;
+    rankedBest = userRanked;
+    progress.highScore = userCasual;
+    progress.rankedScore = userRanked;
+    progress.mpWins = userMp;
+    gpProfile.classicBest = userCasual;
+    gpProfile.rankedBest = userRanked;
+    gpProfile.mpWins = userMp;
 
     if(elCasual) elCasual.textContent = userCasual;
     if(elRank) elRank.textContent = `${userRanked} PTS`;
@@ -4656,7 +4690,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.54';
+  const GAME_VERSION = '20.55';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -5071,6 +5105,9 @@
   }
 
   function reset() {
+    if(score > 0) {
+      recordCurrentScore(score);
+    }
     score = 0; pipes = []; coins = []; flyers = []; particles = [];
     powerups = []; enemies = []; stormClouds = [];
     shockwaves = []; floatingTexts = [];
@@ -5385,6 +5422,32 @@
     }
   }
   function makeFlyer() { flyers.push({ x: W + 35, y: 125 + Math.random() * (H - GROUND - 205), r: 15, wing: Math.random() * 6, speed: 1.05 + Math.random() * .18 }); }
+  function recordCurrentScore(s) {
+    if(typeof s !== 'number' || s <= 0) return;
+    if(currentMode === 'ranked') {
+      if(s > rankedBest) {
+        rankedBest = s;
+        best = rankedBest;
+        storage.set('skyFlappyRankedBest', rankedBest);
+        progress.rankedScore = Math.max(progress.rankedScore || 0, rankedBest);
+        gpProfile.rankedBest = Math.max(gpProfile.rankedBest || 0, rankedBest);
+        persistProgress();
+        saveGPProfile();
+      }
+    } else if(currentMode !== 'multiplayer') {
+      if(s > classicBest) {
+        classicBest = s;
+        best = classicBest;
+        storage.set('skyFlappyClassicBest', classicBest);
+        storage.set('skyFlappyBest', classicBest);
+        progress.highScore = Math.max(progress.highScore || 0, classicBest);
+        gpProfile.classicBest = Math.max(gpProfile.classicBest || 0, classicBest);
+        persistProgress();
+        saveGPProfile();
+      }
+    }
+  }
+
   function updateScore() {
     el.score.textContent = score;
     best = currentMode === 'ranked' ? rankedBest : classicBest;
@@ -5398,6 +5461,7 @@
   }
   function addScore() {
     score++;
+    recordCurrentScore(score);
     updateScore();
     el.score.classList.remove('bump');
     void el.score.offsetWidth;
@@ -6150,23 +6214,18 @@
     updateDashUI();
     if(navigator.vibrate && settings.vibration) navigator.vibrate(80);
 
+    recordCurrentScore(score);
+
     let newBest = false;
     if(currentMode === 'ranked') {
-      newBest = score > rankedBest;
-      if(newBest) {
-        rankedBest = score;
-        storage.set('skyFlappyRankedBest', rankedBest);
-      }
-      submitRankedScore(score);
+      newBest = score >= rankedBest && score > 0;
+      submitRankedScore(rankedBest);
     } else {
-      newBest = score > classicBest;
-      if(newBest) {
-        classicBest = score;
-        storage.set('skyFlappyClassicBest', classicBest);
-      }
+      newBest = score >= classicBest && score > 0;
     }
 
     updateScore();
+    syncGPProfileUI();
     if(typeof saveCloudSave === 'function') saveCloudSave();
     overTimer = 0.65;
   }
@@ -11587,7 +11646,14 @@
 
       // Reward player
       progress.coins = (progress.coins || 0) + 50;
+      progress.mpWins = (progress.mpWins || 0) + 1;
+      storage.set('skyFlappyMpWins', progress.mpWins);
+      gpProfile.mpWins = progress.mpWins;
+      persistProgress();
+      saveGPProfile();
+      syncGPProfileUI();
       updateCoins();
+      if(typeof saveCloudSave === 'function') saveCloudSave();
       audio.stopMusic();
       stopBackgroundMusic();
       if(settings.sound) {
@@ -11932,6 +11998,9 @@
         t.panel.classList.toggle('active', k === tabName);
       }
     });
+    if(tabName === 'stats' || tabName === 'overview') {
+      syncGPProfileUI();
+    }
   }
   bindClick('profileTabOverviewBtn', () => { audio.click(); switchProfileTab('overview'); });
   bindClick('profileTabStatsBtn', () => { audio.click(); switchProfileTab('stats'); });
@@ -12059,6 +12128,7 @@
       rankedBest: rankedBest || 0,
       classicBest: classicBest || 0,
       score: rankedBest || 0,
+      mpWins: progress.mpWins || 0,
       coins: progress.coins || 0,
       loadout: {
         bird: progress.selected || 'classic',
@@ -12109,14 +12179,24 @@
       if(cloudProfile.avatar) gpProfile.avatar = cloudProfile.avatar;
       if(typeof cloudProfile.nameChangesDone === 'number') gpProfile.nameChangesDone = cloudProfile.nameChangesDone;
       
-      // 1. Sync Rank / Scores
+      // 1. Sync Rank / Scores / MP Wins
       if(typeof cloudProfile.rankedBest === 'number' && cloudProfile.rankedBest > rankedBest) {
         rankedBest = cloudProfile.rankedBest;
         storage.set('skyFlappyRankedBest', rankedBest);
+        progress.rankedScore = rankedBest;
+        gpProfile.rankedBest = rankedBest;
       }
       if(typeof cloudProfile.classicBest === 'number' && cloudProfile.classicBest > classicBest) {
         classicBest = cloudProfile.classicBest;
+        storage.set('skyFlappyClassicBest', classicBest);
         storage.set('skyFlappyBest', classicBest);
+        progress.highScore = classicBest;
+        gpProfile.classicBest = classicBest;
+      }
+      if(typeof cloudProfile.mpWins === 'number' && cloudProfile.mpWins > (progress.mpWins || 0)) {
+        progress.mpWins = cloudProfile.mpWins;
+        storage.set('skyFlappyMpWins', progress.mpWins);
+        gpProfile.mpWins = progress.mpWins;
       }
 
       // 2. Sync Coins
