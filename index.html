@@ -15,18 +15,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.31">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.31">
-  <link rel="stylesheet" href="css/shop.css?v=20.31">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.31">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.31">
-  <link rel="stylesheet" href="css/store.css?v=20.31">
-  <link rel="stylesheet" href="css/ranked.css?v=20.31">
-  <link rel="stylesheet" href="css/social.css?v=20.31">
-  <link rel="stylesheet" href="css/splash.css?v=20.31">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.31">
+  <link rel="stylesheet" href="css/style.css?v=20.32">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.32">
+  <link rel="stylesheet" href="css/shop.css?v=20.32">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.32">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.32">
+  <link rel="stylesheet" href="css/store.css?v=20.32">
+  <link rel="stylesheet" href="css/ranked.css?v=20.32">
+  <link rel="stylesheet" href="css/social.css?v=20.32">
+  <link rel="stylesheet" href="css/splash.css?v=20.32">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.32">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.31">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.32">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -562,6 +562,81 @@
         <button class="primary" id="settingsOkBtn" data-close style="margin-top:8px;">OK</button>
       </section>
       
+      
+      <!-- LUCKY BIRD GACHA MODAL -->
+      <section id="gachaModal" class="modal gacha-modal hidden" role="dialog" aria-modal="true" aria-label="Lucky Bird Gacha">
+        <button class="close" data-close>×</button>
+        <div class="gacha-header">
+          <div class="gacha-title-wrap">
+            <span class="gacha-icon">🎰</span>
+            <div>
+              <h2>LUCKY BIRD GACHA</h2>
+              <span class="gacha-subtitle">Dapatkan Skin Mythic, Aura Jejak & Pet Langka!</span>
+            </div>
+          </div>
+          <div class="gacha-coins-pill">
+            <svg class="inline-coin-svg" viewBox="0 0 24 24" width="14" height="14"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="6" fill="#fbbf24"/><text x="12" y="15.5" font-size="10" font-weight="900" text-anchor="middle" fill="#78350f" font-family="Arial">G</text></svg>
+            <span id="gachaUserCoins">0</span>
+          </div>
+        </div>
+
+        <!-- Gacha Stage Machine Showcase -->
+        <div class="gacha-stage">
+          <div class="gacha-sunburst"></div>
+          <div class="gacha-egg-box" id="gachaEggBox">
+            <div class="gacha-egg-glow"></div>
+            <div class="gacha-egg-sprite">🥚</div>
+            <div class="gacha-sparkles">✨</div>
+          </div>
+          <div class="gacha-jackpot-banner">
+            <span class="jackpot-tag">RATE UP MYTHIC</span>
+            <span class="jackpot-name">SUPER SAIYAN GOKU & HONORED ONE GOJO</span>
+          </div>
+          <div class="gacha-rates-strip">
+            <span class="rate-item common">Common 40%</span>
+            <span class="rate-item rare">Rare 30%</span>
+            <span class="rate-item epic">Epic 18%</span>
+            <span class="rate-item leg">Legend 10%</span>
+            <span class="rate-item myth">Mythic 2%</span>
+          </div>
+        </div>
+
+        <!-- Gacha Pull Buttons -->
+        <div class="gacha-actions-row">
+          <button type="button" class="gacha-pull-btn single" id="gachaPull1Btn">
+            <span class="pull-btn-title">TARIK 1X</span>
+            <span class="pull-btn-cost">
+              <svg class="inline-coin-svg" viewBox="0 0 24 24" width="12" height="12"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="6" fill="#fbbf24"/></svg>
+              50 Koin
+            </span>
+          </button>
+          <button type="button" class="gacha-pull-btn multi" id="gachaPull10Btn">
+            <div class="pull-discount-badge">DISKON 10%</div>
+            <span class="pull-btn-title">TARIK 10X</span>
+            <span class="pull-btn-cost">
+              <svg class="inline-coin-svg" viewBox="0 0 24 24" width="12" height="12"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="6" fill="#fbbf24"/></svg>
+              450 Koin
+            </span>
+          </button>
+          <button type="button" class="gacha-pull-btn free" id="gachaPullFreeBtn" title="Tonton Iklan Dapat 1x Tarikan Gratis!">
+            <span class="pull-btn-title">GRATIS 1X</span>
+            <span class="pull-btn-cost">TONTON IKLAN 🎬</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- GACHA RESULT REVEAL MODAL -->
+      <section id="gachaResultModal" class="modal gacha-result-modal hidden" role="dialog" aria-modal="true" aria-label="Hasil Gacha">
+        <div class="gacha-result-header">
+          <h2 id="gachaResultTitle">SELAMAT! HADIAH DIPEROLEH</h2>
+          <span class="gacha-result-sub" id="gachaResultSub">Item otomatis masuk ke inventori & profil Anda</span>
+        </div>
+        <div class="gacha-cards-grid" id="gachaCardsGrid"></div>
+        <div class="gacha-result-actions">
+          <button type="button" class="primary" id="gachaClaimBtn" data-close>AMBIL SEMUA</button>
+        </div>
+      </section>
+
       <!-- COMPLETE SHOP MODAL WITH LIVE SHOWCASE -->
       <section id="shopModal" class="modal shop-modal hidden" role="dialog" aria-modal="true">
         <button class="close" data-close>×</button>
@@ -1463,12 +1538,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.31"></script>
-  <script src="js/admob-config.js?v=20.31"></script>
-  <script src="js/shop-data.js?v=20.31"></script>
-  <script src="js/audio.js?v=20.31"></script>
-  <script src="js/multiplayer.js?v=20.31"></script>
-  <script src="js/social.js?v=20.31"></script>
-  <script src="js/script.js?v=20.31"></script>
+  <script src="js/firebase-config.js?v=20.32"></script>
+  <script src="js/admob-config.js?v=20.32"></script>
+  <script src="js/shop-data.js?v=20.32"></script>
+  <script src="js/audio.js?v=20.32"></script>
+  <script src="js/multiplayer.js?v=20.32"></script>
+  <script src="js/social.js?v=20.32"></script>
+  <script src="js/script.js?v=20.32"></script>
 </body>
 </html>

@@ -4394,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.31';
+  const GAME_VERSION = '20.32';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -13570,3 +13570,152 @@
       }
     };
   }
+
+  // =========================================================
+  // LUCKY BIRD GACHA SYSTEM (PULLS, WEIGHTS & INVENTORY SYNC)
+  // =========================================================
+  const gachaPool = [
+    // Mythic Tier (2%)
+    { type:'skin', id:'goku_ssj', name:'Super Saiyan Goku', rarity:'mythic', icon:'⚡' },
+    { type:'skin', id:'gojo_bird', name:'Honored One Gojo', rarity:'mythic', icon:'👁️' },
+    { type:'skin', id:'tanjiro_bird', name:'Demon Slayer Bird', rarity:'mythic', icon:'🗡️' },
+    { type:'aura', id:'gear_fifth', name:'Sun God Nika Gear 5', rarity:'mythic', icon:'☀️' },
+    { type:'aura', id:'domain_expansion', name:'Domain Infinity Void', rarity:'mythic', icon:'🌌' },
+    // Legendary Tier (10%)
+    { type:'skin', id:'phoenix', name:'Phoenix Fire', rarity:'legendary', icon:'🔥' },
+    { type:'skin', id:'angel', name:'Holy Angel', rarity:'legendary', icon:'👼' },
+    { type:'skin', id:'dragon', name:'Flame Dragon', rarity:'legendary', icon:'🐉' },
+    { type:'aura', id:'golden', name:'Golden Dust Aura', rarity:'legendary', icon:'✨' },
+    { type:'hat', id:'crown', name:'Royal Crown', rarity:'legendary', icon:'👑' },
+    // Epic Tier (18%)
+    { type:'skin', id:'cyber', name:'Cyber Neon', rarity:'epic', icon:'👾' },
+    { type:'skin', id:'mecha', name:'Mecha Cyborg', rarity:'epic', icon:'🤖' },
+    { type:'aura', id:'galaxy', name:'Cosmic Galaxy Aura', rarity:'epic', icon:'🪐' },
+    { type:'aura', id:'neon', name:'Electric Lightning', rarity:'epic', icon:'⚡' },
+    { type:'hat', id:'pirate', name:'Pirate Captain Hat', rarity:'epic', icon:'🏴‍☠️' },
+    // Rare Tier (30%)
+    { type:'skin', id:'rose', name:'Rose Pink Bird', rarity:'rare', icon:'🌸' },
+    { type:'skin', id:'mint', name:'Mint Green Bird', rarity:'rare', icon:'🍃' },
+    { type:'skin', id:'night', name:'Night Sky Bird', rarity:'rare', icon:'🌙' },
+    { type:'aura', id:'fire', name:'Fire Blaze Aura', rarity:'rare', icon:'🔥' },
+    { type:'hat', id:'tophat', name:'Magic Top Hat', rarity:'rare', icon:'🎩' },
+    { type:'hat', id:'cowboy', name:'Cowboy Leather', rarity:'rare', icon:'🤠' },
+    // Common Tier (40%)
+    { type:'coins', id:'coin_pack', name:'Kantong 40 Koin', rarity:'common', icon:'💰', amount:40 },
+    { type:'coins', id:'coin_jackpot', name:'Pundi 60 Koin', rarity:'common', icon:'💎', amount:60 },
+    { type:'hat', id:'cap', name:'Baseball Snapback', rarity:'common', icon:'🧢' },
+    { type:'hat', id:'party', name:'Party Cone Hat', rarity:'common', icon:'🎉' },
+    { type:'hat', id:'beanie', name:'Winter Beanie', rarity:'common', icon:'🧶' }
+  ];
+
+  function openGachaModal() {
+    audio.click();
+    const gModal = $('gachaModal');
+    const uCoins = $('gachaUserCoins');
+    if(uCoins) uCoins.textContent = progress.coins;
+    showModal(gModal);
+  }
+
+  function pickRandomGachaItem() {
+    const roll = Math.random() * 100;
+    let targetRarity = 'common';
+    if(roll < 2) targetRarity = 'mythic';
+    else if(roll < 12) targetRarity = 'legendary';
+    else if(roll < 30) targetRarity = 'epic';
+    else if(roll < 60) targetRarity = 'rare';
+    else targetRarity = 'common';
+
+    const pool = gachaPool.filter(item => item.rarity === targetRarity);
+    if(pool.length === 0) return gachaPool[0];
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  function performGachaPull(count, isFree) {
+    const singleCost = 50;
+    const multiCost = 450;
+    const totalCost = count === 1 ? (isFree ? 0 : singleCost) : multiCost;
+
+    if(!isFree && progress.coins < totalCost) {
+      audio.die();
+      showGameDialog({
+        title: 'Koin Tidak Cukup',
+        html: `<p>Koin Anda tidak cukup untuk melakukan gacha!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Dibutuhkan:</span><b>${totalCost} Koin</b></div><div class="dialog-info-row"><span>Saldo Anda:</span><b style="color:#f87171;">${progress.coins} Koin</b></div></div><p style="font-size:11px;color:#94a3b8;margin-top:6px;">Kumpulkan koin dengan bermain atau tonton video untuk tarikan gratis!</p>`,
+        type: 'coin',
+        confirmText: 'MENGERTI'
+      });
+      return;
+    }
+
+    if(!isFree) {
+      progress.coins -= totalCost;
+      updateCoins();
+      persistProgress();
+    }
+
+    audio.win();
+    const results = [];
+    for(let i = 0; i < count; i++) {
+      const item = pickRandomGachaItem();
+      let isNew = false;
+
+      if(item.type === 'coins') {
+        progress.coins += item.amount;
+        isNew = true;
+      } else {
+        const unlockedKey = item.type === 'skin' ? 'unlocked' : (item.type + 'Unlocked');
+        if(!Array.isArray(progress[unlockedKey])) progress[unlockedKey] = [];
+        
+        if(!progress[unlockedKey].includes(item.id)) {
+          progress[unlockedKey].push(item.id);
+          isNew = true;
+        } else {
+          // Duplicate compensation
+          progress.coins += 25;
+          isNew = false;
+        }
+      }
+      results.push({ ...item, isNew });
+    }
+
+    updateCoins();
+    persistProgress();
+    renderGachaResults(results);
+  }
+
+  function renderGachaResults(results) {
+    const resModal = $('gachaResultModal');
+    const grid = $('gachaCardsGrid');
+    if(!grid) return;
+    grid.innerHTML = '';
+
+    results.forEach(res => {
+      const card = document.createElement('div');
+      card.className = `gacha-card-item ${res.rarity}`;
+      card.innerHTML = `
+        <div class="gacha-card-icon">${res.icon || '🎁'}</div>
+        <div class="gacha-card-name" title="${res.name}">${res.name}</div>
+        <div class="gacha-card-tag ${res.isNew ? 'new' : 'dup'}">${res.isNew ? 'BARU!' : '+25 KOIN'}</div>
+      `;
+      grid.appendChild(card);
+    });
+
+    closeModal();
+    setTimeout(() => {
+      showModal(resModal);
+      audio.win();
+    }, 150);
+  }
+
+  // Bind Gacha Card in Lobby
+  bindClick('mlbbGachaCard', () => openGachaModal());
+  bindClick('gachaPull1Btn', () => performGachaPull(1, false));
+  bindClick('gachaPull10Btn', () => performGachaPull(10, false));
+  bindClick('gachaPullFreeBtn', () => {
+    if(window.AdMobConfig && typeof window.AdMobConfig.showRewardAd === 'function') {
+      window.AdMobConfig.showRewardAd(() => {
+        performGachaPull(1, true);
+      });
+    } else {
+      performGachaPull(1, true);
+    }
+  });

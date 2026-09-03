@@ -6,3 +6,350 @@
 .bg-preview{display:block;width:44px;height:26px;margin:0 auto 5px;border-radius:6px;background:linear-gradient(var(--top),var(--bottom));box-shadow:inset -4px -3px 0 rgba(0,0,0,0.06)}
 
 .music-preview{display:block;width:34px;height:26px;margin:0 auto 5px;border-radius:6px;background:var(--color);box-shadow:inset -4px -3px 0 rgba(0,0,0,0.06)}
+
+/* =========================================================
+   LUCKY BIRD GACHA SYSTEM STYLES
+   ========================================================= */
+
+/* Left Dock Card Pulsing */
+.mlbb-gacha-card {
+  background: linear-gradient(135deg, #7c2d12 0%, #c2410c 50%, #ea580c 100%) !important;
+  border-color: #fbbf24 !important;
+  box-shadow: 0 4px 15px rgba(234, 88, 12, 0.45), 0 0 10px rgba(251, 191, 36, 0.4) !important;
+  animation: gachaCardGlow 2.5s infinite ease-in-out !important;
+}
+
+@keyframes gachaCardGlow {
+  0%, 100% { box-shadow: 0 4px 15px rgba(234, 88, 12, 0.45), 0 0 10px rgba(251, 191, 36, 0.4); }
+  50% { box-shadow: 0 6px 20px rgba(234, 88, 12, 0.7), 0 0 18px rgba(251, 191, 36, 0.75); transform: translateY(-1px); }
+}
+
+.gacha-badge {
+  background: #fbbf24 !important;
+  color: #78350f !important;
+}
+
+.gacha-title {
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.7) !important;
+}
+
+.gacha-sub {
+  color: #fef08a !important;
+  font-weight: 900 !important;
+}
+
+/* GACHA MAIN MODAL */
+.gacha-modal {
+  width: min(520px, 95vw) !important;
+  max-width: 520px !important;
+  max-height: min(330px, 94vh) !important;
+  background: linear-gradient(180deg, #181d33 0%, #0d1222 100%) !important;
+  border: 2px solid #ea580c !important;
+  border-radius: 16px !important;
+  padding: 10px 14px 8px !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 25px rgba(234, 88, 12, 0.35) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+.gacha-modal.hidden {
+  display: none !important;
+}
+
+.gacha-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-bottom: 1.5px solid rgba(234, 88, 12, 0.4) !important;
+  padding-bottom: 6px !important;
+  flex-shrink: 0 !important;
+}
+
+.gacha-title-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.gacha-icon {
+  font-size: 20px !important;
+}
+
+.gacha-header h2 {
+  font: 900 13px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #facc15 !important;
+  margin: 0 !important;
+  letter-spacing: 0.5px !important;
+}
+
+.gacha-subtitle {
+  font: 700 8px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #cbd5e1 !important;
+  margin-top: 2px !important;
+  display: block !important;
+}
+
+.gacha-coins-pill {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: rgba(9, 20, 39, 0.85) !important;
+  border: 1.5px solid #f59e0b !important;
+  border-radius: 12px !important;
+  padding: 3px 8px !important;
+  font: 900 10px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #fbbf24 !important;
+}
+
+/* Gacha Stage */
+.gacha-stage {
+  flex: 1 !important;
+  min-height: 0 !important;
+  background: radial-gradient(circle at center, rgba(234, 88, 12, 0.25) 0%, rgba(9, 20, 39, 0.9) 75%) !important;
+  border: 1px solid #204470 !important;
+  border-radius: 10px !important;
+  margin: 6px 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.gacha-egg-box {
+  position: relative !important;
+  cursor: pointer !important;
+  transition: transform 0.2s !important;
+  margin-bottom: 4px !important;
+}
+
+.gacha-egg-box:hover {
+  transform: scale(1.1) rotate(5deg) !important;
+}
+
+.gacha-egg-sprite {
+  font-size: 52px !important;
+  filter: drop-shadow(0 6px 12px rgba(251, 191, 36, 0.6)) !important;
+  animation: eggWobble 3s infinite ease-in-out !important;
+}
+
+@keyframes eggWobble {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-4px) rotate(-6deg); }
+  75% { transform: translateY(-2px) rotate(6deg); }
+}
+
+.gacha-sparkles {
+  position: absolute !important;
+  top: -8px !important;
+  right: -8px !important;
+  font-size: 18px !important;
+  animation: sparkleTwinkle 1.5s infinite alternate !important;
+}
+
+@keyframes sparkleTwinkle {
+  0% { transform: scale(0.8); opacity: 0.4; }
+  100% { transform: scale(1.3); opacity: 1; }
+}
+
+.gacha-jackpot-banner {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1px solid rgba(251, 191, 36, 0.5) !important;
+  border-radius: 8px !important;
+  padding: 3px 8px !important;
+  margin-bottom: 4px !important;
+}
+
+.jackpot-tag {
+  background: #ef4444 !important;
+  color: #fff !important;
+  font: 900 7px/1 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 2px 4px !important;
+  border-radius: 4px !important;
+}
+
+.jackpot-name {
+  font: 900 7.5px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #facc15 !important;
+  letter-spacing: 0.2px !important;
+}
+
+.gacha-rates-strip {
+  display: flex !important;
+  gap: 6px !important;
+  font: 800 7px/1 'Trebuchet MS', Arial, sans-serif !important;
+}
+
+.rate-item.common { color: #94a3b8; }
+.rate-item.rare { color: #38bdf8; }
+.rate-item.epic { color: #c084fc; }
+.rate-item.leg { color: #fbbf24; }
+.rate-item.myth { color: #f43f5e; font-weight: 900; text-shadow: 0 0 6px rgba(244, 63, 94, 0.6); }
+
+/* Gacha Actions */
+.gacha-actions-row {
+  display: flex !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+}
+
+.gacha-pull-btn {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6px 4px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: all 0.15s !important;
+  position: relative !important;
+}
+
+.gacha-pull-btn.single {
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%) !important;
+  border: 1.5px solid #38bdf8 !important;
+  box-shadow: 0 2px 0 #075985 !important;
+}
+
+.gacha-pull-btn.multi {
+  background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%) !important;
+  border: 1.5px solid #fbbf24 !important;
+  box-shadow: 0 2px 0 #9a3412, 0 0 10px rgba(234, 88, 12, 0.4) !important;
+}
+
+.gacha-pull-btn.free {
+  background: linear-gradient(180deg, #16a34a 0%, #15803d 100%) !important;
+  border: 1.5px solid #4ade80 !important;
+  box-shadow: 0 2px 0 #166534 !important;
+}
+
+.gacha-pull-btn:hover {
+  transform: translateY(-2px) !important;
+  filter: brightness(1.15) !important;
+}
+
+.pull-btn-title {
+  font: 900 10px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #ffffff !important;
+  margin-bottom: 2px !important;
+}
+
+.pull-btn-cost {
+  display: flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  font: 800 8px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #fef08a !important;
+}
+
+.pull-discount-badge {
+  position: absolute !important;
+  top: -6px !important;
+  right: 6px !important;
+  background: #ef4444 !important;
+  border: 1px solid #fff !important;
+  border-radius: 6px !important;
+  color: #fff !important;
+  font: 900 6px/1 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 1.5px 4px !important;
+}
+
+/* REVEAL CARDS GRID */
+.gacha-result-modal {
+  width: min(540px, 95vw) !important;
+  max-height: min(340px, 95vh) !important;
+  background: linear-gradient(180deg, #141b2d 0%, #0a0f1c 100%) !important;
+  border: 2px solid #fbbf24 !important;
+  border-radius: 16px !important;
+  padding: 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+.gacha-result-modal.hidden {
+  display: none !important;
+}
+
+.gacha-result-header {
+  text-align: center !important;
+  margin-bottom: 6px !important;
+}
+
+.gacha-result-header h2 {
+  font: 900 13px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #facc15 !important;
+  margin: 0 0 2px !important;
+}
+
+.gacha-result-sub {
+  font: 700 8px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #94a3b8 !important;
+}
+
+.gacha-cards-grid {
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)) !important;
+  gap: 6px !important;
+  padding: 4px !important;
+}
+
+.gacha-card-item {
+  background: rgba(15, 23, 42, 0.9) !important;
+  border-radius: 10px !important;
+  padding: 6px 4px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  border: 1.5px solid #334155 !important;
+  animation: cardPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+@keyframes cardPopIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.gacha-card-item.common { border-color: #94a3b8 !important; }
+.gacha-card-item.rare { border-color: #38bdf8 !important; box-shadow: 0 0 8px rgba(56, 189, 248, 0.4) !important; }
+.gacha-card-item.epic { border-color: #c084fc !important; box-shadow: 0 0 10px rgba(192, 132, 252, 0.5) !important; }
+.gacha-card-item.legendary { border-color: #fbbf24 !important; box-shadow: 0 0 12px rgba(251, 191, 36, 0.6) !important; }
+.gacha-card-item.mythic { border-color: #f43f5e !important; box-shadow: 0 0 16px rgba(244, 63, 94, 0.8) !important; background: linear-gradient(180deg, #3f0f18 0%, #170509 100%) !important; }
+
+.gacha-card-icon {
+  font-size: 24px !important;
+  margin-bottom: 3px !important;
+}
+
+.gacha-card-name {
+  font: 900 7.5px/1.2 'Trebuchet MS', Arial, sans-serif !important;
+  color: #fff !important;
+  margin-bottom: 2px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 80px !important;
+}
+
+.gacha-card-tag {
+  font: 800 6.5px/1 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 1.5px 4px !important;
+  border-radius: 4px !important;
+  margin-top: auto !important;
+}
+
+.gacha-card-tag.new { background: #22c55e !important; color: #fff !important; }
+.gacha-card-tag.dup { background: #f59e0b !important; color: #fff !important; }
