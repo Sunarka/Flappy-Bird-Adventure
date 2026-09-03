@@ -4053,7 +4053,7 @@
       if(modeNameEl) modeNameEl.textContent = 'MULTIPLAYER';
       if(modeIconEl) modeIconEl.textContent = '';
       if(startModeLabelEl) startModeLabelEl.textContent = '1v1 BATTLE';
-      if(el.playBtn) el.playBtn.innerHTML = `<div class="start-btn-shine"></div><div class="start-btn-text-wrap"><span class="start-btn-label">BUAT / BUKA</span><span class="start-btn-mode">LOBI ROOM</span></div><span class="start-btn-arrow">▶</span>`;
+      if(el.playBtn) el.playBtn.innerHTML = `<div class="start-btn-shine"></div><div class="start-btn-text-wrap"><span class="start-btn-label">TANDING</span><span class="start-btn-mode">MULTIPLAYER</span></div><span class="start-btn-arrow">▶</span>`;
       if(el.modeBestLabel) el.modeBestLabel.textContent = 'MULTIPLAYER';
     } else if(mode === 'ranked') {
       if(modeNameEl) modeNameEl.textContent = 'RANKED';
@@ -4506,7 +4506,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.48';
+  const GAME_VERSION = '20.49';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -11477,19 +11477,6 @@
       card.addEventListener('click', () => {
         setMode(m);
         setTimeout(closeModeDrawer, 180);
-        if(m === 'multiplayer') {
-          setTimeout(() => {
-            showModal(el.multiplayerModal);
-            switchMpTab('create');
-            if(window.multiplayerEngine) {
-              window.multiplayerEngine.createRoom({
-                name: gpProfile.gamerTag || 'SkyPlayer',
-                avatar: gpProfile.avatar || 'chick_yellow',
-                skin: progress.selected || 'classic'
-              });
-            }
-          }, 240);
-        }
       });
     }
   });
@@ -11605,14 +11592,7 @@
     if(currentMode === 'multiplayer') {
       audio.click();
       showModal(el.multiplayerModal);
-      switchMpTab('create');
-      if(window.multiplayerEngine) {
-        window.multiplayerEngine.createRoom({
-          name: gpProfile.gamerTag || 'SkyPlayer',
-          avatar: gpProfile.avatar || 'chick_yellow',
-          skin: progress.selected || 'classic'
-        });
-      }
+      switchMpTab('quick');
       return;
     }
     if(currentMode === 'ranked' && !gpProfile.isLoggedIn) {
