@@ -1015,27 +1015,17 @@ button.mlbb-quick-friend-item {
   background: linear-gradient(0deg, rgba(8, 15, 30, 0.9) 0%, rgba(8, 15, 30, 0.55) 75%, transparent 100%) !important;
 }
 
-/* Saweria Donate Button Special Styling */
-.mlbb-donate-btn {
-  border-color: rgba(245, 158, 11, 0.4) !important;
-  background: rgba(245, 158, 11, 0.12) !important;
-}
-
+/* Saweria Donate Button Themed Hover */
 .mlbb-donate-btn:hover {
-  border-color: #f59e0b !important;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35) !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.35) !important;
   transform: translateY(-2px) !important;
 }
 
-/* Lucky Bird Gacha Button Special Styling */
-.mlbb-gacha-btn {
-  border-color: rgba(250, 204, 21, 0.45) !important;
-  background: rgba(234, 88, 12, 0.15) !important;
-}
-
+/* Lucky Bird Gacha Button Themed Hover */
 .mlbb-gacha-btn:hover {
   border-color: #facc15 !important;
-  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.45), 0 0 10px rgba(250, 204, 21, 0.4) !important;
+  box-shadow: 0 4px 14px rgba(250, 204, 21, 0.45) !important;
   transform: translateY(-2px) !important;
 }
 

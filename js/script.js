@@ -4506,7 +4506,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.51';
+  const GAME_VERSION = '20.52';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -12667,30 +12667,30 @@
       const btn = $('lobbyAdmobRewardBtn') || el.lobbyAdmobRewardBtn;
       if(!btn) return;
 
-      const span = btn.querySelector('span');
+      const label = btn.querySelector('.side-btn-label') || btn.querySelector('span:last-child');
       const isIndo = settings.language !== 'en';
 
       if(stateType === 'LOADING') {
         btn.disabled = true;
         btn.style.opacity = '0.7';
         btn.style.pointerEvents = 'none';
-        if(span) span.textContent = isIndo ? 'MEMUAT...' : 'LOADING...';
+        if(label) label.textContent = isIndo ? 'MEMUAT...' : 'LOADING...';
       } else if(stateType === 'NOT_AVAILABLE') {
         btn.disabled = true;
         btn.style.opacity = '0.75';
         btn.style.pointerEvents = 'none';
-        if(span) span.textContent = isIndo ? 'IKLAN TIDAK TERSEDIA' : 'AD NOT AVAILABLE';
+        if(label) label.textContent = isIndo ? 'IKLAN HABIS' : 'NO ADS';
       } else if(stateType === 'COOLDOWN') {
         btn.disabled = true;
         btn.style.opacity = '0.75';
         btn.style.pointerEvents = 'none';
-        if(span) span.textContent = isIndo ? `TUNGGU (${this.cooldownRemaining}s)` : `TRY AGAIN (${this.cooldownRemaining}s)`;
+        if(label) label.textContent = `${this.cooldownRemaining}s`;
       } else {
         // NORMAL
         btn.disabled = false;
         btn.style.opacity = '1';
         btn.style.pointerEvents = 'auto';
-        if(span) span.textContent = isIndo ? '+25 KOIN' : '+25 COINS';
+        if(label) label.textContent = isIndo ? '+25 KOIN' : '+25 COINS';
       }
     },
 
