@@ -2509,6 +2509,8 @@
     return '';
   }
 
+  let flippedShopCardId = null;
+
   function renderShop() {
     const [unlockedKey, selectedKey] = shopKeys(), catalog = shopCatalog();
     const previewClass = shopCategory === 'bird' ? '' :
@@ -4498,7 +4500,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.41';
+  const GAME_VERSION = '20.42';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -13835,7 +13837,11 @@
   } catch(initErr) {
     _showErrBanner('INIT ERROR: ' + initErr.message + '\n' + (initErr.stack || '').split('\n').slice(0,4).join('\n'));
     console.error('Init error:', initErr);
-    // Coba tetap jalankan loop agar canvas tidak blank
+    // Pastikan splash screen tertutup jika ada error
+    try {
+      const sp = document.getElementById('appSplashScreen');
+      if (sp) sp.style.display = 'none';
+    } catch(e) {}
     requestAnimationFrame(loop);
   }
 
