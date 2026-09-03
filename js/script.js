@@ -4506,7 +4506,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.47';
+  const GAME_VERSION = '20.48';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -4573,7 +4573,7 @@
       checkPendingUpdateOnMenu();
     }
     el.menu.classList.toggle('hidden', next !== State.MENU);
-    el.ready.classList.toggle('hidden', next !== State.READY);
+    el.ready.classList.toggle('hidden', next !== State.READY || currentMode === 'multiplayer');
     el.hud.classList.toggle('hidden', next === State.MENU);
     if(el.topProfileBtn) el.topProfileBtn.classList.toggle('hidden', next !== State.MENU);
     const leftDock = $('mlbbLeftDock');
@@ -4597,7 +4597,7 @@
       }
       if(el.mpBattleHud) el.mpBattleHud.classList.add('hidden');
     } else if(currentMode === 'multiplayer') {
-      el.coinHud.innerHTML = '1v1 BATTLE <b>CLOUDFLARE</b>';
+      el.coinHud.innerHTML = '1v1 BATTLE <b>ARENA</b>';
       if(el.rankTierHud) el.rankTierHud.classList.add('hidden');
       if(el.livesHud) el.livesHud.innerHTML = '';
       updateMpBattleHUD();
@@ -13076,7 +13076,7 @@
 
     mp.on('connected', (data) => {
       if(el.mpServerStatusText) {
-        el.mpServerStatusText.textContent = data.isLocal ? 'LOCAL BUS ONLINE' : 'CLOUDFLARE WS ONLINE';
+        el.mpServerStatusText.textContent = data.isLocal ? 'LOCAL ARENA ONLINE' : 'SERVER ARENA ONLINE';
       }
     });
 
@@ -13285,12 +13285,16 @@
   bindClick(el.mpRematchBtn, () => {
     audio.click();
     closeModal();
+    reset();
+    setState(State.READY);
+    startSearchingRadar();
     if(window.multiplayerEngine) {
+      window.multiplayerEngine.leaveRoom();
       window.multiplayerEngine.quickMatch({
         name: gpProfile.gamerTag || 'SkyPlayer',
         avatar: gpProfile.avatar || 'chick_yellow',
         skin: progress.selected || 'classic'
-      });
+      }, selectedMpGameMode, selectedMpPlayerCount);
     }
   });
 

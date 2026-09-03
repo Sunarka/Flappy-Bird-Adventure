@@ -694,6 +694,9 @@
     }
 
     quickMatch(profile, gameMode = 'survival', maxPlayers = 2) {
+      if (this.currentRoom) {
+        this.leaveRoom();
+      }
       if (this.botFallbackTimer) {
         clearTimeout(this.botFallbackTimer);
         this.botFallbackTimer = null;
