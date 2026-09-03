@@ -4394,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.25';
+  const GAME_VERSION = '20.26';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -12026,6 +12026,96 @@
   });
 
   // (Auth state managed seamlessly by syncCloudProfile)
+
+  // Dedicated CONFIRM NAME CHANGE button (next to the input field)
+  bindClick('gpConfirmNameBtn', async () => {
+    audio.click();
+    if(!gpProfile.isLoggedIn) {
+      showGameDialog({
+        title: 'Login Dulu',
+        html: '<p>Anda harus login terlebih dahulu untuk mengganti nama gamer.</p>',
+        type: 'warning',
+        confirmText: 'MENGERTI'
+      });
+      return;
+    }
+    const newName = el.gpGamerTagInput ? el.gpGamerTagInput.value.trim() : '';
+    if(!newName) {
+      showGameDialog({
+        title: 'Nama Kosong',
+        html: '<p>Nama gamer tidak boleh kosong! Silakan ketik nama baru Anda.</p>',
+        type: 'warning',
+        confirmText: 'MENGERTI'
+      });
+      return;
+    }
+
+    const oldName = gpProfile.gamerTag || 'SkyPlayer';
+    if(newName === oldName) {
+      showGameDialog({
+        title: 'Tidak Ada Perubahan',
+        html: '<p>Nama gamer Anda masih sama. Ketik nama baru untuk mengubahnya.</p>',
+        type: 'info',
+        confirmText: 'OK'
+      });
+      return;
+    }
+
+    const changes = gpProfile.nameChangesDone || 0;
+    if(changes === 0) {
+      // 1x Ganti nama FREE
+      gpProfile.gamerTag = newName;
+      gpProfile.nameChangesDone = 1;
+      saveGPProfile();
+      syncGPProfileUI();
+      showGameDialog({
+        title: 'Nama Berhasil Diubah!',
+        html: `<p>Nama gamer Anda berhasil diubah menjadi:</p><div class="dialog-info-card"><div class="dialog-info-row"><span>GamerTag:</span><b>${newName}</b></div><div class="dialog-info-row"><span>Biaya:</span><b style="color:#4ade80;">GRATIS (1x)</b></div></div>`,
+        type: 'success',
+        confirmText: 'KEREN!'
+      });
+    } else {
+      // Ganti nama bayar 50 Koin
+      const cost = 50;
+      if(progress.coins < cost) {
+        if(el.gpGamerTagInput) el.gpGamerTagInput.value = oldName;
+        showGameDialog({
+          title: 'Koin Tidak Cukup',
+          html: `<p>Koin Anda tidak cukup untuk mengganti nama gamer!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya Ganti Nama:</span><b>${cost} Koin</b></div><div class="dialog-info-row"><span>Saldo Anda:</span><b style="color:#f87171;">${progress.coins} Koin</b></div></div>`,
+          type: 'coin',
+          confirmText: 'MENGERTI'
+        });
+        return;
+      }
+
+      const ok = await showGameDialog({
+        title: 'Konfirmasi Ganti Nama',
+        html: `<p>Apakah Anda yakin ingin mengganti nama menjadi <b>"${newName}"</b>?</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya:</span><b>${cost} Koin</b></div><div class="dialog-info-row"><span>Sisa Saldo:</span><b>${progress.coins - cost} Koin</b></div></div>`,
+        type: 'coin',
+        confirmText: `GANTI NAMA (-${cost} KOIN)`,
+        cancelText: 'BATAL'
+      });
+      if(!ok) {
+        if(el.gpGamerTagInput) el.gpGamerTagInput.value = oldName;
+        showModal(el.googlePlayModal);
+        return;
+      }
+
+      progress.coins -= cost;
+      gpProfile.gamerTag = newName;
+      gpProfile.nameChangesDone = changes + 1;
+      updateCoins();
+      persistProgress();
+      saveGPProfile();
+      syncGPProfileUI();
+      showGameDialog({
+        title: 'Nama Berhasil Diubah!',
+        html: `<p>Nama gamer berhasil diubah menjadi <b>"${newName}"</b>!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Biaya:</span><b>-${cost} Koin</b></div><div class="dialog-info-row"><span>Sisa Koin:</span><b>${progress.coins} Koin</b></div></div>`,
+        type: 'success',
+        confirmText: 'SELESAI'
+      });
+    }
+  });
 
   bindClick('howBtn', () => { audio.click(); showModal(el.how); });
   bindClick('settingsBtn', () => { audio.click(); showModal(el.settings); });
