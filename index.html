@@ -21,18 +21,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.62">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.62">
-  <link rel="stylesheet" href="css/shop.css?v=20.62">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.62">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.62">
-  <link rel="stylesheet" href="css/store.css?v=20.62">
-  <link rel="stylesheet" href="css/ranked.css?v=20.62">
-  <link rel="stylesheet" href="css/social.css?v=20.62">
-  <link rel="stylesheet" href="css/splash.css?v=20.62">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.62">
+  <link rel="stylesheet" href="css/style.css?v=20.63">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.63">
+  <link rel="stylesheet" href="css/shop.css?v=20.63">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.63">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.63">
+  <link rel="stylesheet" href="css/store.css?v=20.63">
+  <link rel="stylesheet" href="css/ranked.css?v=20.63">
+  <link rel="stylesheet" href="css/social.css?v=20.63">
+  <link rel="stylesheet" href="css/splash.css?v=20.63">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.63">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.62">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.63">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -447,9 +447,11 @@
       <!-- BOTTOM BAR (NAVIGATION DOCK & BIG MATCH DOCK) -->
       <footer class="mlbb-bottom-bar">
         <div class="mlbb-bottom-nav">
-          <button class="mlbb-nav-pill" id="lobbyChatBtn" type="button" title="Chat Global & Teman" style="position:relative;">
+          <button class="mlbb-nav-pill mlbb-chat-nav-pill" id="lobbyChatBtn" type="button" title="Chat Global & Teman" style="position:relative;">
             <span class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg></span>
             <span class="nav-label">CHAT</span>
+            <span class="mlbb-chat-divider"></span>
+            <span class="mlbb-chat-snippet" id="mlbbLobbyChatSnippet"><span class="mlbb-chat-ch">[Global]</span> Memuat obrolan...</span>
             <span class="chat-unread-badge hidden" id="lobbyChatUnreadBadge">0</span>
           </button>
         </div>
@@ -1695,13 +1697,13 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.62"></script>
-  <script src="js/admob-config.js?v=20.62"></script>
-  <script src="js/shop-data.js?v=20.62"></script>
-  <script src="js/profanity-filter.js?v=20.62"></script>
-  <script src="js/audio.js?v=20.62"></script>
-  <script src="js/multiplayer.js?v=20.62"></script>
-  <script src="js/social.js?v=20.62"></script>
-  <script src="js/script.js?v=20.62"></script>
+  <script src="js/firebase-config.js?v=20.63"></script>
+  <script src="js/admob-config.js?v=20.63"></script>
+  <script src="js/shop-data.js?v=20.63"></script>
+  <script src="js/profanity-filter.js?v=20.63"></script>
+  <script src="js/audio.js?v=20.63"></script>
+  <script src="js/multiplayer.js?v=20.63"></script>
+  <script src="js/social.js?v=20.63"></script>
+  <script src="js/script.js?v=20.63"></script>
 </body>
 </html>

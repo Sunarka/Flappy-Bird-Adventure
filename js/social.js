@@ -606,11 +606,7 @@
     clearGlobalChatBadge() {
       this.unreadGlobalCount = 0;
       this.lastSeenGlobalTime = Date.now();
-      const b = document.getElementById('lobbyChatUnreadBadge');
-      if (b) {
-        b.textContent = '0';
-        b.classList.add('hidden');
-      }
+      this.updateBadgeUI();
     }
 
     switchLobbyChatTab(tab) {
@@ -675,44 +671,55 @@
       try {
         this.globalChatUnsub = this.db.collection('flappy_global_chat')
           .orderBy('timestamp', 'desc')
-          .limit(35)
+          .limit(40)
           .onSnapshot(snap => {
+            const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+            const cutoff = Date.now() - ONE_DAY_MS;
             const messages = [];
+
             snap.forEach(doc => {
-              messages.push({ id: doc.id, ...doc.data() });
+              const data = doc.data();
+              const msgTime = data.timestamp || 0;
+              // Pesan lewat dari 24 jam (sehari) otomatis dihapus dari server dan tidak dirender
+              if (msgTime > 0 && msgTime < cutoff) {
+                doc.ref.delete().catch(() => {});
+              } else {
+                messages.push({ id: doc.id, ...data });
+              }
             });
             // Reverse so oldest first
             messages.reverse();
 
             // Update snippet on bottom nav
-            if (messages.length > 0 && snippet) {
-              const lastMsg = messages[messages.length - 1];
-              let cleanText = (lastMsg.text || '').startsWith('[BIRD_EMOTE:') ? 'Pesan' : lastMsg.text;
-              if (typeof window.sanitizeToxicText === 'function') cleanText = window.sanitizeToxicText(cleanText);
-              let safeSenderName = lastMsg.senderName || 'Player';
-              if (typeof window.sanitizePlayerName === 'function') safeSenderName = window.sanitizePlayerName(safeSenderName);
-              snippet.innerHTML = `<span class="mlbb-chat-ch">[Global]</span> <b>${this.escapeHtml(safeSenderName)}:</b> ${this.escapeHtml(cleanText)}`;
+            if (snippet) {
+              if (messages.length > 0) {
+                const lastMsg = messages[messages.length - 1];
+                let cleanText = (lastMsg.text || '').startsWith('[BIRD_EMOTE:') ? 'Pesan' : lastMsg.text;
+                if (typeof window.sanitizeToxicText === 'function') cleanText = window.sanitizeToxicText(cleanText);
+                let safeSenderName = lastMsg.senderName || 'Player';
+                if (typeof window.sanitizePlayerName === 'function') safeSenderName = window.sanitizePlayerName(safeSenderName);
+                snippet.innerHTML = `<span class="mlbb-chat-ch">[Global]</span> <b>${this.escapeHtml(safeSenderName)}:</b> ${this.escapeHtml(cleanText)}`;
+              } else {
+                snippet.innerHTML = `<span class="mlbb-chat-ch">[Global]</span> Ketuk untuk chat...`;
+              }
             }
 
             // Unread badge logic
             const modal = document.getElementById('mlbbChatModal');
             const isViewingGlobal = modal && !modal.classList.contains('hidden') && this.currentChatTab === 'global';
             if (isViewingGlobal) {
-              this.clearGlobalChatBadge();
+              this.unreadGlobalCount = 0;
+              this.lastSeenGlobalTime = Date.now();
             } else if (messages.length > 0) {
               const lastMsg = messages[messages.length - 1];
               if (lastMsg && lastMsg.senderKey !== this.myKey) {
                 const lastSeen = this.lastSeenGlobalTime || 0;
                 if (!lastMsg.timestamp || lastMsg.timestamp > lastSeen) {
                   this.unreadGlobalCount = (this.unreadGlobalCount || 0) + 1;
-                  const b = document.getElementById('lobbyChatUnreadBadge');
-                  if (b) {
-                    b.textContent = this.unreadGlobalCount > 99 ? '99+' : String(this.unreadGlobalCount);
-                    b.classList.remove('hidden');
-                  }
                 }
               }
             }
+            this.updateBadgeUI();
 
             // Render messages in modal
             if (container) {
@@ -799,10 +806,12 @@
         const item = document.createElement('div');
         item.className = `mlbb-cm-friend-item ${this.activeFriendChat && this.activeFriendChat.friendKey === f.friendKey ? 'active' : ''}`;
         const avSvg = typeof window.getCuteAvatarSvg === 'function' ? window.getCuteAvatarSvg(f.avatar || 'chick_yellow', 18) : '🐥';
+        const hasUnread = this.unreadFriendMessages && this.unreadFriendMessages[f.friendKey];
+        const safeName = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(f.name || 'Teman') : (f.name || 'Teman');
         item.innerHTML = `
           <div style="width:18px;height:18px;border-radius:50%;overflow:hidden;flex-shrink:0;">${avSvg}</div>
-          <span class="mlbb-cm-friend-item-name">${this.escapeHtml(f.name || 'Teman')}</span>
-          <span class="friend-online-dot ${f.isOnline ? 'online' : ''}" style="margin-left:auto;"></span>
+          <span class="mlbb-cm-friend-item-name">${this.escapeHtml(safeName)}</span>
+          ${hasUnread ? '<span class="friend-unread-dot" title="Pesan baru!"></span>' : `<span class="friend-online-dot ${f.isOnline ? 'online' : ''}" style="margin-left:auto;"></span>`}
         `;
         item.onclick = () => {
           if (window.audio && typeof window.audio.click === 'function') window.audio.click();
@@ -820,7 +829,8 @@
       this.activeFriendChat = friend;
       const targetBar = document.getElementById('mlbbChatActiveFriendName');
       if (targetBar) {
-        targetBar.textContent = `Obrolan Privat: ${friend.name || 'Teman'}`;
+        const safeName = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(friend.name || 'Teman') : (friend.name || 'Teman');
+        targetBar.textContent = `Obrolan Privat: ${safeName}`;
       }
       // Clear unread for this friend
       if (this.myKey && friend && friend.friendKey) {
@@ -831,11 +841,6 @@
           this.unreadFriendMessagesCount = Math.max(0, (this.unreadFriendMessagesCount || 1) - 1);
           this.updateBadgeUI();
           this.renderQuickFriends();
-          const tabDot = document.getElementById('mlbbChatFriendUnreadDot');
-          if (tabDot) {
-            if (this.unreadFriendMessagesCount > 0) tabDot.classList.remove('hidden');
-            else tabDot.classList.add('hidden');
-          }
         }
       }
       this.renderChatFriendsList();
@@ -859,12 +864,35 @@
           .onSnapshot(snap => {
             if (!container) return;
             container.innerHTML = '';
-            if (snap.empty) {
+            const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+            const cutoff = Date.now() - ONE_DAY_MS;
+            const validMessages = [];
+
+            snap.forEach(doc => {
+              const msg = doc.data();
+              const msgTime = msg.timestamp || 0;
+              // Hapus pesan yang sudah lewat 24 jam
+              if (msgTime > 0 && msgTime < cutoff) {
+                doc.ref.delete().catch(() => {});
+              } else {
+                validMessages.push(msg);
+              }
+            });
+
+            // Mark read if this channel is currently active
+            localStorage.setItem('last_read_chat_' + channelId, String(Date.now()));
+            if (this.unreadFriendMessages && this.unreadFriendMessages[friend.friendKey]) {
+              delete this.unreadFriendMessages[friend.friendKey];
+              this.unreadFriendMessagesCount = Math.max(0, (this.unreadFriendMessagesCount || 1) - 1);
+              this.updateBadgeUI();
+              this.renderQuickFriends();
+            }
+
+            if (validMessages.length === 0) {
               container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:25px 10px;font-size:0.8rem;">Belum ada pesan privat. Sapa temanmu!</div>';
               return;
             }
-            snap.forEach(doc => {
-              const msg = doc.data();
+            validMessages.forEach(msg => {
               const isMe = msg.senderKey === this.myKey;
               const timeStr = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
               
@@ -1092,11 +1120,14 @@
           .onSnapshot(snap => {
             let unreadCount = 0;
             this.unreadFriendMessages = {};
+            const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+            const cutoff = Date.now() - ONE_DAY_MS;
             snap.forEach(doc => {
               const d = doc.data();
               if (d && d.lastSenderKey && !myKeys.includes(d.lastSenderKey)) {
                 const lastRead = localStorage.getItem('last_read_chat_' + doc.id) || 0;
-                if (d.lastTimestamp && d.lastTimestamp > Number(lastRead)) {
+                // Hanya anggap unread jika belum dibaca DAN pesan masih dalam rentang 24 jam
+                if (d.lastTimestamp && d.lastTimestamp > Number(lastRead) && d.lastTimestamp >= cutoff) {
                   unreadCount++;
                   this.unreadFriendMessages[d.lastSenderKey] = true;
                 }
@@ -1105,11 +1136,7 @@
             this.unreadFriendMessagesCount = unreadCount;
             this.updateBadgeUI();
             this.renderQuickFriends();
-            const tabDot = document.getElementById('mlbbChatFriendUnreadDot');
-            if (tabDot) {
-              if (unreadCount > 0) tabDot.classList.remove('hidden');
-              else tabDot.classList.add('hidden');
-            }
+            this.renderChatFriendsList();
           }, err => {
             console.warn('[SocialService] Error listening to direct chats:', err.message);
           });
@@ -1521,12 +1548,34 @@
           .onSnapshot(snap => {
             if (!container) return;
             container.innerHTML = '';
-            if (snap.empty) {
-              container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:40px 10px;">Belum ada pesan. Kirim stiker burung imut ke temanmu!</div>';
-              return;
-            }
+            const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+            const cutoff = Date.now() - ONE_DAY_MS;
+            const validMessages = [];
+
             snap.forEach(doc => {
               const msg = doc.data();
+              const msgTime = msg.timestamp || 0;
+              if (msgTime > 0 && msgTime < cutoff) {
+                doc.ref.delete().catch(() => {});
+              } else {
+                validMessages.push(msg);
+              }
+            });
+
+            // Mark read
+            localStorage.setItem('last_read_chat_' + channelId, String(Date.now()));
+            if (this.activeChatFriend && this.unreadFriendMessages && this.unreadFriendMessages[this.activeChatFriend.friendKey]) {
+              delete this.unreadFriendMessages[this.activeChatFriend.friendKey];
+              this.unreadFriendMessagesCount = Math.max(0, (this.unreadFriendMessagesCount || 1) - 1);
+              this.updateBadgeUI();
+              this.renderQuickFriends();
+            }
+
+            if (validMessages.length === 0) {
+              container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:40px 10px;">Belum ada pesan. Kirim obrolan ke temanmu!</div>';
+              return;
+            }
+            validMessages.forEach(msg => {
               const isMe = msg.senderKey === this.myKey;
               const timeStr = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
               
@@ -1577,6 +1626,13 @@
             text: cleanText,
             timestamp: Date.now()
           });
+        // Update parent doc with participants & last timestamp to trigger unread badge on friend's device
+        await this.db.collection('flappy_direct_chats').doc(channelId).set({
+          lastMessage: cleanText,
+          lastSenderKey: this.myKey,
+          lastTimestamp: Date.now(),
+          participants: [this.myKey, this.activeChatFriend.friendKey]
+        }, { merge: true });
       } catch(e) {
         console.warn('[SocialService] Send msg error:', e.message);
       }
@@ -1681,18 +1737,53 @@
     updateBadgeUI() {
       const badge = document.getElementById('socialBadgeCount');
       const tabBadge = document.getElementById('socialReqTabBadge');
-      const friendReqs = (this.friendRequests && this.friendRequests.length) || 0;
-      const unreadMsgs = this.unreadFriendMessagesCount || 0;
-      const total = friendReqs + unreadMsgs;
+      const lobbyChatBadge = document.getElementById('lobbyChatUnreadBadge');
+      const tabDot = document.getElementById('mlbbChatFriendUnreadDot');
 
+      const friendReqs = (this.friendRequests && this.friendRequests.length) || 0;
+      const unreadFriendMsgs = this.unreadFriendMessagesCount || 0;
+      const unreadGlobalMsgs = this.unreadGlobalCount || 0;
+
+      // 1. Badge di Tombol Profil Pertemanan (Right Dock Header)
+      const socialTotal = friendReqs + unreadFriendMsgs;
       if (badge) {
-        if (total > 0) {
-          badge.textContent = total > 99 ? '99+' : String(total);
+        if (socialTotal > 0) {
+          badge.textContent = socialTotal > 99 ? '99+' : String(socialTotal);
           badge.style.display = 'flex';
+          badge.classList.remove('hidden');
         } else {
+          badge.textContent = '0';
           badge.style.display = 'none';
+          badge.classList.add('hidden');
         }
       }
+
+      // 2. Badge di Tombol Chat Lobby (Navigasi Bawah)
+      const totalChatUnread = unreadGlobalMsgs + unreadFriendMsgs;
+      if (lobbyChatBadge) {
+        if (totalChatUnread > 0) {
+          lobbyChatBadge.textContent = totalChatUnread > 99 ? '99+' : String(totalChatUnread);
+          lobbyChatBadge.classList.remove('hidden');
+          lobbyChatBadge.style.display = 'flex';
+        } else {
+          lobbyChatBadge.textContent = '0';
+          lobbyChatBadge.classList.add('hidden');
+          lobbyChatBadge.style.display = 'none';
+        }
+      }
+
+      // 3. Dot Notifikasi di Tab Teman pada Modal Obrolan
+      if (tabDot) {
+        if (unreadFriendMsgs > 0) {
+          tabDot.classList.remove('hidden');
+          tabDot.style.display = 'inline-block';
+        } else {
+          tabDot.classList.add('hidden');
+          tabDot.style.display = 'none';
+        }
+      }
+
+      // 4. Badge di Tab Permintaan Teman pada Modal Sosial
       if (tabBadge) {
         if (friendReqs > 0) {
           tabBadge.textContent = String(friendReqs);
