@@ -4702,7 +4702,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.57';
+  const GAME_VERSION = '20.58';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -13119,6 +13119,15 @@
         if(el.difficultyBtn) el.difficultyBtn.classList.remove('locked-ranked');
       }
     }
+    document.querySelectorAll('.diff-seg-btn').forEach(btn => {
+      const isLocked = currentMode === 'ranked';
+      btn.classList.toggle('locked', isLocked);
+      if(isLocked) {
+        btn.classList.remove('active');
+      } else {
+        btn.classList.toggle('active', btn.dataset.difficulty === settings.difficulty);
+      }
+    });
     if(el.difficultyMenu) {
       el.difficultyMenu.querySelectorAll('[data-difficulty]').forEach(button => {
         button.classList.toggle('active', button.dataset.difficulty === settings.difficulty);
@@ -13187,6 +13196,17 @@
       };
     });
   }
+  document.querySelectorAll('.diff-seg-btn').forEach(button => {
+    button.onclick = () => {
+      if(currentMode === 'ranked') {
+        audio.hit();
+        return;
+      }
+      settings.difficulty = button.dataset.difficulty;
+      audio.click();
+      syncSettings();
+    };
+  });
   document.addEventListener('pointerdown', e => {
     if(!e.target.closest || !e.target.closest('.difficulty-picker')) closeDifficulty();
   });
