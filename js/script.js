@@ -4409,7 +4409,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.33';
+  const GAME_VERSION = '20.34';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -13544,27 +13544,7 @@
     }, { passive: true });
   }
 
-  try {
-    setMode('classic', true);
-    syncSettings();
-    syncGPProfileUI();
-    renderAvatarPickerGrid();
-    syncLeaderboardFromFirebase();
-    updateCoins();
-    renderShop();
-    reset();
-    setState(State.MENU);
-    updateScore();
-    updateMusicUI();
-    initSplashScreen();
-    requestAnimationFrame(loop);
-  } catch(initErr) {
-    _showErrBanner('INIT ERROR: ' + initErr.message + '\n' + (initErr.stack || '').split('\n').slice(0,4).join('\n'));
-    console.error('Init error:', initErr);
-    // Coba tetap jalankan loop agar canvas tidak blank
-    requestAnimationFrame(loop);
-  }
-})();
+
 
   // Native Fullscreen Toggle Controller
   const fsBtn = document.getElementById('fullscreenToggleBtn');
@@ -13745,3 +13725,27 @@
     audio.click();
     showModal(el.rankedModal);
   });
+
+
+  try {
+    setMode('classic', true);
+    syncSettings();
+    syncGPProfileUI();
+    renderAvatarPickerGrid();
+    syncLeaderboardFromFirebase();
+    updateCoins();
+    renderShop();
+    reset();
+    setState(State.MENU);
+    updateScore();
+    updateMusicUI();
+    initSplashScreen();
+    requestAnimationFrame(loop);
+  } catch(initErr) {
+    _showErrBanner('INIT ERROR: ' + initErr.message + '\n' + (initErr.stack || '').split('\n').slice(0,4).join('\n'));
+    console.error('Init error:', initErr);
+    // Coba tetap jalankan loop agar canvas tidak blank
+    requestAnimationFrame(loop);
+  }
+
+})();
