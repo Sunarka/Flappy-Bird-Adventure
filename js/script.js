@@ -4394,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.27';
+  const GAME_VERSION = '20.28';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -13536,3 +13536,25 @@
     requestAnimationFrame(loop);
   }
 })();
+
+  // Native Fullscreen Toggle Controller
+  const fsBtn = document.getElementById('fullscreenToggleBtn');
+  if (fsBtn) {
+    fsBtn.onclick = () => {
+      if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        const docEl = document.documentElement;
+        if (docEl.requestFullscreen) {
+          docEl.requestFullscreen().catch(() => {});
+        } else if (docEl.webkitRequestFullscreen) {
+          docEl.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+    };
+  }
