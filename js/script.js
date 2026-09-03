@@ -4394,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.30';
+  const GAME_VERSION = '20.31';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -12122,6 +12122,12 @@
   if(fbBtn) {
     fbBtn.addEventListener('click', () => {
       audio.click();
+    });
+  }
+  const donateBtn = $('lobbyDonateBtn');
+  if(donateBtn) {
+    donateBtn.addEventListener('click', () => {
+      audio.win();
     });
   }
   bindClick('settingsBtn', () => { audio.click(); showModal(el.settings); });
