@@ -158,7 +158,7 @@
       best: 'TERBAIK',
       newBest: 'REKOR BARU!',
       replayBtn: 'MAIN LAGI',
-      shopBtn: 'SKIN & TOKO',
+      shopBtn: 'TOKO',
       howTitle: 'CARA BERMAIN',
       settingsBtn: 'PENGATURAN',
       rankings: 'LEADERBOARD',
@@ -238,7 +238,7 @@
       best: 'BEST',
       newBest: 'NEW BEST!',
       replayBtn: 'PLAY AGAIN',
-      shopBtn: 'SKIN & SHOP',
+      shopBtn: 'SHOP',
       howTitle: 'HOW TO PLAY',
       settingsBtn: 'SETTINGS',
       rankings: 'LEADERBOARD',
@@ -312,20 +312,23 @@
     if(el.txtSettingDifficulty) el.txtSettingDifficulty.textContent = t.difficulty;
     if(el.settingsOkBtn) el.settingsOkBtn.textContent = t.okBtn;
     
-    // Main Menu Buttons & Badges
-    if(el.shopBtn) el.shopBtn.textContent = t.shopBtn;
+    // Main Menu Buttons & Badges (Only update label, preserve SVG icons)
+    if(el.shopBtn) {
+      const span = el.shopBtn.querySelector('.side-btn-label') || el.shopBtn.querySelector('span:last-child');
+      if(span) span.textContent = t.shopBtn;
+    }
     if(el.howBtn) el.howBtn.textContent = t.howTitle;
     if(el.settingsBtn) el.settingsBtn.setAttribute('title', t.settingsBtn);
     if(el.rankedLeaderboardBtn) {
-      const span = el.rankedLeaderboardBtn.querySelector('span:last-child');
+      const span = el.rankedLeaderboardBtn.querySelector('.side-btn-label') || el.rankedLeaderboardBtn.querySelector('span:last-child');
       if(span) span.textContent = t.rankings;
     }
     if(el.lobbyFeedbackBtn) {
-      const span = el.lobbyFeedbackBtn.querySelector('span');
+      const span = el.lobbyFeedbackBtn.querySelector('.side-btn-label') || el.lobbyFeedbackBtn.querySelector('span:last-child');
       if(span) span.textContent = t.feedbackBtn;
     }
     if(el.lobbyAdmobRewardBtn) {
-      const span = el.lobbyAdmobRewardBtn.querySelector('span');
+      const span = el.lobbyAdmobRewardBtn.querySelector('.side-btn-label') || el.lobbyAdmobRewardBtn.querySelector('span:last-child');
       if(span) span.textContent = t.rewardAdBtn;
     }
 
@@ -4500,7 +4503,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.42';
+  const GAME_VERSION = '20.43';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
