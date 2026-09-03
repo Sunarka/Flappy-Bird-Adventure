@@ -447,6 +447,7 @@
         this.db = firebase.firestore();
         this.isInitialized = true;
         console.log('[SocialService] Firestore Social Module initialized.');
+        setTimeout(() => this.initLobbyChat(), 500);
       }
     }
 
@@ -461,6 +462,369 @@
         keys.push(this.myKey.replace(/^acc_/, ''));
       }
       return Array.from(new Set(keys.filter(Boolean)));
+    }
+
+
+    // ==========================================
+    // MLBB UNIFIED LOBBY CHAT (GLOBAL & FRIENDS)
+    // ==========================================
+    initLobbyChat() {
+      this.currentChatTab = 'global';
+      this.activeFriendChat = null;
+      this.listenGlobalChat();
+      this.renderChatPresets();
+      this.renderChatBirdEmotes();
+      this.bindChatEvents();
+    }
+
+    bindChatEvents() {
+      const chatBtn = document.getElementById('lobbyChatBtn');
+      const modal = document.getElementById('mlbbChatModal');
+      const tabGlobal = document.getElementById('mlbbChatTabGlobalBtn');
+      const tabFriends = document.getElementById('mlbbChatTabFriendsBtn');
+      const form = document.getElementById('mlbbChatForm');
+      const input = document.getElementById('mlbbChatInput');
+
+      if (chatBtn) {
+        chatBtn.onclick = () => {
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+          if (typeof window.showModal === 'function') {
+            window.showModal(modal);
+          } else if (modal) {
+            modal.classList.remove('hidden');
+          }
+          this.switchLobbyChatTab(this.currentChatTab || 'global');
+        };
+      }
+
+      if (tabGlobal) {
+        tabGlobal.onclick = () => {
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+          this.switchLobbyChatTab('global');
+        };
+      }
+
+      if (tabFriends) {
+        tabFriends.onclick = () => {
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+          this.switchLobbyChatTab('friends');
+        };
+      }
+
+      if (form) {
+        form.onsubmit = (e) => {
+          e.preventDefault();
+          const text = input ? input.value.trim() : '';
+          if (!text) return;
+          if (input) input.value = '';
+          this.sendCurrentChatMessage(text);
+        };
+      }
+
+      // Preset chips click
+      const presetsBar = document.getElementById('mlbbChatPresetsBar');
+      if (presetsBar) {
+        presetsBar.querySelectorAll('.mlbb-preset-chip').forEach(chip => {
+          chip.onclick = () => {
+            const preset = chip.getAttribute('data-preset');
+            if (preset) {
+              if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+              this.sendCurrentChatMessage(preset);
+            }
+          };
+        });
+      }
+    }
+
+    switchLobbyChatTab(tab) {
+      this.currentChatTab = tab;
+      const tabGlobal = document.getElementById('mlbbChatTabGlobalBtn');
+      const tabFriends = document.getElementById('mlbbChatTabFriendsBtn');
+      const bodyGlobal = document.getElementById('mlbbGlobalChatBody');
+      const bodyFriends = document.getElementById('mlbbFriendsChatBody');
+      const title = document.getElementById('mlbbChatHeaderTitle');
+      const subtitle = document.getElementById('mlbbChatHeaderSubtitle');
+      const input = document.getElementById('mlbbChatInput');
+
+      if (tabGlobal) tabGlobal.classList.toggle('active', tab === 'global');
+      if (tabFriends) tabFriends.classList.toggle('active', tab === 'friends');
+      if (bodyGlobal) bodyGlobal.classList.toggle('hidden', tab !== 'global');
+      if (bodyFriends) bodyFriends.classList.toggle('hidden', tab !== 'friends');
+
+      if (tab === 'global') {
+        if (title) title.textContent = 'OBROLAN GLOBAL';
+        if (subtitle) subtitle.textContent = 'Semua pemain online di server';
+        if (input) input.placeholder = 'Ketik pesan ke Obrolan Global...';
+        const c = document.getElementById('mlbbGlobalMessagesContainer');
+        if (c) c.scrollTop = c.scrollHeight;
+      } else {
+        if (title) title.textContent = 'CHAT TEMAN (PRIVAT)';
+        if (subtitle) subtitle.textContent = 'Obrolan langsung 1-on-1 dengan teman';
+        if (input) input.placeholder = 'Ketik pesan privat ke teman...';
+        this.renderChatFriendsList();
+      }
+    }
+
+    renderChatPresets() {
+      // already statically in html, but chips bound in bindChatEvents
+    }
+
+    renderChatBirdEmotes() {
+      const bar = document.getElementById('mlbbChatBirdEmotesBar');
+      if (!bar) return;
+      bar.innerHTML = '';
+      CUTE_BIRD_EMOTES.slice(0, 8).forEach(emote => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chat-bird-emote-btn';
+        btn.title = emote.title;
+        btn.innerHTML = emote.render(22);
+        btn.onclick = () => {
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+          this.sendCurrentChatMessage(`[BIRD_EMOTE:${emote.id}]`);
+        };
+        bar.appendChild(btn);
+      });
+    }
+
+    listenGlobalChat() {
+      if (!this.db) return;
+      if (this.globalChatUnsub) this.globalChatUnsub();
+
+      const container = document.getElementById('mlbbGlobalMessagesContainer');
+      const snippet = document.getElementById('mlbbLobbyChatSnippet');
+
+      try {
+        this.globalChatUnsub = this.db.collection('flappy_global_chat')
+          .orderBy('timestamp', 'desc')
+          .limit(35)
+          .onSnapshot(snap => {
+            const messages = [];
+            snap.forEach(doc => {
+              messages.push({ id: doc.id, ...doc.data() });
+            });
+            // Reverse so oldest first
+            messages.reverse();
+
+            // Update snippet on bottom nav
+            if (messages.length > 0 && snippet) {
+              const lastMsg = messages[messages.length - 1];
+              const cleanText = (lastMsg.text || '').startsWith('[BIRD_EMOTE:') ? 'Stiker Burung 🐣' : lastMsg.text;
+              snippet.innerHTML = `<span class="mlbb-chat-ch">[Global]</span> <b>${this.escapeHtml(lastMsg.senderName || 'Player')}:</b> ${this.escapeHtml(cleanText)}`;
+            }
+
+            // Render messages in modal
+            if (container) {
+              container.innerHTML = '';
+              if (messages.length === 0) {
+                container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:25px;font-size:0.8rem;">Belum ada pesan global. Jadilah yang pertama menyapa!</div>';
+                return;
+              }
+
+              messages.forEach(msg => {
+                const isMe = msg.senderKey === this.myKey;
+                const timeStr = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+                
+                let contentHtml = '';
+                if (typeof msg.text === 'string' && msg.text.startsWith('[BIRD_EMOTE:')) {
+                  const emoteId = msg.text.replace('[BIRD_EMOTE:', '').replace(']', '').trim();
+                  const foundEmote = CUTE_BIRD_EMOTES.find(e => e.id === emoteId);
+                  contentHtml = foundEmote ? `<div class="bird-sticker-img" title="${foundEmote.title}">${foundEmote.render(40)}</div>` : this.escapeHtml(msg.text);
+                } else {
+                  contentHtml = this.escapeHtml(msg.text);
+                }
+
+                const row = document.createElement('div');
+                row.className = `mlbb-gm-row ${isMe ? 'is-me' : ''}`;
+                
+                const avSvg = typeof window.getCuteAvatarSvg === 'function'
+                  ? window.getCuteAvatarSvg(msg.senderAvatar || 'chick_yellow', 24)
+                  : '🐥';
+
+                row.innerHTML = `
+                  <div class="mlbb-gm-avatar" title="Lihat Profil ${this.escapeHtml(msg.senderName || 'Pemain')}">
+                    ${avSvg}
+                  </div>
+                  <div class="mlbb-gm-content">
+                    <div class="mlbb-gm-meta">
+                      <span class="mlbb-gm-name">${this.escapeHtml(msg.senderName || 'Pemain')}</span>
+                      <span class="mlbb-gm-tier">${this.escapeHtml(msg.senderTier || 'BRONZE')}</span>
+                      <span class="mlbb-gm-time">${timeStr}</span>
+                    </div>
+                    <div class="mlbb-gm-bubble">${contentHtml}</div>
+                  </div>
+                `;
+
+                // Clicking avatar opens user action (view profile or add friend)
+                const avEl = row.querySelector('.mlbb-gm-avatar');
+                if (avEl && !isMe) {
+                  avEl.onclick = () => {
+                    this.openFriendProfile({
+                      friendKey: msg.senderKey,
+                      name: msg.senderName,
+                      avatar: msg.senderAvatar,
+                      tier: msg.senderTier
+                    });
+                  };
+                }
+
+                container.appendChild(row);
+              });
+              container.scrollTop = container.scrollHeight;
+            }
+          }, err => {
+            console.warn('[SocialService] Global chat error:', err.message);
+          });
+      } catch(e) {
+        console.warn('[SocialService] Init global chat error:', e.message);
+      }
+    }
+
+    renderChatFriendsList() {
+      const list = document.getElementById('mlbbChatFriendsList');
+      if (!list) return;
+      list.innerHTML = '';
+      if (!this.friends || this.friends.length === 0) {
+        list.innerHTML = '<div style="padding:15px 6px;font-size:0.75rem;color:#94a3b8;text-align:center;">Belum ada teman</div>';
+        return;
+      }
+
+      this.friends.forEach(f => {
+        const item = document.createElement('div');
+        item.className = `mlbb-cm-friend-item ${this.activeFriendChat && this.activeFriendChat.friendKey === f.friendKey ? 'active' : ''}`;
+        const avSvg = typeof window.getCuteAvatarSvg === 'function' ? window.getCuteAvatarSvg(f.avatar || 'chick_yellow', 18) : '🐥';
+        item.innerHTML = `
+          <div style="width:18px;height:18px;border-radius:50%;overflow:hidden;flex-shrink:0;">${avSvg}</div>
+          <span class="mlbb-cm-friend-item-name">${this.escapeHtml(f.name || 'Teman')}</span>
+          <span class="friend-online-dot ${f.isOnline ? 'online' : ''}" style="margin-left:auto;"></span>
+        `;
+        item.onclick = () => {
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+          this.selectFriendForLobbyChat(f);
+        };
+        list.appendChild(item);
+      });
+
+      if (!this.activeFriendChat && this.friends.length > 0) {
+        this.selectFriendForLobbyChat(this.friends[0]);
+      }
+    }
+
+    selectFriendForLobbyChat(friend) {
+      this.activeFriendChat = friend;
+      const targetBar = document.getElementById('mlbbChatActiveFriendName');
+      if (targetBar) {
+        targetBar.textContent = `Obrolan Privat: ${friend.name || 'Teman'}`;
+      }
+      this.renderChatFriendsList();
+      this.listenFriendLobbyMessages(friend);
+    }
+
+    listenFriendLobbyMessages(friend) {
+      if (!this.db || !this.myKey || !friend) return;
+      if (this.friendLobbyChatUnsub) this.friendLobbyChatUnsub();
+
+      const container = document.getElementById('mlbbFriendMessagesContainer');
+      if (container) container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:15px;font-size:0.8rem;">Memuat obrolan...</div>';
+
+      const channelId = [this.myKey, friend.friendKey].sort().join('_');
+      try {
+        this.friendLobbyChatUnsub = this.db.collection('flappy_direct_chats')
+          .doc(channelId)
+          .collection('messages')
+          .orderBy('timestamp', 'asc')
+          .limitToLast(40)
+          .onSnapshot(snap => {
+            if (!container) return;
+            container.innerHTML = '';
+            if (snap.empty) {
+              container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:25px 10px;font-size:0.8rem;">Belum ada pesan privat. Sapa temanmu!</div>';
+              return;
+            }
+            snap.forEach(doc => {
+              const msg = doc.data();
+              const isMe = msg.senderKey === this.myKey;
+              const timeStr = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+              
+              let contentHtml = '';
+              if (typeof msg.text === 'string' && msg.text.startsWith('[BIRD_EMOTE:')) {
+                const emoteId = msg.text.replace('[BIRD_EMOTE:', '').replace(']', '').trim();
+                const foundEmote = CUTE_BIRD_EMOTES.find(e => e.id === emoteId);
+                contentHtml = foundEmote ? `<div class="bird-sticker-img" title="${foundEmote.title}">${foundEmote.render(40)}</div>` : this.escapeHtml(msg.text);
+              } else {
+                contentHtml = this.escapeHtml(msg.text);
+              }
+
+              const row = document.createElement('div');
+              row.className = `mlbb-gm-row ${isMe ? 'is-me' : ''}`;
+              const avSvg = typeof window.getCuteAvatarSvg === 'function' ? window.getCuteAvatarSvg(isMe ? (this.myProfile.avatar || 'chick_yellow') : (friend.avatar || 'chick_yellow'), 22) : '🐥';
+              row.innerHTML = `
+                <div class="mlbb-gm-avatar">${avSvg}</div>
+                <div class="mlbb-gm-content">
+                  <div class="mlbb-gm-meta">
+                    <span class="mlbb-gm-name">${this.escapeHtml(isMe ? 'Kamu' : (friend.name || 'Teman'))}</span>
+                    <span class="mlbb-gm-time">${timeStr}</span>
+                  </div>
+                  <div class="mlbb-gm-bubble">${contentHtml}</div>
+                </div>
+              `;
+              container.appendChild(row);
+            });
+            container.scrollTop = container.scrollHeight;
+          });
+      } catch(e) {}
+    }
+
+    async sendCurrentChatMessage(text) {
+      if (!text || !text.trim()) return;
+      if (!this.myProfile || !this.myProfile.isLoggedIn) {
+        if (typeof window.showGameDialog === 'function') {
+          window.showGameDialog({
+            title: 'Login Dulu',
+            html: '<p>Anda harus login akun Google terlebih dahulu untuk mengirim pesan obrolan.</p>',
+            type: 'warning',
+            confirmText: 'MENGERTI'
+          });
+        }
+        return;
+      }
+
+      if (this.currentChatTab === 'friends') {
+        if (!this.activeFriendChat) {
+          if (typeof window.showToast === 'function') window.showToast('Pilih teman terlebih dahulu');
+          return;
+        }
+        const channelId = [this.myKey, this.activeFriendChat.friendKey].sort().join('_');
+        try {
+          await this.db.collection('flappy_direct_chats')
+            .doc(channelId)
+            .collection('messages')
+            .add({
+              senderKey: this.myKey,
+              senderName: this.myProfile.gamerTag || 'Player',
+              text: text.trim(),
+              timestamp: Date.now()
+            });
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+        } catch(e) {
+          console.warn('[SocialService] Send friend chat error:', e.message);
+        }
+      } else {
+        // Send to GLOBAL chat
+        try {
+          await this.db.collection('flappy_global_chat').add({
+            senderKey: this.myKey,
+            senderName: this.myProfile.gamerTag || 'Player',
+            senderAvatar: this.myProfile.avatar || 'chick_yellow',
+            senderTier: this.myProfile.tier || 'BRONZE I',
+            text: text.trim(),
+            timestamp: Date.now()
+          });
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+        } catch(e) {
+          console.warn('[SocialService] Send global chat error:', e.message);
+        }
+      }
     }
 
     setAccount(primaryKey, profile) {
@@ -481,6 +845,7 @@
       this.myProfile = profile || {};
       this.startListeners();
       this.refreshRequests();
+      this.initLobbyChat();
     }
 
     clearAccount() {
