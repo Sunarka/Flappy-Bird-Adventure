@@ -2554,7 +2554,8 @@
         </svg>
       </button>` : '';
 
-      return `<div class="skin-card-wrap" data-card-product="${id}">` +
+      const isCardFlipped = (flippedShopCardId === id);
+      return `<div class="skin-card-wrap ${isCardFlipped ? 'flipped' : ''}" data-card-product="${id}">` +
         `<div class="skin-card-inner">` +
         `  <!-- FRONT FACE: Clean, symmetrical, handcrafted -->` +
         `  <div class="skin-card skin-card-front rarity-${rarity} ${selected ? 'selected ' : ''}${isPreviewing ? 'previewing ' : ''}${isPlayingPreview ? 'playing-preview ' : ''}${unlocked ? '' : 'locked'}" style="--body:${body};--wing:${wing};--beak:${item.beak||body};--cap:${cap};--edge:${edge};--top:${top};--bottom:${bottom};--color:${color}">` +
@@ -2602,19 +2603,40 @@
       if(exBtn) {
         exBtn.onclick = (e) => {
           e.stopPropagation();
+          e.preventDefault();
           audio.click();
-          el.skinList.querySelectorAll('.skin-card-wrap.flipped').forEach(w => {
-            if(w !== wrap) w.classList.remove('flipped');
-          });
-          wrap.classList.add('flipped');
-          previewProduct(wrap.dataset.cardProduct);
+          const cardId = wrap.dataset.cardProduct;
+          if (wrap.classList.contains('flipped')) {
+            flippedShopCardId = null;
+            wrap.classList.remove('flipped');
+          } else {
+            flippedShopCardId = cardId;
+            el.skinList.querySelectorAll('.skin-card-wrap.flipped').forEach(w => {
+              w.classList.remove('flipped');
+            });
+            wrap.classList.add('flipped');
+            
+            // Update live banner without wiping DOM with renderShop
+            const item = catalog[cardId];
+            if(item) {
+              const bTitle = $('shopItemBannerTitle');
+              const bDesc = $('shopItemBannerDesc');
+              if(bTitle) bTitle.textContent = item.name;
+              if(bDesc) {
+                bDesc.textContent = item.desc ? item.desc : 'Item kosmetik eksklusif Feather Rush.';
+                bDesc.style.color = item.desc ? '#fef08a' : '#94a3b8';
+              }
+            }
+          }
         };
       }
 
       // Flip kembali ke depan
       const flipBack = (e) => {
         e.stopPropagation();
+        e.preventDefault();
         audio.click();
+        flippedShopCardId = null;
         wrap.classList.remove('flipped');
       };
 
@@ -4476,7 +4498,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.40';
+  const GAME_VERSION = '20.41';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
