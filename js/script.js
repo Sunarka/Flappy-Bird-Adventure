@@ -824,7 +824,7 @@
       if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
       if(this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
     },
-    playAudioFile(filename, loop = true, volume = 0.45, isPreview = false) {
+    playAudioFile(filename, loop = true, volume = 0.85, isPreview = false) {
       if(isPreview) {
         this.stopPreviewFileMusic();
       } else {
@@ -873,23 +873,33 @@
     playTone(freq, dur, type, volume, slide=0) {
       try {
         this.init();
+        if(!this.ctx) return;
+        const actualVol = Math.min(0.92, (volume || 0.05) * 2.8);
         const t = this.ctx.currentTime, o = this.ctx.createOscillator(), g = this.ctx.createGain();
         o.type = type;
         o.frequency.setValueAtTime(freq, t);
         o.frequency.exponentialRampToValueAtTime(Math.max(20, freq + slide), t + dur);
-        g.gain.setValueAtTime(volume, t);
-        g.gain.exponentialRampToValueAtTime(.001, t + dur);
+        const attack = Math.min(0.015, dur * 0.15);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.linearRampToValueAtTime(actualVol, t + attack);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
         o.connect(g).connect(this.ctx.destination);
         o.start(t);
         o.stop(t + dur);
+        o.onended = () => {
+          try {
+            o.disconnect();
+            g.disconnect();
+          } catch(e) {}
+        };
       } catch(_) {}
     },
-    flap() { this.tone(520, .07, 'triangle', .035, 180); },
-    score() { this.tone(760, .13, 'sine', .05, 260); },
-    coin() { this.tone(980, .14, 'sine', .05, 350); },
-    hit() { this.tone(130, .2, 'sawtooth', .06, -70); },
-    click() { this.tone(360, .045, 'square', .025, 70); },
-    win() { this.tone(660, .16, 'triangle', .05, 500); },
+    flap() { this.tone(520, .07, 'triangle', .055, 180); },
+    score() { this.tone(760, .13, 'sine', .075, 260); },
+    coin() { this.tone(980, .14, 'sine', .08, 350); },
+    hit() { this.tone(130, .2, 'sawtooth', .08, -70); },
+    click() { this.tone(360, .045, 'square', .045, 70); },
+    win() { this.tone(660, .16, 'triangle', .075, 500); },
     
     // Power-up & Skill Sound Effects & Jingles
     powerup(type) {
@@ -1178,7 +1188,7 @@
       this.init();
 
       // Putar lagu studio "A World Beyond - Ghibli Melodic" untuk suasana lobby yang tenang & damai
-      const aud = this.playAudioFile('lobby_ghibli.webm', true, 0.40);
+      const aud = this.playAudioFile('lobby_ghibli.webm', true, 0.80);
       if(aud) {
         aud.onerror = () => {
           this.playSynthLobbyMusic();
@@ -1281,7 +1291,7 @@
       };
 
       if(animeAudioMap[trackId]) {
-        const aud = this.playAudioFile(animeAudioMap[trackId], true, 0.45);
+        const aud = this.playAudioFile(animeAudioMap[trackId], true, 0.85);
         if(aud) {
           aud.onerror = () => {
             this.playSynthGameMusic(trackId);
@@ -1483,7 +1493,7 @@
       this.init();
 
       // Putar soundtrack Nyan Cat yang riang, seru, dan energik untuk duel multiplayer 1v1
-      const aud = this.playAudioFile('nyan_cat.wav', true, 0.45);
+      const aud = this.playAudioFile('nyan_cat.wav', true, 0.85);
       if(aud) {
         aud.onerror = () => {
           this.playSynthNyanCat();
@@ -1566,7 +1576,7 @@
       };
 
       if(animeAudioMap[trackId]) {
-        const aud = this.playAudioFile(animeAudioMap[trackId], true, 0.5, true);
+        const aud = this.playAudioFile(animeAudioMap[trackId], true, 0.85, true);
         if(aud) {
           aud.onerror = () => {
             this.playSynthPreview(trackId);
@@ -4692,7 +4702,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.56';
+  const GAME_VERSION = '20.57';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
