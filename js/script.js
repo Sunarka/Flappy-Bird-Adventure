@@ -4394,7 +4394,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.21';
+  const GAME_VERSION = '20.22';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -12717,9 +12717,8 @@
   let mpSearchStartTime = 0;
 
   function startSearchingRadar() {
-    // Tampilkan radar visual di modal serta status pencarian yang selalu terlihat di atas layar.
-    if(el.mpQuickInitialBox) el.mpQuickInitialBox.classList.add('hidden');
-    if(el.mpQuickSearchingBox) el.mpQuickSearchingBox.classList.remove('hidden');
+    // Tutup modal agar pemain kembali ke lobi utama dan tampilkan banner matchmaking MLBB melayang di atas layar
+    closeModal();
     if(el.mpSearchingBar) el.mpSearchingBar.classList.remove('hidden');
 
     mpSearchStartTime = Date.now();
