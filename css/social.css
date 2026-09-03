@@ -999,30 +999,58 @@
 }
 
 /* Chunky Close Button */
-.friend-profile-modal .close {
-  top: 8px !important;
-  right: 8px !important;
-  width: 28px !important;
-  height: 28px !important;
-  margin: 0 !important;
-  border-radius: 50% !important;
-  background: linear-gradient(180deg, #f87171 0%, #ef4444 100%) !important;
-  color: #ffffff !important;
-  border: 1.5px solid #b91c1c !important;
-  box-shadow: 0 2.5px 0 #991b1b !important;
-  font-size: 18px !important;
-  line-height: 22px !important;
+/* Clean Subtle Close Button (Inside header) */
+.profile-modal-top-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 6px !important;
+  padding-bottom: 4px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  flex-shrink: 0 !important;
+}
+
+.profile-modal-heading {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.profile-modal-icon {
+  font-size: 14px !important;
+}
+
+.profile-modal-title {
+  font: 900 11px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #f1f5f9 !important;
+  letter-spacing: 0.5px !important;
+}
+
+.profile-modal-close-btn {
+  width: 22px !important;
+  height: 22px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 6px !important;
+  color: #cbd5e1 !important;
+  font: 900 14px/1 Arial, sans-serif !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
   transition: all 0.15s ease !important;
+  padding: 0 !important;
 }
 
-.friend-profile-modal .close:hover {
-  transform: rotate(90deg) scale(1.08) !important;
-  filter: brightness(1.15) !important;
+.profile-modal-close-btn:hover {
+  background: #ef4444 !important;
+  border-color: #f87171 !important;
+  color: #ffffff !important;
+  transform: scale(1.05) !important;
 }
 
-.friend-profile-modal .close:active {
-  transform: translateY(2px) scale(0.95) !important;
-  box-shadow: 0 1px 0 #991b1b !important;
+.friend-profile-modal .close {
+  display: none !important;
 }
 
 .profile-top-row {
@@ -1433,4 +1461,158 @@
 
 .mlbb-cm-send-btn:hover {
   filter: brightness(1.15) !important;
+}
+
+/* =========================================================
+   INDIE PROFILE & ACCOUNT TAB 3 STYLES
+   ========================================================= */
+.gp-cloud-card, .gp-guest-box {
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.3) !important;
+  border-radius: 12px !important;
+  padding: 8px 10px !important;
+  margin-bottom: 8px !important;
+}
+
+.gp-card-top-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 6px !important;
+}
+
+.gp-status-pill {
+  font: 900 8px/1 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 3px 8px !important;
+  border-radius: 8px !important;
+}
+
+.gp-status-pill.online {
+  background: rgba(34, 197, 94, 0.2) !important;
+  border: 1px solid #22c55e !important;
+  color: #4ade80 !important;
+}
+
+.gp-status-pill.offline {
+  background: rgba(148, 163, 184, 0.2) !important;
+  border: 1px solid #94a3b8 !important;
+  color: #cbd5e1 !important;
+}
+
+.gp-sync-badge {
+  font: 800 7px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #38bdf8 !important;
+  letter-spacing: 0.3px !important;
+}
+
+.gp-sync-badge.warn {
+  color: #fbbf24 !important;
+}
+
+.gp-account-info-box {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: rgba(8, 15, 30, 0.7) !important;
+  border-radius: 8px !important;
+  padding: 6px 8px !important;
+}
+
+.gp-account-avatar-mini {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  background: #1e293b !important;
+  border: 1px solid #38bdf8 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.gp-account-texts {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.gp-email-display {
+  font: 900 9.5px/1.2 'Trebuchet MS', Arial, sans-serif !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.gp-sync-desc, .gp-guest-desc {
+  font: 700 7.5px/1.2 'Trebuchet MS', Arial, sans-serif !important;
+  color: #94a3b8 !important;
+  margin-top: 2px !important;
+}
+
+.gp-login-btns-grid {
+  display: flex !important;
+  gap: 6px !important;
+  margin-top: 6px !important;
+}
+
+.gp-provider-btn {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 6px !important;
+  border-radius: 8px !important;
+  border: none !important;
+  cursor: pointer !important;
+  font: 900 8.5px/1 'Trebuchet MS', Arial, sans-serif !important;
+  transition: all 0.15s ease !important;
+}
+
+.gp-provider-btn.google {
+  background: #ffffff !important;
+  color: #1e293b !important;
+}
+
+.gp-provider-btn.facebook {
+  background: #1877f2 !important;
+  color: #ffffff !important;
+}
+
+.gp-actions-row {
+  display: flex !important;
+  gap: 8px !important;
+  margin-top: 6px !important;
+}
+
+.gp-btn {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 8px 10px !important;
+  border-radius: 8px !important;
+  font: 900 9px/1 'Trebuchet MS', Arial, sans-serif !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: all 0.15s ease !important;
+}
+
+.gp-btn.primary.save {
+  background: linear-gradient(180deg, #16a34a 0%, #15803d 100%) !important;
+  border: 1px solid #4ade80 !important;
+  box-shadow: 0 2px 0 #14532d !important;
+  color: #ffffff !important;
+}
+
+.gp-btn.secondary.signout {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border: 1px solid #ef4444 !important;
+  color: #fca5a5 !important;
+}
+
+.gp-btn:hover {
+  transform: translateY(-1px) !important;
+  filter: brightness(1.1) !important;
 }
