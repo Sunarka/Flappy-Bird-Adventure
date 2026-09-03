@@ -4643,6 +4643,10 @@
   if(modalLayerEl) {
     modalLayerEl.addEventListener('click', (e) => {
       if(e.target === modalLayerEl) {
+        // DILARANG menutup jika sedang di modal Revive (Continue), Game Dialog, atau Game Over!
+        if(el.reviveModal && !el.reviveModal.classList.contains('hidden')) return;
+        if(el.gameDialogModal && !el.gameDialogModal.classList.contains('hidden')) return;
+        if(el.over && !el.over.classList.contains('hidden')) return;
         closeModal();
       }
     });
@@ -4652,7 +4656,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.53';
+  const GAME_VERSION = '20.54';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -4918,6 +4922,8 @@
     el.livesHud.innerHTML = html;
   }
 
+  let reviveInputAllowed = true;
+
   function getReviveCost() {
     return 20 * Math.pow(2, reviveCount);
   }
@@ -4931,6 +4937,12 @@
     audio.stopMusic();
     stopBackgroundMusic();
     audio.hit();
+
+    // Proteksi 350ms agar ketukan cepat saat main tidak langsung memicu tombol secara tidak sengaja
+    reviveInputAllowed = false;
+    setTimeout(() => {
+      reviveInputAllowed = true;
+    }, 350);
 
     const cost = getReviveCost();
     if(el.reviveCostLabel) {
@@ -13109,17 +13121,36 @@
     el.dashBtn.addEventListener('pointerout', stopHold);
   }
 
+  if(el.reviveModal) {
+    el.reviveModal.addEventListener('click', e => e.stopPropagation());
+    el.reviveModal.addEventListener('pointerdown', e => e.stopPropagation());
+  }
+
   if(el.reviveConfirmBtn) {
-    el.reviveConfirmBtn.onclick = e => {
-      e.stopPropagation();
+    let lastReviveClick = 0;
+    const handleRevive = (e) => {
+      if(e) { e.stopPropagation(); e.preventDefault(); }
+      if(!reviveInputAllowed) return;
+      const now = Date.now();
+      if(now - lastReviveClick < 400) return;
+      lastReviveClick = now;
       executeRevive();
     };
+    el.reviveConfirmBtn.onclick = handleRevive;
+    el.reviveConfirmBtn.addEventListener('pointerdown', handleRevive);
   }
   if(el.reviveGiveUpBtn) {
-    el.reviveGiveUpBtn.onclick = e => {
-      e.stopPropagation();
+    let lastGiveUpClick = 0;
+    const handleGiveUp = (e) => {
+      if(e) { e.stopPropagation(); e.preventDefault(); }
+      if(!reviveInputAllowed) return;
+      const now = Date.now();
+      if(now - lastGiveUpClick < 400) return;
+      lastGiveUpClick = now;
       giveUpRevive();
     };
+    el.reviveGiveUpBtn.onclick = handleGiveUp;
+    el.reviveGiveUpBtn.addEventListener('pointerdown', handleGiveUp);
   }
 
   window.addEventListener('keydown', e => {
