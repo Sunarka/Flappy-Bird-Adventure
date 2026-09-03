@@ -4409,7 +4409,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.35';
+  const GAME_VERSION = '20.36';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -13570,6 +13570,10 @@
   // =========================================================
   // LUCKY BIRD GACHA SYSTEM (PULLS, WEIGHTS & INVENTORY SYNC)
   // =========================================================
+  
+  // =========================================================
+  // LUCKY BIRD GACHA SYSTEM (PULLS, WEIGHTS & INVENTORY SYNC)
+  // =========================================================
   const gachaPool = [
     // Mythic Tier (2%)
     { type:'skin', id:'goku_ssj', name:'Super Saiyan Goku', rarity:'mythic', icon:'⚡' },
@@ -13604,108 +13608,21 @@
     { type:'hat', id:'beanie', name:'Winter Beanie', rarity:'common', icon:'🧶' }
   ];
 
-  const spMilestones = [
-    { tier: 1, name: '50 Koin Emas', icon: '💰', type: 'coins', amount: 50, isFree: true },
-    { tier: 2, name: 'Baseball Snapback', icon: '🧢', type: 'hat', id: 'cap', isFree: true },
-    { tier: 3, name: '100 Koin Emas', icon: '💎', type: 'coins', amount: 100, isFree: true },
-    { tier: 4, name: 'Rose Pink Bird', icon: '🌸', type: 'skin', id: 'rose', isFree: false },
-    { tier: 5, name: '200 Koin Emas', icon: '💰', type: 'coins', amount: 200, isFree: true },
-    { tier: 6, name: 'Fire Blaze Aura', icon: '🔥', type: 'aura', id: 'fire', isFree: false },
-    { tier: 7, name: 'Royal Crown', icon: '👑', type: 'hat', id: 'crown', isFree: false },
-    { tier: 8, name: 'Cyber Neon Bird', icon: '👾', type: 'skin', id: 'cyber', isFree: false },
-    { tier: 9, name: 'Cosmic Galaxy Aura', icon: '🪐', type: 'aura', id: 'galaxy', isFree: false },
-    { tier: 10, name: 'Super Saiyan Goku', icon: '⚡', type: 'skin', id: 'goku_ssj', isFree: false }
-  ];
-
   function openGachaModal() {
     audio.click();
-    const spModal = $('skyPassGachaModal') || $('gachaModal');
-    const uCoins = $('spUserCoins') || $('gachaUserCoins');
+    const gModal = $('gachaModal') || $('skyPassGachaModal');
+    const uCoins = $('gachaUserCoins') || $('spUserCoins');
     if(uCoins) uCoins.textContent = progress.coins;
-    renderSkyPassMilestones();
-    showModal(spModal);
+    showModal(gModal);
   }
-
-  function switchSpTab(tabName) {
-    audio.click();
-    const tabGachaBtn = $('spTabGachaBtn');
-    const tabTrackBtn = $('spTabTrackBtn');
-    const contentGacha = $('spContentGacha');
-    const contentTrack = $('spContentTrack');
-
-    if(tabGachaBtn) tabGachaBtn.classList.toggle('active', tabName === 'gacha');
-    if(tabTrackBtn) tabTrackBtn.classList.toggle('active', tabName === 'track');
-    if(contentGacha) contentGacha.classList.toggle('active', tabName === 'gacha');
-    if(contentTrack) contentTrack.classList.toggle('active', tabName === 'track');
-  }
-
-  function renderSkyPassMilestones() {
-    const track = $('spMilestonesTrack');
-    if(!track) return;
-    track.innerHTML = '';
-
-    const currentScore = progress.highScore || 0;
-    const currentPassLvl = Math.min(10, Math.max(1, Math.floor(currentScore / 5) + 1));
-    const lvlText = $('spUserPassLevel');
-    if(lvlText) lvlText.textContent = 'Lv. ' + currentPassLvl;
-
-    const fillBar = $('spPassXpFill');
-    if(fillBar) fillBar.style.width = Math.min(100, (currentPassLvl / 10) * 100) + '%';
-
-    spMilestones.forEach(m => {
-      const isReached = currentPassLvl >= m.tier;
-      const card = document.createElement('div');
-      card.className = `sp-milestone-card ${isReached ? 'unlocked' : ''}`;
-      card.innerHTML = `
-        <div class="sp-tier-badge">TIER ${m.tier} ${m.isFree ? '(FREE)' : '(PASS)'}</div>
-        <div class="sp-reward-icon">${m.icon}</div>
-        <div class="sp-reward-name" title="${m.name}">${m.name}</div>
-        <button type="button" class="sp-claim-btn ${isReached ? '' : 'locked'}">
-          ${isReached ? 'KLAIM ✓' : 'LOCKED 🔒'}
-        </button>
-      `;
-
-      const btn = card.querySelector('.sp-claim-btn');
-      if(btn && isReached) {
-        btn.onclick = () => {
-          claimSpReward(m, btn);
-        };
-      }
-      track.appendChild(card);
-    });
-  }
-
-  function claimSpReward(m, btn) {
-    if(m.claimed) return;
-    m.claimed = true;
-    audio.win();
-
-    if(m.type === 'coins') {
-      progress.coins += m.amount;
-      updateCoins();
-      persistProgress();
-      const uCoins = $('spUserCoins');
-      if(uCoins) uCoins.textContent = progress.coins;
-    } else {
-      const unlockedKey = m.type === 'skin' ? 'unlocked' : (m.type + 'Unlocked');
-      if(!Array.isArray(progress[unlockedKey])) progress[unlockedKey] = [];
-      if(!progress[unlockedKey].includes(m.id)) {
-        progress[unlockedKey].push(m.id);
-      }
-      persistProgress();
-    }
-
-    btn.textContent = 'SELESAI';
-    btn.classList.add('locked');
-    btn.onclick = null;
-  }
+  window.openGachaModal = openGachaModal;
 
   function pickRandomGachaItem() {
     const roll = Math.random() * 100;
     let targetRarity = 'common';
-    if(roll < 2) targetRarity = 'mythic';
-    else if(roll < 12) targetRarity = 'legendary';
-    else if(roll < 30) targetRarity = 'epic';
+    if(roll < 2.5) targetRarity = 'mythic';
+    else if(roll < 12.5) targetRarity = 'legendary';
+    else if(roll < 30.5) targetRarity = 'epic';
     else if(roll < 60) targetRarity = 'rare';
     else targetRarity = 'common';
 
@@ -13734,6 +13651,8 @@
       progress.coins -= totalCost;
       updateCoins();
       persistProgress();
+      const uCoins = $('gachaUserCoins') || $('spUserCoins');
+      if(uCoins) uCoins.textContent = progress.coins;
     }
 
     audio.win();
@@ -13765,6 +13684,18 @@
     persistProgress();
     renderGachaResults(results);
   }
+  window.performGachaPull = performGachaPull;
+
+  function triggerGachaFreeAd() {
+    if(window.AdMobConfig && typeof window.AdMobConfig.showRewardAd === 'function') {
+      window.AdMobConfig.showRewardAd(() => {
+        performGachaPull(1, true);
+      });
+    } else {
+      performGachaPull(1, true);
+    }
+  }
+  window.triggerGachaFreeAd = triggerGachaFreeAd;
 
   function renderGachaResults(results) {
     const resModal = $('gachaResultModal');
@@ -13787,31 +13718,15 @@
     setTimeout(() => {
       showModal(resModal);
       audio.win();
-    }, 150);
+    }, 120);
   }
 
-  // Bind Gacha Card in Lobby
-  bindClick('mlbbGachaCard', () => openGachaModal());
+  // Bind Gacha Buttons explicitly
+  bindClick('lobbyGachaBtn', openGachaModal);
+  bindClick('mlbbGachaCard', openGachaModal);
   bindClick('gachaPull1Btn', () => performGachaPull(1, false));
   bindClick('gachaPull10Btn', () => performGachaPull(10, false));
-  bindClick('gachaPullFreeBtn', () => {
-    if(window.AdMobConfig && typeof window.AdMobConfig.showRewardAd === 'function') {
-      window.AdMobConfig.showRewardAd(() => {
-        performGachaPull(1, true);
-      });
-    } else {
-      performGachaPull(1, true);
-    }
-  });
-
-  // Bind Indie Mode Switcher Pills
-  bindClick('modePillClassic', () => setMode('classic'));
-  bindClick('modePillRanked', () => setMode('ranked'));
-  bindClick('modePillMp', () => setMode('multiplayer'));
-  bindClick('overLeaderboardBtn', () => {
-    audio.click();
-    showModal(el.rankedModal);
-  });
+  bindClick('gachaPullFreeBtn', triggerGachaFreeAd);
 
 
   try {

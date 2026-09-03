@@ -109,6 +109,8 @@ canvas {
 .tier-roadmap-modal.hidden,
 .revive-modal.hidden,
 .game-dialog-modal.hidden,
+.gacha-modal.hidden,
+.gacha-result-modal.hidden,
 .mp-over-modal.hidden {
   display: none !important;
 }
