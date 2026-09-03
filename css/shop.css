@@ -70,3 +70,181 @@
 
 @keyframes coinShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-5px);color:#ef4444}40%,80%{transform:translateX(5px);color:#ef4444}}
 .coin-shake{animation:coinShake 0.45s ease-in-out}
+
+/* =========================================================
+   3D FLIP CARD STYLES FOR SHOP ITEMS
+   Clean Front (No Wall of Text) + Interactive Flip Back
+   ========================================================= */
+
+.skin-card-wrap {
+  perspective: 800px !important;
+  position: relative !important;
+  min-height: 100px !important;
+  height: 100px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.skin-card-inner {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  transform-style: preserve-3d !important;
+}
+
+.skin-card-wrap.flipped .skin-card-inner {
+  transform: rotateY(180deg) !important;
+}
+
+.skin-card-front, .skin-card-back {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  box-sizing: border-box !important;
+}
+
+/* Front Face */
+.skin-card-front {
+  padding: 5px 6px 4px !important;
+  z-index: 2 !important;
+  transform: rotateY(0deg) !important;
+}
+
+.skin-card-header-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin-bottom: 2px !important;
+}
+
+.skin-card-header-row .rarity-badge {
+  position: static !important;
+}
+
+/* Info Icon Button (i) on Front */
+.card-flip-info-btn {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 50% !important;
+  width: 16px !important;
+  height: 16px !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  transition: all 0.15s ease !important;
+}
+
+.card-flip-info-btn:hover {
+  background: #38bdf8 !important;
+  border-color: #7dd3fc !important;
+  color: #0f172a !important;
+  transform: scale(1.15) !important;
+}
+
+/* Back Face (Revealed on 180deg Flip) */
+.skin-card-back {
+  transform: rotateY(180deg) !important;
+  background: linear-gradient(180deg, #142442 0%, #0c172c 100%) !important;
+  border: 1.5px solid #38bdf8 !important;
+  padding: 5px 6px !important;
+  color: #f1f5f9 !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5), inset 0 0 10px rgba(56, 189, 248, 0.2) !important;
+}
+
+.card-back-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  flex-shrink: 0 !important;
+}
+
+.card-back-close-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 4px !important;
+  width: 15px !important;
+  height: 15px !important;
+  font-size: 8px !important;
+  color: #cbd5e1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+}
+
+.card-back-close-btn:hover {
+  background: #ef4444 !important;
+  color: #fff !important;
+}
+
+.card-back-body {
+  flex: 1 !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  padding: 2px 0 !important;
+}
+
+.card-back-title {
+  font: 900 8.5px/1.1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #ffffff !important;
+  margin-bottom: 2px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.card-back-desc-tag {
+  font: 800 6.5px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #facc15 !important;
+  letter-spacing: 0.3px !important;
+  margin-bottom: 2px !important;
+}
+
+.card-back-desc-text {
+  font: 700 7px/1.2 'Trebuchet MS', Arial, sans-serif !important;
+  color: #cbd5e1 !important;
+  margin: 0 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+.card-back-return-btn {
+  background: rgba(56, 189, 248, 0.2) !important;
+  border: 1px solid #38bdf8 !important;
+  border-radius: 6px !important;
+  color: #38bdf8 !important;
+  font: 900 7.5px/1 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 3px 6px !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  transition: all 0.15s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.card-back-return-btn:hover {
+  background: #38bdf8 !important;
+  color: #0f172a !important;
+}
