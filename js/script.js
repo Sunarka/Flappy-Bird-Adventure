@@ -2546,41 +2546,48 @@
         actionHtml = `<button class="skin-cost-btn buy-btn ${canAfford ? '' : 'cant-afford'}" data-action="buy" data-product="${id}" type="button"><svg viewBox="0 0 16 16" width="12" height="12" class="mini-coin-svg"><circle cx="8" cy="8" r="6.5" fill="#fbbf24" stroke="#d97706" stroke-width="1.2"/><text x="8" y="11" text-anchor="middle" font-size="8" font-weight="900" fill="#92400e">$</text></svg> ${t.buy} ${item.cost}</button>`;
       }
 
+      // Info button SVG (No emojis)
+      const infoBtnHtml = desc ? `<button type="button" class="card-flip-info-btn" title="Detail Kemampuan" data-info-target="${id}">
+        <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+      </button>` : '';
+
       return `<div class="skin-card-wrap" data-card-product="${id}">` +
         `<div class="skin-card-inner">` +
-        `  <!-- FRONT OF CARD (Clean, No wall of text) -->` +
+        `  <!-- FRONT OF CARD (Clean, Professional, No wall of text) -->` +
         `  <div class="skin-card skin-card-front rarity-${rarity} ${selected ? 'selected ' : ''}${isPreviewing ? 'previewing ' : ''}${isPlayingPreview ? 'playing-preview ' : ''}${unlocked ? '' : 'locked'}" style="--body:${body};--wing:${wing};--beak:${item.beak||body};--cap:${cap};--edge:${edge};--top:${top};--bottom:${bottom};--color:${color}">` +
-        `    <div class="skin-card-header-row">` +
-        `      <span class="rarity-badge rarity-${rarity}">${rarity.toUpperCase()}</span>` +
-        (desc ? `      <button type="button" class="card-flip-info-btn" title="Lihat Deskripsi & Efek" data-info-target="${id}">ℹ️</button>` : '') +
-        `    </div>` +
+        `    <span class="rarity-badge rarity-${rarity}">${rarity.toUpperCase()}</span>` +
+        infoBtnHtml +
         `    <span class="skin-preview ${previewClass}">${iconSvg}</span>` +
-        `    <span class="skin-name">${item.name}</span>` +
+        `    <span class="skin-name" title="${item.name}">${item.name}</span>` +
         actionHtml +
         `  </div>` +
-        `  <!-- BACK OF CARD (3D Flipped Description) -->` +
+        `  <!-- BACK OF CARD (Clean 3D Flipped Description with ONE SVG Close button) -->` +
         `  <div class="skin-card-back rarity-${rarity}">` +
         `    <div class="card-back-header">` +
-        `      <span class="rarity-badge rarity-${rarity}">${rarity.toUpperCase()}</span>` +
-        `      <button type="button" class="card-back-close-btn" title="Tutup Deskripsi">✕</button>` +
+        `      <div class="card-back-title" title="${item.name}">${item.name}</div>` +
+        `      <button type="button" class="card-back-close-btn" title="Tutup">` +
+        `        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">` +
+        `          <path d="M18 6L6 18M6 6l12 12"/>` +
+        `        </svg>` +
+        `      </button>` +
         `    </div>` +
-        `    <div class="card-back-body">` +
-        `      <div class="card-back-title">${item.name}</div>` +
-        `      <div class="card-back-desc-tag">DESKRIPSI & EFEK:</div>` +
-        `      <p class="card-back-desc-text">${desc || 'Item kosmetik spesial.'}</p>` +
+        `    <div class="card-back-badge">EFEK / KEMAMPUAN</div>` +
+        `    <div class="card-back-desc-scroll">` +
+        `      <p class="card-back-desc-text">${desc || 'Item kosmetik eksklusif Feather Rush.'}</p>` +
         `    </div>` +
-        `    <button type="button" class="card-back-return-btn">KEMBALI ↩</button>` +
+        `    <div class="card-back-tap-hint">Ketuk untuk kembali ↩</div>` +
         `  </div>` +
         `</div>` +
         `</div>`;
     }).join('');
 
-    // Klik Kartu -> Preview tampilan & suara tanpa membeli
+    // Klik Kartu Depan -> Preview tampilan & suara
     el.skinList.querySelectorAll('.skin-card-wrap').forEach(wrap => {
       const front = wrap.querySelector('.skin-card-front');
       const infoBtn = wrap.querySelector('.card-flip-info-btn');
       const closeBtn = wrap.querySelector('.card-back-close-btn');
-      const returnBtn = wrap.querySelector('.card-back-return-btn');
       const back = wrap.querySelector('.skin-card-back');
 
       if(front) {
@@ -2590,12 +2597,11 @@
         };
       }
 
-      // Flip ke belakang saat klik info icon ℹ️
+      // Flip ke belakang saat klik info icon
       if(infoBtn) {
         infoBtn.onclick = (e) => {
           e.stopPropagation();
           audio.click();
-          // Tutup semua kartu lain yang sedang terbuka
           el.skinList.querySelectorAll('.skin-card-wrap.flipped').forEach(w => {
             if(w !== wrap) w.classList.remove('flipped');
           });
@@ -2611,13 +2617,7 @@
       };
 
       if(closeBtn) closeBtn.onclick = flipBack;
-      if(returnBtn) returnBtn.onclick = flipBack;
-      if(back) {
-        back.onclick = (e) => {
-          if(e.target.closest('.card-back-close-btn') || e.target.closest('.card-back-return-btn')) return;
-          flipBack(e);
-        };
-      }
+      if(back) back.onclick = flipBack;
     });
 
     // Tombol Aksi: BUY atau EQUIP
@@ -4465,7 +4465,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.38';
+  const GAME_VERSION = '20.39';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
