@@ -4506,7 +4506,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.49';
+  const GAME_VERSION = '20.50';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -11300,12 +11300,12 @@
 
     // Left (Player)
     if(el.mpOverMyName) el.mpOverMyName.textContent = gpProfile.gamerTag || 'YOU';
-    if(el.mpOverMyAvatar) el.mpOverMyAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 46);
+    if(el.mpOverMyAvatar) el.mpOverMyAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 38);
     if(el.mpOverMyScore) el.mpOverMyScore.textContent = myScore;
 
     // Right (Rival)
     if(el.mpOverRivalName) el.mpOverRivalName.textContent = rival.name || 'Rival';
-    if(el.mpOverRivalAvatar) el.mpOverRivalAvatar.innerHTML = getCuteAvatarSvg(rival.avatar, 46);
+    if(el.mpOverRivalAvatar) el.mpOverRivalAvatar.innerHTML = getCuteAvatarSvg(rival.avatar, 38);
     if(el.mpOverRivalScore) el.mpOverRivalScore.textContent = rivalScore;
 
     if(isWinner) {
