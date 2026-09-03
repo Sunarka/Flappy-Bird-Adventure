@@ -3521,7 +3521,8 @@
       el.gpAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 52);
     }
     if(el.gpGamerTagInput && document.activeElement !== el.gpGamerTagInput) {
-      el.gpGamerTagInput.value = gpProfile.gamerTag || 'SkyPlayer';
+      const displayTag = gpProfile.gamerTag || 'SkyPlayer';
+      el.gpGamerTagInput.value = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(displayTag) : displayTag;
     }
     if(el.gpUserEmail) el.gpUserEmail.textContent = gpProfile.email ? gpProfile.email : (gpProfile.gamerTag || 'Akun Pemain');
     if(el.gpRankedBest) el.gpRankedBest.textContent = rankedBest;
@@ -3689,7 +3690,8 @@
 
       if(isLogged) {
         if(elAvatar) elAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 38);
-        if(elName) elName.textContent = gpProfile.gamerTag || 'Player';
+        const rawName = gpProfile.gamerTag || 'Player';
+        if(elName) elName.textContent = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(rawName) : rawName;
         if(elTierIcon) elTierIcon.innerHTML = playerTier.iconSvg;
         if(elTierNum) elTierNum.textContent = currentScore;
         if(elXpFill) {
@@ -3849,8 +3851,8 @@
         seenIds.add(uniqueKey);
       }
 
-      const score = Math.max(0, parseInt(p.score, 10) || 0);
-      const name = isUser ? (gpProfile.gamerTag || p.name || 'SkyPlayer').slice(0, 16) : ((p.name && typeof p.name === 'string') ? p.name.slice(0, 16) : 'Player');
+      let name = isUser ? (gpProfile.gamerTag || p.name || 'SkyPlayer').slice(0, 16) : ((p.name && typeof p.name === 'string') ? p.name.slice(0, 16) : 'Player');
+      if(typeof window.sanitizePlayerName === 'function') name = window.sanitizePlayerName(name);
       let av = isUser ? (gpProfile.avatar || p.avatar || 'chick_yellow') : p.avatar;
       if(!isUser && (!av || !cuteAvatarKeys.includes(av))) {
         av = cuteAvatarKeys[uniqueList.length % cuteAvatarKeys.length];
@@ -4293,8 +4295,8 @@
     const elRank = $('fpRankBadge');
     const elUid = $('fpUid');
 
-    if(elAv) elAv.innerHTML = getCuteAvatarSvg(player.avatar || 'chick_yellow', 44);
-    if(elName) elName.textContent = player.name || 'Gamer';
+    const rawPName = player.name || 'Gamer';
+    if(elName) elName.textContent = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(rawPName) : rawPName;
     if(elRank) {
       elRank.textContent = `${pTier.name} TIER`;
       elRank.style.color = pTier.color;
@@ -4474,7 +4476,8 @@
     const elTrBtn = $('trMasterProfileBtn');
 
     if(elTrAv) elTrAv.innerHTML = getCuteAvatarSvg(topMaster.avatar, 26);
-    if(elTrName) elTrName.textContent = topMaster.name;
+    const rawTmName = topMaster.name || 'Master';
+    if(elTrName) elTrName.textContent = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(rawTmName) : rawTmName;
     if(elTrTier) {
       elTrTier.innerHTML = `<span class="tier-icon-inline">${topMasterTier.iconSvg}</span> ${topMasterTier.name} TIER (${topMaster.score} PTS)`;
       elTrTier.style.color = topMasterTier.color;
@@ -4526,7 +4529,7 @@
         rankHtml += `
           <div class="lb-row${userClass}" data-player-name="${p.name}" style="cursor:pointer;" title="Klik untuk lihat profil ${p.name}">
             <span class="lb-rank ${rankClass}">${rankBadge}</span>
-            <span class="lb-player"><span class="lb-av-circle">${getCuteAvatarSvg(p.avatar, 24)}</span> ${p.name}</span>
+            <span class="lb-player"><span class="lb-av-circle">${getCuteAvatarSvg(p.avatar, 24)}</span> ${typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(p.name) : p.name}</span>
             <span class="lb-tier" style="color: ${playerTier.color}; justify-content: flex-end;">
               <span class="tier-icon-inline">${playerTier.iconSvg}</span>
               ${playerTier.name}
@@ -4621,7 +4624,7 @@
       html += `
         <div class="lb-row${activeClass}${userClass}" data-player-name="${p.name}">
           <span class="lb-rank ${rankClass}">${rankBadge}</span>
-          <span class="lb-player"><span class="lb-av-circle">${getCuteAvatarSvg(p.avatar, 24)}</span> ${p.name}</span>
+          <span class="lb-player"><span class="lb-av-circle">${getCuteAvatarSvg(p.avatar, 24)}</span> ${typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(p.name) : p.name}</span>
           <span class="lb-score">${p.score}</span>
         </div>
       `;
@@ -4835,7 +4838,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.61';
+  const GAME_VERSION = '20.62';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -11769,12 +11772,14 @@
     const rivalScore = rivalFinalScore !== undefined ? rivalFinalScore : (rival.score || 0);
 
     // Left (Player)
-    if(el.mpOverMyName) el.mpOverMyName.textContent = gpProfile.gamerTag || 'YOU';
+    const mySafeName = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(gpProfile.gamerTag || 'YOU') : (gpProfile.gamerTag || 'YOU');
+    if(el.mpOverMyName) el.mpOverMyName.textContent = mySafeName;
     if(el.mpOverMyAvatar) el.mpOverMyAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 38);
     if(el.mpOverMyScore) el.mpOverMyScore.textContent = myScore;
 
     // Right (Rival)
-    if(el.mpOverRivalName) el.mpOverRivalName.textContent = rival.name || 'Rival';
+    const rivalSafeName = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(rival.name || 'Rival') : (rival.name || 'Rival');
+    if(el.mpOverRivalName) el.mpOverRivalName.textContent = rivalSafeName;
     if(el.mpOverRivalAvatar) el.mpOverRivalAvatar.innerHTML = getCuteAvatarSvg(rival.avatar, 38);
     if(el.mpOverRivalScore) el.mpOverRivalScore.textContent = rivalScore;
 
@@ -12643,7 +12648,9 @@
       });
       return;
     }
-    const newName = el.gpGamerTagInput ? el.gpGamerTagInput.value.trim() : '';
+    const rawNewName = el.gpGamerTagInput ? el.gpGamerTagInput.value.trim() : '';
+    const newName = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(rawNewName) : rawNewName;
+    if(el.gpGamerTagInput) el.gpGamerTagInput.value = newName;
     if(!newName) {
       showGameDialog({
         title: 'Nama Kosong',

@@ -1401,7 +1401,8 @@
           ctx.textAlign = 'center';
           
           // Name pill
-          const tagText = `${op.name || 'Rival'} (${op.score || 0} pts)`;
+          const opCleanName = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(op.name || 'Rival') : (op.name || 'Rival');
+          const tagText = `${opCleanName} (${op.score || 0} pts)`;
           const textWidth = ctx.measureText(tagText).width;
           ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
           ctx.beginPath();

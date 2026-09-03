@@ -687,8 +687,11 @@
             // Update snippet on bottom nav
             if (messages.length > 0 && snippet) {
               const lastMsg = messages[messages.length - 1];
-              const cleanText = (lastMsg.text || '').startsWith('[BIRD_EMOTE:') ? 'Pesan' : lastMsg.text;
-              snippet.innerHTML = `<span class="mlbb-chat-ch">[Global]</span> <b>${this.escapeHtml(lastMsg.senderName || 'Player')}:</b> ${this.escapeHtml(cleanText)}`;
+              let cleanText = (lastMsg.text || '').startsWith('[BIRD_EMOTE:') ? 'Pesan' : lastMsg.text;
+              if (typeof window.sanitizeToxicText === 'function') cleanText = window.sanitizeToxicText(cleanText);
+              let safeSenderName = lastMsg.senderName || 'Player';
+              if (typeof window.sanitizePlayerName === 'function') safeSenderName = window.sanitizePlayerName(safeSenderName);
+              snippet.innerHTML = `<span class="mlbb-chat-ch">[Global]</span> <b>${this.escapeHtml(safeSenderName)}:</b> ${this.escapeHtml(cleanText)}`;
             }
 
             // Unread badge logic
@@ -729,8 +732,13 @@
                   const foundEmote = CUTE_BIRD_EMOTES.find(e => e.id === emoteId);
                   contentHtml = foundEmote ? `<div class="bird-sticker-img" title="${foundEmote.title}">${foundEmote.render(40)}</div>` : this.escapeHtml(msg.text);
                 } else {
-                  contentHtml = this.escapeHtml(msg.text);
+                  let filteredMsgText = msg.text || '';
+                  if (typeof window.sanitizeToxicText === 'function') filteredMsgText = window.sanitizeToxicText(filteredMsgText);
+                  contentHtml = this.escapeHtml(filteredMsgText);
                 }
+
+                let safeSenderName = msg.senderName || 'Pemain';
+                if (typeof window.sanitizePlayerName === 'function') safeSenderName = window.sanitizePlayerName(safeSenderName);
 
                 const row = document.createElement('div');
                 row.className = `mlbb-gm-row ${isMe ? 'is-me' : ''}`;
@@ -740,12 +748,12 @@
                   : '<svg viewBox="0 0 24 24" width="24" height="24" fill="#38bdf8"><circle cx="12" cy="12" r="10"/></svg>';
 
                 row.innerHTML = `
-                  <div class="mlbb-gm-avatar" title="Lihat Profil ${this.escapeHtml(msg.senderName || 'Pemain')}">
+                  <div class="mlbb-gm-avatar" title="Lihat Profil ${this.escapeHtml(safeSenderName)}">
                     ${avSvg}
                   </div>
                   <div class="mlbb-gm-content">
                     <div class="mlbb-gm-meta">
-                      <span class="mlbb-gm-name">${this.escapeHtml(msg.senderName || 'Pemain')}</span>
+                      <span class="mlbb-gm-name">${this.escapeHtml(safeSenderName)}</span>
                       <span class="mlbb-gm-tier">${this.escapeHtml(msg.senderTier || 'BRONZE')}</span>
                       <span class="mlbb-gm-time">${timeStr}</span>
                     </div>
@@ -866,17 +874,22 @@
                 const foundEmote = CUTE_BIRD_EMOTES.find(e => e.id === emoteId);
                 contentHtml = foundEmote ? `<div class="bird-sticker-img" title="${foundEmote.title}">${foundEmote.render(40)}</div>` : this.escapeHtml(msg.text);
               } else {
-                contentHtml = this.escapeHtml(msg.text);
+                let filteredMsgText = msg.text || '';
+                if (typeof window.sanitizeToxicText === 'function') filteredMsgText = window.sanitizeToxicText(filteredMsgText);
+                contentHtml = this.escapeHtml(filteredMsgText);
               }
+
+              let rawName = isMe ? (this.myProfile.gamerTag || 'Saya') : (friend.name || 'Teman');
+              let safeSenderName = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(rawName) : rawName;
 
               const row = document.createElement('div');
               row.className = `mlbb-gm-row ${isMe ? 'is-me' : ''}`;
-              const avSvg = typeof window.getCuteAvatarSvg === 'function' ? window.getCuteAvatarSvg(isMe ? (this.myProfile.avatar || 'chick_yellow') : (friend.avatar || 'chick_yellow'), 22) : '🐥';
+              const avSvg = typeof window.getCuteAvatarSvg === 'function' ? window.getCuteAvatarSvg(isMe ? (this.myProfile.avatar || 'chick_yellow') : (friend.avatar || 'chick_yellow'), 22) : '<svg viewBox="0 0 24 24" width="22" height="22" fill="#38bdf8"><circle cx="12" cy="12" r="10"/></svg>';
               row.innerHTML = `
                 <div class="mlbb-gm-avatar">${avSvg}</div>
                 <div class="mlbb-gm-content">
                   <div class="mlbb-gm-meta">
-                    <span class="mlbb-gm-name">${this.escapeHtml(isMe ? (this.myProfile.gamerTag || 'Saya') : (friend.name || 'Teman'))}</span>
+                    <span class="mlbb-gm-name">${this.escapeHtml(safeSenderName)}</span>
                     <span class="mlbb-gm-time">${timeStr}</span>
                   </div>
                   <div class="mlbb-gm-bubble">${contentHtml}</div>
@@ -907,6 +920,13 @@
         return;
       }
 
+      // Sensor teks chat sebelum disimpan/dikirim
+      let cleanText = text.trim();
+      if (typeof window.sanitizeToxicText === 'function') cleanText = window.sanitizeToxicText(cleanText);
+
+      let myCleanName = this.myProfile.gamerTag || 'Player';
+      if (typeof window.sanitizePlayerName === 'function') myCleanName = window.sanitizePlayerName(myCleanName);
+
       if (this.currentChatTab === 'friends') {
         if (!this.activeFriendChat) {
           if (typeof window.showToast === 'function') window.showToast('Pilih teman terlebih dahulu');
@@ -919,13 +939,13 @@
             .collection('messages')
             .add({
               senderKey: this.myKey,
-              senderName: this.myProfile.gamerTag || 'Player',
-              text: text.trim(),
+              senderName: myCleanName,
+              text: cleanText,
               timestamp: Date.now()
             });
           // Update parent document with participants & timestamp for notification triggers
           await this.db.collection('flappy_direct_chats').doc(channelId).set({
-            lastMessage: text.trim(),
+            lastMessage: cleanText,
             lastSenderKey: this.myKey,
             lastTimestamp: Date.now(),
             participants: [this.myKey, this.activeFriendChat.friendKey]
@@ -939,10 +959,10 @@
         try {
           await this.db.collection('flappy_global_chat').add({
             senderKey: this.myKey,
-            senderName: this.myProfile.gamerTag || 'Player',
+            senderName: myCleanName,
             senderAvatar: this.myProfile.avatar || 'chick_yellow',
             senderTier: this.myProfile.tier || 'BRONZE I',
-            text: text.trim(),
+            text: cleanText,
             timestamp: Date.now()
           });
           if (window.audio && typeof window.audio.click === 'function') window.audio.click();
@@ -1520,7 +1540,9 @@
                   contentHtml = `<div>${this.escapeHtml(msg.text)}</div>`;
                 }
               } else {
-                contentHtml = `<div>${this.escapeHtml(msg.text)}</div>`;
+                let filteredMsgText = msg.text || '';
+                if (typeof window.sanitizeToxicText === 'function') filteredMsgText = window.sanitizeToxicText(filteredMsgText);
+                contentHtml = `<div>${this.escapeHtml(filteredMsgText)}</div>`;
               }
 
               const bubble = document.createElement('div');
@@ -1541,14 +1563,18 @@
     async sendMessage(text) {
       if (!this.db || !this.myKey || !this.activeChatFriend || !text || !text.trim()) return;
       const channelId = [this.myKey, this.activeChatFriend.friendKey].sort().join('_');
+      let cleanText = text.trim();
+      if (typeof window.sanitizeToxicText === 'function') cleanText = window.sanitizeToxicText(cleanText);
+      let myCleanName = this.myProfile.gamerTag || 'Player';
+      if (typeof window.sanitizePlayerName === 'function') myCleanName = window.sanitizePlayerName(myCleanName);
       try {
         await this.db.collection('flappy_direct_chats')
           .doc(channelId)
           .collection('messages')
           .add({
             senderKey: this.myKey,
-            senderName: this.myProfile.gamerTag || 'Player',
-            text: text.trim(),
+            senderName: myCleanName,
+            text: cleanText,
             timestamp: Date.now()
           });
       } catch(e) {
