@@ -1340,10 +1340,25 @@
       };
 
       // Set initial data
-      document.getElementById('fpAvatarBox').innerHTML = getAv(friend.avatar || 'chick_yellow', 52);
+      document.getElementById('fpAvatarBox').innerHTML = getAv(friend.avatar || 'chick_yellow', 44);
       document.getElementById('fpName').textContent = friend.name || 'Gamer';
       document.getElementById('fpRankBadge').textContent = `${friend.tier || 'BRONZE I'}`;
       document.getElementById('fpUid').textContent = `ID: ${friend.friendKey || 'acc_...'}`;
+
+      // Reset to overview tab
+      if (typeof window.switchFriendProfileTab === 'function') {
+        window.switchFriendProfileTab('overview');
+      }
+
+      // Wire tab buttons
+      const tabOverBtn = document.getElementById('fpTabOverviewBtn');
+      const tabStatsBtn = document.getElementById('fpTabStatsBtn');
+      if (tabOverBtn && typeof window.switchFriendProfileTab === 'function') {
+        tabOverBtn.onclick = () => window.switchFriendProfileTab('overview');
+      }
+      if (tabStatsBtn && typeof window.switchFriendProfileTab === 'function') {
+        tabStatsBtn.onclick = () => window.switchFriendProfileTab('stats');
+      }
 
       // Open modal
       if (typeof window.showModal === 'function') {
@@ -1353,11 +1368,14 @@
       }
 
       // Bind action buttons in profile
+      const addBtn = document.getElementById('fpAddFriendBtn');
       const chatBtn = document.getElementById('fpChatBtn');
       const inviteBtn = document.getElementById('fpInviteBtn');
       const removeBtn = document.getElementById('fpRemoveBtn');
 
+      if (addBtn) addBtn.style.display = 'none'; // Already a friend
       if (chatBtn) {
+        chatBtn.style.display = 'inline-flex';
         chatBtn.onclick = () => {
           this.openDirectChat(friend);
         };

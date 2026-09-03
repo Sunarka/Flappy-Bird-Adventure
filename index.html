@@ -21,18 +21,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.58">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.58">
-  <link rel="stylesheet" href="css/shop.css?v=20.58">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.58">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.58">
-  <link rel="stylesheet" href="css/store.css?v=20.58">
-  <link rel="stylesheet" href="css/ranked.css?v=20.58">
-  <link rel="stylesheet" href="css/social.css?v=20.58">
-  <link rel="stylesheet" href="css/splash.css?v=20.58">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.58">
+  <link rel="stylesheet" href="css/style.css?v=20.59">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.59">
+  <link rel="stylesheet" href="css/shop.css?v=20.59">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.59">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.59">
+  <link rel="stylesheet" href="css/store.css?v=20.59">
+  <link rel="stylesheet" href="css/ranked.css?v=20.59">
+  <link rel="stylesheet" href="css/social.css?v=20.59">
+  <link rel="stylesheet" href="css/splash.css?v=20.59">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.59">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.58">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.59">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -1509,100 +1509,129 @@
         </form>
       </section>
 
-      <!-- FRIEND DETAILED PROFILE MODAL -->
-      <section id="friendProfileModal" class="modal friend-profile-modal hidden" role="dialog" aria-modal="true" aria-label="Profil Teman">
+      <!-- FRIEND & PLAYER DETAILED PROFILE MODAL (NO-SCROLL TABBED) -->
+      <section id="friendProfileModal" class="modal friend-profile-modal hidden" role="dialog" aria-modal="true" aria-label="Profil Pemain">
         <button class="close" data-close>×</button>
         
-        <div class="profile-scrollable-content">
-          <!-- Hero Banner -->
-          <div class="friend-profile-hero">
-            <div class="friend-profile-avatar-box" id="fpAvatarBox"></div>
-            <div class="friend-profile-info">
-              <div class="friend-profile-name" id="fpName">GamerTag</div>
-              <div class="friend-profile-rank-badge" id="fpRankBadge">BRONZE I</div>
-              <div style="font-size:0.75rem;color:#94a3b8;margin-top:2px;" id="fpUid">ID: acc_...</div>
-            </div>
-          </div>
+        <!-- Profile Navigation Tabs -->
+        <div class="profile-tabs">
+          <button class="profile-tab-btn active" id="fpTabOverviewBtn" type="button">
+            <span>RINGKASAN</span>
+          </button>
+          <button class="profile-tab-btn" id="fpTabStatsBtn" type="button">
+            <span>STATISTIK</span>
+          </button>
+        </div>
 
-          <!-- Live Animated Canvas Showcase Box (Same as Shop) -->
-          <div class="friend-showcase-box">
-            <canvas id="fpShowcaseCanvas" width="240" height="80" class="friend-showcase-canvas"></canvas>
-            <div class="friend-showcase-tag">PREVIEW PERLENGKAPAN LIVE</div>
-          </div>
+        <!-- TAB 1: RINGKASAN PROFIL (Side-by-Side Top Row & 2x2 Equipped Grid) -->
+        <div class="profile-tab-panel active" id="fpTabOverview">
+          <div class="profile-scrollable-content" style="overflow:hidden;max-height:none;">
+            <!-- Row 1: Profile Info (Left) + Live Showcase Stage (Right) Side-by-Side -->
+            <div class="profile-top-row">
+              <div class="friend-profile-hero">
+                <div class="friend-profile-avatar-box" id="fpAvatarBox"></div>
+                <div class="friend-profile-info" style="flex:1;min-width:0;">
+                  <div class="friend-profile-name" id="fpName" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">GamerTag</div>
+                  <div class="friend-profile-rank-badge" id="fpRankBadge">BRONZE I</div>
+                  <div style="font-size:0.68rem;color:#94a3b8;margin-top:2px;" id="fpUid">ID: acc_...</div>
+                </div>
+              </div>
 
-          <!-- Career Statistics 2x2 Grid -->
-          <div class="friend-section-title">STATISTIK BERMAIN</div>
-          <div class="friend-stats-grid">
-            <div class="friend-stat-box">
-              <div class="friend-stat-label">Rekor Casual</div>
-              <div class="friend-stat-val" id="fpCasualScore">0</div>
+              <!-- Live Character Showcase Stage (Right Half) -->
+              <div class="friend-showcase-box">
+                <canvas id="fpShowcaseCanvas" width="200" height="85" class="friend-showcase-canvas"></canvas>
+                <div class="friend-showcase-tag">PREVIEW LIVE</div>
+              </div>
             </div>
-            <div class="friend-stat-box">
-              <div class="friend-stat-label">Poin Ranked</div>
-              <div class="friend-stat-val gold" id="fpRankPoints">0 PTS</div>
-            </div>
-            <div class="friend-stat-box">
-              <div class="friend-stat-label">Menang Multiplayer</div>
-              <div class="friend-stat-val green" id="fpMpWins">0 MENANG</div>
-            </div>
-            <div class="friend-stat-box">
-              <div class="friend-stat-label">Total Koin</div>
-              <div class="friend-stat-val gold" id="fpCoins">0</div>
-            </div>
-          </div>
 
-          <!-- Equipped Loadout Showcase -->
-          <div class="friend-section-title">PERLENGKAPAN SAAT INI</div>
-          <div class="friend-loadout-showcase">
-            <div class="friend-loadout-item">
-              <div class="friend-loadout-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#38bdf8"><path d="M22 2C14 2 8 8 8 16c0 1.1.9 2 2 2h1c0-1.1.9-2 2-2 1.66 0 3-1.34 3-3V9c2 0 4-1 6-7z"/></svg></div>
-              <div class="friend-loadout-item-type">BURUNG</div>
-              <div class="friend-loadout-item-name" id="fpEquippedBird">Classic</div>
-            </div>
-            <div class="friend-loadout-item">
-              <div class="friend-loadout-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#fbbf24"><path d="M12 2a5 5 0 0 0-5 5c0 1.5.7 2.8 1.7 3.7A8 8 0 0 0 4 18v2h16v-2a8 8 0 0 0-4.7-7.3A5 5 0 0 0 17 7a5 5 0 0 0-5-5z"/></svg></div>
-              <div class="friend-loadout-item-type">PET</div>
-              <div class="friend-loadout-item-name" id="fpEquippedPet">None</div>
-            </div>
-            <div class="friend-loadout-item">
-              <div class="friend-loadout-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#c084fc"><path d="M5 16V9a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v7h2a1 1 0 0 1 1 1v2H2v-2a1 1 0 0 1 1-1h2z"/></svg></div>
-              <div class="friend-loadout-item-type">TOPI</div>
-              <div class="friend-loadout-item-name" id="fpEquippedHat">None</div>
-            </div>
-            <div class="friend-loadout-item">
-              <div class="friend-loadout-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#f43f5e"><path d="M12 2l2.4 7.2h7.6l-6.1 4.5 2.3 7.3-6.2-4.6-6.2 4.6 2.3-7.3-6.1-4.5h7.6z"/></svg></div>
-              <div class="friend-loadout-item-type">AURA</div>
-              <div class="friend-loadout-item-name" id="fpEquippedAura">None</div>
-            </div>
-          </div>
-
-          <!-- Unlocked Cosmetics Breakdown -->
-          <div class="friend-section-title">KOLEKSI & INVENTORI</div>
-          <div class="friend-stats-grid">
-            <div class="friend-stat-box">
-              <div class="friend-stat-label">Skin Burung</div>
-              <div class="friend-stat-val" id="fpSkinCount">1 Dimiliki</div>
-            </div>
-            <div class="friend-stat-box">
-              <div class="friend-stat-label">Pet Pendamping</div>
-              <div class="friend-stat-val" id="fpPetCount">0 Dimiliki</div>
-            </div>
-            <div class="friend-stat-box">
-              <div class="friend-stat-label">Topi & Mahkota</div>
-              <div class="friend-stat-val" id="fpHatCount">0 Dimiliki</div>
-            </div>
-            <div class="friend-stat-box">
-              <div class="friend-stat-label">Aura Jejak</div>
-              <div class="friend-stat-val" id="fpAuraCount">0 Dimiliki</div>
+            <!-- Equipped Loadout 4 Items (2x2 Grid) -->
+            <div class="friend-section-title">PERLENGKAPAN AKTIF</div>
+            <div class="friend-equipped-grid">
+              <div class="friend-item-pill">
+                <div class="friend-item-pill-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#38bdf8"><path d="M22 2C14 2 8 8 8 16c0 1.1.9 2 2 2h1c0-1.1.9-2 2-2 1.66 0 3-1.34 3-3V9c2 0 4-1 6-7z"/></svg></div>
+                <div class="friend-item-pill-info">
+                  <div class="friend-item-pill-title">Skin Burung</div>
+                  <div class="friend-item-pill-val" id="fpEquippedBird">CLASSIC</div>
+                </div>
+              </div>
+              <div class="friend-item-pill">
+                <div class="friend-item-pill-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#fbbf24"><path d="M12 2a5 5 0 0 0-5 5c0 1.5.7 2.8 1.7 3.7A8 8 0 0 0 4 18v2h16v-2a8 8 0 0 0-4.7-7.3A5 5 0 0 0 17 7a5 5 0 0 0-5-5z"/></svg></div>
+                <div class="friend-item-pill-info">
+                  <div class="friend-item-pill-title">Pet Pendamping</div>
+                  <div class="friend-item-pill-val" id="fpEquippedPet">NONE</div>
+                </div>
+              </div>
+              <div class="friend-item-pill">
+                <div class="friend-item-pill-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#c084fc"><path d="M5 16V9a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v7h2a1 1 0 0 1 1 1v2H2v-2a1 1 0 0 1 1-1h2z"/></svg></div>
+                <div class="friend-item-pill-info">
+                  <div class="friend-item-pill-title">Topi / Aksesoris</div>
+                  <div class="friend-item-pill-val" id="fpEquippedHat">NONE</div>
+                </div>
+              </div>
+              <div class="friend-item-pill">
+                <div class="friend-item-pill-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#f43f5e"><path d="M12 2l2.4 7.2h7.6l-6.1 4.5 2.3 7.3-6.2-4.6-6.2 4.6 2.3-7.3-6.1-4.5h7.6z"/></svg></div>
+                <div class="friend-item-pill-info">
+                  <div class="friend-item-pill-title">Aura Ekor</div>
+                  <div class="friend-item-pill-val" id="fpEquippedAura">NONE</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Action Bar -->
-        <div class="friend-profile-actions">
-          <button class="social-action-btn" id="fpChatBtn" style="flex:1;justify-content:center;padding:10px;" type="button">Kirim Chat</button>
-          <button class="social-action-btn success" id="fpInviteBtn" style="flex:1;justify-content:center;padding:10px;" type="button">Ajak Main</button>
-          <button class="social-action-btn danger" id="fpRemoveBtn" style="padding:10px 14px;" type="button" title="Hapus Teman">&times;</button>
+        <!-- TAB 2: STATISTIK & KOLEKSI (2x2 Career + 2x2 Collections) -->
+        <div class="profile-tab-panel hidden" id="fpTabStats">
+          <div class="profile-scrollable-content" style="overflow:hidden;max-height:none;">
+            <!-- Career Statistics 2x2 Grid -->
+            <div class="friend-section-title" style="margin-top:2px;">STATISTIK BERMAIN</div>
+            <div class="friend-stats-grid">
+              <div class="friend-stat-box">
+                <div class="friend-stat-label">Rekor Casual</div>
+                <div class="friend-stat-val" id="fpCasualScore">0</div>
+              </div>
+              <div class="friend-stat-box">
+                <div class="friend-stat-label">Poin Ranked</div>
+                <div class="friend-stat-val gold" id="fpRankPoints">0 PTS</div>
+              </div>
+              <div class="friend-stat-box">
+                <div class="friend-stat-label">Menang Multiplayer</div>
+                <div class="friend-stat-val green" id="fpMpWins">0 MENANG</div>
+              </div>
+              <div class="friend-stat-box">
+                <div class="friend-stat-label">Total Koin</div>
+                <div class="friend-stat-val gold" id="fpCoins">0</div>
+              </div>
+            </div>
+
+            <!-- Unlocked Cosmetics Breakdown 2x2 Grid -->
+            <div class="friend-section-title">KOLEKSI DIMILIKI</div>
+            <div class="friend-stats-grid">
+              <div class="friend-stat-box">
+                <div class="friend-stat-label">Skin Burung</div>
+                <div class="friend-stat-val" id="fpSkinCount">1 Dimiliki</div>
+              </div>
+              <div class="friend-stat-box">
+                <div class="friend-stat-label">Pet Pendamping</div>
+                <div class="friend-stat-val" id="fpPetCount">0 Dimiliki</div>
+              </div>
+              <div class="friend-stat-box">
+                <div class="friend-stat-label">Topi & Mahkota</div>
+                <div class="friend-stat-val" id="fpHatCount">0 Dimiliki</div>
+              </div>
+              <div class="friend-stat-box">
+                <div class="friend-stat-label">Aura Jejak</div>
+                <div class="friend-stat-val" id="fpAuraCount">0 Dimiliki</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Bar with Add Friend, Chat, Invite -->
+        <div class="friend-profile-actions" style="margin-top:auto;padding-top:6px;display:flex;gap:6px;align-items:center;">
+          <button class="social-action-btn primary" id="fpAddFriendBtn" style="flex:1.2;justify-content:center;padding:7px 10px;font-weight:900;background:linear-gradient(180deg,#22c55e 0%,#16a34a 100%);border:1px solid #4ade80;color:#fff;" type="button">+ Tambah Teman</button>
+          <button class="social-action-btn" id="fpChatBtn" style="flex:1;justify-content:center;padding:7px 10px;" type="button">Kirim Chat</button>
+          <button class="social-action-btn success" id="fpInviteBtn" style="flex:1;justify-content:center;padding:7px 10px;font-weight:900;" type="button">Ajak Main</button>
+          <button class="social-action-btn danger" id="fpRemoveBtn" style="padding:7px 12px;" type="button" title="Hapus Teman">&times;</button>
         </div>
       </section>
 
@@ -1634,12 +1663,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.58"></script>
-  <script src="js/admob-config.js?v=20.58"></script>
-  <script src="js/shop-data.js?v=20.58"></script>
-  <script src="js/audio.js?v=20.58"></script>
-  <script src="js/multiplayer.js?v=20.58"></script>
-  <script src="js/social.js?v=20.58"></script>
-  <script src="js/script.js?v=20.58"></script>
+  <script src="js/firebase-config.js?v=20.59"></script>
+  <script src="js/admob-config.js?v=20.59"></script>
+  <script src="js/shop-data.js?v=20.59"></script>
+  <script src="js/audio.js?v=20.59"></script>
+  <script src="js/multiplayer.js?v=20.59"></script>
+  <script src="js/social.js?v=20.59"></script>
+  <script src="js/script.js?v=20.59"></script>
 </body>
 </html>

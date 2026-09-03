@@ -4205,11 +4205,84 @@
     championShowcaseRunning = false;
   }
 
+  function switchFriendProfileTab(tabName) {
+    const isOverview = tabName === 'overview';
+    const tabOverBtn = $('fpTabOverviewBtn');
+    const tabStatsBtn = $('fpTabStatsBtn');
+    const panelOver = $('fpTabOverview');
+    const panelStats = $('fpTabStats');
+
+    if(tabOverBtn) tabOverBtn.classList.toggle('active', isOverview);
+    if(tabStatsBtn) tabStatsBtn.classList.toggle('active', !isOverview);
+    if(panelOver) {
+      panelOver.classList.toggle('hidden', !isOverview);
+      panelOver.classList.toggle('active', isOverview);
+    }
+    if(panelStats) {
+      panelStats.classList.toggle('hidden', isOverview);
+      panelStats.classList.toggle('active', !isOverview);
+    }
+  }
+  window.switchFriendProfileTab = switchFriendProfileTab;
+
+  function handleAddFriend(player) {
+    if(!player) return;
+    const friendKey = player.friendKey || player.id || ('usr_' + Math.abs(hashCode(player.name || 'bot')));
+    const pScore = player.score || player.rankedBest || 0;
+    const pTier = (player.tier && player.tier.name) ? player.tier.name : (typeof getRankTier === 'function' ? getRankTier(pScore).name : 'BRONZE I');
+    const friendObj = {
+      friendKey: friendKey,
+      name: player.name || 'Gamer',
+      avatar: player.avatar || 'chick_yellow',
+      tier: player.tier || pTier,
+      score: pScore,
+      status: 'online',
+      isBot: Boolean(player.isBot)
+    };
+
+    if(window.socialService) {
+      if(!Array.isArray(window.socialService.friends)) window.socialService.friends = [];
+      if(!window.socialService.friends.some(f => f.friendKey === friendKey || f.name === friendObj.name)) {
+        window.socialService.friends.unshift(friendObj);
+        if(typeof window.socialService.renderFriendList === 'function') window.socialService.renderFriendList();
+        if(typeof window.socialService.renderLobbyFriendsPreview === 'function') window.socialService.renderLobbyFriendsPreview();
+      }
+      if(window.socialService.db && player.friendKey && !player.isBot) {
+        window.socialService.sendFriendRequest(player.friendKey, player.name, player.avatar, player.tier).catch(() => {});
+      }
+    }
+
+    if(audio && audio.coin) audio.coin();
+    if(typeof showGameDialog === 'function') {
+      showGameDialog({
+        title: 'TEMAN DITAMBAHKAN',
+        html: `<b>${player.name || 'Pemain'}</b> berhasil ditambahkan ke daftar Teman kamu! Sekarang kamu bisa melihat profil dan mengajaknya bermain kapan saja.`,
+        type: 'success',
+        confirmText: 'MANTAP!'
+      });
+    } else if(typeof showToast === 'function') {
+      showToast(`✓ Berhasil berteman dengan ${player.name || 'Pemain'}!`);
+    }
+
+    const addBtn = $('fpAddFriendBtn');
+    if(addBtn) {
+      addBtn.textContent = '✓ Berteman';
+      addBtn.style.background = '#166534';
+      addBtn.style.borderColor = '#4ade80';
+      addBtn.style.color = '#86efac';
+      addBtn.disabled = true;
+    }
+  }
+  window.handleAddFriend = handleAddFriend;
+
   function openLeaderboardPlayerProfile(player) {
     if(!player) return;
     if(audio && audio.click) audio.click();
     const modal = $('friendProfileModal');
     if(!modal) return;
+
+    // Reset to overview tab
+    switchFriendProfileTab('overview');
 
     const pScore = player.score || 0;
     const pTier = getRankTier(pScore);
@@ -4220,7 +4293,7 @@
     const elRank = $('fpRankBadge');
     const elUid = $('fpUid');
 
-    if(elAv) elAv.innerHTML = getCuteAvatarSvg(player.avatar || 'chick_yellow', 52);
+    if(elAv) elAv.innerHTML = getCuteAvatarSvg(player.avatar || 'chick_yellow', 44);
     if(elName) elName.textContent = player.name || 'Gamer';
     if(elRank) {
       elRank.textContent = `${pTier.name} TIER`;
@@ -4228,7 +4301,7 @@
     }
     if(elUid) elUid.textContent = `ID: ${player.id || 'usr_' + Math.abs(hashCode(player.name || 'bot'))}`;
 
-    // Career Statistics
+    // Career Statistics (Tab 2)
     const elCasual = $('fpCasualScore');
     const elRankPts = $('fpRankPoints');
     const elMp = $('fpMpWins');
@@ -4239,7 +4312,13 @@
     if(elMp) elMp.textContent = `${Math.max(1, Math.round(pScore / 30))} MENANG`;
     if(elCoins) elCoins.textContent = `${pScore * 14 + 280}`;
 
-    // Loadout names
+    // Cosmetics collection counts (Tab 2)
+    if($('fpSkinCount')) $('fpSkinCount').textContent = `${Math.min(8, Math.max(1, Math.round(pScore / 25)))} Dimiliki`;
+    if($('fpPetCount')) $('fpPetCount').textContent = `${Math.min(6, Math.max(0, Math.round(pScore / 35)))} Dimiliki`;
+    if($('fpHatCount')) $('fpHatCount').textContent = `${Math.min(10, Math.max(0, Math.round(pScore / 20)))} Dimiliki`;
+    if($('fpAuraCount')) $('fpAuraCount').textContent = `${Math.min(6, Math.max(0, Math.round(pScore / 40)))} Dimiliki`;
+
+    // Loadout names (Tab 1)
     const fmt = (v, d) => (v && v !== 'none') ? String(v).replace(/[-_]+/g, ' ').toUpperCase() : d;
     if($('fpEquippedBird')) $('fpEquippedBird').textContent = fmt(lo.bird, 'CLASSIC');
     if($('fpEquippedPet')) $('fpEquippedPet').textContent = fmt(lo.pet, 'NONE');
@@ -4259,9 +4338,63 @@
       }, 'fpShowcaseCanvas');
     }
 
-    // Hide remove friend button for dummy / leaderboard players not in friend list
+    // Action buttons configuration
+    const isAlreadyFriend = window.socialService && Array.isArray(window.socialService.friends) && window.socialService.friends.some(f => f.friendKey === (player.id || player.friendKey) || f.name === player.name);
+
+    const addBtn = $('fpAddFriendBtn');
+    const chatBtn = $('fpChatBtn');
+    const inviteBtn = $('fpInviteBtn');
     const removeBtn = $('fpRemoveBtn');
-    if(removeBtn) removeBtn.style.display = 'none';
+
+    if(isAlreadyFriend) {
+      if(addBtn) addBtn.style.display = 'none';
+      if(chatBtn) {
+        chatBtn.style.display = 'inline-flex';
+        chatBtn.onclick = () => {
+          if(window.socialService) window.socialService.openDirectChat(player);
+        };
+      }
+      if(removeBtn) {
+        removeBtn.style.display = 'inline-flex';
+        removeBtn.onclick = () => {
+          if(confirm(`Yakin ingin menghapus ${player.name} dari pertemanan?`)) {
+            if(window.socialService) window.socialService.removeFriend(player.id || player.friendKey);
+            closeModal();
+          }
+        };
+      }
+    } else {
+      if(addBtn) {
+        addBtn.style.display = 'inline-flex';
+        addBtn.textContent = '+ Tambah Teman';
+        addBtn.disabled = false;
+        addBtn.style.background = 'linear-gradient(180deg,#22c55e 0%,#16a34a 100%)';
+        addBtn.style.borderColor = '#4ade80';
+        addBtn.style.color = '#fff';
+        addBtn.onclick = () => {
+          handleAddFriend(player);
+        };
+      }
+      if(chatBtn) chatBtn.style.display = 'none';
+      if(removeBtn) removeBtn.style.display = 'none';
+    }
+
+    if(inviteBtn) {
+      inviteBtn.style.display = 'inline-flex';
+      inviteBtn.onclick = () => {
+        if(audio) audio.click();
+        if(typeof showToast === 'function') {
+          showToast(`Undangan duel 1v1 terkirim ke ${player.name || 'Pemain'}!`);
+        }
+        if(el.multiplayerModal && typeof showModal === 'function') {
+          showModal(el.multiplayerModal);
+        }
+      };
+    }
+
+    // Wire tab buttons
+    if($('fpTabOverviewBtn')) $('fpTabOverviewBtn').onclick = () => { if(audio) audio.click(); switchFriendProfileTab('overview'); };
+    if($('fpTabStatsBtn')) $('fpTabStatsBtn').onclick = () => { if(audio) audio.click(); switchFriendProfileTab('stats'); };
 
     showModal(modal);
   }
@@ -4702,7 +4835,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.58';
+  const GAME_VERSION = '20.59';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
