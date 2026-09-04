@@ -1,4 +1,4 @@
-﻿/**
+/**
  * FEATHER RUSH - PROFANITY & SARA FILTER
  * Sensor beberapa huruf saja menggunakan "*" untuk chat dan nama player.
  */
@@ -30,13 +30,17 @@
     'anjing', 'anjir', 'anjay', 'anjrit', 'bajingan', 'bangsat', 'babi', 'kontol',
     'memek', 'pantek', 'pepek', 'peler', 'titit', 'itil', 'jembut', 'ngentot',
     'ngewe', 'bokep', 'sange', 'colmek', 'lonte', 'perek', 'jablay', 'goblok',
-    'tolol', 'kampret', 'sialan', 'modar', 'mampus', 'picek', 'budek',
+    'tolol', 'bego', 'idiot', 'kampret', 'sialan', 'modar', 'mampus', 'picek', 'budek',
+    'puki', 'pukimak',
     // SARA & Rasisme
-    'kafir', 'murtad', 'negro', 'nigger', 'nigga', 'chink', 'tiko',
+    'kafir', 'murtad', 'negro', 'niggers', 'nigger', 'niggas', 'nigga', 'chink', 'tiko',
     // English Profanities
     'motherfucker', 'bullshit', 'asshole', 'bastard', 'fucker', 'fucking',
     'fuck', 'bitch', 'cunt', 'dick', 'pussy', 'slut', 'whore', 'retard'
   ];
+
+  // Kata yang harus dicocokkan sebagai boundary / bukan bagian dari kata aman seperti "masukan", "pantai", dll
+  const EXACT_OR_BOUNDARY_ROOTS = ['asu', 'tai', 'tek', 'spic', 'kike', 'coon'];
 
   // Regex fleksibel dengan leet-speak (a->[a4@], i->[i1!], o->[o0], e->[e3], u->[u*], s->[s$])
   const BAD_WORDS_REGEX_CHAT = new RegExp([
@@ -78,6 +82,7 @@
     '\\bm[a4@]+mp[u*]+s\\b',
     '\\bp[i1!]+c[e3]+k\\b',
     '\\bb[u*]+d[e3]+k\\b',
+    '\\bp[u*]+k[i1!]+[a-z]*\\b',
     // SARA & Rasisme
     '\\bk[a4@]+f[i1!]+r[a-z]*\\b',
     '\\bm[u*]+rt[a4@]+d[a-z]*\\b',
@@ -121,6 +126,57 @@
   }).join('|'), 'gi');
 
   /**
+   * Normalisasi leet-speak & karakter khusus
+   */
+  function normalizeText(text) {
+    if (!text || typeof text !== 'string') return '';
+    let s = text.toLowerCase();
+    s = s.replace(/[@4]/g, 'a')
+         .replace(/[1!|]/g, 'i')
+         .replace(/[0]/g, 'o')
+         .replace(/[3]/g, 'e')
+         .replace(/[$5]/g, 's')
+         .replace(/[7+]/g, 't')
+         .replace(/[8]/g, 'b');
+    return s;
+  }
+
+  /**
+   * Cek apakah nama atau teks mengandung kata toxic / SARA (True/False)
+   */
+  function containsToxicOrSara(text) {
+    if (!text || typeof text !== 'string') return false;
+    const raw = text.toLowerCase().trim();
+    if (!raw) return false;
+    const norm = normalizeText(raw);
+    const stripped = norm.replace(/[^a-z0-9]/g, '');
+
+    // 1. Cek substring roots (AnjingPro, NIGGERS, dll)
+    for (let i = 0; i < BAD_WORDS_ROOTS.length; i++) {
+      const root = BAD_WORDS_ROOTS[i];
+      if (norm.includes(root) || stripped.includes(root)) {
+        return true;
+      }
+    }
+
+    // 2. Cek boundary roots (asu, tai, tek, dll)
+    for (let j = 0; j < EXACT_OR_BOUNDARY_ROOTS.length; j++) {
+      const bRoot = EXACT_OR_BOUNDARY_ROOTS[j];
+      const rx = new RegExp('(^|[^a-z])' + bRoot + '([^a-z]|$)', 'i');
+      if (rx.test(norm) || rx.test(raw)) {
+        return true;
+      }
+    }
+
+    // 3. Cek regex patterns
+    if (NAME_BAD_WORDS_REGEX.test(raw) || BAD_WORDS_REGEX_CHAT.test(raw)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Sensor teks chat: menyensor beberapa huruf kata toxic/sara menggunakan '*'
    */
   function sanitizeToxicText(text) {
@@ -134,11 +190,14 @@
    */
   function sanitizePlayerName(name) {
     if (!name || typeof name !== 'string') return name || '';
-    return name.replace(NAME_BAD_WORDS_REGEX, match => maskWord(match));
+    let result = name.replace(NAME_BAD_WORDS_REGEX, match => maskWord(match));
+    result = result.replace(BAD_WORDS_REGEX_CHAT, match => maskWord(match));
+    return result;
   }
 
   // Ekspor ke window global
   window.maskWord = maskWord;
+  window.containsToxicOrSara = containsToxicOrSara;
   window.sanitizeToxicText = sanitizeToxicText;
   window.sanitizePlayerName = sanitizePlayerName;
 

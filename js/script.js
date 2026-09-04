@@ -4358,8 +4358,17 @@
       }
       if(removeBtn) {
         removeBtn.style.display = 'inline-flex';
-        removeBtn.onclick = () => {
-          if(confirm(`Yakin ingin menghapus ${player.name} dari pertemanan?`)) {
+        removeBtn.onclick = async () => {
+          let safePlayerName = player.name || 'Teman';
+          if(typeof window.sanitizePlayerName === 'function') safePlayerName = window.sanitizePlayerName(safePlayerName);
+          const ok = await showGameDialog({
+            title: 'Hapus Teman',
+            html: `<p>Apakah Anda yakin ingin menghapus <b>${safePlayerName}</b> dari pertemanan?</p>`,
+            type: 'warning',
+            confirmText: 'YA, HAPUS',
+            cancelText: 'BATAL'
+          });
+          if(ok) {
             if(window.socialService) window.socialService.removeFriend(player.id || player.friendKey);
             closeModal();
           }
@@ -4838,7 +4847,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.64';
+  const GAME_VERSION = '20.65';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -12163,14 +12172,13 @@
   function showGameDialog({
     title = 'PEMBERITAHUAN',
     html = '',
-    type = 'info', // 'coin', 'warning', 'success', 'info'
+    type = 'info', // 'coin', 'warning', 'danger', 'success', 'info'
     confirmText = 'MENGERTI',
     cancelText = null
   } = {}) {
     return new Promise((resolve) => {
       activeDialogResolver = resolve;
       if (!el.gameDialogModal) {
-        alert(title + '\n\n' + html.replace(/<[^>]+>/g, ''));
         resolve(true);
         return;
       }
@@ -12178,6 +12186,8 @@
       let iconSvg = '';
       if (type === 'coin') {
         iconSvg = `<svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="10" fill="#f59e0b" stroke="#fde047" stroke-width="2"/><circle cx="12" cy="12" r="7" fill="#fbbf24"/><text x="12" y="16" font-size="11" font-weight="900" text-anchor="middle" fill="#78350f" font-family="Arial">G</text></svg>`;
+      } else if (type === 'danger') {
+        iconSvg = `<svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="10" fill="#ef4444" stroke="#f87171" stroke-width="2"/><path d="M12 7v6M12 17v.01" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`;
       } else if (type === 'warning') {
         iconSvg = `<svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 2L1 21h22L12 2zm0 3.8L20.2 19H3.8L12 5.8zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z" fill="#f59e0b"/></svg>`;
       } else if (type === 'success') {
@@ -12210,12 +12220,13 @@
       }
 
       if (type === 'success') audio.win();
-      else if (type === 'warning' || type === 'coin') audio.hit();
+      else if (type === 'warning' || type === 'coin' || type === 'danger') audio.hit();
       else audio.click();
 
       showModal(el.gameDialogModal);
     });
   }
+  window.showGameDialog = showGameDialog;
 
   bindClick(el.dialogConfirmBtn, () => {
     audio.click();
@@ -12428,9 +12439,21 @@
         if(savedAcc.avatar) gpProfile.avatar = savedAcc.avatar;
         gpProfile.nameChangesDone = savedAcc.nameChangesDone || 0;
       } else if(user.displayName) {
-        gpProfile.gamerTag = user.displayName.slice(0, 16);
+        let tag = user.displayName.slice(0, 16);
+        if(typeof window.containsToxicOrSara === 'function' && window.containsToxicOrSara(tag)) {
+          tag = 'Player-' + Math.floor(100 + Math.random() * 900);
+        }
+        gpProfile.gamerTag = tag;
       } else if(user.email) {
-        gpProfile.gamerTag = user.email.split('@')[0].slice(0, 16);
+        let tag = user.email.split('@')[0].slice(0, 16);
+        if(typeof window.containsToxicOrSara === 'function' && window.containsToxicOrSara(tag)) {
+          tag = 'Player-' + Math.floor(100 + Math.random() * 900);
+        }
+        gpProfile.gamerTag = tag;
+      }
+
+      if(typeof window.containsToxicOrSara === 'function' && window.containsToxicOrSara(gpProfile.gamerTag)) {
+        gpProfile.gamerTag = 'Player-' + Math.floor(100 + Math.random() * 900);
       }
 
       // Simpan data awal ke Firestore Cloud menggunakan Primary Key
@@ -12560,8 +12583,8 @@
       performGoogleSignIn();
       return;
     }
-    const newName = el.gpGamerTagInput ? el.gpGamerTagInput.value.trim() : '';
-    if(!newName) {
+    const rawNewName = el.gpGamerTagInput ? el.gpGamerTagInput.value.trim() : '';
+    if(!rawNewName) {
       showGameDialog({
         title: 'Nama Kosong',
         html: '<p>Nama gamer tidak boleh kosong! Silakan ketik nama baru Anda.</p>',
@@ -12572,6 +12595,20 @@
     }
 
     const oldName = gpProfile.gamerTag || 'SkyPlayer';
+
+    // Peringatan jika nama mengandung Toxic atau SARA
+    if(typeof window.containsToxicOrSara === 'function' && window.containsToxicOrSara(rawNewName)) {
+      showGameDialog({
+        title: 'Nama Tidak Diizinkan',
+        html: '<p>Nama gamer yang Anda masukkan mengandung kata yang dilarang atau tidak pantas (<b>Toxic / SARA</b>).</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Status:</span><b style="color:#f87171;">Ditolak</b></div><div class="dialog-info-row"><span>Aturan:</span><span>Gunakan nama yang sopan & ramah</span></div></div><p style="font-size:11px;color:#94a3b8;margin-top:8px;">Silakan pilih nama gamer lain yang menyenangkan untuk semua pemain!</p>',
+        type: 'danger',
+        confirmText: 'GANTI NAMA LAIN'
+      });
+      if(el.gpGamerTagInput) el.gpGamerTagInput.value = oldName;
+      return;
+    }
+
+    const newName = rawNewName;
     if(newName !== oldName) {
       const changes = gpProfile.nameChangesDone || 0;
       if(changes === 0) {
@@ -12649,6 +12686,30 @@
       return;
     }
     const rawNewName = el.gpGamerTagInput ? el.gpGamerTagInput.value.trim() : '';
+    if(!rawNewName) {
+      showGameDialog({
+        title: 'Nama Kosong',
+        html: '<p>Nama gamer tidak boleh kosong! Silakan ketik nama baru Anda.</p>',
+        type: 'warning',
+        confirmText: 'MENGERTI'
+      });
+      return;
+    }
+
+    const oldName = gpProfile.gamerTag || 'SkyPlayer';
+
+    // Peringatan jika nama mengandung Toxic atau SARA
+    if(typeof window.containsToxicOrSara === 'function' && window.containsToxicOrSara(rawNewName)) {
+      showGameDialog({
+        title: 'Nama Tidak Diizinkan',
+        html: '<p>Nama gamer yang Anda masukkan mengandung kata yang dilarang atau tidak pantas (<b>Toxic / SARA</b>).</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Status:</span><b style="color:#f87171;">Ditolak</b></div><div class="dialog-info-row"><span>Aturan:</span><span>Gunakan nama yang sopan & ramah</span></div></div><p style="font-size:11px;color:#94a3b8;margin-top:8px;">Silakan pilih nama gamer lain yang menyenangkan untuk semua pemain!</p>',
+        type: 'danger',
+        confirmText: 'GANTI NAMA LAIN'
+      });
+      if(el.gpGamerTagInput) el.gpGamerTagInput.value = oldName;
+      return;
+    }
+
     const newName = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(rawNewName) : rawNewName;
     if(el.gpGamerTagInput) el.gpGamerTagInput.value = newName;
     if(!newName) {
@@ -12661,7 +12722,6 @@
       return;
     }
 
-    const oldName = gpProfile.gamerTag || 'SkyPlayer';
     if(newName === oldName) {
       showGameDialog({
         title: 'Tidak Ada Perubahan',
@@ -12899,7 +12959,12 @@
           btn.classList.remove('success');
         } else {
           btn.textContent = 'Gagal';
-          alert(res.msg);
+          showGameDialog({
+            title: 'Permintaan Pertemanan',
+            html: `<p>${res.msg || 'Gagal mengirim permintaan pertemanan.'}</p>`,
+            type: 'warning',
+            confirmText: 'MENGERTI'
+          });
         }
       };
     });
@@ -14039,7 +14104,12 @@
         navigator.clipboard.writeText(code);
         showGameDialog({ title: 'Kode Disalin!', html: `<p>Kode room <b>#${code}</b> berhasil disalin ke clipboard!</p>`, type: 'success' });
       } catch(_) {
-        prompt('Salin kode room Anda:', code);
+        showGameDialog({
+          title: 'Kode Room',
+          html: `<p>Salin kode room Anda di bawah ini:</p><div class="dialog-info-card" style="text-align:center;"><b style="font-size:18px;color:#facc15;letter-spacing:2px;">#${code}</b></div>`,
+          type: 'info',
+          confirmText: 'SELESAI'
+        });
       }
     }
   });

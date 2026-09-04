@@ -1388,7 +1388,9 @@
 
       // Set initial data
       document.getElementById('fpAvatarBox').innerHTML = getAv(friend.avatar || 'chick_yellow', 44);
-      document.getElementById('fpName').textContent = friend.name || 'Gamer';
+      let safeDisplayName = friend.name || 'Gamer';
+      if (typeof window.sanitizePlayerName === 'function') safeDisplayName = window.sanitizePlayerName(safeDisplayName);
+      document.getElementById('fpName').textContent = safeDisplayName;
       document.getElementById('fpRankBadge').textContent = `${friend.tier || 'BRONZE I'}`;
       document.getElementById('fpUid').textContent = `ID: ${friend.friendKey || 'acc_...'}`;
 
@@ -1453,8 +1455,18 @@
       }
 
       if (removeBtn) {
-        removeBtn.onclick = () => {
-          if (confirm(`Yakin ingin menghapus ${friend.name} dari pertemanan?`)) {
+        removeBtn.onclick = async () => {
+          let confirmed = false;
+          if (typeof window.showGameDialog === 'function') {
+            confirmed = await window.showGameDialog({
+              title: 'Hapus Teman',
+              html: `<p>Apakah Anda yakin ingin menghapus <b>${this.escapeHtml(safeDisplayName)}</b> dari daftar pertemanan?</p>`,
+              type: 'warning',
+              confirmText: 'YA, HAPUS',
+              cancelText: 'BATAL'
+            });
+          }
+          if (confirmed) {
             this.removeFriend(friend.friendKey);
             if (typeof window.closeModal === 'function') window.closeModal();
           }
@@ -1975,11 +1987,23 @@
       });
 
       container.querySelectorAll('.btn-remove-friend').forEach(btn => {
-        btn.onclick = (e) => {
+        btn.onclick = async (e) => {
           e.stopPropagation();
           const key = btn.getAttribute('data-key');
           const friend = this.friends.find(f => f.friendKey === key);
-          if (confirm(`Yakin ingin menghapus ${friend ? friend.name : 'teman ini'} dari daftar?`)) {
+          let safeFriendName = friend ? friend.name : 'teman ini';
+          if (typeof window.sanitizePlayerName === 'function') safeFriendName = window.sanitizePlayerName(safeFriendName);
+          let confirmed = false;
+          if (typeof window.showGameDialog === 'function') {
+            confirmed = await window.showGameDialog({
+              title: 'Hapus Teman',
+              html: `<p>Apakah Anda yakin ingin menghapus <b>${this.escapeHtml(safeFriendName)}</b> dari daftar pertemanan?</p>`,
+              type: 'warning',
+              confirmText: 'YA, HAPUS',
+              cancelText: 'BATAL'
+            });
+          }
+          if (confirmed) {
             this.removeFriend(key);
           }
         };
