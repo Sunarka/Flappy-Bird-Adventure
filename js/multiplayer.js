@@ -1448,8 +1448,6 @@
               ctx.fillStyle = 'rgba(165, 243, 252, 0.45)';
               ctx.strokeStyle = '#38bdf8';
               ctx.lineWidth = 2.2;
-              ctx.shadowColor = '#00f5d4';
-              ctx.shadowBlur = 12;
               ctx.beginPath();
               ctx.roundRect(drawX - 20, drawY - 20, 40, 40, 6);
               ctx.fill();
@@ -1466,8 +1464,6 @@
               // Crackling Electric Zap Aura
               ctx.strokeStyle = '#fde047';
               ctx.lineWidth = 2.2;
-              ctx.shadowColor = '#eab308';
-              ctx.shadowBlur = 10;
               ctx.beginPath();
               for (let i = 0; i < 4; i++) {
                 const ang = Math.random() * Math.PI * 2;
