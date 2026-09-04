@@ -29,3 +29,4 @@ sharp(inputPath)
   .catch(err => {
     console.error('❌ Error creating avatar:', err);
   });
+

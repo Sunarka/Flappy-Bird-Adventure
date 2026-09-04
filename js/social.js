@@ -1669,13 +1669,12 @@
             // Loadout
             const l = data.loadout || {};
             const fmt = (v, d) => (v && v !== 'none') ? String(v).replace(/[-_]+/g, ' ').toUpperCase() : d;
-            document.getElementById('fpEquippedBird').textContent = fmt(l.bird, 'CLASSIC');
-            document.getElementById('fpEquippedPet').textContent = fmt(l.pet, 'NONE');
-            document.getElementById('fpEquippedHat').textContent = fmt(l.hat, 'NONE');
-            document.getElementById('fpEquippedAura').textContent = fmt(l.aura, 'NONE');
-            
-            
-            
+            if(document.getElementById('fpEquippedBird')) document.getElementById('fpEquippedBird').textContent = fmt(l.bird, 'CLASSIC');
+            if(document.getElementById('fpEquippedPet')) document.getElementById('fpEquippedPet').textContent = fmt(l.pet, 'NONE');
+            if(document.getElementById('fpEquippedHat')) document.getElementById('fpEquippedHat').textContent = fmt(l.hat, 'NONE');
+            if(document.getElementById('fpEquippedAura')) document.getElementById('fpEquippedAura').textContent = fmt(l.aura, 'NONE');
+            if(document.getElementById('fpEquippedPipe')) document.getElementById('fpEquippedPipe').textContent = fmt(l.pipe, 'GREEN CLASSIC');
+            if(document.getElementById('fpEquippedMusic')) document.getElementById('fpEquippedMusic').textContent = fmt(l.music, 'HAPPY MELODY');
 
             // Unlocked counts
             const u = data.unlocked || {};
