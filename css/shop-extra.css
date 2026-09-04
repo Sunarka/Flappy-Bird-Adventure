@@ -751,3 +751,333 @@
   color: #94a3b8 !important;
   cursor: default !important;
 }
+
+/* =========================================================
+   DEDICATED PET COMPANION MODAL (UI PET KHUSUS)
+   ========================================================= */
+.pet-modal {
+  width: min(540px, 96vw) !important;
+  max-width: 540px !important;
+  max-height: min(340px, 94vh) !important;
+  background: linear-gradient(180deg, #0d172a 0%, #070e1c 100%) !important;
+  border: 2px solid #38bdf8 !important;
+  border-radius: 16px !important;
+  padding: 10px 14px 10px !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.85), 0 0 25px rgba(56, 189, 248, 0.25) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+.pet-modal.hidden {
+  display: none !important;
+}
+
+.pet-modal-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-bottom: 1.5px solid rgba(56, 189, 248, 0.3) !important;
+  padding-bottom: 6px !important;
+  padding-right: 32px !important;
+  flex-shrink: 0 !important;
+}
+
+.pet-title-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.pet-modal-header h2 {
+  font: 900 13px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #38bdf8 !important;
+  margin: 0 !important;
+  letter-spacing: 0.5px !important;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
+}
+
+.pet-subtitle {
+  font: 700 8px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #94a3b8 !important;
+  margin-top: 2px !important;
+  display: block !important;
+}
+
+.pet-modal-body {
+  flex: 1 !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 210px 1fr !important;
+  gap: 10px !important;
+  margin-top: 8px !important;
+  overflow: hidden !important;
+}
+
+@media (max-width: 480px) {
+  .pet-modal-body {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.pet-detail-card {
+  background: rgba(15, 23, 42, 0.75) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border-radius: 10px !important;
+  padding: 6px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.pet-showcase-box {
+  position: relative !important;
+  height: 85px !important;
+  background: radial-gradient(circle at center, rgba(56, 189, 248, 0.2) 0%, rgba(9, 20, 39, 0.9) 75%) !important;
+  border: 1px solid #1e3a5f !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.pet-showcase-glow {
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  opacity: 0.6 !important;
+  transition: background 0.3s !important;
+}
+
+.pet-rarity-badge {
+  position: absolute !important;
+  top: 4px !important;
+  right: 4px !important;
+  font: 900 7px/1 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 2px 5px !important;
+  border-radius: 4px !important;
+  text-transform: uppercase !important;
+  background: rgba(0,0,0,0.6) !important;
+  border: 1px solid currentColor !important;
+}
+
+.pet-rarity-badge.legendary { color: #facc15 !important; border-color: #facc15 !important; }
+.pet-rarity-badge.epic { color: #c084fc !important; border-color: #c084fc !important; }
+.pet-rarity-badge.rare { color: #38bdf8 !important; border-color: #38bdf8 !important; }
+.pet-rarity-badge.common { color: #94a3b8 !important; border-color: #94a3b8 !important; }
+
+.pet-info-box {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+.pet-name {
+  font: 900 9.5px/1.2 'Trebuchet MS', Arial, sans-serif !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.pet-skill-card {
+  background: rgba(8, 14, 28, 0.8) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 6px !important;
+  padding: 4px 6px !important;
+}
+
+.pet-skill-title-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font: 900 8px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #facc15 !important;
+  margin-bottom: 2px !important;
+}
+
+.pet-skill-desc {
+  font: 600 7.5px/1.2 'Trebuchet MS', Arial, sans-serif !important;
+  color: #cbd5e1 !important;
+  margin: 0 !important;
+}
+
+.pet-actions-row {
+  margin-top: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+.pet-equip-btn {
+  font: 900 8.5px/1 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 5px 8px !important;
+  border-radius: 6px !important;
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%) !important;
+  border: 1px solid #4ade80 !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transition: transform 0.1s !important;
+}
+
+.pet-equip-btn:disabled {
+  background: #334155 !important;
+  border-color: #475569 !important;
+  color: #94a3b8 !important;
+  cursor: default !important;
+}
+
+.pet-gacha-cta-btn {
+  font: 900 8px/1 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+  background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%) !important;
+  border: 1px solid #fbbf24 !important;
+  color: #fef08a !important;
+  cursor: pointer !important;
+  animation: petGachaGlow 2s infinite ease-in-out !important;
+}
+
+@keyframes petGachaGlow {
+  0%, 100% { box-shadow: 0 0 6px rgba(234, 88, 12, 0.4); }
+  50% { box-shadow: 0 0 12px rgba(251, 191, 36, 0.7); }
+}
+
+.pet-list-wrapper {
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  padding-right: 2px !important;
+}
+
+.pet-list-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)) !important;
+  gap: 6px !important;
+}
+
+.pet-grid-card {
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1.5px solid #1e3a5f !important;
+  border-radius: 8px !important;
+  padding: 6px 4px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: transform 0.15s, border-color 0.15s !important;
+  position: relative !important;
+}
+
+.pet-grid-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: #38bdf8 !important;
+}
+
+.pet-grid-card.active {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
+  background: rgba(14, 165, 233, 0.15) !important;
+}
+
+.pet-grid-card.equipped-now {
+  border-color: #22c55e !important;
+}
+
+.pet-grid-card-icon {
+  width: 38px !important;
+  height: 38px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+}
+
+.pet-grid-card-name {
+  font: 900 7.5px/1.1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #f1f5f9 !important;
+  margin-top: 3px !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.pet-grid-card-status {
+  font: 900 6.5px/1 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 2px 4px !important;
+  border-radius: 4px !important;
+  margin-top: 3px !important;
+  text-transform: uppercase !important;
+}
+
+.pet-grid-card-status.equipped {
+  background: #22c55e !important;
+  color: #ffffff !important;
+}
+
+.pet-grid-card-status.owned {
+  background: rgba(56, 189, 248, 0.2) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.4) !important;
+}
+
+.pet-grid-card-status.locked {
+  background: rgba(234, 88, 12, 0.2) !important;
+  color: #fb923c !important;
+  border: 1px solid rgba(234, 88, 12, 0.4) !important;
+}
+
+/* =========================================================
+   DIAMOND SHOP & AVATAR PICKER BADGES
+   ========================================================= */
+.skin-cost-btn.diamond-btn {
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.35) !important;
+}
+
+.skin-cost-btn.diamond-btn.cant-afford {
+  background: #334155 !important;
+  border-color: #475569 !important;
+  color: #94a3b8 !important;
+  box-shadow: none !important;
+}
+
+.avatar-card-buy-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%) !important;
+  border: 1px solid #38bdf8 !important;
+  border-radius: 6px !important;
+  padding: 2px 6px !important;
+  color: #ffffff !important;
+  font: 900 8.5px/1 'Trebuchet MS', Arial, sans-serif !important;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.4) !important;
+  margin-top: 2px !important;
+}
+
+.avatar-card.locked {
+  opacity: 0.85 !important;
+}
+
+.avatar-lock-icon {
+  position: absolute !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  font-size: 11px !important;
+  background: rgba(0,0,0,0.7) !important;
+  border-radius: 50% !important;
+  padding: 1px !important;
+  line-height: 1 !important;
+}
+

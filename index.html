@@ -328,6 +328,10 @@
           <span class="mlbb-res-val" id="topCoinVal">0</span>
           <button class="mlbb-res-add-btn" id="topAddCoinBtn" title="Dapatkan Koin Gratis!">+</button>
         </div>
+        <div class="mlbb-res-pill diamonds" id="topDiamondPill" title="Diamond Permata" style="background:rgba(14,165,233,0.18);border:1px solid rgba(56,189,248,0.5);">
+          <span class="mlbb-res-icon" style="font-size:13px;line-height:1;">💎</span>
+          <span class="mlbb-res-val" id="topDiamondVal" style="color:#38bdf8;font-weight:900;">0</span>
+        </div>
         <div class="mlbb-res-pill points" id="topRankPill" title="Poin Ranked">
           <span class="mlbb-res-icon">
             <svg viewBox="0 0 24 24" width="15" height="15">
@@ -410,6 +414,11 @@
       <button class="mlbb-side-btn mlbb-gacha-btn" id="lobbyGachaBtn" type="button" title="Lucky Bird Gacha - Tarik Hadiah Langka!" onclick="window.openGachaModal && window.openGachaModal()">
         <span class="side-btn-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#ffffff"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V18h-2v-1.07A4.004 4.004 0 0 1 8 13h2a2 2 0 1 0 2-2H11a4 4 0 0 1 0-8V2h2v1.07A4.004 4.004 0 0 1 16 7h-2a2 2 0 1 0-2 2h1a4 4 0 0 1 0 7.93z"/></svg></span>
         <span class="side-btn-label">GACHA</span>
+      </button>
+
+      <button class="mlbb-side-btn" id="lobbyPetBtn" type="button" title="Pet Companion - Pendamping Setia" onclick="window.openPetModal && window.openPetModal()">
+        <span class="side-btn-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#ffffff"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+        <span class="side-btn-label">PETS</span>
       </button>
 
       <button class="mlbb-side-btn" id="shopBtn" type="button" title="Toko Skin & Koleksi">
@@ -785,9 +794,15 @@
         <button class="close" data-close>×</button>
         <div class="shop-header">
           <h2>SKIN & SHOP</h2>
-          <div class="shop-coins">
-            <svg class="inline-coin-svg" viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="9" fill="#f59e0b" stroke="#d97706" stroke-width="2"/><circle cx="12" cy="12" r="6" fill="#fbbf24"/><text x="12" y="15.5" font-size="10" font-weight="900" text-anchor="middle" fill="#78350f" font-family="Arial">G</text></svg>
-            <span id="shopCoins">0</span>
+          <div class="shop-currencies" style="display:flex;align-items:center;gap:10px;">
+            <div class="shop-coins">
+              <svg class="inline-coin-svg" viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="9" fill="#f59e0b" stroke="#d97706" stroke-width="2"/><circle cx="12" cy="12" r="6" fill="#fbbf24"/><text x="12" y="15.5" font-size="10" font-weight="900" text-anchor="middle" fill="#78350f" font-family="Arial">G</text></svg>
+              <span id="shopCoins">0</span>
+            </div>
+            <div class="shop-diamonds" id="shopDiamondWrap" style="display:inline-flex;align-items:center;gap:4px;background:rgba(14,165,233,0.2);border:1px solid #38bdf8;padding:2px 8px;border-radius:12px;font-weight:900;color:#38bdf8;font-size:12px;">
+              <span style="font-size:13px;line-height:1;">💎</span>
+              <span id="shopDiamonds">0</span>
+            </div>
           </div>
         </div>
 
@@ -802,7 +817,6 @@
           <button class="tab-scroll-arrow left" id="tabPrev" aria-label="Geser tab kiri">‹</button>
           <div class="shop-tabs" id="shopTabs">
             <button class="active" data-shop-category="bird">BIRD</button>
-            <button data-shop-category="pet">PETS</button>
             <button data-shop-category="booster">BOOSTER</button>
             <button data-shop-category="aura">AURA</button>
             <button data-shop-category="hat">HAT</button>
@@ -991,6 +1005,56 @@
           <!-- 16 Cute SVG Character Avatars dynamically populated in script.js -->
         </div>
         <button class="primary" data-close type="button">SELESAI</button>
+      </section>
+
+      <!-- DEDICATED PET COMPANION MODAL (UI PET KHUSUS) -->
+      <section id="petCompanionModal" class="modal pet-modal hidden" role="dialog" aria-modal="true" aria-label="Pet Companion Sanctuary">
+        <button class="close" data-close>×</button>
+        <div class="pet-modal-header">
+          <div class="pet-title-wrap">
+            <span class="pet-header-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="#facc15"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+            <div>
+              <h2>PET COMPANION</h2>
+              <span class="pet-subtitle">Duo Pelindung Imut dengan Skill Pasif Unik (Hanya di Lucky Gacha)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pet-modal-body">
+          <!-- Left: Live Showcase & Skill Detail Card -->
+          <div class="pet-detail-card">
+            <div class="pet-showcase-box">
+              <div class="pet-showcase-glow" id="petGlowEffect"></div>
+              <canvas id="petShowcaseCanvas" width="220" height="85" aria-label="Pratinjau Duo Pet"></canvas>
+              <div class="pet-rarity-badge" id="petRarityBadge">LEGENDARY</div>
+            </div>
+            
+            <div class="pet-info-box">
+              <h3 class="pet-name" id="petDetailName">PIP & PEEP (CANARY DUO)</h3>
+              <div class="pet-skill-card">
+                <div class="pet-skill-title-row">
+                  <span class="pet-skill-icon">⚡</span>
+                  <span class="pet-skill-name" id="petSkillName">DUO BODYGUARD INTERCEPT</span>
+                </div>
+                <p class="pet-skill-desc" id="petSkillDesc">Meluncur menghancurkan musuh yang mendekat (1-hit kill) dan respawn setelah 11 detik.</p>
+              </div>
+            </div>
+
+            <div class="pet-actions-row">
+              <button type="button" class="primary pet-equip-btn" id="petEquipBtn">GUNAKAN PET INI</button>
+              <button type="button" class="pet-gacha-cta-btn" id="petGachaCtaBtn" onclick="window.openGachaModal && window.openGachaModal()">
+                <span>TARIK DI LUCKY GACHA ▶</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: Pet Selection Grid -->
+          <div class="pet-list-wrapper">
+            <div class="pet-list-grid" id="petListGrid">
+              <!-- Dynamically populated pet cards in script.js -->
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- Ranked Leaderboard & Top 1 Champion Portrait Showcase Modal -->
