@@ -3829,7 +3829,7 @@
       } else if(isUnlocked) {
         badgeHtml = '<span class="avatar-card-check" style="background:#0284c7;color:#fff;">PILIH</span>';
       } else {
-        badgeHtml = '<span class="avatar-card-buy-btn">💎 25</span>';
+        badgeHtml = '<span class="avatar-card-buy-btn">💎 50</span>';
       }
 
       html += `
@@ -3853,8 +3853,8 @@
         if(!avId) return;
 
         if(!isUnlocked) {
-          // Beli Anime Avatar Pakai Diamond (25 💎)
-          const cost = 25;
+          // Beli Anime Avatar Pakai Diamond (50 💎)
+          const cost = 50;
           if((progress.diamonds || 0) >= cost) {
             progress.diamonds -= cost;
             if(!progress.avatarUnlocked.includes(avId)) {
@@ -15624,7 +15624,189 @@
     }, 120);
   }
 
-  // Bind Gacha & Pet Buttons explicitly
+  // =========================================================
+  // DAILY CHECK-IN SYSTEM (HADIAH LOGIN HARIAN)
+  // =========================================================
+  const DAILY_REWARDS_CONFIG = [
+    { day: 1, type: 'coins', amount: 100, label: '+100 Koin', icon: '🪙' },
+    { day: 2, type: 'diamonds', amount: 5, label: '+5 💎', icon: '💎' },
+    { day: 3, type: 'coins', amount: 250, label: '+250 Koin', icon: '🪙' },
+    { day: 4, type: 'diamonds', amount: 10, label: '+10 💎', icon: '💎' },
+    { day: 5, type: 'coins', amount: 500, label: '+500 Koin', icon: '🪙' },
+    { day: 6, type: 'diamonds', amount: 15, label: '+15 💎', icon: '💎' },
+    { day: 7, type: 'both', diamonds: 50, coins: 1000, label: '+50 💎 & 1000 🪙', icon: '👑', grand: true }
+  ];
+
+  function getLocalDateString(d = new Date()) {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function getDailyCheckinStatus() {
+    if (!progress.dailyCheckin || typeof progress.dailyCheckin !== 'object') {
+      progress.dailyCheckin = {
+        lastClaimDate: null,
+        streak: 0,
+        dayIndex: 0
+      };
+    }
+    const checkin = progress.dailyCheckin;
+    const today = getLocalDateString();
+    
+    const isClaimedToday = (checkin.lastClaimDate === today);
+    let activeDayIndex = typeof checkin.dayIndex === 'number' ? checkin.dayIndex : 0;
+    
+    if (!isClaimedToday && checkin.lastClaimDate) {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = getLocalDateString(yesterday);
+      
+      if (checkin.lastClaimDate !== yesterdayStr) {
+        // Streak resets if missed a day
+        activeDayIndex = 0;
+      }
+    }
+    
+    if (activeDayIndex < 0 || activeDayIndex > 6) activeDayIndex = 0;
+    
+    return {
+      today,
+      isClaimedToday,
+      activeDayIndex,
+      streak: checkin.streak || (isClaimedToday ? 1 : 0),
+      lastClaimDate: checkin.lastClaimDate
+    };
+  }
+
+  function updateDailyCheckinBadge() {
+    const badge = $('dailyCheckinBadge');
+    if (!badge) return;
+    const status = getDailyCheckinStatus();
+    badge.style.display = status.isClaimedToday ? 'none' : 'block';
+  }
+
+  function renderDailyCheckinGrid() {
+    const grid = $('dailyGrid');
+    const streakCountEl = $('dailyStreakCount');
+    const claimBtn = $('dailyClaimBtn');
+    const tipEl = $('dailyFooterTip');
+    if (!grid) return;
+
+    const status = getDailyCheckinStatus();
+    if (streakCountEl) streakCountEl.textContent = status.streak;
+
+    let html = '';
+    DAILY_REWARDS_CONFIG.forEach((reward, idx) => {
+      const isPast = status.isClaimedToday ? (idx <= status.activeDayIndex) : (idx < status.activeDayIndex);
+      const isCurrent = !status.isClaimedToday && (idx === status.activeDayIndex);
+      
+      let stateClass = '';
+      let statusBadge = '';
+      if (isPast) {
+        stateClass = 'claimed';
+        statusBadge = '<span class="daily-card-status-badge">✅</span>';
+      } else if (isCurrent) {
+        stateClass = 'ready-today';
+        statusBadge = '<span class="daily-card-status-badge">🎁</span>';
+      } else {
+        stateClass = 'locked';
+        statusBadge = '<span class="daily-card-status-badge">🔒</span>';
+      }
+      if (reward.grand) stateClass += ' grand-day';
+
+      const rewardTypeClass = reward.type === 'diamonds' ? 'diamond' : (reward.type === 'coins' ? 'coins' : 'diamond');
+
+      html += `
+        <div class="daily-card ${stateClass}">
+          ${statusBadge}
+          <div class="daily-card-day">Hari ${reward.day}</div>
+          <div class="daily-card-icon">${reward.icon}</div>
+          <div class="daily-card-reward ${rewardTypeClass}">${reward.label}</div>
+        </div>
+      `;
+    });
+    grid.innerHTML = html;
+
+    if (claimBtn) {
+      if (status.isClaimedToday) {
+        claimBtn.disabled = true;
+        claimBtn.textContent = 'SUDAH DIKLAIM HARI INI';
+        if (tipEl) tipEl.textContent = 'Kembali besok untuk klaim hadiah Hari ke-' + (((status.activeDayIndex + 1) % 7) + 1) + '!';
+      } else {
+        claimBtn.disabled = false;
+        const targetReward = DAILY_REWARDS_CONFIG[status.activeDayIndex];
+        claimBtn.textContent = `KLAIM HARI KE-${targetReward.day} (${targetReward.label})`;
+        if (tipEl) tipEl.textContent = 'Klik tombol di atas untuk mengambil hadiah Anda sekarang!';
+      }
+    }
+  }
+
+  function claimDailyReward() {
+    const status = getDailyCheckinStatus();
+    if (status.isClaimedToday) {
+      if (typeof showToast === 'function') showToast('Hadiah hari ini sudah diklaim!', 'info');
+      return;
+    }
+
+    const currentReward = DAILY_REWARDS_CONFIG[status.activeDayIndex];
+    if (!currentReward) return;
+
+    if (currentReward.type === 'coins') {
+      progress.coins += currentReward.amount;
+    } else if (currentReward.type === 'diamonds') {
+      progress.diamonds = (progress.diamonds || 0) + currentReward.amount;
+    } else if (currentReward.type === 'both') {
+      progress.diamonds = (progress.diamonds || 0) + currentReward.diamonds;
+      progress.coins += currentReward.coins;
+    }
+
+    progress.dailyCheckin = {
+      lastClaimDate: status.today,
+      streak: (status.streak || 0) + 1,
+      dayIndex: (status.activeDayIndex + 1) % 7
+    };
+    progress.coinsUpdatedAt = Date.now();
+
+    updateCoins();
+    persistProgress();
+    if (typeof saveCloudSave === 'function') saveCloudSave();
+
+    audio.win();
+    makeParticles(window.innerWidth / 2, window.innerHeight / 2, 35, '#facc15');
+
+    if (typeof showToast === 'function') {
+      showToast(`🎉 Hadiah Hari ke-${currentReward.day} Berhasil Diklaim: ${currentReward.label}!`, 'success');
+    }
+
+    renderDailyCheckinGrid();
+    updateDailyCheckinBadge();
+  }
+  window.claimDailyReward = claimDailyReward;
+
+  function openDailyCheckinModal() {
+    audio.click();
+    renderDailyCheckinGrid();
+    showModal($('dailyCheckinModal'));
+  }
+  window.openDailyCheckinModal = openDailyCheckinModal;
+
+  function initDailyCheckin() {
+    updateDailyCheckinBadge();
+    const status = getDailyCheckinStatus();
+    if (!status.isClaimedToday) {
+      setTimeout(() => {
+        if (state === State.MENU && !document.querySelector('.modal:not(.hidden)')) {
+          openDailyCheckinModal();
+        }
+      }, 1500);
+    }
+  }
+
+  // Bind Buttons explicitly
+  bindClick('lobbyDailyBtn', openDailyCheckinModal);
+  bindClick('dailyClaimBtn', claimDailyReward);
   bindClick('lobbyGachaBtn', openGachaModal);
   bindClick('mlbbGachaCard', openGachaModal);
   bindClick('lobbyPetBtn', openPetModal);
@@ -15651,6 +15833,7 @@
     setState(State.MENU);
     updateScore();
     updateMusicUI();
+    initDailyCheckin();
     initSplashScreen();
     requestAnimationFrame(loop);
   } catch(initErr) {

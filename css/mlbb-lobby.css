@@ -238,16 +238,29 @@
   text-shadow: 0 0 8px rgba(251, 191, 36, 0.55);
 }
 
-.mlbb-res-pill.points {
-  border-color: rgba(56, 189, 248, 0.6);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 10px rgba(56, 189, 248, 0.22), inset 0 1px 1px rgba(186, 230, 253, 0.35);
+.mlbb-res-pill.diamonds {
+  border-color: rgba(56, 189, 248, 0.6) !important;
+  background: rgba(14, 165, 233, 0.18) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 10px rgba(56, 189, 248, 0.25), inset 0 1px 1px rgba(186, 230, 253, 0.35) !important;
 }
 
-.mlbb-res-pill.points .mlbb-res-val {
+.mlbb-res-pill.diamonds .mlbb-res-val {
   font: 900 13px/1 'Trebuchet MS', Arial, sans-serif;
   color: #38bdf8;
   letter-spacing: 0.5px;
   text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+.mlbb-res-pill.points {
+  border-color: rgba(234, 179, 8, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 10px rgba(234, 179, 8, 0.2), inset 0 1px 1px rgba(254, 240, 138, 0.3);
+}
+
+.mlbb-res-pill.points .mlbb-res-val {
+  font: 900 13px/1 'Trebuchet MS', Arial, sans-serif;
+  color: #fde047;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px rgba(253, 224, 71, 0.55);
 }
 
 .mlbb-res-icon {
@@ -1242,4 +1255,237 @@ button.mlbb-quick-friend-item {
   box-shadow: 0 4px 14px rgba(250, 204, 21, 0.45) !important;
   transform: translateY(-2px) !important;
 }
+
+/* Daily Check-in Notification Badge Dot */
+.daily-badge-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #ef4444;
+  animation: pingPulse 1.2s infinite;
+}
+
+/* Daily Check-in Modal */
+.daily-modal {
+  width: 92vw;
+  max-width: 620px;
+  max-height: 90vh;
+  background: radial-gradient(circle at top, rgba(30, 58, 138, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+  border: 1.5px solid rgba(250, 204, 21, 0.5) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(250, 204, 21, 0.25) !important;
+  padding: 16px 20px 20px !important;
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.daily-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+}
+
+.daily-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.daily-header-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.1) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+}
+
+.daily-title-wrap h2 {
+  font: 900 16px/1.1 'Trebuchet MS', Arial, sans-serif;
+  color: #fbbf24;
+  margin: 0 0 3px;
+  letter-spacing: 0.8px;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+.daily-subtitle {
+  font: 600 10px/1.2 'Trebuchet MS', Arial, sans-serif;
+  color: #cbd5e1;
+}
+
+.daily-streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  border-radius: 99px;
+  padding: 4px 10px;
+  font: 800 11px/1 'Trebuchet MS', Arial, sans-serif;
+  color: #fca5a5;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.25);
+}
+
+.daily-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+  .daily-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .daily-card.grand-day {
+    grid-column: span 2;
+  }
+}
+
+.daily-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 10px 4px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 105px;
+  position: relative;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.daily-card-day {
+  font: 800 10px/1 'Trebuchet MS', Arial, sans-serif;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.daily-card-icon {
+  font-size: 24px;
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.daily-card-reward {
+  font: 900 10px/1 'Trebuchet MS', Arial, sans-serif;
+  color: #f8fafc;
+  text-align: center;
+}
+
+.daily-card-reward.diamond {
+  color: #38bdf8;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+.daily-card-reward.coins {
+  color: #fbbf24;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
+}
+
+/* Card States */
+.daily-card.claimed {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.5);
+  opacity: 0.75;
+}
+
+.daily-card.claimed .daily-card-day {
+  color: #6ee7b7;
+}
+
+.daily-card-status-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.daily-card.ready-today {
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.25) 0%, rgba(30, 41, 59, 0.9) 100%);
+  border-color: #facc15;
+  box-shadow: 0 0 16px rgba(250, 204, 21, 0.4), inset 0 0 8px rgba(250, 204, 21, 0.2);
+  transform: translateY(-2px);
+  animation: pulseCard 2s infinite ease-in-out;
+}
+
+.daily-card.ready-today .daily-card-day {
+  color: #fde047;
+  font-weight: 900;
+}
+
+.daily-card.grand-day {
+  background: radial-gradient(circle at top, rgba(245, 158, 11, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border-color: rgba(251, 191, 36, 0.7);
+}
+
+@keyframes pulseCard {
+  0%, 100% {
+    box-shadow: 0 0 14px rgba(250, 204, 21, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(250, 204, 21, 0.7);
+  }
+}
+
+.daily-modal-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.daily-claim-btn {
+  width: 100%;
+  max-width: 320px;
+  padding: 12px 20px;
+  font: 900 13px/1 'Trebuchet MS', Arial, sans-serif;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+  border: 1.5px solid #fef08a;
+  border-radius: 99px;
+  box-shadow: 0 6px 20px rgba(234, 179, 8, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.daily-claim-btn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(234, 179, 8, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.7);
+}
+
+.daily-claim-btn:disabled {
+  background: rgba(51, 65, 85, 0.8);
+  border-color: rgba(100, 116, 139, 0.4);
+  color: #94a3b8;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.daily-footer-tip {
+  font: 600 9px/1 'Trebuchet MS', Arial, sans-serif;
+  color: #94a3b8;
+}
+
 

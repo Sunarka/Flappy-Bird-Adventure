@@ -332,22 +332,18 @@
           <span class="mlbb-res-icon" style="font-size:13px;line-height:1;">💎</span>
           <span class="mlbb-res-val" id="topDiamondVal" style="color:#38bdf8;font-weight:900;">0</span>
         </div>
-        <div class="mlbb-res-pill points" id="topRankPill" title="Poin Ranked">
+        <div class="mlbb-res-pill points" id="topRankPill" title="Poin Bintang Ranked (MMR)">
           <span class="mlbb-res-icon">
-            <svg viewBox="0 0 24 24" width="15" height="15">
+            <svg viewBox="0 0 24 24" width="16" height="16">
               <defs>
-                <linearGradient id="rankGemGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#7dd3fc"/>
-                  <stop offset="45%" stop-color="#38bdf8"/>
-                  <stop offset="100%" stop-color="#0284c7"/>
+                <linearGradient id="rankStarGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#fde047"/>
+                  <stop offset="45%" stop-color="#eab308"/>
+                  <stop offset="100%" stop-color="#ca8a04"/>
                 </linearGradient>
               </defs>
-              <polygon points="12,2 19,8 12,22 5,8" fill="url(#rankGemGrad)"/>
-              <polygon points="12,2 19,8 12,8" fill="#e0f2fe" opacity="0.65"/>
-              <polygon points="12,2 5,8 12,8" fill="#bae6fd" opacity="0.9"/>
-              <polygon points="5,8 12,8 12,22" fill="#38bdf8" opacity="0.85"/>
-              <polygon points="19,8 12,8 12,22" fill="#0284c7"/>
-              <circle cx="8.5" cy="5.5" r="1.2" fill="#ffffff"/>
+              <path d="M12 2l2.9 6.2 6.8.9-5 4.7 1.3 6.7-6-3.3-6 3.3 1.3-6.7-5-4.7 6.8-.9L12 2z" fill="url(#rankStarGrad)" stroke="#78350f" stroke-width="0.8"/>
+              <circle cx="12" cy="11.5" r="2.2" fill="#fef08a" opacity="0.85"/>
             </svg>
           </span>
           <span class="mlbb-res-val" id="topRankVal">0</span>
@@ -411,13 +407,19 @@
 
     <!-- LEFT SIDEBAR (EVENT PASS & QUICK ACTIONS) -->
     <aside class="mlbb-left-dock" id="mlbbLeftDock">
+      <button class="mlbb-side-btn mlbb-daily-btn" id="lobbyDailyBtn" type="button" title="Hadiah Login Harian - Klaim Diamond & Koin!" onclick="window.openDailyCheckinModal && window.openDailyCheckinModal()">
+        <span class="side-btn-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#ffffff"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/></svg></span>
+        <span class="side-btn-label">DAILY</span>
+        <span class="daily-badge-dot" id="dailyCheckinBadge" style="display:none;"></span>
+      </button>
+
       <button class="mlbb-side-btn mlbb-gacha-btn" id="lobbyGachaBtn" type="button" title="Lucky Bird Gacha - Tarik Hadiah Langka!" onclick="window.openGachaModal && window.openGachaModal()">
         <span class="side-btn-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#ffffff"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V18h-2v-1.07A4.004 4.004 0 0 1 8 13h2a2 2 0 1 0 2-2H11a4 4 0 0 1 0-8V2h2v1.07A4.004 4.004 0 0 1 16 7h-2a2 2 0 1 0-2 2h1a4 4 0 0 1 0 7.93z"/></svg></span>
         <span class="side-btn-label">GACHA</span>
       </button>
 
       <button class="mlbb-side-btn" id="lobbyPetBtn" type="button" title="Pet Companion - Pendamping Setia" onclick="window.openPetModal && window.openPetModal()">
-        <span class="side-btn-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#ffffff"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+        <span class="side-btn-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="#ffffff"><ellipse cx="12" cy="16.5" rx="4.5" ry="3.5"/><circle cx="6.5" cy="11.5" r="2.2"/><circle cx="10" cy="7.5" r="2.2"/><circle cx="14" cy="7.5" r="2.2"/><circle cx="17.5" cy="11.5" r="2.2"/></svg></span>
         <span class="side-btn-label">PETS</span>
       </button>
 
@@ -710,6 +712,35 @@
       
       
       
+      <!-- DAILY CHECK-IN MODAL (HADIAH LOGIN HARIAN) -->
+      <section id="dailyCheckinModal" class="modal daily-modal hidden" role="dialog" aria-modal="true" aria-label="Hadiah Login Harian">
+        <button class="close" data-close>×</button>
+        <div class="daily-modal-header">
+          <div class="daily-title-wrap">
+            <span class="daily-header-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="#fbbf24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/></svg></span>
+            <div>
+              <h2>HADIAH LOGIN HARIAN</h2>
+              <span class="daily-subtitle">Login 7 hari berturut-turut untuk klaim Koin Emas & Diamond Melimpah!</span>
+            </div>
+          </div>
+          <div class="daily-streak-badge" id="dailyStreakBadge">
+            <span class="streak-icon">🔥</span>
+            <span>STREAK: <strong id="dailyStreakCount">1</strong> HARI</span>
+          </div>
+        </div>
+
+        <div class="daily-modal-body">
+          <div class="daily-grid" id="dailyGrid">
+            <!-- Rendered dynamically by JS (Day 1 - Day 7) -->
+          </div>
+        </div>
+
+        <div class="daily-modal-footer">
+          <button class="daily-claim-btn" id="dailyClaimBtn" type="button">KLAIM HADIAH HARI INI</button>
+          <div class="daily-footer-tip" id="dailyFooterTip">Reset hadiah setiap pukul 00:00 waktu setempat</div>
+        </div>
+      </section>
+
       <!-- LUCKY BIRD GACHA MODAL (PURE GACHA BOX) -->
       <section id="gachaModal" class="modal gacha-modal hidden" role="dialog" aria-modal="true" aria-label="Lucky Bird Gacha">
         <button class="close" data-close>×</button>
@@ -1012,7 +1043,7 @@
         <button class="close" data-close>×</button>
         <div class="pet-modal-header">
           <div class="pet-title-wrap">
-            <span class="pet-header-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="#facc15"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+            <span class="pet-header-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="#facc15"><ellipse cx="12" cy="16.5" rx="4.5" ry="3.5"/><circle cx="6.5" cy="11.5" r="2.2"/><circle cx="10" cy="7.5" r="2.2"/><circle cx="14" cy="7.5" r="2.2"/><circle cx="17.5" cy="11.5" r="2.2"/></svg></span>
             <div>
               <h2>PET COMPANION</h2>
               <span class="pet-subtitle">Duo Pelindung Imut dengan Skill Pasif Unik (Hanya di Lucky Gacha)</span>
