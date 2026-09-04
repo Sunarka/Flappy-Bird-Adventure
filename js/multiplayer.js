@@ -403,6 +403,7 @@
           break;
         }
 
+        case 'QUEUED':
         case 'QUEUED_FOR_MATCH': {
           this.matchStatus = 'QUEUED';
           this.emit('queued', data);
@@ -410,10 +411,12 @@
         }
 
         case 'MATCH_CANCELLED': {
-          if (this.matchStatus !== 'QUEUED') {
-            this.matchStatus = 'IDLE';
-            this.emit('match_cancelled');
+          this.matchStatus = 'IDLE';
+          if (this.botFallbackTimer) {
+            clearTimeout(this.botFallbackTimer);
+            this.botFallbackTimer = null;
           }
+          this.emit('match_cancelled');
           break;
         }
 
@@ -711,16 +714,22 @@
         this.send({ type: 'QUICK_MATCH', profile: this.myProfile, gameMode: this.gameMode, maxPlayers: this.maxPlayers });
       }
 
-      // Auto-Bot Fallback Timer: 2.2 sampai 3.2 detik jika belum ada pemain online asli, mulai dengan AI Bot!
-      const botWaitMs = Math.floor(2200 + Math.random() * 1000); // 2.2s - 3.2s
+      // Auto-Bot Fallback Timer: 7.0 sampai 10.0 detik jika belum ada pemain online asli, mulai dengan AI Bot!
+      // (Sesuai rentang 7-15s ekspektasi pemain dan estimasi 00:10 di banner radar)
+      const botWaitMs = Math.floor(7000 + Math.random() * 3000); // 7.0s - 10.0s
       this.botFallbackTimer = setTimeout(() => {
         if (this.matchStatus === 'QUEUED') {
+          console.log(`[MultiplayerEngine] Waktu tunggu matchmaking habis (${(botWaitMs/1000).toFixed(1)} detik). Menghubungkan ke AI Bot...`);
           this.spawnBotMatch();
         }
       }, botWaitMs);
     }
 
     spawnBotMatch() {
+      if (this.botFallbackTimer) {
+        clearTimeout(this.botFallbackTimer);
+        this.botFallbackTimer = null;
+      }
       if (this.matchStatus !== 'QUEUED' && this.matchStatus !== 'IN_ROOM' && this.matchStatus !== 'IDLE') return;
 
       const BOT_PREFIXES = ['Sky', 'Cyber', 'Shadow', 'Aero', 'Dragon', 'Neko', 'Vortex', 'Phoenix', 'Star', 'Ghost', 'Quantum', 'Lunar', 'Pixel', 'Hyper', 'Nova', 'Falcon', 'Alpha', 'Mega', 'Blaze', 'Storm', 'Frost', 'Apex', 'Turbo', 'Kitsune', 'Mecha', 'Zen', 'Pyro', 'Cosmo', 'Mystic', 'Iron', 'Thunder'];

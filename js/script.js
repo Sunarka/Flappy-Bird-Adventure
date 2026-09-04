@@ -4189,6 +4189,13 @@
       el.rankedLeaderboardBtn.style.display = 'flex';
     }
 
+    if(mode !== 'multiplayer') {
+      if(typeof stopSearchingRadar === 'function') stopSearchingRadar();
+      if(window.multiplayerEngine && window.multiplayerEngine.matchStatus === 'QUEUED') {
+        window.multiplayerEngine.cancelMatch();
+      }
+    }
+
     updateMenuRankedUI();
     updateScore();
     syncSettings();
@@ -4816,11 +4823,6 @@
     const reviveModal = el.reviveModal || $('reviveModal');
     if(reviveModal) { reviveModal.classList.add('hidden'); reviveModal.style.display = 'none'; }
 
-    if (typeof stopSearchingRadar === 'function') stopSearchingRadar();
-    if (window.multiplayerEngine && window.multiplayerEngine.matchStatus === 'QUEUED') {
-      window.multiplayerEngine.cancelMatch();
-    }
-
     if (activeDialogResolver) {
       const res = activeDialogResolver;
       activeDialogResolver = null;
@@ -4847,7 +4849,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.65';
+  const GAME_VERSION = '20.66';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -5417,6 +5419,10 @@
     if(currentMode === 'multiplayer') {
       startMultiplayerGameWithArenaCountdown();
       return;
+    }
+    if(typeof stopSearchingRadar === 'function') stopSearchingRadar();
+    if(window.multiplayerEngine && window.multiplayerEngine.matchStatus === 'QUEUED') {
+      window.multiplayerEngine.cancelMatch();
     }
     reset();
     setState(State.READY);
@@ -13624,7 +13630,11 @@
 
   function startSearchingRadar() {
     // Tutup modal agar pemain kembali ke lobi utama dan tampilkan banner matchmaking MLBB melayang dari atas
-    closeModal();
+    const mpModal = el.multiplayerModal || $('multiplayerModal');
+    if(mpModal) { mpModal.classList.add('hidden'); mpModal.style.display = 'none'; }
+    const layer = el.layer || $('modalLayer');
+    if(layer) { layer.classList.add('hidden'); }
+
     const searchingBar = document.getElementById('mpSearchingBar');
     if(searchingBar) {
       searchingBar.classList.remove('hidden');
@@ -13640,6 +13650,14 @@
       const timeStr = `${mm}:${ss}`;
       const timerEl = document.getElementById('mpSearchTimerText');
       if(timerEl) timerEl.textContent = timeStr;
+
+      // FAILSAFE WATCHDOG: Jika detik berjalan mencapai 8 detik (dalam rentang 7-15s) dan match belum dimulai, otomatis mulai duel bot!
+      if (elapsedSec >= 8 && window.multiplayerEngine) {
+        if (window.multiplayerEngine.matchStatus === 'QUEUED' || !window.multiplayerEngine.currentRoom) {
+          console.log(`[Matchmaking Watchdog] Waktu tunggu mencapai ${elapsedSec}s. Memulai match dengan AI Bot.`);
+          window.multiplayerEngine.spawnBotMatch();
+        }
+      }
     }, 1000);
     const timerEl = document.getElementById('mpSearchTimerText');
     if(timerEl) timerEl.textContent = '00:00';
