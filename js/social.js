@@ -774,6 +774,7 @@
     clearGlobalChatBadge() {
       this.unreadGlobalCount = 0;
       this.lastSeenGlobalTime = Date.now();
+      try { localStorage.setItem('flappy_last_seen_global', String(this.lastSeenGlobalTime)); } catch(_) {}
       this.updateBadgeUI();
     }
 
@@ -859,20 +860,22 @@
               }
             }
 
-            // Unread badge logic
+            // Unread badge logic (Dihitung akurat berdasarkan pesan yang belum dilihat)
             const modal = document.getElementById('mlbbChatModal');
             const isViewingGlobal = modal && !modal.classList.contains('hidden') && this.currentChatTab === 'global';
             if (isViewingGlobal) {
               this.unreadGlobalCount = 0;
               this.lastSeenGlobalTime = Date.now();
-            } else if (messages.length > 0) {
-              const lastMsg = messages[messages.length - 1];
-              if (lastMsg && lastMsg.senderKey !== this.myKey) {
-                const lastSeen = this.lastSeenGlobalTime || 0;
-                if (!lastMsg.timestamp || lastMsg.timestamp > lastSeen) {
-                  this.unreadGlobalCount = (this.unreadGlobalCount || 0) + 1;
+              try { localStorage.setItem('flappy_last_seen_global', String(this.lastSeenGlobalTime)); } catch(_) {}
+            } else {
+              const lastSeen = Number(localStorage.getItem('flappy_last_seen_global')) || this.lastSeenGlobalTime || 0;
+              let count = 0;
+              messages.forEach(m => {
+                if (m.senderKey !== this.myKey && m.timestamp && m.timestamp > lastSeen) {
+                  count++;
                 }
-              }
+              });
+              this.unreadGlobalCount = count;
             }
             this.updateBadgeUI();
 
