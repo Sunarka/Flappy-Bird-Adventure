@@ -1763,19 +1763,32 @@
 }
 
 /* =========================================================
-   CUSTOM IN-GAME NOTIFICATION & CONFIRMATION MODAL
+   CUSTOM IN-GAME NOTIFICATION & CONFIRMATION MODAL (NO SCROLL)
    ========================================================= */
 .game-dialog-modal {
   width: min(315px, 92vw) !important;
+  max-width: 320px !important;
+  max-height: 90vh !important;
   background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%) !important;
   border: 2px solid #38bdf8 !important;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 24px rgba(56, 189, 248, 0.3) !important;
   color: #ffffff !important;
-  padding: 22px 18px 18px !important;
-  border-radius: 20px !important;
+  padding: 14px 16px 14px !important;
+  border-radius: 18px !important;
   text-align: center !important;
   z-index: 1000 !important;
   box-sizing: border-box !important;
+  overflow: hidden !important;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.game-dialog-modal::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .game-dialog-modal.hidden {
@@ -1786,21 +1799,28 @@
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
+  justify-content: center !important;
 }
 
 .dialog-icon-wrap {
-  width: 54px;
-  height: 54px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 12px;
+  margin: 0 auto 6px;
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid #38bdf8;
-  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
   animation: pulseHint 1.8s infinite ease-in-out;
   flex-shrink: 0;
+}
+
+.dialog-icon-wrap svg {
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 
 .dialog-icon-wrap.warning {
@@ -1822,9 +1842,9 @@
 }
 
 .dialog-title {
-  font: 900 16px 'Trebuchet MS', Arial, sans-serif !important;
+  font: 900 15px 'Trebuchet MS', Arial, sans-serif !important;
   color: #38bdf8 !important;
-  margin: 0 0 8px !important;
+  margin: 0 0 5px !important;
   letter-spacing: 0.5px;
 }
 
@@ -1841,25 +1861,35 @@
 }
 
 .dialog-body {
-  font: 600 12px/1.5 'Trebuchet MS', Arial, sans-serif;
+  font: 600 11.5px/1.38 'Trebuchet MS', Arial, sans-serif;
   color: #cbd5e1;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   width: 100%;
+  overflow: hidden !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.dialog-body::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .dialog-body p {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
 }
 
 .dialog-info-card {
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  padding: 8px 12px;
-  margin: 8px 0;
+  border-radius: 8px;
+  padding: 5px 10px;
+  margin: 5px 0 6px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
   text-align: left;
 }
 
@@ -1867,7 +1897,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 11.5px;
+  font-size: 11px;
 }
 
 .dialog-info-row b {
@@ -1877,7 +1907,7 @@
 .dialog-actions {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   width: 100%;
 }
 
@@ -1888,10 +1918,10 @@
   border-color: #38bdf8 !important;
   color: #ffffff !important;
   box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4) !important;
-  font-size: 13px !important;
-  min-height: 42px !important;
+  font-size: 12px !important;
+  min-height: 36px !important;
   font-weight: 900 !important;
-  border-radius: 12px !important;
+  border-radius: 10px !important;
 }
 
 .dialog-btn-cancel {
@@ -1900,9 +1930,9 @@
   background: rgba(255, 255, 255, 0.1) !important;
   color: #cbd5e1 !important;
   box-shadow: none !important;
-  font-size: 12px !important;
-  min-height: 38px !important;
-  border-radius: 12px !important;
+  font-size: 11px !important;
+  min-height: 32px !important;
+  border-radius: 10px !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
@@ -1910,6 +1940,7 @@
   background: rgba(255, 255, 255, 0.18) !important;
   color: #ffffff !important;
 }
+
 
 
 

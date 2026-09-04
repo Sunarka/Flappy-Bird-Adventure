@@ -406,8 +406,8 @@ button.close:active,
   }
 }
 .brand-logo{display:block;max-width:100%;height:auto}
-.subtitle-badge{margin:6px 0 10px;font-weight:900;font-size:11px;letter-spacing:3px;color:#1c5682;background:rgba(255,255,255,0.6);padding:3px 12px;border-radius:99px;display:inline-block;box-shadow:0 2px 5px rgba(0,0,0,0.06)}
-.how-modal{max-width:320px;padding:22px 18px 18px}
+.how-modal{max-width:320px;padding:16px 16px 14px;overflow:hidden !important;scrollbar-width:none !important;-ms-overflow-style:none !important}
+.how-modal::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important}
 .instructions-list{display:flex;flex-direction:column;gap:8px;margin-bottom:15px;text-align:left}
 .inst-item{display:flex;align-items:center;gap:10px;background:rgba(240,249,255,0.8);border:1.5px solid rgba(186,230,253,0.9);border-radius:12px;padding:7px 9px;box-shadow:0 2px 6px rgba(0,0,0,0.03)}
 .inst-icon{width:36px;height:36px;min-width:36px;border-radius:10px;background:#ffffff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,0.08);border:1px solid rgba(224,242,254,0.8)}
