@@ -3599,7 +3599,25 @@
     }
   ];
 
+  // Daftar anime avatars yang punya file PNG nyata (dari ava.png)
+  const ANIME_AVATAR_PNG = new Set([
+    'luffy_mugiwara', 'naruto_sage', 'tanjiro_slayer', 'nezuko_chan',
+    'gojo_satoru', 'goku_saiyan', 'levi_scout', 'anya_forger'
+  ]);
+
   function getCuteAvatarSvg(avatarId, size = 48) {
+    // Anime avatar: gunakan gambar PNG nyata
+    if (avatarId && ANIME_AVATAR_PNG.has(avatarId)) {
+      const found = cuteAvatarsCatalog.find(a => a.id === avatarId);
+      const svgFallback = found ? found.render(size) : '';
+      return `<img
+        src="assets/avatars/${avatarId}.png"
+        width="${size}" height="${size}"
+        alt="${found ? found.name : avatarId}"
+        style="display:block;width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;"
+        onerror="this.style.display='none';this.insertAdjacentHTML('afterend','${svgFallback.replace(/'/g, "\\'").replace(/\n/g,'')}')"
+      />`;
+    }
     const found = cuteAvatarsCatalog.find(a => a.id === avatarId);
     if(found) return found.render(size);
     // Legacy fallback mapping
@@ -3739,9 +3757,16 @@
     let html = '';
     cuteAvatarsCatalog.forEach(a => {
       const isSelected = (gpProfile.avatar || cuteAvatarsCatalog[0].id) === a.id;
+      const isAnime = ANIME_AVATAR_PNG.has(a.id);
+      const bgStyle = isAnime
+        ? `background:#0f172a;`
+        : `background:${a.bg};`;
+      const iconContent = isAnime
+        ? `<img src="assets/avatars/${a.id}.png" width="44" height="44" alt="${a.name}" style="display:block;width:44px;height:44px;border-radius:50%;object-fit:cover;" onerror="this.outerHTML='${a.render(44).replace(/'/g, "\\'").replace(/\n/g,'')}'"/>`
+        : a.render(44);
       html += `
         <div class="avatar-card${isSelected ? ' selected' : ''}" data-avatar-id="${a.id}">
-          <div class="avatar-card-icon" style="background:${a.bg}">${a.render(44)}</div>
+          <div class="avatar-card-icon" style="${bgStyle}">${iconContent}</div>
           <div class="avatar-card-name">${a.name}</div>
           ${isSelected ? '<span class="avatar-card-check">DIPAKAI</span>' : ''}
         </div>
