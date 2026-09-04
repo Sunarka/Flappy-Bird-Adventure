@@ -4342,7 +4342,7 @@
             renderLeaderboardList();
             startChampionSpotlight(selectedSpotlightPlayer || leaderboardData[0]);
           } else {
-            renderTiersProgressView();
+            updateRankedLeaderboardUI();
           }
         }
       }
@@ -4565,9 +4565,12 @@
   }
   window.handleAddFriend = handleAddFriend;
 
-  function openLeaderboardPlayerProfile(player) {
+  let lastProfileSourceModal = null;
+
+  function openLeaderboardPlayerProfile(player, sourceModal = 'rankedModal') {
     if(!player) return;
     if(audio && audio.click) audio.click();
+    lastProfileSourceModal = sourceModal;
     const modal = $('friendProfileModal');
     if(!modal) return;
 
@@ -4700,6 +4703,22 @@
     if($('fpTabOverviewBtn')) $('fpTabOverviewBtn').onclick = () => { if(audio) audio.click(); switchFriendProfileTab('overview'); };
     if($('fpTabStatsBtn')) $('fpTabStatsBtn').onclick = () => { if(audio) audio.click(); switchFriendProfileTab('stats'); };
 
+    // Wire Back Button to return to Leaderboard
+    const backBtn = $('fpBackBtn');
+    if (backBtn) {
+      backBtn.onclick = () => {
+        if (audio && audio.click) audio.click();
+        if (lastProfileSourceModal === 'rankedModal' && el.rankedModal) {
+          showModal(el.rankedModal);
+          switchLeaderboardTab(activeLeaderboardTab || 'global');
+        } else if (lastProfileSourceModal === 'social' && el.socialModal) {
+          showModal(el.socialModal);
+        } else {
+          closeModal();
+        }
+      };
+    }
+
     showModal(modal);
   }
 
@@ -4755,6 +4774,11 @@
       stopChampionSpotlight();
     }
   }
+
+  function renderTiersProgressView() {
+    updateRankedLeaderboardUI();
+  }
+  window.renderTiersProgressView = renderTiersProgressView;
 
   // Update Dynamic Ranked Leaderboard & Spotlight Top 1 Player
   function updateRankedLeaderboardUI() {
@@ -5137,7 +5161,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.72';
+  const GAME_VERSION = '20.73';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
