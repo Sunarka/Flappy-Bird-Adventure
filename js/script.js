@@ -625,13 +625,13 @@
     },
     aero_lumos: {
       name: 'AERO & LUMOS (HOLY ARCHANGELS)',
-      desc: 'Duo bidadari suci. Memberi berkah cahaya +1 Skor Ekstra & +2 Koin Bonus setiap melewati 3 pipa',
+      desc: 'Duo bidadari suci. Memberi berkah cahaya +1 Skor Ekstra & +2 Koin Bonus setiap melewati 2 pipa',
       cost: 0,
       color: '#eab308',
       skillType: 'blessing',
       skillName: 'DIVINE SCORE & GOLD BLESSING',
-      skillDesc: 'Memberikan +1 Skor Ekstra & +2 Koin Bonus setiap berhasil melewati 3 rintangan pipa',
-      interval: 3,
+      skillDesc: 'Memberikan +1 Skor Ekstra & +2 Koin Bonus setiap berhasil melewati 2 rintangan pipa',
+      interval: 2,
       baby1: { name: 'Aero', color: '#fef08a', wingColor: '#eab308', blushColor: '#fde047', accessory: 'halo' },
       baby2: { name: 'Lumos', color: '#ffffff', wingColor: '#fef08a', blushColor: '#fde047', accessory: 'halo' }
     },
@@ -5762,6 +5762,44 @@
 
     makeParticles(bird.x, bird.y, 22, isShadow ? '#a855f7' : '#38bdf8');
     makeParticles(bird.x - 18, bird.y, 16, isShadow ? '#7e22ce' : '#fde047');
+
+    // SHADOW BONUS: Hancurkan musuh terdekat saat Dash (radius 160px)
+    if(isShadow) {
+      const shadowReach = 160;
+      let closestTarget = null;
+      let closestDist = shadowReach;
+      const allEnemies = [...enemies, ...flyers];
+      for(const e of allEnemies) {
+        if(!e.dead) {
+          const dist = Math.hypot(e.x - bird.x, e.y - bird.y);
+          if(dist < closestDist) { closestDist = dist; closestTarget = e; }
+        }
+      }
+      if(!closestTarget) {
+        for(const c of stormClouds) {
+          if(c.phase === 'warn' || c.phase === 'strike') {
+            const dist = Math.hypot(c.targetX - bird.x, (c.y + 15) - bird.y);
+            if(dist < closestDist) { closestDist = dist; closestTarget = { _cloud: c, x: c.targetX, y: c.y + 15 }; }
+          }
+        }
+      }
+      if(closestTarget) {
+        if(closestTarget._cloud) {
+          closestTarget._cloud.phase = 'fade';
+          closestTarget._cloud.timer = 0.05;
+        } else {
+          closestTarget.dead = true;
+          closestTarget.x = -999;
+        }
+        addScore();
+        makeParticles(closestTarget.x, closestTarget.y, 32, '#a855f7');
+        makeParticles(closestTarget.x, closestTarget.y, 20, '#000000');
+        shockwaves.push({ x: closestTarget.x, y: closestTarget.y, r: 8, maxR: 75, color: '#7e22ce', life: 0.4, maxLife: 0.4 });
+        floatingTexts.push({ x: closestTarget.x, y: closestTarget.y - 20, text: 'VOID SHRED! +1', color: '#c084fc', vy: -70, life: 0.85, maxLife: 0.85 });
+        audio.rocketSmash();
+        shake = 0.25;
+      }
+    }
     updateDashUI();
   }
 
@@ -8197,62 +8235,60 @@
       }
     }
 
-    // 3. SKILL: BLAZE & EMBER (Phoenix Scorcher - semburan api naga membakar musuh dalam radius 190px)
+    // 3. SKILL: BLAZE & EMBER (Phoenix Scorcher - cooldown 2.5s, range 130px, max 2 kill per burst)
     if(petData.skillType === 'fire') {
-      const burnReach = 190;
-      for(const e of enemies) {
-        if(!e.dead && e.x > bird.x - 15 && e.x < bird.x + burnReach && Math.abs(e.y - bird.y) < 55) {
-          e.dead = true;
-          e.x = -999;
-          audio.rocketSmash();
-          addScore();
-          floatingTexts.push({
-            x: e.x, y: e.y - 18,
-            text: 'INCINERATED! +1',
-            color: '#f97316',
-            vy: -65, life: 0.8, maxLife: 0.8
-          });
-          makeParticles(e.x, e.y, 28, '#f97316');
-          makeParticles(e.x, e.y, 20, '#fde047');
-          shockwaves.push({ x: e.x, y: e.y, r: 8, maxR: 65, color: '#f97316', life: 0.35, maxLife: 0.35 });
-          shake = 0.22;
+      petSkillTimer += dt;
+      const fireCooldown = 2.5; // Cooldown antar burst (sebelumnya tidak ada = OP!)
+      if(petSkillTimer >= fireCooldown) {
+        const burnReach = 130; // Dikurangi dari 190 → 130px
+        let killCount = 0;
+        const maxKillPerBurst = 2; // Maks 2 musuh per burst
+
+        for(const e of enemies) {
+          if(killCount >= maxKillPerBurst) break;
+          if(!e.dead && e.x > bird.x - 15 && e.x < bird.x + burnReach && Math.abs(e.y - bird.y) < 55) {
+            e.dead = true; e.x = -999;
+            killCount++;
+            audio.rocketSmash();
+            addScore();
+            floatingTexts.push({ x: e.x, y: e.y - 18, text: 'INCINERATED! +1', color: '#f97316', vy: -65, life: 0.8, maxLife: 0.8 });
+            makeParticles(e.x, e.y, 28, '#f97316');
+            makeParticles(e.x, e.y, 20, '#fde047');
+            shockwaves.push({ x: e.x, y: e.y, r: 8, maxR: 65, color: '#f97316', life: 0.35, maxLife: 0.35 });
+            shake = 0.22;
+          }
         }
-      }
-      for(const f of flyers) {
-        if(!f.dead && f.x > bird.x - 15 && f.x < bird.x + burnReach && Math.abs(f.y - bird.y) < 55) {
-          f.dead = true;
-          f.x = -999;
-          audio.rocketSmash();
-          addScore();
-          floatingTexts.push({
-            x: f.x, y: f.y - 18,
-            text: 'INCINERATED! +1',
-            color: '#f97316',
-            vy: -65, life: 0.8, maxLife: 0.8
-          });
-          makeParticles(f.x, f.y, 28, '#f97316');
-          makeParticles(f.x, f.y, 20, '#fde047');
-          shockwaves.push({ x: f.x, y: f.y, r: 8, maxR: 65, color: '#f97316', life: 0.35, maxLife: 0.35 });
-          shake = 0.22;
+        for(const f of flyers) {
+          if(killCount >= maxKillPerBurst) break;
+          if(!f.dead && f.x > bird.x - 15 && f.x < bird.x + burnReach && Math.abs(f.y - bird.y) < 55) {
+            f.dead = true; f.x = -999;
+            killCount++;
+            audio.rocketSmash();
+            addScore();
+            floatingTexts.push({ x: f.x, y: f.y - 18, text: 'INCINERATED! +1', color: '#f97316', vy: -65, life: 0.8, maxLife: 0.8 });
+            makeParticles(f.x, f.y, 28, '#f97316');
+            makeParticles(f.x, f.y, 20, '#fde047');
+            shockwaves.push({ x: f.x, y: f.y, r: 8, maxR: 65, color: '#f97316', life: 0.35, maxLife: 0.35 });
+            shake = 0.22;
+          }
         }
-      }
-      for(const c of stormClouds) {
-        if((c.phase === 'warn' || c.phase === 'strike') && c.targetX > bird.x - 15 && c.targetX < bird.x + burnReach && Math.abs(c.y + 15 - bird.y) < 65) {
-          c.phase = 'fade';
-          c.timer = 0.05;
-          audio.rocketSmash();
-          addScore();
-          floatingTexts.push({
-            x: c.targetX, y: c.y - 18,
-            text: 'VAPORIZED! +1',
-            color: '#f97316',
-            vy: -65, life: 0.8, maxLife: 0.8
-          });
-          makeParticles(c.targetX, c.y + 15, 28, '#f97316');
-          makeParticles(c.targetX, c.y + 15, 20, '#fde047');
-          shockwaves.push({ x: c.targetX, y: c.y + 15, r: 8, maxR: 65, color: '#f97316', life: 0.35, maxLife: 0.35 });
-          shake = 0.22;
+        for(const c of stormClouds) {
+          if(killCount >= maxKillPerBurst) break;
+          if((c.phase === 'warn' || c.phase === 'strike') && c.targetX > bird.x - 15 && c.targetX < bird.x + burnReach && Math.abs(c.y + 15 - bird.y) < 65) {
+            c.phase = 'fade'; c.timer = 0.05;
+            killCount++;
+            audio.rocketSmash();
+            addScore();
+            floatingTexts.push({ x: c.targetX, y: c.y - 18, text: 'VAPORIZED! +1', color: '#f97316', vy: -65, life: 0.8, maxLife: 0.8 });
+            makeParticles(c.targetX, c.y + 15, 28, '#f97316');
+            makeParticles(c.targetX, c.y + 15, 20, '#fde047');
+            shockwaves.push({ x: c.targetX, y: c.y + 15, r: 8, maxR: 65, color: '#f97316', life: 0.35, maxLife: 0.35 });
+            shake = 0.22;
+          }
         }
+        // Reset cooldown hanya jika ada yang terkena (atau tetap tick 2.5s)
+        if(killCount > 0) petSkillTimer = 0;
+        else if(petSkillTimer > fireCooldown + 2) petSkillTimer = 0; // Prevent drift
       }
     }
 
