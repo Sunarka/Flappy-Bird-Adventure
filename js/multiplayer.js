@@ -1281,7 +1281,7 @@
           }
 
           // Turunkan opacity lawan agar mudah dibedakan dengan pemain sendiri (HD Ghost Rival)
-          const rivalOpacity = op.isAlive ? 0.72 : 0.35;
+          const rivalOpacity = op.isAlive ? 1.0 : 0.4;
 
           // 1. Render Opponent Baby Birds (100% HD identik dengan pemain tapi dengan opacity lawan)
           if (op.babyBirds && op.babyBirds.length > 0 && op.isAlive) {

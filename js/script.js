@@ -550,7 +550,8 @@
     // Anime Special Pipes
     katana_torii:{ name:'RED TORII & KATANA', desc:'Pipa gerbang Shinto merah berkilau pedang katana', cost:0, body:'#991b1b', wing:'#ef4444', edge:'#450a0a', cap:'#facc15' },
     bamboo_demon:{ name:'DEMON SLAYER BAMBOO', desc:'Pipa bambu hijau bertali merah Nezuko', cost:0, body:'#15803d', wing:'#4ade80', edge:'#14532d', cap:'#f472b6' },
-    chakra_scroll:{ name:'NINJUTSU GIANT SCROLL', desc:'Pipa gulungan jurus ninjutsu kayu & kertas mantra', cost:0, body:'#78350f', wing:'#d97706', edge:'#451a03', cap:'#fde047' }
+    chakra_scroll:{ name:'NINJUTSU GIANT SCROLL', desc:'Pipa gulungan jurus ninjutsu kayu & kertas mantra', cost:0, body:'#78350f', wing:'#d97706', edge:'#451a03', cap:'#fde047' },
+    jungle_vines:{ name:'ANCIENT JUNGLE VINES', desc:'Pipa batu lumut purba terlilit akar rimba', cost:0, body:'#14532d', wing:'#15803d', edge:'#052e16', cap:'#84cc16' }
   };
 
   // 6. Backgrounds (Nama Lengkap) - ALL FREE FOR TESTING
@@ -559,6 +560,7 @@
     sunset:{ name:'WARM SUNSET', desc:'Senja jingga hangat romantis', cost:0, top:'#f89b75', bottom:'#ffe5a6', hill:'#c47772' },
     space:{ name:'DEEP COSMIC SPACE', desc:'Luar angkasa kosmik gelap', cost:0, top:'#182858', bottom:'#4c4a8c', hill:'#393c77' },
     forest:{ name:'MISTY GREEN FOREST', desc:'Hutan rimbun hijau asri', cost:0, top:'#2d6a4f', bottom:'#b7e4c7', hill:'#1b4332' },
+    jungle:{ name:'TROPICAL JUNGLE SAFARI', desc:'Rimba belantara tropis kanopi rimbun & sulur purba', cost:0, top:'#064e3b', bottom:'#a7f3d0', hill:'#065f46' },
     ocean:{ name:'DEEP OCEAN CORAL', desc:'Kedalaman laut biru & terumbu karang', cost:0, top:'#0369a1', bottom:'#0891b2', hill:'#0e7490' },
     volcano:{ name:'VOLCANIC LAVA', desc:'Kawah gunung berapi malam bara panas', cost:0, top:'#2e1065', bottom:'#7f1d1d', hill:'#450a0a' },
     synthwave:{ name:'80S SYNTHWAVE GRID', desc:'Grid neon ungu & matahari senja retro', cost:0, top:'#3b0764', bottom:'#ec4899', hill:'#831843' },
@@ -1872,6 +1874,8 @@
     if(el.shopCoins) el.shopCoins.textContent = progress.coins;
     const topCoinEl = $('topCoinVal');
     if(topCoinEl) topCoinEl.textContent = progress.coins;
+    const gachaCoinEl = $('gachaUserCoins') || $('spUserCoins');
+    if(gachaCoinEl) gachaCoinEl.textContent = progress.coins;
     const topRankEl = $('topRankVal');
     if(topRankEl) topRankEl.textContent = `${gpProfile.rankedBest || progress.rankedScore || 0}`;
   }
@@ -3961,7 +3965,12 @@
         if(elAvatar) {
           elAvatar.innerHTML = getCuteAvatarSvg('chick_yellow', 38);
         }
-        if(elName) elName.textContent = 'GUEST';
+        // Tampilkan GUEST#XXXX dari guestId yang tersimpan, atau generate baru
+        if(!gpProfile.guestId) {
+          gpProfile.guestId = Math.floor(1000 + Math.random() * 9000);
+          saveGPProfile && saveGPProfile();
+        }
+        if(elName) elName.textContent = 'GUEST#' + gpProfile.guestId;
         if(elTierIcon) elTierIcon.innerHTML = playerTier.iconSvg;
         if(elTierNum) elTierNum.textContent = String(currentScore);
         if(elXpFill) elXpFill.style.width = '30%';
@@ -12879,8 +12888,12 @@
     gpProfile.isLoggedIn = true;
     gpProfile.isGoogle = false;
     gpProfile.email = 'Mode Tamu (Lokal)';
-    if(!gpProfile.gamerTag || gpProfile.gamerTag === 'SkyPlayer') {
-      gpProfile.gamerTag = 'Player-' + Math.floor(100 + Math.random() * 900);
+    // Generate guestId sekali permanen (GUEST#XXXX)
+    if(!gpProfile.guestId) {
+      gpProfile.guestId = Math.floor(1000 + Math.random() * 9000);
+    }
+    if(!gpProfile.gamerTag || gpProfile.gamerTag === 'SkyPlayer' || gpProfile.gamerTag === 'GUEST') {
+      gpProfile.gamerTag = 'GUEST#' + gpProfile.guestId;
     }
     saveGPProfile();
     audio.win();
@@ -14836,7 +14849,9 @@
     return pool[Math.floor(Math.random() * pool.length)];
   }
 
+  let isGachaPulling = false;
   function performGachaPull(count, isFree) {
+    if(isGachaPulling) return;
     const singleCost = 50;
     const multiCost = 450;
     const totalCost = count === 1 ? (isFree ? 0 : singleCost) : multiCost;
@@ -14869,6 +14884,8 @@
       return;
     }
 
+    isGachaPulling = true;
+
     if(!isFree) {
       progress.coins = Math.max(0, progress.coins - totalCost);
       progress.coinsUpdatedAt = Date.now();
@@ -14877,6 +14894,9 @@
       if(typeof saveCloudSave === 'function') saveCloudSave();
       const uCoins = $('gachaUserCoins') || $('spUserCoins');
       if(uCoins) uCoins.textContent = progress.coins;
+      if(typeof showToast === 'function') {
+        showToast(`Tarik ${count}X: -${totalCost} Koin 🪙`, 'success');
+      }
     }
 
     audio.win();
@@ -14908,7 +14928,7 @@
     updateCoins();
     persistProgress();
     if(typeof saveCloudSave === 'function') saveCloudSave();
-    renderGachaResults(results);
+    renderGachaResults(results, totalCost);
   }
   window.performGachaPull = performGachaPull;
 
@@ -14940,11 +14960,28 @@
     return '<svg viewBox="0 0 24 24" width="28" height="28" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
   }
 
-  function renderGachaResults(results) {
+  function renderGachaResults(results, spentCoins) {
     const resModal = $('gachaResultModal');
     const grid = $('gachaCardsGrid');
     if(!grid) return;
     grid.innerHTML = '';
+
+    const totalCashback = results.reduce((acc, r) => {
+      if(r.type === 'coins') return acc + r.amount;
+      if(!r.isNew) return acc + 25;
+      return acc;
+    }, 0);
+
+    const sub = $('gachaResultSub');
+    if(sub) {
+      if(typeof spentCoins === 'number' && spentCoins > 0 && totalCashback > 0) {
+        sub.innerHTML = `Biaya Tarik: <b>-${spentCoins} Koin</b> | Cashback & Hadiah: <b style="color:#facc15;">+${totalCashback} Koin 🪙</b>`;
+      } else if(typeof spentCoins === 'number' && spentCoins > 0) {
+        sub.innerHTML = `Biaya Tarik: <b>-${spentCoins} Koin 🪙</b> | Item otomatis tersimpan di profil`;
+      } else {
+        sub.textContent = 'Item otomatis tersimpan di inventori & profil Anda';
+      }
+    }
 
     results.forEach(res => {
       const card = document.createElement('div');
@@ -14961,6 +14998,7 @@
     setTimeout(() => {
       showModal(resModal);
       audio.win();
+      isGachaPulling = false;
     }, 120);
   }
 

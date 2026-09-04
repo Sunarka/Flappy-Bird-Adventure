@@ -121,7 +121,8 @@
     // Anime Special Pipes
     katana_torii:{ name:'RED TORII & KATANA', desc:'Pipa gerbang Shinto merah berkilau pedang katana', cost:0, rarity:'mythic', body:'#991b1b', wing:'#ef4444', edge:'#450a0a', cap:'#facc15' },
     bamboo_demon:{ name:'DEMON SLAYER BAMBOO', desc:'Pipa bambu hijau bertali merah Nezuko Kamado', cost:0, rarity:'mythic', body:'#15803d', wing:'#4ade80', edge:'#14532d', cap:'#f472b6' },
-    chakra_scroll:{ name:'NINJUTSU GIANT SCROLL', desc:'Pipa gulungan jurus ninjutsu kayu & kertas mantra', cost:0, rarity:'mythic', body:'#78350f', wing:'#d97706', edge:'#451a03', cap:'#fde047' }
+    chakra_scroll:{ name:'NINJUTSU GIANT SCROLL', desc:'Pipa gulungan jurus ninjutsu kayu & kertas mantra', cost:0, rarity:'mythic', body:'#78350f', wing:'#d97706', edge:'#451a03', cap:'#fde047' },
+    jungle_vines:{ name:'ANCIENT JUNGLE VINES', desc:'Pipa batu lumut purba terlilit akar rimba belantara tropis', cost:0, rarity:'rare', body:'#14532d', wing:'#15803d', edge:'#052e16', cap:'#84cc16' }
   };
 
   // 6. Backgrounds (Volumetric Parallax Atmospheres)
@@ -130,6 +131,7 @@
     sunset:{ name:'WARM SUNSET', desc:'Senja jingga hangat romantis bergradasi emas', cost:0, rarity:'rare', top:'#f89b75', bottom:'#ffe5a6', hill:'#c47772', groundBase:'#9a3412', groundTop:'#f97316', groundStripe:'#fdba74' },
     space:{ name:'DEEP COSMIC SPACE', desc:'Luar angkasa kosmik gelap bertabur bintang & nebula', cost:0, rarity:'epic', top:'#182858', bottom:'#4c4a8c', hill:'#393c77', groundBase:'#1e1b4b', groundTop:'#6366f1', groundStripe:'#a5b4fc' },
     forest:{ name:'MISTY GREEN FOREST', desc:'Hutan rimbun hijau asri berembun sejuk', cost:0, rarity:'rare', top:'#2d6a4f', bottom:'#b7e4c7', hill:'#1b4332', groundBase:'#3f2e18', groundTop:'#22c55e', groundStripe:'#86efac' },
+    jungle:{ name:'TROPICAL JUNGLE SAFARI', desc:'Rimba belantara tropis kanopi rimbun & sulur purba liar', cost:0, rarity:'epic', top:'#064e3b', bottom:'#a7f3d0', hill:'#065f46', groundBase:'#271c0c', groundTop:'#10b981', groundStripe:'#6ee7b7' },
     ocean:{ name:'DEEP OCEAN CORAL', desc:'Kedalaman laut biru & terumbu karang tropis', cost:0, rarity:'epic', top:'#0369a1', bottom:'#0891b2', hill:'#0e7490', groundBase:'#0c4a6e', groundTop:'#06b6d4', groundStripe:'#67e8f9' },
     volcano:{ name:'VOLCANIC LAVA', desc:'Kawah gunung berapi malam bara panas membara', cost:0, rarity:'legendary', top:'#2e1065', bottom:'#7f1d1d', hill:'#450a0a', groundBase:'#450a0a', groundTop:'#ef4444', groundStripe:'#fca5a5' },
     synthwave:{ name:'80S SYNTHWAVE GRID', desc:'Grid neon ungu & matahari senja retro laser', cost:0, rarity:'legendary', top:'#3b0764', bottom:'#ec4899', hill:'#831843', groundBase:'#4c0519', groundTop:'#f43f5e', groundStripe:'#fda4af' },

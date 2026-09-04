@@ -242,10 +242,49 @@
       } else if(skinId === 'phoenix') {
         this.playTone(523, 0.1, 'triangle', 0.05, 200);
         setTimeout(() => this.playTone(1046, 0.12, 'sawtooth', 0.035, 100), 45);
+      } else if(skinId === 'goku_ssj') {
+        this.playTone(440, 0.12, 'sawtooth', 0.06, 200);
+        setTimeout(() => this.playTone(880, 0.15, 'square', 0.05, -50), 40);
+        this.speakVoice('Ha!', { lang: 'ja-JP', pitch: 1.2, rate: 1.3 });
+      } else if(skinId === 'tanjiro_bird') {
+        this.playTone(659, 0.1, 'triangle', 0.055, 150);
+        setTimeout(() => this.playTone(988, 0.12, 'sine', 0.045, 0), 35);
+        this.speakVoice('Iku zo!', { lang: 'ja-JP', pitch: 1.25, rate: 1.2 });
+      } else if(skinId === 'naruto_bird') {
+        this.playTone(587, 0.1, 'sine', 0.06, 120);
+        setTimeout(() => this.playTone(880, 0.12, 'triangle', 0.04, 80), 35);
+        this.speakVoice('Dattebayo!', { lang: 'ja-JP', pitch: 1.35, rate: 1.3 });
+      } else if(skinId === 'luffy_bird') {
+        this.playTone(523, 0.1, 'square', 0.06, 300);
+        setTimeout(() => this.playTone(784, 0.12, 'sine', 0.045, -100), 40);
+        this.speakVoice('Shishishi!', { lang: 'ja-JP', pitch: 1.4, rate: 1.3 });
+      } else if(skinId === 'gojo_bird') {
+        this.playTone(1046, 0.15, 'sine', 0.065, 0);
+        setTimeout(() => this.playTone(1568, 0.18, 'triangle', 0.05, 0), 40);
+        this.speakVoice('Yowai mo.', { lang: 'ja-JP', pitch: 0.95, rate: 1.1 });
       } else {
         this.playTone(784, 0.08, 'sine', 0.045, 150);
         setTimeout(() => this.playTone(1174, 0.1, 'triangle', 0.04, 100), 40);
       }
+    },
+
+    speakVoice(text, options = {}) {
+      const s = window.settings || { sound: true };
+      if (!s.sound || !window.speechSynthesis) return;
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = options.lang || 'ja-JP';
+        u.pitch = options.pitch !== undefined ? options.pitch : 1.15;
+        u.rate = options.rate !== undefined ? options.rate : 1.1;
+        u.volume = options.volume !== undefined ? options.volume : 1.0;
+        const voices = window.speechSynthesis.getVoices() || [];
+        const matchVoice = voices.find(v => v.lang.startsWith(u.lang.slice(0, 2))) ||
+                           voices.find(v => v.lang.includes('JP') || v.lang.includes('ja')) ||
+                           voices[0];
+        if (matchVoice) u.voice = matchVoice;
+        window.speechSynthesis.speak(u);
+      } catch(e) {}
     },
 
     rocketSmash() {
