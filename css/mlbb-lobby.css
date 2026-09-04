@@ -506,20 +506,20 @@
 /* --- 2. LEFT SIDEBAR (EVENT PASS & QUICK DOCK) --- */
 .mlbb-left-dock {
   position: absolute;
-  left: 14px;
-  top: 60px;
-  bottom: 60px;
-  max-height: calc(100% - 118px);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  left: 12px;
+  top: 56px;
+  display: grid;
+  grid-template-columns: repeat(2, 60px);
+  gap: 5px;
   z-index: 20;
   pointer-events: auto;
+  height: auto;
+  max-height: calc(100% - 116px);
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding-bottom: 4px;
+  padding-bottom: 2px;
 }
 
 .mlbb-left-dock::-webkit-scrollbar {
@@ -527,13 +527,13 @@
 }
 
 .mlbb-event-card {
-  width: 82px;
+  width: 100%;
   background: linear-gradient(145deg, #c2410c 0%, #7c2d12 100%);
   border: 1.5px solid #fdba74;
-  border-radius: 12px;
-  padding: 7px 5px;
+  border-radius: 10px;
+  padding: 5px 3px;
   text-align: center;
-  box-shadow: 0 6px 16px rgba(194, 65, 12, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(194, 65, 12, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   user-select: none;
@@ -572,24 +572,31 @@
 }
 
 .mlbb-side-btn {
-  width: 82px;
-  min-height: 36px;
-  background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+  width: 100%;
+  min-height: 32px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
+  border-radius: 9px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 5px 2px;
-  gap: 2px;
+  padding: 4px 2px;
+  gap: 1.5px;
   color: #f8fafc;
   cursor: pointer;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
   transition: all 0.18s;
   text-decoration: none;
+}
+
+.mlbb-side-btn.mlbb-donate-btn {
+  grid-column: span 2;
+  flex-direction: row;
+  gap: 6px;
+  min-height: 28px;
 }
 
 .mlbb-side-btn:hover {
@@ -600,12 +607,12 @@
 }
 
 .side-btn-icon {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1;
 }
 
 .side-btn-label {
-  font: 900 9px 'Trebuchet MS', Arial, sans-serif;
+  font: 900 8.5px 'Trebuchet MS', Arial, sans-serif;
   letter-spacing: 0.3px;
   white-space: nowrap;
 }
@@ -613,15 +620,15 @@
 /* --- 3. RIGHT SIDEBAR (ONLINE FRIENDS DOCK) --- */
 .mlbb-right-dock {
   position: absolute;
-  right: 14px;
-  top: 60px;
-  bottom: 60px;
-  max-height: calc(100% - 118px);
-  width: 126px;
-  background: linear-gradient(180deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.92) 100%);
+  right: 12px;
+  top: 56px;
+  width: 120px;
+  height: auto;
+  max-height: calc(100% - 116px);
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.88) 0%, rgba(15, 23, 42, 0.95) 100%);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
-  padding: 8px 6px;
+  padding: 6px 5px;
   z-index: 20;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -1510,7 +1517,7 @@ button.mlbb-quick-friend-item {
 }
 
 /* =========================================================
-   MOBILE RESPONSIVE RULES (NO OVERLAPPING / NON-COLLIDING DOCK)
+   MOBILE RESPONSIVE RULES (COMPACT 2-COLUMN GRID & AUTO HEIGHT)
    ========================================================= */
 
 @media (max-height: 540px), (max-width: 768px) {
@@ -1567,41 +1574,54 @@ button.mlbb-quick-friend-item {
     font-size: 9px !important;
   }
 
-  /* Left Sidebar Dock */
+  /* Left Sidebar Dock (Compact 2-Column Matrix) */
   .mlbb-left-dock {
     left: 8px !important;
     top: 46px !important;
-    bottom: 50px !important;
-    max-height: calc(100% - 98px) !important;
-    gap: 4px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 54px) !important;
+    gap: 3px !important;
+    height: auto !important;
+    max-height: calc(100% - 94px) !important;
+    padding-bottom: 2px !important;
   }
   .mlbb-event-card {
-    width: 66px !important;
-    padding: 4px 2px !important;
-  }
-  .mlbb-side-btn {
-    width: 66px !important;
-    min-height: 28px !important;
+    width: 100% !important;
     padding: 3px 2px !important;
-    gap: 1px !important;
     border-radius: 8px !important;
   }
+  .mlbb-side-btn {
+    width: 100% !important;
+    min-height: 26px !important;
+    padding: 2px 1px !important;
+    gap: 1px !important;
+    border-radius: 7px !important;
+  }
+  .mlbb-side-btn.mlbb-donate-btn {
+    grid-column: span 2 !important;
+    flex-direction: row !important;
+    gap: 4px !important;
+    min-height: 24px !important;
+  }
+  .side-btn-icon {
+    font-size: 13px !important;
+  }
   .side-btn-icon svg {
-    width: 13px !important;
-    height: 13px !important;
+    width: 12px !important;
+    height: 12px !important;
   }
   .side-btn-label {
-    font-size: 7.5px !important;
-    letter-spacing: 0.2px !important;
+    font-size: 7.2px !important;
+    letter-spacing: 0.1px !important;
   }
 
-  /* Right Sidebar Dock */
+  /* Right Sidebar Dock (Auto Height, Clean Fit) */
   .mlbb-right-dock {
     right: 8px !important;
     top: 46px !important;
-    bottom: 50px !important;
-    width: 96px !important;
-    max-height: calc(100% - 98px) !important;
+    width: 98px !important;
+    height: auto !important;
+    max-height: calc(100% - 94px) !important;
     padding: 5px 4px !important;
     border-radius: 10px !important;
   }
@@ -1623,7 +1643,7 @@ button.mlbb-quick-friend-item {
 
   /* Center hero speech bubble */
   .mlbb-center-content {
-    bottom: 120px !important;
+    bottom: 110px !important;
   }
   .mlbb-speech-bubble {
     font-size: 9.5px !important;
@@ -1637,17 +1657,17 @@ button.mlbb-quick-friend-item {
     padding: 0 8px 2px !important;
   }
   .mlbb-bottom-nav {
-    margin-left: 70px !important;
+    margin-left: 118px !important;
     gap: 6px !important;
   }
   .mlbb-chat-nav-pill {
-    max-width: 190px !important;
+    max-width: 180px !important;
     padding: 3px 8px !important;
     min-height: 28px !important;
     font-size: 9px !important;
   }
   .mlbb-chat-snippet {
-    max-width: 105px !important;
+    max-width: 95px !important;
     font-size: 8.5px !important;
   }
   .mlbb-match-dock {
@@ -1688,39 +1708,42 @@ button.mlbb-quick-friend-item {
   .mlbb-left-dock {
     left: 4px !important;
     top: 40px !important;
-    bottom: 44px !important;
-    max-height: calc(100% - 86px) !important;
+    grid-template-columns: repeat(2, 48px) !important;
     gap: 2.5px !important;
+    height: auto !important;
+    max-height: calc(100% - 84px) !important;
   }
   .mlbb-side-btn {
-    width: 56px !important;
-    min-height: 23px !important;
+    min-height: 22px !important;
     padding: 2px 1px !important;
   }
+  .mlbb-side-btn.mlbb-donate-btn {
+    min-height: 20px !important;
+  }
   .side-btn-icon svg {
-    width: 11px !important;
-    height: 11px !important;
+    width: 10px !important;
+    height: 10px !important;
   }
   .side-btn-label {
-    font-size: 6.8px !important;
+    font-size: 6.5px !important;
   }
   .mlbb-bottom-nav {
-    margin-left: 58px !important;
+    margin-left: 104px !important;
   }
   .mlbb-chat-nav-pill {
-    max-width: 145px !important;
-    padding: 2px 6px !important;
+    max-width: 130px !important;
+    padding: 2px 5px !important;
   }
   .mlbb-chat-snippet {
-    max-width: 70px !important;
+    max-width: 60px !important;
     font-size: 8px !important;
   }
   .mlbb-right-dock {
-    width: 84px !important;
+    width: 86px !important;
     right: 4px !important;
     top: 40px !important;
-    bottom: 44px !important;
-    max-height: calc(100% - 86px) !important;
+    height: auto !important;
+    max-height: calc(100% - 84px) !important;
   }
   .mlbb-start-match-btn {
     padding: 4px 12px !important;
@@ -1735,24 +1758,24 @@ button.mlbb-quick-friend-item {
   /* Mobile Portrait Layout */
   .mlbb-left-dock {
     left: 6px !important;
-    top: 50px !important;
-    bottom: 56px !important;
-    max-height: calc(100% - 110px) !important;
-    gap: 4px !important;
+    top: 48px !important;
+    grid-template-columns: repeat(2, 50px) !important;
+    gap: 3px !important;
+    height: auto !important;
+    max-height: calc(100% - 100px) !important;
   }
   .mlbb-side-btn {
-    width: 58px !important;
-    min-height: 26px !important;
+    min-height: 24px !important;
     padding: 2px 1px !important;
   }
   .side-btn-label {
-    font-size: 7px !important;
+    font-size: 6.8px !important;
   }
   .mlbb-right-dock {
     display: none !important;
   }
   .mlbb-bottom-nav {
-    margin-left: 62px !important;
+    margin-left: 108px !important;
   }
   .mlbb-chat-snippet {
     display: none !important;
@@ -1761,8 +1784,8 @@ button.mlbb-quick-friend-item {
     display: none !important;
   }
   .mlbb-chat-nav-pill {
-    max-width: 70px !important;
-    padding: 4px 8px !important;
+    max-width: 60px !important;
+    padding: 4px 6px !important;
   }
   .mlbb-mode-pill-btn {
     padding: 4px 6px !important;
@@ -1774,6 +1797,7 @@ button.mlbb-quick-friend-item {
     padding: 6px 14px !important;
   }
 }
+
 
 
 
