@@ -15387,6 +15387,170 @@
   });
 
 
+  // =========================================================
+  // DAILY LOGIN CHECK-IN SYSTEM (7-DAY STREAK CYCLE)
+  // =========================================================
+  const DAILY_REWARDS_CONFIG = [
+    { day: 1, type: 'coins', amount: 100, label: '+100 Koin' },
+    { day: 2, type: 'coins', amount: 150, label: '+150 Koin' },
+    { day: 3, type: 'diamonds', amount: 20, label: '+20 Diamond' },
+    { day: 4, type: 'coins', amount: 200, label: '+200 Koin' },
+    { day: 5, type: 'coins', amount: 250, label: '+250 Koin' },
+    { day: 6, type: 'diamonds', amount: 40, label: '+40 Diamond' },
+    { day: 7, type: 'both', coins: 500, diamonds: 50, label: '+500 Koin & +50 DM', grand: true }
+  ];
+
+  function getDailyCheckinStatus() {
+    const today = new Date().toISOString().slice(0, 10);
+    const lastClaim = progress.lastDailyClaimDate || '';
+    const hasClaimedToday = lastClaim === today;
+    
+    // Calculate streak continuity
+    let streak = Number(progress.dailyStreak) || 0;
+    if (lastClaim && !hasClaimedToday) {
+      const lastDate = new Date(lastClaim);
+      const now = new Date(today);
+      const diffDays = Math.round((now - lastDate) / (1000 * 60 * 60 * 24));
+      if (diffDays > 1) {
+        // Missed more than 1 day: reset streak to 0
+        streak = 0;
+        progress.dailyStreak = 0;
+      }
+    }
+
+    // Current target day index in the 7-day cycle (1 to 7)
+    let targetDay = hasClaimedToday ? (streak === 0 ? 1 : ((streak - 1) % 7) + 1) : ((streak % 7) + 1);
+
+    return {
+      today,
+      lastClaim,
+      hasClaimedToday,
+      streak,
+      targetDay,
+      canClaim: !hasClaimedToday
+    };
+  }
+
+  function updateDailyBadge() {
+    const status = getDailyCheckinStatus();
+    const badge = $('dailyCheckinBadge');
+    if (badge) {
+      badge.style.display = status.canClaim ? 'block' : 'none';
+    }
+  }
+
+  function renderDailyCheckinGrid() {
+    const grid = $('dailyGrid');
+    const streakCount = $('dailyStreakCount');
+    const claimBtn = $('dailyClaimBtn');
+    const status = getDailyCheckinStatus();
+
+    if (streakCount) streakCount.textContent = status.streak;
+
+    if (grid) {
+      grid.innerHTML = '';
+      DAILY_REWARDS_CONFIG.forEach(cfg => {
+        const card = document.createElement('div');
+        const isPastClaimed = cfg.day < status.targetDay || (cfg.day === status.targetDay && status.hasClaimedToday);
+        const isReadyToday = cfg.day === status.targetDay && !status.hasClaimedToday;
+        
+        let cardClass = `daily-card ${cfg.grand ? 'grand-day' : ''}`;
+        if (isPastClaimed) cardClass += ' claimed';
+        if (isReadyToday) cardClass += ' ready-today';
+        card.className = cardClass;
+
+        const iconSvg = cfg.type === 'diamonds' 
+          ? `<svg viewBox="0 0 24 24" width="28" height="28" fill="#38bdf8" style="filter:drop-shadow(0 2px 6px rgba(56,189,248,0.6));"><polygon points="12,2 22,8.5 12,22 2,8.5"/></svg>`
+          : cfg.type === 'both'
+          ? `<div style="display:flex;gap:2px;align-items:center;"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="6" fill="#fbbf24"/></svg><svg viewBox="0 0 24 24" width="20" height="20" fill="#38bdf8"><polygon points="12,2 22,8.5 12,22 2,8.5"/></svg></div>`
+          : `<svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="6" fill="#fbbf24"/><text x="12" y="15.5" font-size="10" font-weight="900" text-anchor="middle" fill="#78350f" font-family="Arial">G</text></svg>`;
+
+        card.innerHTML = `
+          <div class="daily-card-day">HARI ${cfg.day}</div>
+          <div class="daily-card-icon">${iconSvg}</div>
+          <div class="daily-card-reward ${cfg.type === 'diamonds' ? 'diamond' : 'coins'}">${cfg.label}</div>
+          ${isPastClaimed ? '<div class="daily-card-status-badge">✓</div>' : ''}
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    if (claimBtn) {
+      if (status.canClaim) {
+        claimBtn.disabled = false;
+        claimBtn.textContent = 'KLAIM HADIAH HARI INI';
+        claimBtn.style.opacity = '1';
+        claimBtn.style.cursor = 'pointer';
+      } else {
+        claimBtn.disabled = true;
+        claimBtn.textContent = 'SUDAH DIKLAIM HARI INI ✓';
+        claimBtn.style.opacity = '0.65';
+        claimBtn.style.cursor = 'default';
+      }
+    }
+  }
+
+  function claimDailyReward() {
+    const status = getDailyCheckinStatus();
+    if (!status.canClaim) {
+      if (audio) audio.click();
+      if (typeof showToast === 'function') showToast('Hadiah hari ini sudah diklaim! Kembali lagi besok.');
+      return;
+    }
+
+    const cfg = DAILY_REWARDS_CONFIG[status.targetDay - 1];
+    if (!cfg) return;
+
+    if (cfg.type === 'coins') {
+      progress.coins = (progress.coins || 0) + cfg.amount;
+    } else if (cfg.type === 'diamonds') {
+      progress.diamonds = (progress.diamonds || 0) + cfg.amount;
+    } else if (cfg.type === 'both') {
+      progress.coins = (progress.coins || 0) + (cfg.coins || 0);
+      progress.diamonds = (progress.diamonds || 0) + (cfg.diamonds || 0);
+    }
+
+    progress.dailyStreak = (status.streak || 0) + 1;
+    progress.lastDailyClaimDate = status.today;
+    progress.coinsUpdatedAt = Date.now();
+
+    updateCoins();
+    persistProgress();
+    if (typeof saveCloudSave === 'function') saveCloudSave();
+
+    if (audio) audio.win();
+    if (typeof showToast === 'function') {
+      showToast(`Berhasil klaim Hadiah Hari ke-${status.targetDay}: ${cfg.label}! 🎉`, 'success');
+    }
+
+    renderDailyCheckinGrid();
+    updateDailyBadge();
+  }
+
+  function openDailyCheckinModal() {
+    if (audio) audio.click();
+    renderDailyCheckinGrid();
+    const modal = $('dailyCheckinModal');
+    if (modal) showModal(modal);
+  }
+  window.openDailyCheckinModal = openDailyCheckinModal;
+
+  function openPetModal() {
+    if (audio) audio.click();
+    shopCategory = 'pet';
+    syncPreviewLoadout();
+    updateCoins();
+    renderShop();
+    if (el.shop) showModal(el.shop);
+    startShopShowcase();
+  }
+  window.openPetModal = openPetModal;
+
+  // Bind side buttons explicitly
+  bindClick('lobbyDailyBtn', openDailyCheckinModal);
+  bindClick('dailyClaimBtn', claimDailyReward);
+  bindClick('lobbyPetBtn', openPetModal);
+
   try {
     setMode('classic', true);
     syncSettings();
@@ -15394,6 +15558,7 @@
     renderAvatarPickerGrid();
     syncLeaderboardFromFirebase();
     updateCoins();
+    updateDailyBadge();
     renderShop();
     reset();
     setState(State.MENU);
