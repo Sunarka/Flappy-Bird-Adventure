@@ -4849,7 +4849,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.66';
+  const GAME_VERSION = '20.67';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -13300,6 +13300,57 @@
     });
   }
 
+  function showLobbyAdmobRewardModal(onRewardComplete) {
+    if(audio) audio.click();
+    showGameDialog({
+      title: 'DAPATKAN KOIN GRATIS!',
+      html: `
+        <div style="text-align:center;padding:4px 0;">
+          <div style="font-size:38px;margin-bottom:8px;">🪙</div>
+          <p style="font-size:13px;color:#e2e8f0;margin-bottom:10px;">Tonton video singkat untuk mendapatkan <b>+50 Koin Emas</b> secara gratis!</p>
+          <div class="dialog-info-card" style="text-align:center;background:rgba(234,179,8,0.12);border-color:#eab308;padding:10px;">
+            <span style="color:#facc15;font-weight:900;font-size:15px;letter-spacing:0.5px;">HADIAH: +50 KOIN EMAS 💰</span>
+          </div>
+        </div>
+      `,
+      type: 'coin',
+      confirmText: 'TONTON IKLAN (+50) ▶',
+      cancelText: 'NANTI SAJA',
+      showCancel: true
+    }).then(confirmed => {
+      if(!confirmed) return;
+      if(typeof window.showGoogleAdMobRewarded === 'function') {
+        window.showGoogleAdMobRewarded((amount) => {
+          const rewardCoins = amount || 50;
+          addCoins(rewardCoins, 'lobby_reward_ad');
+          if(typeof onRewardComplete === 'function') onRewardComplete(rewardCoins);
+          showGameDialog({
+            title: 'Selamat!',
+            html: `<p>Kamu berhasil mendapatkan <b style="color:#facc15;">+${rewardCoins} Koin Emas</b>!</p>`,
+            type: 'success',
+            confirmText: 'TERIMA KASIH'
+          });
+        }, () => {}, () => {
+          // Fallback jika provider iklan sedang bersiap di browser
+          addCoins(50, 'lobby_fallback_ad');
+          if(typeof onRewardComplete === 'function') onRewardComplete(50);
+          showGameDialog({
+            title: 'Bonus Koin!',
+            html: `<p>Iklan sedang bersiap. Kamu tetap mendapatkan <b style="color:#facc15;">+50 Koin Emas</b>!</p>`,
+            type: 'success',
+            confirmText: 'KLAIM'
+          });
+        });
+      } else if(typeof RewardAdManager !== 'undefined' && typeof RewardAdManager.show === 'function') {
+        RewardAdManager.show();
+      } else {
+        addCoins(50, 'lobby_free_ad');
+        if(typeof onRewardComplete === 'function') onRewardComplete(50);
+      }
+    });
+  }
+  window.showLobbyAdmobRewardModal = showLobbyAdmobRewardModal;
+
   // Shop Tabs Swipe / Scroll & Selection
   if(el.shopTabs) {
     el.shopTabs.querySelectorAll('[data-shop-category]').forEach(tab => {
@@ -14457,12 +14508,29 @@
     const totalCost = count === 1 ? (isFree ? 0 : singleCost) : multiCost;
 
     if(!isFree && progress.coins < totalCost) {
-      audio.die();
+      if(audio) audio.hit();
+      const kekurangan = totalCost - progress.coins;
       showGameDialog({
         title: 'Koin Tidak Cukup',
-        html: `<p>Koin Anda tidak cukup untuk melakukan gacha!</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Dibutuhkan:</span><b>${totalCost} Koin</b></div><div class="dialog-info-row"><span>Saldo Anda:</span><b style="color:#f87171;">${progress.coins} Koin</b></div></div><p style="font-size:11px;color:#94a3b8;margin-top:6px;">Kumpulkan koin dengan bermain atau tonton video untuk tarikan gratis!</p>`,
+        html: `
+          <p>Koin Anda kurang <b>${kekurangan} Koin</b> untuk melakukan tarikan gacha!</p>
+          <div class="dialog-info-card">
+            <div class="dialog-info-row"><span>Dibutuhkan:</span><b>${totalCost} Koin</b></div>
+            <div class="dialog-info-row"><span>Saldo Anda:</span><b style="color:#f87171;">${progress.coins} Koin</b></div>
+          </div>
+          <p style="font-size:12px;color:#38bdf8;margin-top:8px;font-weight:bold;">Tonton video singkat untuk mendapatkan +50 Koin Gratis sekarang?</p>
+        `,
         type: 'coin',
-        confirmText: 'MENGERTI'
+        confirmText: 'TAMBAH KOIN (+50) 🪙',
+        cancelText: 'BATAL',
+        showCancel: true
+      }).then(confirmed => {
+        if(confirmed) {
+          showLobbyAdmobRewardModal(() => {
+            const uCoins = $('gachaUserCoins') || $('spUserCoins');
+            if(uCoins) uCoins.textContent = progress.coins;
+          });
+        }
       });
       return;
     }
@@ -14564,6 +14632,12 @@
   bindClick('gachaPull1Btn', () => performGachaPull(1, false));
   bindClick('gachaPull10Btn', () => performGachaPull(10, false));
   bindClick('gachaPullFreeBtn', triggerGachaFreeAd);
+  bindClick('gachaAddCoinsBtn', () => {
+    showLobbyAdmobRewardModal(() => {
+      const uCoins = $('gachaUserCoins') || $('spUserCoins');
+      if(uCoins) uCoins.textContent = progress.coins;
+    });
+  });
 
 
   try {

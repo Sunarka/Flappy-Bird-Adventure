@@ -107,6 +107,7 @@
     score() { this.tone(760, .13, 'sine', .075, 260); },
     coin() { this.tone(980, .14, 'sine', .08, 350); },
     hit() { this.tone(130, .2, 'sawtooth', .08, -70); },
+    die() { this.hit(); },
     click() { this.tone(360, .045, 'square', .045, 70); },
     win() { this.tone(660, .16, 'triangle', .075, 500); },
 

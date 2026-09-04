@@ -10,7 +10,49 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#77cef2">
-  <title>Feather Rush</title>
+  <title>Feather Rush - Main Game Flappy Bird Online Gratis 1v1 Multiplayer</title>
+  <meta name="description" content="Mainkan Feather Rush, game burung terbang seru ala Flappy Bird dengan mode 1v1 Real-Time Multiplayer, Ranked Extreme, Gacha Skin Mythic & Pet Imut. Gratis langsung di browser!">
+  <meta name="keywords" content="feather rush, feather rush game, game feather rush, flappy bird online, flappy bird multiplayer, game burung terbang, game santai online, game html5 seru">
+  <meta name="author" content="Feather Rush">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://feather-rush.my.id/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Feather Rush - Game Flappy Bird Online & Multiplayer 1v1">
+  <meta property="og:description" content="Mainkan Feather Rush! Game burung terbang seru dengan mode Multiplayer 1v1 Real-Time, Ranked, dan Gacha Skin Mythic gratis di browser.">
+  <meta property="og:url" content="https://feather-rush.my.id/">
+  <meta property="og:site_name" content="Feather Rush">
+  <meta property="og:image" content="https://feather-rush.my.id/assets/logo.png">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Feather Rush - Game Flappy Bird Online & Multiplayer 1v1">
+  <meta name="twitter:description" content="Mainkan Feather Rush! Game burung terbang seru dengan mode Multiplayer 1v1 Real-Time, Ranked, dan Gacha Skin Mythic gratis di browser.">
+  <meta name="twitter:image" content="https://feather-rush.my.id/assets/logo.png">
+
+  <!-- Schema.org Structured Data (JSON-LD) for Google Game Rich Snippet -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["VideoGame", "WebApplication"],
+    "name": "Feather Rush",
+    "url": "https://feather-rush.my.id/",
+    "applicationCategory": "Game",
+    "operatingSystem": "Any",
+    "genre": ["Arcade", "Multiplayer", "Casual"],
+    "playMode": ["MultiPlayer", "SinglePlayer"],
+    "inLanguage": ["id", "en"],
+    "description": "Feather Rush adalah game aksi arcade burung terbang dengan fitur duel online 1v1 real-time, turnamen leaderboard ranked extreme, gacha skin mythic, serta pet companion imut yang dapat dimainkan langsung di web browser tanpa instalasi.",
+    "screenshot": "https://feather-rush.my.id/assets/logo.png",
+    "author": {
+      "@type": "Organization",
+      "name": "Feather Rush"
+    }
+  }
+  </script>
+
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20.29">
   <link rel="apple-touch-icon" href="assets/logo.png">
   <link rel="manifest" href="manifest.json">
@@ -21,18 +63,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.66">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.66">
-  <link rel="stylesheet" href="css/shop.css?v=20.66">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.66">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.66">
-  <link rel="stylesheet" href="css/store.css?v=20.66">
-  <link rel="stylesheet" href="css/ranked.css?v=20.66">
-  <link rel="stylesheet" href="css/social.css?v=20.66">
-  <link rel="stylesheet" href="css/splash.css?v=20.66">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.66">
+  <link rel="stylesheet" href="css/style.css?v=20.67">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.67">
+  <link rel="stylesheet" href="css/shop.css?v=20.67">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.67">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.67">
+  <link rel="stylesheet" href="css/store.css?v=20.67">
+  <link rel="stylesheet" href="css/ranked.css?v=20.67">
+  <link rel="stylesheet" href="css/social.css?v=20.67">
+  <link rel="stylesheet" href="css/splash.css?v=20.67">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.67">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.66">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.67">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -664,9 +706,10 @@
               <span class="gacha-subtitle">Tarik Hadiah Skin Mythic, Aura Jejak & Koin Emas!</span>
             </div>
           </div>
-          <div class="gacha-coins-pill">
+          <div class="gacha-coins-pill" id="gachaAddCoinsBtn" role="button" tabindex="0" title="Dapatkan Koin Gratis! (+50)" style="cursor:pointer;display:inline-flex;align-items:center;gap:5px;user-select:none;">
             <svg class="inline-coin-svg" viewBox="0 0 24 24" width="14" height="14"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="6" fill="#fbbf24"/><text x="12" y="15.5" font-size="10" font-weight="900" text-anchor="middle" fill="#78350f" font-family="Arial">G</text></svg>
             <span id="gachaUserCoins">0</span>
+            <span class="gacha-coins-add-badge" style="background:#22c55e;color:#fff;border-radius:50%;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;margin-left:2px;box-shadow:0 0 6px rgba(34,197,94,0.7);line-height:1;">+</span>
           </div>
         </div>
 
@@ -1692,13 +1735,13 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.66"></script>
-  <script src="js/admob-config.js?v=20.66"></script>
-  <script src="js/shop-data.js?v=20.66"></script>
-  <script src="js/profanity-filter.js?v=20.66"></script>
-  <script src="js/audio.js?v=20.66"></script>
-  <script src="js/multiplayer.js?v=20.66"></script>
-  <script src="js/social.js?v=20.66"></script>
-  <script src="js/script.js?v=20.66"></script>
+  <script src="js/firebase-config.js?v=20.67"></script>
+  <script src="js/admob-config.js?v=20.67"></script>
+  <script src="js/shop-data.js?v=20.67"></script>
+  <script src="js/profanity-filter.js?v=20.67"></script>
+  <script src="js/audio.js?v=20.67"></script>
+  <script src="js/multiplayer.js?v=20.67"></script>
+  <script src="js/social.js?v=20.67"></script>
+  <script src="js/script.js?v=20.67"></script>
 </body>
 </html>
