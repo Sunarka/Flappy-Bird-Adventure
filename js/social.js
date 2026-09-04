@@ -881,6 +881,12 @@
 
             // Render messages in modal
             if (container) {
+              const newSig = messages.map(m => (m.id || m.timestamp) + ':' + m.timestamp + ':' + (m.text || '')).join('|');
+              if (container._lastGlobalSig === newSig) {
+                return; // Content unchanged, skip DOM re-render to eliminate flickering
+              }
+              container._lastGlobalSig = newSig;
+
               container.innerHTML = '';
               if (messages.length === 0) {
                 container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:25px;font-size:0.8rem;">Belum ada pesan global. Jadilah yang pertama menyapa!</div>';
@@ -964,7 +970,9 @@
 
       this.friends.forEach(f => {
         const item = document.createElement('div');
-        item.className = `mlbb-cm-friend-item ${this.activeFriendChat && this.activeFriendChat.friendKey === f.friendKey ? 'active' : ''}`;
+        const isActive = this.activeFriendChat && this.activeFriendChat.friendKey === f.friendKey;
+        item.className = `mlbb-cm-friend-item ${isActive ? 'active' : ''}`;
+        item.dataset.friendKey = f.friendKey;
         const avSvg = typeof window.getCuteAvatarSvg === 'function' ? window.getCuteAvatarSvg(f.avatar || 'chick_yellow', 18) : '🐥';
         const hasUnread = this.unreadFriendMessages && this.unreadFriendMessages[f.friendKey];
         const safeName = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(f.name || 'Teman') : (f.name || 'Teman');
@@ -986,12 +994,16 @@
     }
 
     selectFriendForLobbyChat(friend) {
+      if (!friend) return;
+      const isSameFriend = this.activeFriendChat && this.activeFriendChat.friendKey === friend.friendKey;
       this.activeFriendChat = friend;
+
       const targetBar = document.getElementById('mlbbChatActiveFriendName');
       if (targetBar) {
         const safeName = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(friend.name || 'Teman') : (friend.name || 'Teman');
         targetBar.textContent = `Obrolan Privat: ${safeName}`;
       }
+
       // Clear unread for this friend
       if (this.myKey && friend && friend.friendKey) {
         const channelId = [this.myKey, friend.friendKey].sort().join('_');
@@ -1003,16 +1015,38 @@
           this.renderQuickFriends();
         }
       }
-      this.renderChatFriendsList();
-      this.listenFriendLobbyMessages(friend);
+
+      // Update active highlight on friends list DOM
+      const list = document.getElementById('mlbbChatFriendsList');
+      if (list) {
+        const items = list.querySelectorAll('.mlbb-cm-friend-item');
+        items.forEach(el => {
+          if (el.dataset.friendKey === friend.friendKey) {
+            el.classList.add('active');
+          } else {
+            el.classList.remove('active');
+          }
+        });
+      }
+
+      if (!isSameFriend || !this.friendLobbyChatUnsub) {
+        this.listenFriendLobbyMessages(friend);
+      }
     }
 
     listenFriendLobbyMessages(friend) {
       if (!this.db || !this.myKey || !friend) return;
-      if (this.friendLobbyChatUnsub) this.friendLobbyChatUnsub();
+      if (this.friendLobbyChatUnsub) {
+        this.friendLobbyChatUnsub();
+        this.friendLobbyChatUnsub = null;
+      }
 
       const container = document.getElementById('mlbbFriendMessagesContainer');
-      if (container) container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:15px;font-size:0.8rem;">Memuat obrolan...</div>';
+      if (container && (!container._renderedFriendKey || container._renderedFriendKey !== friend.friendKey)) {
+        container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:15px;font-size:0.8rem;">Memuat obrolan...</div>';
+        container._lastFriendSig = '';
+        container._renderedFriendKey = friend.friendKey;
+      }
 
       const channelId = [this.myKey, friend.friendKey].sort().join('_');
       try {
@@ -1023,7 +1057,6 @@
           .limitToLast(40)
           .onSnapshot(snap => {
             if (!container) return;
-            container.innerHTML = '';
             const ONE_DAY_MS = 24 * 60 * 60 * 1000;
             const cutoff = Date.now() - ONE_DAY_MS;
             const validMessages = [];
@@ -1031,13 +1064,17 @@
             snap.forEach(doc => {
               const msg = doc.data();
               const msgTime = msg.timestamp || 0;
-              // Hapus pesan yang sudah lewat 24 jam
-              if (msgTime > 0 && msgTime < cutoff) {
-                doc.ref.delete().catch(() => {});
-              } else {
-                validMessages.push(msg);
+              if (msgTime >= cutoff) {
+                validMessages.push({ id: doc.id, ...msg });
               }
             });
+
+            // Prevent flickering: check if message content/ids have actually changed
+            const newSig = validMessages.map(m => (m.id || m.timestamp) + ':' + m.timestamp + ':' + (m.text || '')).join('|');
+            if (container._lastFriendSig === newSig) {
+              return; // Nothing changed, skip DOM re-render completely!
+            }
+            container._lastFriendSig = newSig;
 
             // Mark read if this channel is currently active
             localStorage.setItem('last_read_chat_' + channelId, String(Date.now()));
@@ -1048,6 +1085,7 @@
               this.renderQuickFriends();
             }
 
+            container.innerHTML = '';
             if (validMessages.length === 0) {
               container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:25px 10px;font-size:0.8rem;">Belum ada pesan privat. Sapa temanmu!</div>';
               return;

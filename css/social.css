@@ -1365,7 +1365,6 @@
   display: flex !important;
   align-items: flex-start !important;
   gap: 8px !important;
-  animation: fadeInMsg 0.2s ease !important;
 }
 
 .mlbb-gm-avatar {
