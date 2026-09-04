@@ -702,14 +702,16 @@
     unlocked: ['classic'],
     selected: 'classic',
     avatarUnlocked: ['chick_yellow'],
-    petUnlocked: ['pip_peep', 'none']
+    petUnlocked: ['none'],
+    selectedPet: 'none'
   });
   if(!Array.isArray(progress.unlocked)) progress.unlocked = ['classic'];
   if(!skins[progress.selected]) progress.selected = 'classic';
   if(typeof progress.coins !== 'number') progress.coins = 0;
   if(typeof progress.diamonds !== 'number') progress.diamonds = 50;
   if(!Array.isArray(progress.avatarUnlocked)) progress.avatarUnlocked = ['chick_yellow'];
-  if(!Array.isArray(progress.petUnlocked)) progress.petUnlocked = ['pip_peep', 'none'];
+  if(!Array.isArray(progress.petUnlocked)) progress.petUnlocked = ['none'];
+  if(!progress.selectedPet || !petsCatalog[progress.selectedPet]) progress.selectedPet = 'none';
 
   for(const [key, catalog, free] of [
     ['pipe', pipeSkins, 'green'],
@@ -719,7 +721,7 @@
     ['hat', hats, 'none'],
     ['outfit', outfits, 'none'],
     ['booster', boosters, 'none'],
-    ['pet', petsCatalog, 'pip_peep']
+    ['pet', petsCatalog, 'none']
   ]){
     const unlockedKey = key + 'Unlocked';
     const selectedKey = 'selected' + key[0].toUpperCase() + key.slice(1);
@@ -806,8 +808,8 @@
   let laserBeams = [];
 
   function applyPetSkin() {
-    const petId = progress.selectedPet || 'pip_peep';
-    const skin = petsCatalog[petId] || petsCatalog.pip_peep;
+    const petId = progress.selectedPet || 'none';
+    const skin = petsCatalog[petId];
     if(skin && skin.baby1 && skin.baby2) {
       babyBirds[0].name = skin.baby1.name;
       babyBirds[0].color = skin.baby1.color;
@@ -825,8 +827,8 @@
 
   function resetBabyBirds(active = true) {
     applyPetSkin();
-    const petId = progress.selectedPet || 'pip_peep';
-    const isNone = petId === 'none';
+    const petId = progress.selectedPet || 'none';
+    const isNone = !petId || petId === 'none';
     petSkillTimer = 0;
     aeroPipesPassed = 0;
     laserBeams = [];
@@ -1942,7 +1944,7 @@
   let shopCategory = 'bird';
   const previewLoadout = {
     bird: 'classic',
-    pet: 'pip_peep',
+    pet: 'none',
     booster: 'none',
     aura: 'default',
     hat: 'none',
@@ -1957,7 +1959,7 @@
 
   function syncPreviewLoadout() {
     previewLoadout.bird = progress.selected || 'classic';
-    previewLoadout.pet = progress.selectedPet || 'pip_peep';
+    previewLoadout.pet = progress.selectedPet || 'none';
     previewLoadout.booster = progress.selectedBooster || 'none';
     previewLoadout.aura = progress.selectedAura || 'default';
     previewLoadout.hat = progress.selectedHat || 'none';
@@ -1972,7 +1974,7 @@
     if(!el.showcaseLabel) return;
     const cat = shopCategory;
     const catCatalog = shopCatalog();
-    const currentId = previewLoadout[cat] || (cat === 'pet' ? 'pip_peep' : 'none');
+    const currentId = previewLoadout[cat] || 'none';
     const item = catCatalog[currentId];
     if(item) {
       el.showcaseLabel.textContent = 'PREVIEW: ' + item.name;
@@ -3753,7 +3755,7 @@
         coins: progress.coins || 0,
         loadout: {
           bird: progress.selected || 'classic',
-          pet: progress.selectedPet || 'pip_peep',
+          pet: progress.selectedPet || 'none',
           aura: progress.selectedAura || 'default',
           hat: progress.selectedHat || 'none',
           outfit: progress.selectedOutfit || 'none',
@@ -3764,7 +3766,7 @@
         },
         unlocked: {
           bird: progress.unlocked || ['classic'],
-          pet: progress.petUnlocked || ['pip_peep'],
+          pet: progress.petUnlocked || ['none'],
           aura: progress.auraUnlocked || ['default'],
           hat: progress.hatUnlocked || ['none'],
           outfit: progress.outfitUnlocked || ['none'],
@@ -6135,7 +6137,7 @@
     if(score === 10 || score === 25 || score === 50) makeParticles(180, 180, 25, '#ffe45c');
 
     // Pet Skill: Aero & Lumos (Divine Blessing)
-    const petId = progress.selectedPet || 'pip_peep';
+    const petId = progress.selectedPet || 'none';
     if(petId === 'aero_lumos') {
       aeroPipesPassed++;
       if(aeroPipesPassed % 4 === 0) {
@@ -6358,7 +6360,7 @@
       return;
     }
     let html = '';
-    const petId = progress.selectedPet || 'pip_peep';
+    const petId = progress.selectedPet || 'none';
     
     // Status Skill Pet Khusus
     if(petId === 'pip_peep') {
@@ -9673,9 +9675,9 @@
     }
 
     // --- Mascot 2 & 3: Equipped Pet Companion Duo Waddling & Hopping ---
-    const activePetId = progress.selectedPet || 'pip_peep';
+    const activePetId = progress.selectedPet || 'none';
     if(activePetId !== 'none') {
-      const pData = petsCatalog[activePetId] || petsCatalog.pip_peep;
+      const pData = petsCatalog[activePetId];
       if(pData && pData.baby1 && pData.baby2) {
         // Pet Baby 1 (Left pet)
         const chick1InteractiveHop = Math.sin((1 - lobbyChick1Bounce / 0.5) * Math.PI) * 18;
@@ -12796,7 +12798,7 @@
       coinsUpdatedAt: progress.coinsUpdatedAt || Date.now(),
       loadout: {
         bird: progress.selected || 'classic',
-        pet: progress.selectedPet || 'pip_peep',
+        pet: progress.selectedPet || 'none',
         aura: progress.selectedAura || 'default',
         hat: progress.selectedHat || 'none',
         outfit: progress.selectedOutfit || 'none',
@@ -12807,7 +12809,7 @@
       },
       unlocked: {
         bird: progress.unlocked || ['classic'],
-        pet: progress.petUnlocked || ['pip_peep'],
+        pet: progress.petUnlocked || ['none'],
         aura: progress.auraUnlocked || ['default'],
         hat: progress.hatUnlocked || ['none'],
         outfit: progress.outfitUnlocked || ['none'],
@@ -12837,7 +12839,7 @@
     progress.coins = 0;
     progress.coinsUpdatedAt = Date.now();
     progress.unlocked = ['classic'];
-    progress.petUnlocked = ['pip_peep'];
+    progress.petUnlocked = ['none'];
     progress.auraUnlocked = ['default'];
     progress.hatUnlocked = ['none'];
     progress.outfitUnlocked = ['none'];
@@ -12846,7 +12848,7 @@
     progress.musicUnlocked = ['happy'];
     progress.boosterUnlocked = ['none'];
     progress.selected = 'classic';
-    progress.selectedPet = 'pip_peep';
+    progress.selectedPet = 'none';
     progress.selectedAura = 'default';
     progress.selectedHat = 'none';
     progress.selectedOutfit = 'none';
@@ -12915,7 +12917,7 @@
       // 3. Sync Loadout (Equipped bird, pet, aura, hat, outfit, pipe, background, music, booster)
       const l = cloudProfile.loadout || {};
       progress.selected = (l.bird && skins[l.bird]) ? l.bird : 'classic';
-      progress.selectedPet = (l.pet && petsCatalog[l.pet]) ? l.pet : 'pip_peep';
+      progress.selectedPet = (l.pet && petsCatalog[l.pet]) ? l.pet : 'none';
       progress.selectedAura = (l.aura && auras[l.aura]) ? l.aura : 'default';
       progress.selectedHat = (l.hat && (hats[l.hat] || l.hat === 'none')) ? l.hat : 'none';
       progress.selectedOutfit = (l.outfit && (outfits[l.outfit] || l.outfit === 'none')) ? l.outfit : 'none';
@@ -12928,7 +12930,7 @@
       const cleanArr = (arr, fallback) => Array.isArray(arr) && arr.length > 0 ? Array.from(new Set(arr)) : [fallback];
       const u = cloudProfile.unlocked || {};
       progress.unlocked = cleanArr(u.bird, 'classic');
-      progress.petUnlocked = cleanArr(u.pet, 'pip_peep');
+      progress.petUnlocked = cleanArr(u.pet, 'none');
       progress.auraUnlocked = cleanArr(u.aura, 'default');
       progress.hatUnlocked = cleanArr(u.hat, 'none');
       progress.outfitUnlocked = cleanArr(u.outfit, 'none');
@@ -15068,7 +15070,7 @@
 
   function openPetModal() {
     audio.click();
-    previewPetId = progress.selectedPet || 'pip_peep';
+    previewPetId = (progress.selectedPet && progress.selectedPet !== 'none') ? progress.selectedPet : 'pip_peep';
     renderPetModal();
     startPetShowcase();
     showModal($('petCompanionModal'));
@@ -15090,8 +15092,8 @@
   }
 
   function equipPet(id) {
-    if(!petsCatalog[id]) return;
-    if(!Array.isArray(progress.petUnlocked)) progress.petUnlocked = ['pip_peep', 'none'];
+    if(!petsCatalog[id] && id !== 'none') return;
+    if(!Array.isArray(progress.petUnlocked)) progress.petUnlocked = ['none'];
     if(!progress.petUnlocked.includes(id) && id !== 'none') return;
 
     progress.selectedPet = id;
@@ -15102,14 +15104,15 @@
     if(typeof saveCloudSave === 'function') saveCloudSave();
     previewPet(id);
     if(typeof showToast === 'function') {
-      showToast(`Pet ${petsCatalog[id].name} berhasil dipasang!`, 'success');
+      const name = petsCatalog[id] ? petsCatalog[id].name : 'Tanpa Pet';
+      showToast(`Pet ${name} berhasil dipasang!`, 'success');
     }
   }
 
   function renderPetDetailCard() {
     const pet = petsCatalog[previewPetId] || petsCatalog.pip_peep;
-    const isEquipped = (progress.selectedPet || 'pip_peep') === previewPetId;
-    const isUnlocked = Array.isArray(progress.petUnlocked) ? (progress.petUnlocked.includes(previewPetId) || previewPetId === 'none') : (previewPetId === 'pip_peep' || previewPetId === 'none');
+    const isEquipped = (progress.selectedPet || 'none') === previewPetId;
+    const isUnlocked = Array.isArray(progress.petUnlocked) ? (progress.petUnlocked.includes(previewPetId) || previewPetId === 'none') : false;
 
     const nameEl = $('petDetailName');
     const skillNameEl = $('petSkillName');
@@ -15162,12 +15165,12 @@
   function renderPetGrid() {
     const grid = $('petListGrid');
     if(!grid) return;
-    if(!Array.isArray(progress.petUnlocked)) progress.petUnlocked = ['pip_peep', 'none'];
+    if(!Array.isArray(progress.petUnlocked)) progress.petUnlocked = ['none'];
 
     grid.innerHTML = Object.entries(petsCatalog).map(([id, pet]) => {
       const isSelected = previewPetId === id;
-      const isEquipped = (progress.selectedPet || 'pip_peep') === id;
-      const isUnlocked = progress.petUnlocked.includes(id) || id === 'none';
+      const isEquipped = (progress.selectedPet || 'none') === id;
+      const isUnlocked = progress.petUnlocked.includes(id);
       const iconSvg = getShopItemSvg('pet', id, pet);
 
       let statusHtml = '';
@@ -15512,7 +15515,7 @@
         progress.diamonds = (progress.diamonds || 0) + item.amount;
         isNew = true;
       } else if(item.type === 'pet') {
-        if(!Array.isArray(progress.petUnlocked)) progress.petUnlocked = ['pip_peep', 'none'];
+        if(!Array.isArray(progress.petUnlocked)) progress.petUnlocked = ['none'];
         if(!progress.petUnlocked.includes(item.id)) {
           progress.petUnlocked.push(item.id);
           isNew = true;

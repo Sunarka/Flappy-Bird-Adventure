@@ -73,7 +73,7 @@ class FirebaseLeaderboardService {
       avatar: player.avatar || 'chick_yellow',
       loadout: {
         bird: player.loadout?.bird || 'classic',
-        pet: player.loadout?.pet || 'pip_peep',
+        pet: player.loadout?.pet || 'none',
         aura: player.loadout?.aura || 'default',
         hat: player.loadout?.hat || 'none',
         outfit: player.loadout?.outfit || 'none',
@@ -264,7 +264,7 @@ class FirebaseLeaderboardService {
           nameChangesDone: d.nameChangesDone || 0,
           loadout: {
             bird: d.loadout?.bird || 'classic',
-            pet: d.loadout?.pet || 'pip_peep',
+            pet: d.loadout?.pet || 'none',
             aura: d.loadout?.aura || 'default',
             hat: d.loadout?.hat || 'none',
             outfit: d.loadout?.outfit || 'none',
@@ -294,7 +294,7 @@ class FirebaseLeaderboardService {
             nameChangesDone: d2.nameChangesDone || 0,
             loadout: {
               bird: d2.loadout?.bird || 'classic',
-              pet: d2.loadout?.pet || 'pip_peep',
+              pet: d2.loadout?.pet || 'none',
               aura: d2.loadout?.aura || 'default',
               hat: d2.loadout?.hat || 'none',
               outfit: d2.loadout?.outfit || 'none',
@@ -336,7 +336,7 @@ class FirebaseLeaderboardService {
         coinsUpdatedAt: typeof data.coinsUpdatedAt === 'number' ? data.coinsUpdatedAt : Date.now(),
         loadout: {
           bird: data.loadout?.bird || 'classic',
-          pet: data.loadout?.pet || 'pip_peep',
+          pet: data.loadout?.pet || 'none',
           aura: data.loadout?.aura || 'default',
           hat: data.loadout?.hat || 'none',
           outfit: data.loadout?.outfit || 'none',
@@ -380,7 +380,7 @@ class FirebaseLeaderboardService {
             nameChangesDone: d.nameChangesDone || 0,
             loadout: {
               bird: d.loadout?.bird || 'classic',
-              pet: d.loadout?.pet || 'pip_peep',
+              pet: d.loadout?.pet || 'none',
               aura: d.loadout?.aura || 'default',
               hat: d.loadout?.hat || 'none',
               outfit: d.loadout?.outfit || 'none',
