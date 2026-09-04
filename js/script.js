@@ -3609,14 +3609,7 @@
     // Anime avatar: gunakan gambar PNG nyata
     if (avatarId && ANIME_AVATAR_PNG.has(avatarId)) {
       const found = cuteAvatarsCatalog.find(a => a.id === avatarId);
-      const svgFallback = found ? found.render(size) : '';
-      return `<img
-        src="assets/avatars/${avatarId}.png"
-        width="${size}" height="${size}"
-        alt="${found ? found.name : avatarId}"
-        style="display:block;width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;"
-        onerror="this.style.display='none';this.insertAdjacentHTML('afterend','${svgFallback.replace(/'/g, "\\'").replace(/\n/g,'')}')"
-      />`;
+      return `<img src="assets/avatars/${avatarId}.png" width="${size}" height="${size}" alt="${found ? found.name : avatarId}" class="anime-avatar-img" style="display:block;width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;" />`;
     }
     const found = cuteAvatarsCatalog.find(a => a.id === avatarId);
     if(found) return found.render(size);
@@ -3762,7 +3755,7 @@
         ? `background:#0f172a;`
         : `background:${a.bg};`;
       const iconContent = isAnime
-        ? `<img src="assets/avatars/${a.id}.png" width="44" height="44" alt="${a.name}" style="display:block;width:44px;height:44px;border-radius:50%;object-fit:cover;" onerror="this.outerHTML='${a.render(44).replace(/'/g, "\\'").replace(/\n/g,'')}'"/>`
+        ? `<img src="assets/avatars/${a.id}.png" width="44" height="44" alt="${a.name}" style="display:block;width:44px;height:44px;border-radius:50%;object-fit:cover;" />`
         : a.render(44);
       html += `
         <div class="avatar-card${isSelected ? ' selected' : ''}" data-avatar-id="${a.id}">
