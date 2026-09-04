@@ -2800,17 +2800,29 @@
       color: '#fef08a',
       bg: 'linear-gradient(135deg, #fef08a 0%, #facc15 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <circle cx="24" cy="25" r="18" fill="#facc15"/>
-        <circle cx="22" cy="7" r="4.5" fill="#f87171"/>
-        <circle cx="27" cy="8.5" r="4" fill="#ef4444"/>
-        <circle cx="17" cy="22" r="3.8" fill="#1e293b"/>
-        <circle cx="18.2" cy="20.8" r="1.4" fill="#ffffff"/>
-        <circle cx="31" cy="22" r="3.8" fill="#1e293b"/>
-        <circle cx="32.2" cy="20.8" r="1.4" fill="#ffffff"/>
-        <ellipse cx="12" cy="27" rx="3.5" ry="2.2" fill="#f87171" opacity="0.6"/>
-        <ellipse cx="36" cy="27" rx="3.5" ry="2.2" fill="#f87171" opacity="0.6"/>
-        <polygon points="24,23 20,29 28,29" fill="#f97316"/>
-        <polygon points="24,31 21,29 27,29" fill="#ea580c"/>
+        <defs>
+          <linearGradient id="g_chick" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fffbeb"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+          <linearGradient id="g_beak" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fb923c"/><stop offset="100%" stop-color="#ea580c"/></linearGradient>
+        </defs>
+        <circle cx="24" cy="24" r="23" fill="#fef9c3"/>
+        <circle cx="21" cy="7" r="4.5" fill="#f87171"/>
+        <circle cx="27" cy="8" r="4" fill="#ef4444"/>
+        <circle cx="24" cy="26" r="17.5" fill="url(#g_chick)"/>
+        <!-- Soft rosy cheeks -->
+        <ellipse cx="11.5" cy="28.5" rx="3.8" ry="2.2" fill="#fb7185" opacity="0.8"/>
+        <ellipse cx="36.5" cy="28.5" rx="3.8" ry="2.2" fill="#fb7185" opacity="0.8"/>
+        <!-- Sparkling Kawaii Eyes -->
+        <ellipse cx="16.5" cy="23" rx="3.6" ry="4.4" fill="#0f172a"/>
+        <circle cx="17.8" cy="21.2" r="1.6" fill="#ffffff"/>
+        <circle cx="15.2" cy="24.8" r="0.8" fill="#ffffff"/>
+        <ellipse cx="31.5" cy="23" rx="3.6" ry="4.4" fill="#0f172a"/>
+        <circle cx="32.8" cy="21.2" r="1.6" fill="#ffffff"/>
+        <circle cx="30.2" cy="24.8" r="0.8" fill="#ffffff"/>
+        <!-- Cute Little Orange Beak -->
+        <path d="M 21 26.5 Q 24 23 27 26.5 Q 24 31 21 26.5 Z" fill="url(#g_beak)"/>
+        <!-- Tiny Flapping Wing -->
+        <ellipse cx="8" cy="27" rx="3" ry="4.5" fill="#fbbf24" transform="rotate(-15 8 27)"/>
+        <ellipse cx="40" cy="27" rx="3" ry="4.5" fill="#fbbf24" transform="rotate(15 40 27)"/>
       </svg>`
     },
     {
@@ -2819,19 +2831,31 @@
       color: '#f472b6',
       bg: 'linear-gradient(135deg, #fbcfe8 0%, #f472b6 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <circle cx="24" cy="25" r="18" fill="#f472b6"/>
-        <circle cx="12" cy="11" r="3.5" fill="#ffffff"/>
-        <circle cx="9" cy="14" r="3.5" fill="#ffffff"/>
-        <circle cx="15" cy="14" r="3.5" fill="#ffffff"/>
-        <circle cx="12" cy="17" r="3.5" fill="#ffffff"/>
-        <circle cx="12" cy="14" r="2.5" fill="#fbbf24"/>
-        <circle cx="17" cy="23" r="3.8" fill="#1e293b"/>
-        <circle cx="18.2" cy="21.5" r="1.4" fill="#ffffff"/>
-        <circle cx="31" cy="23" r="3.8" fill="#1e293b"/>
-        <circle cx="32.2" cy="21.5" r="1.4" fill="#ffffff"/>
-        <ellipse cx="12" cy="28" rx="3.8" ry="2.2" fill="#fb7185" opacity="0.75"/>
-        <ellipse cx="36" cy="28" rx="3.8" ry="2.2" fill="#fb7185" opacity="0.75"/>
-        <polygon points="24,24 20,29.5 28,29.5" fill="#fb923c"/>
+        <defs>
+          <linearGradient id="g_sakura" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fdf2f8"/><stop offset="100%" stop-color="#f472b6"/></linearGradient>
+        </defs>
+        <circle cx="24" cy="24" r="23" fill="#fce7f3"/>
+        <!-- Cherry Blossom Flower in Hair -->
+        <circle cx="12" cy="11" r="3.6" fill="#ffffff"/>
+        <circle cx="9" cy="14.5" r="3.6" fill="#ffffff"/>
+        <circle cx="15.5" cy="14.5" r="3.6" fill="#ffffff"/>
+        <circle cx="12" cy="17.5" r="3.6" fill="#ffffff"/>
+        <circle cx="12" cy="14.5" r="2.4" fill="#fbbf24"/>
+        <circle cx="24" cy="26" r="17.5" fill="url(#g_sakura)"/>
+        <!-- Kawaii Eyelashes & Sparkling Eyes -->
+        <path d="M 12.5 19.5 Q 16.5 17 20.5 19.5" fill="none" stroke="#831843" stroke-width="1.2" stroke-linecap="round"/>
+        <ellipse cx="16.5" cy="23.5" rx="3.6" ry="4.2" fill="#831843"/>
+        <circle cx="17.8" cy="21.8" r="1.6" fill="#ffffff"/>
+        <circle cx="15.2" cy="25" r="0.8" fill="#ffffff"/>
+        <path d="M 27.5 19.5 Q 31.5 17 35.5 19.5" fill="none" stroke="#831843" stroke-width="1.2" stroke-linecap="round"/>
+        <ellipse cx="31.5" cy="23.5" rx="3.6" ry="4.2" fill="#831843"/>
+        <circle cx="32.8" cy="21.8" r="1.6" fill="#ffffff"/>
+        <circle cx="30.2" cy="25" r="0.8" fill="#ffffff"/>
+        <!-- Rosy Blush Cheeks -->
+        <ellipse cx="11" cy="29" rx="3.8" ry="2.2" fill="#fb7185" opacity="0.85"/>
+        <ellipse cx="37" cy="29" rx="3.8" ry="2.2" fill="#fb7185" opacity="0.85"/>
+        <polygon points="24,25 21,29.5 27,29.5" fill="#f97316"/>
+        <path d="M 21.5 32 Q 24 34.5 26.5 32" fill="none" stroke="#be185d" stroke-width="1.2" stroke-linecap="round"/>
       </svg>`
     },
     {
@@ -2840,18 +2864,28 @@
       color: '#38bdf8',
       bg: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <circle cx="24" cy="25" r="18" fill="#1e293b"/>
-        <ellipse cx="24" cy="29" rx="12" ry="13.5" fill="#ffffff"/>
-        <path d="M 9 20 A 15 15 0 0 1 39 20" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="9" cy="22" r="5" fill="#0284c7"/>
-        <circle cx="39" cy="22" r="5" fill="#0284c7"/>
-        <circle cx="18" cy="23" r="3.2" fill="#0f172a"/>
-        <circle cx="19" cy="22" r="1.2" fill="#ffffff"/>
-        <circle cx="30" cy="23" r="3.2" fill="#0f172a"/>
-        <circle cx="31" cy="22" r="1.2" fill="#ffffff"/>
-        <polygon points="24,25 20.5,29.5 27.5,29.5" fill="#f97316"/>
-        <circle cx="14" cy="28" r="2.5" fill="#f87171" opacity="0.5"/>
-        <circle cx="34" cy="28" r="2.5" fill="#f87171" opacity="0.5"/>
+        <circle cx="24" cy="24" r="23" fill="#e0f2fe"/>
+        <circle cx="24" cy="26" r="17.5" fill="#1e293b"/>
+        <!-- Chibi White Belly -->
+        <ellipse cx="24" cy="29" rx="12.5" ry="14" fill="#ffffff"/>
+        <!-- Warm Knitted Earmuffs -->
+        <path d="M 8 20 A 16 16 0 0 1 40 20" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="8" cy="22" r="5" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5"/>
+        <circle cx="40" cy="22" r="5" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5"/>
+        <!-- Super Cute Black Button Eyes -->
+        <ellipse cx="17.5" cy="23.5" rx="3.4" ry="4" fill="#0f172a"/>
+        <circle cx="18.6" cy="22" r="1.5" fill="#ffffff"/>
+        <circle cx="16.4" cy="24.8" r="0.7" fill="#ffffff"/>
+        <ellipse cx="30.5" cy="23.5" rx="3.4" ry="4" fill="#0f172a"/>
+        <circle cx="31.6" cy="22" r="1.5" fill="#ffffff"/>
+        <circle cx="29.4" cy="24.8" r="0.7" fill="#ffffff"/>
+        <!-- Blushing Cheeks -->
+        <circle cx="13" cy="28.5" r="2.8" fill="#fb7185" opacity="0.65"/>
+        <circle cx="35" cy="28.5" r="2.8" fill="#fb7185" opacity="0.65"/>
+        <polygon points="24,25.5 20.5,30 27.5,30" fill="#f97316"/>
+        <!-- Tiny Red Bowtie -->
+        <polygon points="21,34 27,34 24,36" fill="#ef4444"/>
+        <circle cx="24" cy="34" r="1.3" fill="#fca5a5"/>
       </svg>`
     },
     {
@@ -2860,16 +2894,28 @@
       color: '#10b981',
       bg: 'linear-gradient(135deg, #a7f3d0 0%, #10b981 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <circle cx="11" cy="11" r="6" fill="#1e293b"/>
-        <circle cx="37" cy="11" r="6" fill="#1e293b"/>
-        <circle cx="24" cy="26" r="17" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
-        <ellipse cx="16" cy="23" rx="5" ry="4.2" fill="#1e293b" transform="rotate(-15 16 23)"/>
-        <ellipse cx="32" cy="23" rx="5" ry="4.2" fill="#1e293b" transform="rotate(15 32 23)"/>
-        <circle cx="16.5" cy="22.5" r="2.2" fill="#ffffff"/>
-        <circle cx="31.5" cy="22.5" r="2.2" fill="#ffffff"/>
-        <polygon points="24,26 21.5,30 26.5,30" fill="#f97316"/>
-        <circle cx="11" cy="30" r="3" fill="#fca5a5" opacity="0.7"/>
-        <circle cx="37" cy="30" r="3" fill="#fca5a5" opacity="0.7"/>
+        <circle cx="24" cy="24" r="23" fill="#d1fae5"/>
+        <!-- Fluffy Black Ears -->
+        <circle cx="10" cy="11" r="6" fill="#1e293b"/>
+        <circle cx="10" cy="11" r="3.2" fill="#475569"/>
+        <circle cx="38" cy="11" r="6" fill="#1e293b"/>
+        <circle cx="38" cy="11" r="3.2" fill="#475569"/>
+        <circle cx="24" cy="26" r="17.5" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2"/>
+        <!-- Chibi Teardrop Eye Patches -->
+        <ellipse cx="16" cy="23.5" rx="5.2" ry="4.5" fill="#1e293b" transform="rotate(-15 16 23.5)"/>
+        <ellipse cx="32" cy="23.5" rx="5.2" ry="4.5" fill="#1e293b" transform="rotate(15 32 23.5)"/>
+        <!-- Big Twinkling Panda Eyes -->
+        <circle cx="16.5" cy="23" r="2.4" fill="#ffffff"/>
+        <circle cx="15.5" cy="24.8" r="1" fill="#ffffff"/>
+        <circle cx="31.5" cy="23" r="2.4" fill="#ffffff"/>
+        <circle cx="30.5" cy="24.8" r="1" fill="#ffffff"/>
+        <!-- Cheeks & Little Nose -->
+        <ellipse cx="10.5" cy="29.5" rx="3.5" ry="2" fill="#fca5a5" opacity="0.8"/>
+        <ellipse cx="37.5" cy="29.5" rx="3.5" ry="2" fill="#fca5a5" opacity="0.8"/>
+        <polygon points="24,26.5 21.5,30.5 26.5,30.5" fill="#f97316"/>
+        <path d="M 22 32.5 Q 24 34.5 26 32.5" fill="none" stroke="#334155" stroke-width="1.2" stroke-linecap="round"/>
+        <!-- Bamboo Leaf in Mouth -->
+        <path d="M 27 31 Q 34 30 38 27 Q 34 33 27 32 Z" fill="#22c55e"/>
       </svg>`
     },
     {
@@ -2878,20 +2924,30 @@
       color: '#fb923c',
       bg: 'linear-gradient(135deg, #ffedd5 0%, #fb923c 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <polygon points="8,19 14,7 21,14" fill="#f97316"/>
-        <polygon points="10,18 14,10 19,14" fill="#fecdd3"/>
-        <polygon points="40,19 34,7 27,14" fill="#f97316"/>
-        <polygon points="38,18 34,10 29,14" fill="#fecdd3"/>
-        <circle cx="24" cy="26" r="17" fill="#fed7aa"/>
-        <circle cx="17" cy="23" r="3.5" fill="#1e293b"/>
-        <circle cx="18" cy="22" r="1.3" fill="#ffffff"/>
-        <circle cx="31" cy="23" r="3.5" fill="#1e293b"/>
-        <circle cx="32" cy="22" r="1.3" fill="#ffffff"/>
-        <line x1="6" y1="26" x2="13" y2="27" stroke="#ea580c" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="6" y1="30" x2="13" y2="29" stroke="#ea580c" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="42" y1="26" x2="35" y2="27" stroke="#ea580c" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="42" y1="30" x2="35" y2="29" stroke="#ea580c" stroke-width="1.5" stroke-linecap="round"/>
-        <polygon points="24,26 21,30.5 27,30.5" fill="#ea580c"/>
+        <circle cx="24" cy="24" r="23" fill="#ffedd5"/>
+        <!-- Pointy Cat Ears -->
+        <polygon points="7,19 13,6 21,14" fill="#f97316"/>
+        <polygon points="9,18 13,9 19,14" fill="#fecdd3"/>
+        <polygon points="41,19 35,6 27,14" fill="#f97316"/>
+        <polygon points="39,18 35,9 29,14" fill="#fecdd3"/>
+        <circle cx="24" cy="26" r="17.5" fill="#fed7aa"/>
+        <!-- Big Round Anime Eyes -->
+        <ellipse cx="16.5" cy="23.5" rx="3.6" ry="4.4" fill="#0f172a"/>
+        <circle cx="17.8" cy="21.8" r="1.6" fill="#ffffff"/>
+        <circle cx="15.2" cy="25" r="0.8" fill="#ffffff"/>
+        <ellipse cx="31.5" cy="23.5" rx="3.6" ry="4.4" fill="#0f172a"/>
+        <circle cx="32.8" cy="21.8" r="1.6" fill="#ffffff"/>
+        <circle cx="30.2" cy="25" r="0.8" fill="#ffffff"/>
+        <!-- Rosy Blush & Whiskers -->
+        <ellipse cx="11" cy="29" rx="3.5" ry="2" fill="#fb7185" opacity="0.8"/>
+        <ellipse cx="37" cy="29" rx="3.5" ry="2" fill="#fb7185" opacity="0.8"/>
+        <line x1="5" y1="26" x2="12" y2="27" stroke="#ea580c" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="5" y1="30" x2="12" y2="29" stroke="#ea580c" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="43" y1="26" x2="36" y2="27" stroke="#ea580c" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="43" y1="30" x2="36" y2="29" stroke="#ea580c" stroke-width="1.4" stroke-linecap="round"/>
+        <!-- Cute :3 Cat Mouth -->
+        <polygon points="24,26.5 22,29 26,29" fill="#ea580c"/>
+        <path d="M 21 30 Q 22.5 32 24 30 Q 25.5 32 27 30" fill="none" stroke="#c2410c" stroke-width="1.4" stroke-linecap="round"/>
       </svg>`
     },
     {
@@ -2900,18 +2956,25 @@
       color: '#f43f5e',
       bg: 'linear-gradient(135deg, #ffe4e6 0%, #f43f5e 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <ellipse cx="16" cy="11" rx="4.5" ry="10" fill="#ffffff" stroke="#fbcfe8" stroke-width="1.2"/>
-        <ellipse cx="16" cy="11" rx="2.5" ry="7" fill="#fecdd3"/>
-        <ellipse cx="32" cy="11" rx="4.5" ry="10" fill="#ffffff" stroke="#fbcfe8" stroke-width="1.2"/>
-        <ellipse cx="32" cy="11" rx="2.5" ry="7" fill="#fecdd3"/>
-        <circle cx="24" cy="27" r="16.5" fill="#ffffff" stroke="#fbcfe8" stroke-width="1.2"/>
-        <circle cx="17" cy="25" r="3.5" fill="#be123c"/>
-        <circle cx="18" cy="24" r="1.3" fill="#ffffff"/>
-        <circle cx="31" cy="25" r="3.5" fill="#be123c"/>
-        <circle cx="32" cy="24" r="1.3" fill="#ffffff"/>
-        <ellipse cx="11" cy="30" rx="3.5" ry="2" fill="#fda4af"/>
-        <ellipse cx="37" cy="30" rx="3.5" ry="2" fill="#fda4af"/>
-        <polygon points="24,27 21.5,31 26.5,31" fill="#fb7185"/>
+        <circle cx="24" cy="24" r="23" fill="#fff1f2"/>
+        <!-- Long Fluffy Bunny Ears -->
+        <ellipse cx="15.5" cy="11" rx="4.5" ry="10.5" fill="#ffffff" stroke="#fbcfe8" stroke-width="1.2"/>
+        <ellipse cx="15.5" cy="11" rx="2.5" ry="7.5" fill="#fecdd3"/>
+        <ellipse cx="32.5" cy="11" rx="4.5" ry="10.5" fill="#ffffff" stroke="#fbcfe8" stroke-width="1.2"/>
+        <ellipse cx="32.5" cy="11" rx="2.5" ry="7.5" fill="#fecdd3"/>
+        <circle cx="24" cy="27" r="17" fill="#ffffff" stroke="#fbcfe8" stroke-width="1.2"/>
+        <!-- Ruby Sparkling Eyes -->
+        <ellipse cx="16.5" cy="24.5" rx="3.6" ry="4.2" fill="#be123c"/>
+        <circle cx="17.8" cy="22.8" r="1.6" fill="#ffffff"/>
+        <circle cx="15.2" cy="26" r="0.8" fill="#ffffff"/>
+        <ellipse cx="31.5" cy="24.5" rx="3.6" ry="4.2" fill="#be123c"/>
+        <circle cx="32.8" cy="22.8" r="1.6" fill="#ffffff"/>
+        <circle cx="30.2" cy="26" r="0.8" fill="#ffffff"/>
+        <!-- Super Sweet Blush & Mouth -->
+        <ellipse cx="10.5" cy="29.5" rx="3.8" ry="2.2" fill="#fda4af" opacity="0.9"/>
+        <ellipse cx="37.5" cy="29.5" rx="3.8" ry="2.2" fill="#fda4af" opacity="0.9"/>
+        <polygon points="24,27 22,30.5 26,30.5" fill="#fb7185"/>
+        <path d="M 21.5 32 Q 24 34.5 26.5 32" fill="none" stroke="#e11d48" stroke-width="1.2" stroke-linecap="round"/>
       </svg>`
     },
     {
@@ -2920,17 +2983,26 @@
       color: '#ea580c',
       bg: 'linear-gradient(135deg, #ffedd5 0%, #ea580c 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <polygon points="8,16 15,4 21,15" fill="#ea580c"/>
-        <polygon points="10,16 15,7 19,15" fill="#1e293b"/>
-        <polygon points="40,16 33,4 27,15" fill="#ea580c"/>
-        <polygon points="38,16 33,7 29,15" fill="#1e293b"/>
-        <circle cx="24" cy="26" r="17" fill="#ea580c"/>
-        <path d="M 10 26 C 14 36 24 38 24 38 C 24 38 34 36 38 26 Z" fill="#ffffff"/>
-        <circle cx="17" cy="24" r="3.2" fill="#1e293b"/>
-        <circle cx="18" cy="23" r="1.2" fill="#ffffff"/>
-        <circle cx="31" cy="24" r="3.2" fill="#1e293b"/>
-        <circle cx="32" cy="23" r="1.2" fill="#ffffff"/>
-        <polygon points="24,26 21,30.5 27,30.5" fill="#1e293b"/>
+        <circle cx="24" cy="24" r="23" fill="#ffedd5"/>
+        <!-- Big Fox Ears with Dark Tips -->
+        <polygon points="7,16 14,4 21,15" fill="#ea580c"/>
+        <polygon points="10,16 14,7 19,15" fill="#1e293b"/>
+        <polygon points="41,16 34,4 27,15" fill="#ea580c"/>
+        <polygon points="38,16 34,7 29,15" fill="#1e293b"/>
+        <circle cx="24" cy="26" r="17.5" fill="#ea580c"/>
+        <!-- White Muzzle Mask -->
+        <path d="M 9 26 C 13 37 24 39 24 39 C 24 39 35 37 39 26 Z" fill="#ffffff"/>
+        <!-- Golden Amber Anime Eyes -->
+        <ellipse cx="16.5" cy="23.5" rx="3.4" ry="4.2" fill="#1e293b"/>
+        <circle cx="17.7" cy="21.8" r="1.5" fill="#ffffff"/>
+        <circle cx="15.3" cy="25" r="0.7" fill="#fde047"/>
+        <ellipse cx="31.5" cy="23.5" rx="3.4" ry="4.2" fill="#1e293b"/>
+        <circle cx="32.7" cy="21.8" r="1.5" fill="#ffffff"/>
+        <circle cx="30.3" cy="25" r="0.7" fill="#fde047"/>
+        <!-- Soft Blush & Fox Nose -->
+        <ellipse cx="12" cy="29" rx="3.2" ry="1.8" fill="#fb7185" opacity="0.75"/>
+        <ellipse cx="36" cy="29" rx="3.2" ry="1.8" fill="#fb7185" opacity="0.75"/>
+        <polygon points="24,27 21.5,31 26.5,31" fill="#1e293b"/>
       </svg>`
     },
     {
@@ -2939,17 +3011,26 @@
       color: '#22c55e',
       bg: 'linear-gradient(135deg, #bbf7d0 0%, #16a34a 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <polygon points="14,14 11,4 19,10" fill="#facc15"/>
-        <polygon points="34,14 37,4 29,10" fill="#facc15"/>
-        <circle cx="24" cy="26" r="17" fill="#22c55e"/>
-        <polygon points="24,5 21,11 27,11" fill="#f97316"/>
-        <circle cx="17" cy="24" r="4" fill="#0f172a"/>
-        <circle cx="18.5" cy="22.5" r="1.6" fill="#fef08a"/>
-        <circle cx="31" cy="24" r="4" fill="#0f172a"/>
-        <circle cx="32.5" cy="22.5" r="1.6" fill="#fef08a"/>
-        <polygon points="24,25 20,30 28,30" fill="#eab308"/>
-        <circle cx="12" cy="30" r="2.5" fill="#fed7aa" opacity="0.6"/>
-        <circle cx="36" cy="30" r="2.5" fill="#fed7aa" opacity="0.6"/>
+        <circle cx="24" cy="24" r="23" fill="#dcfce7"/>
+        <!-- Golden Horns -->
+        <polygon points="13,14 10,3 18,9" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+        <polygon points="35,14 38,3 30,9" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+        <circle cx="24" cy="26" r="17.5" fill="#22c55e"/>
+        <!-- Flame Crest on Head -->
+        <polygon points="24,4 20,11 24,9 28,11" fill="#f97316"/>
+        <!-- Big Emerald Cute Eyes with Gold Glint -->
+        <ellipse cx="16.5" cy="23.5" rx="3.8" ry="4.4" fill="#0f172a"/>
+        <circle cx="18" cy="21.8" r="1.7" fill="#ffffff"/>
+        <circle cx="15.2" cy="25" r="1" fill="#fef08a"/>
+        <ellipse cx="31.5" cy="23.5" rx="3.8" ry="4.4" fill="#0f172a"/>
+        <circle cx="33" cy="21.8" r="1.7" fill="#ffffff"/>
+        <circle cx="30.2" cy="25" r="1" fill="#fef08a"/>
+        <!-- Blush & Dragon Snout -->
+        <ellipse cx="11.5" cy="29" rx="3.5" ry="2" fill="#fed7aa" opacity="0.8"/>
+        <ellipse cx="36.5" cy="29" rx="3.5" ry="2" fill="#fed7aa" opacity="0.8"/>
+        <polygon points="24,25.5 20,30.5 28,30.5" fill="#eab308"/>
+        <circle cx="22" cy="29.5" r="0.8" fill="#713f12"/>
+        <circle cx="26" cy="29.5" r="0.8" fill="#713f12"/>
       </svg>`
     },
     {
@@ -2958,16 +3039,24 @@
       color: '#6366f1',
       bg: 'linear-gradient(135deg, #c7d2fe 0%, #4f46e5 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <polygon points="10,14 12,6 18,12" fill="#4338ca"/>
-        <polygon points="38,14 36,6 30,12" fill="#4338ca"/>
-        <circle cx="24" cy="26" r="17" fill="#6366f1"/>
-        <circle cx="17" cy="23" r="6.5" fill="#ffffff"/>
-        <circle cx="17" cy="23" r="4.2" fill="#1e1b4b"/>
-        <circle cx="18.5" cy="21.5" r="1.6" fill="#ffffff"/>
-        <circle cx="31" cy="23" r="6.5" fill="#ffffff"/>
-        <circle cx="31" cy="23" r="4.2" fill="#1e1b4b"/>
-        <circle cx="32.5" cy="21.5" r="1.6" fill="#ffffff"/>
-        <polygon points="24,25 21,30.5 27,30.5" fill="#f59e0b"/>
+        <circle cx="24" cy="24" r="23" fill="#e0e7ff"/>
+        <!-- Feather Tuft Ears -->
+        <polygon points="9,14 11,5 18,12" fill="#4338ca"/>
+        <polygon points="39,14 37,5 30,12" fill="#4338ca"/>
+        <circle cx="24" cy="26" r="17.5" fill="#6366f1"/>
+        <!-- Giant Cute Anime Eyeglasses Ring -->
+        <circle cx="16.5" cy="23" r="6.8" fill="#ffffff"/>
+        <ellipse cx="16.5" cy="23" rx="4.2" ry="4.8" fill="#1e1b4b"/>
+        <circle cx="18" cy="21.2" r="1.7" fill="#ffffff"/>
+        <circle cx="15" cy="24.8" r="0.8" fill="#38bdf8"/>
+        <circle cx="31.5" cy="23" r="6.8" fill="#ffffff"/>
+        <ellipse cx="31.5" cy="23" rx="4.2" ry="4.8" fill="#1e1b4b"/>
+        <circle cx="33" cy="21.2" r="1.7" fill="#ffffff"/>
+        <circle cx="30" cy="24.8" r="0.8" fill="#38bdf8"/>
+        <!-- Cheeks & Little Beak -->
+        <circle cx="10" cy="30" r="2.5" fill="#fb7185" opacity="0.6"/>
+        <circle cx="38" cy="30" r="2.5" fill="#fb7185" opacity="0.6"/>
+        <polygon points="24,24.5 21,30 27,30" fill="#f59e0b"/>
       </svg>`
     },
     {
@@ -2976,16 +3065,23 @@
       color: '#84cc16',
       bg: 'linear-gradient(135deg, #d9f99d 0%, #65a30d 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <circle cx="15" cy="14" r="6.5" fill="#84cc16"/>
-        <circle cx="15" cy="14" r="4" fill="#ffffff"/>
-        <circle cx="15" cy="14" r="2.5" fill="#1e293b"/>
-        <circle cx="33" cy="14" r="6.5" fill="#84cc16"/>
-        <circle cx="33" cy="14" r="4" fill="#ffffff"/>
-        <circle cx="33" cy="14" r="2.5" fill="#1e293b"/>
-        <circle cx="24" cy="27" r="16" fill="#84cc16"/>
-        <ellipse cx="11" cy="29" rx="3.5" ry="2.2" fill="#f472b6" opacity="0.8"/>
-        <ellipse cx="37" cy="29" rx="3.5" ry="2.2" fill="#f472b6" opacity="0.8"/>
-        <polygon points="24,25 21,29.5 27,29.5" fill="#facc15"/>
+        <circle cx="24" cy="24" r="23" fill="#ecfccb"/>
+        <!-- Big Pop-Up Frog Eyes -->
+        <circle cx="14" cy="14" r="7" fill="#84cc16"/>
+        <circle cx="14" cy="14" r="4.6" fill="#ffffff"/>
+        <ellipse cx="14" cy="14" rx="2.8" ry="3.5" fill="#1e293b"/>
+        <circle cx="15.2" cy="12.6" r="1.4" fill="#ffffff"/>
+        <circle cx="34" cy="14" r="7" fill="#84cc16"/>
+        <circle cx="34" cy="14" r="4.6" fill="#ffffff"/>
+        <ellipse cx="34" cy="14" rx="2.8" ry="3.5" fill="#1e293b"/>
+        <circle cx="35.2" cy="12.6" r="1.4" fill="#ffffff"/>
+        <circle cx="24" cy="27" r="16.5" fill="#84cc16"/>
+        <!-- Pink Cute Cheeks -->
+        <ellipse cx="10.5" cy="29" rx="3.8" ry="2.2" fill="#f472b6" opacity="0.9"/>
+        <ellipse cx="37.5" cy="29" rx="3.8" ry="2.2" fill="#f472b6" opacity="0.9"/>
+        <!-- Cheerful Froggy Smile -->
+        <polygon points="24,25.5 21.5,29 26.5,29" fill="#facc15"/>
+        <path d="M 18 31 Q 24 36 30 31" fill="none" stroke="#365314" stroke-width="1.6" stroke-linecap="round"/>
       </svg>`
     },
     {
@@ -2994,12 +3090,20 @@
       color: '#38bdf8',
       bg: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
+        <circle cx="24" cy="24" r="23" fill="#0f172a"/>
+        <!-- Astronaut Helmet -->
         <circle cx="24" cy="24" r="18" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
         <circle cx="24" cy="24" r="14" fill="#0284c7"/>
-        <path d="M 13 18 A 12 12 0 0 1 31 13" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
-        <circle cx="24" cy="26" r="9" fill="#facc15"/>
-        <circle cx="21" cy="24" r="1.8" fill="#0f172a"/>
-        <circle cx="27" cy="24" r="1.8" fill="#0f172a"/>
+        <!-- Helmet Glass Reflection Flare -->
+        <path d="M 13 17 A 12 12 0 0 1 31 12" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.75"/>
+        <!-- Cute Little Alien Chick Peeking Inside -->
+        <circle cx="24" cy="26" r="8.5" fill="#facc15"/>
+        <ellipse cx="21" cy="24.5" rx="1.6" ry="2.2" fill="#0f172a"/>
+        <circle cx="21.6" cy="23.8" r="0.8" fill="#ffffff"/>
+        <ellipse cx="27" cy="24.5" rx="1.6" ry="2.2" fill="#0f172a"/>
+        <circle cx="27.6" cy="23.8" r="0.8" fill="#ffffff"/>
+        <circle cx="18" cy="26.5" r="1.5" fill="#fb7185" opacity="0.8"/>
+        <circle cx="30" cy="26.5" r="1.5" fill="#fb7185" opacity="0.8"/>
         <polygon points="24,26 22,29 26,29" fill="#f97316"/>
       </svg>`
     },
@@ -3009,13 +3113,24 @@
       color: '#06b6d4',
       bg: 'linear-gradient(135deg, #164e63 0%, #0891b2 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <line x1="24" y1="4" x2="24" y2="10" stroke="#06b6d4" stroke-width="2"/>
-        <circle cx="24" cy="4" r="2.5" fill="#f43f5e"/>
-        <rect x="8" y="10" width="32" height="30" rx="8" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
-        <rect x="13" y="17" width="22" height="9" rx="4.5" fill="#06b6d4"/>
-        <circle cx="18" cy="21.5" r="2" fill="#ffffff"/>
-        <circle cx="30" cy="21.5" r="2" fill="#ffffff"/>
-        <polygon points="24,29 20,34 28,34" fill="#fbbf24"/>
+        <circle cx="24" cy="24" r="23" fill="#082f49"/>
+        <!-- Cute Antenna with Red Bulb -->
+        <line x1="24" y1="3" x2="24" y2="10" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="24" cy="3.5" r="3" fill="#f43f5e"/>
+        <circle cx="23" cy="2.5" r="1" fill="#ffffff"/>
+        <!-- Chibi Mecha Chassis -->
+        <rect x="7" y="10" width="34" height="30" rx="9" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
+        <!-- Visor Screen -->
+        <rect x="12" y="16" width="24" height="10" rx="5" fill="#06b6d4"/>
+        <!-- Cyan/White Glowing Chibi Robot Eyes -->
+        <ellipse cx="17.5" cy="21" rx="2.5" ry="3.2" fill="#ffffff"/>
+        <circle cx="18" cy="20" r="1" fill="#a5f3fc"/>
+        <ellipse cx="30.5" cy="21" rx="2.5" ry="3.2" fill="#ffffff"/>
+        <circle cx="31" cy="20" r="1" fill="#a5f3fc"/>
+        <!-- Beep Boop Cheeks & Beak -->
+        <circle cx="10" cy="28" r="2" fill="#f43f5e" opacity="0.8"/>
+        <circle cx="38" cy="28" r="2" fill="#f43f5e" opacity="0.8"/>
+        <polygon points="24,28 20,33 28,33" fill="#fbbf24"/>
       </svg>`
     },
     {
@@ -3024,12 +3139,18 @@
       color: '#c084fc',
       bg: 'linear-gradient(135deg, #f3e8ff 0%, #a855f7 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <path d="M 10 26 C 10 14 38 14 38 26 C 38 38 34 42 30 38 C 26 34 22 34 18 38 C 14 42 10 38 10 26 Z" fill="#ffffff" stroke="#c084fc" stroke-width="1.8"/>
-        <path d="M 16 23 Q 19 19 22 23" fill="none" stroke="#6b21a8" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M 26 23 Q 29 19 32 23" fill="none" stroke="#6b21a8" stroke-width="2.5" stroke-linecap="round"/>
-        <ellipse cx="14" cy="27" rx="3" ry="1.8" fill="#f472b6" opacity="0.8"/>
-        <ellipse cx="34" cy="27" rx="3" ry="1.8" fill="#f472b6" opacity="0.8"/>
-        <ellipse cx="24" cy="27" rx="2" ry="2.8" fill="#f43f5e"/>
+        <circle cx="24" cy="24" r="23" fill="#f5f3ff"/>
+        <!-- Floating Chibi Ghost Body -->
+        <path d="M 10 26 C 10 13 38 13 38 26 C 38 38 34 42 30 38 C 26 34 22 34 18 38 C 14 42 10 38 10 26 Z" fill="#ffffff" stroke="#c084fc" stroke-width="2"/>
+        <!-- Happy Curved Closed Eyes -->
+        <path d="M 15 22 Q 18.5 17.5 22 22" fill="none" stroke="#6b21a8" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M 26 22 Q 29.5 17.5 33 22" fill="none" stroke="#6b21a8" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Super Cute Pink Cheeks -->
+        <ellipse cx="13.5" cy="26.5" rx="3.5" ry="2.2" fill="#f472b6" opacity="0.9"/>
+        <ellipse cx="34.5" cy="26.5" rx="3.5" ry="2.2" fill="#f472b6" opacity="0.9"/>
+        <!-- Little Surprised 'o' Mouth -->
+        <ellipse cx="24" cy="26.5" rx="2.4" ry="3.4" fill="#f43f5e"/>
+        <circle cx="24" cy="25" r="1" fill="#fca5a5"/>
       </svg>`
     },
     {
@@ -3038,13 +3159,24 @@
       color: '#eab308',
       bg: 'linear-gradient(135deg, #fef08a 0%, #ca8a04 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <polygon points="12,14 14,5 19,10 24,3 29,10 34,5 36,14" fill="#fbbf24" stroke="#d97706" stroke-width="1.2"/>
-        <circle cx="24" cy="26" r="17" fill="#facc15"/>
-        <circle cx="17" cy="24" r="3.5" fill="#1e293b"/>
-        <circle cx="18" cy="23" r="1.3" fill="#ffffff"/>
-        <circle cx="31" cy="24" r="3.5" fill="#1e293b"/>
-        <circle cx="32" cy="23" r="1.3" fill="#ffffff"/>
-        <polygon points="24,25 20.5,30 27.5,30" fill="#ea580c"/>
+        <circle cx="24" cy="24" r="23" fill="#fef9c3"/>
+        <!-- Golden Crown with Ruby Gemstones -->
+        <polygon points="11,14 13,4 18,10 24,2 30,10 35,4 37,14" fill="#fbbf24" stroke="#d97706" stroke-width="1.2"/>
+        <circle cx="24" cy="8" r="2" fill="#ef4444"/>
+        <circle cx="15" cy="11" r="1.3" fill="#3b82f6"/>
+        <circle cx="33" cy="11" r="1.3" fill="#3b82f6"/>
+        <circle cx="24" cy="26" r="17.5" fill="#facc15"/>
+        <!-- Sparkling Royal Eyes -->
+        <ellipse cx="16.5" cy="24" rx="3.6" ry="4.4" fill="#1e293b"/>
+        <circle cx="17.8" cy="22.2" r="1.6" fill="#ffffff"/>
+        <circle cx="15.2" cy="25.5" r="0.8" fill="#ffffff"/>
+        <ellipse cx="31.5" cy="24" rx="3.6" ry="4.4" fill="#1e293b"/>
+        <circle cx="32.8" cy="22.2" r="1.6" fill="#ffffff"/>
+        <circle cx="30.2" cy="25.5" r="0.8" fill="#ffffff"/>
+        <!-- Cheeks & Royal Beak -->
+        <ellipse cx="11" cy="29" rx="3.5" ry="2" fill="#fb7185" opacity="0.8"/>
+        <ellipse cx="37" cy="29" rx="3.5" ry="2" fill="#fb7185" opacity="0.8"/>
+        <polygon points="24,25.5 20.5,30.5 27.5,30.5" fill="#ea580c"/>
       </svg>`
     },
     {
@@ -3053,14 +3185,18 @@
       color: '#64748b',
       bg: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <circle cx="24" cy="25" r="18" fill="#0f172a"/>
-        <rect x="6" y="15" width="36" height="8" rx="2" fill="#dc2626"/>
-        <polygon points="38,19 46,14 44,22" fill="#dc2626"/>
-        <ellipse cx="24" cy="25" rx="13" ry="5.5" fill="#fed7aa"/>
-        <circle cx="18" cy="25" r="2.8" fill="#0f172a"/>
-        <circle cx="19" cy="24" r="1" fill="#ffffff"/>
-        <circle cx="30" cy="25" r="2.8" fill="#0f172a"/>
-        <circle cx="31" cy="24" r="1" fill="#ffffff"/>
+        <circle cx="24" cy="24" r="23" fill="#1e293b"/>
+        <circle cx="24" cy="25" r="17.5" fill="#0f172a"/>
+        <!-- Red Shinobi Headband Ribbons Flowing -->
+        <rect x="6" y="14" width="36" height="8" rx="3" fill="#dc2626"/>
+        <polygon points="38,18 46,13 44,22" fill="#dc2626"/>
+        <!-- Eye Slit Opening -->
+        <ellipse cx="24" cy="25" rx="13.5" ry="5.8" fill="#fed7aa"/>
+        <!-- Fierce Yet Chibi Eyes -->
+        <ellipse cx="17.5" cy="24.8" rx="3" ry="3.5" fill="#0f172a"/>
+        <circle cx="18.5" cy="23.8" r="1.2" fill="#ffffff"/>
+        <ellipse cx="30.5" cy="24.8" rx="3" ry="3.5" fill="#0f172a"/>
+        <circle cx="31.5" cy="23.8" r="1.2" fill="#ffffff"/>
         <polygon points="24,27 22,30 26,30" fill="#ea580c"/>
       </svg>`
     },
@@ -3070,14 +3206,22 @@
       color: '#f97316',
       bg: 'linear-gradient(135deg, #fed7aa 0%, #ea580c 100%)',
       render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <polygon points="24,2 18,12 24,9 30,12" fill="#ef4444"/>
-        <polygon points="24,5 20,12 24,10 28,12" fill="#facc15"/>
-        <circle cx="24" cy="26" r="17" fill="#f97316"/>
-        <circle cx="17" cy="23" r="3.8" fill="#450a0a"/>
-        <circle cx="18.5" cy="21.5" r="1.5" fill="#fef08a"/>
-        <circle cx="31" cy="23" r="3.8" fill="#450a0a"/>
-        <circle cx="32.5" cy="21.5" r="1.5" fill="#fef08a"/>
-        <polygon points="24,25 20,31 28,31" fill="#facc15"/>
+        <circle cx="24" cy="24" r="23" fill="#ffedd5"/>
+        <!-- Flame Feathers Crown -->
+        <polygon points="24,1 17,12 24,8 31,12" fill="#ef4444"/>
+        <polygon points="24,4 19,12 24,9 29,12" fill="#facc15"/>
+        <circle cx="24" cy="26" r="17.5" fill="#f97316"/>
+        <!-- Radiant Blazing Eyes with Gold Highlight -->
+        <ellipse cx="16.5" cy="23.5" rx="3.8" ry="4.4" fill="#450a0a"/>
+        <circle cx="18" cy="21.8" r="1.6" fill="#ffffff"/>
+        <circle cx="15.2" cy="25" r="1" fill="#fef08a"/>
+        <ellipse cx="31.5" cy="23.5" rx="3.8" ry="4.4" fill="#450a0a"/>
+        <circle cx="33" cy="21.8" r="1.6" fill="#ffffff"/>
+        <circle cx="30.2" cy="25" r="1" fill="#fef08a"/>
+        <!-- Golden Beak & Glowing Cheeks -->
+        <circle cx="11" cy="29.5" r="2.8" fill="#fde047" opacity="0.8"/>
+        <circle cx="37" cy="29.5" r="2.8" fill="#fde047" opacity="0.8"/>
+        <polygon points="24,25 19.5,31 28.5,31" fill="#facc15"/>
       </svg>`
     },
     // ANIME SPECIAL PROFILE AVATARS (SUPER CUTE KAWAII CHIBI PORTRAITS)
@@ -3528,6 +3672,11 @@
     if(el.gpAvatar) {
       el.gpAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 52);
     }
+    const gpWrap = $('gpAvatarWrap');
+    if(gpWrap) {
+      const myTierBorder = typeof getAvatarRankBorderClass === 'function' ? getAvatarRankBorderClass(rankedBest) : 'rank-border-bronze';
+      gpWrap.className = 'friend-profile-avatar-box ' + myTierBorder;
+    }
     if(el.gpGamerTagInput && document.activeElement !== el.gpGamerTagInput) {
       const displayTag = gpProfile.gamerTag || 'SkyPlayer';
       el.gpGamerTagInput.value = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(displayTag) : displayTag;
@@ -3826,6 +3975,30 @@
       progressPercent: 0
     };
   }
+  window.getRankTier = getRankTier;
+
+  function getAvatarRankBorderClass(scoreOrTier) {
+    if(!scoreOrTier) return 'rank-border-bronze';
+    if(typeof scoreOrTier === 'number') {
+      const tier = getRankTier(scoreOrTier);
+      return 'rank-border-' + (tier.id || 'bronze');
+    }
+    if(typeof scoreOrTier === 'string') {
+      const lower = scoreOrTier.toLowerCase();
+      if(lower.includes('grandmaster')) return 'rank-border-grandmaster';
+      if(lower.includes('master')) return 'rank-border-master';
+      if(lower.includes('diamond')) return 'rank-border-diamond';
+      if(lower.includes('platinum')) return 'rank-border-platinum';
+      if(lower.includes('gold')) return 'rank-border-gold';
+      if(lower.includes('silver')) return 'rank-border-silver';
+      return 'rank-border-bronze';
+    }
+    if(typeof scoreOrTier === 'object' && scoreOrTier.id) {
+      return 'rank-border-' + scoreOrTier.id;
+    }
+    return 'rank-border-bronze';
+  }
+  window.getAvatarRankBorderClass = getAvatarRankBorderClass;
 
   const cuteAvatarKeys = [
     'chick_yellow', 'pink_sakura', 'penguin_tux', 'panda_bamboo',
@@ -4310,6 +4483,11 @@
     const elRank = $('fpRankBadge');
     const elUid = $('fpUid');
 
+    if(elAv) {
+      elAv.innerHTML = getCuteAvatarSvg(player.avatar || 'chick_yellow', 44);
+      elAv.className = 'friend-profile-avatar-box ' + getAvatarRankBorderClass(pScore);
+    }
+
     const rawPName = player.name || 'Gamer';
     if(elName) elName.textContent = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(rawPName) : rawPName;
     if(elRank) {
@@ -4549,11 +4727,12 @@
         const rankBadge = rankNum === 1 ? '#1' : rankNum === 2 ? '#2' : rankNum === 3 ? '#3' : `#${rankNum}`;
         const userClass = p.isUser ? ' user-row' : '';
         const playerTier = getRankTier(p.score);
+        const borderClass = getAvatarRankBorderClass(p.score);
 
         rankHtml += `
           <div class="lb-row${userClass}" data-player-name="${p.name}" style="cursor:pointer;" title="Klik untuk lihat profil ${p.name}">
             <span class="lb-rank ${rankClass}">${rankBadge}</span>
-            <span class="lb-player"><span class="lb-av-circle">${getCuteAvatarSvg(p.avatar, 24)}</span> ${typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(p.name) : p.name}</span>
+            <span class="lb-player"><span class="lb-av-circle ${borderClass}">${getCuteAvatarSvg(p.avatar, 24)}</span> ${typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(p.name) : p.name}</span>
             <span class="lb-tier" style="color: ${playerTier.color}; justify-content: flex-end;">
               <span class="tier-icon-inline">${playerTier.iconSvg}</span>
               ${playerTier.name}
@@ -4644,11 +4823,12 @@
       const rankBadge = isTop1 ? '#1' : p.rank === 2 ? '#2' : p.rank === 3 ? '#3' : `#${p.rank}`;
       const activeClass = (selectedSpotlightPlayer && selectedSpotlightPlayer.name === p.name) ? ' active-spotlight' : '';
       const userClass = p.isUser ? ' user-row' : '';
+      const borderClass = getAvatarRankBorderClass(p.score);
 
       html += `
         <div class="lb-row${activeClass}${userClass}" data-player-name="${p.name}">
           <span class="lb-rank ${rankClass}">${rankBadge}</span>
-          <span class="lb-player"><span class="lb-av-circle">${getCuteAvatarSvg(p.avatar, 24)}</span> ${typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(p.name) : p.name}</span>
+          <span class="lb-player"><span class="lb-av-circle ${borderClass}">${getCuteAvatarSvg(p.avatar, 24)}</span> ${typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(p.name) : p.name}</span>
           <span class="lb-score">${p.score}</span>
         </div>
       `;
@@ -4857,7 +5037,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.68';
+  const GAME_VERSION = '20.70';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -5070,8 +5250,11 @@
 
       // 1v1 Player & Rival Info Cards
       if(el.mpMyHudName) el.mpMyHudName.textContent = gpProfile.gamerTag || 'YOU';
-      if(el.mpMyHudAvatar) el.mpMyHudAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 30);
       const myTier = getRankTier(rankedBest || 0);
+      if(el.mpMyHudAvatar) {
+        el.mpMyHudAvatar.innerHTML = getCuteAvatarSvg(gpProfile.avatar, 30);
+        el.mpMyHudAvatar.className = 'mp-hud-avatar ' + getAvatarRankBorderClass(myTier);
+      }
       if(el.mpMyHudTier) el.mpMyHudTier.textContent = myTier.name || 'GOLD';
       if(el.mpMyHudScore) el.mpMyHudScore.textContent = score;
 
@@ -5090,7 +5273,10 @@
       const rTier = rival.tier || rivalProfile?.tier || 'MASTER';
 
       if(el.mpRivalHudName) el.mpRivalHudName.textContent = rName.slice(0, 10);
-      if(el.mpRivalHudAvatar) el.mpRivalHudAvatar.innerHTML = getCuteAvatarSvg(rAvatar, 30);
+      if(el.mpRivalHudAvatar) {
+        el.mpRivalHudAvatar.innerHTML = getCuteAvatarSvg(rAvatar, 30);
+        el.mpRivalHudAvatar.className = 'mp-hud-avatar rival ' + getAvatarRankBorderClass(rTier);
+      }
       if(el.mpRivalHudTier) el.mpRivalHudTier.textContent = rTier;
       if(el.mpRivalHudScore) el.mpRivalHudScore.textContent = rival.score || 0;
 

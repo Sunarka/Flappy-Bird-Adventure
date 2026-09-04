@@ -1584,4 +1584,51 @@ button.close:active,
   transform: translateY(-1px) !important;
 }
 
+/* =========================================================
+   UNIVERSAL DYNAMIC AVATAR RANK BORDERS (LEADERBOARD, FRIENDS, CHAT, MP)
+   ========================================================= */
+.rank-border-bronze {
+  border: 2px solid #ea580c !important;
+  box-shadow: 0 0 6px rgba(234, 88, 12, 0.45) !important;
+}
+
+.rank-border-silver {
+  border: 2px solid #cbd5e1 !important;
+  box-shadow: 0 0 8px rgba(203, 213, 225, 0.55) !important;
+}
+
+.rank-border-gold {
+  border: 2px solid #facc15 !important;
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.65) !important;
+}
+
+.rank-border-platinum {
+  border: 2px solid #2dd4bf !important;
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.7) !important;
+}
+
+.rank-border-diamond {
+  border: 2px solid #38bdf8 !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.8), inset 0 0 4px rgba(56, 189, 248, 0.4) !important;
+  animation: diamondBorderGlow 2.5s infinite alternate !important;
+}
+
+.rank-border-master {
+  border: 2px solid #c084fc !important;
+  box-shadow: 0 0 14px rgba(192, 132, 252, 0.85), inset 0 0 6px rgba(236, 72, 153, 0.5) !important;
+  animation: masterBorderPulse 2s infinite alternate !important;
+}
+
+.rank-border-grandmaster {
+  border: 2px solid #f43f5e !important;
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.95), 0 0 8px #facc15, inset 0 0 6px rgba(250, 204, 21, 0.6) !important;
+  animation: grandmasterBorderPulse 2s infinite alternate !important;
+}
+
+@keyframes grandmasterBorderPulse {
+  0% { border-color: #f43f5e; box-shadow: 0 0 12px rgba(244, 63, 94, 0.8), 0 0 6px #facc15; }
+  50% { border-color: #facc15; box-shadow: 0 0 18px rgba(250, 204, 21, 0.95), 0 0 8px #f43f5e; }
+  100% { border-color: #ec4899; box-shadow: 0 0 15px rgba(236, 72, 153, 0.9), 0 0 8px #fbbf24; }
+}
+
 

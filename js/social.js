@@ -754,8 +754,10 @@
                   ? window.getCuteAvatarSvg(msg.senderAvatar || 'chick_yellow', 24)
                   : '<svg viewBox="0 0 24 24" width="24" height="24" fill="#38bdf8"><circle cx="12" cy="12" r="10"/></svg>';
 
+                const borderClass = typeof window.getAvatarRankBorderClass === 'function' ? window.getAvatarRankBorderClass(msg.senderTier || 'bronze') : 'rank-border-bronze';
+
                 row.innerHTML = `
-                  <div class="mlbb-gm-avatar" title="Lihat Profil ${this.escapeHtml(safeSenderName)}">
+                  <div class="mlbb-gm-avatar ${borderClass}" title="Lihat Profil ${this.escapeHtml(safeSenderName)}">
                     ${avSvg}
                   </div>
                   <div class="mlbb-gm-content">
@@ -913,8 +915,10 @@
               const row = document.createElement('div');
               row.className = `mlbb-gm-row ${isMe ? 'is-me' : ''}`;
               const avSvg = typeof window.getCuteAvatarSvg === 'function' ? window.getCuteAvatarSvg(isMe ? (this.myProfile.avatar || 'chick_yellow') : (friend.avatar || 'chick_yellow'), 22) : '<svg viewBox="0 0 24 24" width="22" height="22" fill="#38bdf8"><circle cx="12" cy="12" r="10"/></svg>';
+              const senderRank = isMe ? (this.myProfile.rankedBest || 0) : (friend.tier || friend.score || 'bronze');
+              const borderClass = typeof window.getAvatarRankBorderClass === 'function' ? window.getAvatarRankBorderClass(senderRank) : 'rank-border-bronze';
               row.innerHTML = `
-                <div class="mlbb-gm-avatar">${avSvg}</div>
+                <div class="mlbb-gm-avatar ${borderClass}">${avSvg}</div>
                 <div class="mlbb-gm-content">
                   <div class="mlbb-gm-meta">
                     <span class="mlbb-gm-name">${this.escapeHtml(safeSenderName)}</span>
@@ -1387,7 +1391,12 @@
       };
 
       // Set initial data
-      document.getElementById('fpAvatarBox').innerHTML = getAv(friend.avatar || 'chick_yellow', 44);
+      const fpAv = document.getElementById('fpAvatarBox');
+      if(fpAv) {
+        fpAv.innerHTML = getAv(friend.avatar || 'chick_yellow', 44);
+        const borderClass = typeof window.getAvatarRankBorderClass === 'function' ? window.getAvatarRankBorderClass(friend.tier || friend.score) : 'rank-border-bronze';
+        fpAv.className = 'friend-profile-avatar-box ' + borderClass;
+      }
       let safeDisplayName = friend.name || 'Gamer';
       if (typeof window.sanitizePlayerName === 'function') safeDisplayName = window.sanitizePlayerName(safeDisplayName);
       document.getElementById('fpName').textContent = safeDisplayName;
@@ -1871,9 +1880,10 @@
         : 'chick_yellow';
       container.innerHTML = this.friends.slice(0, 2).map(friend => {
         const hasUnread = this.unreadFriendMessages && this.unreadFriendMessages[friend.friendKey];
+        const borderClass = typeof window.getAvatarRankBorderClass === 'function' ? window.getAvatarRankBorderClass(friend.tier || friend.score) : 'rank-border-bronze';
         return `
         <button class="mlbb-quick-friend-item" type="button" data-friend-key="${friend.friendKey}" title="Obrolan / Profil ${this.escapeHtml(friend.name || 'teman')}">
-          <span class="mlbb-qf-avatar">${avatar(friend.avatar)}</span>
+          <span class="mlbb-qf-avatar ${borderClass}">${avatar(friend.avatar)}</span>
           <span class="mlbb-qf-name">${this.escapeHtml(friend.name || 'Teman')}</span>
           ${hasUnread ? '<span class="friend-unread-dot" title="Pesan baru!"></span>' : '<span class="mlbb-qf-status" aria-label="Terhubung"></span>'}
         </button>`;
@@ -1919,10 +1929,11 @@
       let html = '';
       this.friends.forEach(f => {
         const svg = getAv(f.avatar, 38);
+        const borderClass = typeof window.getAvatarRankBorderClass === 'function' ? window.getAvatarRankBorderClass(f.tier || f.score) : 'rank-border-bronze';
         html += `
           <div class="social-player-card" data-key="${f.friendKey}">
             <div class="social-player-info btn-view-profile" data-key="${f.friendKey}" title="Klik untuk lihat profil lengkap">
-              <div class="social-player-avatar">
+              <div class="social-player-avatar ${borderClass}">
                 ${svg}
                 <div class="social-status-dot"></div>
               </div>
@@ -2032,10 +2043,11 @@
       let html = '';
       this.friendRequests.forEach(req => {
         const svg = getAv(req.fromAvatar, 38);
+        const borderClass = typeof window.getAvatarRankBorderClass === 'function' ? window.getAvatarRankBorderClass(req.fromTier || 'bronze') : 'rank-border-bronze';
         html += `
           <div class="social-player-card">
             <div class="social-player-info">
-              <div class="social-player-avatar">${svg}</div>
+              <div class="social-player-avatar ${borderClass}">${svg}</div>
               <div class="social-player-meta">
                 <div class="social-player-name">${this.escapeHtml(req.fromName)}</div>
                 <div class="social-player-tier">${req.fromTier || "BRONZE I"}</div>
