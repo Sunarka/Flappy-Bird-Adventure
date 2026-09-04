@@ -3603,42 +3603,21 @@
       name: 'ANYA FORGER',
       color: '#f472b6',
       bg: 'linear-gradient(135deg, #fce7f3 0%, #fb7185 100%)',
-      render: (size = 48) => `<svg viewBox="0 0 48 48" width="${size}" height="${size}" style="display:block">
-        <circle cx="24" cy="24" r="23" fill="#ffe4e6"/>
-        <!-- Soft Fluffy Pink Hair -->
-        <circle cx="24" cy="26" r="16.5" fill="#f472b6"/>
-        <!-- Black-Gold Conical Hair Ornaments -->
-        <polygon points="10,13 6,5 15,10" fill="#0f172a"/>
-        <polygon points="9,12 6,7 13,10" fill="#facc15"/>
-        <polygon points="38,13 42,5 33,10" fill="#0f172a"/>
-        <polygon points="39,12 42,7 35,10" fill="#facc15"/>
-        <!-- Cute Face -->
-        <circle cx="24" cy="28" r="14" fill="#fff1f2"/>
-        <!-- Giant Sparkling Emerald Anime Eyes -->
-        <circle cx="17" cy="25" r="4" fill="#059669"/>
-        <circle cx="17" cy="25" r="2.6" fill="#10b981"/>
-        <circle cx="18.3" cy="23.6" r="1.5" fill="#ffffff"/>
-        <circle cx="15.8" cy="26.3" r="0.8" fill="#ffffff"/>
-        <circle cx="31" cy="25" r="4" fill="#059669"/>
-        <circle cx="31" cy="25" r="2.6" fill="#10b981"/>
-        <circle cx="32.3" cy="23.6" r="1.5" fill="#ffffff"/>
-        <circle cx="29.8" cy="26.3" r="0.8" fill="#ffffff"/>
-        <!-- Waku Waku Blush -->
-        <ellipse cx="11" cy="29.5" rx="3.5" ry="1.8" fill="#fb7185" opacity="0.85"/>
-        <ellipse cx="37" cy="29.5" rx="3.5" ry="1.8" fill="#fb7185" opacity="0.85"/>
-        <!-- Smug 'Heh' Cute Smile -->
-        <path d="M 20.5 31.5 Q 24 35.5 27.5 31.5" fill="none" stroke="#e11d48" stroke-width="1.4" stroke-linecap="round"/>
-        <!-- Eden Academy Uniform Collar -->
-        <path d="M 12 43 L 18 36 L 24 39 L 30 36 L 36 43 Z" fill="#0f172a"/>
-        <path d="M 18 36 L 24 39 L 30 36" fill="none" stroke="#facc15" stroke-width="1.2"/>
-      </svg>`
+      render: (size = 48) => `<img src="assets/avatars/anya_forger.png" width="${size}" height="${size}" alt="Anya Forger" class="anime-avatar-img" style="display:block;width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;" />`
+    },
+    {
+      id: 'pak_vramroro',
+      name: 'PAK VRAMRORO',
+      color: '#38bdf8',
+      bg: 'linear-gradient(135deg, #72caed 0%, #1e40af 100%)',
+      render: (size = 48) => `<img src="assets/avatars/pak_vramroro.png" width="${size}" height="${size}" alt="Pak Vramroro" class="anime-avatar-img" style="display:block;width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;" />`
     }
   ];
 
-  // Daftar anime avatars yang punya file PNG nyata (dari ava.png)
+  // Daftar anime avatars yang punya file PNG nyata (dari ava.png & custom)
   const ANIME_AVATAR_PNG = new Set([
     'luffy_mugiwara', 'naruto_sage', 'tanjiro_slayer', 'nezuko_chan',
-    'gojo_satoru', 'goku_saiyan', 'levi_scout', 'anya_forger'
+    'gojo_satoru', 'goku_saiyan', 'levi_scout', 'anya_forger', 'pak_vramroro'
   ]);
 
   function getCuteAvatarSvg(avatarId, size = 48) {
@@ -4169,7 +4148,7 @@
     'owl_scholar', 'froggy_kero', 'astro_space', 'robo_mecha',
     'ghost_spook', 'king_royal', 'ninja_shadow', 'phoenix_blaze',
     'luffy_mugiwara', 'naruto_sage', 'tanjiro_slayer', 'nezuko_chan',
-    'gojo_satoru', 'goku_saiyan', 'levi_scout', 'anya_forger'
+    'gojo_satoru', 'goku_saiyan', 'levi_scout', 'anya_forger', 'pak_vramroro'
   ];
 
   function sanitizeLeaderboard(list) {
