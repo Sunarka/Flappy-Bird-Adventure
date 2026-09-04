@@ -12718,6 +12718,54 @@
     }
   }
 
+  function resetLocalUserState() {
+    progress.coins = 0;
+    progress.coinsUpdatedAt = Date.now();
+    progress.unlocked = ['classic'];
+    progress.petUnlocked = ['pip_peep'];
+    progress.auraUnlocked = ['default'];
+    progress.hatUnlocked = ['none'];
+    progress.outfitUnlocked = ['none'];
+    progress.pipeUnlocked = ['green'];
+    progress.backgroundUnlocked = ['sky'];
+    progress.musicUnlocked = ['happy'];
+    progress.boosterUnlocked = ['none'];
+    progress.selected = 'classic';
+    progress.selectedPet = 'pip_peep';
+    progress.selectedAura = 'default';
+    progress.selectedHat = 'none';
+    progress.selectedOutfit = 'none';
+    progress.selectedPipe = 'green';
+    progress.selectedBackground = 'sky';
+    progress.selectedMusic = 'happy';
+    progress.selectedBooster = 'none';
+    progress.mpWins = 0;
+    progress.rankedScore = 0;
+    progress.highScore = 0;
+
+    classicBest = 0;
+    rankedBest = 0;
+    best = 0;
+    storage.set('skyFlappyClassicBest', 0);
+    storage.set('skyFlappyRankedBest', 0);
+    storage.set('skyFlappyBest', 0);
+    storage.set('skyFlappyMpWins', 0);
+    storage.set('skyFlappyProgress', progress);
+
+    gpProfile.isLoggedIn = false;
+    gpProfile.isGoogle = false;
+    gpProfile.email = '';
+    gpProfile.googleUid = null;
+    gpProfile.primaryKey = null;
+    gpProfile.gamerTag = 'SkyPlayer';
+    gpProfile.avatar = 'chick_yellow';
+    gpProfile.nameChangesDone = 0;
+    gpProfile.rankedBest = 0;
+    gpProfile.classicBest = 0;
+    gpProfile.mpWins = 0;
+    storage.set('skyFlappyGPProfile', gpProfile);
+  }
+
   let isApplyingCloudSync = false;
 
   function applyCloudProfile(cloudProfile) {
@@ -12728,74 +12776,51 @@
       if(cloudProfile.avatar) gpProfile.avatar = cloudProfile.avatar;
       if(typeof cloudProfile.nameChangesDone === 'number') gpProfile.nameChangesDone = cloudProfile.nameChangesDone;
       
-      // 1. Sync Rank / Scores / MP Wins
-      if(typeof cloudProfile.rankedBest === 'number' && cloudProfile.rankedBest > rankedBest) {
-        rankedBest = cloudProfile.rankedBest;
-        storage.set('skyFlappyRankedBest', rankedBest);
-        progress.rankedScore = rankedBest;
-        gpProfile.rankedBest = rankedBest;
-      }
-      if(typeof cloudProfile.classicBest === 'number' && cloudProfile.classicBest > classicBest) {
-        classicBest = cloudProfile.classicBest;
-        storage.set('skyFlappyClassicBest', classicBest);
-        storage.set('skyFlappyBest', classicBest);
-        progress.highScore = classicBest;
-        gpProfile.classicBest = classicBest;
-      }
-      if(typeof cloudProfile.mpWins === 'number' && cloudProfile.mpWins > (progress.mpWins || 0)) {
-        progress.mpWins = cloudProfile.mpWins;
-        storage.set('skyFlappyMpWins', progress.mpWins);
-        gpProfile.mpWins = progress.mpWins;
-      }
+      // 1. Sync Rank / Scores / MP Wins (Eksklusif milik akun yang sedang login)
+      rankedBest = typeof cloudProfile.rankedBest === 'number' ? cloudProfile.rankedBest : 0;
+      storage.set('skyFlappyRankedBest', rankedBest);
+      progress.rankedScore = rankedBest;
+      gpProfile.rankedBest = rankedBest;
 
-      // 2. Sync Coins (Smart Timestamp Comparison: Tidak akan mengembalikan koin yang baru dihabiskan)
-      const cloudCoins = typeof cloudProfile.coins === 'number' ? cloudProfile.coins : null;
-      if (cloudCoins !== null) {
-        const cloudTime = typeof cloudProfile.coinsUpdatedAt === 'number' ? cloudProfile.coinsUpdatedAt : 0;
-        const localTime = typeof progress.coinsUpdatedAt === 'number' ? progress.coinsUpdatedAt : 0;
+      classicBest = typeof cloudProfile.classicBest === 'number' ? cloudProfile.classicBest : 0;
+      storage.set('skyFlappyClassicBest', classicBest);
+      storage.set('skyFlappyBest', classicBest);
+      progress.highScore = classicBest;
+      gpProfile.classicBest = classicBest;
+      best = classicBest;
 
-        if (cloudTime > 0 && localTime > 0) {
-          if (cloudTime >= localTime) {
-            progress.coins = cloudCoins;
-            progress.coinsUpdatedAt = cloudTime;
-          } else {
-            // Local lebih baru (misal baru saja gacha/belanja), simpan koin lokal ke cloud!
-            if(typeof saveCloudSave === 'function') saveCloudSave();
-          }
-        } else {
-          progress.coins = cloudCoins;
-          progress.coinsUpdatedAt = cloudTime || Date.now();
-        }
-      }
+      progress.mpWins = typeof cloudProfile.mpWins === 'number' ? cloudProfile.mpWins : 0;
+      storage.set('skyFlappyMpWins', progress.mpWins);
+      gpProfile.mpWins = progress.mpWins;
+
+      // 2. Sync Coins (Eksklusif milik akun ini)
+      progress.coins = typeof cloudProfile.coins === 'number' ? cloudProfile.coins : 0;
+      progress.coinsUpdatedAt = cloudProfile.coinsUpdatedAt || Date.now();
 
       // 3. Sync Loadout (Equipped bird, pet, aura, hat, outfit, pipe, background, music, booster)
-      if(cloudProfile.loadout) {
-        const l = cloudProfile.loadout;
-        if(l.bird && skins[l.bird]) progress.selected = l.bird;
-        if(l.pet && petsCatalog[l.pet]) progress.selectedPet = l.pet;
-        if(l.aura && auras[l.aura]) progress.selectedAura = l.aura;
-        if(l.hat && (hats[l.hat] || l.hat === 'none')) progress.selectedHat = l.hat;
-        if(l.outfit && (outfits[l.outfit] || l.outfit === 'none')) progress.selectedOutfit = l.outfit;
-        if(l.pipe && pipeSkins[l.pipe]) progress.selectedPipe = l.pipe;
-        if(l.background && backgrounds[l.background]) progress.selectedBackground = l.background;
-        if(l.music && tracks[l.music]) progress.selectedMusic = l.music;
-        if(l.booster && (boosters[l.booster] || l.booster === 'none')) progress.selectedBooster = l.booster;
-      }
+      const l = cloudProfile.loadout || {};
+      progress.selected = (l.bird && skins[l.bird]) ? l.bird : 'classic';
+      progress.selectedPet = (l.pet && petsCatalog[l.pet]) ? l.pet : 'pip_peep';
+      progress.selectedAura = (l.aura && auras[l.aura]) ? l.aura : 'default';
+      progress.selectedHat = (l.hat && (hats[l.hat] || l.hat === 'none')) ? l.hat : 'none';
+      progress.selectedOutfit = (l.outfit && (outfits[l.outfit] || l.outfit === 'none')) ? l.outfit : 'none';
+      progress.selectedPipe = (l.pipe && pipeSkins[l.pipe]) ? l.pipe : 'green';
+      progress.selectedBackground = (l.background && backgrounds[l.background]) ? l.background : 'sky';
+      progress.selectedMusic = (l.music && tracks[l.music]) ? l.music : 'happy';
+      progress.selectedBooster = (l.booster && (boosters[l.booster] || l.booster === 'none')) ? l.booster : 'none';
 
-      // 4. Merge Unlocked Inventories
-      if(cloudProfile.unlocked) {
-        const u = cloudProfile.unlocked;
-        const mergeArr = (currentArr, cloudArr) => Array.from(new Set([...(currentArr || []), ...(cloudArr || [])]));
-        if(Array.isArray(u.bird)) progress.unlocked = mergeArr(progress.unlocked, u.bird);
-        if(Array.isArray(u.pet)) progress.petUnlocked = mergeArr(progress.petUnlocked, u.pet);
-        if(Array.isArray(u.aura)) progress.auraUnlocked = mergeArr(progress.auraUnlocked, u.aura);
-        if(Array.isArray(u.hat)) progress.hatUnlocked = mergeArr(progress.hatUnlocked, u.hat);
-        if(Array.isArray(u.outfit)) progress.outfitUnlocked = mergeArr(progress.outfitUnlocked, u.outfit);
-        if(Array.isArray(u.pipe)) progress.pipeUnlocked = mergeArr(progress.pipeUnlocked, u.pipe);
-        if(Array.isArray(u.background)) progress.backgroundUnlocked = mergeArr(progress.backgroundUnlocked, u.background);
-        if(Array.isArray(u.music)) progress.musicUnlocked = mergeArr(progress.musicUnlocked, u.music);
-        if(Array.isArray(u.booster)) progress.boosterUnlocked = mergeArr(progress.boosterUnlocked, u.booster);
-      }
+      // 4. Exact Unlocked Inventories (Tanpa mencampur item dari akun sebelumnya)
+      const cleanArr = (arr, fallback) => Array.isArray(arr) && arr.length > 0 ? Array.from(new Set(arr)) : [fallback];
+      const u = cloudProfile.unlocked || {};
+      progress.unlocked = cleanArr(u.bird, 'classic');
+      progress.petUnlocked = cleanArr(u.pet, 'pip_peep');
+      progress.auraUnlocked = cleanArr(u.aura, 'default');
+      progress.hatUnlocked = cleanArr(u.hat, 'none');
+      progress.outfitUnlocked = cleanArr(u.outfit, 'none');
+      progress.pipeUnlocked = cleanArr(u.pipe, 'green');
+      progress.backgroundUnlocked = cleanArr(u.background, 'sky');
+      progress.musicUnlocked = cleanArr(u.music, 'happy');
+      progress.boosterUnlocked = cleanArr(u.booster, 'none');
 
       if(typeof applyPetSkin === 'function') applyPetSkin();
       persistProgress();
@@ -12838,31 +12863,43 @@
       const accountsMap = storage.get('skyFlappyAccountsMap', {});
       const savedAcc = accountsMap[primaryKey] || accountsMap[uid] || accountsMap[user.email];
       if(savedAcc && savedAcc.gamerTag) {
-        gpProfile.gamerTag = savedAcc.gamerTag;
-        if(savedAcc.avatar) gpProfile.avatar = savedAcc.avatar;
-        gpProfile.nameChangesDone = savedAcc.nameChangesDone || 0;
-      } else if(user.displayName) {
-        let tag = user.displayName.slice(0, 16);
-        if(typeof window.containsToxicOrSara === 'function' && window.containsToxicOrSara(tag)) {
-          tag = 'Player-' + Math.floor(100 + Math.random() * 900);
-        }
-        gpProfile.gamerTag = tag;
-      } else if(user.email) {
-        let tag = user.email.split('@')[0].slice(0, 16);
-        if(typeof window.containsToxicOrSara === 'function' && window.containsToxicOrSara(tag)) {
-          tag = 'Player-' + Math.floor(100 + Math.random() * 900);
-        }
-        gpProfile.gamerTag = tag;
-      }
+        applyCloudProfile(savedAcc);
+      } else {
+        // Akun baru: mulai dari inventori fresh/default (0 koin, 0 skin ekstra)
+        resetLocalUserState();
+        gpProfile.isLoggedIn = true;
+        gpProfile.isGoogle = true;
+        gpProfile.authProvider = providerName;
+        gpProfile.email = user.email || '';
+        gpProfile.googleUid = uid;
+        gpProfile.primaryKey = primaryKey;
+        gpProfile.id = primaryKey;
 
-      if(typeof window.containsToxicOrSara === 'function' && window.containsToxicOrSara(gpProfile.gamerTag)) {
-        gpProfile.gamerTag = 'Player-' + Math.floor(100 + Math.random() * 900);
-      }
+        if(user.displayName) {
+          let tag = user.displayName.slice(0, 16);
+          if(typeof window.containsToxicOrSara === 'function' && window.containsToxicOrSara(tag)) {
+            tag = 'Player-' + Math.floor(100 + Math.random() * 900);
+          }
+          gpProfile.gamerTag = tag;
+        } else if(user.email) {
+          let tag = user.email.split('@')[0].slice(0, 16);
+          if(typeof window.containsToxicOrSara === 'function' && window.containsToxicOrSara(tag)) {
+            tag = 'Player-' + Math.floor(100 + Math.random() * 900);
+          }
+          gpProfile.gamerTag = tag;
+        }
 
-      // Simpan data awal ke Firestore Cloud menggunakan Primary Key
-      await saveCloudSave();
-      saveGPProfile();
-      syncGPProfileUI();
+        if(typeof window.containsToxicOrSara === 'function' && window.containsToxicOrSara(gpProfile.gamerTag)) {
+          gpProfile.gamerTag = 'Player-' + Math.floor(100 + Math.random() * 900);
+        }
+
+        // Simpan data awal akun baru ke Firestore Cloud
+        await saveCloudSave();
+        saveGPProfile();
+        syncGPProfileUI();
+        if(typeof renderShop === 'function') renderShop();
+        updateCoins();
+      }
     }
 
     // 2. Real-time Live Listener: Update instan tanpa reload ketika Rank, Pet, atau Skin diubah di perangkat lain!
@@ -12956,32 +12993,34 @@
 
   bindClick(el.gpSignOutBtn, async () => {
     audio.click();
+    if(gpProfile.isLoggedIn && (gpProfile.googleUid || gpProfile.email)) {
+      const accKey = gpProfile.primaryKey || ('acc_' + gpProfile.googleUid) || gpProfile.email;
+      const accountsMap = storage.get('skyFlappyAccountsMap', {});
+      const accData = buildCloudPayload();
+      accountsMap[accKey] = accData;
+      if(gpProfile.googleUid) accountsMap[gpProfile.googleUid] = accData;
+      storage.set('skyFlappyAccountsMap', accountsMap);
+      if(typeof saveCloudSave === 'function') {
+        try { await saveCloudSave(); } catch(_) {}
+      }
+    }
     if(window.FirebaseLeaderboard && typeof window.FirebaseLeaderboard.signOut === 'function') {
       try { await window.FirebaseLeaderboard.signOut(); } catch(_) {}
     }
-    if(gpProfile.googleUid || gpProfile.email) {
-      const accKey = gpProfile.googleUid || gpProfile.email;
-      const accountsMap = storage.get('skyFlappyAccountsMap', {});
-      accountsMap[accKey] = {
-        gamerTag: gpProfile.gamerTag,
-        avatar: gpProfile.avatar,
-        nameChangesDone: gpProfile.nameChangesDone || 0,
-        rankedBest: rankedBest || 0,
-        email: gpProfile.email,
-        authProvider: gpProfile.authProvider || 'google'
-      };
-      storage.set('skyFlappyAccountsMap', accountsMap);
+    if(unsubscribeUserProfileListener) {
+      try { unsubscribeUserProfileListener(); } catch(_) {}
+      unsubscribeUserProfileListener = null;
     }
-    gpProfile.isLoggedIn = false;
-    gpProfile.isGoogle = false;
-    gpProfile.email = '';
-    gpProfile.googleUid = null;
-    gpProfile.primaryKey = null;
-    storage.set('skyFlappyGPProfile', gpProfile);
     if(window.socialService) {
       window.socialService.clearAccount();
     }
+    // Reset state lokal kembali ke Guest bersih
+    resetLocalUserState();
+    if(typeof applyPetSkin === 'function') applyPetSkin();
     syncGPProfileUI();
+    if(typeof updateRankUI === 'function') updateRankUI();
+    if(typeof renderShop === 'function') renderShop();
+    updateCoins();
   });
 
   bindClick(el.gpAuthActionBtn, async () => {
