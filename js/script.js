@@ -4221,6 +4221,9 @@
     'gojo_satoru', 'goku_saiyan', 'levi_scout', 'anya_forger', 'pak_vramroro'
   ];
 
+  const fmt = (v, d) => (v && v !== 'none') ? String(v).replace(/[-_]+/g, ' ').toUpperCase() : d;
+  window.fmt = fmt;
+
   function sanitizeLeaderboard(list) {
     if(!Array.isArray(list)) return [];
     const seenUsers = new Set();
@@ -4251,12 +4254,13 @@
         av = cuteAvatarKeys[uniqueList.length % cuteAvatarKeys.length];
       }
 
+      const rawScore = parseInt(p.score, 10) || 0;
       uniqueList.push({
         id: isUser ? (gpProfile.googleUid || gpProfile.id) : (p.id || name),
         uid: isUser ? (gpProfile.googleUid || gpProfile.id) : (p.uid || p.id || name),
         name: name,
-        score: score,
-        tier: getRankTier(score).name,
+        score: rawScore,
+        tier: getRankTier(rawScore).name,
         avatar: av || 'gojo_satoru',
         isUser: isUser,
         loadout: isUser ? {
@@ -4265,7 +4269,8 @@
           hat: progress.selectedHat || 'none',
           outfit: progress.selectedOutfit || 'none',
           pipe: progress.selectedPipe || 'green',
-          background: progress.selectedBackground || 'sky'
+          background: progress.selectedBackground || 'sky',
+          music: progress.selectedMusic || 'happy'
         } : (p.loadout || {})
       });
     }
@@ -4273,39 +4278,39 @@
     return uniqueList;
   }
 
-  // Default Leaderboard Data (Top 25 High-Scoring Dummy Champions from Supreme to Bronze)
+  // Default Leaderboard Data (Top High-Scoring Dummy Champions from Grandmaster to Bronze, with fufufafa as Supreme Rank #1)
   const defaultLeaderboard = [
-    { rank: 1, name: 'fufufafa', score: 1850, tier: 'SUPREME', avatar: 'pak_vramroro', loadout: { bird: 'gojo_bird', aura: 'super_saiyan', hat: 'crown', outfit: 'royal_robe', pipe: 'sawit', background: 'hidden_leaf', music: 'mendaki_semeru' } },
-    { rank: 2, name: 'SkyKing_God', score: 1480, tier: 'MASTER', avatar: 'gojo_satoru', loadout: { bird: 'phoenix', aura: 'galaxy', hat: 'crown', outfit: 'cape', pipe: 'cyber', background: 'sunset', music: 'cyberbeat' } },
-    { rank: 3, name: 'Shadow_Slayer', score: 1290, tier: 'MASTER', avatar: 'ninja_shadow', loadout: { bird: 'shadow', aura: 'neon', hat: 'shinobi_plate', outfit: 'akatsuki_cloak', pipe: 'neon', background: 'forest', music: 'gurenge' } },
-    { rank: 4, name: 'CyberValkyrie_Prime', score: 1120, tier: 'MASTER', avatar: 'robo_mecha', loadout: { bird: 'cyber', aura: 'fire', hat: 'tiara', outfit: 'goldchain', pipe: 'neon', background: 'space', music: 'arcade' } },
-    { rank: 5, name: 'Phoenix_Emperor', score: 960, tier: 'MASTER', avatar: 'phoenix_blaze', loadout: { bird: 'phoenix', aura: 'golden', hat: 'crown', outfit: 'cape', pipe: 'cyber', background: 'sunset', music: 'epic' } },
-    { rank: 6, name: 'Goku_UltraInstinct', score: 840, tier: 'MASTER', avatar: 'goku_saiyan', loadout: { bird: 'goku_ssj', aura: 'super_saiyan', hat: 'saiyan_hair', outfit: 'goku_gi', pipe: 'katana_torii', background: 'namek_green', music: 'blue_bird' } },
-    { rank: 7, name: 'Dragon_Sovereign', score: 720, tier: 'MASTER', avatar: 'dragon_pyro', loadout: { bird: 'dragon', aura: 'fire', hat: 'crown', outfit: 'redtie', pipe: 'lava', background: 'volcano', music: 'epic' } },
-    { rank: 8, name: 'GoldenFalcon_99', score: 610, tier: 'MASTER', avatar: 'king_royal', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset', music: 'happy' } },
-    { rank: 9, name: 'Shinobi_Hokage', score: 520, tier: 'MASTER', avatar: 'naruto_sage', loadout: { bird: 'naruto_bird', aura: 'neon', hat: 'hokage_hat', outfit: 'scout_cape', pipe: 'wood', background: 'hidden_leaf', music: 'blue_bird' } },
-    { rank: 10, name: 'Levi_Ackerman', score: 450, tier: 'MASTER', avatar: 'levi_scout', loadout: { bird: 'night', aura: 'galaxy', hat: 'ninja', outfit: 'scout_cape', pipe: 'green', background: 'forest', music: 'gurenge' } },
-    { rank: 11, name: 'Luffy_Gear5', score: 380, tier: 'MASTER', avatar: 'luffy_mugiwara', loadout: { bird: 'luffy_bird', aura: 'gear_fifth', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'candy', background: 'sky', music: 'we_are' } },
-    { rank: 12, name: 'SakuraWing', score: 310, tier: 'DIAMOND', avatar: 'pink_sakura', loadout: { bird: 'rose', aura: 'sakura', hat: 'flowercrown', outfit: 'princessdress', pipe: 'candy', background: 'wano_sakura', music: 'sparkle' } },
-    { rank: 13, name: 'FrostGuardian', score: 260, tier: 'DIAMOND', avatar: 'penguin_tux', loadout: { bird: 'classic', aura: 'frost', hat: 'beanie', outfit: 'fairy', pipe: 'crystal', background: 'space', music: 'chill' } },
-    { rank: 14, name: 'BlazeRaptor', score: 220, tier: 'DIAMOND', avatar: 'tanjiro_slayer', loadout: { bird: 'tanjiro_bird', aura: 'fire', hat: 'tanjiro_earrings', outfit: 'tanjiro_haori', pipe: 'katana_torii', background: 'wano_sakura', music: 'gurenge' } },
-    { rank: 15, name: 'StarGazer_X', score: 180, tier: 'PLATINUM', avatar: 'astro_space', loadout: { bird: 'cyber', aura: 'galaxy', hat: 'astronaut', outfit: 'cyber_armor', pipe: 'crystal', background: 'space', music: 'arcade' } },
-    { rank: 16, name: 'NeonNinja', score: 150, tier: 'PLATINUM', avatar: 'fox_kitsune', loadout: { bird: 'night', aura: 'neon', hat: 'cowboy', outfit: 'badge', pipe: 'green', background: 'forest', music: 'cyberbeat' } },
-    { rank: 17, name: 'EchoPhantom', score: 125, tier: 'PLATINUM', avatar: 'ghost_spook', loadout: { bird: 'gojo_bird', aura: 'domain_expansion', hat: 'gojo_blindfold', outfit: 'jujutsu_coat', pipe: 'sawit', background: 'sunset', music: 'sparkle' } },
-    { rank: 18, name: 'ThunderBird_7', score: 105, tier: 'PLATINUM', avatar: 'nezuko_chan', loadout: { bird: 'mint', aura: 'rainbow', hat: 'cap', outfit: 'redtie', pipe: 'bamboo_demon', background: 'sky', music: 'happy' } },
-    { rank: 19, name: 'AquaFin', score: 88, tier: 'GOLD', avatar: 'froggy_kero', loadout: { bird: 'mint', aura: 'bubble', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'jungle_vines', background: 'ocean', music: 'bounce' } },
-    { rank: 20, name: 'MysticOwl', score: 75, tier: 'GOLD', avatar: 'owl_scholar', loadout: { bird: 'night', aura: 'galaxy', hat: 'witch', outfit: 'cape', pipe: 'cyber', background: 'space', music: 'chill' } },
-    { rank: 21, name: 'CrimsonBeak', score: 62, tier: 'GOLD', avatar: 'cat_neko', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset', music: 'bounce' } },
-    { rank: 22, name: 'CloudChaser', score: 48, tier: 'SILVER', avatar: 'bunny_fluff', loadout: { bird: 'rose', aura: 'hearts', hat: 'chopper_hat', outfit: 'hoodie', pipe: 'candy', background: 'sky', music: 'happy' } },
-    { rank: 23, name: 'SolarFlare_88', score: 38, tier: 'SILVER', avatar: 'panda_bamboo', loadout: { bird: 'classic', aura: 'default', hat: 'none', outfit: 'scarf', pipe: 'wood', background: 'sky', music: 'chill' } },
-    { rank: 24, name: 'VortexWing', score: 28, tier: 'SILVER', avatar: 'anya_forger', loadout: { bird: 'cyber', aura: 'matrix', hat: 'cap', outfit: 'badge', pipe: 'neon', background: 'synthwave', music: 'arcade' } },
-    { rank: 25, name: 'VelvetCrow', score: 19, tier: 'BRONZE', avatar: 'chick_yellow', loadout: { bird: 'night', aura: 'default', hat: 'none', outfit: 'none', pipe: 'green', background: 'forest', music: 'happy' } }
+    { rank: 1, name: 'fufufafa', score: 1850, tier: 'GRANDMASTER', avatar: 'pak_vramroro', loadout: { bird: 'gojo_bird', aura: 'super_saiyan', hat: 'crown', outfit: 'royal_robe', pipe: 'sawit', background: 'hidden_leaf', music: 'mendaki_semeru' } },
+    { rank: 2, name: 'SkyKing_God', score: 1480, tier: 'GRANDMASTER', avatar: 'gojo_satoru', loadout: { bird: 'phoenix', aura: 'galaxy', hat: 'crown', outfit: 'cape', pipe: 'cyber', background: 'sunset', music: 'cyberbeat' } },
+    { rank: 3, name: 'Shadow_Slayer', score: 1290, tier: 'GRANDMASTER', avatar: 'ninja_shadow', loadout: { bird: 'shadow', aura: 'neon', hat: 'shinobi_plate', outfit: 'akatsuki_cloak', pipe: 'neon', background: 'forest', music: 'gurenge' } },
+    { rank: 4, name: 'CyberValkyrie_Prime', score: 1120, tier: 'GRANDMASTER', avatar: 'robo_mecha', loadout: { bird: 'cyber', aura: 'fire', hat: 'tiara', outfit: 'goldchain', pipe: 'neon', background: 'space', music: 'arcade' } },
+    { rank: 5, name: 'Phoenix_Emperor', score: 960, tier: 'GRANDMASTER', avatar: 'phoenix_blaze', loadout: { bird: 'phoenix', aura: 'golden', hat: 'crown', outfit: 'cape', pipe: 'cyber', background: 'sunset', music: 'epic' } },
+    { rank: 6, name: 'Goku_UltraInstinct', score: 840, tier: 'GRANDMASTER', avatar: 'goku_saiyan', loadout: { bird: 'goku_ssj', aura: 'super_saiyan', hat: 'saiyan_hair', outfit: 'goku_gi', pipe: 'katana_torii', background: 'namek_green', music: 'blue_bird' } },
+    { rank: 7, name: 'Dragon_Sovereign', score: 720, tier: 'GRANDMASTER', avatar: 'dragon_pyro', loadout: { bird: 'dragon', aura: 'fire', hat: 'crown', outfit: 'redtie', pipe: 'lava', background: 'volcano', music: 'epic' } },
+    { rank: 8, name: 'GoldenFalcon_99', score: 610, tier: 'GRANDMASTER', avatar: 'king_royal', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset', music: 'happy' } },
+    { rank: 9, name: 'Shinobi_Hokage', score: 520, tier: 'GRANDMASTER', avatar: 'naruto_sage', loadout: { bird: 'naruto_bird', aura: 'neon', hat: 'hokage_hat', outfit: 'scout_cape', pipe: 'wood', background: 'hidden_leaf', music: 'blue_bird' } },
+    { rank: 10, name: 'Levi_Ackerman', score: 450, tier: 'GRANDMASTER', avatar: 'levi_scout', loadout: { bird: 'night', aura: 'galaxy', hat: 'ninja', outfit: 'scout_cape', pipe: 'green', background: 'forest', music: 'gurenge' } },
+    { rank: 11, name: 'Luffy_Gear5', score: 380, tier: 'GRANDMASTER', avatar: 'luffy_mugiwara', loadout: { bird: 'luffy_bird', aura: 'gear_fifth', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'candy', background: 'sky', music: 'we_are' } },
+    { rank: 12, name: 'SakuraWing', score: 310, tier: 'GRANDMASTER', avatar: 'pink_sakura', loadout: { bird: 'rose', aura: 'sakura', hat: 'flowercrown', outfit: 'princessdress', pipe: 'candy', background: 'wano_sakura', music: 'sparkle' } },
+    { rank: 13, name: 'FrostGuardian', score: 280, tier: 'MASTER', avatar: 'penguin_tux', loadout: { bird: 'classic', aura: 'frost', hat: 'beanie', outfit: 'fairy', pipe: 'crystal', background: 'space', music: 'chill' } },
+    { rank: 14, name: 'BlazeRaptor', score: 260, tier: 'MASTER', avatar: 'tanjiro_slayer', loadout: { bird: 'tanjiro_bird', aura: 'fire', hat: 'tanjiro_earrings', outfit: 'tanjiro_haori', pipe: 'katana_torii', background: 'wano_sakura', music: 'gurenge' } },
+    { rank: 15, name: 'StarGazer_X', score: 240, tier: 'MASTER', avatar: 'astro_space', loadout: { bird: 'cyber', aura: 'galaxy', hat: 'astronaut', outfit: 'cyber_armor', pipe: 'crystal', background: 'space', music: 'arcade' } },
+    { rank: 16, name: 'NeonNinja', score: 210, tier: 'DIAMOND', avatar: 'fox_kitsune', loadout: { bird: 'night', aura: 'neon', hat: 'cowboy', outfit: 'badge', pipe: 'green', background: 'forest', music: 'cyberbeat' } },
+    { rank: 17, name: 'EchoPhantom', score: 190, tier: 'DIAMOND', avatar: 'ghost_spook', loadout: { bird: 'gojo_bird', aura: 'domain_expansion', hat: 'gojo_blindfold', outfit: 'jujutsu_coat', pipe: 'sawit', background: 'sunset', music: 'sparkle' } },
+    { rank: 18, name: 'ThunderBird_7', score: 170, tier: 'DIAMOND', avatar: 'nezuko_chan', loadout: { bird: 'mint', aura: 'rainbow', hat: 'cap', outfit: 'redtie', pipe: 'bamboo_demon', background: 'sky', music: 'happy' } },
+    { rank: 19, name: 'AquaFin', score: 145, tier: 'PLATINUM', avatar: 'froggy_kero', loadout: { bird: 'mint', aura: 'bubble', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'jungle_vines', background: 'ocean', music: 'bounce' } },
+    { rank: 20, name: 'MysticOwl', score: 125, tier: 'PLATINUM', avatar: 'owl_scholar', loadout: { bird: 'night', aura: 'galaxy', hat: 'witch', outfit: 'cape', pipe: 'cyber', background: 'space', music: 'chill' } },
+    { rank: 21, name: 'CrimsonBeak', score: 110, tier: 'PLATINUM', avatar: 'cat_neko', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset', music: 'bounce' } },
+    { rank: 22, name: 'CloudChaser', score: 85, tier: 'GOLD', avatar: 'bunny_fluff', loadout: { bird: 'rose', aura: 'hearts', hat: 'chopper_hat', outfit: 'hoodie', pipe: 'candy', background: 'sky', music: 'happy' } },
+    { rank: 23, name: 'SolarFlare_88', score: 70, tier: 'GOLD', avatar: 'panda_bamboo', loadout: { bird: 'classic', aura: 'default', hat: 'none', outfit: 'scarf', pipe: 'wood', background: 'sky', music: 'chill' } },
+    { rank: 24, name: 'VortexWing', score: 45, tier: 'SILVER', avatar: 'anya_forger', loadout: { bird: 'cyber', aura: 'matrix', hat: 'cap', outfit: 'badge', pipe: 'neon', background: 'synthwave', music: 'arcade' } },
+    { rank: 25, name: 'VelvetCrow', score: 20, tier: 'BRONZE', avatar: 'chick_yellow', loadout: { bird: 'night', aura: 'default', hat: 'none', outfit: 'none', pipe: 'green', background: 'forest', music: 'happy' } }
   ];
 
-  let leaderboardData = sanitizeLeaderboard(storage.get('skyFlappyLeaderboard_v8', defaultLeaderboard));
-  if(!leaderboardData || leaderboardData.length < 25) {
+  let leaderboardData = sanitizeLeaderboard(storage.get('skyFlappyLeaderboard_v12', defaultLeaderboard));
+  if(!leaderboardData || leaderboardData.length < 25 || leaderboardData.some(p => p.score === 0)) {
     leaderboardData = sanitizeLeaderboard([...defaultLeaderboard]);
-    storage.set('skyFlappyLeaderboard_v8', leaderboardData);
+    storage.set('skyFlappyLeaderboard_v12', leaderboardData);
   }
 
   let selectedSpotlightPlayer = leaderboardData[0];
@@ -4357,7 +4362,7 @@
     leaderboardData.sort((a, b) => b.score - a.score);
     leaderboardData.forEach((p, i) => p.rank = i + 1);
 
-    storage.set('skyFlappyLeaderboard_v6', leaderboardData);
+    storage.set('skyFlappyLeaderboard_v12', leaderboardData);
     storage.set('skyFlappyLeaderboard', leaderboardData);
 
     // Kirim Skor Tertinggi ke Firebase Firestore Global Leaderboard dengan Primary Key
@@ -4434,9 +4439,9 @@
           });
         }
 
-        // 3. Tambahkan default bot jika daftar masih sedikit (< 12 pemain)
+        // 3. Tambahkan default bot agar selalu lengkap minimal 25 pemain dengan fufufafa di puncak
         defaultLeaderboard.forEach(d => {
-          if(!seenKeys.has(d.name) && merged.length < 12) {
+          if(!seenKeys.has(d.name)) {
             seenKeys.add(d.name);
             merged.push(d);
           }
@@ -4446,7 +4451,7 @@
         leaderboardData.sort((a, b) => b.score - a.score);
         leaderboardData.forEach((p, i) => p.rank = i + 1);
 
-        storage.set('skyFlappyLeaderboard_v6', leaderboardData);
+        storage.set('skyFlappyLeaderboard_v12', leaderboardData);
         storage.set('skyFlappyLeaderboard', leaderboardData);
 
         if(el.rankedModal && !el.rankedModal.classList.contains('hidden')) {
