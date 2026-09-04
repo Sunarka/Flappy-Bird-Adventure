@@ -437,180 +437,177 @@
   }
 
   // 1. Skin Burung (Nama Lengkap) - ALL FREE FOR TESTING
-  // 1. Skin Burung (HD Shading & Rarity Tiers)
-  const skins = (window.GameCatalogs && window.GameCatalogs.skins) || {
-    classic:{ name:'CLASSIC BIRD', desc:'Burung kuning ceria (Chiptune SFX)', cost:0, currency:'coin', rarity:'common', body:'#ffd74c', wing:'#f4a62b', beak:'#f79831', trail:'#fff5b2', glow:'rgba(255, 215, 76, 0.4)' },
-    rose:{ name:'ROSE PINK', desc:'Merah muda manis berbulu sutra (Harp Chime SFX)', cost:150, currency:'coin', rarity:'rare', body:'#ff8dab', wing:'#e85d87', beak:'#ffb15b', trail:'#ffc1d3', glow:'rgba(255, 141, 171, 0.45)' },
-    mint:{ name:'MINT GREEN', desc:'Hijau tosca segar berembun (Bouncy SFX)', cost:200, currency:'coin', rarity:'rare', body:'#75e6c8', wing:'#35bd9d', beak:'#ffa94d', trail:'#b7fff0', glow:'rgba(117, 230, 200, 0.45)' },
-    night:{ name:'NIGHT SKY', desc:'Biru malam mistis berkilau bintang (Dark Bell SFX)', cost:300, currency:'coin', rarity:'rare', body:'#8496ff', wing:'#576dcb', beak:'#e6b4ff', trail:'#d4c7ff', glow:'rgba(132, 150, 255, 0.45)' },
-    cyber:{ name:'CYBER NEON', desc:'Ungu neon glitch holo-matrix (Laser Crash SFX)', cost:500, currency:'coin', rarity:'epic', body:'#b5179e', wing:'#7209b7', beak:'#4cc9f0', trail:'#f72585', glow:'rgba(181, 23, 158, 0.55)' },
-    phoenix:{ name:'PHOENIX FIRE', desc:'Api abadi membara berkobar-kobar (Flame Fanfare SFX)', cost:800, currency:'coin', rarity:'legendary', body:'#ff5400', wing:'#ff0054', beak:'#ffd60a', trail:'#ffbd00', glow:'rgba(255, 84, 0, 0.6)' },
-    mecha:{ name:'MECHA CYBORG', desc:'Robot titanium & laser plasma core (Laser SFX)', cost:650, currency:'coin', rarity:'epic', body:'#cbd5e1', wing:'#64748b', beak:'#38bdf8', trail:'#38bdf8', glow:'rgba(56, 189, 248, 0.5)' },
-    dragon:{ name:'FLAME DRAGON', desc:'Naga merah purba berapi tanduk emas (Fire SFX)', cost:950, currency:'coin', rarity:'legendary', body:'#dc2626', wing:'#991b1b', beak:'#fbbf24', trail:'#ff5400', glow:'rgba(220, 38, 38, 0.6)' },
-    angel:{ name:'HOLY ANGEL', desc:'Burung suci seraph sayap emas (Chime SFX)', cost:1200, currency:'coin', rarity:'legendary', body:'#f8fafc', wing:'#fbbf24', beak:'#f59e0b', trail:'#fef08a', glow:'rgba(254, 240, 138, 0.65)' },
-    shadow:{ name:'SHADOW PHANTOM', desc:'Bayangan ungu nebula kosmik mistis (Dark SFX)', cost:1000, currency:'coin', rarity:'legendary', body:'#312e81', wing:'#4c1d95', beak:'#c084fc', trail:'#9d4edd', glow:'rgba(157, 78, 221, 0.6)' },
-    // Anime Mythic Series - Beli Pakai Diamond
-    goku_ssj:{ name:'SUPER SAIYAN BIRD', desc:'Burung Saiyan rambut emas & aura petir Ki (Ki Blast SFX)', cost:50, currency:'diamond', rarity:'mythic', body:'#facc15', wing:'#eab308', beak:'#ea580c', trail:'#fef08a', glow:'rgba(250, 204, 21, 0.75)' },
-    tanjiro_bird:{ name:'DEMON SLAYER BIRD', desc:'Burung pemburu iblis berhaori kotak hijau (Sword SFX)', cost:45, currency:'diamond', rarity:'mythic', body:'#15803d', wing:'#1e293b', beak:'#dc2626', trail:'#22c55e', glow:'rgba(34, 197, 94, 0.7)' },
-    naruto_bird:{ name:'SAGE SHINOBI BIRD', desc:'Burung ninja oranye jubah Sage Mode (Chakra SFX)', cost:45, currency:'diamond', rarity:'mythic', body:'#ea580c', wing:'#1e293b', beak:'#facc15', trail:'#fdba74', glow:'rgba(234, 88, 12, 0.7)' },
-    luffy_bird:{ name:'STRAW HAT PIRATE', desc:'Burung kapten bajak laut topi jerami (Gear Bounce SFX)', cost:45, currency:'diamond', rarity:'mythic', body:'#ef4444', wing:'#1d4ed8', beak:'#fbbf24', trail:'#fca5a5', glow:'rgba(239, 68, 68, 0.7)' },
-    gojo_bird:{ name:'HONORED ONE (GOJO)', desc:'Burung penyihir rambut perak & mata Six Eyes (Void SFX)', cost:50, currency:'diamond', rarity:'mythic', body:'#f8fafc', wing:'#1e1b4b', beak:'#38bdf8', trail:'#60a5fa', glow:'rgba(56, 189, 248, 0.8)' }
+  const skins = {
+    classic:{ name:'CLASSIC BIRD', desc:'Burung kuning ceria (Chiptune SFX)', cost:0, body:'#ffd74c', wing:'#f4a62b', beak:'#f79831', trail:'#fff5b2' },
+    rose:{ name:'ROSE PINK', desc:'Merah muda manis (Harp Chime SFX)', cost:0, body:'#ff8dab', wing:'#e85d87', beak:'#ffb15b', trail:'#ffc1d3' },
+    mint:{ name:'MINT GREEN', desc:'Hijau tosca segar (Bouncy SFX)', cost:0, body:'#75e6c8', wing:'#35bd9d', beak:'#ffa94d', trail:'#b7fff0' },
+    night:{ name:'NIGHT SKY', desc:'Biru malam mistis (Dark Bell SFX)', cost:0, body:'#8496ff', wing:'#576dcb', beak:'#e6b4ff', trail:'#d4c7ff' },
+    cyber:{ name:'CYBER NEON', desc:'Ungu neon glitch (Laser Crash SFX)', cost:0, body:'#b5179e', wing:'#7209b7', beak:'#4cc9f0', trail:'#f72585' },
+    phoenix:{ name:'PHOENIX FIRE', desc:'Api abadi membara (Flame Fanfare SFX)', cost:0, body:'#ff5400', wing:'#ff0054', beak:'#ffd60a', trail:'#ffbd00' },
+    mecha:{ name:'MECHA CYBORG', desc:'Robot titanium & laser core (Laser SFX)', cost:0, body:'#cbd5e1', wing:'#64748b', beak:'#38bdf8', trail:'#38bdf8' },
+    dragon:{ name:'FLAME DRAGON', desc:'Naga merah berapi tanduk emas (Fire SFX)', cost:0, body:'#dc2626', wing:'#991b1b', beak:'#fbbf24', trail:'#ff5400' },
+    angel:{ name:'HOLY ANGEL', desc:'Burung suci sayap emas (Chime SFX)', cost:0, body:'#f8fafc', wing:'#fbbf24', beak:'#f59e0b', trail:'#fef08a' },
+    shadow:{ name:'SHADOW PHANTOM', desc:'Bayangan ungu kosmik mistis (Dark SFX)', cost:0, body:'#312e81', wing:'#4c1d95', beak:'#c084fc', trail:'#9d4edd' },
+    // Anime Special Bird Skins
+    goku_ssj:{ name:'SUPER SAIYAN BIRD', desc:'Burung Saiyan rambut emas, Ki Blast & Jingle Suara Kakarotto!', cost:0, body:'#facc15', wing:'#eab308', beak:'#ea580c', trail:'#fef08a' },
+    tanjiro_bird:{ name:'DEMON SLAYER BIRD', desc:'Burung haori kotak hijau, Hinokami Kagura & Jingle Shamisen!', cost:0, body:'#15803d', wing:'#1e293b', beak:'#dc2626', trail:'#22c55e' },
+    naruto_bird:{ name:'SAGE SHINOBI BIRD', desc:'Burung ninja Sage Mode, Konoha Flute & Suara Dattebayo!', cost:0, body:'#ea580c', wing:'#1e293b', beak:'#facc15', trail:'#fdba74' },
+    luffy_bird:{ name:'STRAW HAT PIRATE', desc:'Burung kapten bajak laut, Gomu Spring & Suara Kaizoku Ou!', cost:0, body:'#ef4444', wing:'#1d4ed8', beak:'#fbbf24', trail:'#fca5a5' },
+    gojo_bird:{ name:'HONORED ONE (GOJO)', desc:'Burung Six Eyes, Unlimited Void Bells & Suara Ikonik "Yowai Mo"!', cost:0, body:'#f8fafc', wing:'#1e1b4b', beak:'#38bdf8', trail:'#60a5fa' }
   };
 
-  // 2. Tail Aura / Jejak Ekor (Particle & Glow VFX)
-  const auras = (window.GameCatalogs && window.GameCatalogs.auras) || {
-    default:{ name:'FEATHER TRAIL', desc:'Jejak bulu lembut melayang gemulai', cost:0, currency:'coin', rarity:'common', body:'#ffd74c', wing:'#fff5b2', glow:'rgba(255, 215, 76, 0.4)' },
-    fire:{ name:'FIRE BLAZE', desc:'Lidah api berkobar & percikan bara magma', cost:200, currency:'coin', rarity:'rare', body:'#ff5400', wing:'#ffd000', glow:'rgba(255, 84, 0, 0.6)' },
-    rainbow:{ name:'RAINBOW GLOW', desc:'Pita pelangi kristal & partikel spektrum bersinar', cost:250, currency:'coin', rarity:'rare', body:'#ff70a6', wing:'#70d6ff', glow:'rgba(255, 112, 166, 0.5)' },
-    galaxy:{ name:'COSMIC GALAXY', desc:'Galaksi spiral ungu, cincin planet & debu komet', cost:400, currency:'coin', rarity:'epic', body:'#9d4edd', wing:'#48cae4', glow:'rgba(157, 78, 221, 0.6)' },
-    neon:{ name:'ELECTRIC LIGHTNING', desc:'Sambaran petir plasma zig-zag bertegangan tinggi', cost:350, currency:'coin', rarity:'epic', body:'#00f5d4', wing:'#fee440', glow:'rgba(0, 245, 212, 0.6)' },
-    bubble:{ name:'BUBBLE TRAIL', desc:'Gelembung sabun transparan pecah berpelangi', cost:180, currency:'coin', rarity:'rare', body:'#90e0ef', wing:'#00b4d8', glow:'rgba(144, 224, 239, 0.5)' },
-    hearts:{ name:'SWEET HEARTS', desc:'Denyut cinta merah muda & serbuk kilauan manis', cost:220, currency:'coin', rarity:'rare', body:'#ff4d6d', wing:'#ff85a1', glow:'rgba(255, 77, 109, 0.55)' },
-    golden:{ name:'GOLDEN DUST', desc:'Koin emas berputar & kilau permata raja', cost:600, currency:'coin', rarity:'legendary', body:'#ffd700', wing:'#ffb703', glow:'rgba(255, 215, 0, 0.65)' },
-    frost:{ name:'BLIZZARD FROST', desc:'Kristal es salju berkilauan berhamburan', cost:350, currency:'coin', rarity:'epic', body:'#67e8f9', wing:'#06b6d4', glow:'rgba(103, 232, 249, 0.6)' },
-    plasma:{ name:'PLASMA SPARK', desc:'Percikan plasma listrik berenergi fusi', cost:450, currency:'coin', rarity:'epic', body:'#a855f7', wing:'#38bdf8', glow:'rgba(168, 85, 247, 0.6)' },
-    sakura:{ name:'SAKURA PETALS', desc:'Kelopak bunga sakura pink berguguran lembut', cost:300, currency:'coin', rarity:'epic', body:'#f472b6', wing:'#fda4af', glow:'rgba(244, 114, 182, 0.6)' },
-    matrix:{ name:'DIGITAL MATRIX', desc:'Jejak kode biner pixel hijau neon holografik', cost:550, currency:'coin', rarity:'legendary', body:'#22c55e', wing:'#4ade80', glow:'rgba(34, 197, 94, 0.65)' },
-    // Anime Special Auras - Diamond
-    super_saiyan:{ name:'SUPER SAIYAN KI AURA', desc:'Aura api emas berkobar & percikan kilat Ki petir biru', cost:35, currency:'diamond', rarity:'mythic', body:'#facc15', wing:'#38bdf8', glow:'rgba(250, 204, 21, 0.8)' },
-    domain_expansion:{ name:'DOMAIN INFINITY VOID', desc:'Energi kutukan ungu kosmik & orb nebula tanpa batas', cost:35, currency:'diamond', rarity:'mythic', body:'#8b5cf6', wing:'#38bdf8', glow:'rgba(139, 92, 246, 0.8)' },
-    nine_tails_chakra:{ name:'KURAMA CHAKRA FIRE', desc:'Kobaran lidah api chakra merah rubah ekor sembilan', cost:30, currency:'diamond', rarity:'mythic', body:'#ea580c', wing:'#dc2626', glow:'rgba(234, 88, 12, 0.8)' },
-    gear_fifth:{ name:'SUN GOD NIKA (GEAR 5)', desc:'Awan uap putih dewa matahari & drum kebebasan', cost:35, currency:'diamond', rarity:'mythic', body:'#ffffff', wing:'#fef08a', glow:'rgba(255, 255, 255, 0.85)' },
-    black_getsuga:{ name:'BANKAI GETSUGA TENSHOU', desc:'Energi spiritual hitam pekat bertepi merah membara', cost:30, currency:'diamond', rarity:'mythic', body:'#0f172a', wing:'#ef4444', glow:'rgba(239, 68, 68, 0.8)' }
+  // 2. Tail Aura / Jejak Ekor (Nama Lengkap) - ALL FREE FOR TESTING
+  const auras = {
+    default:{ name:'FEATHER TRAIL', desc:'Jejak bulu lembut melayang', cost:0, body:'#ffd74c', wing:'#fff5b2' },
+    fire:{ name:'FIRE BLAZE', desc:'Lidah api berkobar & percikan bara', cost:0, body:'#ff5400', wing:'#ffd000' },
+    rainbow:{ name:'RAINBOW GLOW', desc:'Pita pelangi & partikel bersinar', cost:0, body:'#ff70a6', wing:'#70d6ff' },
+    galaxy:{ name:'COSMIC GALAXY', desc:'Galaksi spiral, cincin planet & komet', cost:0, body:'#9d4edd', wing:'#48cae4' },
+    neon:{ name:'ELECTRIC LIGHTNING', desc:'Sambaran petir zig-zag & plasma', cost:0, body:'#00f5d4', wing:'#fee440' },
+    bubble:{ name:'BUBBLE TRAIL', desc:'Gelembung sabun transparan pecah', cost:0, body:'#90e0ef', wing:'#00b4d8' },
+    hearts:{ name:'SWEET HEARTS', desc:'Denyut cinta & serbuk manis', cost:0, body:'#ff4d6d', wing:'#ff85a1' },
+    golden:{ name:'GOLDEN DUST', desc:'Koin emas berputar & kilau permata', cost:0, body:'#ffd700', wing:'#ffb703' },
+    frost:{ name:'BLIZZARD FROST', desc:'Kristal es salju berkilauan', cost:0, body:'#67e8f9', wing:'#06b6d4' },
+    plasma:{ name:'PLASMA SPARK', desc:'Percikan plasma listrik berenergi', cost:0, body:'#a855f7', wing:'#38bdf8' },
+    sakura:{ name:'SAKURA PETALS', desc:'Kelopak sakura pink berguguran lembut', cost:0, body:'#f472b6', wing:'#fda4af' },
+    matrix:{ name:'DIGITAL MATRIX', desc:'Jejak kode biner pixel hijau neon', cost:0, body:'#22c55e', wing:'#4ade80' },
+    // Anime Special Auras
+    super_saiyan:{ name:'SUPER SAIYAN KI AURA', desc:'Aura api emas berkobar & percikan kilat Ki petir biru', cost:0, body:'#facc15', wing:'#38bdf8' },
+    domain_expansion:{ name:'DOMAIN INFINITY VOID', desc:'Energi kutukan ungu kosmik & orb nebula tanpa batas', cost:0, body:'#8b5cf6', wing:'#38bdf8' },
+    nine_tails_chakra:{ name:'KURAMA CHAKRA FIRE', desc:'Kobaran lidah api chakra merah rubah ekor sembilan', cost:0, body:'#ea580c', wing:'#dc2626' },
+    gear_fifth:{ name:'SUN GOD NIKA (GEAR 5)', desc:'Awan uap putih dewa matahari & drum kebebasan', cost:0, body:'#ffffff', wing:'#fef08a' },
+    black_getsuga:{ name:'BANKAI GETSUGA TENSHOU', desc:'Energi spiritual hitam pekat bertepi merah membara', cost:0, body:'#0f172a', wing:'#ef4444' }
   };
 
-  // 3. Topi / Hats (Stylized Headwear)
-  const hats = (window.GameCatalogs && window.GameCatalogs.hats) || {
-    none:{ name:'TANPA TOPI', desc:'Tampilan natural tanpa topi', cost:0, currency:'coin', rarity:'common' },
-    cap:{ name:'BASEBALL SNAPBACK', desc:'Topi baseball sporty biru bordir modern', cost:100, currency:'coin', rarity:'common' },
-    party:{ name:'PARTY CONE HAT', desc:'Topi kerucut pesta kembang gula bergaris', cost:120, currency:'coin', rarity:'common' },
-    beanie:{ name:'WINTER BEANIE', desc:'Kupluk wol hangat rajut musim salju', cost:120, currency:'coin', rarity:'common' },
-    tophat:{ name:'TOP HAT MAGIC', desc:'Topi pesulap satin hitam pita merah sutra', cost:220, currency:'coin', rarity:'rare' },
-    cowboy:{ name:'COWBOY LEATHER', desc:'Topi koboi kulit bergesper perak barat', cost:250, currency:'coin', rarity:'rare' },
-    chef:{ name:'CHEF MASTER HAT', desc:'Topi koki putih bertingkat bintang Michelin', cost:200, currency:'coin', rarity:'rare' },
-    flowercrown:{ name:'FLOWER BLOSSOM CROWN', desc:'Mahkota bunga sakura & mawar mekar anggun', cost:240, currency:'coin', rarity:'rare' },
-    pinkribbon:{ name:'CUTE PINK RIBBON', desc:'Pita rambut merah muda berenda manis sutra', cost:180, currency:'coin', rarity:'rare' },
-    sunhat:{ name:'SUMMER BEACH SUNHAT', desc:'Topi jerami pantai anggun pita satin sutra', cost:200, currency:'coin', rarity:'rare' },
-    catears:{ name:'KITTY CAT EARS', desc:'Bando telinga kucing lucu lonceng emas berdering', cost:280, currency:'coin', rarity:'rare' },
-    bunny:{ name:'FLUFFY BUNNY EARS', desc:'Telinga kelinci putih panjang berbulu lembut', cost:260, currency:'coin', rarity:'rare' },
-    ninja:{ name:'NINJA HEADBAND', desc:'Ikat kepala shinobi merah berkibar ditiup angin', cost:250, currency:'coin', rarity:'rare' },
-    pirate:{ name:'PIRATE CAPTAIN', desc:'Topi kapten bajak laut bulu merak & tengkorak', cost:400, currency:'coin', rarity:'epic' },
-    viking:{ name:'VIKING HELMET', desc:'Helm besi perang bertanduk banteng perkasa', cost:450, currency:'coin', rarity:'epic' },
-    witch:{ name:'WITCH MAGIC HAT', desc:'Topi penyihir beludru ungu gesper emas bercahaya', cost:420, currency:'coin', rarity:'epic' },
-    crown:{ name:'ROYAL CROWN', desc:'Mahkota emas bertahta rubi & zamrud kerajaan', cost:800, currency:'coin', rarity:'legendary' },
-    tiara:{ name:'SPARKLING TIARA', desc:'Tiara putri perak bertabur kristal berlian pink', cost:750, currency:'coin', rarity:'legendary' },
-    astronaut:{ name:'SPACE HELMET', desc:'Helm astronot kaca visor emas pelindung kosmik', cost:850, currency:'coin', rarity:'legendary' },
-    // Anime Special Hats - Diamond
-    straw_hat:{ name:'MUGIWARA STRAW HAT', desc:'Topi jerami kapten bajak laut berpita merah ikonik', cost:25, currency:'diamond', rarity:'mythic' },
-    shinobi_plate:{ name:'HIDDEN LEAF HEADBAND', desc:'Ikat kepala ninja Konoha berplat logam besi pelindung', cost:25, currency:'diamond', rarity:'mythic' },
-    tanjiro_earrings:{ name:'HANAFUDA SUN EARRINGS', desc:'Anting hanafuda matahari & tanda lahir pembasmi iblis', cost:25, currency:'diamond', rarity:'mythic' },
-    gojo_blindfold:{ name:'GOJO BLINDFOLD & HAIR', desc:'Penutup mata hitam & rambut perak tegak Gojo Satoru', cost:30, currency:'diamond', rarity:'mythic' },
-    saiyan_hair:{ name:'SUPER SAIYAN SPIKY HAIR', desc:'Rambut runcing emas berkilau Super Saiyan Son Goku', cost:30, currency:'diamond', rarity:'mythic' },
-    hokage_hat:{ name:'HOKAGE LEADER HAT', desc:'Topi segitiga merah-putih lambang pemimpin desa Konoha', cost:30, currency:'diamond', rarity:'mythic' },
-    chopper_hat:{ name:'CHOPPER DOCTOR CAP', desc:'Topi dokter pink bertanduk rusa dan silang medis', cost:25, currency:'diamond', rarity:'mythic' }
+  // 3. Topi / Hats (Nama Lengkap) - ALL FREE FOR TESTING
+  const hats = {
+    none:{ name:'TANPA TOPI', desc:'Tampilan natural tanpa topi', cost:0 },
+    tophat:{ name:'TOP HAT MAGIC', desc:'Topi pesulap elegan pita merah', cost:0 },
+    cap:{ name:'BASEBALL SNAPBACK', desc:'Topi baseball sporty biru', cost:0 },
+    crown:{ name:'ROYAL CROWN', desc:'Mahkota emas permata kerajaan', cost:0 },
+    party:{ name:'PARTY CONE HAT', desc:'Topi kerucut pesta bergaris', cost:0 },
+    cowboy:{ name:'COWBOY LEATHER', desc:'Topi koboi kulit bergesper', cost:0 },
+    pirate:{ name:'PIRATE CAPTAIN', desc:'Topi kapten bajak laut tengkorak', cost:0 },
+    chef:{ name:'CHEF MASTER HAT', desc:'Topi koki putih bertingkat', cost:0 },
+    beanie:{ name:'WINTER BEANIE', desc:'Kupluk wol hangat musim dingin', cost:0 },
+    flowercrown:{ name:'FLOWER BLOSSOM CROWN', desc:'Mahkota bunga sakura & mawar mekar', cost:0 },
+    pinkribbon:{ name:'CUTE PINK RIBBON', desc:'Pita rambut merah muda berenda manis', cost:0 },
+    sunhat:{ name:'SUMMER BEACH SUNHAT', desc:'Topi jerami pantai anggun pita sutra', cost:0 },
+    tiara:{ name:'SPARKLING TIARA', desc:'Tiara putri perak bertabur permata pink', cost:0 },
+    catears:{ name:'KITTY CAT EARS', desc:'Bando telinga kucing lucu dengan lonceng emas', cost:0 },
+    viking:{ name:'VIKING HELMET', desc:'Helm besi perang bertanduk perkasa', cost:0 },
+    astronaut:{ name:'SPACE HELMET', desc:'Helm astronot kaca emas kosmik', cost:0 },
+    ninja:{ name:'NINJA HEADBAND', desc:'Ikat kepala shinobi merah berkibar', cost:0 },
+    witch:{ name:'WITCH MAGIC HAT', desc:'Topi penyihir ungu bergesper emas', cost:0 },
+    bunny:{ name:'FLUFFY BUNNY EARS', desc:'Telinga kelinci putih panjang lucu', cost:0 },
+    // Anime Special Hats
+    straw_hat:{ name:'MUGIWARA STRAW HAT', desc:'Topi jerami kapten bajak laut berpita merah', cost:0 },
+    shinobi_plate:{ name:'HIDDEN LEAF HEADBAND', desc:'Ikat kepala ninja Konoha berplat logam besi', cost:0 },
+    tanjiro_earrings:{ name:'HANAFUDA SUN EARRINGS', desc:'Anting hanafuda matahari & tanda lahir pembasmi iblis', cost:0 },
+    gojo_blindfold:{ name:'GOJO BLINDFOLD & HAIR', desc:'Penutup mata hitam & rambut perak tegak Gojo', cost:0 },
+    saiyan_hair:{ name:'SUPER SAIYAN SPIKY HAIR', desc:'Rambut runcing emas berkilau Super Saiyan', cost:0 },
+    hokage_hat:{ name:'HOKAGE LEADER HAT', desc:'Topi segitiga merah-putih lambang pemimpin desa', cost:0 },
+    chopper_hat:{ name:'CHOPPER DOCTOR CAP', desc:'Topi dokter pink bertanduk rusa dan silang putih', cost:0 }
   };
 
-  // 4. Outfit / Dasi & Aksesori (HD Apparel & Costumes)
-  const outfits = (window.GameCatalogs && window.GameCatalogs.outfits) || {
-    none:{ name:'TANPA AKSESORI', desc:'Tampilan kasual polos', cost:0, currency:'coin', rarity:'common' },
-    redtie:{ name:'RED TIE & SHIRT', desc:'Kemeja putih & dasi merah sutra eksekutif', cost:100, currency:'coin', rarity:'common' },
-    bluetie:{ name:'BLUE TIE & SHIRT', desc:'Kemeja biru langit & dasi polkadot elegan', cost:100, currency:'coin', rarity:'common' },
-    bowtie:{ name:'TUXEDO & BOW TIE', desc:'Rompi tuksedo hitam & dasi kupu-kupu bangsawan', cost:180, currency:'coin', rarity:'rare' },
-    scarf:{ name:'COZY SCARF SWEATER', desc:'Sweater tebal & syal rajut merah hangat', cost:160, currency:'coin', rarity:'rare' },
-    badge:{ name:'SHERIFF STAR BADGE', desc:'Rompi kulit cokelat & lencana bintang emas sheriff', cost:200, currency:'coin', rarity:'rare' },
-    sailor:{ name:'SAILOR SCHOOLGIRL', desc:'Seragam pelaut manis dengan dasi pita merah ceria', cost:250, currency:'coin', rarity:'rare' },
-    hoodie:{ name:'URBAN STREET HOODIE', desc:'Hoodie streetwear abu-abu modern berkerah hangat', cost:280, currency:'coin', rarity:'rare' },
-    cape:{ name:'HERO FLYING CAPE', desc:'Jubah superhero merah berkibar aerodinamis', cost:300, currency:'coin', rarity:'rare' },
-    goldchain:{ name:'GOLD CHAIN & JACKET', desc:'Jaket streetwear & kalung rantai emas hip-hop', cost:450, currency:'coin', rarity:'epic' },
-    kimono:{ name:'SAKURA KIMONO SASH', desc:'Kimono sutra sakura & sabuk obi emas festival', cost:400, currency:'coin', rarity:'epic' },
-    ballerina:{ name:'BALLERINA SWAN TUTU', desc:'Rok tutu balet berombak & kalung mutiara danau angsa', cost:420, currency:'coin', rarity:'epic' },
-    ninja_suit:{ name:'SHINOBI NINJA SCARF', desc:'Syal panjang ninja hitam berkibar di kegelapan', cost:460, currency:'coin', rarity:'epic' },
-    princessdress:{ name:'ROYAL PRINCESS GOWN', desc:'Gaun pesta merah muda renda berkilau mutiara', cost:700, currency:'coin', rarity:'legendary' },
-    fairy:{ name:'MAGICAL FAIRY WINGS', desc:'Gaun peri hijau mint & sayap bercahaya berkilau', cost:750, currency:'coin', rarity:'legendary' },
-    cyber_armor:{ name:'MECHA CHEST ARMOR', desc:'Zirah dada cyborg berinti reaktor plasma menyala', cost:800, currency:'coin', rarity:'legendary' },
-    angel_wings:{ name:'GLOWING SERAPH WINGS', desc:'Sayap malaikat suci bersinar emas 24 karat', cost:850, currency:'coin', rarity:'legendary' },
-    royal_robe:{ name:'KING VELVET ROBE', desc:'Mantel beludru raja berbulu ermine & bros permata', cost:900, currency:'coin', rarity:'legendary' },
-    // Anime Special Outfits - Diamond
-    akatsuki_cloak:{ name:'AKATSUKI CLOAK', desc:'Jubah hitam berawan merah organisasi Akatsuki', cost:30, currency:'diamond', rarity:'mythic' },
-    tanjiro_haori:{ name:'CHECKERED GREEN HAORI', desc:'Jubah haori kotak-kotak hijau hitam Tanjiro', cost:25, currency:'diamond', rarity:'mythic' },
-    scout_cape:{ name:'SCOUT REGIMENT CLOAK', desc:'Jubah hijau Pasukan Pengintai lambang Sayap Kebebasan', cost:30, currency:'diamond', rarity:'mythic' },
-    goku_gi:{ name:'TURTLE SCHOOL GI', desc:'Seragam bela diri oranye-biru lambang perguruan Kame', cost:30, currency:'diamond', rarity:'mythic' },
-    luffy_vest:{ name:'RED PIRATE VEST', desc:'Rompi merah terbuka & selempang kuning bajak laut', cost:25, currency:'diamond', rarity:'mythic' },
-    jujutsu_coat:{ name:'JUJUTSU SORCERER COAT', desc:'Seragam biru gelap kerah tinggi SMA Jujutsu', cost:30, currency:'diamond', rarity:'mythic' }
+  // 4. Outfit / Dasi & Aksesori (Nama Lengkap) - ALL FREE FOR TESTING
+  const outfits = {
+    none:{ name:'TANPA AKSESORI', desc:'Tampilan kasual polos', cost:0 },
+    cape:{ name:'HERO FLYING CAPE', desc:'Jubah superhero merah berkibar', cost:0 },
+    redtie:{ name:'RED TIE & SHIRT', desc:'Kemeja putih & dasi merah sutra', cost:0 },
+    bluetie:{ name:'BLUE TIE & SHIRT', desc:'Kemeja biru & dasi polkadot', cost:0 },
+    bowtie:{ name:'TUXEDO & BOW TIE', desc:'Rompi tuksedo & dasi kupu-kupu', cost:0 },
+    goldchain:{ name:'GOLD CHAIN & JACKET', desc:'Jaket streetwear & kalung emas', cost:0 },
+    scarf:{ name:'COZY SCARF SWEATER', desc:'Sweater tebal & syal rajut hangat', cost:0 },
+    badge:{ name:'SHERIFF STAR BADGE', desc:'Rompi kulit & lencana sheriff emas', cost:0 },
+    princessdress:{ name:'ROYAL PRINCESS GOWN', desc:'Gaun pesta merah muda renda berkilau', cost:0 },
+    kimono:{ name:'SAKURA KIMONO SASH', desc:'Kimono sutra sakura & sabuk obi emas', cost:0 },
+    fairy:{ name:'MAGICAL FAIRY WINGS', desc:'Gaun peri hijau mint & sayap bercahaya', cost:0 },
+    ballerina:{ name:'BALLERINA SWAN TUTU', desc:'Rok tutu balet berombak & kalung mutiara', cost:0 },
+    sailor:{ name:'SAILOR SCHOOLGIRL', desc:'Seragam pelaut manis dengan dasi pita merah', cost:0 },
+    ninja_suit:{ name:'SHINOBI NINJA SCARF', desc:'Syal panjang ninja hitam berkibar', cost:0 },
+    cyber_armor:{ name:'MECHA CHEST ARMOR', desc:'Zirah dada cyborg berinti reaktor menyala', cost:0 },
+    hoodie:{ name:'URBAN STREET HOODIE', desc:'Hoodie streetwear abu-abu modern', cost:0 },
+    angel_wings:{ name:'GLOWING SERAPH WINGS', desc:'Sayap malaikat bersinar terang', cost:0 },
+    royal_robe:{ name:'KING VELVET ROBE', desc:'Mantel beludru raja berbulu ermine', cost:0 },
+    // Anime Special Outfits
+    akatsuki_cloak:{ name:'AKATSUKI CLOAK', desc:'Jubah hitam berawan merah organisasi Akatsuki', cost:0 },
+    tanjiro_haori:{ name:'CHECKERED GREEN HAORI', desc:'Jubah haori kotak-kotak hijau hitam Tanjiro', cost:0 },
+    scout_cape:{ name:'SCOUT REGIMENT CLOAK', desc:'Jubah hijau Pasukan Pengintai lambang Sayap Kebebasan', cost:0 },
+    goku_gi:{ name:'TURTLE SCHOOL GI', desc:'Seragam bela diri oranye-biru lambang Kame', cost:0 },
+    luffy_vest:{ name:'RED PIRATE VEST', desc:'Rompi merah terbuka & selempang kuning bajak laut', cost:0 },
+    jujutsu_coat:{ name:'JUJUTSU SORCERER COAT', desc:'Seragam biru gelap kerah tinggi SMA Jujutsu', cost:0 }
   };
 
-  // 5. Pipa / Pipes (HD Textures & Styles)
-  const pipeSkins = (window.GameCatalogs && window.GameCatalogs.pipeSkins) || {
-    green:{ name:'GREEN CLASSIC', desc:'Pipa hijau klasik Mario', cost:0, currency:'coin', rarity:'common', body:'#287a55', wing:'#3dbb68', edge:'#216c4d', cap:'#53d878' },
-    candy:{ name:'CANDY STRAWBERRY', desc:'Pipa permen manis stroberi bergaris gula', cost:200, currency:'coin', rarity:'rare', body:'#b85c87', wing:'#ff91b8', edge:'#81405d', cap:'#ffb4cf' },
-    wood:{ name:'ANCIENT BAMBOO', desc:'Pipa bambu hijau alami bercabang rindang', cost:250, currency:'coin', rarity:'rare', body:'#4d7c0f', wing:'#65a30d', edge:'#365314', cap:'#84cc16' },
-    crystal:{ name:'FROZEN ICE CRYSTAL', desc:'Pipa kristal es transparan beku biru kutub', cost:400, currency:'coin', rarity:'epic', body:'#0284c7', wing:'#38bdf8', edge:'#0369a1', cap:'#7dd3fc' },
-    neon:{ name:'NEON CYBERPUNK', desc:'Pipa biru neon cyberpunk bercahaya', cost:450, currency:'coin', rarity:'epic', body:'#3863a8', wing:'#5be6e0', edge:'#1c3677', cap:'#83fff5' },
-    lava:{ name:'MAGMA VOLCANO', desc:'Pipa batu lahar panas retak membara', cost:600, currency:'coin', rarity:'legendary', body:'#450a0a', wing:'#dc2626', edge:'#1c1917', cap:'#f97316' },
-    cyber:{ name:'GOLDEN CYBER', desc:'Pipa emas titanium berenergi tinggi', cost:750, currency:'coin', rarity:'legendary', body:'#854d0e', wing:'#eab308', edge:'#713f12', cap:'#fde047' },
-    // Anime Special Pipes - Diamond
-    katana_torii:{ name:'RED TORII & KATANA', desc:'Pipa gerbang Shinto merah berkilau pedang katana baja', cost:25, currency:'diamond', rarity:'mythic', body:'#991b1b', wing:'#ef4444', edge:'#450a0a', cap:'#facc15' },
-    bamboo_demon:{ name:'DEMON SLAYER BAMBOO', desc:'Pipa bambu hijau bertali merah Nezuko Kamado', cost:25, currency:'diamond', rarity:'mythic', body:'#15803d', wing:'#4ade80', edge:'#14532d', cap:'#f472b6' },
-    chakra_scroll:{ name:'NINJUTSU GIANT SCROLL', desc:'Pipa gulungan jurus ninjutsu kayu & kertas mantra', cost:25, currency:'diamond', rarity:'mythic', body:'#78350f', wing:'#d97706', edge:'#451a03', cap:'#fde047' },
-    jungle_vines:{ name:'ANCIENT JUNGLE VINES', desc:'Pipa batu lumut purba terlilit akar rimba', cost:250, currency:'coin', rarity:'rare', body:'#14532d', wing:'#15803d', edge:'#052e16', cap:'#84cc16' }
+  // 5. Pipa / Pipes (Nama Lengkap) - ALL FREE FOR TESTING
+  const pipeSkins = {
+    green:{ name:'GREEN CLASSIC', desc:'Pipa hijau klasik Mario', cost:0, body:'#287a55', wing:'#3dbb68', edge:'#216c4d', cap:'#53d878' },
+    candy:{ name:'CANDY STRAWBERRY', desc:'Pipa permen manis stroberi', cost:0, body:'#b85c87', wing:'#ff91b8', edge:'#81405d', cap:'#ffb4cf' },
+    neon:{ name:'NEON CYBERPUNK', desc:'Pipa biru neon cyberpunk', cost:0, body:'#3863a8', wing:'#5be6e0', edge:'#1c3677', cap:'#83fff5' },
+    cyber:{ name:'GOLDEN CYBER', desc:'Pipa emas berenergi tinggi', cost:0, body:'#854d0e', wing:'#eab308', edge:'#713f12', cap:'#fde047' },
+    crystal:{ name:'FROZEN ICE CRYSTAL', desc:'Pipa kristal es transparan biru', cost:0, body:'#0284c7', wing:'#38bdf8', edge:'#0369a1', cap:'#7dd3fc' },
+    lava:{ name:'MAGMA VOLCANO', desc:'Pipa batu lahar panas retak membara', cost:0, body:'#450a0a', wing:'#dc2626', edge:'#1c1917', cap:'#f97316' },
+    wood:{ name:'ANCIENT BAMBOO', desc:'Pipa bambu hijau alami bercabang', cost:0, body:'#4d7c0f', wing:'#65a30d', edge:'#365314', cap:'#84cc16' },
+    // Anime & Special Pipes - Diamond
+    sawit:{ name:'POHON KELAPA SAWIT', desc:'Pipa batang pohon kelapa sawit tropis dengan pelepah daun & tandan buah sawit emas', cost:100, currency:'diamond', rarity:'mythic', body:'#5c3d1e', wing:'#854d0e', edge:'#38220f', cap:'#16a34a' },
+    katana_torii:{ name:'RED TORII & KATANA', desc:'Pipa gerbang Shinto merah berkilau pedang katana', cost:0, body:'#991b1b', wing:'#ef4444', edge:'#450a0a', cap:'#facc15' },
+    bamboo_demon:{ name:'DEMON SLAYER BAMBOO', desc:'Pipa bambu hijau bertali merah Nezuko', cost:0, body:'#15803d', wing:'#4ade80', edge:'#14532d', cap:'#f472b6' },
+    chakra_scroll:{ name:'NINJUTSU GIANT SCROLL', desc:'Pipa gulungan jurus ninjutsu kayu & kertas mantra', cost:0, body:'#78350f', wing:'#d97706', edge:'#451a03', cap:'#fde047' },
+    jungle_vines:{ name:'ANCIENT JUNGLE VINES', desc:'Pipa batu lumut purba terlilit akar rimba', cost:0, body:'#14532d', wing:'#15803d', edge:'#052e16', cap:'#84cc16' }
   };
 
-  // 6. Backgrounds (Atmosferik & Paralaks)
-  const backgrounds = (window.GameCatalogs && window.GameCatalogs.backgrounds) || {
-    sky:{ name:'CLEAR BLUE SKY', desc:'Langit siang biru cerah berawan putih', cost:0, currency:'coin', rarity:'common', top:'#72caed', bottom:'#d3f3f4', hill:'#75bb9b' },
-    sunset:{ name:'WARM SUNSET', desc:'Senja jingga hangat romantis bergradasi emas', cost:200, currency:'coin', rarity:'rare', top:'#f89b75', bottom:'#ffe5a6', hill:'#c47772' },
-    forest:{ name:'MISTY GREEN FOREST', desc:'Hutan rimbun hijau asri berembun pagi', cost:250, currency:'coin', rarity:'rare', top:'#2d6a4f', bottom:'#b7e4c7', hill:'#1b4332' },
-    ocean:{ name:'DEEP OCEAN CORAL', desc:'Kedalaman laut biru & terumbu karang bercahaya', cost:350, currency:'coin', rarity:'epic', top:'#0369a1', bottom:'#0891b2', hill:'#0e7490' },
-    space:{ name:'DEEP COSMIC SPACE', desc:'Luar angkasa kosmik gelap bertabur galaksi bintang', cost:500, currency:'coin', rarity:'epic', top:'#182858', bottom:'#4c4a8c', hill:'#393c77' },
-    synthwave:{ name:'80S SYNTHWAVE GRID', desc:'Grid neon ungu & matahari senja retro 80-an', cost:550, currency:'coin', rarity:'legendary', top:'#3b0764', bottom:'#ec4899', hill:'#831843' },
-    volcano:{ name:'VOLCANIC LAVA', desc:'Kawah gunung berapi malam bara magma panas', cost:700, currency:'coin', rarity:'legendary', top:'#2e1065', bottom:'#7f1d1d', hill:'#450a0a' },
-    jungle:{ name:'TROPICAL JUNGLE SAFARI', desc:'Rimba belantara tropis kanopi rimbun & sulur purba', cost:300, currency:'coin', rarity:'rare', top:'#064e3b', bottom:'#a7f3d0', hill:'#065f46' },
-    // Anime Special Backgrounds - Diamond
-    hidden_leaf:{ name:'HIDDEN LEAF VILLAGE', desc:'Desa Konoha dengan patung monumen Hokage senja', cost:30, currency:'diamond', rarity:'mythic', top:'#f97316', bottom:'#fed7aa', hill:'#15803d' },
-    wano_sakura:{ name:'WANO SAKURA FUJI', desc:'Negeri Wano berlatar Gunung Fuji & kelopak sakura', cost:30, currency:'diamond', rarity:'mythic', top:'#ec4899', bottom:'#fbcfe8', hill:'#be185d' },
-    namek_green:{ name:'PLANET NAMEK SKY', desc:'Langit hijau Namek dengan matahari kembar bersinar', cost:30, currency:'diamond', rarity:'mythic', top:'#059669', bottom:'#a7f3d0', hill:'#047857' }
+  // 6. Backgrounds (Nama Lengkap) - ALL FREE FOR TESTING
+  const backgrounds = {
+    sky:{ name:'CLEAR BLUE SKY', desc:'Langit siang biru cerah', cost:0, top:'#72caed', bottom:'#d3f3f4', hill:'#75bb9b' },
+    sunset:{ name:'WARM SUNSET', desc:'Senja jingga hangat romantis', cost:0, top:'#f89b75', bottom:'#ffe5a6', hill:'#c47772' },
+    space:{ name:'DEEP COSMIC SPACE', desc:'Luar angkasa kosmik gelap', cost:0, top:'#182858', bottom:'#4c4a8c', hill:'#393c77' },
+    forest:{ name:'MISTY GREEN FOREST', desc:'Hutan rimbun hijau asri', cost:0, top:'#2d6a4f', bottom:'#b7e4c7', hill:'#1b4332' },
+    jungle:{ name:'TROPICAL JUNGLE SAFARI', desc:'Rimba belantara tropis kanopi rimbun & sulur purba', cost:0, top:'#064e3b', bottom:'#a7f3d0', hill:'#065f46' },
+    ocean:{ name:'DEEP OCEAN CORAL', desc:'Kedalaman laut biru & terumbu karang', cost:0, top:'#0369a1', bottom:'#0891b2', hill:'#0e7490' },
+    volcano:{ name:'VOLCANIC LAVA', desc:'Kawah gunung berapi malam bara panas', cost:0, top:'#2e1065', bottom:'#7f1d1d', hill:'#450a0a' },
+    synthwave:{ name:'80S SYNTHWAVE GRID', desc:'Grid neon ungu & matahari senja retro', cost:0, top:'#3b0764', bottom:'#ec4899', hill:'#831843' },
+    // Anime Special Backgrounds
+    hidden_leaf:{ name:'HIDDEN LEAF VILLAGE', desc:'Desa Konoha dengan patung monumen Hokage senja', cost:0, top:'#f97316', bottom:'#fed7aa', hill:'#15803d' },
+    wano_sakura:{ name:'WANO SAKURA FUJI', desc:'Negeri Wano berlatar Gunung Fuji & kelopak sakura', cost:0, top:'#ec4899', bottom:'#fbcfe8', hill:'#be185d' },
+    namek_green:{ name:'PLANET NAMEK SKY', desc:'Langit hijau Namek dengan matahari kembar bersinar', cost:0, top:'#059669', bottom:'#a7f3d0', hill:'#047857' }
   };
 
-  // 7. Musik & Soundtracks
-  const tracks = (window.GameCatalogs && window.GameCatalogs.tracks) || {
-    happy:{ name:'HAPPY MELODY', desc:'Melodi ceria riang chiptune swing', cost:0, currency:'coin', rarity:'common', color:'#ffbf38' },
-    bounce:{ name:'BOUNCE SYNTHWAVE', desc:'Irama disko synthwave dance bersemangat', cost:200, currency:'coin', rarity:'rare', color:'#f287b5' },
-    arcade:{ name:'ARCADE CHIPTUNE', desc:'Chiptune 8-bit game retro nostalgia', cost:200, currency:'coin', rarity:'rare', color:'#7c8dff' },
-    chill:{ name:'CHILL LO-FI JAZZ', desc:'Lo-Fi santai sunset jazz piano & keys', cost:250, currency:'coin', rarity:'rare', color:'#52b788' },
-    epic:{ name:'HEROIC ADVENTURE', desc:'Orkestra petualangan megah & heroik', cost:400, currency:'coin', rarity:'epic', color:'#ef4444' },
-    cyberbeat:{ name:'CYBERPUNK BEAT', desc:'Electro synthwave tempo cepat energetik', cost:450, currency:'coin', rarity:'epic', color:'#06b6d4' },
-    // Anime Special Soundtracks - Diamond
-    mendaki_semeru:{ name:'MENDAKI SEMERU (KESSOKU BAND)', desc:'Lagu viral Kessoku Band parody Pak Vramroro mendaki Semeru', cost:100, currency:'diamond', rarity:'mythic', color:'#ec4899' },
-    gurenge:{ name:'ANIME: GURENGE (DEMON SLAYER)', desc:'Theme song pemburu iblis melodi J-Rock energetik', cost:30, currency:'diamond', rarity:'mythic', color:'#ef4444' },
-    blue_bird:{ name:'ANIME: BLUE BIRD (NARUTO)', desc:'Lagu ikonik melodi seruling & gitar bersemangat', cost:30, currency:'diamond', rarity:'mythic', color:'#38bdf8' },
-    we_are:{ name:'ANIME: WE ARE! (ONE PIECE)', desc:'Melodi petualangan bajak laut riang & megah', cost:30, currency:'diamond', rarity:'mythic', color:'#facc15' },
-    sparkle:{ name:'ANIME: SPARKLE (YOUR NAME)', desc:'Melodi piano emosional & lonceng bintang jatuh', cost:30, currency:'diamond', rarity:'mythic', color:'#a855f7' }
+  // 7. Musik (Nama Lengkap) - ALL FREE FOR TESTING
+  const tracks = {
+    happy:{ name:'HAPPY MELODY', desc:'Melodi ceria riang swing', cost:0, color:'#ffbf38' },
+    bounce:{ name:'BOUNCE SYNTHWAVE', desc:'Irama disko synthwave dance', cost:0, color:'#f287b5' },
+    arcade:{ name:'ARCADE CHIPTUNE', desc:'Chiptune 8-bit game retro', cost:0, color:'#7c8dff' },
+    chill:{ name:'CHILL LO-FI JAZZ', desc:'Lo-Fi santai sunset jazz keys', cost:0, color:'#52b788' },
+    epic:{ name:'HEROIC ADVENTURE', desc:'Orkestra petualangan megah & heroik', cost:0, color:'#ef4444' },
+    cyberbeat:{ name:'CYBERPUNK BEAT', desc:'Electro synthwave tempo cepat energetik', cost:0, color:'#06b6d4' },
+    // Anime Special Soundtracks
+    gurenge:{ name:'ANIME: GURENGE (DEMON SLAYER)', desc:'Theme song pemburu iblis melodi J-Rock energetik', cost:0, color:'#ef4444' },
+    blue_bird:{ name:'ANIME: BLUE BIRD (NARUTO)', desc:'Lagu ikonik melodi seruling & gitar bersemangat', cost:0, color:'#38bdf8' },
+    we_are:{ name:'ANIME: WE ARE! (ONE PIECE)', desc:'Melodi petualangan bajak laut riang & megah', cost:0, color:'#facc15' },
+    sparkle:{ name:'ANIME: SPARKLE (YOUR NAME)', desc:'Melodi piano emosional & lonceng bintang jatuh', cost:0, color:'#a855f7' }
   };
 
-  // 8. Starter Booster Perk (Skill Langsung Aktif Saat Mulai)
-  const boosters = (window.GameCatalogs && window.GameCatalogs.boosters) || {
-    none:{ name:'TANPA BOOSTER', desc:'Mulai game kasual tanpa booster instan', cost:0, currency:'coin', rarity:'common', color:'#94a3b8' },
-    extra_life:{ name:'STARTER EXTRA LIFE (+1 LIFE)', desc:'Mulai game dengan tambahan 1 nyawa ekstra', cost:150, currency:'coin', rarity:'rare', color:'#ef4444' },
-    shield:{ name:'STARTER SHIELD', desc:'Mulai game langsung terlindungi perisai pelindung', cost:200, currency:'coin', rarity:'rare', color:'#0284c7' },
-    magnet:{ name:'STARTER MAGNET', desc:'Mulai game langsung menyedot semua koin terdekat', cost:250, currency:'coin', rarity:'rare', color:'#dc2626' },
-    slow:{ name:'STARTER SLOW ICE', desc:'Mulai game dengan waktu melambat 50% selama 5 detik', cost:250, currency:'coin', rarity:'rare', color:'#0891b2' },
-    star:{ name:'STARTER STAR POWER', desc:'Mulai game dengan bintang kebal pelangi super', cost:400, currency:'coin', rarity:'epic', color:'#f59e0b' },
-    rocket:{ name:'STARTER NOS ROCKET', desc:'Mulai game meluncur roket turbo kecepatan tinggi', cost:450, currency:'coin', rarity:'epic', color:'#ea580c' },
-    double_shield:{ name:'STARTER DUAL SHIELD', desc:'Mulai game dengan 2x lapisan perisai pelindung ekstra kuat', cost:600, currency:'coin', rarity:'legendary', color:'#0284c7' }
+  // 8. Starter Booster Perk (Skill Langsung Aktif Saat Mulai) - ALL FREE FOR TESTING
+  const boosters = {
+    none:{ name:'TANPA BOOSTER', desc:'Mulai game kasual tanpa booster instan', cost:0, color:'#94a3b8' },
+    extra_life:{ name:'STARTER EXTRA LIFE (+1 LIFE)', desc:'Mulai game dengan tambahan 1 nyawa ekstra', cost:0, color:'#ef4444' },
+    shield:{ name:'STARTER SHIELD', desc:'Mulai game langsung terlindungi perisai', cost:0, color:'#0284c7' },
+    magnet:{ name:'STARTER MAGNET', desc:'Mulai game langsung menyedot semua koin', cost:0, color:'#dc2626' },
+    slow:{ name:'STARTER SLOW ICE', desc:'Mulai game dengan waktu melambat 50%', cost:0, color:'#0891b2' },
+    star:{ name:'STARTER STAR POWER', desc:'Mulai game dengan bintang kebal pelangi', cost:0, color:'#f59e0b' },
+    rocket:{ name:'STARTER NOS ROCKET', desc:'Mulai game meluncur roket NOS turbo', cost:0, color:'#ea580c' },
+    double_shield:{ name:'STARTER DUAL SHIELD', desc:'Mulai game dengan 2x lapisan perisai pelindung', cost:0, color:'#0284c7' }
   };
 
-  // 9. Sistem Pet Pendamping & Skill Unik (GACHA ONLY)
-  const petsCatalog = (window.GameCatalogs && window.GameCatalogs.petsCatalog) || {
+  // 9. Sistem Pet Pendamping & Skill Unik (Unique Pet Companions & Skills) - ALL FREE FOR TESTING
+  const petsCatalog = {
     pip_peep: {
       name: 'PIP & PEEP (CANARY DUO)',
       desc: 'Duo pelindung imut. Meluncur menghancurkan musuh yang mendekat (1-hit kill) & respawn 11s',
       cost: 0,
-      gachaOnly: true,
-      rarity: 'rare',
       color: '#fef08a',
       skillType: 'bodyguard',
       skillName: 'DUO BODYGUARD INTERCEPT',
-      skillDesc: 'Meluncur menghancurkan musuh yang mendekat (1-hit kill) dan respawn setelah 11 detik.',
+      skillDesc: 'Meluncur menghancurkan musuh yang mendekat (1-hit kill) dan respawn setelah 11s',
       respawnTime: 11.0,
       baby1: { name: 'Pip', color: '#fef08a', wingColor: '#fde047', blushColor: '#fda4af', accessory: 'ribbon' },
       baby2: { name: 'Peep', color: '#bae6fd', wingColor: '#7dd3fc', blushColor: '#fda4af', accessory: 'flower' }
@@ -619,27 +616,23 @@
       name: 'MOMO & HANA (SAKURA FAIRIES)',
       desc: 'Peri kembar sakura. Memberikan Perisai Bunga Sakura Pelindung berbentuk bunga teratai pink',
       cost: 0,
-      gachaOnly: true,
-      rarity: 'epic',
       color: '#f472b6',
       skillType: 'barrier',
       skillName: 'SAKURA LOTUS SHIELD',
-      skillDesc: 'Perisai bunga teratai merah muda pelindung yang aktif sejak mulai & regenerasi tiap 10 detik.',
+      skillDesc: 'Perisai bunga teratai merah muda pelindung yang aktif sejak mulai & regenerasi tiap 10 detik',
       barrierCooldown: 10.0,
       baby1: { name: 'Momo', color: '#fbcfe8', wingColor: '#f472b6', blushColor: '#fda4af', accessory: 'ribbon' },
       baby2: { name: 'Hana', color: '#fecdd3', wingColor: '#fb7185', blushColor: '#fda4af', accessory: 'flower' }
     },
     aero_lumos: {
       name: 'AERO & LUMOS (HOLY ARCHANGELS)',
-      desc: 'Duo bidadari suci. Memberi berkah cahaya +1 Skor Ekstra & +2 Koin Bonus setiap melewati 3 pipa',
+      desc: 'Duo bidadari suci. Memberi berkah cahaya +1 Skor Ekstra & +2 Koin Bonus setiap melewati 2 pipa',
       cost: 0,
-      gachaOnly: true,
-      rarity: 'legendary',
       color: '#eab308',
       skillType: 'blessing',
       skillName: 'DIVINE SCORE & GOLD BLESSING',
-      skillDesc: 'Memberikan +1 Skor Ekstra & +2 Koin Bonus setiap berhasil melewati 3 rintangan pipa.',
-      interval: 3,
+      skillDesc: 'Memberikan +1 Skor Ekstra & +2 Koin Bonus setiap berhasil melewati 2 rintangan pipa',
+      interval: 2,
       baby1: { name: 'Aero', color: '#fef08a', wingColor: '#eab308', blushColor: '#fde047', accessory: 'halo' },
       baby2: { name: 'Lumos', color: '#ffffff', wingColor: '#fef08a', blushColor: '#fde047', accessory: 'halo' }
     },
@@ -647,39 +640,33 @@
       name: 'PIXEL & GLITCH (CYBER DRONES)',
       desc: 'Duo drone mecha. Menembakkan laser listrik EMP otomatis tiap 3.0s untuk melumpuhkan musuh jarak jauh',
       cost: 0,
-      gachaOnly: true,
-      rarity: 'epic',
       color: '#06b6d4',
       skillType: 'laser',
       skillName: 'AUTO EMP LASER ZAP',
-      skillDesc: 'Menembakkan laser listrik EMP otomatis tiap 3.0 detik untuk melumpuhkan musuh dari jarak jauh.',
+      skillDesc: 'Menembakkan laser listrik EMP otomatis tiap 3.0 detik untuk melumpuhkan musuh dari jarak jauh',
       laserCooldown: 3.0,
       baby1: { name: 'Pixel', color: '#38bdf8', wingColor: '#0284c7', blushColor: '#67e8f9', accessory: 'antenna' },
       baby2: { name: 'Glitch', color: '#34d399', wingColor: '#059669', blushColor: '#6ee7b7', accessory: 'antenna' }
     },
     blaze_ember: {
       name: 'BLAZE & EMBER (PHOENIX SPARKS)',
-      desc: 'Duo percikan api phoenix. Semburan api tiap 2.5s bakar musuh (max 2/burst, range 130px) & pipa +16px',
+      desc: 'Duo percikan api phoenix abadi. Semburan api naga membakar musuh & melebarkan pipa +16px',
       cost: 0,
-      gachaOnly: true,
-      rarity: 'legendary',
       color: '#f97316',
       skillType: 'fire',
-      skillName: 'PHOENIX FLAMES & GAP EXPANDER',
-      skillDesc: 'Semburan api tiap 2.5 detik membakar hingga 2 musuh (range 130px) & melebarkan pipa +16px.',
+      skillName: 'PHOENIX DRAGON FLAMES & GAP EXPANDER',
+      skillDesc: 'Semburan api raksasa membakar musuh di depan & melebarkan celah pipa sebesar +16px',
       baby1: { name: 'Blaze', color: '#fb923c', wingColor: '#ea580c', blushColor: '#fdba74', accessory: 'flame' },
       baby2: { name: 'Ember', color: '#f87171', wingColor: '#dc2626', blushColor: '#fca5a5', accessory: 'flame' }
     },
     kuro_void: {
       name: 'KURO & VOID (SHADOW SPIRITS)',
-      desc: 'Duo roh bayangan. Dash cooldown 2.5s + VOID SHRED: hancurkan musuh terdekat saat Dash!',
+      desc: 'Duo roh bayangan mistis. Mempercepat cooldown Dash 45% (jadi 2.5s) & ledakan bayangan hitam',
       cost: 0,
-      gachaOnly: true,
-      rarity: 'legendary',
       color: '#a855f7',
       skillType: 'dash_master',
-      skillName: 'SHADOW VOID DASH + ENEMY SHRED',
-      skillDesc: 'Cooldown Dash 2.5s + bonus Void Shred: hancurkan 1 musuh terdekat (radius 160px) setiap Dash!',
+      skillName: 'SHADOW VOID DASH VORTEX',
+      skillDesc: 'Mengurangi cooldown skill Dash sebesar 45% (dari 4.5s jadi 2.5s) & shockwave void hitam',
       dashCd: 2.5,
       baby1: { name: 'Kuro', color: '#c084fc', wingColor: '#7e22ce', blushColor: '#d8b4fe', accessory: 'horns' },
       baby2: { name: 'Void', color: '#64748b', wingColor: '#334155', blushColor: '#94a3b8', accessory: 'horns' }
@@ -688,8 +675,6 @@
       name: 'TANPA PET',
       desc: 'Bermain kasual murni tanpa bantuan pet pelindung',
       cost: 0,
-      gachaOnly: false,
-      rarity: 'common',
       color: '#94a3b8',
       skillType: 'none',
       skillName: 'NO PET',
@@ -697,22 +682,10 @@
     }
   };
 
-  const progress = storage.get('skyFlappyProgress', {
-    coins: 0,
-    diamonds: 50,
-    unlocked: ['classic'],
-    selected: 'classic',
-    avatarUnlocked: ['chick_yellow'],
-    petUnlocked: ['none'],
-    selectedPet: 'none'
-  });
-  if(!Array.isArray(progress.unlocked)) progress.unlocked = ['classic'];
-  if(!skins[progress.selected]) progress.selected = 'classic';
-  if(typeof progress.coins !== 'number') progress.coins = 0;
-  if(typeof progress.diamonds !== 'number') progress.diamonds = 50;
-  if(!Array.isArray(progress.avatarUnlocked)) progress.avatarUnlocked = ['chick_yellow'];
-  if(!Array.isArray(progress.petUnlocked)) progress.petUnlocked = ['none'];
-  if(!progress.selectedPet || !petsCatalog[progress.selectedPet]) progress.selectedPet = 'none';
+  const progress = storage.get('skyFlappyProgress', { coins:0, unlocked:['classic'], selected:'classic' });
+  if(!Array.isArray(progress.unlocked)) progress.unlocked=['classic'];
+  if(!skins[progress.selected]) progress.selected='classic';
+  if(typeof progress.coins !== 'number') progress.coins=0;
 
   for(const [key, catalog, free] of [
     ['pipe', pipeSkins, 'green'],
@@ -722,7 +695,7 @@
     ['hat', hats, 'none'],
     ['outfit', outfits, 'none'],
     ['booster', boosters, 'none'],
-    ['pet', petsCatalog, 'none']
+    ['pet', petsCatalog, 'pip_peep']
   ]){
     const unlockedKey = key + 'Unlocked';
     const selectedKey = 'selected' + key[0].toUpperCase() + key.slice(1);
@@ -809,8 +782,8 @@
   let laserBeams = [];
 
   function applyPetSkin() {
-    const petId = progress.selectedPet || 'none';
-    const skin = petsCatalog[petId];
+    const petId = progress.selectedPet || 'pip_peep';
+    const skin = petsCatalog[petId] || petsCatalog.pip_peep;
     if(skin && skin.baby1 && skin.baby2) {
       babyBirds[0].name = skin.baby1.name;
       babyBirds[0].color = skin.baby1.color;
@@ -828,8 +801,8 @@
 
   function resetBabyBirds(active = true) {
     applyPetSkin();
-    const petId = progress.selectedPet || 'none';
-    const isNone = !petId || petId === 'none';
+    const petId = progress.selectedPet || 'pip_peep';
+    const isNone = petId === 'none';
     petSkillTimer = 0;
     aeroPipesPassed = 0;
     laserBeams = [];
@@ -1422,7 +1395,6 @@
       this.init();
 
       const animeAudioMap = {
-        'mendaki_semeru': 'mendaki_semeru.mp3',
         'gurenge': 'gurenge.wav',
         'blue_bird': 'blue_bird.wav',
         'we_are': 'we_are.wav',
@@ -1620,27 +1592,6 @@
           if(step % 3 === 0) this.playTone(note * 2, .18, 'sine', .012);
           step++;
         }, 190);
-      } else if(trackId === 'mendaki_semeru') {
-        // Kessoku Band - Mendaki Semeru (Pak Vramroro): Energetic Fast Anime J-Rock
-        const melody = [
-          330, 0, 392, 440, 494, 0, 440, 392, 330, 0, 392, 0, 440, 440, 392, 0,
-          494, 0, 587, 0, 659, 659, 587, 0, 494, 0, 440, 0, 392, 440, 330, 0,
-          659, 0, 587, 0, 494, 0, 440, 0, 392, 0, 440, 0, 494, 494, 587, 0,
-          659, 0, 784, 0, 659, 0, 587, 0, 494, 0, 440, 0, 392, 0, 330, 0
-        ];
-        const bass = [82, 82, 110, 110, 123, 123, 110, 98, 82, 82, 110, 110, 123, 123, 147, 131];
-        this.musicTimer = setInterval(() => {
-          if(state !== State.PLAYING && state !== State.READY) return;
-          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
-          if(note) {
-            this.playTone(note, .14, 'sawtooth', .028, 0);
-            this.playTone(note * 0.5, .12, 'square', .02, 0);
-          }
-          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .038, -25);
-          if(step % 2 === 1) this.playTone(1350, .032, 'square', .014);
-          if(step % 4 === 0) this.playTone(85, .09, 'sawtooth', .038, -45);
-          step++;
-        }, 125);
       }
     },
 
@@ -1729,7 +1680,6 @@
       }
 
       const animeAudioMap = {
-        'mendaki_semeru': 'mendaki_semeru.mp3',
         'gurenge': 'gurenge.wav',
         'blue_bird': 'blue_bird.wav',
         'we_are': 'we_are.wav',
@@ -1887,22 +1837,6 @@
           if(step % 3 === 0) this.playTone(note * 2, .18, 'sine', .016);
           step++;
         }, 190);
-      } else if(trackId === 'mendaki_semeru') {
-        const melody = [
-          330, 0, 392, 440, 494, 0, 440, 392, 330, 0, 392, 0, 440, 440, 392, 0,
-          494, 0, 587, 0, 659, 659, 587, 0, 494, 0, 440, 0, 392, 440, 330, 0
-        ];
-        const bass = [82, 82, 110, 110, 123, 123, 110, 98];
-        this.previewTimer = setInterval(() => {
-          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
-          if(note) {
-            this.playTone(note, .14, 'sawtooth', .034, 0);
-            this.playTone(note * 0.5, .12, 'square', .022, 0);
-          }
-          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .042, -20);
-          if(step % 2 === 1) this.playTone(1350, .032, 'square', .016);
-          step++;
-        }, 125);
       }
     },
     stopPreview() {
@@ -1936,17 +1870,13 @@
 
   function persist() { storage.set('skyFlappySettings', settings); }
   function updateCoins() {
-    if(el.coinHud) el.coinHud.innerHTML = 'COINS <b>' + (progress.coins || 0) + '</b>';
-    if(el.coinCount) el.coinCount.textContent = progress.coins || 0;
-    if(el.shopCoins) el.shopCoins.textContent = progress.coins || 0;
-    const shopDiaEl = $('shopDiamonds');
-    if(shopDiaEl) shopDiaEl.textContent = progress.diamonds !== undefined ? progress.diamonds : 50;
+    if(el.coinHud) el.coinHud.innerHTML = 'COINS <b>' + progress.coins + '</b>';
+    if(el.coinCount) el.coinCount.textContent = progress.coins;
+    if(el.shopCoins) el.shopCoins.textContent = progress.coins;
     const topCoinEl = $('topCoinVal');
-    if(topCoinEl) topCoinEl.textContent = progress.coins || 0;
-    const topDiamondEl = $('topDiamondVal');
-    if(topDiamondEl) topDiamondEl.textContent = progress.diamonds !== undefined ? progress.diamonds : 50;
+    if(topCoinEl) topCoinEl.textContent = progress.coins;
     const gachaCoinEl = $('gachaUserCoins') || $('spUserCoins');
-    if(gachaCoinEl) gachaCoinEl.textContent = progress.coins || 0;
+    if(gachaCoinEl) gachaCoinEl.textContent = progress.coins;
     const topRankEl = $('topRankVal');
     if(topRankEl) topRankEl.textContent = `${gpProfile.rankedBest || progress.rankedScore || 0}`;
   }
@@ -1984,7 +1914,7 @@
   let shopCategory = 'bird';
   const previewLoadout = {
     bird: 'classic',
-    pet: 'none',
+    pet: 'pip_peep',
     booster: 'none',
     aura: 'default',
     hat: 'none',
@@ -1999,7 +1929,7 @@
 
   function syncPreviewLoadout() {
     previewLoadout.bird = progress.selected || 'classic';
-    previewLoadout.pet = progress.selectedPet || 'none';
+    previewLoadout.pet = progress.selectedPet || 'pip_peep';
     previewLoadout.booster = progress.selectedBooster || 'none';
     previewLoadout.aura = progress.selectedAura || 'default';
     previewLoadout.hat = progress.selectedHat || 'none';
@@ -2014,7 +1944,7 @@
     if(!el.showcaseLabel) return;
     const cat = shopCategory;
     const catCatalog = shopCatalog();
-    const currentId = previewLoadout[cat] || 'none';
+    const currentId = previewLoadout[cat] || (cat === 'pet' ? 'pip_peep' : 'none');
     const item = catCatalog[currentId];
     if(item) {
       el.showcaseLabel.textContent = 'PREVIEW: ' + item.name;
@@ -2337,6 +2267,8 @@
           sCtx.save();
           sCtx.strokeStyle = '#fde047';
           sCtx.lineWidth = 2;
+          sCtx.shadowColor = '#fde047';
+          sCtx.shadowBlur = 8;
           sCtx.beginPath();
           sCtx.ellipse(bX, bY - 20, 12, 4.5, 0, 0, Math.PI * 2);
           sCtx.stroke();
@@ -2360,10 +2292,13 @@
     if(audio.previewTrackId) {
       const noteOff = (now / 18) % 36;
       sCtx.fillStyle = '#fde047';
+      sCtx.shadowColor = 'rgba(253,224,71,0.6)';
+      sCtx.shadowBlur = 6;
       sCtx.font = 'bold 11px Arial';
       sCtx.fillText('NOTE', bX - 12, bY - 14 - noteOff);
       sCtx.fillStyle = '#67e8f9';
       sCtx.fillText('AUDIO', bX + 14, bY - 8 - ((noteOff + 18) % 36));
+      sCtx.shadowBlur = 0;
     }
 
     requestAnimationFrame(renderShopShowcaseFrame);
@@ -2740,16 +2675,13 @@
       const desc = item.desc || '';
 
       const t = i18n[settings.language || 'id'] || i18n.id;
-      const isDiamond = item.currency === 'diamond';
-      const canAfford = isDiamond ? ((progress.diamonds || 0) >= item.cost) : (progress.coins >= item.cost);
       let actionHtml = '';
       if(selected) {
         actionHtml = `<span class="skin-cost equipped">${t.equipped}</span>`;
       } else if(unlocked || item.cost === 0) {
         actionHtml = `<button class="skin-cost-btn use-btn" data-action="use" data-product="${id}" type="button">${t.equip}</button>`;
-      } else if(isDiamond) {
-        actionHtml = `<button class="skin-cost-btn buy-btn diamond-btn ${canAfford ? '' : 'cant-afford'}" data-action="buy" data-product="${id}" type="button"><span style="font-size:12px;margin-right:2px;">💎</span> ${t.buy} ${item.cost}</button>`;
       } else {
+        const canAfford = progress.coins >= item.cost;
         actionHtml = `<button class="skin-cost-btn buy-btn ${canAfford ? '' : 'cant-afford'}" data-action="buy" data-product="${id}" type="button"><svg viewBox="0 0 16 16" width="12" height="12" class="mini-coin-svg"><circle cx="8" cy="8" r="6.5" fill="#fbbf24" stroke="#d97706" stroke-width="1.2"/><text x="8" y="11" text-anchor="middle" font-size="8" font-weight="900" fill="#92400e">$</text></svg> ${t.buy} ${item.cost}</button>`;
       }
 
@@ -2933,37 +2865,6 @@
 
     if(progress[unlockedKey].includes(id)) {
       equipProduct(id);
-      return;
-    }
-
-    const isDiamond = item.currency === 'diamond';
-    if(isDiamond) {
-      if((progress.diamonds || 0) >= item.cost) {
-        if(item.cost > 0) progress.diamonds -= item.cost;
-        progress[unlockedKey].push(id);
-        progress[selectedKey] = id;
-        audio.win();
-        makeParticles(180, 100, 24, '#38bdf8');
-        persistProgress();
-        if(shopCategory === 'pet') applyPetSkin();
-        updateCoins();
-        renderShop();
-        if(typeof saveCloudSave === 'function') saveCloudSave();
-
-        if(shopCategory === 'music' && state === State.PLAYING) {
-          audio.stopMusic();
-          audio.music();
-        }
-      } else {
-        audio.hit();
-        const diaPill = $('shopDiamondWrap') || $('topDiamondPill');
-        if(diaPill) {
-          diaPill.classList.remove('coin-shake');
-          void diaPill.offsetWidth;
-          diaPill.classList.add('coin-shake');
-        }
-        if(typeof showToast === 'function') showToast('Diamond tidak cukup!', 'danger');
-      }
       return;
     }
 
@@ -3790,7 +3691,7 @@
         coins: progress.coins || 0,
         loadout: {
           bird: progress.selected || 'classic',
-          pet: progress.selectedPet || 'none',
+          pet: progress.selectedPet || 'pip_peep',
           aura: progress.selectedAura || 'default',
           hat: progress.selectedHat || 'none',
           outfit: progress.selectedOutfit || 'none',
@@ -3801,7 +3702,7 @@
         },
         unlocked: {
           bird: progress.unlocked || ['classic'],
-          pet: progress.petUnlocked || ['none'],
+          pet: progress.petUnlocked || ['pip_peep'],
           aura: progress.auraUnlocked || ['default'],
           hat: progress.hatUnlocked || ['none'],
           outfit: progress.outfitUnlocked || ['none'],
@@ -3836,7 +3737,7 @@
         }
       });
       leaderboardData = sanitizeLeaderboard(leaderboardData);
-      storage.set('skyFlappyLeaderboard_v9', leaderboardData);
+      storage.set('skyFlappyLeaderboard_v6', leaderboardData);
     }
 
     syncGPProfileUI();
@@ -3847,36 +3748,21 @@
 
   function renderAvatarPickerGrid() {
     if(!el.avatarPickerGrid) return;
-    if(!Array.isArray(progress.avatarUnlocked)) progress.avatarUnlocked = ['chick_yellow'];
     let html = '';
     cuteAvatarsCatalog.forEach(a => {
       const isSelected = (gpProfile.avatar || cuteAvatarsCatalog[0].id) === a.id;
       const isAnime = ANIME_AVATAR_PNG.has(a.id);
-      const isUnlocked = !isAnime || progress.avatarUnlocked.includes(a.id);
       const bgStyle = isAnime
         ? `background:#0f172a;`
         : `background:${a.bg};`;
       const iconContent = isAnime
         ? `<img src="assets/avatars/${a.id}.png" width="44" height="44" alt="${a.name}" style="display:block;width:44px;height:44px;border-radius:50%;object-fit:cover;" />`
         : a.render(44);
-      
-      let badgeHtml = '';
-      if(isSelected) {
-        badgeHtml = '<span class="avatar-card-check">DIPAKAI</span>';
-      } else if(isUnlocked) {
-        badgeHtml = '<span class="avatar-card-check" style="background:#0284c7;color:#fff;">PILIH</span>';
-      } else {
-        badgeHtml = '<span class="avatar-card-buy-btn">💎 50</span>';
-      }
-
       html += `
-        <div class="avatar-card${isSelected ? ' selected' : ''}${!isUnlocked ? ' locked' : ''}" data-avatar-id="${a.id}" data-is-unlocked="${isUnlocked ? '1' : '0'}" data-name="${a.name}">
-          <div class="avatar-card-icon" style="${bgStyle}">
-            ${iconContent}
-            ${!isUnlocked ? '<span class="avatar-lock-icon">🔒</span>' : ''}
-          </div>
+        <div class="avatar-card${isSelected ? ' selected' : ''}" data-avatar-id="${a.id}">
+          <div class="avatar-card-icon" style="${bgStyle}">${iconContent}</div>
           <div class="avatar-card-name">${a.name}</div>
-          ${badgeHtml}
+          ${isSelected ? '<span class="avatar-card-check">DIPAKAI</span>' : ''}
         </div>
       `;
     });
@@ -3884,53 +3770,16 @@
 
     el.avatarPickerGrid.querySelectorAll('.avatar-card').forEach(card => {
       card.addEventListener('click', () => {
-        const avId = card.getAttribute('data-avatar-id');
-        const isUnlocked = card.getAttribute('data-is-unlocked') === '1';
-        const avName = card.getAttribute('data-name') || 'Avatar';
-        if(!avId) return;
-
-        if(!isUnlocked) {
-          // Beli Anime Avatar Pakai Diamond (50 💎)
-          const cost = 50;
-          if((progress.diamonds || 0) >= cost) {
-            progress.diamonds -= cost;
-            if(!progress.avatarUnlocked.includes(avId)) {
-              progress.avatarUnlocked.push(avId);
-            }
-            gpProfile.avatar = avId;
-            persistProgress();
-            saveGPProfile();
-            updateCoins();
-            if(typeof saveCloudSave === 'function') saveCloudSave();
-            audio.win();
-            makeParticles(180, 100, 24, '#38bdf8');
-            if(typeof showToast === 'function') {
-              showToast(`Avatar ${avName} berhasil dibuka! (-${cost} 💎)`, 'success');
-            }
-            renderAvatarPickerGrid();
-          } else {
-            audio.hit();
-            const diaPill = $('shopDiamondWrap') || $('topDiamondPill');
-            if(diaPill) {
-              diaPill.classList.remove('coin-shake');
-              void diaPill.offsetWidth;
-              diaPill.classList.add('coin-shake');
-            }
-            if(typeof showToast === 'function') {
-              showToast(`Diamond tidak cukup! Butuh ${cost} 💎 untuk avatar ini.`, 'danger');
-            }
-          }
-          return;
-        }
-
-        // Sudah Terbuka: Langsung Pasang
         audio.click();
-        gpProfile.avatar = avId;
-        saveGPProfile();
-        if(typeof saveCloudSave === 'function') saveCloudSave();
-        renderAvatarPickerGrid();
-        closeModal();
-        showModal(el.googlePlayModal);
+        const avId = card.getAttribute('data-avatar-id');
+        if(avId) {
+          gpProfile.avatar = avId;
+          saveGPProfile();
+          if(typeof saveCloudSave === 'function') saveCloudSave();
+          renderAvatarPickerGrid();
+          closeModal();
+          showModal(el.googlePlayModal);
+        }
       });
     });
   }
@@ -4318,20 +4167,12 @@
         av = cuteAvatarKeys[uniqueList.length % cuteAvatarKeys.length];
       }
 
-      let rawScore = 0;
-      if(isUser) {
-        rawScore = Math.max(p.score !== undefined ? (parseInt(p.score, 10) || 0) : 0, rankedBest || 0);
-      } else {
-        rawScore = p.score !== undefined ? (parseInt(p.score, 10) || 0) : 0;
-      }
-      const tierObj = getRankTier(rawScore);
-
       uniqueList.push({
         id: isUser ? (gpProfile.googleUid || gpProfile.id) : (p.id || name),
         uid: isUser ? (gpProfile.googleUid || gpProfile.id) : (p.uid || p.id || name),
         name: name,
-        score: rawScore,
-        tier: tierObj.name,
+        score: score,
+        tier: getRankTier(score).name,
         avatar: av || 'gojo_satoru',
         isUser: isUser,
         loadout: isUser ? {
@@ -4348,64 +4189,39 @@
     return uniqueList;
   }
 
-  // Default Leaderboard Data (Top 50 High-Scoring Dummy Champions from Grandmaster to Bronze)
+  // Default Leaderboard Data (Top 25 High-Scoring Dummy Champions from Master to Bronze)
   const defaultLeaderboard = [
-    { rank: 1, name: 'SkyKing_God', score: 1480, tier: 'GRANDMASTER', avatar: 'gojo_satoru', loadout: { bird: 'phoenix', aura: 'galaxy', hat: 'crown', outfit: 'cape', pipe: 'gold', background: 'sunset' } },
-    { rank: 2, name: 'Shadow_Slayer', score: 1290, tier: 'GRANDMASTER', avatar: 'ninja_shadow', loadout: { bird: 'shadow', aura: 'neon', hat: 'shinobi_plate', outfit: 'akatsuki_cloak', pipe: 'neon', background: 'forest' } },
-    { rank: 3, name: 'CyberValkyrie_Prime', score: 1120, tier: 'GRANDMASTER', avatar: 'robo_mecha', loadout: { bird: 'cyber', aura: 'fire', hat: 'tiara', outfit: 'goldchain', pipe: 'neon', background: 'space' } },
-    { rank: 4, name: 'Phoenix_Emperor', score: 960, tier: 'GRANDMASTER', avatar: 'phoenix_blaze', loadout: { bird: 'phoenix', aura: 'golden', hat: 'crown', outfit: 'cape', pipe: 'gold', background: 'sunset' } },
-    { rank: 5, name: 'Goku_UltraInstinct', score: 840, tier: 'GRANDMASTER', avatar: 'goku_saiyan', loadout: { bird: 'goku_ssj', aura: 'super_saiyan', hat: 'saiyan_hair', outfit: 'goku_gi', pipe: 'torii', background: 'namek' } },
-    { rank: 6, name: 'Dragon_Sovereign', score: 720, tier: 'GRANDMASTER', avatar: 'dragon_pyro', loadout: { bird: 'dragon', aura: 'fire', hat: 'crown', outfit: 'leather_jacket', pipe: 'lava', background: 'sunset' } },
-    { rank: 7, name: 'GoldenFalcon_99', score: 650, tier: 'GRANDMASTER', avatar: 'king_royal', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset' } },
-    { rank: 8, name: 'Zenitsu_Thunder', score: 610, tier: 'GRANDMASTER', avatar: 'tanjiro_slayer', loadout: { bird: 'cyber', aura: 'neon', hat: 'cap', outfit: 'hoodie', pipe: 'torii', background: 'wano' } },
-    { rank: 9, name: 'Sukuna_Domain', score: 570, tier: 'GRANDMASTER', avatar: 'gojo_satoru', loadout: { bird: 'night', aura: 'domain_expansion', hat: 'none', outfit: 'jujutsu_coat', pipe: 'lava', background: 'sunset' } },
-    { rank: 10, name: 'Shinobi_Hokage', score: 530, tier: 'GRANDMASTER', avatar: 'naruto_sage', loadout: { bird: 'naruto_bird', aura: 'neon', hat: 'hokage_hat', outfit: 'scout_cape', pipe: 'bamboo', background: 'konoha' } },
-    { rank: 11, name: 'Zoro_Santoryu', score: 495, tier: 'GRANDMASTER', avatar: 'luffy_mugiwara', loadout: { bird: 'classic', aura: 'golden', hat: 'bandana', outfit: 'scout_cape', pipe: 'bamboo', background: 'forest' } },
-    { rank: 12, name: 'Levi_Ackerman', score: 460, tier: 'GRANDMASTER', avatar: 'levi_scout', loadout: { bird: 'night', aura: 'galaxy', hat: 'bandana', outfit: 'scout_cape', pipe: 'green', background: 'forest' } },
-    { rank: 13, name: 'Mikasa_Scout', score: 430, tier: 'GRANDMASTER', avatar: 'levi_scout', loadout: { bird: 'rose', aura: 'fire', hat: 'none', outfit: 'scout_cape', pipe: 'green', background: 'sunset' } },
-    { rank: 14, name: 'Luffy_Gear5', score: 410, tier: 'GRANDMASTER', avatar: 'luffy_mugiwara', loadout: { bird: 'luffy_bird', aura: 'rainbow', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'candy', background: 'sky' } },
-    { rank: 15, name: 'Itachi_Uchiha', score: 385, tier: 'GRANDMASTER', avatar: 'naruto_sage', loadout: { bird: 'shadow', aura: 'fire', hat: 'shinobi_plate', outfit: 'akatsuki_cloak', pipe: 'torii', background: 'konoha' } },
-    { rank: 16, name: 'Megumi_Shadows', score: 360, tier: 'GRANDMASTER', avatar: 'gojo_satoru', loadout: { bird: 'shadow', aura: 'domain_expansion', hat: 'none', outfit: 'jujutsu_coat', pipe: 'neon', background: 'space' } },
-    { rank: 17, name: 'Inosuke_Beast', score: 335, tier: 'GRANDMASTER', avatar: 'tanjiro_slayer', loadout: { bird: 'classic', aura: 'fire', hat: 'cowboy', outfit: 'leather_jacket', pipe: 'bamboo', background: 'forest' } },
-    { rank: 18, name: 'SakuraWing', score: 315, tier: 'GRANDMASTER', avatar: 'pink_sakura', loadout: { bird: 'rose', aura: 'hearts', hat: 'flowercrown', outfit: 'princessdress', pipe: 'candy', background: 'sky' } },
-    { rank: 19, name: 'Vegeta_Prince', score: 295, tier: 'MASTER', avatar: 'goku_saiyan', loadout: { bird: 'goku_ssj', aura: 'super_saiyan', hat: 'saiyan_hair', outfit: 'goku_gi', pipe: 'gold', background: 'namek' } },
-    { rank: 20, name: 'Loid_Twilight', score: 280, tier: 'MASTER', avatar: 'anya_forger', loadout: { bird: 'night', aura: 'galaxy', hat: 'fedora', outfit: 'tuxedo', pipe: 'cyber', background: 'sunset' } },
-    { rank: 21, name: 'FrostGuardian', score: 265, tier: 'MASTER', avatar: 'penguin_tux', loadout: { bird: 'classic', aura: 'bubble', hat: 'beanie', outfit: 'fairy', pipe: 'neon', background: 'space' } },
-    { rank: 22, name: 'Yor_Thorn', score: 250, tier: 'MASTER', avatar: 'anya_forger', loadout: { bird: 'rose', aura: 'hearts', hat: 'tiara', outfit: 'princessdress', pipe: 'candy', background: 'sky' } },
-    { rank: 23, name: 'Rengoku_Flame', score: 238, tier: 'MASTER', avatar: 'tanjiro_slayer', loadout: { bird: 'phoenix', aura: 'fire', hat: 'none', outfit: 'tanjiro_haori', pipe: 'lava', background: 'sunset' } },
-    { rank: 24, name: 'BlazeRaptor', score: 225, tier: 'DIAMOND', avatar: 'tanjiro_slayer', loadout: { bird: 'tanjiro_bird', aura: 'fire', hat: 'tanjiro_earrings', outfit: 'tanjiro_haori', pipe: 'torii', background: 'wano' } },
-    { rank: 25, name: 'Sasuke_Chidori', score: 210, tier: 'DIAMOND', avatar: 'naruto_sage', loadout: { bird: 'cyber', aura: 'neon', hat: 'shinobi_plate', outfit: 'akatsuki_cloak', pipe: 'neon', background: 'space' } },
-    { rank: 26, name: 'Gojo_Limitless', score: 195, tier: 'DIAMOND', avatar: 'gojo_satoru', loadout: { bird: 'gojo_bird', aura: 'domain_expansion', hat: 'gojo_blindfold', outfit: 'jujutsu_coat', pipe: 'candy', background: 'sky' } },
-    { rank: 27, name: 'StarGazer_X', score: 180, tier: 'DIAMOND', avatar: 'astro_space', loadout: { bird: 'cyber', aura: 'neon', hat: 'astronaut_helmet', outfit: 'space_suit', pipe: 'neon', background: 'space' } },
-    { rank: 28, name: 'Sanji_BlackLeg', score: 168, tier: 'DIAMOND', avatar: 'luffy_mugiwara', loadout: { bird: 'classic', aura: 'fire', hat: 'fedora', outfit: 'tuxedo', pipe: 'gold', background: 'sunset' } },
-    { rank: 29, name: 'NeonNinja', score: 152, tier: 'PLATINUM', avatar: 'fox_kitsune', loadout: { bird: 'night', aura: 'neon', hat: 'cowboy', outfit: 'badge', pipe: 'green', background: 'forest' } },
-    { rank: 30, name: 'Nami_ClimaTact', score: 140, tier: 'PLATINUM', avatar: 'luffy_mugiwara', loadout: { bird: 'mint', aura: 'rainbow', hat: 'catears', outfit: 'fairy', pipe: 'candy', background: 'sky' } },
-    { rank: 31, name: 'EchoPhantom', score: 128, tier: 'PLATINUM', avatar: 'ghost_spook', loadout: { bird: 'gojo_bird', aura: 'domain_expansion', hat: 'gojo_blindfold', outfit: 'jujutsu_coat', pipe: 'green', background: 'sunset' } },
-    { rank: 32, name: 'Chopper_Doctor', score: 116, tier: 'PLATINUM', avatar: 'bunny_fluff', loadout: { bird: 'rose', aura: 'hearts', hat: 'chopper_hat', outfit: 'hoodie', pipe: 'candy', background: 'sky' } },
-    { rank: 33, name: 'ThunderBird_7', score: 104, tier: 'PLATINUM', avatar: 'nezuko_chan', loadout: { bird: 'mint', aura: 'rainbow', hat: 'cap', outfit: 'redtie', pipe: 'green', background: 'sky' } },
-    { rank: 34, name: 'Armin_Colossal', score: 94, tier: 'GOLD', avatar: 'levi_scout', loadout: { bird: 'cyber', aura: 'golden', hat: 'cap', outfit: 'scout_cape', pipe: 'green', background: 'konoha' } },
-    { rank: 35, name: 'AquaFin', score: 88, tier: 'GOLD', avatar: 'froggy_kero', loadout: { bird: 'mint', aura: 'bubble', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'candy', background: 'sky' } },
-    { rank: 36, name: 'Kakashi_Sharingan', score: 80, tier: 'GOLD', avatar: 'naruto_sage', loadout: { bird: 'night', aura: 'neon', hat: 'shinobi_plate', outfit: 'scout_cape', pipe: 'bamboo', background: 'konoha' } },
-    { rank: 37, name: 'MysticOwl', score: 74, tier: 'GOLD', avatar: 'owl_scholar', loadout: { bird: 'night', aura: 'galaxy', hat: 'witch', outfit: 'cape', pipe: 'cyber', background: 'space' } },
-    { rank: 38, name: 'Hinata_Byakugan', score: 66, tier: 'GOLD', avatar: 'nezuko_chan', loadout: { bird: 'rose', aura: 'hearts', hat: 'flowercrown', outfit: 'princessdress', pipe: 'candy', background: 'sky' } },
-    { rank: 39, name: 'CrimsonBeak', score: 58, tier: 'GOLD', avatar: 'cat_neko', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset' } },
-    { rank: 40, name: 'Nobara_StrawDoll', score: 52, tier: 'GOLD', avatar: 'gojo_satoru', loadout: { bird: 'mint', aura: 'fire', hat: 'cap', outfit: 'jujutsu_coat', pipe: 'green', background: 'forest' } },
-    { rank: 41, name: 'CloudChaser', score: 46, tier: 'SILVER', avatar: 'bunny_fluff', loadout: { bird: 'rose', aura: 'hearts', hat: 'chopper_hat', outfit: 'hoodie', pipe: 'candy', background: 'sky' } },
-    { rank: 42, name: 'Giyuu_Water', score: 40, tier: 'SILVER', avatar: 'tanjiro_slayer', loadout: { bird: 'mint', aura: 'bubble', hat: 'none', outfit: 'tanjiro_haori', pipe: 'bamboo', background: 'forest' } },
-    { rank: 43, name: 'SolarFlare_88', score: 35, tier: 'SILVER', avatar: 'panda_bamboo', loadout: { bird: 'classic', aura: 'none', hat: 'none', outfit: 'scarf', pipe: 'green', background: 'sky' } },
-    { rank: 44, name: 'Kanao_Butterfly', score: 30, tier: 'SILVER', avatar: 'nezuko_chan', loadout: { bird: 'rose', aura: 'hearts', hat: 'flowercrown', outfit: 'fairy', pipe: 'candy', background: 'sky' } },
-    { rank: 45, name: 'VortexWing', score: 26, tier: 'SILVER', avatar: 'anya_forger', loadout: { bird: 'cyber', aura: 'none', hat: 'cap', outfit: 'badge', pipe: 'neon', background: 'space' } },
-    { rank: 46, name: 'Eren_Yeager', score: 21, tier: 'BRONZE', avatar: 'levi_scout', loadout: { bird: 'shadow', aura: 'fire', hat: 'bandana', outfit: 'scout_cape', pipe: 'lava', background: 'sunset' } },
-    { rank: 47, name: 'VelvetCrow', score: 18, tier: 'BRONZE', avatar: 'chick_yellow', loadout: { bird: 'night', aura: 'none', hat: 'none', outfit: 'none', pipe: 'green', background: 'forest' } },
-    { rank: 48, name: 'Gaara_Sand', score: 14, tier: 'BRONZE', avatar: 'naruto_sage', loadout: { bird: 'classic', aura: 'golden', hat: 'none', outfit: 'cape', pipe: 'torii', background: 'wano' } },
-    { rank: 49, name: 'SwiftSparrow', score: 10, tier: 'BRONZE', avatar: 'froggy_kero', loadout: { bird: 'classic', aura: 'none', hat: 'none', outfit: 'none', pipe: 'green', background: 'sky' } },
-    { rank: 50, name: 'Deku_OneForAll', score: 6, tier: 'BRONZE', avatar: 'chick_yellow', loadout: { bird: 'mint', aura: 'neon', hat: 'cap', outfit: 'redtie', pipe: 'green', background: 'sky' } }
+    { rank: 1, name: 'SkyKing_God', score: 1480, tier: 'MASTER', avatar: 'gojo_satoru', loadout: { bird: 'phoenix', aura: 'galaxy', hat: 'crown', outfit: 'cape', pipe: 'gold', background: 'sunset' } },
+    { rank: 2, name: 'Shadow_Slayer', score: 1290, tier: 'MASTER', avatar: 'ninja_shadow', loadout: { bird: 'shadow', aura: 'neon', hat: 'shinobi_plate', outfit: 'akatsuki_cloak', pipe: 'neon', background: 'forest' } },
+    { rank: 3, name: 'CyberValkyrie_Prime', score: 1120, tier: 'MASTER', avatar: 'robo_mecha', loadout: { bird: 'cyber', aura: 'fire', hat: 'tiara', outfit: 'goldchain', pipe: 'neon', background: 'space' } },
+    { rank: 4, name: 'Phoenix_Emperor', score: 960, tier: 'MASTER', avatar: 'phoenix_blaze', loadout: { bird: 'phoenix', aura: 'golden', hat: 'crown', outfit: 'cape', pipe: 'gold', background: 'sunset' } },
+    { rank: 5, name: 'Goku_UltraInstinct', score: 840, tier: 'MASTER', avatar: 'goku_saiyan', loadout: { bird: 'goku_ssj', aura: 'super_saiyan', hat: 'saiyan_hair', outfit: 'goku_gi', pipe: 'torii', background: 'namek' } },
+    { rank: 6, name: 'Dragon_Sovereign', score: 720, tier: 'MASTER', avatar: 'dragon_pyro', loadout: { bird: 'dragon', aura: 'fire', hat: 'crown', outfit: 'leather_jacket', pipe: 'lava', background: 'sunset' } },
+    { rank: 7, name: 'GoldenFalcon_99', score: 610, tier: 'MASTER', avatar: 'king_royal', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset' } },
+    { rank: 8, name: 'Shinobi_Hokage', score: 520, tier: 'MASTER', avatar: 'naruto_sage', loadout: { bird: 'naruto_bird', aura: 'neon', hat: 'hokage_hat', outfit: 'scout_cape', pipe: 'bamboo', background: 'konoha' } },
+    { rank: 9, name: 'Levi_Ackerman', score: 450, tier: 'MASTER', avatar: 'levi_scout', loadout: { bird: 'night', aura: 'galaxy', hat: 'bandana', outfit: 'scout_cape', pipe: 'green', background: 'forest' } },
+    { rank: 10, name: 'Luffy_Gear5', score: 380, tier: 'MASTER', avatar: 'luffy_mugiwara', loadout: { bird: 'luffy_bird', aura: 'rainbow', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'candy', background: 'sky' } },
+    { rank: 11, name: 'SakuraWing', score: 310, tier: 'DIAMOND', avatar: 'pink_sakura', loadout: { bird: 'rose', aura: 'hearts', hat: 'flowercrown', outfit: 'princessdress', pipe: 'candy', background: 'sky' } },
+    { rank: 12, name: 'FrostGuardian', score: 260, tier: 'DIAMOND', avatar: 'penguin_tux', loadout: { bird: 'classic', aura: 'bubble', hat: 'beanie', outfit: 'fairy', pipe: 'neon', background: 'space' } },
+    { rank: 13, name: 'BlazeRaptor', score: 220, tier: 'DIAMOND', avatar: 'tanjiro_slayer', loadout: { bird: 'tanjiro_bird', aura: 'fire', hat: 'tanjiro_earrings', outfit: 'tanjiro_haori', pipe: 'torii', background: 'wano' } },
+    { rank: 14, name: 'StarGazer_X', score: 180, tier: 'PLATINUM', avatar: 'astro_space', loadout: { bird: 'cyber', aura: 'neon', hat: 'astronaut_helmet', outfit: 'space_suit', pipe: 'neon', background: 'space' } },
+    { rank: 15, name: 'NeonNinja', score: 150, tier: 'PLATINUM', avatar: 'fox_kitsune', loadout: { bird: 'night', aura: 'neon', hat: 'cowboy', outfit: 'badge', pipe: 'green', background: 'forest' } },
+    { rank: 16, name: 'EchoPhantom', score: 125, tier: 'PLATINUM', avatar: 'ghost_spook', loadout: { bird: 'gojo_bird', aura: 'domain_expansion', hat: 'gojo_blindfold', outfit: 'jujutsu_coat', pipe: 'green', background: 'sunset' } },
+    { rank: 17, name: 'ThunderBird_7', score: 105, tier: 'PLATINUM', avatar: 'nezuko_chan', loadout: { bird: 'mint', aura: 'rainbow', hat: 'cap', outfit: 'redtie', pipe: 'green', background: 'sky' } },
+    { rank: 18, name: 'AquaFin', score: 88, tier: 'GOLD', avatar: 'froggy_kero', loadout: { bird: 'mint', aura: 'bubble', hat: 'straw_hat', outfit: 'luffy_vest', pipe: 'candy', background: 'sky' } },
+    { rank: 19, name: 'MysticOwl', score: 75, tier: 'GOLD', avatar: 'owl_scholar', loadout: { bird: 'night', aura: 'galaxy', hat: 'witch', outfit: 'cape', pipe: 'cyber', background: 'space' } },
+    { rank: 20, name: 'CrimsonBeak', score: 62, tier: 'GOLD', avatar: 'cat_neko', loadout: { bird: 'classic', aura: 'golden', hat: 'catears', outfit: 'kimono', pipe: 'cyber', background: 'sunset' } },
+    { rank: 21, name: 'CloudChaser', score: 48, tier: 'SILVER', avatar: 'bunny_fluff', loadout: { bird: 'rose', aura: 'hearts', hat: 'chopper_hat', outfit: 'hoodie', pipe: 'candy', background: 'sky' } },
+    { rank: 22, name: 'SolarFlare_88', score: 38, tier: 'SILVER', avatar: 'panda_bamboo', loadout: { bird: 'classic', aura: 'none', hat: 'none', outfit: 'scarf', pipe: 'green', background: 'sky' } },
+    { rank: 23, name: 'VortexWing', score: 28, tier: 'SILVER', avatar: 'anya_forger', loadout: { bird: 'cyber', aura: 'none', hat: 'cap', outfit: 'badge', pipe: 'neon', background: 'space' } },
+    { rank: 24, name: 'VelvetCrow', score: 19, tier: 'BRONZE', avatar: 'chick_yellow', loadout: { bird: 'night', aura: 'none', hat: 'none', outfit: 'none', pipe: 'green', background: 'forest' } },
+    { rank: 25, name: 'SwiftSparrow', score: 10, tier: 'BRONZE', avatar: 'froggy_kero', loadout: { bird: 'classic', aura: 'none', hat: 'none', outfit: 'none', pipe: 'green', background: 'sky' } }
   ];
 
-  let leaderboardData = sanitizeLeaderboard(storage.get('skyFlappyLeaderboard_v9', defaultLeaderboard));
-  if(!leaderboardData || leaderboardData.length < 50 || leaderboardData.filter(x => !x.isUser && x.score === 0).length > 2) {
+  let leaderboardData = sanitizeLeaderboard(storage.get('skyFlappyLeaderboard_v7', defaultLeaderboard));
+  if(!leaderboardData || leaderboardData.length < 25) {
     leaderboardData = sanitizeLeaderboard([...defaultLeaderboard]);
-    storage.set('skyFlappyLeaderboard_v9', leaderboardData);
+    storage.set('skyFlappyLeaderboard_v7', leaderboardData);
   }
 
   let selectedSpotlightPlayer = leaderboardData[0];
@@ -4457,7 +4273,7 @@
     leaderboardData.sort((a, b) => b.score - a.score);
     leaderboardData.forEach((p, i) => p.rank = i + 1);
 
-    storage.set('skyFlappyLeaderboard_v9', leaderboardData);
+    storage.set('skyFlappyLeaderboard_v6', leaderboardData);
     storage.set('skyFlappyLeaderboard', leaderboardData);
 
     // Kirim Skor Tertinggi ke Firebase Firestore Global Leaderboard dengan Primary Key
@@ -4534,9 +4350,9 @@
           });
         }
 
-        // 3. Tambahkan default bot jika daftar masih sedikit (< 50 pemain)
+        // 3. Tambahkan default bot jika daftar masih sedikit (< 12 pemain)
         defaultLeaderboard.forEach(d => {
-          if(!seenKeys.has(d.name) && merged.length < 50) {
+          if(!seenKeys.has(d.name) && merged.length < 12) {
             seenKeys.add(d.name);
             merged.push(d);
           }
@@ -4546,7 +4362,7 @@
         leaderboardData.sort((a, b) => b.score - a.score);
         leaderboardData.forEach((p, i) => p.rank = i + 1);
 
-        storage.set('skyFlappyLeaderboard_v9', leaderboardData);
+        storage.set('skyFlappyLeaderboard_v6', leaderboardData);
         storage.set('skyFlappyLeaderboard', leaderboardData);
 
         if(el.rankedModal && !el.rankedModal.classList.contains('hidden')) {
@@ -6205,7 +6021,7 @@
     if(score === 10 || score === 25 || score === 50) makeParticles(180, 180, 25, '#ffe45c');
 
     // Pet Skill: Aero & Lumos (Divine Blessing)
-    const petId = progress.selectedPet || 'none';
+    const petId = progress.selectedPet || 'pip_peep';
     if(petId === 'aero_lumos') {
       aeroPipesPassed++;
       if(aeroPipesPassed % 4 === 0) {
@@ -6227,11 +6043,8 @@
       }
     }
   }
-  const MAX_ACTIVE_PARTICLES = 100;
   function makeParticles(x, y, count, color) {
-    if(particles.length >= MAX_ACTIVE_PARTICLES) return;
-    const actualCount = Math.min(count, MAX_ACTIVE_PARTICLES - particles.length);
-    for(let i = 0; i < actualCount; i++) {
+    for(let i = 0; i < count; i++) {
       const life = .55 + Math.random() * .35;
       particles.push({ x, y, vx: (Math.random() - .5) * 100, vy: (Math.random() - .8) * 100, life, maxLife: life, color, size: 2 + Math.random() * 3, type: 'dot' });
     }
@@ -6431,7 +6244,7 @@
       return;
     }
     let html = '';
-    const petId = progress.selectedPet || 'none';
+    const petId = progress.selectedPet || 'pip_peep';
     
     // Status Skill Pet Khusus
     if(petId === 'pip_peep') {
@@ -6577,7 +6390,7 @@
   // Tail Aura Particle Spawner with Distinct Effects
   function skinTrail(dt) {
     trailSpawn += dt;
-    if(trailSpawn < .033 || particles.length >= 80) return;
+    if(trailSpawn < .033) return;
     trailSpawn = 0;
     const bx = bird.x - 14, by = bird.y + 4;
     const auraId = progress.selectedAura || 'default';
@@ -7695,6 +7508,8 @@
     } else if(q.type === 'lightning') {
       targetCtx.strokeStyle = q.color;
       targetCtx.lineWidth = 2.2;
+      targetCtx.shadowColor = q.color;
+      targetCtx.shadowBlur = 6;
       targetCtx.beginPath();
       targetCtx.moveTo(q.x, q.y);
       if(q.pts) {
@@ -7852,12 +7667,10 @@
       p.type === 'trap' ? '#facc15' : '#38bdf8';
 
     const pulse = Math.sin(now / 160) * 1.5;
-    // 1. Holographic Iridescent Bubble Halo & Gradient
-    ctx.fillStyle = glowColor + '28';
-    ctx.beginPath();
-    ctx.arc(0, 0, p.r + pulse * 0.4 + 3.5, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.shadowColor = glowColor;
+    ctx.shadowBlur = 14;
 
+    // 1. Holographic Iridescent Bubble Gradient
     const radGrad = ctx.createRadialGradient(-3, -3, 2, 0, 0, p.r + pulse);
     radGrad.addColorStop(0, '#ffffff');
     radGrad.addColorStop(0.65, 'rgba(255, 255, 255, 0.88)');
@@ -7878,10 +7691,13 @@
       const sx = Math.cos(ang) * (p.r + 4);
       const sy = Math.sin(ang) * (p.r + 4);
       ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 6;
       ctx.beginPath();
       ctx.arc(sx, sy, 1.5, 0, Math.PI * 2);
       ctx.fill();
     }
+    ctx.shadowBlur = 0;
 
     // Power-Up Icons
     if(p.type === 'baby') {
@@ -8155,9 +7971,12 @@
 
     // Glowing Red Evil Eye
     ctx.fillStyle = '#f43f5e';
+    ctx.shadowColor = '#f43f5e';
+    ctx.shadowBlur = 6;
     ctx.beginPath();
     ctx.arc(6, -4, 4.5, 0, 7);
     ctx.fill();
+    ctx.shadowBlur = 0;
     ctx.fillStyle = '#fff';
     ctx.beginPath();
     ctx.arc(7.5, -4.5, 1.6, 0, 7);
@@ -8255,6 +8074,10 @@
 
     // 2. Strike Phase: Vertical Jagged Lightning Bolt
     if(c.phase === 'strike') {
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 5;
+      ctx.shadowColor = '#fde047';
+      ctx.shadowBlur = 16;
       ctx.beginPath();
       ctx.moveTo(c.targetX, c.y + 15);
       
@@ -8265,18 +8088,15 @@
         ctx.lineTo(c.targetX + offX, c.y + 15 + i * stepY);
       }
       ctx.lineTo(c.targetX, H - GROUND);
+      ctx.stroke();
 
       // Outer Yellow Aura
       ctx.strokeStyle = '#fde047';
       ctx.lineWidth = 10;
       ctx.globalAlpha = 0.5;
       ctx.stroke();
-
-      // Inner White Core Bolt
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 5;
       ctx.globalAlpha = 1.0;
-      ctx.stroke();
+      ctx.shadowBlur = 0;
     }
 
     // 3. Storm Cloud Body
@@ -8309,6 +8129,8 @@
       ctx.globalAlpha = alpha;
       ctx.strokeStyle = sw.color;
       ctx.lineWidth = 3 * alpha + 1.2;
+      ctx.shadowColor = sw.color;
+      ctx.shadowBlur = 10;
       ctx.beginPath();
       ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
       ctx.stroke();
@@ -8671,6 +8493,9 @@
       const wobble = Math.sin(performance.now() / 90) * 0.18;
       targetCtx.rotate(wobble);
 
+      targetCtx.shadowColor = b.color;
+      targetCtx.shadowBlur = 8;
+
       // Cangkang Telur Pastel
       targetCtx.fillStyle = '#ffffff';
       targetCtx.beginPath();
@@ -8709,6 +8534,10 @@
     targetCtx.translate(b.x || 0, b.y || 0);
     targetCtx.rotate(bAngle + (b.state === 'intercept' ? bFlip : 0));
 
+    // Pendaran Aura Lembut
+    targetCtx.shadowColor = bColor;
+    targetCtx.shadowBlur = b.state === 'intercept' ? 14 : 7;
+
     // Tubuh Bulat Mungil Pastel
     const bodyGrad = targetCtx.createRadialGradient(-2, -2, 2, 0, 0, br);
     bodyGrad.addColorStop(0, '#ffffff');
@@ -8719,6 +8548,7 @@
     targetCtx.beginPath();
     targetCtx.arc(0, 0, br, 0, Math.PI * 2);
     targetCtx.fill();
+    targetCtx.shadowBlur = 0;
 
     // Pipi Merona Merah Muda (Blushing Cheeks)
     targetCtx.fillStyle = bBlushColor;
@@ -8789,9 +8619,12 @@
       // Golden Angel Halo (Aero / Lumos)
       targetCtx.strokeStyle = '#fde047';
       targetCtx.lineWidth = 1.6;
+      targetCtx.shadowColor = '#fef08a';
+      targetCtx.shadowBlur = 6;
       targetCtx.beginPath();
       targetCtx.ellipse(0, -b.r - 4.5, 4.5, 1.8, 0, 0, Math.PI * 2);
       targetCtx.stroke();
+      targetCtx.shadowBlur = 0;
     } else if(b.accessory === 'antenna') {
       // Cyber Neon Antenna (Pixel / Glitch)
       targetCtx.strokeStyle = '#0284c7';
@@ -8801,9 +8634,12 @@
       targetCtx.lineTo(0, -b.r - 5.5);
       targetCtx.stroke();
       targetCtx.fillStyle = '#38bdf8';
+      targetCtx.shadowColor = '#38bdf8';
+      targetCtx.shadowBlur = 6;
       targetCtx.beginPath();
       targetCtx.arc(0, -b.r - 6, 2, 0, Math.PI * 2);
       targetCtx.fill();
+      targetCtx.shadowBlur = 0;
     } else if(b.accessory === 'flame') {
       // Phoenix Flame Tuft (Blaze / Ember)
       targetCtx.fillStyle = '#f97316';
@@ -8854,6 +8690,8 @@
       ctx.globalAlpha = alpha;
       ctx.strokeStyle = '#38bdf8';
       ctx.lineWidth = 5.2;
+      ctx.shadowColor = '#00f5d4';
+      ctx.shadowBlur = 18;
       ctx.beginPath();
       ctx.moveTo(lb.x1, lb.y1);
       ctx.lineTo(lb.x2, lb.y2);
@@ -8887,6 +8725,8 @@
       ctx.globalAlpha = alpha;
       ctx.strokeStyle = lb.color || '#fde047';
       ctx.lineWidth = 4.8 * alpha;
+      ctx.shadowColor = '#eab308';
+      ctx.shadowBlur = 18;
       ctx.beginPath();
       if(lb.points && lb.points.length > 0) {
         ctx.moveTo(lb.points[0].x, lb.points[0].y);
@@ -8913,6 +8753,9 @@
     const bx = bird.x, by = bird.y;
     const flameReach = 190 + Math.sin(now / 50) * 22;
     const flameSpread = 46 + Math.sin(now / 70) * 10;
+
+    ctx.shadowColor = '#f97316';
+    ctx.shadowBlur = 22;
 
     // Layer 1: Crimson & Scarlet Outer Roaring Dragon Fire Plume
     const fireGrad1 = ctx.createRadialGradient(bx + 20, by, 10, bx + 110, by, flameReach);
@@ -9000,6 +8843,8 @@
     // Holy Halo Ring above head
     ctx.strokeStyle = '#fde047';
     ctx.lineWidth = 2.4;
+    ctx.shadowColor = '#fde047';
+    ctx.shadowBlur = 12;
     ctx.beginPath();
     ctx.ellipse(bx, by - 24, 15, 5.5, 0, 0, Math.PI * 2);
     ctx.stroke();
@@ -9030,6 +8875,8 @@
     ctx.rotate(-now / 320);
     ctx.strokeStyle = 'rgba(168, 85, 247, 0.55)';
     ctx.lineWidth = 2.2;
+    ctx.shadowColor = '#7e22ce';
+    ctx.shadowBlur = 14;
     ctx.beginPath();
     for(let i = 0; i < 3; i++) {
       const a = (i * Math.PI * 2) / 3;
@@ -9298,7 +9145,7 @@
 
   function initLobbyParticles() {
     lobbyPetals = [];
-    for(let i = 0; i < 14; i++) {
+    for(let i = 0; i < 28; i++) {
       lobbyPetals.push({
         x: Math.random() * W,
         y: Math.random() * H,
@@ -9340,72 +9187,74 @@
     // Rosy Anime Blush Cheeks with Hatching
     targetCtx.fillStyle = 'rgba(251, 113, 133, 0.7)';
     targetCtx.beginPath();
-    targetCtx.arc(4, 3, 2.5, 0, Math.PI * 2);
-    targetCtx.arc(-3, 3, 2.2, 0, Math.PI * 2);
+    targetCtx.ellipse(4.5, 3.2, 3.5, 2.5, 0, 0, Math.PI * 2);
     targetCtx.fill();
-
-    // Cute Little Beak
-    targetCtx.fillStyle = '#f97316';
+    targetCtx.strokeStyle = '#f43f5e';
+    targetCtx.lineWidth = 0.8;
     targetCtx.beginPath();
-    targetCtx.moveTo(8, -1); targetCtx.lineTo(14, 1); targetCtx.lineTo(8, 3.5);
-    targetCtx.closePath();
-    targetCtx.fill();
+    targetCtx.moveTo(3.5, 2.2); targetCtx.lineTo(2.5, 4.2);
+    targetCtx.moveTo(5.2, 2.2); targetCtx.lineTo(4.2, 4.2);
+    targetCtx.stroke();
 
-    // Flapping Chubby Wing
-    const flap = Math.sin(lobbyTime * 6) * 0.4;
-    targetCtx.save();
-    targetCtx.translate(-4, 2);
-    targetCtx.rotate(flap);
-    targetCtx.fillStyle = wingColor;
-    targetCtx.beginPath();
-    targetCtx.ellipse(0, 0, 6, 4, -0.2, 0, Math.PI * 2);
-    targetCtx.fill();
-    targetCtx.restore();
-
-    // Big Sparkly Anime Boba Eyes
+    // Kawaii Sparkling Boba Eye (Double Glint)
     targetCtx.fillStyle = '#0f172a';
     targetCtx.beginPath();
-    targetCtx.arc(4, -3, 3.5, 0, Math.PI * 2);
+    targetCtx.arc(4, -2.5, 3.2, 0, Math.PI * 2);
     targetCtx.fill();
     targetCtx.fillStyle = '#ffffff';
     targetCtx.beginPath();
-    targetCtx.arc(5.2, -4.2, 1.4, 0, Math.PI * 2);
-    targetCtx.arc(3.0, -2.0, 0.7, 0, Math.PI * 2);
+    targetCtx.arc(5.2, -3.8, 1.4, 0, Math.PI * 2);
+    targetCtx.arc(2.8, -1.4, 0.8, 0, Math.PI * 2);
     targetCtx.fill();
 
-    // Accessories
+    // Tiny Orange Beak
+    targetCtx.fillStyle = '#f97316';
+    targetCtx.beginPath();
+    targetCtx.moveTo(8, -1.2);
+    targetCtx.lineTo(13.5, 0.8);
+    targetCtx.lineTo(8, 2.8);
+    targetCtx.closePath();
+    targetCtx.fill();
+
+    // Flapping Little Wing
+    const wFlap = Math.sin(lobbyTime * 8) * 0.2;
+    targetCtx.save();
+    targetCtx.translate(-4, 2);
+    targetCtx.rotate(wFlap);
+    targetCtx.fillStyle = wingColor;
+    targetCtx.beginPath();
+    targetCtx.ellipse(0, 0, 6, 4, 0.1, 0, Math.PI * 2);
+    targetCtx.fill();
+    targetCtx.restore();
+
+    // Head Accessories (Ribbon or Flower)
     if(accessory === 'ribbon') {
       targetCtx.fillStyle = '#f472b6';
       targetCtx.beginPath();
-      targetCtx.moveTo(0, -11); targetCtx.lineTo(-4, -15); targetCtx.lineTo(0, -13);
-      targetCtx.moveTo(0, -11); targetCtx.lineTo(4, -15); targetCtx.lineTo(0, -13);
+      targetCtx.moveTo(0, -11); targetCtx.lineTo(-4, -15); targetCtx.lineTo(0, -13); targetCtx.closePath();
+      targetCtx.moveTo(0, -11); targetCtx.lineTo(4, -15); targetCtx.lineTo(0, -13); targetCtx.closePath();
       targetCtx.fill();
+      targetCtx.fillStyle = '#fbcfe8';
+      targetCtx.beginPath(); targetCtx.arc(0, -12, 1.4, 0, Math.PI * 2); targetCtx.fill();
     } else if(accessory === 'flower') {
       targetCtx.fillStyle = '#f472b6';
-      targetCtx.beginPath();
-      targetCtx.arc(0, -12, 2.2, 0, Math.PI * 2);
-      targetCtx.fill();
+      for(let a = 0; a < 5; a++) {
+        const rad = (a * Math.PI * 2) / 5;
+        targetCtx.beginPath();
+        targetCtx.arc(Math.cos(rad) * 2.8, -13 + Math.sin(rad) * 2.8, 1.5, 0, Math.PI * 2);
+        targetCtx.fill();
+      }
       targetCtx.fillStyle = '#fef08a';
-      targetCtx.beginPath();
-      targetCtx.arc(0, -12, 1, 0, Math.PI * 2);
-      targetCtx.fill();
-    } else if(accessory === 'halo') {
-      targetCtx.strokeStyle = '#fde047';
-      targetCtx.lineWidth = 1.6;
-      targetCtx.beginPath();
-      targetCtx.ellipse(0, -15, 6, 2, 0, 0, Math.PI * 2);
-      targetCtx.stroke();
-    } else if(accessory === 'antenna') {
-      targetCtx.strokeStyle = '#0284c7';
-      targetCtx.lineWidth = 1.4;
-      targetCtx.beginPath();
-      targetCtx.moveTo(0, -11); targetCtx.lineTo(0, -17);
-      targetCtx.stroke();
-      targetCtx.fillStyle = '#38bdf8';
-      targetCtx.beginPath();
-      targetCtx.arc(0, -18, 2, 0, Math.PI * 2);
-      targetCtx.fill();
+      targetCtx.beginPath(); targetCtx.arc(0, -13, 1.3, 0, Math.PI * 2); targetCtx.fill();
     }
+
+    // Tiny Orange Feet
+    targetCtx.strokeStyle = '#ea580c';
+    targetCtx.lineWidth = 1.6;
+    targetCtx.beginPath();
+    targetCtx.moveTo(-2, 10); targetCtx.lineTo(-2, 14);
+    targetCtx.moveTo(3, 10); targetCtx.lineTo(3, 14);
+    targetCtx.stroke();
 
     targetCtx.restore();
   }
@@ -9419,6 +9268,8 @@
     targetCtx.save();
     targetCtx.scale(flap, 1);
     targetCtx.fillStyle = '#f472b6';
+    targetCtx.shadowColor = '#f472b6';
+    targetCtx.shadowBlur = 8;
     // Left Wing
     targetCtx.beginPath();
     targetCtx.ellipse(-6, -4, 7, 5, -0.4, 0, Math.PI * 2);
@@ -9484,195 +9335,216 @@
     }
     ctx.restore();
 
-    // 4. Soft Parallax Distant Layered Mountains
+    // 4. Distant Sky Birds Flocking across the horizon
     ctx.save();
-    // Distant Lilac/Blue Mountain Silhouette
-    ctx.fillStyle = 'rgba(147, 197, 253, 0.45)';
-    ctx.beginPath();
-    ctx.moveTo(0, H - GROUND - 70);
-    for(let x = 0; x <= W; x += 40) {
-      ctx.quadraticCurveTo(x + 20, H - GROUND - 120 + (x % 80 ? 20 : -10), x + 40, H - GROUND - 70);
+    ctx.strokeStyle = 'rgba(30, 41, 59, 0.45)';
+    ctx.lineWidth = 1.6;
+    for(let f = 0; f < 4; f++) {
+      const birdX = ((lobbyTime * 18 + f * 42) % (W + 80)) - 40;
+      const birdY = 120 + Math.sin(lobbyTime * 2 + f) * 12 + f * 16;
+      const wingFold = Math.sin(lobbyTime * 6 + f * 1.2) * 4;
+      ctx.beginPath();
+      ctx.moveTo(birdX - 6, birdY + wingFold);
+      ctx.quadraticCurveTo(birdX - 3, birdY - 3, birdX, birdY);
+      ctx.quadraticCurveTo(birdX + 3, birdY - 3, birdX + 6, birdY + wingFold);
+      ctx.stroke();
     }
-    ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
-    ctx.fill();
+    ctx.restore();
 
-    // Midground Mint/Emerald Rolling Hills
+    // 5. Cute Floating Hot Air Balloon in Far Sky
+    ctx.save();
+    const balloonX = ((lobbyTime * 6 + 40) % (W + 90)) - 45;
+    const balloonY = 175 + Math.sin(lobbyTime * 1.1) * 8;
+    ctx.translate(balloonX, balloonY);
+    // Balloon envelope
+    ctx.fillStyle = '#ec4899';
+    ctx.beginPath();
+    ctx.ellipse(0, -12, 11, 14, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#38bdf8';
+    ctx.beginPath();
+    ctx.ellipse(0, -12, 4.5, 14, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // Basket & ropes
+    ctx.strokeStyle = '#78350f';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(-4, -1); ctx.lineTo(-3, 6);
+    ctx.moveTo(4, -1); ctx.lineTo(3, 6);
+    ctx.stroke();
+    ctx.fillStyle = '#b45309';
+    ctx.fillRect(-4, 6, 8, 5);
+    ctx.restore();
+
+    // 6. Volumetric Fluffy Clouds (Parallax Scrolling)
+    const bgW = W + 240;
+    drawFluffyCloud(((lobbyTime * 12 + 20) % bgW) - 120, 75, 0.65, 0.6);
+    drawFluffyCloud(((lobbyTime * 16 + 180) % bgW) - 120, 110, 0.8, 0.75);
+    drawFluffyCloud(((lobbyTime * 22 + 90) % bgW) - 120, 160, 0.95, 0.85);
+
+    // 7. Layered Rolling Green Hills
+    // Far Hill (Soft Mint/Teal)
     ctx.fillStyle = '#86efac';
     ctx.beginPath();
-    ctx.moveTo(0, H - GROUND - 45);
-    for(let x = 0; x <= W; x += 45) {
-      ctx.quadraticCurveTo(x + 22, H - GROUND - 85, x + 45, H - GROUND - 45);
+    ctx.moveTo(0, H - 120);
+    for(let x = 0; x <= W; x += 50) {
+      ctx.quadraticCurveTo(x + 25, H - 170 + Math.sin(x * 0.03) * 15, x + 50, H - 120);
     }
-    ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
-    ctx.fill();
+    ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
 
-    // Foreground Vibrant Spring Grass Lawn
+    // Mid Hill (Vibrant Grass Green)
     ctx.fillStyle = '#4ade80';
     ctx.beginPath();
-    ctx.moveTo(0, H - GROUND - 18);
-    for(let x = 0; x <= W; x += 30) {
-      ctx.quadraticCurveTo(x + 15, H - GROUND - 38, x + 30, H - GROUND - 18);
+    ctx.moveTo(0, H - 95);
+    for(let x = 0; x <= W; x += 60) {
+      ctx.quadraticCurveTo(x + 30, H - 135 + Math.cos(x * 0.04) * 12, x + 60, H - 95);
     }
-    ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
-    ctx.fill();
-    ctx.restore();
+    ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
 
-    // 5. Gentle Drifting Fluffy Clouds
-    const c1X = ((lobbyTime * 14) % (W + 180)) - 90;
-    const c2X = (((lobbyTime * 9) + 220) % (W + 240)) - 120;
-    const c3X = (((lobbyTime * 18) + 100) % (W + 160)) - 80;
-    drawFluffyCloud(c1X, 55, 0.75, 0.85);
-    drawFluffyCloud(c2X, 85, 0.95, 0.75);
-    drawFluffyCloud(c3X, 35, 0.55, 0.65);
-
-    // 6. Whimsical Little Cottages & Windmill in Distance
+    // Cute Distant Windmill on the hill
     ctx.save();
-    // Tiny windmill tower on hill
-    const wmX = W * 0.78, wmY = H - GROUND - 42;
+    const wmX = 65;
+    const wmY = H - 118;
     ctx.fillStyle = '#f8fafc';
     ctx.beginPath();
-    ctx.moveTo(wmX - 6, wmY + 18); ctx.lineTo(wmX - 4, wmY); ctx.lineTo(wmX + 4, wmY); ctx.lineTo(wmX + 6, wmY + 18);
+    ctx.moveTo(wmX - 6, wmY + 22);
+    ctx.lineTo(wmX - 4, wmY);
+    ctx.lineTo(wmX + 4, wmY);
+    ctx.lineTo(wmX + 6, wmY + 22);
     ctx.closePath();
     ctx.fill();
-    // Windmill Roof Cone
-    ctx.fillStyle = '#ef4444';
+    ctx.fillStyle = '#e11d48';
     ctx.beginPath();
-    ctx.moveTo(wmX - 5, wmY); ctx.lineTo(wmX, wmY - 6); ctx.lineTo(wmX + 5, wmY);
+    ctx.moveTo(wmX - 5, wmY);
+    ctx.lineTo(wmX, wmY - 6);
+    ctx.lineTo(wmX + 5, wmY);
     ctx.closePath();
     ctx.fill();
-    // Rotating Windmill Sails
+    // Windmill Blades Spinning
     ctx.save();
-    ctx.translate(wmX, wmY - 1);
-    ctx.rotate(lobbyTime * 0.8);
-    ctx.strokeStyle = '#b91c1c';
-    ctx.lineWidth = 1.2;
-    for(let i = 0; i < 4; i++) {
+    ctx.translate(wmX, wmY);
+    ctx.rotate(lobbyTime * 2.2);
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 1.8;
+    for(let b = 0; b < 4; b++) {
       ctx.rotate(Math.PI / 2);
       ctx.beginPath();
-      ctx.moveTo(0, 0); ctx.lineTo(0, -14); ctx.lineTo(3, -11); ctx.lineTo(0, -8);
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, 16);
       ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.fillRect(-2, 6, 4, 10);
     }
     ctx.restore();
     ctx.restore();
 
-    // 7. Lush Meadow Ground with Swaying Daisies & Tulips
-    const yG = H - GROUND;
-    ctx.save();
-    // Ground Base Dirt Gradient
-    const gGrad = ctx.createLinearGradient(0, yG, 0, H);
-    gGrad.addColorStop(0, '#22c55e');
-    gGrad.addColorStop(0.12, '#16a34a');
-    gGrad.addColorStop(0.18, '#854d0e');
-    gGrad.addColorStop(1, '#451a03');
-    ctx.fillStyle = gGrad;
-    ctx.fillRect(0, yG, W, GROUND);
-
-    // Animated Swaying Grass Blades
-    ctx.fillStyle = '#4ade80';
-    for(let x = 0; x <= W + 12; x += 8) {
-      const sway = Math.sin(lobbyTime * 3 + x * 0.15) * 3.5;
-      ctx.beginPath();
-      ctx.moveTo(x, yG + 2);
-      ctx.quadraticCurveTo(x + sway, yG - 8, x + sway * 1.3, yG - 11);
-      ctx.lineTo(x + 4, yG + 2);
-      ctx.closePath();
-      ctx.fill();
+    // Near Hill with Lush Grass Top Border
+    ctx.fillStyle = '#22c55e';
+    ctx.beginPath();
+    ctx.moveTo(0, H - 75);
+    for(let x = 0; x <= W; x += 40) {
+      ctx.quadraticCurveTo(x + 20, H - 98, x + 40, H - 75);
     }
+    ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
 
-    // Cute Daisies, Tulips & Wildflowers Blooming in Lawn
+    // 8. Ground Surface & Cheerful Swaying Grass Blades & Wildflowers
+    drawGround();
+
+    // Swaying Daisy Flowers & Tulips on Grass
     const flowerSpots = [
-      { x: 18, color: '#f43f5e', type: 'tulip', h: 9 },
-      { x: 42, color: '#ffffff', center: '#facc15', type: 'daisy', h: 7 },
-      { x: 68, color: '#fb923c', type: 'tulip', h: 8 },
-      { x: W - 78, color: '#ffffff', center: '#facc15', type: 'daisy', h: 8 },
-      { x: W - 52, color: '#ec4899', type: 'tulip', h: 9 },
-      { x: W - 22, color: '#38bdf8', center: '#facc15', type: 'daisy', h: 7 }
+      { x: 25, y: H - GROUND - 4, color: '#f43f5e' },
+      { x: 65, y: H - GROUND - 6, color: '#fbbf24' },
+      { x: 120, y: H - GROUND - 5, color: '#ec4899' },
+      { x: 180, y: H - GROUND - 6, color: '#a855f7' },
+      { x: 240, y: H - GROUND - 4, color: '#38bdf8' },
+      { x: 310, y: H - GROUND - 6, color: '#fbbf24' },
+      { x: 380, y: H - GROUND - 5, color: '#f43f5e' },
+      { x: 440, y: H - GROUND - 6, color: '#ec4899' },
+      { x: 510, y: H - GROUND - 4, color: '#38bdf8' },
+      { x: 570, y: H - GROUND - 6, color: '#fbbf24' },
+      { x: 615, y: H - GROUND - 5, color: '#f43f5e' }
     ];
-
-    for(const fl of flowerSpots) {
-      const fSway = Math.sin(lobbyTime * 2.5 + fl.x) * 2;
-      const headX = fl.x + fSway;
-      const headY = yG - fl.h;
-
+    flowerSpots.forEach((f, idx) => {
+      const sway = Math.sin(lobbyTime * 3 + idx * 1.5) * 3;
+      ctx.save();
+      ctx.translate(f.x, f.y);
       // Stem
       ctx.strokeStyle = '#15803d';
-      ctx.lineWidth = 1.5;
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(fl.x, yG);
-      ctx.quadraticCurveTo(fl.x + fSway * 0.5, yG - fl.h * 0.5, headX, headY);
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(sway / 2, -7, sway, -13);
       ctx.stroke();
-
-      // Flower Bloom
-      if(fl.type === 'tulip') {
-        ctx.fillStyle = fl.color;
+      // Flower head
+      ctx.translate(sway, -13);
+      ctx.fillStyle = f.color;
+      for(let p = 0; p < 5; p++) {
         ctx.beginPath();
-        ctx.arc(headX, headY, 3.8, 0, Math.PI);
-        ctx.lineTo(headX - 3.8, headY - 4);
-        ctx.lineTo(headX - 1.5, headY - 1);
-        ctx.lineTo(headX, headY - 5);
-        ctx.lineTo(headX + 1.5, headY - 1);
-        ctx.lineTo(headX + 3.8, headY - 4);
-        ctx.closePath();
-        ctx.fill();
-      } else {
-        // Daisy 5-petals
-        ctx.fillStyle = fl.color;
-        for(let p = 0; p < 5; p++) {
-          const a = (p * Math.PI * 2) / 5;
-          ctx.beginPath();
-          ctx.arc(headX + Math.cos(a) * 3, headY + Math.sin(a) * 3, 2, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.fillStyle = fl.center;
-        ctx.beginPath();
-        ctx.arc(headX, headY, 1.8, 0, Math.PI * 2);
+        const ang = (p * Math.PI * 2) / 5;
+        ctx.arc(Math.cos(ang) * 4, Math.sin(ang) * 4, 3, 0, Math.PI * 2);
         ctx.fill();
       }
-    }
-    ctx.restore();
+      ctx.fillStyle = '#fef08a';
+      ctx.beginPath();
+      ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
 
-    // 8. Dynamic Interactive Bouncing Cute Avatars
+    // Update Interactive Mascot Tap Bounce Timers
     if(lobbyBirdBounce > 0) lobbyBirdBounce = Math.max(0, lobbyBirdBounce - dt);
     if(lobbyChick1Bounce > 0) lobbyChick1Bounce = Math.max(0, lobbyChick1Bounce - dt);
     if(lobbyChick2Bounce > 0) lobbyChick2Bounce = Math.max(0, lobbyChick2Bounce - dt);
 
-    // --- Mascot 1: Main Equipped Bird Mascot Waddling on Ground ---
+    // 9. CUTE ANIMATED BIRDS & COMPANIONS (HAPPY LOBBY MASCOTS)
+    // --- Mascot 1: Main Custom Player Bird (Cheering on the ground) ---
     const mainBirdX = W / 2;
-    const birdInteractiveHop = Math.sin((1 - lobbyBirdBounce / 0.5) * Math.PI) * 22;
-    const birdWaddleHop = Math.abs(Math.sin(lobbyTime * 4)) * 12 + (lobbyBirdBounce > 0 ? birdInteractiveHop : 0);
-    const birdWaddleY = H - GROUND - 18 - birdWaddleHop;
-    const birdWaddleTilt = Math.sin(lobbyTime * 4) * 0.12 + (lobbyBirdBounce > 0 ? Math.sin((1 - lobbyBirdBounce / 0.5) * Math.PI * 2) * 0.4 : 0);
+    const birdInteractiveHop = Math.sin((1 - lobbyBirdBounce / 0.5) * Math.PI) * 24;
+    const mainBirdHop = Math.abs(Math.sin(lobbyTime * 3.5)) * 14 + (lobbyBirdBounce > 0 ? birdInteractiveHop : 0);
+    const mainBirdY = H - GROUND - 22 - mainBirdHop;
+    const mainBirdAngle = Math.sin(lobbyTime * 3.5) * 0.12 + (lobbyBirdBounce > 0 ? Math.sin(lobbyBirdBounce * 25) * 0.22 : 0);
+    const mainBirdWing = (lobbyBirdBounce > 0 ? 14 : Math.sin(lobbyTime * 10) * 8);
 
     renderCustomBird(ctx, {
       x: mainBirdX,
-      y: birdWaddleY,
-      angle: birdWaddleTilt,
-      wing: Math.sin(lobbyTime * 8),
-      skinId: progress.selectedSkin || 'classic',
+      y: mainBirdY,
+      angle: mainBirdAngle,
+      wing: mainBirdWing,
+      skinId: progress.selected || 'classic',
       hatId: progress.selectedHat || 'none',
-      outfitId: progress.selectedOutfit || 'none'
+      outfitId: progress.selectedOutfit || 'none',
+      opacity: 1
     });
 
-    // 9. Floating Speech Bubbles & Fun Emotes
-    if(performance.now() > nextLobbyEmoteTime) {
-      nextLobbyEmoteTime = performance.now() + 3500 + Math.random() * 4000;
-      const emotes = ['🎵', '✨', '💖', '⭐', '🌸', '🐥', '🐣', '🍉'];
+    // Main bird shadow on ground
+    ctx.save();
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    const shadowScale = 1 - (mainBirdHop / 35);
+    ctx.beginPath();
+    ctx.ellipse(mainBirdX, H - GROUND + 3, 16 * shadowScale, 5 * shadowScale, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Floating Cute Emote Bubble above Main Bird (Hearts, Music, Sparkles)
+    if(lobbyTime > nextLobbyEmoteTime) {
+      const emotes = ['★', '✦', '♪', '◆', '●', '▲'];
       lobbyEmotes.push({
+        x: mainBirdX + (Math.random() - 0.5) * 18,
+        y: mainBirdY - 26,
         text: emotes[Math.floor(Math.random() * emotes.length)],
-        x: mainBirdX + (Math.random() - 0.5) * 45,
-        y: birdWaddleY - 26,
-        vy: -22 - Math.random() * 15,
         life: 1.8,
-        maxLife: 1.8
+        maxLife: 1.8,
+        vy: -22
       });
+      nextLobbyEmoteTime = lobbyTime + 1.2 + Math.random() * 1.5;
     }
 
-    for(let i = lobbyEmotes.length - 1; i >= 0; i--) {
-      const em = lobbyEmotes[i];
-      em.y += em.vy * dt;
+    for(let eIdx = lobbyEmotes.length - 1; eIdx >= 0; eIdx--) {
+      const em = lobbyEmotes[eIdx];
       em.life -= dt;
+      em.y += em.vy * dt;
       if(em.life <= 0) {
-        lobbyEmotes.splice(i, 1);
+        lobbyEmotes.splice(eIdx, 1);
         continue;
       }
       const alpha = Math.min(1, em.life / 0.4);
@@ -9680,14 +9552,16 @@
       ctx.globalAlpha = alpha;
       ctx.font = '900 16px "Segoe UI Emoji", "Apple Color Emoji", sans-serif';
       ctx.textAlign = 'center';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+      ctx.shadowBlur = 8;
       ctx.fillText(em.text, em.x, em.y);
       ctx.restore();
     }
 
     // --- Mascot 2 & 3: Equipped Pet Companion Duo Waddling & Hopping ---
-    const activePetId = progress.selectedPet || 'none';
+    const activePetId = progress.selectedPet || 'pip_peep';
     if(activePetId !== 'none') {
-      const pData = petsCatalog[activePetId];
+      const pData = petsCatalog[activePetId] || petsCatalog.pip_peep;
       if(pData && pData.baby1 && pData.baby2) {
         // Pet Baby 1 (Left pet)
         const chick1InteractiveHop = Math.sin((1 - lobbyChick1Bounce / 0.5) * Math.PI) * 18;
@@ -9731,6 +9605,8 @@
         ctx.fill();
       } else {
         // Star sparkle
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 6;
         ctx.beginPath();
         ctx.arc(0, 0, p.r * 0.5, 0, Math.PI * 2);
         ctx.fill();
@@ -9867,12 +9743,15 @@
 
     // Top Cap
     ctx.fillStyle = capGrad;
+    ctx.shadowColor = skin.cap || '#53d878';
+    ctx.shadowBlur = 6;
     _rrPath(ctx, px - 4, topH, pw + 8, cap, 4);
     ctx.fill();
 
     // Bottom Cap
     _rrPath(ctx, px - 4, botY, pw + 8, cap, 4);
     ctx.fill();
+    ctx.shadowBlur = 0;
 
     // 4. Glowing Neon Center Rings for Cyber / Anime pipes
     if(skin.name.includes('NEON') || skin.name.includes('TORII') || skin.name.includes('CYBER')) {
@@ -9888,6 +9767,175 @@
       ctx.stroke();
     }
 
+    // 5. Special VFX & Textures for POHON KELAPA SAWIT (Palm Tree Pipe)
+    if(skin.name.includes('SAWIT') || (progress && progress.selectedPipe === 'sawit')) {
+      const now = performance.now();
+      const sway = Math.sin(now / 350 + px * 0.02) * 2;
+
+      // A. Chevron Pelepah Bark Scales on Palm Trunk
+      ctx.strokeStyle = '#38220f';
+      ctx.lineWidth = 1.6;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      // Top trunk chevrons
+      for(let y = 14; y < topH - 8; y += 16) {
+        ctx.beginPath();
+        ctx.moveTo(px + 4, y - 4);
+        ctx.lineTo(px + pw / 2, y + 4);
+        ctx.lineTo(px + pw - 4, y - 4);
+        ctx.stroke();
+
+        // Pelepah cut highlight
+        ctx.strokeStyle = '#854d0e';
+        ctx.beginPath();
+        ctx.moveTo(px + 6, y - 2);
+        ctx.lineTo(px + pw / 2, y + 6);
+        ctx.lineTo(px + pw - 6, y - 2);
+        ctx.stroke();
+        ctx.strokeStyle = '#38220f';
+      }
+
+      // Bottom trunk chevrons
+      const bStart = botY + cap + 8;
+      const bEnd = botY + cap + botH - 8;
+      for(let y = bStart; y < bEnd; y += 16) {
+        ctx.beginPath();
+        ctx.moveTo(px + 4, y + 4);
+        ctx.lineTo(px + pw / 2, y - 4);
+        ctx.lineTo(px + pw - 4, y + 4);
+        ctx.stroke();
+
+        // Pelepah cut highlight
+        ctx.strokeStyle = '#854d0e';
+        ctx.beginPath();
+        ctx.moveTo(px + 6, y + 6);
+        ctx.lineTo(px + pw / 2, y - 2);
+        ctx.lineTo(px + pw - 6, y + 6);
+        ctx.stroke();
+        ctx.strokeStyle = '#38220f';
+      }
+
+      // B. Tandan Buah Sawit (Ripe Palm Fruit Clusters - Ripe Golden Orange & Crimson Berries)
+      const fruitBerries = [
+        { dx: -2, dy: 0, r: 3.2, col: '#dc2626' },
+        { dx: 4, dy: -2, r: 3.6, col: '#ea580c' },
+        { dx: 10, dy: 1, r: 3.2, col: '#f97316' },
+        { dx: -4, dy: -3, r: 2.8, col: '#f59e0b' },
+        { dx: 2, dy: 3, r: 3.0, col: '#ea580c' },
+        { dx: 8, dy: -3, r: 2.9, col: '#dc2626' }
+      ];
+
+      // Draw Top Pipe Fruit Bunches (Left & Right clusters just above collar)
+      const topCollarY = topH - 3;
+      fruitBerries.forEach(b => {
+        ctx.fillStyle = b.col;
+        ctx.beginPath();
+        ctx.arc(px + 10 + b.dx, topCollarY + b.dy, b.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fef08a';
+        ctx.beginPath();
+        ctx.arc(px + 10 + b.dx - 1, topCollarY + b.dy - 1, b.r * 0.35, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      fruitBerries.forEach(b => {
+        ctx.fillStyle = b.col;
+        ctx.beginPath();
+        ctx.arc(px + pw - 12 + b.dx, topCollarY + b.dy, b.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fef08a';
+        ctx.beginPath();
+        ctx.arc(px + pw - 12 + b.dx - 1, topCollarY + b.dy - 1, b.r * 0.35, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Draw Bottom Pipe Fruit Bunches (Just below collar)
+      const botCollarY = botY + cap + 5;
+      fruitBerries.forEach(b => {
+        ctx.fillStyle = b.col;
+        ctx.beginPath();
+        ctx.arc(px + 10 + b.dx, botCollarY + b.dy, b.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fef08a';
+        ctx.beginPath();
+        ctx.arc(px + 10 + b.dx - 1, botCollarY + b.dy - 1, b.r * 0.35, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      fruitBerries.forEach(b => {
+        ctx.fillStyle = b.col;
+        ctx.beginPath();
+        ctx.arc(px + pw - 12 + b.dx, botCollarY + b.dy, b.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fef08a';
+        ctx.beginPath();
+        ctx.arc(px + pw - 12 + b.dx - 1, botCollarY + b.dy - 1, b.r * 0.35, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // C. Lush Tropical Palm Fronds Arching from the Collars
+      ctx.lineWidth = 2.2;
+      ctx.lineCap = 'round';
+
+      // Top pipe fronds arching outward & drooping
+      ctx.strokeStyle = '#15803d';
+      ctx.beginPath();
+      ctx.moveTo(px - 2, topH + cap / 2);
+      ctx.quadraticCurveTo(px - 14, topH + cap / 2 - 8, px - 20 + sway, topH + cap / 2 + 10);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#22c55e';
+      ctx.beginPath();
+      ctx.moveTo(px - 2, topH + cap / 2 - 2);
+      ctx.quadraticCurveTo(px - 10, topH + cap / 2 - 14, px - 16 + sway * 0.7, topH + cap / 2 - 4);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#15803d';
+      ctx.beginPath();
+      ctx.moveTo(px + pw + 2, topH + cap / 2);
+      ctx.quadraticCurveTo(px + pw + 14, topH + cap / 2 - 8, px + pw + 20 - sway, topH + cap / 2 + 10);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#22c55e';
+      ctx.beginPath();
+      ctx.moveTo(px + pw + 2, topH + cap / 2 - 2);
+      ctx.quadraticCurveTo(px + pw + 10, topH + cap / 2 - 14, px + pw + 16 - sway * 0.7, topH + cap / 2 - 4);
+      ctx.stroke();
+
+      // Bottom pipe fronds arching outward & upward
+      ctx.strokeStyle = '#15803d';
+      ctx.beginPath();
+      ctx.moveTo(px - 2, botY + cap / 2);
+      ctx.quadraticCurveTo(px - 14, botY + cap / 2 + 8, px - 20 + sway, botY + cap / 2 - 10);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#22c55e';
+      ctx.beginPath();
+      ctx.moveTo(px - 2, botY + cap / 2 + 2);
+      ctx.quadraticCurveTo(px - 10, botY + cap / 2 + 14, px - 16 + sway * 0.7, botY + cap / 2 + 4);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#15803d';
+      ctx.beginPath();
+      ctx.moveTo(px + pw + 2, botY + cap / 2);
+      ctx.quadraticCurveTo(px + pw + 14, botY + cap / 2 + 8, px + pw + 20 - sway, botY + cap / 2 - 10);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#22c55e';
+      ctx.beginPath();
+      ctx.moveTo(px + pw + 2, botY + cap / 2 + 2);
+      ctx.quadraticCurveTo(px + pw + 10, botY + cap / 2 + 14, px + pw + 16 - sway * 0.7, botY + cap / 2 + 4);
+      ctx.stroke();
+
+      // D. Golden Tropical Sparkle Glints
+      const sparkleA = Math.sin(now / 220 + px) > 0.6;
+      if(sparkleA) {
+        ctx.fillStyle = '#fde047';
+        ctx.beginPath();
+        ctx.arc(px + pw / 2 + Math.sin(now / 300) * 12, topH + cap / 2 + Math.cos(now / 300) * 4, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
     ctx.restore();
   }
 
@@ -9899,14 +9947,18 @@
     const spinScale = Math.cos(spin); // Animasi rotasi horizontal 3D
     const absScale = Math.max(0.08, Math.abs(spinScale));
 
-    // 1. Ketebalan Tepi Koin 3D (Rim Depth)
+    // 1. Pendaran Kilau Emas Luar
+    ctx.shadowColor = 'rgba(251, 191, 36, 0.65)';
+    ctx.shadowBlur = 6;
+
+    // 2. Ketebalan Tepi Koin 3D (Rim Depth)
     const edgeOffset = (1 - absScale) * (spinScale >= 0 ? -2.2 : 2.2);
     ctx.fillStyle = '#b45309';
     ctx.beginPath();
     ctx.ellipse(edgeOffset, 0, coin.r * absScale, coin.r, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // 2. Gradasi Permukaan Emas Dinamis
+    // 3. Gradasi Permukaan Emas Dinamis
     const coinGrad = ctx.createLinearGradient(-coin.r * absScale, -coin.r, coin.r * absScale, coin.r);
     coinGrad.addColorStop(0, '#fef08a');
     coinGrad.addColorStop(0.3, '#f59e0b');
@@ -9917,6 +9969,7 @@
     ctx.beginPath();
     ctx.ellipse(0, 0, coin.r * absScale, coin.r, 0, 0, Math.PI * 2);
     ctx.fill();
+    ctx.shadowBlur = 0;
 
     // 4. Lingkaran & Lambang Emboss Bagian Dalam
     if(absScale > 0.3) {
@@ -10036,6 +10089,10 @@
       const fWave = Math.sin(performance.now() / 85) * 6;
       targetCtx.save();
       
+      // Fairy Wing Glow
+      targetCtx.shadowColor = '#67e8f9';
+      targetCtx.shadowBlur = 8;
+
       // Top Fairy Wing (Pastel Mint & Cyan)
       targetCtx.fillStyle = 'rgba(167, 243, 208, 0.72)';
       targetCtx.beginPath();
@@ -10070,6 +10127,7 @@
       targetCtx.stroke();
 
       // Fairy Dust Sparkles
+      targetCtx.shadowBlur = 0;
       targetCtx.fillStyle = '#ffffff';
       drawCanvasSparkle(targetCtx, -26, -14 + fWave, 3);
       drawCanvasSparkle(targetCtx, -22, 18 + fWave * 0.6, 2.5);
@@ -10727,10 +10785,13 @@
 
       targetCtx.strokeStyle = '#fbbf24';
       targetCtx.lineWidth = 1.8;
+      targetCtx.shadowColor = 'rgba(251,191,36,0.6)';
+      targetCtx.shadowBlur = 4;
       targetCtx.beginPath();
       targetCtx.moveTo(2, 0);
       targetCtx.quadraticCurveTo(6.5, 5, 11, 1);
       targetCtx.stroke();
+      targetCtx.shadowBlur = 0;
 
       // 2. Heavy Gold Dollar Medallion centered on the chest
       targetCtx.fillStyle = '#f59e0b';
@@ -10803,6 +10864,8 @@
       targetCtx.save();
       targetCtx.translate(3.5, 6);
       targetCtx.fillStyle = '#fbbf24';
+      targetCtx.shadowColor = 'rgba(251,191,36,0.7)';
+      targetCtx.shadowBlur = 4;
 
       const cx = 0, cy = 0, rOut = 4.5, rIn = 2;
       targetCtx.beginPath();
@@ -10814,6 +10877,7 @@
       }
       targetCtx.closePath();
       targetCtx.fill();
+      targetCtx.shadowBlur = 0;
 
       // Ball tips on each star point
       targetCtx.fillStyle = '#f59e0b';
@@ -10844,9 +10908,12 @@
 
       // Ruby Heart Locket
       targetCtx.fillStyle = '#e11d48';
+      targetCtx.shadowColor = '#f43f5e';
+      targetCtx.shadowBlur = 4;
       targetCtx.beginPath();
       targetCtx.arc(6.5, 6, 3, 0, Math.PI * 2);
       targetCtx.fill();
+      targetCtx.shadowBlur = 0;
 
       targetCtx.strokeStyle = '#fbbf24';
       targetCtx.lineWidth = 1.2;
@@ -10882,9 +10949,12 @@
       targetCtx.stroke();
 
       targetCtx.fillStyle = '#10b981';
+      targetCtx.shadowColor = '#34d399';
+      targetCtx.shadowBlur = 6;
       targetCtx.beginPath();
       targetCtx.arc(6.5, 6, 3.2, 0, Math.PI * 2);
       targetCtx.fill();
+      targetCtx.shadowBlur = 0;
       targetCtx.fillStyle = '#ffffff';
       drawCanvasSparkle(targetCtx, 6.5, 6.5, 2.5);
     } else if(outfitId === 'ballerina') {
@@ -10952,6 +11022,8 @@
       // Glowing Cyan Arc Reactor on Chest
       targetCtx.save();
       targetCtx.fillStyle = '#0284c7';
+      targetCtx.shadowColor = '#38bdf8';
+      targetCtx.shadowBlur = 8;
       targetCtx.beginPath();
       targetCtx.arc(6.5, 6, 4, 0, Math.PI * 2);
       targetCtx.fill();
@@ -11259,6 +11331,8 @@
       // Sparkling Princess Tiara Crown
       targetCtx.save();
       targetCtx.fillStyle = '#f1f5f9';
+      targetCtx.shadowColor = '#f472b6';
+      targetCtx.shadowBlur = 6;
 
       // Tiara Base Silver Band
       rrTo(targetCtx, 0, -16, 14, 2.5, 1);
@@ -11274,6 +11348,7 @@
       targetCtx.lineTo(14, -16);
       targetCtx.closePath();
       targetCtx.fill();
+      targetCtx.shadowBlur = 0;
 
       // Pink Ruby Gems on 3 Peaks
       targetCtx.fillStyle = '#f43f5e';
@@ -11613,10 +11688,8 @@
 
     // 1. Ambient Skin Glow Aura (Soft Halo)
     if(skin.glow) {
-      targetCtx.fillStyle = skin.glow + '28';
-      targetCtx.beginPath();
-      targetCtx.ellipse(0, 0, 23, 19, 0, 0, Math.PI * 2);
-      targetCtx.fill();
+      targetCtx.shadowColor = skin.glow;
+      targetCtx.shadowBlur = 10;
     }
 
     // 2. Tail feathers with double layers
@@ -11639,6 +11712,7 @@
     targetCtx.beginPath();
     targetCtx.ellipse(0, 0, 19, 15, 0, 0, 7);
     targetCtx.fill();
+    targetCtx.shadowBlur = 0;
 
     // 3b. Rosy Cheeks (Cute Chibi Blush with Anime Hatching)
     targetCtx.fillStyle = 'rgba(251, 113, 133, 0.55)';
@@ -11833,6 +11907,8 @@
     } else if(opt.skinId === 'gojo_bird') {
       // SATORU GOJO'S FAMOUS CELESTIAL GLOWING SKY-BLUE SIX EYES
       targetCtx.save();
+      targetCtx.shadowColor = '#00f5d4';
+      targetCtx.shadowBlur = 14;
 
       // Pure Bright Sclera
       targetCtx.fillStyle = '#ffffff';
@@ -11955,9 +12031,11 @@
     const radius = sR + pulse + 2;
 
     // 1. Soft Pink & Rose Radiant Ambient Glowing Halo
-    targetCtx.fillStyle = 'rgba(244, 114, 182, 0.28)';
+    targetCtx.shadowColor = '#f472b6';
+    targetCtx.shadowBlur = 18;
+    targetCtx.fillStyle = 'rgba(244, 114, 182, 0.22)';
     targetCtx.beginPath();
-    targetCtx.arc(2, 0, radius + 2, 0, Math.PI * 2);
+    targetCtx.arc(2, 0, radius, 0, Math.PI * 2);
     targetCtx.fill();
 
     // 2. Rotating 8-Petal Sakura Lotus Blossom Contour
@@ -12028,6 +12106,8 @@
     targetCtx.save();
     targetCtx.strokeStyle = '#38bdf8';
     targetCtx.lineWidth = 2.4;
+    targetCtx.shadowColor = '#38bdf8';
+    targetCtx.shadowBlur = 10;
     targetCtx.beginPath();
     targetCtx.arc(2, 0, sR, 0, Math.PI * 2);
     targetCtx.stroke();
@@ -12145,6 +12225,8 @@
           const sAngle = performance.now() / 250 + (i * Math.PI * 2) / 4;
           const sx = 2 + Math.cos(sAngle) * 28;
           const sy = Math.sin(sAngle) * 28;
+          ctx.shadowColor = '#67e8f9';
+          ctx.shadowBlur = 6;
           drawCanvasIceCrystal(ctx, sx, sy, 4.5);
         }
         ctx.restore();
@@ -12156,6 +12238,8 @@
         const hue = (performance.now() * 0.6) % 360;
         ctx.strokeStyle = `hsl(${hue}, 100%, 60%)`;
         ctx.lineWidth = 3.2;
+        ctx.shadowColor = `hsl(${hue}, 100%, 65%)`;
+        ctx.shadowBlur = 14;
         ctx.beginPath();
         ctx.arc(2, 0, 26, 0, Math.PI * 2);
         ctx.stroke();
@@ -12767,7 +12851,7 @@
       coinsUpdatedAt: progress.coinsUpdatedAt || Date.now(),
       loadout: {
         bird: progress.selected || 'classic',
-        pet: progress.selectedPet || 'none',
+        pet: progress.selectedPet || 'pip_peep',
         aura: progress.selectedAura || 'default',
         hat: progress.selectedHat || 'none',
         outfit: progress.selectedOutfit || 'none',
@@ -12778,7 +12862,7 @@
       },
       unlocked: {
         bird: progress.unlocked || ['classic'],
-        pet: progress.petUnlocked || ['none'],
+        pet: progress.petUnlocked || ['pip_peep'],
         aura: progress.auraUnlocked || ['default'],
         hat: progress.hatUnlocked || ['none'],
         outfit: progress.outfitUnlocked || ['none'],
@@ -12808,7 +12892,7 @@
     progress.coins = 0;
     progress.coinsUpdatedAt = Date.now();
     progress.unlocked = ['classic'];
-    progress.petUnlocked = ['none'];
+    progress.petUnlocked = ['pip_peep'];
     progress.auraUnlocked = ['default'];
     progress.hatUnlocked = ['none'];
     progress.outfitUnlocked = ['none'];
@@ -12817,7 +12901,7 @@
     progress.musicUnlocked = ['happy'];
     progress.boosterUnlocked = ['none'];
     progress.selected = 'classic';
-    progress.selectedPet = 'none';
+    progress.selectedPet = 'pip_peep';
     progress.selectedAura = 'default';
     progress.selectedHat = 'none';
     progress.selectedOutfit = 'none';
@@ -12886,7 +12970,7 @@
       // 3. Sync Loadout (Equipped bird, pet, aura, hat, outfit, pipe, background, music, booster)
       const l = cloudProfile.loadout || {};
       progress.selected = (l.bird && skins[l.bird]) ? l.bird : 'classic';
-      progress.selectedPet = (l.pet && petsCatalog[l.pet]) ? l.pet : 'none';
+      progress.selectedPet = (l.pet && petsCatalog[l.pet]) ? l.pet : 'pip_peep';
       progress.selectedAura = (l.aura && auras[l.aura]) ? l.aura : 'default';
       progress.selectedHat = (l.hat && (hats[l.hat] || l.hat === 'none')) ? l.hat : 'none';
       progress.selectedOutfit = (l.outfit && (outfits[l.outfit] || l.outfit === 'none')) ? l.outfit : 'none';
@@ -12899,7 +12983,7 @@
       const cleanArr = (arr, fallback) => Array.isArray(arr) && arr.length > 0 ? Array.from(new Set(arr)) : [fallback];
       const u = cloudProfile.unlocked || {};
       progress.unlocked = cleanArr(u.bird, 'classic');
-      progress.petUnlocked = cleanArr(u.pet, 'none');
+      progress.petUnlocked = cleanArr(u.pet, 'pip_peep');
       progress.auraUnlocked = cleanArr(u.aura, 'default');
       progress.hatUnlocked = cleanArr(u.hat, 'none');
       progress.outfitUnlocked = cleanArr(u.outfit, 'none');
@@ -14836,73 +14920,6 @@
     _showErrBanner('JS ERROR: ' + e.message + '\n  at ' + (e.filename || '') + ':' + e.lineno);
   });
 
-  // Real-Time Network & Server Ping Monitor (Bukan Gimmick / Placeholder)
-  function updatePingDisplay(ms) {
-    const pingBadge = document.querySelector('.mlbb-ping-badge');
-    const pingText = document.querySelector('.mlbb-ping-badge .ping-text') || document.querySelector('.ping-text');
-    const pingDot = document.querySelector('.mlbb-ping-badge .ping-dot') || document.querySelector('.ping-dot');
-    if (!pingText) return;
-
-    const displayMs = Math.max(1, Math.round(ms));
-    pingText.textContent = displayMs + 'ms';
-
-    let dotColor = '#22c55e';
-    let textColor = '#4ade80';
-    let statusClass = 'ping-good';
-
-    if (displayMs < 65) {
-      dotColor = '#22c55e';
-      textColor = '#4ade80';
-      statusClass = 'ping-good';
-    } else if (displayMs < 140) {
-      dotColor = '#eab308';
-      textColor = '#facc15';
-      statusClass = 'ping-medium';
-    } else {
-      dotColor = '#ef4444';
-      textColor = '#f87171';
-      statusClass = 'ping-bad';
-    }
-
-    if (pingDot) {
-      pingDot.style.backgroundColor = dotColor;
-      pingDot.style.boxShadow = `0 0 6px ${dotColor}`;
-    }
-    pingText.style.color = textColor;
-
-    if (pingBadge) {
-      pingBadge.classList.remove('ping-good', 'ping-medium', 'ping-bad');
-      pingBadge.classList.add(statusClass);
-    }
-  }
-  window.updatePingDisplay = updatePingDisplay;
-
-  function initRealtimePingMonitor() {
-    async function measurePing() {
-      const start = performance.now();
-      try {
-        const signal = typeof AbortSignal !== 'undefined' && AbortSignal.timeout ? AbortSignal.timeout(1500) : undefined;
-        await fetch(window.location.origin + '/favicon.ico?_ping=' + Date.now(), { method: 'HEAD', cache: 'no-store', signal });
-        const latency = Math.round(performance.now() - start);
-        updatePingDisplay(latency);
-      } catch(_) {
-        const fallbackMs = Math.floor(22 + Math.random() * 14);
-        updatePingDisplay(fallbackMs);
-      }
-    }
-
-    // Connect to multiplayer engine ping if available
-    if (window.multiplayerEngine && typeof window.multiplayerEngine.on === 'function') {
-      window.multiplayerEngine.on('ping', (p) => {
-        if (typeof p === 'number' && p > 0) updatePingDisplay(p);
-      });
-    }
-
-    measurePing();
-    setInterval(measurePing, 4000);
-  }
-  setTimeout(initRealtimePingMonitor, 1000);
-
   // Auto Request Fullscreen and Lock Landscape on First User Gesture
   function requestAutoLandscapeFullscreen() {
     try {
@@ -15032,359 +15049,32 @@
   }
 
   // =========================================================
-  // DEDICATED PET COMPANION MODAL CONTROLLER (UI PET KHUSUS)
+  // LUCKY BIRD GACHA SYSTEM (PULLS, WEIGHTS & INVENTORY SYNC)
   // =========================================================
-  let previewPetId = 'pip_peep';
-  let petShowcaseRunning = false;
-  let petShowcaseAngle = 0;
-
-  function openPetModal() {
-    audio.click();
-    previewPetId = (progress.selectedPet && progress.selectedPet !== 'none') ? progress.selectedPet : 'pip_peep';
-    renderPetModal();
-    startPetShowcase();
-    showModal($('petCompanionModal'));
-  }
-  window.openPetModal = openPetModal;
-
-  function closePetModal() {
-    stopPetShowcase();
-    closeModal();
-  }
-  window.closePetModal = closePetModal;
-
-  function previewPet(id) {
-    if(!petsCatalog[id]) return;
-    previewPetId = id;
-    audio.babyChirp();
-    renderPetDetailCard();
-    renderPetGrid();
-  }
-
-  function equipPet(id) {
-    if(!petsCatalog[id] && id !== 'none') return;
-    if(!Array.isArray(progress.petUnlocked)) progress.petUnlocked = ['none'];
-    if(!progress.petUnlocked.includes(id) && id !== 'none') return;
-
-    progress.selectedPet = id;
-    applyPetSkin();
-    persistProgress();
-    audio.win();
-    makeParticles(180, 100, 24, '#38bdf8');
-    if(typeof saveCloudSave === 'function') saveCloudSave();
-    previewPet(id);
-    if(typeof showToast === 'function') {
-      const name = petsCatalog[id] ? petsCatalog[id].name : 'Tanpa Pet';
-      showToast(`Pet ${name} berhasil dipasang!`, 'success');
-    }
-  }
-
-  function renderPetDetailCard() {
-    const pet = petsCatalog[previewPetId] || petsCatalog.pip_peep;
-    const isEquipped = (progress.selectedPet || 'none') === previewPetId;
-    const isUnlocked = Array.isArray(progress.petUnlocked) ? (progress.petUnlocked.includes(previewPetId) || previewPetId === 'none') : false;
-
-    const nameEl = $('petDetailName');
-    const skillNameEl = $('petSkillName');
-    const skillDescEl = $('petSkillDesc');
-    const rarityEl = $('petRarityBadge');
-    const equipBtn = $('petEquipBtn');
-    const gachaCtaBtn = $('petGachaCtaBtn');
-    const glowEl = $('petGlowEffect');
-
-    if(nameEl) nameEl.textContent = pet.name;
-    if(skillNameEl) skillNameEl.textContent = pet.skillName || 'SKILL PASIF';
-    if(skillDescEl) skillDescEl.textContent = pet.skillDesc || pet.desc || 'Pet companion setia Feather Rush.';
-    if(rarityEl) {
-      rarityEl.textContent = (pet.rarity || 'legendary').toUpperCase();
-      rarityEl.className = `pet-rarity-badge ${pet.rarity || 'legendary'}`;
-    }
-    if(glowEl) {
-      glowEl.style.background = `radial-gradient(circle, ${pet.color || '#38bdf8'}33 0%, transparent 70%)`;
-    }
-
-    if(equipBtn && gachaCtaBtn) {
-      if(isEquipped) {
-        equipBtn.style.display = 'block';
-        equipBtn.textContent = 'DIPAKAI (AKTIF)';
-        equipBtn.disabled = true;
-        equipBtn.style.background = '#334155';
-        equipBtn.style.borderColor = '#475569';
-        equipBtn.style.color = '#94a3b8';
-        gachaCtaBtn.style.display = 'none';
-      } else if(isUnlocked) {
-        equipBtn.style.display = 'block';
-        equipBtn.textContent = 'GUNAKAN PET INI';
-        equipBtn.disabled = false;
-        equipBtn.style.background = 'linear-gradient(180deg, #22c55e 0%, #16a34a 100%)';
-        equipBtn.style.borderColor = '#4ade80';
-        equipBtn.style.color = '#ffffff';
-        equipBtn.onclick = () => equipPet(previewPetId);
-        gachaCtaBtn.style.display = 'none';
-      } else {
-        equipBtn.style.display = 'none';
-        gachaCtaBtn.style.display = 'block';
-        gachaCtaBtn.onclick = () => {
-          closeModal();
-          openGachaModal();
-        };
-      }
-    }
-  }
-
-  function renderPetGrid() {
-    const grid = $('petListGrid');
-    if(!grid) return;
-    if(!Array.isArray(progress.petUnlocked)) progress.petUnlocked = ['none'];
-
-    grid.innerHTML = Object.entries(petsCatalog).map(([id, pet]) => {
-      const isSelected = previewPetId === id;
-      const isEquipped = (progress.selectedPet || 'none') === id;
-      const isUnlocked = progress.petUnlocked.includes(id);
-      const iconSvg = getShopItemSvg('pet', id, pet);
-
-      let statusHtml = '';
-      if(isEquipped) {
-        statusHtml = '<span class="pet-grid-card-status equipped">DIPAKAI</span>';
-      } else if(isUnlocked) {
-        statusHtml = '<span class="pet-grid-card-status owned">MILIK</span>';
-      } else {
-        statusHtml = '<span class="pet-grid-card-status locked">GACHA ONLY</span>';
-      }
-
-      return `
-        <div class="pet-grid-card${isSelected ? ' active' : ''}${isEquipped ? ' equipped-now' : ''}" data-pet-id="${id}">
-          <div class="pet-grid-card-icon">${iconSvg}</div>
-          <div class="pet-grid-card-name" title="${pet.name}">${pet.name.split('(')[0].trim()}</div>
-          ${statusHtml}
-        </div>
-      `;
-    }).join('');
-
-    grid.querySelectorAll('.pet-grid-card').forEach(card => {
-      card.onclick = () => {
-        const pId = card.getAttribute('data-pet-id');
-        if(pId) previewPet(pId);
-      };
-    });
-  }
-
-  function renderPetModal() {
-    renderPetDetailCard();
-    renderPetGrid();
-  }
-
-  function startPetShowcase() {
-    if(petShowcaseRunning) return;
-    petShowcaseRunning = true;
-    requestAnimationFrame(renderPetShowcaseFrame);
-  }
-
-  function stopPetShowcase() {
-    petShowcaseRunning = false;
-  }
-
-  function renderPetShowcaseFrame() {
-    const canvas = $('petShowcaseCanvas');
-    if(!petShowcaseRunning || !canvas) return;
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width, h = canvas.height;
-
-    ctx.clearRect(0, 0, w, h);
-    petShowcaseAngle += 0.04;
-
-    const pet = petsCatalog[previewPetId] || petsCatalog.pip_peep;
-
-    // Background glow
-    const bgGrad = ctx.createRadialGradient(w / 2, h / 2, 5, w / 2, h / 2, w / 2);
-    bgGrad.addColorStop(0, `${pet.color || '#38bdf8'}33`);
-    bgGrad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = bgGrad;
-    ctx.fillRect(0, 0, w, h);
-
-    if(previewPetId === 'none') {
-      ctx.fillStyle = '#64748b';
-      ctx.font = '900 12px "Trebuchet MS", Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText('TANPA PET PENDAMPING', w / 2, h / 2 + 4);
-    } else {
-      const b1 = pet.baby1 || { color: '#fef08a', wingColor: '#fde047', blushColor: '#fda4af', accessory: 'ribbon' };
-      const b2 = pet.baby2 || { color: '#bae6fd', wingColor: '#7dd3fc', blushColor: '#fda4af', accessory: 'flower' };
-
-      const float1Y = Math.sin(petShowcaseAngle) * 5;
-      const float2Y = Math.cos(petShowcaseAngle * 1.1) * 5;
-      const wingFlap = Math.sin(petShowcaseAngle * 6) * 4;
-
-      // Draw Baby 1 (Left)
-      drawShowcaseBaby(ctx, w / 2 - 36, h / 2 + float1Y, 15, b1, wingFlap, -0.05);
-
-      // Draw Baby 2 (Right)
-      drawShowcaseBaby(ctx, w / 2 + 36, h / 2 + float2Y, 14, b2, -wingFlap, 0.05);
-
-      // Draw Connection Sparkle Hearts / Magic
-      ctx.fillStyle = `${pet.color || '#facc15'}99`;
-      ctx.beginPath();
-      ctx.arc(w / 2 + Math.sin(petShowcaseAngle * 2) * 12, h / 2 - 10 + Math.cos(petShowcaseAngle * 2) * 6, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    if(petShowcaseRunning) {
-      requestAnimationFrame(renderPetShowcaseFrame);
-    }
-  }
-
-  function drawShowcaseBaby(ctx, x, y, r, bData, wingFlap, tilt) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(tilt);
-
-    // Body Shadow
-    ctx.fillStyle = 'rgba(0,0,0,0.25)';
-    ctx.beginPath();
-    ctx.ellipse(0, r + 8, r * 0.8, 3, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Body
-    ctx.fillStyle = bData.color;
-    ctx.beginPath();
-    ctx.arc(0, 0, r, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Wing
-    ctx.fillStyle = bData.wingColor;
-    ctx.beginPath();
-    ctx.ellipse(-r * 0.55, 2 + wingFlap * 0.2, r * 0.5, r * 0.35, -0.2, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Beak
-    ctx.fillStyle = '#ea580c';
-    ctx.beginPath();
-    ctx.moveTo(r * 0.6, -1);
-    ctx.lineTo(r + 6, 2);
-    ctx.lineTo(r * 0.6, 5);
-    ctx.closePath();
-    ctx.fill();
-
-    // Rosy Blush
-    ctx.fillStyle = bData.blushColor || '#fda4af';
-    ctx.beginPath();
-    ctx.arc(r * 0.15, 4, 3, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Eye
-    ctx.fillStyle = '#0f172a';
-    ctx.beginPath();
-    ctx.arc(r * 0.35, -2, 3, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Eye Sparkle
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(r * 0.45, -3.2, 1.2, 0, Math.PI * 2);
-    ctx.arc(r * 0.25, -1, 0.7, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Accessory
-    if(bData.accessory === 'ribbon') {
-      ctx.fillStyle = '#f43f5e';
-      ctx.beginPath();
-      ctx.arc(-r * 0.4, -r * 0.8, 3, 0, Math.PI * 2);
-      ctx.arc(-r * 0.8, -r * 0.8, 3, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#ffe4e6';
-      ctx.beginPath();
-      ctx.arc(-r * 0.6, -r * 0.8, 2, 0, Math.PI * 2);
-      ctx.fill();
-    } else if(bData.accessory === 'flower') {
-      ctx.fillStyle = '#fb7185';
-      ctx.beginPath();
-      ctx.arc(r * 0.2, -r * 0.85, 3.5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#fef08a';
-      ctx.beginPath();
-      ctx.arc(r * 0.2, -r * 0.85, 1.5, 0, Math.PI * 2);
-      ctx.fill();
-    } else if(bData.accessory === 'halo') {
-      ctx.strokeStyle = '#facc15';
-      ctx.lineWidth = 1.8;
-      ctx.beginPath();
-      ctx.ellipse(0, -r - 5, r * 0.7, 3, 0, 0, Math.PI * 2);
-      ctx.stroke();
-    } else if(bData.accessory === 'horns') {
-      ctx.fillStyle = '#a855f7';
-      ctx.beginPath();
-      ctx.moveTo(-r * 0.5, -r * 0.6);
-      ctx.lineTo(-r * 0.7, -r - 5);
-      ctx.lineTo(-r * 0.2, -r * 0.8);
-      ctx.closePath();
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(r * 0.5, -r * 0.6);
-      ctx.lineTo(r * 0.7, -r - 5);
-      ctx.lineTo(r * 0.2, -r * 0.8);
-      ctx.closePath();
-      ctx.fill();
-    } else if(bData.accessory === 'flame') {
-      ctx.fillStyle = '#f97316';
-      ctx.beginPath();
-      ctx.moveTo(-2, -r);
-      ctx.quadraticCurveTo(-6, -r - 8, 0, -r - 12);
-      ctx.quadraticCurveTo(6, -r - 8, 2, -r);
-      ctx.closePath();
-      ctx.fill();
-      ctx.fillStyle = '#fef08a';
-      ctx.beginPath();
-      ctx.arc(0, -r - 4, 2, 0, Math.PI * 2);
-      ctx.fill();
-    } else if(bData.accessory === 'antenna') {
-      ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(0, -r);
-      ctx.lineTo(0, -r - 6);
-      ctx.stroke();
-      ctx.fillStyle = '#67e8f9';
-      ctx.beginPath();
-      ctx.arc(0, -r - 7, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    ctx.restore();
-  }
-
+  
   // =========================================================
   // LUCKY BIRD GACHA SYSTEM (PULLS, WEIGHTS & INVENTORY SYNC)
   // =========================================================
   const gachaPool = [
-    // Mythic Tier (2.5%)
-    { type:'skin', id:'goku_ssj', name:'Super Saiyan Goku Bird', rarity:'mythic' },
-    { type:'skin', id:'gojo_bird', name:'Honored One Gojo Bird', rarity:'mythic' },
+    // Mythic Tier (2%)
+    { type:'skin', id:'goku_ssj', name:'Super Saiyan Goku', rarity:'mythic' },
+    { type:'skin', id:'gojo_bird', name:'Honored One Gojo', rarity:'mythic' },
     { type:'skin', id:'tanjiro_bird', name:'Demon Slayer Bird', rarity:'mythic' },
-    { type:'skin', id:'naruto_bird', name:'Sage Shinobi Bird', rarity:'mythic' },
-    { type:'skin', id:'luffy_bird', name:'Straw Hat Pirate Bird', rarity:'mythic' },
     { type:'aura', id:'gear_fifth', name:'Sun God Nika Gear 5', rarity:'mythic' },
     { type:'aura', id:'domain_expansion', name:'Domain Infinity Void', rarity:'mythic' },
     // Legendary Tier (10%)
-    { type:'pet', id:'aero_lumos', name:'Aero & Lumos (Holy Archangels)', rarity:'legendary' },
-    { type:'pet', id:'blaze_ember', name:'Blaze & Ember (Phoenix Sparks)', rarity:'legendary' },
-    { type:'pet', id:'kuro_void', name:'Kuro & Void (Shadow Spirits)', rarity:'legendary' },
-    { type:'diamonds', id:'dia_jackpot', name:'Pundi 25 Diamond 💎', rarity:'legendary', amount:25 },
     { type:'skin', id:'phoenix', name:'Phoenix Fire', rarity:'legendary' },
     { type:'skin', id:'angel', name:'Holy Angel', rarity:'legendary' },
     { type:'skin', id:'dragon', name:'Flame Dragon', rarity:'legendary' },
     { type:'aura', id:'golden', name:'Golden Dust Aura', rarity:'legendary' },
     { type:'hat', id:'crown', name:'Royal Crown', rarity:'legendary' },
     // Epic Tier (18%)
-    { type:'pet', id:'momo_hana', name:'Momo & Hana (Sakura Fairies)', rarity:'epic' },
-    { type:'pet', id:'pixel_glitch', name:'Pixel & Glitch (Cyber Drones)', rarity:'epic' },
     { type:'skin', id:'cyber', name:'Cyber Neon', rarity:'epic' },
     { type:'skin', id:'mecha', name:'Mecha Cyborg', rarity:'epic' },
     { type:'aura', id:'galaxy', name:'Cosmic Galaxy Aura', rarity:'epic' },
     { type:'aura', id:'neon', name:'Electric Lightning', rarity:'epic' },
     { type:'hat', id:'pirate', name:'Pirate Captain Hat', rarity:'epic' },
     // Rare Tier (30%)
-    { type:'pet', id:'pip_peep', name:'Pip & Peep (Canary Duo)', rarity:'rare' },
-    { type:'diamonds', id:'dia_pack', name:'Kantong 10 Diamond 💎', rarity:'rare', amount:10 },
     { type:'skin', id:'rose', name:'Rose Pink Bird', rarity:'rare' },
     { type:'skin', id:'mint', name:'Mint Green Bird', rarity:'rare' },
     { type:'skin', id:'night', name:'Night Sky Bird', rarity:'rare' },
@@ -15481,19 +15171,6 @@
       if(item.type === 'coins') {
         progress.coins += item.amount;
         isNew = true;
-      } else if(item.type === 'diamonds') {
-        progress.diamonds = (progress.diamonds || 0) + item.amount;
-        isNew = true;
-      } else if(item.type === 'pet') {
-        if(!Array.isArray(progress.petUnlocked)) progress.petUnlocked = ['none'];
-        if(!progress.petUnlocked.includes(item.id)) {
-          progress.petUnlocked.push(item.id);
-          isNew = true;
-        } else {
-          // Pet dupe cashback: 5 Diamonds!
-          progress.diamonds = (progress.diamonds || 0) + 5;
-          isNew = false;
-        }
       } else {
         const unlockedKey = item.type === 'skin' ? 'unlocked' : (item.type + 'Unlocked');
         if(!Array.isArray(progress[unlockedKey])) progress[unlockedKey] = [];
@@ -15534,13 +15211,6 @@
     if(item.type === 'coins') {
       return '<svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="6" fill="#fbbf24"/><text x="12" y="15.5" font-size="10" font-weight="900" text-anchor="middle" fill="#78350f" font-family="Arial">G</text></svg>';
     }
-    if(item.type === 'diamonds') {
-      return '<span style="font-size:24px;line-height:1;">💎</span>';
-    }
-    if(item.type === 'pet') {
-      const p = petsCatalog[item.id] || petsCatalog.pip_peep;
-      return getShopItemSvg('pet', item.id, p);
-    }
     if(item.type === 'skin') {
       return '<svg viewBox="0 0 24 24" width="28" height="28" fill="#38bdf8"><path d="M22 2C14 2 8 8 8 16c0 1.1.9 2 2 2h1c0-1.1.9-2 2-2 1.66 0 3-1.34 3-3V9c2 0 4-1 6-7z"/></svg>';
     }
@@ -15561,7 +15231,6 @@
 
     const totalCashback = results.reduce((acc, r) => {
       if(r.type === 'coins') return acc + r.amount;
-      if(r.type === 'diamonds') return acc;
       if(!r.isNew) return acc + 25;
       return acc;
     }, 0);
@@ -15580,11 +15249,10 @@
     results.forEach(res => {
       const card = document.createElement('div');
       card.className = `gacha-card-item ${res.rarity}`;
-      const tagText = res.isNew ? 'BARU!' : (res.type === 'pet' ? '+5 💎' : '+25 KOIN');
       card.innerHTML = `
         <div class="gacha-card-icon">${getGachaItemSvg(res)}</div>
         <div class="gacha-card-name" title="${res.name}">${res.name}</div>
-        <div class="gacha-card-tag ${res.isNew ? 'new' : 'dup'}">${tagText}</div>
+        <div class="gacha-card-tag ${res.isNew ? 'new' : 'dup'}">${res.isNew ? 'BARU!' : '+25 KOIN'}</div>
       `;
       grid.appendChild(card);
     });
@@ -15597,192 +15265,9 @@
     }, 120);
   }
 
-  // =========================================================
-  // DAILY CHECK-IN SYSTEM (HADIAH LOGIN HARIAN)
-  // =========================================================
-  const DAILY_REWARDS_CONFIG = [
-    { day: 1, type: 'coins', amount: 100, label: '+100 Koin', icon: '🪙' },
-    { day: 2, type: 'diamonds', amount: 5, label: '+5 💎', icon: '💎' },
-    { day: 3, type: 'coins', amount: 250, label: '+250 Koin', icon: '🪙' },
-    { day: 4, type: 'diamonds', amount: 10, label: '+10 💎', icon: '💎' },
-    { day: 5, type: 'coins', amount: 500, label: '+500 Koin', icon: '🪙' },
-    { day: 6, type: 'diamonds', amount: 15, label: '+15 💎', icon: '💎' },
-    { day: 7, type: 'both', diamonds: 50, coins: 1000, label: '+50 💎 & 1000 🪙', icon: '👑', grand: true }
-  ];
-
-  function getLocalDateString(d = new Date()) {
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  function getDailyCheckinStatus() {
-    if (!progress.dailyCheckin || typeof progress.dailyCheckin !== 'object') {
-      progress.dailyCheckin = {
-        lastClaimDate: null,
-        streak: 0,
-        dayIndex: 0
-      };
-    }
-    const checkin = progress.dailyCheckin;
-    const today = getLocalDateString();
-    
-    const isClaimedToday = (checkin.lastClaimDate === today);
-    let activeDayIndex = typeof checkin.dayIndex === 'number' ? checkin.dayIndex : 0;
-    
-    if (!isClaimedToday && checkin.lastClaimDate) {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = getLocalDateString(yesterday);
-      
-      if (checkin.lastClaimDate !== yesterdayStr) {
-        // Streak resets if missed a day
-        activeDayIndex = 0;
-      }
-    }
-    
-    if (activeDayIndex < 0 || activeDayIndex > 6) activeDayIndex = 0;
-    
-    return {
-      today,
-      isClaimedToday,
-      activeDayIndex,
-      streak: checkin.streak || (isClaimedToday ? 1 : 0),
-      lastClaimDate: checkin.lastClaimDate
-    };
-  }
-
-  function updateDailyCheckinBadge() {
-    const badge = $('dailyCheckinBadge');
-    if (!badge) return;
-    const status = getDailyCheckinStatus();
-    badge.style.display = status.isClaimedToday ? 'none' : 'block';
-  }
-
-  function renderDailyCheckinGrid() {
-    const grid = $('dailyGrid');
-    const streakCountEl = $('dailyStreakCount');
-    const claimBtn = $('dailyClaimBtn');
-    const tipEl = $('dailyFooterTip');
-    if (!grid) return;
-
-    const status = getDailyCheckinStatus();
-    if (streakCountEl) streakCountEl.textContent = status.streak;
-
-    let html = '';
-    DAILY_REWARDS_CONFIG.forEach((reward, idx) => {
-      const isPast = status.isClaimedToday ? (idx <= status.activeDayIndex) : (idx < status.activeDayIndex);
-      const isCurrent = !status.isClaimedToday && (idx === status.activeDayIndex);
-      
-      let stateClass = '';
-      let statusBadge = '';
-      if (isPast) {
-        stateClass = 'claimed';
-        statusBadge = '<span class="daily-card-status-badge">✅</span>';
-      } else if (isCurrent) {
-        stateClass = 'ready-today';
-        statusBadge = '<span class="daily-card-status-badge">🎁</span>';
-      } else {
-        stateClass = 'locked';
-        statusBadge = '<span class="daily-card-status-badge">🔒</span>';
-      }
-      if (reward.grand) stateClass += ' grand-day';
-
-      const rewardTypeClass = reward.type === 'diamonds' ? 'diamond' : (reward.type === 'coins' ? 'coins' : 'diamond');
-
-      html += `
-        <div class="daily-card ${stateClass}">
-          ${statusBadge}
-          <div class="daily-card-day">Hari ${reward.day}</div>
-          <div class="daily-card-icon">${reward.icon}</div>
-          <div class="daily-card-reward ${rewardTypeClass}">${reward.label}</div>
-        </div>
-      `;
-    });
-    grid.innerHTML = html;
-
-    if (claimBtn) {
-      if (status.isClaimedToday) {
-        claimBtn.disabled = true;
-        claimBtn.textContent = 'SUDAH DIKLAIM HARI INI';
-        if (tipEl) tipEl.textContent = 'Kembali besok untuk klaim hadiah Hari ke-' + (((status.activeDayIndex + 1) % 7) + 1) + '!';
-      } else {
-        claimBtn.disabled = false;
-        const targetReward = DAILY_REWARDS_CONFIG[status.activeDayIndex];
-        claimBtn.textContent = `KLAIM HARI KE-${targetReward.day} (${targetReward.label})`;
-        if (tipEl) tipEl.textContent = 'Klik tombol di atas untuk mengambil hadiah Anda sekarang!';
-      }
-    }
-  }
-
-  function claimDailyReward() {
-    const status = getDailyCheckinStatus();
-    if (status.isClaimedToday) {
-      if (typeof showToast === 'function') showToast('Hadiah hari ini sudah diklaim!', 'info');
-      return;
-    }
-
-    const currentReward = DAILY_REWARDS_CONFIG[status.activeDayIndex];
-    if (!currentReward) return;
-
-    if (currentReward.type === 'coins') {
-      progress.coins += currentReward.amount;
-    } else if (currentReward.type === 'diamonds') {
-      progress.diamonds = (progress.diamonds || 0) + currentReward.amount;
-    } else if (currentReward.type === 'both') {
-      progress.diamonds = (progress.diamonds || 0) + currentReward.diamonds;
-      progress.coins += currentReward.coins;
-    }
-
-    progress.dailyCheckin = {
-      lastClaimDate: status.today,
-      streak: (status.streak || 0) + 1,
-      dayIndex: (status.activeDayIndex + 1) % 7
-    };
-    progress.coinsUpdatedAt = Date.now();
-
-    updateCoins();
-    persistProgress();
-    if (typeof saveCloudSave === 'function') saveCloudSave();
-
-    audio.win();
-    makeParticles(window.innerWidth / 2, window.innerHeight / 2, 35, '#facc15');
-
-    if (typeof showToast === 'function') {
-      showToast(`🎉 Hadiah Hari ke-${currentReward.day} Berhasil Diklaim: ${currentReward.label}!`, 'success');
-    }
-
-    renderDailyCheckinGrid();
-    updateDailyCheckinBadge();
-  }
-  window.claimDailyReward = claimDailyReward;
-
-  function openDailyCheckinModal() {
-    audio.click();
-    renderDailyCheckinGrid();
-    showModal($('dailyCheckinModal'));
-  }
-  window.openDailyCheckinModal = openDailyCheckinModal;
-
-  function initDailyCheckin() {
-    updateDailyCheckinBadge();
-    const status = getDailyCheckinStatus();
-    if (!status.isClaimedToday) {
-      setTimeout(() => {
-        if (state === State.MENU && !document.querySelector('.modal:not(.hidden)')) {
-          openDailyCheckinModal();
-        }
-      }, 1500);
-    }
-  }
-
-  // Bind Buttons explicitly
-  bindClick('lobbyDailyBtn', openDailyCheckinModal);
-  bindClick('dailyClaimBtn', claimDailyReward);
+  // Bind Gacha Buttons explicitly
   bindClick('lobbyGachaBtn', openGachaModal);
   bindClick('mlbbGachaCard', openGachaModal);
-  bindClick('lobbyPetBtn', openPetModal);
   bindClick('gachaPull1Btn', () => performGachaPull(1, false));
   bindClick('gachaPull10Btn', () => performGachaPull(10, false));
   bindClick('gachaPullFreeBtn', triggerGachaFreeAd);
@@ -15806,7 +15291,6 @@
     setState(State.MENU);
     updateScore();
     updateMusicUI();
-    initDailyCheckin();
     initSplashScreen();
     requestAnimationFrame(loop);
   } catch(initErr) {

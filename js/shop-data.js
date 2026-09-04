@@ -119,7 +119,8 @@
     crystal:{ name:'FROZEN ICE CRYSTAL', desc:'Pipa kristal es transparan biru kutub utara', cost:480, currency:'coin', rarity:'epic', body:'#0284c7', wing:'#38bdf8', edge:'#0369a1', cap:'#7dd3fc' },
     cyber:{ name:'GOLDEN CYBER', desc:'Pipa emas berenergi tinggi bertahta permata', cost:700, currency:'coin', rarity:'legendary', body:'#854d0e', wing:'#eab308', edge:'#713f12', cap:'#fde047' },
     lava:{ name:'MAGMA VOLCANO', desc:'Pipa batu lahar panas retak membara magma cair', cost:750, currency:'coin', rarity:'legendary', body:'#450a0a', wing:'#dc2626', edge:'#1c1917', cap:'#f97316' },
-    // Anime Special Pipes - Diamond
+    // Anime & Special Pipes - Diamond
+    sawit:{ name:'POHON KELAPA SAWIT', desc:'Pipa batang pohon kelapa sawit tropis dengan pelepah daun & tandan buah sawit emas', cost:100, currency:'diamond', rarity:'mythic', body:'#5c3d1e', wing:'#854d0e', edge:'#38220f', cap:'#16a34a' },
     katana_torii:{ name:'RED TORII & KATANA', desc:'Pipa gerbang Shinto merah berkilau pedang katana', cost:25, currency:'diamond', rarity:'mythic', body:'#991b1b', wing:'#ef4444', edge:'#450a0a', cap:'#facc15' },
     bamboo_demon:{ name:'DEMON SLAYER BAMBOO', desc:'Pipa bambu hijau bertali merah Nezuko Kamado', cost:25, currency:'diamond', rarity:'mythic', body:'#15803d', wing:'#4ade80', edge:'#14532d', cap:'#f472b6' },
     chakra_scroll:{ name:'NINJUTSU GIANT SCROLL', desc:'Pipa gulungan jurus ninjutsu kayu & kertas mantra', cost:25, currency:'diamond', rarity:'mythic', body:'#78350f', wing:'#d97706', edge:'#451a03', cap:'#fde047' }
