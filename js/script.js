@@ -580,6 +580,7 @@
     epic:{ name:'HEROIC ADVENTURE', desc:'Orkestra petualangan megah & heroik', cost:0, color:'#ef4444' },
     cyberbeat:{ name:'CYBERPUNK BEAT', desc:'Electro synthwave tempo cepat energetik', cost:0, color:'#06b6d4' },
     // Anime Special Soundtracks
+    mendaki_semeru:{ name:'MENDAKI SEMERU (KESSOKU BAND)', desc:'Lagu viral Kessoku Band parody Pak Vramroro mendaki Semeru', cost:100, currency:'diamond', rarity:'mythic', color:'#ec4899' },
     gurenge:{ name:'ANIME: GURENGE (DEMON SLAYER)', desc:'Theme song pemburu iblis melodi J-Rock energetik', cost:0, color:'#ef4444' },
     blue_bird:{ name:'ANIME: BLUE BIRD (NARUTO)', desc:'Lagu ikonik melodi seruling & gitar bersemangat', cost:0, color:'#38bdf8' },
     we_are:{ name:'ANIME: WE ARE! (ONE PIECE)', desc:'Melodi petualangan bajak laut riang & megah', cost:0, color:'#facc15' },
@@ -686,6 +687,7 @@
   if(!Array.isArray(progress.unlocked)) progress.unlocked=['classic'];
   if(!skins[progress.selected]) progress.selected='classic';
   if(typeof progress.coins !== 'number') progress.coins=0;
+  if(typeof progress.diamonds !== 'number') progress.diamonds = Number(storage.get('skyFlappyDiamonds', 0)) || 0;
 
   for(const [key, catalog, free] of [
     ['pipe', pipeSkins, 'green'],
@@ -1870,6 +1872,7 @@
 
   function persist() { storage.set('skyFlappySettings', settings); }
   function updateCoins() {
+    if(typeof progress.diamonds !== 'number') progress.diamonds = Number(storage.get('skyFlappyDiamonds', 0)) || 0;
     if(el.coinHud) el.coinHud.innerHTML = 'COINS <b>' + progress.coins + '</b>';
     if(el.coinCount) el.coinCount.textContent = progress.coins;
     if(el.shopCoins) el.shopCoins.textContent = progress.coins;
@@ -1879,6 +1882,10 @@
     if(gachaCoinEl) gachaCoinEl.textContent = progress.coins;
     const topRankEl = $('topRankVal');
     if(topRankEl) topRankEl.textContent = `${gpProfile.rankedBest || progress.rankedScore || 0}`;
+    const topDiamondEl = $('topDiamondVal');
+    if(topDiamondEl) topDiamondEl.textContent = progress.diamonds || 0;
+    const shopDiamondsEl = $('shopDiamonds');
+    if(shopDiamondsEl) shopDiamondsEl.textContent = progress.diamonds || 0;
   }
 
   function playBackgroundMusic() {
@@ -2602,6 +2609,9 @@
     }
 
     if(cat === 'pipe') {
+      if(id === 'sawit') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="10" y="11" width="12" height="17" rx="2" fill="#5c3d1e" stroke="#38220f" stroke-width="1"/><path d="M11 15 L16 18 L21 15 M11 19 L16 22 L21 19 M11 23 L16 26 L21 23" fill="none" stroke="#a16207" stroke-width="1.2" stroke-linecap="round"/><circle cx="12.5" cy="12.5" r="1.6" fill="#dc2626"/><circle cx="15" cy="13.5" r="1.8" fill="#ea580c"/><circle cx="17.5" cy="12.8" r="1.7" fill="#f97316"/><circle cx="19.2" cy="13.8" r="1.4" fill="#ea580c"/><circle cx="16" cy="12.2" r="1.3" fill="#facc15"/><rect x="7.5" y="5.5" width="17" height="6.5" rx="2" fill="#16a34a" stroke="#14532d" stroke-width="1"/><path d="M8 7 C4 4, 2 8, 1 12 M24 7 C28 4, 30 8, 31 12" fill="none" stroke="#22c55e" stroke-width="1.6" stroke-linecap="round"/><line x1="12" y1="6" x2="12" y2="28" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/></svg>`;
+      }
       if(id === 'katana_torii') {
         return `<svg viewBox="0 0 32 32" class="shop-item-svg"><rect x="4" y="6" width="24" height="4" rx="1" fill="#dc2626"/><rect x="8" y="10" width="5" height="18" fill="#b91c1c"/><rect x="19" y="10" width="5" height="18" fill="#b91c1c"/><line x1="8" y1="26" x2="24" y2="10" stroke="#cbd5e1" stroke-width="2"/><circle cx="16" cy="18" r="2" fill="#fbbf24"/></svg>`;
       }
@@ -2628,6 +2638,9 @@
     }
 
     if(cat === 'music') {
+      if(id === 'mendaki_semeru') {
+        return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="12" fill="#ec4899"/><circle cx="16" cy="16" r="4.5" fill="#0f172a"/><circle cx="16" cy="16" r="1.5" fill="#facc15"/><polygon points="8,23 16,9 24,23" fill="#be185d"/><polygon points="12,16 16,9 20,16" fill="#ffffff"/><path d="M12 20 L20 12" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+      }
       if(id === 'gurenge') {
         return `<svg viewBox="0 0 32 32" class="shop-item-svg"><circle cx="16" cy="16" r="12" fill="#dc2626"/><circle cx="16" cy="16" r="4.5" fill="#0f172a"/><circle cx="16" cy="16" r="1.5" fill="#facc15"/><path d="M12 20 L20 12 M18 10 L22 14" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/></svg>`;
       }
@@ -2676,13 +2689,18 @@
 
       const t = i18n[settings.language || 'id'] || i18n.id;
       let actionHtml = '';
+      const isDiamond = item.currency === 'diamond';
+      const cost = item.cost !== undefined ? item.cost : 0;
       if(selected) {
         actionHtml = `<span class="skin-cost equipped">${t.equipped}</span>`;
-      } else if(unlocked || item.cost === 0) {
+      } else if(unlocked || cost === 0) {
         actionHtml = `<button class="skin-cost-btn use-btn" data-action="use" data-product="${id}" type="button">${t.equip}</button>`;
       } else {
-        const canAfford = progress.coins >= item.cost;
-        actionHtml = `<button class="skin-cost-btn buy-btn ${canAfford ? '' : 'cant-afford'}" data-action="buy" data-product="${id}" type="button"><svg viewBox="0 0 16 16" width="12" height="12" class="mini-coin-svg"><circle cx="8" cy="8" r="6.5" fill="#fbbf24" stroke="#d97706" stroke-width="1.2"/><text x="8" y="11" text-anchor="middle" font-size="8" font-weight="900" fill="#92400e">$</text></svg> ${t.buy} ${item.cost}</button>`;
+        const canAfford = isDiamond ? ((progress.diamonds || 0) >= cost) : (progress.coins >= cost);
+        const iconHtml = isDiamond ?
+          `<svg viewBox="0 0 24 24" width="12" height="12" fill="#38bdf8" style="vertical-align:middle;margin-right:2px;filter:drop-shadow(0 0 4px #0284c7);"><path d="M12 2L2 9l10 13L22 9l-10-7zm0 2.8L18.4 9 12 18.6 5.6 9 12 4.8z"/></svg>` :
+          `<svg viewBox="0 0 16 16" width="12" height="12" class="mini-coin-svg"><circle cx="8" cy="8" r="6.5" fill="#fbbf24" stroke="#d97706" stroke-width="1.2"/><text x="8" y="11" text-anchor="middle" font-size="8" font-weight="900" fill="#92400e">$</text></svg>`;
+        actionHtml = `<button class="skin-cost-btn buy-btn ${canAfford ? '' : 'cant-afford'}" data-action="buy" data-product="${id}" type="button">${iconHtml} ${t.buy} ${cost}</button>`;
       }
 
       // Exclamation Mark Logo Button - ONLY on items with descriptions/skills
@@ -2868,12 +2886,22 @@
       return;
     }
 
-    if(item.cost === 0 || progress.coins >= item.cost) {
-      if(item.cost > 0) progress.coins -= item.cost;
+    const isDiamond = item.currency === 'diamond';
+    const cost = item.cost !== undefined ? item.cost : 0;
+    const currentBalance = isDiamond ? (progress.diamonds || 0) : (progress.coins || 0);
+
+    if(cost === 0 || currentBalance >= cost) {
+      if(cost > 0) {
+        if(isDiamond) {
+          progress.diamonds = Math.max(0, (progress.diamonds || 0) - cost);
+        } else {
+          progress.coins = Math.max(0, progress.coins - cost);
+        }
+      }
       progress[unlockedKey].push(id);
       progress[selectedKey] = id;
       audio.win();
-      makeParticles(180, 100, 24, '#fbbf24');
+      makeParticles(180, 100, 24, isDiamond ? '#38bdf8' : '#fbbf24');
       persistProgress();
       if(shopCategory === 'pet') applyPetSkin();
       updateCoins();
@@ -2886,8 +2914,15 @@
       }
     } else {
       audio.hit();
-      // Efek getar pada saldo koin saat koin tidak mencukupi
-      if(el.shopCoins && el.shopCoins.parentElement) {
+      // Efek getar pada saldo koin / diamond saat saldo tidak mencukupi
+      if(isDiamond) {
+        const dWrap = $('shopDiamondWrap') || $('topDiamondPill');
+        if(dWrap) {
+          dWrap.classList.remove('coin-shake');
+          void dWrap.offsetWidth;
+          dWrap.classList.add('coin-shake');
+        }
+      } else if(el.shopCoins && el.shopCoins.parentElement) {
         el.shopCoins.parentElement.classList.remove('coin-shake');
         void el.shopCoins.parentElement.offsetWidth;
         el.shopCoins.parentElement.classList.add('coin-shake');
