@@ -700,8 +700,16 @@
     if(!catalog[progress[selectedKey]]) progress[selectedKey] = free;
   }
 
+  let cloudSaveDebounceTimer = null;
   function persistProgress() {
+    if(!progress.coinsUpdatedAt) progress.coinsUpdatedAt = Date.now();
     storage.set('skyFlappyProgress', progress);
+    if(typeof saveCloudSave === 'function' && typeof gpProfile !== 'undefined' && gpProfile && gpProfile.isLoggedIn) {
+      if(cloudSaveDebounceTimer) clearTimeout(cloudSaveDebounceTimer);
+      cloudSaveDebounceTimer = setTimeout(() => {
+        saveCloudSave();
+      }, 350);
+    }
   }
   window.persistProgress = persistProgress;
 
@@ -4849,7 +4857,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.67';
+  const GAME_VERSION = '20.68';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -12297,6 +12305,7 @@
       score: rankedBest || 0,
       mpWins: progress.mpWins || 0,
       coins: progress.coins || 0,
+      coinsUpdatedAt: progress.coinsUpdatedAt || Date.now(),
       loadout: {
         bird: progress.selected || 'classic',
         pet: progress.selectedPet || 'pip_peep',
@@ -12366,9 +12375,24 @@
         gpProfile.mpWins = progress.mpWins;
       }
 
-      // 2. Sync Coins
-      if(typeof cloudProfile.coins === 'number' && cloudProfile.coins > (progress.coins || 0)) {
-        progress.coins = cloudProfile.coins;
+      // 2. Sync Coins (Smart Timestamp Comparison: Tidak akan mengembalikan koin yang baru dihabiskan)
+      const cloudCoins = typeof cloudProfile.coins === 'number' ? cloudProfile.coins : null;
+      if (cloudCoins !== null) {
+        const cloudTime = typeof cloudProfile.coinsUpdatedAt === 'number' ? cloudProfile.coinsUpdatedAt : 0;
+        const localTime = typeof progress.coinsUpdatedAt === 'number' ? progress.coinsUpdatedAt : 0;
+
+        if (cloudTime > 0 && localTime > 0) {
+          if (cloudTime >= localTime) {
+            progress.coins = cloudCoins;
+            progress.coinsUpdatedAt = cloudTime;
+          } else {
+            // Local lebih baru (misal baru saja gacha/belanja), simpan koin lokal ke cloud!
+            if(typeof saveCloudSave === 'function') saveCloudSave();
+          }
+        } else {
+          progress.coins = cloudCoins;
+          progress.coinsUpdatedAt = cloudTime || Date.now();
+        }
       }
 
       // 3. Sync Loadout (Equipped bird, pet, aura, hat, outfit, pipe, background, music, booster)
@@ -14536,9 +14560,11 @@
     }
 
     if(!isFree) {
-      progress.coins -= totalCost;
+      progress.coins = Math.max(0, progress.coins - totalCost);
+      progress.coinsUpdatedAt = Date.now();
       updateCoins();
       persistProgress();
+      if(typeof saveCloudSave === 'function') saveCloudSave();
       const uCoins = $('gachaUserCoins') || $('spUserCoins');
       if(uCoins) uCoins.textContent = progress.coins;
     }
@@ -14568,8 +14594,10 @@
       results.push({ ...item, isNew });
     }
 
+    progress.coinsUpdatedAt = Date.now();
     updateCoins();
     persistProgress();
+    if(typeof saveCloudSave === 'function') saveCloudSave();
     renderGachaResults(results);
   }
   window.performGachaPull = performGachaPull;

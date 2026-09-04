@@ -260,6 +260,7 @@ class FirebaseLeaderboardService {
           rankedBest: typeof d.score === 'number' ? d.score : (d.rankedBest || 0),
           classicBest: typeof d.classicBest === 'number' ? d.classicBest : 0,
           coins: d.coins || 0,
+          coinsUpdatedAt: typeof d.coinsUpdatedAt === 'number' ? d.coinsUpdatedAt : 0,
           nameChangesDone: d.nameChangesDone || 0,
           loadout: {
             bird: d.loadout?.bird || 'classic',
@@ -289,6 +290,7 @@ class FirebaseLeaderboardService {
             rankedBest: typeof d2.score === 'number' ? d2.score : (d2.rankedBest || 0),
             classicBest: typeof d2.classicBest === 'number' ? d2.classicBest : 0,
             coins: d2.coins || 0,
+            coinsUpdatedAt: typeof d2.coinsUpdatedAt === 'number' ? d2.coinsUpdatedAt : 0,
             nameChangesDone: d2.nameChangesDone || 0,
             loadout: {
               bird: d2.loadout?.bird || 'classic',
@@ -331,6 +333,7 @@ class FirebaseLeaderboardService {
         score: typeof data.rankedBest === 'number' ? data.rankedBest : (typeof data.score === 'number' ? data.score : 0),
         classicBest: typeof data.classicBest === 'number' ? data.classicBest : 0,
         coins: typeof data.coins === 'number' ? data.coins : 0,
+        coinsUpdatedAt: typeof data.coinsUpdatedAt === 'number' ? data.coinsUpdatedAt : Date.now(),
         loadout: {
           bird: data.loadout?.bird || 'classic',
           pet: data.loadout?.pet || 'pip_peep',

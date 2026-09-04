@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://feather-rush.my.id/sitemap.xml
+
