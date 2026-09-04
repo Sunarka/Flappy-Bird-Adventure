@@ -449,11 +449,11 @@
     angel:{ name:'HOLY ANGEL', desc:'Burung suci sayap emas (Chime SFX)', cost:0, body:'#f8fafc', wing:'#fbbf24', beak:'#f59e0b', trail:'#fef08a' },
     shadow:{ name:'SHADOW PHANTOM', desc:'Bayangan ungu kosmik mistis (Dark SFX)', cost:0, body:'#312e81', wing:'#4c1d95', beak:'#c084fc', trail:'#9d4edd' },
     // Anime Special Bird Skins
-    goku_ssj:{ name:'SUPER SAIYAN BIRD', desc:'Burung Saiyan berambut emas & aura listrik (Ki Blast SFX)', cost:0, body:'#facc15', wing:'#eab308', beak:'#ea580c', trail:'#fef08a' },
-    tanjiro_bird:{ name:'DEMON SLAYER BIRD', desc:'Burung pemburu iblis berhaori kotak hijau (Sword SFX)', cost:0, body:'#15803d', wing:'#1e293b', beak:'#dc2626', trail:'#22c55e' },
-    naruto_bird:{ name:'SAGE SHINOBI BIRD', desc:'Burung ninja oranye jubah Sage Mode (Chakra SFX)', cost:0, body:'#ea580c', wing:'#1e293b', beak:'#facc15', trail:'#fdba74' },
-    luffy_bird:{ name:'STRAW HAT PIRATE', desc:'Burung kapten bajak laut topi jerami (Gear Bounce SFX)', cost:0, body:'#ef4444', wing:'#1d4ed8', beak:'#fbbf24', trail:'#fca5a5' },
-    gojo_bird:{ name:'HONORED ONE (GOJO)', desc:'Burung penyihir rambut perak & mata Six Eyes (Void SFX)', cost:0, body:'#f8fafc', wing:'#1e1b4b', beak:'#38bdf8', trail:'#60a5fa' }
+    goku_ssj:{ name:'SUPER SAIYAN BIRD', desc:'Burung Saiyan rambut emas, Ki Blast & Jingle Suara Kakarotto!', cost:0, body:'#facc15', wing:'#eab308', beak:'#ea580c', trail:'#fef08a' },
+    tanjiro_bird:{ name:'DEMON SLAYER BIRD', desc:'Burung haori kotak hijau, Hinokami Kagura & Jingle Shamisen!', cost:0, body:'#15803d', wing:'#1e293b', beak:'#dc2626', trail:'#22c55e' },
+    naruto_bird:{ name:'SAGE SHINOBI BIRD', desc:'Burung ninja Sage Mode, Konoha Flute & Suara Dattebayo!', cost:0, body:'#ea580c', wing:'#1e293b', beak:'#facc15', trail:'#fdba74' },
+    luffy_bird:{ name:'STRAW HAT PIRATE', desc:'Burung kapten bajak laut, Gomu Spring & Suara Kaizoku Ou!', cost:0, body:'#ef4444', wing:'#1d4ed8', beak:'#fbbf24', trail:'#fca5a5' },
+    gojo_bird:{ name:'HONORED ONE (GOJO)', desc:'Burung Six Eyes, Unlimited Void Bells & Suara Ikonik "Yowai Mo"!', cost:0, body:'#f8fafc', wing:'#1e1b4b', beak:'#38bdf8', trail:'#60a5fa' }
   };
 
   // 2. Tail Aura / Jejak Ekor (Nama Lengkap) - ALL FREE FOR TESTING
@@ -1020,6 +1020,26 @@
       } else if(skinId === 'phoenix') {
         this.playTone(523, 0.1, 'triangle', 0.05, 200);
         setTimeout(() => this.playTone(1046, 0.12, 'sawtooth', 0.035, 100), 45);
+      } else if(skinId === 'goku_ssj') {
+        this.playTone(440, 0.12, 'sawtooth', 0.06, 200);
+        setTimeout(() => this.playTone(880, 0.15, 'square', 0.05, -50), 40);
+        this.speakVoice('Ha!', { lang: 'ja-JP', pitch: 1.2, rate: 1.3 });
+      } else if(skinId === 'tanjiro_bird') {
+        this.playTone(659, 0.1, 'triangle', 0.055, 150);
+        setTimeout(() => this.playTone(988, 0.12, 'sine', 0.045, 0), 35);
+        this.speakVoice('Iku zo!', { lang: 'ja-JP', pitch: 1.25, rate: 1.2 });
+      } else if(skinId === 'naruto_bird') {
+        this.playTone(587, 0.1, 'sine', 0.06, 120);
+        setTimeout(() => this.playTone(880, 0.12, 'triangle', 0.04, 80), 35);
+        this.speakVoice('Dattebayo!', { lang: 'ja-JP', pitch: 1.35, rate: 1.3 });
+      } else if(skinId === 'luffy_bird') {
+        this.playTone(523, 0.1, 'square', 0.06, 300);
+        setTimeout(() => this.playTone(784, 0.12, 'sine', 0.045, -100), 40);
+        this.speakVoice('Shishishi!', { lang: 'ja-JP', pitch: 1.4, rate: 1.3 });
+      } else if(skinId === 'gojo_bird') {
+        this.playTone(1046, 0.15, 'sine', 0.065, 0);
+        setTimeout(() => this.playTone(1568, 0.18, 'triangle', 0.05, 0), 40);
+        this.speakVoice('Yowai mo.', { lang: 'ja-JP', pitch: 0.95, rate: 1.1 });
       } else {
         // Classic / Rose / Mint / Night cheerful bird chirp
         this.playTone(784, 0.08, 'sine', 0.045, 150);
@@ -1067,6 +1087,26 @@
       this.playTone(880, 0.06, 'sawtooth', 0.055, 400);
       this.playTone(1760, 0.12, 'sine', 0.045, -200);
       setTimeout(() => this.playTone(1320, 0.1, 'triangle', 0.04, 150), 30);
+    },
+
+    speakVoice(text, options = {}) {
+      if (!settings.sound || !window.speechSynthesis) return;
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = options.lang || 'ja-JP';
+        u.pitch = options.pitch !== undefined ? options.pitch : 1.15;
+        u.rate = options.rate !== undefined ? options.rate : 1.1;
+        u.volume = options.volume !== undefined ? options.volume : 1.0;
+        
+        // Find suitable voice (prefer Japanese or native voices if available)
+        const voices = window.speechSynthesis.getVoices() || [];
+        const matchVoice = voices.find(v => v.lang.startsWith(u.lang.slice(0, 2))) ||
+                           voices.find(v => v.lang.includes('JP') || v.lang.includes('ja')) ||
+                           voices[0];
+        if (matchVoice) u.voice = matchVoice;
+        window.speechSynthesis.speak(u);
+      } catch(e) {}
     },
 
     // Distinct Death Jingles per Bird Skin (Sesuai dengan Karakter & Tema Burung)
@@ -1183,6 +1223,66 @@
           this.playTone(notes[step], .38, 'sawtooth', .042, -20);
           this.playTone(notes[step] * 0.707, .42, 'sine', .048, -10);
         }, 145);
+      } else if(skinId === 'goku_ssj') {
+        // Super Saiyan Bird: Dragon Ball Ki Aura Explosion, Dramatic Saiyan Fanfare & Kamehameha Echo
+        this.playTone(120, 0.45, 'sawtooth', 0.09, -80);
+        this.playTone(240, 0.35, 'square', 0.07, 300);
+        setTimeout(() => this.speakVoice('Kakarotto! Mada mada da!', { lang: 'ja-JP', pitch: 1.15, rate: 1.25 }), 120);
+        const dbzNotes = [440, 554, 659, 880, 830, 740, 659, 440, 220];
+        this.deathTimer = setInterval(() => {
+          step++;
+          if(step >= dbzNotes.length) { clearInterval(this.deathTimer); this.deathTimer = null; return; }
+          this.playTone(dbzNotes[step], .28, 'sawtooth', .065, step % 2 === 0 ? 30 : -40);
+          this.playTone(dbzNotes[step] * 1.5, .18, 'triangle', .035, 10);
+        }, 150);
+      } else if(skinId === 'tanjiro_bird') {
+        // Demon Slayer Bird: Hinokami Kagura Water Breathing Slice & Emotional Shamisen Strings
+        this.playTone(659, 0.25, 'triangle', 0.07, -150);
+        this.playTone(330, 0.4, 'sine', 0.08, -60);
+        setTimeout(() => this.speakVoice('Hinokami Kagura! Makeru na!', { lang: 'ja-JP', pitch: 1.2, rate: 1.15 }), 100);
+        const tanjiroNotes = [880, 784, 659, 587, 523, 440, 392, 330, 220];
+        this.deathTimer = setInterval(() => {
+          step++;
+          if(step >= tanjiroNotes.length) { clearInterval(this.deathTimer); this.deathTimer = null; return; }
+          this.playTone(tanjiroNotes[step], .32, 'triangle', .06, -20);
+          this.playTone(tanjiroNotes[step] * 0.75, .38, 'sine', .045, 0);
+        }, 140);
+      } else if(skinId === 'naruto_bird') {
+        // Sage Shinobi Bird: Konoha Flute & Rasengan Chakra Dispersal
+        this.playTone(587, 0.3, 'sine', 0.08, 120);
+        this.playTone(293, 0.45, 'triangle', 0.075, -50);
+        setTimeout(() => this.speakVoice('Dattebayo! Ore wa akiramenai!', { lang: 'ja-JP', pitch: 1.35, rate: 1.2 }), 90);
+        const narutoNotes = [587, 659, 880, 988, 880, 740, 587, 440, 293];
+        this.deathTimer = setInterval(() => {
+          step++;
+          if(step >= narutoNotes.length) { clearInterval(this.deathTimer); this.deathTimer = null; return; }
+          this.playTone(narutoNotes[step], .26, 'sine', .065, step === narutoNotes.length - 1 ? -80 : 25);
+          this.playTone(narutoNotes[step] * 1.5, .2, 'triangle', .035, 0);
+        }, 145);
+      } else if(skinId === 'luffy_bird') {
+        // Straw Hat Pirate: Gomu Gomu Spring Snap & Joyful Grand Line Fanfare
+        this.playTone(261, 0.15, 'sawtooth', 0.08, 450);
+        this.playTone(523, 0.18, 'square', 0.065, -200);
+        setTimeout(() => this.speakVoice('Gomu gomu no! Kaizoku ou ni ore wa naru!', { lang: 'ja-JP', pitch: 1.4, rate: 1.25 }), 80);
+        const luffyNotes = [523, 659, 784, 1046, 880, 784, 659, 523, 261];
+        this.deathTimer = setInterval(() => {
+          step++;
+          if(step >= luffyNotes.length) { clearInterval(this.deathTimer); this.deathTimer = null; return; }
+          this.playTone(luffyNotes[step], .22, 'square', .055, step % 2 === 0 ? 50 : -30);
+          this.playTone(luffyNotes[step] * 1.25, .16, 'sine', .035, 10);
+        }, 130);
+      } else if(skinId === 'gojo_bird') {
+        // Honored One (Gojo): Iconic "Yowai mo" Whispered Taunt & Hollow Purple / Unlimited Void Cosmic Bells
+        this.playTone(1046, 0.35, 'sine', 0.08, 0);
+        this.playTone(1568, 0.28, 'triangle', 0.06, 0);
+        setTimeout(() => this.speakVoice('Yowai mo... Daijoubu, boku saikyou dakara.', { lang: 'ja-JP', pitch: 0.95, rate: 1.05 }), 80);
+        const gojoNotes = [1046, 1175, 1318, 1568, 1760, 1568, 1318, 1046, 523];
+        this.deathTimer = setInterval(() => {
+          step++;
+          if(step >= gojoNotes.length) { clearInterval(this.deathTimer); this.deathTimer = null; return; }
+          this.playTone(gojoNotes[step], .35, 'sine', .068, 0);
+          this.playTone(gojoNotes[step] * 1.414, .25, 'triangle', .035, -15);
+        }, 160);
       }
     },
 
@@ -5037,7 +5137,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.70';
+  const GAME_VERSION = '20.71';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
