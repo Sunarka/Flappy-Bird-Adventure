@@ -571,20 +571,20 @@
     namek_green:{ name:'PLANET NAMEK SKY', desc:'Langit hijau Namek dengan matahari kembar bersinar', cost:0, top:'#059669', bottom:'#a7f3d0', hill:'#047857' }
   };
 
-  // 7. Musik (Nama Lengkap) - ALL FREE FOR TESTING
+  // 7. Musik (Synthesizer Melodies & Anime Themes)
   const tracks = {
-    happy:{ name:'HAPPY MELODY', desc:'Melodi ceria riang swing', cost:0, color:'#ffbf38' },
-    bounce:{ name:'BOUNCE SYNTHWAVE', desc:'Irama disko synthwave dance', cost:0, color:'#f287b5' },
-    arcade:{ name:'ARCADE CHIPTUNE', desc:'Chiptune 8-bit game retro', cost:0, color:'#7c8dff' },
-    chill:{ name:'CHILL LO-FI JAZZ', desc:'Lo-Fi santai sunset jazz keys', cost:0, color:'#52b788' },
-    epic:{ name:'HEROIC ADVENTURE', desc:'Orkestra petualangan megah & heroik', cost:0, color:'#ef4444' },
-    cyberbeat:{ name:'CYBERPUNK BEAT', desc:'Electro synthwave tempo cepat energetik', cost:0, color:'#06b6d4' },
-    // Anime Special Soundtracks
-    mendaki_semeru:{ name:'MENDAKI SEMERU (KESSOKU BAND)', desc:'Lagu viral Kessoku Band parody Pak Vramroro mendaki Semeru', cost:100, currency:'diamond', rarity:'mythic', color:'#ec4899' },
-    gurenge:{ name:'ANIME: GURENGE (DEMON SLAYER)', desc:'Theme song pemburu iblis melodi J-Rock energetik', cost:0, color:'#ef4444' },
-    blue_bird:{ name:'ANIME: BLUE BIRD (NARUTO)', desc:'Lagu ikonik melodi seruling & gitar bersemangat', cost:0, color:'#38bdf8' },
-    we_are:{ name:'ANIME: WE ARE! (ONE PIECE)', desc:'Melodi petualangan bajak laut riang & megah', cost:0, color:'#facc15' },
-    sparkle:{ name:'ANIME: SPARKLE (YOUR NAME)', desc:'Melodi piano emosional & lonceng bintang jatuh', cost:0, color:'#a855f7' }
+    happy:{ name:'HAPPY MELODY', desc:'Melodi ceria riang swing chiptune klasik', cost:0, currency:'coin', rarity:'common', color:'#ffbf38' },
+    bounce:{ name:'BOUNCE SYNTHWAVE', desc:'Irama disko synthwave dance bersemangat', cost:200, currency:'coin', rarity:'rare', color:'#f287b5' },
+    arcade:{ name:'ARCADE CHIPTUNE', desc:'Chiptune 8-bit game retro nostalgia arcade', cost:200, currency:'coin', rarity:'rare', color:'#7c8dff' },
+    chill:{ name:'CHILL LO-FI JAZZ', desc:'Lo-Fi santai sunset jazz piano & rhodes keys', cost:250, currency:'coin', rarity:'rare', color:'#52b788' },
+    epic:{ name:'HEROIC ADVENTURE', desc:'Orkestra petualangan megah bertempo cepat', cost:400, currency:'coin', rarity:'epic', color:'#ef4444' },
+    cyberbeat:{ name:'CYBERPUNK BEAT', desc:'Electro synthwave tempo cepat cyber futuristik', cost:450, currency:'coin', rarity:'epic', color:'#06b6d4' },
+    // Anime Special Soundtracks - Diamond
+    gurenge:{ name:'ANIME: GURENGE (DEMON SLAYER)', desc:'Theme song pemburu iblis melodi J-Rock energetik', cost:30, currency:'diamond', rarity:'mythic', color:'#ef4444' },
+    blue_bird:{ name:'ANIME: BLUE BIRD (NARUTO)', desc:'Lagu ikonik melodi seruling & gitar bersemangat', cost:30, currency:'diamond', rarity:'mythic', color:'#38bdf8' },
+    we_are:{ name:'ANIME: WE ARE! (ONE PIECE)', desc:'Melodi petualangan bajak laut riang & megah', cost:30, currency:'diamond', rarity:'mythic', color:'#facc15' },
+    sparkle:{ name:'ANIME: SPARKLE (YOUR NAME)', desc:'Melodi piano emosional & lonceng bintang jatuh', cost:30, currency:'diamond', rarity:'mythic', color:'#a855f7' },
+    mendaki_semeru:{ name:'MENDAKI SEMERU (KESSOKU BAND)', desc:'Lagu viral Kessoku Band parody Pak Vramroro mendaki Semeru', cost:100, currency:'diamond', rarity:'mythic', color:'#ec4899' }
   };
 
   // 8. Starter Booster Perk (Skill Langsung Aktif Saat Mulai) - ALL FREE FOR TESTING
@@ -1596,25 +1596,27 @@
           step++;
         }, 190);
       } else if(trackId === 'mendaki_semeru') {
-        // "Mendaki Semeru" - Kessoku Band energetic J-Rock synth riff & punchy bass
+        // "Mendaki Semeru" - Kessoku Band (Seishun Complex / Pak Vramroro)
         const melody = [
-          659, 659, 0, 587, 659, 0, 784, 0, 880, 880, 0, 784, 659, 0, 587, 0,
-          523, 523, 0, 587, 659, 0, 523, 0, 440, 440, 523, 659, 587, 0, 0, 0,
-          659, 784, 880, 0, 1047, 0, 988, 880, 784, 0, 659, 0, 784, 880, 784, 0,
-          659, 587, 523, 0, 440, 523, 659, 0, 587, 0, 523, 0, 440, 0, 0, 0
+          554, 554, 554, 0, 494, 0, 440, 494, 554, 0, 659, 0, 554, 0, 494, 0,
+          440, 440, 440, 0, 415, 0, 370, 415, 440, 0, 554, 0, 494, 0, 440, 0,
+          587, 587, 587, 0, 554, 0, 494, 554, 587, 0, 740, 0, 659, 0, 587, 0,
+          554, 0, 494, 0, 440, 0, 415, 440, 494, 0, 440, 0, 415, 0, 370, 0
         ];
         const bass = [
-          110, 110, 131, 131, 147, 147, 131, 131,
-          87, 87, 110, 110, 131, 131, 147, 147
+          92, 92, 92, 92, 92, 92, 92, 92,
+          147, 147, 147, 147, 147, 147, 147, 147,
+          165, 165, 165, 165, 165, 165, 165, 165,
+          138, 138, 138, 138, 92, 92, 92, 92
         ];
         this.musicTimer = setInterval(() => {
           if(state !== State.PLAYING && state !== State.READY) return;
-          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          const note = melody[step % melody.length], low = bass[step % bass.length];
           if(note) {
             this.playTone(note, .14, 'sawtooth', .025, 0);
             this.playTone(note * 0.5, .12, 'square', .018, 0);
           }
-          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .038, -20);
+          if(low) this.playTone(low, .22, 'triangle', .038, -20);
           if(step % 4 === 0) this.playTone(160, .08, 'triangle', .032, -80);
           if(step % 2 === 1) this.playTone(1100, .035, 'square', .012);
           step++;
@@ -1867,22 +1869,24 @@
         }, 190);
       } else if(trackId === 'mendaki_semeru') {
         const melody = [
-          659, 659, 0, 587, 659, 0, 784, 0, 880, 880, 0, 784, 659, 0, 587, 0,
-          523, 523, 0, 587, 659, 0, 523, 0, 440, 440, 523, 659, 587, 0, 0, 0,
-          659, 784, 880, 0, 1047, 0, 988, 880, 784, 0, 659, 0, 784, 880, 784, 0,
-          659, 587, 523, 0, 440, 523, 659, 0, 587, 0, 523, 0, 440, 0, 0, 0
+          554, 554, 554, 0, 494, 0, 440, 494, 554, 0, 659, 0, 554, 0, 494, 0,
+          440, 440, 440, 0, 415, 0, 370, 415, 440, 0, 554, 0, 494, 0, 440, 0,
+          587, 587, 587, 0, 554, 0, 494, 554, 587, 0, 740, 0, 659, 0, 587, 0,
+          554, 0, 494, 0, 440, 0, 415, 440, 494, 0, 440, 0, 415, 0, 370, 0
         ];
         const bass = [
-          110, 110, 131, 131, 147, 147, 131, 131,
-          87, 87, 110, 110, 131, 131, 147, 147
+          92, 92, 92, 92, 92, 92, 92, 92,
+          147, 147, 147, 147, 147, 147, 147, 147,
+          165, 165, 165, 165, 165, 165, 165, 165,
+          138, 138, 138, 138, 92, 92, 92, 92
         ];
         this.previewTimer = setInterval(() => {
-          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          const note = melody[step % melody.length], low = bass[step % bass.length];
           if(note) {
             this.playTone(note, .14, 'sawtooth', .032, 0);
             this.playTone(note * 0.5, .12, 'square', .022, 0);
           }
-          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .042, -20);
+          if(low) this.playTone(low, .22, 'triangle', .042, -20);
           if(step % 4 === 0) this.playTone(160, .08, 'triangle', .04, -80);
           if(step % 2 === 1) this.playTone(1100, .035, 'square', .014);
           step++;
@@ -2723,7 +2727,25 @@
       tab.classList.toggle('active', tab.dataset.shopCategory === shopCategory);
     });
 
-    el.skinList.innerHTML = Object.entries(catalog).map(([id, item]) => {
+    const rarityWeights = {
+      'common': 1,
+      'uncommon': 2,
+      'rare': 3,
+      'epic': 4,
+      'legendary': 5,
+      'mythic': 6
+    };
+
+    const sortedCatalogEntries = Object.entries(catalog).sort(([idA, itemA], [idB, itemB]) => {
+      const rA = rarityWeights[(itemA.rarity || 'common').toLowerCase()] || 1;
+      const rB = rarityWeights[(itemB.rarity || 'common').toLowerCase()] || 1;
+      if (rA !== rB) return rA - rB; // Common at top, Mythic at bottom
+      const costA = itemA.cost || 0;
+      const costB = itemB.cost || 0;
+      return costA - costB;
+    });
+
+    el.skinList.innerHTML = sortedCatalogEntries.map(([id, item]) => {
       const unlocked = progress[unlockedKey].includes(id);
       const selected = progress[selectedKey] === id;
       const isPreviewing = previewLoadout[shopCategory] === id;
@@ -2746,7 +2768,7 @@
       } else {
         const canAfford = isDiamond ? ((progress.diamonds || 0) >= cost) : (progress.coins >= cost);
         const iconHtml = isDiamond ?
-          `<svg viewBox="0 0 24 24" width="12" height="12" fill="#38bdf8" style="vertical-align:middle;margin-right:2px;filter:drop-shadow(0 0 4px #0284c7);"><path d="M12 2L2 9l10 13L22 9l-10-7zm0 2.8L18.4 9 12 18.6 5.6 9 12 4.8z"/></svg>` :
+          `<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:middle;margin-right:2px;filter:drop-shadow(0 0 3px #0284c7);"><polygon points="6,3 18,3 22,9 2,9" fill="#7dd3fc"/><polygon points="6,3 18,3 12,9" fill="#e0f2fe"/><polygon points="2,9 12,21 7,9" fill="#0369a1"/><polygon points="22,9 17,9 12,21" fill="#0284c7"/><polygon points="7,9 17,9 12,21" fill="#38bdf8"/><polyline points="6,3 18,3 22,9 12,21 2,9 6,3" fill="none" stroke="#bae6fd" stroke-width="0.8" stroke-linejoin="round"/></svg>` :
           `<svg viewBox="0 0 16 16" width="12" height="12" class="mini-coin-svg"><circle cx="8" cy="8" r="6.5" fill="#fbbf24" stroke="#d97706" stroke-width="1.2"/><text x="8" y="11" text-anchor="middle" font-size="8" font-weight="900" fill="#92400e">$</text></svg>`;
         actionHtml = `<button class="skin-cost-btn buy-btn ${canAfford ? '' : 'cant-afford'}" data-action="buy" data-product="${id}" type="button">${iconHtml} ${t.buy} ${cost}</button>`;
       }

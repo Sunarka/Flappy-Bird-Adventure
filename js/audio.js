@@ -805,26 +805,28 @@
           step++;
         }, 190);
       } else if(trackId === 'mendaki_semeru') {
-        // "Mendaki Semeru" - Kessoku Band energetic J-Rock synth riff & punchy bass
+        // "Mendaki Semeru" - Kessoku Band (Seishun Complex / Pak Vramroro)
         const melody = [
-          659, 659, 0, 587, 659, 0, 784, 0, 880, 880, 0, 784, 659, 0, 587, 0,
-          523, 523, 0, 587, 659, 0, 523, 0, 440, 440, 523, 659, 587, 0, 0, 0,
-          659, 784, 880, 0, 1047, 0, 988, 880, 784, 0, 659, 0, 784, 880, 784, 0,
-          659, 587, 523, 0, 440, 523, 659, 0, 587, 0, 523, 0, 440, 0, 0, 0
+          554, 554, 554, 0, 494, 0, 440, 494, 554, 0, 659, 0, 554, 0, 494, 0,
+          440, 440, 440, 0, 415, 0, 370, 415, 440, 0, 554, 0, 494, 0, 440, 0,
+          587, 587, 587, 0, 554, 0, 494, 554, 587, 0, 740, 0, 659, 0, 587, 0,
+          554, 0, 494, 0, 440, 0, 415, 440, 494, 0, 440, 0, 415, 0, 370, 0
         ];
         const bass = [
-          110, 110, 131, 131, 147, 147, 131, 131,
-          87, 87, 110, 110, 131, 131, 147, 147
+          92, 92, 92, 92, 92, 92, 92, 92,
+          147, 147, 147, 147, 147, 147, 147, 147,
+          165, 165, 165, 165, 165, 165, 165, 165,
+          138, 138, 138, 138, 92, 92, 92, 92
         ];
         this.musicTimer = setInterval(() => {
           const state = window.gameState || 'playing';
           if(state !== 'playing' && state !== 'ready') return;
-          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          const note = melody[step % melody.length], low = bass[step % bass.length];
           if(note) {
             this.playTone(note, .14, 'sawtooth', .025, 0);
             this.playTone(note * 0.5, .12, 'square', .018, 0);
           }
-          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .038, -20);
+          if(low) this.playTone(low, .22, 'triangle', .038, -20);
           if(step % 4 === 0) this.playTone(160, .08, 'triangle', .032, -80);
           if(step % 2 === 1) this.playTone(1100, .035, 'square', .012);
           step++;
@@ -1070,22 +1072,24 @@
         }, 190);
       } else if(trackId === 'mendaki_semeru') {
         const melody = [
-          659, 659, 0, 587, 659, 0, 784, 0, 880, 880, 0, 784, 659, 0, 587, 0,
-          523, 523, 0, 587, 659, 0, 523, 0, 440, 440, 523, 659, 587, 0, 0, 0,
-          659, 784, 880, 0, 1047, 0, 988, 880, 784, 0, 659, 0, 784, 880, 784, 0,
-          659, 587, 523, 0, 440, 523, 659, 0, 587, 0, 523, 0, 440, 0, 0, 0
+          554, 554, 554, 0, 494, 0, 440, 494, 554, 0, 659, 0, 554, 0, 494, 0,
+          440, 440, 440, 0, 415, 0, 370, 415, 440, 0, 554, 0, 494, 0, 440, 0,
+          587, 587, 587, 0, 554, 0, 494, 554, 587, 0, 740, 0, 659, 0, 587, 0,
+          554, 0, 494, 0, 440, 0, 415, 440, 494, 0, 440, 0, 415, 0, 370, 0
         ];
         const bass = [
-          110, 110, 131, 131, 147, 147, 131, 131,
-          87, 87, 110, 110, 131, 131, 147, 147
+          92, 92, 92, 92, 92, 92, 92, 92,
+          147, 147, 147, 147, 147, 147, 147, 147,
+          165, 165, 165, 165, 165, 165, 165, 165,
+          138, 138, 138, 138, 92, 92, 92, 92
         ];
         this.previewTimer = setInterval(() => {
-          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          const note = melody[step % melody.length], low = bass[step % bass.length];
           if(note) {
             this.playTone(note, .14, 'sawtooth', .032, 0);
             this.playTone(note * 0.5, .12, 'square', .022, 0);
           }
-          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .042, -20);
+          if(low) this.playTone(low, .22, 'triangle', .042, -20);
           if(step % 4 === 0) this.playTone(160, .08, 'triangle', .04, -80);
           if(step % 2 === 1) this.playTone(1100, .035, 'square', .014);
           step++;
