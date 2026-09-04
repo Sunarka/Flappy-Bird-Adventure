@@ -1326,28 +1326,43 @@
 
 
     async sendLobbyInvite(friend, roomCode) {
+      let actualRoomCode = roomCode;
+      if (!actualRoomCode || actualRoomCode === '----') {
+        if (window.multiplayerEngine && window.multiplayerEngine.currentRoom && window.multiplayerEngine.currentRoom.code) {
+          actualRoomCode = window.multiplayerEngine.currentRoom.code;
+        } else if (window.multiplayerEngine) {
+          window.multiplayerEngine.createRoom({
+            name: this.myProfile?.gamerTag || 'SkyPlayer',
+            avatar: this.myProfile?.avatar || 'chick_yellow',
+            skin: (window.progress && window.progress.selected) || 'classic'
+          });
+          actualRoomCode = window.multiplayerEngine.currentRoom?.code;
+        }
+      }
+
       if (!this.db || !friend || !friend.friendKey) {
         if (typeof window.showGameDialog === 'function') {
           window.showGameDialog({
             title: 'Undangan Disalin!',
-            html: `<p>Bagikan kode room <b style="color:#facc15;">#${roomCode}</b> ke <b>${friend ? friend.name : 'teman'}</b>!</p>`,
+            html: `<p>Bagikan kode room <b style="color:#facc15;">#${actualRoomCode || '----'}</b> ke <b>${friend ? friend.name : 'teman'}</b>!</p>`,
             type: 'info'
           });
         }
         return;
       }
       try {
-        await this.db.collection('flappy_game_invites').add({
+        const invitePayload = {
           fromKey: this.myKey,
           fromName: this.myProfile?.gamerTag || 'Teman',
           fromAvatar: this.myProfile?.avatar || 'chick_yellow',
           toKey: friend.friendKey,
-          roomCode: String(roomCode),
+          roomCode: String(actualRoomCode),
           mode: window.selectedMpGameMode || 'survival',
           status: 'pending',
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        console.log('[SocialService] Game invite sent to:', friend.name);
+          timestamp: Date.now()
+        };
+        await this.db.collection('flappy_invites').add(invitePayload);
+        console.log('[SocialService] Multiplayer invite sent to:', friend.name, 'Room #', actualRoomCode);
       } catch (err) {
         console.warn('[SocialService] Error sending game invite:', err.message);
       }

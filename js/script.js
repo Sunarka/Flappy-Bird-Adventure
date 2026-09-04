@@ -14142,8 +14142,8 @@
       const timerEl = document.getElementById('mpSearchTimerText');
       if(timerEl) timerEl.textContent = timeStr;
 
-      // FAILSAFE WATCHDOG: Jika detik berjalan mencapai 8 detik (dalam rentang 7-15s) dan match belum dimulai, otomatis mulai duel bot!
-      if (elapsedSec >= 8 && window.multiplayerEngine) {
+      // FAILSAFE WATCHDOG: Jika detik berjalan mencapai 14 detik dan match belum dimulai, otomatis mulai duel bot
+      if (elapsedSec >= 14 && window.multiplayerEngine) {
         if (window.multiplayerEngine.matchStatus === 'QUEUED' || !window.multiplayerEngine.currentRoom) {
           console.log(`[Matchmaking Watchdog] Waktu tunggu mencapai ${elapsedSec}s. Memulai match dengan AI Bot.`);
           window.multiplayerEngine.spawnBotMatch();

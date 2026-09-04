@@ -704,6 +704,16 @@
         clearTimeout(this.botFallbackTimer);
         this.botFallbackTimer = null;
       }
+      if (this.matchmakingUnsub) {
+        this.matchmakingUnsub();
+        this.matchmakingUnsub = null;
+      }
+      if (this.ticketUnsub) {
+        this.ticketUnsub();
+        this.ticketUnsub = null;
+      }
+
+      this.initFirestore();
       this.gameMode = gameMode || 'survival';
       this.maxPlayers = Number(maxPlayers) || 2;
       this.myProfile = { ...profile, id: this.localPlayerId };
@@ -714,12 +724,81 @@
         this.send({ type: 'QUICK_MATCH', profile: this.myProfile, gameMode: this.gameMode, maxPlayers: this.maxPlayers });
       }
 
-      // Auto-Bot Fallback Timer: 7.0 sampai 10.0 detik jika belum ada pemain online asli, mulai dengan AI Bot!
-      // (Sesuai rentang 7-15s ekspektasi pemain dan estimasi 00:10 di banner radar)
-      const botWaitMs = Math.floor(7000 + Math.random() * 3000); // 7.0s - 10.0s
+      // 1. FIRESTORE REAL-TIME MATCHMAKING POOL (1 - 6 Detik: Prioritaskan Player Online Asli)
+      if (this.fs) {
+        const ticketId = `ticket_${this.localPlayerId}`;
+        const ticketRef = this.fs.collection('flappy_matchmaking_pool').doc(ticketId);
+
+        ticketRef.set({
+          playerId: this.localPlayerId,
+          profile: this.myProfile,
+          gameMode: this.gameMode,
+          maxPlayers: this.maxPlayers,
+          status: 'searching',
+          timestamp: Date.now()
+        }).catch(e => console.warn('[MP Ticket Set Error]:', e));
+
+        // Listen to own ticket for match notification
+        this.ticketUnsub = ticketRef.onSnapshot(snap => {
+          if (!snap.exists) return;
+          const data = snap.data();
+          if (data.status === 'matched' && data.roomCode) {
+            if (this.matchStatus === 'QUEUED') {
+              console.log('[Matchmaking Pool] Berhasil dicocokkan ke room:', data.roomCode);
+              if (this.botFallbackTimer) {
+                clearTimeout(this.botFallbackTimer);
+                this.botFallbackTimer = null;
+              }
+              ticketRef.delete().catch(() => {});
+              this.joinRoom(data.roomCode, this.myProfile);
+            }
+          }
+        }, () => {});
+
+        // Cari lawan online lain yang sedang 'searching'
+        const poolQuery = this.fs.collection('flappy_matchmaking_pool')
+          .where('gameMode', '==', this.gameMode)
+          .where('maxPlayers', '==', this.maxPlayers)
+          .where('status', '==', 'searching');
+
+        this.matchmakingUnsub = poolQuery.onSnapshot(snap => {
+          if (this.matchStatus !== 'QUEUED') return;
+          const now = Date.now();
+          snap.forEach(async doc => {
+            if (doc.id !== ticketId && this.matchStatus === 'QUEUED') {
+              const otherData = doc.data();
+              if (otherData && otherData.playerId && otherData.status === 'searching' && (now - (otherData.timestamp || 0) < 20000)) {
+                // Host yang membuat room adalah yang memiliki localPlayerId lebih kecil
+                if (this.localPlayerId < otherData.playerId) {
+                  const roomCode = Math.floor(1000 + Math.random() * 9000).toString();
+                  console.log(`[Matchmaking Pool] Pairing ${this.localPlayerId} vs ${otherData.playerId} in Room #${roomCode}`);
+                  
+                  // Update tiket lawan & tiket sendiri
+                  doc.ref.update({ status: 'matched', roomCode }).catch(() => {});
+                  ticketRef.update({ status: 'matched', roomCode }).catch(() => {});
+
+                  if (this.botFallbackTimer) {
+                    clearTimeout(this.botFallbackTimer);
+                    this.botFallbackTimer = null;
+                  }
+
+                  // Buat room di Firestore
+                  this.createRoom(this.myProfile);
+                }
+              }
+            }
+          });
+        }, () => {});
+      }
+
+      // 2. TIMING MATCHMAKING: 1-6 Detik prioritaskan player asli, 7-13 Detik mulai dengan AI Bot
+      const botWaitMs = Math.floor(7000 + Math.random() * 6000); // 7.0s - 13.0s
       this.botFallbackTimer = setTimeout(() => {
         if (this.matchStatus === 'QUEUED') {
-          console.log(`[MultiplayerEngine] Waktu tunggu matchmaking habis (${(botWaitMs/1000).toFixed(1)} detik). Menghubungkan ke AI Bot...`);
+          console.log(`[MultiplayerEngine] Waktu tunggu matchmaking habis (${(botWaitMs/1000).toFixed(1)}s). Memulai match dengan AI Bot...`);
+          if (this.fs) {
+            this.fs.collection('flappy_matchmaking_pool').doc(`ticket_${this.localPlayerId}`).delete().catch(() => {});
+          }
           this.spawnBotMatch();
         }
       }, botWaitMs);
@@ -865,6 +944,17 @@
       if (this.botFallbackTimer) {
         clearTimeout(this.botFallbackTimer);
         this.botFallbackTimer = null;
+      }
+      if (this.matchmakingUnsub) {
+        this.matchmakingUnsub();
+        this.matchmakingUnsub = null;
+      }
+      if (this.ticketUnsub) {
+        this.ticketUnsub();
+        this.ticketUnsub = null;
+      }
+      if (this.fs) {
+        this.fs.collection('flappy_matchmaking_pool').doc(`ticket_${this.localPlayerId}`).delete().catch(() => {});
       }
       this.matchStatus = 'IDLE';
       this.send({ type: 'CANCEL_MATCH' });
