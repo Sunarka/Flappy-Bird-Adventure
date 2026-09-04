@@ -1630,55 +1630,34 @@
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  padding: 3px 8px !important;
+  padding: 4px 10px !important;
   background: #182229 !important;
   border-bottom: 1px solid #223547 !important;
   flex-shrink: 0 !important;
 }
 
-.mlbb-wa-drawer-tabs {
-  display: flex !important;
-  gap: 4px !important;
-}
-
-.mlbb-wa-drawer-tab {
-  background: transparent !important;
-  border: none !important;
-  color: #8696a0 !important;
-  font: 800 9px/1 'Trebuchet MS', Arial, sans-serif !important;
-  padding: 4px 8px !important;
-  border-radius: 6px !important;
-  cursor: pointer !important;
+.mlbb-wa-drawer-title {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 4px !important;
-  transition: all 0.15s !important;
-}
-
-.mlbb-wa-drawer-tab:hover {
-  color: #e9edef !important;
-  background: rgba(255, 255, 255, 0.06) !important;
-}
-
-.mlbb-wa-drawer-tab.active {
-  color: #25d366 !important;
-  background: rgba(37, 211, 102, 0.14) !important;
-  border-bottom: 2px solid #25d366 !important;
+  gap: 6px !important;
+  font: 900 10.5px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #38bdf8 !important;
+  letter-spacing: 0.5px !important;
 }
 
 .mlbb-wa-drawer-close {
   background: transparent !important;
   border: none !important;
   color: #8696a0 !important;
-  font: 800 12px/1 Arial, sans-serif !important;
-  width: 20px !important;
-  height: 20px !important;
+  width: 22px !important;
+  height: 22px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   cursor: pointer !important;
   border-radius: 50% !important;
   transition: all 0.15s !important;
+  padding: 0 !important;
 }
 
 .mlbb-wa-drawer-close:hover {
@@ -1698,80 +1677,7 @@
   display: none !important;
 }
 
-/* Panel 1: Emojis Grid */
-.mlbb-wa-emoji-grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(28px, 1fr)) !important;
-  gap: 3px !important;
-}
-
-.mlbb-wa-emoji-item {
-  background: transparent !important;
-  border: none !important;
-  font-size: 19px !important;
-  line-height: 1 !important;
-  padding: 3px 0 !important;
-  cursor: pointer !important;
-  border-radius: 6px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: transform 0.12s, background 0.12s !important;
-  user-select: none !important;
-}
-
-.mlbb-wa-emoji-item:hover {
-  transform: scale(1.25) !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-}
-
-.mlbb-wa-emoji-item:active {
-  transform: scale(0.95) !important;
-}
-
-/* Panel 2: Bird Stickers Grid */
-.mlbb-wa-stickers-grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)) !important;
-  gap: 6px !important;
-}
-
-.mlbb-wa-sticker-card {
-  background: #182229 !important;
-  border: 1px solid #223547 !important;
-  border-radius: 8px !important;
-  padding: 4px 2px !important;
-  cursor: pointer !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 3px !important;
-  transition: transform 0.15s, border-color 0.15s, background 0.15s !important;
-}
-
-.mlbb-wa-sticker-card:hover {
-  transform: translateY(-2px) scale(1.04) !important;
-  border-color: #25d366 !important;
-  background: #202c33 !important;
-  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.25) !important;
-}
-
-.mlbb-wa-sticker-card:active {
-  transform: scale(0.95) !important;
-}
-
-.mlbb-wa-sticker-name {
-  font: 700 7.5px/1 'Trebuchet MS', Arial, sans-serif !important;
-  color: #8696a0 !important;
-  text-align: center !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  max-width: 72px !important;
-}
-
-/* Panel 3: Quick Presets Grid */
+/* Quick Presets Grid */
 .mlbb-wa-presets-grid {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -1782,20 +1688,26 @@
   background: #182229 !important;
   border: 1px solid #2a3942 !important;
   color: #e9edef !important;
-  font: 700 10px/1 'Trebuchet MS', Arial, sans-serif !important;
+  font: 700 10.5px/1 'Trebuchet MS', Arial, sans-serif !important;
   padding: 5px 9px !important;
   border-radius: 14px !important;
   cursor: pointer !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 4px !important;
+  gap: 5px !important;
   transition: all 0.15s !important;
+}
+
+.mlbb-wa-preset-btn .preset-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .mlbb-wa-preset-btn:hover {
   background: #202c33 !important;
-  border-color: #25d366 !important;
-  color: #25d366 !important;
+  border-color: #38bdf8 !important;
+  color: #38bdf8 !important;
   transform: scale(1.03) !important;
 }
 
@@ -1825,7 +1737,7 @@
   background: #182533 !important;
   border: 1.5px solid #28445e !important;
   border-radius: 24px !important;
-  padding: 0 6px !important;
+  padding: 0 6px 0 12px !important;
   height: 38px !important;
   min-height: 38px !important;
   max-height: 38px !important;

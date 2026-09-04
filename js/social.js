@@ -544,149 +544,86 @@
     }
 
     initWhatsAppEmojiDrawer() {
-      const emojiGrid = document.getElementById('mlbbEmojiGrid');
-      const stickersGrid = document.getElementById('mlbbBirdStickersGrid');
       const presetsGrid = document.getElementById('mlbbQuickPresetsGrid');
 
-      // 1. Populate Popular Gaming & Reaction Emojis Grid
-      if (emojiGrid && !emojiGrid.hasChildNodes()) {
-        const POPULAR_EMOJIS = [
-          '😀', '😂', '🤣', '😊', '😍', '😎', '🥳', '🥺',
-          '😭', '😡', '😱', '🤔', '😴', '🤐', '🙄', '🤯',
-          '🔥', '👑', '🎮', '🏆', '⚡', '💯', '💣', '🎯',
-          '✨', '💥', '🚀', '💎', '🌟', '🥇', '⚔️', '🛡️',
-          '👍', '👎', '👏', '🙌', '🤝', '✌️', '👋', '🙏',
-          '💖', '💔', '💩', '👻', '💀', '🤖', '👾', '🤠'
-        ];
-        POPULAR_EMOJIS.forEach(emoji => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'mlbb-wa-emoji-item';
-          btn.textContent = emoji;
-          btn.title = emoji;
-          btn.onclick = (e) => {
-            e.preventDefault();
-            if (window.audio && typeof window.audio.click === 'function') window.audio.click();
-            this.insertEmojiAtCursor(emoji);
-          };
-          emojiGrid.appendChild(btn);
-        });
-      }
-
-      // 2. Populate Cute Bird Stickers Grid (All 10 Cute Bird SVGs)
-      if (stickersGrid && !stickersGrid.hasChildNodes() && Array.isArray(CUTE_BIRD_EMOTES)) {
-        CUTE_BIRD_EMOTES.forEach(emote => {
-          const card = document.createElement('button');
-          card.type = 'button';
-          card.className = 'mlbb-wa-sticker-card';
-          card.title = emote.title;
-          card.innerHTML = `
-            ${emote.render(34)}
-            <span class="mlbb-wa-sticker-name">${this.escapeHtml(emote.title.split('/')[0].trim())}</span>
-          `;
-          card.onclick = (e) => {
-            e.preventDefault();
-            if (window.audio && typeof window.audio.click === 'function') window.audio.click();
-            this.sendCurrentChatMessage(`[BIRD_EMOTE:${emote.id}]`);
-            this.toggleEmojiDrawer(false);
-          };
-          stickersGrid.appendChild(card);
-        });
-      }
-
-      // 3. Populate Quick Presets Grid
+      // Populate Quick Presets Grid with crisp vector SVG icons
       if (presetsGrid && !presetsGrid.hasChildNodes()) {
         const PRESETS = [
-          { text: 'Mabar yuk!', icon: '🎮' },
-          { text: 'Gas 1v1!', icon: '⚔️' },
-          { text: 'Semangat bro!', icon: '🔥' },
-          { text: 'GG (Good Game)!', icon: '🏆' },
-          { text: 'Ada room kosong?', icon: '🚪' },
-          { text: 'Bentar ya lagi main', icon: '⏳' },
-          { text: 'Ayo rematch!', icon: '🔄' },
-          { text: 'Mantap sekali!', icon: '👍' },
-          { text: 'Ampun bang jago!', icon: '🙏' },
-          { text: 'Keren abis!', icon: '👑' }
+          {
+            text: 'Mabar yuk!',
+            svg: '<svg viewBox="0 0 24 24" width="15" height="15" fill="#38bdf8"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>'
+          },
+          {
+            text: 'Gas 1v1!',
+            svg: '<svg viewBox="0 0 24 24" width="15" height="15" fill="#f87171"><path d="M6.92 5h2.16L12 8.08 14.92 5h2.16l-3.92 4 4 4.08-1.42 1.42L12 10.92l-3.74 3.58L6.84 13.08 10.84 9 6.92 5z"/></svg>'
+          },
+          {
+            text: 'Semangat bro!',
+            svg: '<svg viewBox="0 0 24 24" width="15" height="15" fill="#fb923c"><path d="M12 23c-4.97 0-9-4.03-9-9 0-4.04 2.68-7.46 6.43-8.58.4-.12.82.13.91.53.09.4-.13.82-.53.91C6.67 7.7 4.5 10.6 4.5 14c0 4.14 3.36 7.5 7.5 7.5s7.5-3.36 7.5-7.5c0-3.3-2.07-6.15-5.08-7.14-.4-.13-.62-.56-.49-.96.13-.4.56-.62.96-.49C18.6 6.7 21 10.07 21 14c0 4.97-4.03 9-9 9z"/></svg>'
+          },
+          {
+            text: 'GG (Good Game)!',
+            svg: '<svg viewBox="0 0 24 24" width="15" height="15" fill="#facc15"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>'
+          },
+          {
+            text: 'Ada room kosong?',
+            svg: '<svg viewBox="0 0 24 24" width="15" height="15" fill="#a78bfa"><path d="M19 19V5c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v14H3v2h18v-2h-2zm-4-6h-2v-2h2v2z"/></svg>'
+          },
+          {
+            text: 'Bentar ya lagi main',
+            svg: '<svg viewBox="0 0 24 24" width="15" height="15" fill="#38bdf8"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>'
+          },
+          {
+            text: 'Ayo rematch!',
+            svg: '<svg viewBox="0 0 24 24" width="15" height="15" fill="#4ade80"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>'
+          },
+          {
+            text: 'Mantap sekali!',
+            svg: '<svg viewBox="0 0 24 24" width="15" height="15" fill="#60a5fa"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>'
+          },
+          {
+            text: 'Ampun bang jago!',
+            svg: '<svg viewBox="0 0 24 24" width="15" height="15" fill="#facc15"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>'
+          },
+          {
+            text: 'Keren abis!',
+            svg: '<svg viewBox="0 0 24 24" width="15" height="15" fill="#f43f5e"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'
+          }
         ];
         PRESETS.forEach(p => {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'mlbb-wa-preset-btn';
-          btn.innerHTML = `<span>${p.icon}</span> <span>${this.escapeHtml(p.text)}</span>`;
+          btn.innerHTML = `<span class="preset-icon">${p.svg}</span> <span>${this.escapeHtml(p.text)}</span>`;
           btn.onclick = (e) => {
             e.preventDefault();
             if (window.audio && typeof window.audio.click === 'function') window.audio.click();
             this.sendCurrentChatMessage(p.text);
-            this.toggleEmojiDrawer(false);
+            this.togglePresetsDrawer(false);
           };
           presetsGrid.appendChild(btn);
         });
       }
 
-      // 4. Tab Switcher
-      const tabEmoji = document.getElementById('mlbbDrawerTabEmoji');
-      const tabStickers = document.getElementById('mlbbDrawerTabStickers');
-      const tabPresets = document.getElementById('mlbbDrawerTabPresets');
-      const panelEmoji = document.getElementById('mlbbEmojiTabContent');
-      const panelStickers = document.getElementById('mlbbStickersTabContent');
-      const panelPresets = document.getElementById('mlbbPresetsTabContent');
-
-      const switchDrawerTab = (activeTab) => {
-        if (window.audio && typeof window.audio.click === 'function') window.audio.click();
-        if (tabEmoji) tabEmoji.classList.toggle('active', activeTab === 'emojis');
-        if (tabStickers) tabStickers.classList.toggle('active', activeTab === 'stickers');
-        if (tabPresets) tabPresets.classList.toggle('active', activeTab === 'presets');
-
-        if (panelEmoji) panelEmoji.classList.toggle('hidden', activeTab !== 'emojis');
-        if (panelStickers) panelStickers.classList.toggle('hidden', activeTab !== 'stickers');
-        if (panelPresets) panelPresets.classList.toggle('hidden', activeTab !== 'presets');
-      };
-
-      if (tabEmoji) tabEmoji.onclick = () => switchDrawerTab('emojis');
-      if (tabStickers) tabStickers.onclick = () => switchDrawerTab('stickers');
-      if (tabPresets) tabPresets.onclick = () => switchDrawerTab('presets');
-
-      // 5. Drawer Close Button
+      // Drawer Close Button
       const closeBtn = document.getElementById('mlbbDrawerCloseBtn');
       if (closeBtn) {
         closeBtn.onclick = () => {
           if (window.audio && typeof window.audio.click === 'function') window.audio.click();
-          this.toggleEmojiDrawer(false);
+          this.togglePresetsDrawer(false);
         };
       }
     }
 
-    toggleEmojiDrawer(forceState, targetTab = 'emojis') {
+    togglePresetsDrawer(forceState) {
       const drawer = document.getElementById('mlbbEmojiDrawer');
-      const emojiBtn = document.getElementById('mlbbChatEmojiBtn');
       if (!drawer) return;
-
       const shouldOpen = typeof forceState === 'boolean' ? forceState : drawer.classList.contains('hidden');
       drawer.classList.toggle('hidden', !shouldOpen);
-
-      if (emojiBtn) {
-        const iconEmoji = emojiBtn.querySelector('.icon-emoji');
-        const iconKeyboard = emojiBtn.querySelector('.icon-keyboard');
-        if (iconEmoji) iconEmoji.classList.toggle('hidden', shouldOpen);
-        if (iconKeyboard) iconKeyboard.classList.toggle('hidden', !shouldOpen);
-      }
-
-      if (shouldOpen && targetTab) {
-        const tabBtn = document.getElementById(targetTab === 'presets' ? 'mlbbDrawerTabPresets' : (targetTab === 'stickers' ? 'mlbbDrawerTabStickers' : 'mlbbDrawerTabEmoji'));
-        if (tabBtn) tabBtn.click();
-      }
     }
 
-    insertEmojiAtCursor(emoji) {
-      const input = document.getElementById('mlbbChatInput');
-      if (!input) return;
-      const start = input.selectionStart ?? input.value.length;
-      const end = input.selectionEnd ?? input.value.length;
-      const text = input.value;
-      input.value = text.substring(0, start) + emoji + text.substring(end);
-      const newPos = start + emoji.length;
-      input.setSelectionRange(newPos, newPos);
-      input.focus();
+    toggleEmojiDrawer(forceState) {
+      this.togglePresetsDrawer(forceState);
     }
 
     bindChatEvents() {
@@ -705,7 +642,7 @@
           } else if (modal) {
             modal.classList.remove('hidden');
           }
-          this.toggleEmojiDrawer(false);
+          this.togglePresetsDrawer(false);
           this.switchLobbyChatTab(this.currentChatTab || 'global');
           this.clearGlobalChatBadge();
         };
@@ -725,23 +662,13 @@
         };
       }
 
-      // Emoji Toggle Button (inside WhatsApp pill)
-      const emojiBtn = document.getElementById('mlbbChatEmojiBtn');
-      if (emojiBtn) {
-        emojiBtn.onclick = (e) => {
-          e.preventDefault();
-          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
-          this.toggleEmojiDrawer();
-        };
-      }
-
-      // Quick Presets Button (inside WhatsApp pill)
+      // Quick Presets Button (inside pill)
       const quickBtn = document.getElementById('mlbbChatQuickBtn');
       if (quickBtn) {
         quickBtn.onclick = (e) => {
           e.preventDefault();
           if (window.audio && typeof window.audio.click === 'function') window.audio.click();
-          this.toggleEmojiDrawer(true, 'presets');
+          this.togglePresetsDrawer();
         };
       }
 
@@ -751,7 +678,7 @@
           const text = input ? input.value.trim() : '';
           if (!text) return;
           if (input) input.value = '';
-          this.toggleEmojiDrawer(false);
+          this.togglePresetsDrawer(false);
           this.sendCurrentChatMessage(text);
         };
       }
@@ -973,7 +900,7 @@
         const isActive = this.activeFriendChat && this.activeFriendChat.friendKey === f.friendKey;
         item.className = `mlbb-cm-friend-item ${isActive ? 'active' : ''}`;
         item.dataset.friendKey = f.friendKey;
-        const avSvg = typeof window.getCuteAvatarSvg === 'function' ? window.getCuteAvatarSvg(f.avatar || 'chick_yellow', 18) : '🐥';
+        const avSvg = typeof window.getCuteAvatarSvg === 'function' ? window.getCuteAvatarSvg(f.avatar || 'chick_yellow', 18) : '<svg viewBox="0 0 24 24" width="18" height="18" fill="#38bdf8"><circle cx="12" cy="12" r="10"/></svg>';
         const hasUnread = this.unreadFriendMessages && this.unreadFriendMessages[f.friendKey];
         const safeName = typeof window.sanitizePlayerName === 'function' ? window.sanitizePlayerName(f.name || 'Teman') : (f.name || 'Teman');
         item.innerHTML = `
