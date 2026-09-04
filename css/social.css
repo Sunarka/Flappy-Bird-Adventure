@@ -1070,6 +1070,8 @@
   justify-content: center !important;
   cursor: pointer !important;
   transition: all 0.15s ease !important;
+}
+
 .friend-profile-modal .close,
 .profile-modal-close-btn {
   display: flex !important;

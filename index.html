@@ -21,18 +21,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.63">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.63">
-  <link rel="stylesheet" href="css/shop.css?v=20.63">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.63">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.63">
-  <link rel="stylesheet" href="css/store.css?v=20.63">
-  <link rel="stylesheet" href="css/ranked.css?v=20.63">
-  <link rel="stylesheet" href="css/social.css?v=20.63">
-  <link rel="stylesheet" href="css/splash.css?v=20.63">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.63">
+  <link rel="stylesheet" href="css/style.css?v=20.64">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.64">
+  <link rel="stylesheet" href="css/shop.css?v=20.64">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.64">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.64">
+  <link rel="stylesheet" href="css/store.css?v=20.64">
+  <link rel="stylesheet" href="css/ranked.css?v=20.64">
+  <link rel="stylesheet" href="css/social.css?v=20.64">
+  <link rel="stylesheet" href="css/splash.css?v=20.64">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.64">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.63">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.64">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -947,16 +947,20 @@
       <!-- Ranked Leaderboard & Top 1 Champion Portrait Showcase Modal -->
       <section id="rankedModal" class="modal ranked-modal hidden" role="dialog" aria-modal="true">
         <button class="close" data-close>×</button>
-        <h2>RANKED LEADERBOARD</h2>
-
-        <!-- Two Leaderboard Tabs: TOP 25 POIN vs TOP 25 RANK -->
-        <div class="lb-tabs-bar" id="lbTabsBar">
-          <button id="lbTabGlobalBtn" class="lb-tab-btn active" type="button">
-            <span><svg class="inline-tab-svg" viewBox="0 0 24 24" width="14" height="14" style="vertical-align:middle;margin-right:4px;"><path d="M6 3h12v4a6 6 0 0 1-5 5.91V17h3a1 1 0 0 1 1 1v2H7v-2a1 1 0 0 1 1-1h3v-4.09A6 6 0 0 1 6 7V3zM4 5H2v2a4 4 0 0 0 4 4h0V9A2 2 0 0 1 4 7V5zm16 0v2a2 2 0 0 1-2 2v2h0a4 4 0 0 0 4-4V5h-2z" fill="#facc15"/></svg>TOP 25 POIN TERTINGGI</span>
-          </button>
-          <button id="lbTabTiersBtn" class="lb-tab-btn" type="button">
-            <span><svg class="inline-tab-svg" viewBox="0 0 24 24" width="14" height="14" style="vertical-align:middle;margin-right:4px;"><path d="M2 19h20v2H2zm1-8l4.5 4L12 6l4.5 9L21 11v6H3z" fill="#facc15"/></svg>TOP 25 RANK TERTINGGI</span>
-          </button>
+        <div class="ranked-modal-top-bar">
+          <h2>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="#facc15" style="vertical-align:middle;margin-right:5px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            RANKED LEADERBOARD
+          </h2>
+          <!-- Two Leaderboard Tabs: TOP 25 POIN vs TOP 25 RANK -->
+          <div class="lb-tabs-bar" id="lbTabsBar">
+            <button id="lbTabGlobalBtn" class="lb-tab-btn active" type="button">
+              <span>TOP 25 POIN</span>
+            </button>
+            <button id="lbTabTiersBtn" class="lb-tab-btn" type="button">
+              <span>TOP 25 RANK</span>
+            </button>
+          </div>
         </div>
 
         <!-- TAB 1: TOP 25 POIN TERTINGGI VIEW (Hanya Poin, Tanpa Tier) -->
@@ -968,13 +972,13 @@
               <div class="portrait-canvas-box">
                 <div class="portrait-flash-spark" id="portraitSpark1"></div>
                 <div class="portrait-flash-spark" id="portraitSpark2"></div>
-                <canvas id="championCanvas" width="400" height="90" aria-label="Potret Burung Juara 1"></canvas>
+                <canvas id="championCanvas" width="235" height="90" aria-label="Potret Burung Juara 1"></canvas>
               </div>
               <!-- Champion Details & Equipped Cosmetics from Shop (No Booster) -->
               <div class="champion-meta">
                 <div class="champion-main-info">
                   <strong id="championGamerTag">SkyKing_God</strong>
-                  <div style="display:flex;align-items:center;gap:8px;">
+                  <div style="display:flex;align-items:center;gap:6px;">
                     <span class="champion-score">SCORE <b id="championScore">1480</b></span>
                     <button type="button" class="champion-view-profile-btn" id="championViewProfileBtn" title="Lihat Profil Lengkap">PROFIL ↗</button>
                   </div>
@@ -1002,23 +1006,25 @@
 
         <!-- TAB 2: TOP 25 RANK TERTINGGI VIEW (Hanya Tier, Tanpa Score) -->
         <div id="lbTiersView" class="lb-tab-content hidden">
-          <!-- TOP 1 RANK MASTER PREVIEW BANNER -->
-          <div class="top-rank-preview-card" id="topRankPreviewCard">
-            <div class="tr-avatar-box">
-              <span id="trMasterAvatar"></span>
-              <span class="tr-crown-badge"><svg viewBox="0 0 24 24" width="16" height="16" fill="#fbbf24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg></span>
+          <div class="lb-tiers-left-pane">
+            <!-- TOP 1 RANK MASTER PREVIEW BANNER -->
+            <div class="top-rank-preview-card" id="topRankPreviewCard">
+              <div class="tr-avatar-box">
+                <span id="trMasterAvatar"></span>
+                <span class="tr-crown-badge"><svg viewBox="0 0 24 24" width="16" height="16" fill="#fbbf24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg></span>
+              </div>
+              <div class="tr-info-box">
+                <div class="tr-badge-label">JUARA 1 TIER TERTINGGI</div>
+                <div class="tr-master-name" id="trMasterName">SkyKing_God</div>
+                <div class="tr-master-tier" id="trMasterTier">MASTER TIER</div>
+              </div>
+              <button type="button" class="tr-profile-btn" id="trMasterProfileBtn">PROFIL ↗</button>
             </div>
-            <div class="tr-info-box">
-              <div class="tr-badge-label">JUARA 1 TIER TERTINGGI</div>
-              <div class="tr-master-name" id="trMasterName">SkyKing_God</div>
-              <div class="tr-master-tier" id="trMasterTier">MASTER TIER</div>
-            </div>
-            <button type="button" class="tr-profile-btn" id="trMasterProfileBtn">PROFIL ↗</button>
-          </div>
 
-          <!-- My Personal Rank Progression Card -->
-          <div class="my-rank-card" id="myRankCard">
-            <!-- Injected via JavaScript with big Rank SVG, progress bar, points to rank up -->
+            <!-- My Personal Rank Progression Card -->
+            <div class="my-rank-card" id="myRankCard">
+              <!-- Injected via JavaScript with big Rank SVG, progress bar, points to rank up -->
+            </div>
           </div>
 
           <!-- LEADERBOARD TOP 25 RANK TERTINGGI LIST (RANK, PLAYER, TIER) -->
@@ -1697,13 +1703,13 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.63"></script>
-  <script src="js/admob-config.js?v=20.63"></script>
-  <script src="js/shop-data.js?v=20.63"></script>
-  <script src="js/profanity-filter.js?v=20.63"></script>
-  <script src="js/audio.js?v=20.63"></script>
-  <script src="js/multiplayer.js?v=20.63"></script>
-  <script src="js/social.js?v=20.63"></script>
-  <script src="js/script.js?v=20.63"></script>
+  <script src="js/firebase-config.js?v=20.64"></script>
+  <script src="js/admob-config.js?v=20.64"></script>
+  <script src="js/shop-data.js?v=20.64"></script>
+  <script src="js/profanity-filter.js?v=20.64"></script>
+  <script src="js/audio.js?v=20.64"></script>
+  <script src="js/multiplayer.js?v=20.64"></script>
+  <script src="js/social.js?v=20.64"></script>
+  <script src="js/script.js?v=20.64"></script>
 </body>
 </html>
