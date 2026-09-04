@@ -609,7 +609,8 @@
         'gurenge': 'gurenge.wav',
         'blue_bird': 'blue_bird.wav',
         'we_are': 'we_are.wav',
-        'sparkle': 'sparkle.wav'
+        'sparkle': 'sparkle.wav',
+        'mendaki_semeru': 'mendaki_semeru.wav'
       };
 
       if(animeAudioMap[trackId]) {
@@ -722,6 +723,112 @@
           if(step % 4 === 0) this.playTone(70, .12, 'triangle', .04, -30);
           step++;
         }, 135);
+      } else if(trackId === 'gurenge') {
+        const melody = [
+          370, 0, 415, 0, 466, 0, 554, 554, 494, 0, 466, 0, 415, 0, 370, 0,
+          415, 0, 466, 0, 554, 0, 622, 622, 554, 0, 466, 0, 415, 415, 370, 0,
+          370, 0, 415, 0, 466, 0, 554, 554, 494, 0, 466, 0, 415, 0, 370, 0,
+          466, 0, 554, 0, 622, 0, 740, 740, 622, 0, 554, 0, 622, 0, 0, 0
+        ];
+        const bass = [92, 92, 110, 110, 123, 123, 138, 138, 92, 92, 110, 110, 123, 123, 138, 138];
+        this.musicTimer = setInterval(() => {
+          const state = window.gameState || 'playing';
+          if(state !== 'playing' && state !== 'ready') return;
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          if(note) {
+            this.playTone(note, .14, 'sawtooth', .024, 0);
+            this.playTone(note * 0.5, .12, 'square', .016, 0);
+          }
+          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .036, -20);
+          if(step % 2 === 1) this.playTone(1100, .035, 'square', .012);
+          if(step % 4 === 0) this.playTone(80, .08, 'sawtooth', .035, -40);
+          step++;
+        }, 130);
+      } else if(trackId === 'blue_bird') {
+        const melody = [
+          440, 0, 494, 0, 523, 0, 587, 0, 659, 659, 587, 0, 523, 0, 494, 0,
+          440, 0, 494, 0, 523, 0, 440, 0, 392, 0, 349, 0, 392, 0, 440, 0,
+          587, 0, 523, 0, 440, 0, 392, 0, 349, 0, 330, 0, 294, 0, 330, 0,
+          349, 0, 392, 0, 440, 0, 523, 0, 587, 0, 659, 0, 587, 0, 523, 0
+        ];
+        const bass = [110, 110, 131, 131, 147, 147, 131, 131, 87, 87, 98, 98, 110, 110, 131, 131];
+        this.musicTimer = setInterval(() => {
+          const state = window.gameState || 'playing';
+          if(state !== 'playing' && state !== 'ready') return;
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          if(note) this.playTone(note, .15, 'triangle', .032, 0);
+          if(low && step % 2 === 0) this.playTone(low, .18, 'sine', .035, 0);
+          if(step % 4 === 2) this.playTone(1300, .03, 'triangle', .01);
+          step++;
+        }, 135);
+      } else if(trackId === 'we_are') {
+        const melody = [
+          392, 392, 440, 0, 494, 0, 523, 0, 587, 587, 494, 0, 392, 0, 330, 0,
+          392, 0, 440, 0, 494, 0, 440, 0, 392, 0, 330, 0, 294, 0, 392, 0,
+          494, 0, 587, 0, 659, 659, 587, 0, 494, 0, 392, 0, 440, 0, 392, 0,
+          440, 0, 494, 0, 523, 0, 587, 0, 659, 0, 698, 0, 587, 0, 0, 0
+        ];
+        const bass = [98, 98, 131, 131, 147, 147, 131, 131, 98, 98, 110, 110, 131, 131, 147, 147];
+        this.musicTimer = setInterval(() => {
+          const state = window.gameState || 'playing';
+          if(state !== 'playing' && state !== 'ready') return;
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          if(note) {
+            this.playTone(note, .16, 'sawtooth', .025, 0);
+            this.playTone(note * 0.5, .16, 'triangle', .02, 0);
+          }
+          if(low && step % 2 === 0) this.playTone(low, .26, 'sine', .038);
+          if(step % 4 === 0) this.playTone(120, .08, 'triangle', .03, -60);
+          step++;
+        }, 145);
+      } else if(trackId === 'sparkle') {
+        const chords = [
+          [622, 784, 932, 1175], [698, 831, 1047, 1245], [784, 932, 1175, 1397], [932, 1175, 1397, 1568]
+        ];
+        const melody = [
+          587, 0, 523, 0, 466, 0, 392, 0, 349, 0, 311, 0, 349, 0, 392, 0,
+          466, 0, 523, 0, 587, 0, 698, 0, 587, 0, 466, 0, 392, 0, 0, 0
+        ];
+        const bass = [78, 87, 98, 117];
+        this.musicTimer = setInterval(() => {
+          const state = window.gameState || 'playing';
+          if(state !== 'playing' && state !== 'ready') return;
+          const chord = chords[Math.floor(step / 4) % chords.length];
+          const note = melody[step % melody.length];
+          const low = bass[Math.floor(step / 4) % bass.length];
+          if(step % 2 === 0) {
+            chord.forEach(f => this.playTone(f, .45, 'sine', .016));
+            this.playTone(low * 2, .55, 'sine', .032);
+          }
+          if(note) this.playTone(note, .28, 'triangle', .022);
+          if(step % 3 === 0) this.playTone(note * 2, .18, 'sine', .012);
+          step++;
+        }, 190);
+      } else if(trackId === 'mendaki_semeru') {
+        // "Mendaki Semeru" - Kessoku Band energetic J-Rock synth riff & punchy bass
+        const melody = [
+          659, 659, 0, 587, 659, 0, 784, 0, 880, 880, 0, 784, 659, 0, 587, 0,
+          523, 523, 0, 587, 659, 0, 523, 0, 440, 440, 523, 659, 587, 0, 0, 0,
+          659, 784, 880, 0, 1047, 0, 988, 880, 784, 0, 659, 0, 784, 880, 784, 0,
+          659, 587, 523, 0, 440, 523, 659, 0, 587, 0, 523, 0, 440, 0, 0, 0
+        ];
+        const bass = [
+          110, 110, 131, 131, 147, 147, 131, 131,
+          87, 87, 110, 110, 131, 131, 147, 147
+        ];
+        this.musicTimer = setInterval(() => {
+          const state = window.gameState || 'playing';
+          if(state !== 'playing' && state !== 'ready') return;
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          if(note) {
+            this.playTone(note, .14, 'sawtooth', .025, 0);
+            this.playTone(note * 0.5, .12, 'square', .018, 0);
+          }
+          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .038, -20);
+          if(step % 4 === 0) this.playTone(160, .08, 'triangle', .032, -80);
+          if(step % 2 === 1) this.playTone(1100, .035, 'square', .012);
+          step++;
+        }, 125);
       }
     },
 
@@ -807,7 +914,8 @@
         'gurenge': 'gurenge.wav',
         'blue_bird': 'blue_bird.wav',
         'we_are': 'we_are.wav',
-        'sparkle': 'sparkle.wav'
+        'sparkle': 'sparkle.wav',
+        'mendaki_semeru': 'mendaki_semeru.wav'
       };
 
       if(animeAudioMap[trackId]) {
@@ -868,6 +976,120 @@
           }
           step++;
         }, 230);
+      } else if(trackId === 'epic') {
+        const melody = [523, 659, 784, 1047, 880, 1047, 1318, 1047, 784, 880, 1047, 1318, 1568, 1318, 1047, 784];
+        const brassBass = [131, 165, 196, 262, 220, 262, 330, 262];
+        this.previewTimer = setInterval(() => {
+          const note = melody[step % melody.length], low = brassBass[Math.floor(step / 2) % brassBass.length];
+          if(note) {
+            this.playTone(note, .18, 'sawtooth', .032, 0);
+            this.playTone(note * 0.5, .18, 'triangle', .025, 0);
+          }
+          if(low && step % 2 === 0) {
+            this.playTone(low, .36, 'sawtooth', .042, -10);
+            this.playTone(low * 0.5, .4, 'sine', .05, 0);
+          }
+          if(step % 4 === 0) this.playTone(160, .08, 'triangle', .045, -80);
+          step++;
+        }, 160);
+      } else if(trackId === 'cyberbeat') {
+        const melody = [440, 523, 587, 659, 784, 659, 587, 523, 440, 587, 659, 784, 880, 784, 659, 587];
+        const cyberBass = [110, 110, 131, 110, 147, 110, 165, 131];
+        this.previewTimer = setInterval(() => {
+          const note = melody[step % melody.length], low = cyberBass[step % cyberBass.length];
+          if(note) this.playTone(note, .12, 'square', .03, step % 2 === 0 ? 15 : -15);
+          if(low) this.playTone(low, .16, 'sawtooth', .044, -20);
+          if(step % 2 === 1) this.playTone(950, .035, 'sawtooth', .018, -500);
+          if(step % 4 === 0) this.playTone(70, .12, 'triangle', .05, -30);
+          step++;
+        }, 135);
+      } else if(trackId === 'gurenge') {
+        const melody = [
+          370, 0, 415, 0, 466, 0, 554, 554, 494, 0, 466, 0, 415, 0, 370, 0,
+          415, 0, 466, 0, 554, 0, 622, 622, 554, 0, 466, 0, 415, 415, 370, 0
+        ];
+        const bass = [92, 92, 110, 110, 123, 123, 138, 138];
+        this.previewTimer = setInterval(() => {
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          if(note) {
+            this.playTone(note, .14, 'sawtooth', .032, 0);
+            this.playTone(note * 0.5, .12, 'square', .022, 0);
+          }
+          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .042, -20);
+          if(step % 2 === 1) this.playTone(1100, .035, 'square', .016);
+          step++;
+        }, 130);
+      } else if(trackId === 'blue_bird') {
+        const melody = [
+          440, 0, 494, 0, 523, 0, 587, 0, 659, 659, 587, 0, 523, 0, 494, 0,
+          440, 0, 494, 0, 523, 0, 440, 0, 392, 0, 349, 0, 392, 0, 440, 0
+        ];
+        const bass = [110, 110, 131, 131, 147, 147, 131, 131];
+        this.previewTimer = setInterval(() => {
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          if(note) this.playTone(note, .15, 'triangle', .038, 0);
+          if(low && step % 2 === 0) this.playTone(low, .18, 'sine', .042, 0);
+          if(step % 4 === 2) this.playTone(1300, .03, 'triangle', .014);
+          step++;
+        }, 135);
+      } else if(trackId === 'we_are') {
+        const melody = [
+          392, 392, 440, 0, 494, 0, 523, 0, 587, 587, 494, 0, 392, 0, 330, 0,
+          392, 0, 440, 0, 494, 0, 440, 0, 392, 0, 330, 0, 294, 0, 392, 0
+        ];
+        const bass = [98, 98, 131, 131, 147, 147, 131, 131];
+        this.previewTimer = setInterval(() => {
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          if(note) {
+            this.playTone(note, .16, 'sawtooth', .032, 0);
+            this.playTone(note * 0.5, .16, 'triangle', .025, 0);
+          }
+          if(low && step % 2 === 0) this.playTone(low, .26, 'sine', .045);
+          step++;
+        }, 145);
+      } else if(trackId === 'sparkle') {
+        const chords = [
+          [622, 784, 932, 1175], [698, 831, 1047, 1245], [784, 932, 1175, 1397], [932, 1175, 1397, 1568]
+        ];
+        const melody = [
+          587, 0, 523, 0, 466, 0, 392, 0, 349, 0, 311, 0, 349, 0, 392, 0,
+          466, 0, 523, 0, 587, 0, 698, 0, 587, 0, 466, 0, 392, 0, 0, 0
+        ];
+        const bass = [78, 87, 98, 117];
+        this.previewTimer = setInterval(() => {
+          const chord = chords[Math.floor(step / 2) % chords.length];
+          const note = melody[step % melody.length];
+          const low = bass[Math.floor(step / 2) % bass.length];
+          if(step % 2 === 0) {
+            chord.forEach(f => this.playTone(f, .45, 'sine', .022));
+            this.playTone(low * 2, .55, 'sine', .04);
+          }
+          if(note) this.playTone(note, .28, 'triangle', .028);
+          if(step % 3 === 0) this.playTone(note * 2, .18, 'sine', .016);
+          step++;
+        }, 190);
+      } else if(trackId === 'mendaki_semeru') {
+        const melody = [
+          659, 659, 0, 587, 659, 0, 784, 0, 880, 880, 0, 784, 659, 0, 587, 0,
+          523, 523, 0, 587, 659, 0, 523, 0, 440, 440, 523, 659, 587, 0, 0, 0,
+          659, 784, 880, 0, 1047, 0, 988, 880, 784, 0, 659, 0, 784, 880, 784, 0,
+          659, 587, 523, 0, 440, 523, 659, 0, 587, 0, 523, 0, 440, 0, 0, 0
+        ];
+        const bass = [
+          110, 110, 131, 131, 147, 147, 131, 131,
+          87, 87, 110, 110, 131, 131, 147, 147
+        ];
+        this.previewTimer = setInterval(() => {
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          if(note) {
+            this.playTone(note, .14, 'sawtooth', .032, 0);
+            this.playTone(note * 0.5, .12, 'square', .022, 0);
+          }
+          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .042, -20);
+          if(step % 4 === 0) this.playTone(160, .08, 'triangle', .04, -80);
+          if(step % 2 === 1) this.playTone(1100, .035, 'square', .014);
+          step++;
+        }, 125);
       }
     },
 

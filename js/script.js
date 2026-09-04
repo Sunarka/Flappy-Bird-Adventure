@@ -1400,7 +1400,8 @@
         'gurenge': 'gurenge.wav',
         'blue_bird': 'blue_bird.wav',
         'we_are': 'we_are.wav',
-        'sparkle': 'sparkle.wav'
+        'sparkle': 'sparkle.wav',
+        'mendaki_semeru': 'mendaki_semeru.wav'
       };
 
       if(animeAudioMap[trackId]) {
@@ -1594,6 +1595,30 @@
           if(step % 3 === 0) this.playTone(note * 2, .18, 'sine', .012);
           step++;
         }, 190);
+      } else if(trackId === 'mendaki_semeru') {
+        // "Mendaki Semeru" - Kessoku Band energetic J-Rock synth riff & punchy bass
+        const melody = [
+          659, 659, 0, 587, 659, 0, 784, 0, 880, 880, 0, 784, 659, 0, 587, 0,
+          523, 523, 0, 587, 659, 0, 523, 0, 440, 440, 523, 659, 587, 0, 0, 0,
+          659, 784, 880, 0, 1047, 0, 988, 880, 784, 0, 659, 0, 784, 880, 784, 0,
+          659, 587, 523, 0, 440, 523, 659, 0, 587, 0, 523, 0, 440, 0, 0, 0
+        ];
+        const bass = [
+          110, 110, 131, 131, 147, 147, 131, 131,
+          87, 87, 110, 110, 131, 131, 147, 147
+        ];
+        this.musicTimer = setInterval(() => {
+          if(state !== State.PLAYING && state !== State.READY) return;
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          if(note) {
+            this.playTone(note, .14, 'sawtooth', .025, 0);
+            this.playTone(note * 0.5, .12, 'square', .018, 0);
+          }
+          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .038, -20);
+          if(step % 4 === 0) this.playTone(160, .08, 'triangle', .032, -80);
+          if(step % 2 === 1) this.playTone(1100, .035, 'square', .012);
+          step++;
+        }, 125);
       }
     },
 
@@ -1685,7 +1710,8 @@
         'gurenge': 'gurenge.wav',
         'blue_bird': 'blue_bird.wav',
         'we_are': 'we_are.wav',
-        'sparkle': 'sparkle.wav'
+        'sparkle': 'sparkle.wav',
+        'mendaki_semeru': 'mendaki_semeru.wav'
       };
 
       if(animeAudioMap[trackId]) {
@@ -1839,6 +1865,28 @@
           if(step % 3 === 0) this.playTone(note * 2, .18, 'sine', .016);
           step++;
         }, 190);
+      } else if(trackId === 'mendaki_semeru') {
+        const melody = [
+          659, 659, 0, 587, 659, 0, 784, 0, 880, 880, 0, 784, 659, 0, 587, 0,
+          523, 523, 0, 587, 659, 0, 523, 0, 440, 440, 523, 659, 587, 0, 0, 0,
+          659, 784, 880, 0, 1047, 0, 988, 880, 784, 0, 659, 0, 784, 880, 784, 0,
+          659, 587, 523, 0, 440, 523, 659, 0, 587, 0, 523, 0, 440, 0, 0, 0
+        ];
+        const bass = [
+          110, 110, 131, 131, 147, 147, 131, 131,
+          87, 87, 110, 110, 131, 131, 147, 147
+        ];
+        this.previewTimer = setInterval(() => {
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          if(note) {
+            this.playTone(note, .14, 'sawtooth', .032, 0);
+            this.playTone(note * 0.5, .12, 'square', .022, 0);
+          }
+          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .042, -20);
+          if(step % 4 === 0) this.playTone(160, .08, 'triangle', .04, -80);
+          if(step % 2 === 1) this.playTone(1100, .035, 'square', .014);
+          step++;
+        }, 125);
       }
     },
     stopPreview() {
