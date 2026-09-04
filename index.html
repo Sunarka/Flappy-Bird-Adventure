@@ -1531,38 +1531,73 @@
           </div>
         </div>
 
-        <!-- Quick Message Presets Chips (Ala MLBB) -->
-        <div class="mlbb-cm-presets-bar" id="mlbbChatPresetsBar">
-          <button class="mlbb-preset-chip" data-preset="Mabar yuk!" type="button">
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="vertical-align:middle;margin-right:2px;"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-            Mabar yuk!
-          </button>
-          <button class="mlbb-preset-chip" data-preset="Gas 1v1!" type="button">
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="vertical-align:middle;margin-right:2px;"><path d="M6.92 5h-2.1l-.82 2.45L2 8.42V10h1.58l.71 2.12.89.88L6.92 5zm13.08 5v-1.58l-2-1-.82-2.42h-2.1l1.74 8 1.74-1.71.72-2.17.72.88zm-5.5 4.5l-2.5-2.5-2.5 2.5 2.5 2.5 2.5-2.5zm-5.5-2l-1.5 1.5 3 3 1.5-1.5-3-3zm8 0l-3 3 1.5 1.5 3-3-1.5-1.5z"/></svg>
-            Gas 1v1!
-          </button>
-          <button class="mlbb-preset-chip" data-preset="Semangat bro!" type="button">
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="#f97316" style="vertical-align:middle;margin-right:2px;"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.784 1.399 8.169-7.333-3.856-7.333 3.856 1.399-8.169-5.934-5.784 8.2-1.192zm0 5.702l-2.073 4.202-4.636.674 3.355 3.27-.792 4.618 4.146-2.18 4.146 2.18-.792-4.618 3.355-3.27-4.636-.674z"/></svg>
-            Semangat bro!
-          </button>
-          <button class="mlbb-preset-chip" data-preset="GG (Good Game)!" type="button">
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="#fbbf24" style="vertical-align:middle;margin-right:2px;"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1a5.01 5.01 0 0 0 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
-            GG!
-          </button>
-          <button class="mlbb-preset-chip" data-preset="Ada room kosong?" type="button">
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="vertical-align:middle;margin-right:2px;"><path d="M19 19V5c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v14H3v2h18v-2h-2zm-4-6h-2v-2h2v2z"/></svg>
-            Ada room kosong?
-          </button>
-        </div>
+        <!-- WhatsApp-Style Bottom Chat Container -->
+        <div class="mlbb-wa-bottom-container">
+          <!-- WhatsApp Emoji & Sticker Drawer (Pop-up above input) -->
+          <div class="mlbb-wa-drawer hidden" id="mlbbEmojiDrawer">
+            <div class="mlbb-wa-drawer-header">
+              <div class="mlbb-wa-drawer-tabs">
+                <button type="button" class="mlbb-wa-drawer-tab active" data-tab="emojis" id="mlbbDrawerTabEmoji">
+                  <span class="tab-emoji-icon">😊</span> EMOJI
+                </button>
+                <button type="button" class="mlbb-wa-drawer-tab" data-tab="stickers" id="mlbbDrawerTabStickers">
+                  <span class="tab-emoji-icon">🐤</span> STIKER BURUNG
+                </button>
+                <button type="button" class="mlbb-wa-drawer-tab" data-tab="presets" id="mlbbDrawerTabPresets">
+                  <span class="tab-emoji-icon">⚡</span> PESAN CEPAT
+                </button>
+              </div>
+              <button type="button" class="mlbb-wa-drawer-close" id="mlbbDrawerCloseBtn" title="Tutup">✕</button>
+            </div>
 
-        <!-- Unified Message Input Form -->
-        <form class="mlbb-cm-input-bar" id="mlbbChatForm">
-          <input type="text" id="mlbbChatInput" class="mlbb-cm-input" placeholder="Ketik pesan obrolan..." maxlength="100" autocomplete="off">
-          <button type="submit" class="mlbb-cm-send-btn" id="mlbbChatSendBtn">
-            KIRIM
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="vertical-align:middle;margin-left:3px;"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-          </button>
-        </form>
+            <!-- Panel 1: Popular Reaction & Gaming Emojis Grid -->
+            <div class="mlbb-wa-drawer-panel" id="mlbbEmojiTabContent">
+              <div class="mlbb-wa-emoji-grid" id="mlbbEmojiGrid"></div>
+            </div>
+
+            <!-- Panel 2: Cute Bird Animated SVG Stickers -->
+            <div class="mlbb-wa-drawer-panel hidden" id="mlbbStickersTabContent">
+              <div class="mlbb-wa-stickers-grid" id="mlbbBirdStickersGrid"></div>
+            </div>
+
+            <!-- Panel 3: Quick Preset Replies -->
+            <div class="mlbb-wa-drawer-panel hidden" id="mlbbPresetsTabContent">
+              <div class="mlbb-wa-presets-grid" id="mlbbQuickPresetsGrid"></div>
+            </div>
+          </div>
+
+          <!-- WhatsApp Input Bar Form -->
+          <form class="mlbb-wa-input-form" id="mlbbChatForm">
+            <!-- Pill Input Box (WhatsApp style capsule) -->
+            <div class="mlbb-wa-pill-box">
+              <!-- Emoji Toggle Button inside pill (Left) -->
+              <button type="button" class="mlbb-wa-btn-icon mlbb-wa-emoji-btn" id="mlbbChatEmojiBtn" title="Pilih Emoji & Stiker">
+                <svg class="icon-emoji" viewBox="0 0 24 24" width="21" height="21">
+                  <circle cx="12" cy="12" r="10" fill="#facc15"/>
+                  <circle cx="8.5" cy="9.5" r="1.5" fill="#1e293b"/>
+                  <circle cx="15.5" cy="9.5" r="1.5" fill="#1e293b"/>
+                  <path d="M8 14.5c1.1 1.5 2.5 2 4 2s2.9-.5 4-2" fill="none" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+                <svg class="icon-keyboard hidden" viewBox="0 0 24 24" width="20" height="20" fill="#38bdf8">
+                  <path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm8 7H9v-2h6v2zm1-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/>
+                </svg>
+              </button>
+
+              <!-- Text Input Field -->
+              <input type="text" id="mlbbChatInput" class="mlbb-wa-text-input" placeholder="Ketik pesan..." maxlength="120" autocomplete="off">
+
+              <!-- Quick Presets Button inside pill (Right) -->
+              <button type="button" class="mlbb-wa-btn-icon mlbb-wa-quick-btn" id="mlbbChatQuickBtn" title="Pesan Cepat (Mabar, GG, dll)">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="#38bdf8"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+              </button>
+            </div>
+
+            <!-- WhatsApp Floating Circular Send Button (Right) -->
+            <button type="submit" class="mlbb-wa-send-btn" id="mlbbChatSendBtn" title="Kirim Pesan">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="#ffffff"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </button>
+          </form>
+        </div>
       </section>
 
       <!-- 1-ON-1 DIRECT CHAT MODAL -->

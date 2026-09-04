@@ -471,6 +471,7 @@
       `
     }
   ];
+  if (typeof window !== 'undefined') window.CUTE_BIRD_EMOTES = CUTE_BIRD_EMOTES;
 
   class SocialService {
     constructor() {
@@ -538,9 +539,154 @@
       this.currentChatTab = 'global';
       this.activeFriendChat = null;
       this.listenGlobalChat();
-      this.renderChatPresets();
-      this.renderChatBirdEmotes();
+      this.initWhatsAppEmojiDrawer();
       this.bindChatEvents();
+    }
+
+    initWhatsAppEmojiDrawer() {
+      const emojiGrid = document.getElementById('mlbbEmojiGrid');
+      const stickersGrid = document.getElementById('mlbbBirdStickersGrid');
+      const presetsGrid = document.getElementById('mlbbQuickPresetsGrid');
+
+      // 1. Populate Popular Gaming & Reaction Emojis Grid
+      if (emojiGrid && !emojiGrid.hasChildNodes()) {
+        const POPULAR_EMOJIS = [
+          '😀', '😂', '🤣', '😊', '😍', '😎', '🥳', '🥺',
+          '😭', '😡', '😱', '🤔', '😴', '🤐', '🙄', '🤯',
+          '🔥', '👑', '🎮', '🏆', '⚡', '💯', '💣', '🎯',
+          '✨', '💥', '🚀', '💎', '🌟', '🥇', '⚔️', '🛡️',
+          '👍', '👎', '👏', '🙌', '🤝', '✌️', '👋', '🙏',
+          '💖', '💔', '💩', '👻', '💀', '🤖', '👾', '🤠'
+        ];
+        POPULAR_EMOJIS.forEach(emoji => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'mlbb-wa-emoji-item';
+          btn.textContent = emoji;
+          btn.title = emoji;
+          btn.onclick = (e) => {
+            e.preventDefault();
+            if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+            this.insertEmojiAtCursor(emoji);
+          };
+          emojiGrid.appendChild(btn);
+        });
+      }
+
+      // 2. Populate Cute Bird Stickers Grid (All 10 Cute Bird SVGs)
+      if (stickersGrid && !stickersGrid.hasChildNodes() && Array.isArray(CUTE_BIRD_EMOTES)) {
+        CUTE_BIRD_EMOTES.forEach(emote => {
+          const card = document.createElement('button');
+          card.type = 'button';
+          card.className = 'mlbb-wa-sticker-card';
+          card.title = emote.title;
+          card.innerHTML = `
+            ${emote.render(34)}
+            <span class="mlbb-wa-sticker-name">${this.escapeHtml(emote.title.split('/')[0].trim())}</span>
+          `;
+          card.onclick = (e) => {
+            e.preventDefault();
+            if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+            this.sendCurrentChatMessage(`[BIRD_EMOTE:${emote.id}]`);
+            this.toggleEmojiDrawer(false);
+          };
+          stickersGrid.appendChild(card);
+        });
+      }
+
+      // 3. Populate Quick Presets Grid
+      if (presetsGrid && !presetsGrid.hasChildNodes()) {
+        const PRESETS = [
+          { text: 'Mabar yuk!', icon: '🎮' },
+          { text: 'Gas 1v1!', icon: '⚔️' },
+          { text: 'Semangat bro!', icon: '🔥' },
+          { text: 'GG (Good Game)!', icon: '🏆' },
+          { text: 'Ada room kosong?', icon: '🚪' },
+          { text: 'Bentar ya lagi main', icon: '⏳' },
+          { text: 'Ayo rematch!', icon: '🔄' },
+          { text: 'Mantap sekali!', icon: '👍' },
+          { text: 'Ampun bang jago!', icon: '🙏' },
+          { text: 'Keren abis!', icon: '👑' }
+        ];
+        PRESETS.forEach(p => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'mlbb-wa-preset-btn';
+          btn.innerHTML = `<span>${p.icon}</span> <span>${this.escapeHtml(p.text)}</span>`;
+          btn.onclick = (e) => {
+            e.preventDefault();
+            if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+            this.sendCurrentChatMessage(p.text);
+            this.toggleEmojiDrawer(false);
+          };
+          presetsGrid.appendChild(btn);
+        });
+      }
+
+      // 4. Tab Switcher
+      const tabEmoji = document.getElementById('mlbbDrawerTabEmoji');
+      const tabStickers = document.getElementById('mlbbDrawerTabStickers');
+      const tabPresets = document.getElementById('mlbbDrawerTabPresets');
+      const panelEmoji = document.getElementById('mlbbEmojiTabContent');
+      const panelStickers = document.getElementById('mlbbStickersTabContent');
+      const panelPresets = document.getElementById('mlbbPresetsTabContent');
+
+      const switchDrawerTab = (activeTab) => {
+        if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+        if (tabEmoji) tabEmoji.classList.toggle('active', activeTab === 'emojis');
+        if (tabStickers) tabStickers.classList.toggle('active', activeTab === 'stickers');
+        if (tabPresets) tabPresets.classList.toggle('active', activeTab === 'presets');
+
+        if (panelEmoji) panelEmoji.classList.toggle('hidden', activeTab !== 'emojis');
+        if (panelStickers) panelStickers.classList.toggle('hidden', activeTab !== 'stickers');
+        if (panelPresets) panelPresets.classList.toggle('hidden', activeTab !== 'presets');
+      };
+
+      if (tabEmoji) tabEmoji.onclick = () => switchDrawerTab('emojis');
+      if (tabStickers) tabStickers.onclick = () => switchDrawerTab('stickers');
+      if (tabPresets) tabPresets.onclick = () => switchDrawerTab('presets');
+
+      // 5. Drawer Close Button
+      const closeBtn = document.getElementById('mlbbDrawerCloseBtn');
+      if (closeBtn) {
+        closeBtn.onclick = () => {
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+          this.toggleEmojiDrawer(false);
+        };
+      }
+    }
+
+    toggleEmojiDrawer(forceState, targetTab = 'emojis') {
+      const drawer = document.getElementById('mlbbEmojiDrawer');
+      const emojiBtn = document.getElementById('mlbbChatEmojiBtn');
+      if (!drawer) return;
+
+      const shouldOpen = typeof forceState === 'boolean' ? forceState : drawer.classList.contains('hidden');
+      drawer.classList.toggle('hidden', !shouldOpen);
+
+      if (emojiBtn) {
+        const iconEmoji = emojiBtn.querySelector('.icon-emoji');
+        const iconKeyboard = emojiBtn.querySelector('.icon-keyboard');
+        if (iconEmoji) iconEmoji.classList.toggle('hidden', shouldOpen);
+        if (iconKeyboard) iconKeyboard.classList.toggle('hidden', !shouldOpen);
+      }
+
+      if (shouldOpen && targetTab) {
+        const tabBtn = document.getElementById(targetTab === 'presets' ? 'mlbbDrawerTabPresets' : (targetTab === 'stickers' ? 'mlbbDrawerTabStickers' : 'mlbbDrawerTabEmoji'));
+        if (tabBtn) tabBtn.click();
+      }
+    }
+
+    insertEmojiAtCursor(emoji) {
+      const input = document.getElementById('mlbbChatInput');
+      if (!input) return;
+      const start = input.selectionStart ?? input.value.length;
+      const end = input.selectionEnd ?? input.value.length;
+      const text = input.value;
+      input.value = text.substring(0, start) + emoji + text.substring(end);
+      const newPos = start + emoji.length;
+      input.setSelectionRange(newPos, newPos);
+      input.focus();
     }
 
     bindChatEvents() {
@@ -559,6 +705,7 @@
           } else if (modal) {
             modal.classList.remove('hidden');
           }
+          this.toggleEmojiDrawer(false);
           this.switchLobbyChatTab(this.currentChatTab || 'global');
           this.clearGlobalChatBadge();
         };
@@ -578,17 +725,38 @@
         };
       }
 
+      // Emoji Toggle Button (inside WhatsApp pill)
+      const emojiBtn = document.getElementById('mlbbChatEmojiBtn');
+      if (emojiBtn) {
+        emojiBtn.onclick = (e) => {
+          e.preventDefault();
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+          this.toggleEmojiDrawer();
+        };
+      }
+
+      // Quick Presets Button (inside WhatsApp pill)
+      const quickBtn = document.getElementById('mlbbChatQuickBtn');
+      if (quickBtn) {
+        quickBtn.onclick = (e) => {
+          e.preventDefault();
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+          this.toggleEmojiDrawer(true, 'presets');
+        };
+      }
+
       if (form) {
         form.onsubmit = (e) => {
           e.preventDefault();
           const text = input ? input.value.trim() : '';
           if (!text) return;
           if (input) input.value = '';
+          this.toggleEmojiDrawer(false);
           this.sendCurrentChatMessage(text);
         };
       }
 
-      // Preset chips click
+      // Fallback for any legacy preset chips
       const presetsBar = document.getElementById('mlbbChatPresetsBar');
       if (presetsBar) {
         presetsBar.querySelectorAll('.mlbb-preset-chip').forEach(chip => {
@@ -611,6 +779,7 @@
 
     switchLobbyChatTab(tab) {
       this.currentChatTab = tab;
+      this.toggleEmojiDrawer(false);
       const tabGlobal = document.getElementById('mlbbChatTabGlobalBtn');
       const tabFriends = document.getElementById('mlbbChatTabFriendsBtn');
       const bodyGlobal = document.getElementById('mlbbGlobalChatBody');
@@ -640,25 +809,11 @@
     }
 
     renderChatPresets() {
-      // already statically in html, but chips bound in bindChatEvents
+      // Handled via WhatsApp drawer
     }
 
     renderChatBirdEmotes() {
-      const bar = document.getElementById('mlbbChatBirdEmotesBar');
-      if (!bar) return;
-      bar.innerHTML = '';
-      CUTE_BIRD_EMOTES.slice(0, 8).forEach(emote => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'chat-bird-emote-btn';
-        btn.title = emote.title;
-        btn.innerHTML = emote.render(22);
-        btn.onclick = () => {
-          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
-          this.sendCurrentChatMessage(`[BIRD_EMOTE:${emote.id}]`);
-        };
-        bar.appendChild(btn);
-      });
+      // Handled via WhatsApp drawer
     }
 
     listenGlobalChat() {
@@ -1533,23 +1688,23 @@
     // ==========================================
     openDirectChat(friend) {
       this.activeChatFriend = friend;
+      const mlbbModal = document.getElementById('mlbbChatModal');
+      if (mlbbModal) {
+        if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+        if (typeof window.showModal === 'function') {
+          window.showModal(mlbbModal);
+        } else {
+          mlbbModal.classList.remove('hidden');
+        }
+        this.toggleEmojiDrawer(false);
+        this.switchLobbyChatTab('friends');
+        if (friend) {
+          this.selectFriendForLobbyChat(friend);
+        }
+        return;
+      }
       const modal = document.getElementById('directChatModal');
       if (!modal) return;
-
-      const nameEl = document.getElementById('chatPartnerName');
-      const avatarEl = document.getElementById('chatPartnerAvatar');
-      if (nameEl) nameEl.textContent = friend.name || 'Teman';
-      if (avatarEl && typeof window.getCuteAvatarSvg === 'function') {
-        avatarEl.innerHTML = window.getCuteAvatarSvg(friend.avatar || 'chick_yellow', 36);
-      }
-
-      this.initBirdEmotesBar();
-
-      if (typeof window.showModal === 'function') {
-        window.showModal(modal);
-      } else {
-        modal.classList.remove('hidden');
-      }
 
       const channelId = [this.myKey, friend.friendKey].sort().join('_');
       this.listenMessages(channelId);
