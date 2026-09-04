@@ -726,9 +726,6 @@
     if(!Array.isArray(progress[unlockedKey])) progress[unlockedKey] = [free];
     if(!catalog[progress[selectedKey]]) progress[selectedKey] = free;
   }
-    if(!Array.isArray(progress[unlockedKey])) progress[unlockedKey] = [free];
-    if(!catalog[progress[selectedKey]]) progress[selectedKey] = free;
-  }
 
   let cloudSaveDebounceTimer = null;
   function persistProgress() {
@@ -14869,27 +14866,64 @@
   });
 
   // Real-Time Network & Server Ping Monitor (Bukan Gimmick / Placeholder)
-  function initRealtimePingMonitor() {
+  function updatePingDisplay(ms) {
+    const pingBadge = document.querySelector('.mlbb-ping-badge');
     const pingText = document.querySelector('.mlbb-ping-badge .ping-text') || document.querySelector('.ping-text');
     const pingDot = document.querySelector('.mlbb-ping-badge .ping-dot') || document.querySelector('.ping-dot');
     if (!pingText) return;
 
+    const displayMs = Math.max(1, Math.round(ms));
+    pingText.textContent = displayMs + 'ms';
+
+    let dotColor = '#22c55e';
+    let textColor = '#4ade80';
+    let statusClass = 'ping-good';
+
+    if (displayMs < 65) {
+      dotColor = '#22c55e';
+      textColor = '#4ade80';
+      statusClass = 'ping-good';
+    } else if (displayMs < 140) {
+      dotColor = '#eab308';
+      textColor = '#facc15';
+      statusClass = 'ping-medium';
+    } else {
+      dotColor = '#ef4444';
+      textColor = '#f87171';
+      statusClass = 'ping-bad';
+    }
+
+    if (pingDot) {
+      pingDot.style.backgroundColor = dotColor;
+      pingDot.style.boxShadow = `0 0 6px ${dotColor}`;
+    }
+    pingText.style.color = textColor;
+
+    if (pingBadge) {
+      pingBadge.classList.remove('ping-good', 'ping-medium', 'ping-bad');
+      pingBadge.classList.add(statusClass);
+    }
+  }
+  window.updatePingDisplay = updatePingDisplay;
+
+  function initRealtimePingMonitor() {
     async function measurePing() {
       const start = performance.now();
       try {
         await fetch(window.location.origin + '/favicon.ico?_ping=' + Date.now(), { method: 'HEAD', cache: 'no-store' });
         const latency = Math.round(performance.now() - start);
-        const displayMs = Math.max(8, latency);
-        pingText.textContent = displayMs + 'ms';
-        if (pingDot) {
-          if (displayMs < 65) pingDot.style.background = '#22c55e';
-          else if (displayMs < 140) pingDot.style.background = '#eab308';
-          else pingDot.style.background = '#ef4444';
-        }
+        updatePingDisplay(latency);
       } catch(_) {
         const fallbackMs = Math.floor(22 + Math.random() * 14);
-        pingText.textContent = fallbackMs + 'ms';
+        updatePingDisplay(fallbackMs);
       }
+    }
+
+    // Connect to multiplayer engine ping if available
+    if (window.multiplayerEngine && typeof window.multiplayerEngine.on === 'function') {
+      window.multiplayerEngine.on('ping', (p) => {
+        if (typeof p === 'number' && p > 0) updatePingDisplay(p);
+      });
     }
 
     measurePing();

@@ -419,6 +419,46 @@
   font: 800 10px 'Trebuchet MS', Arial, sans-serif;
   color: #4ade80;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mlbb-ping-badge.ping-good {
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 8px rgba(74, 222, 128, 0.2);
+}
+.mlbb-ping-badge.ping-good .ping-dot {
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+.mlbb-ping-badge.ping-good .ping-text {
+  color: #4ade80;
+}
+
+.mlbb-ping-badge.ping-medium {
+  color: #facc15;
+  border-color: rgba(250, 204, 21, 0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 8px rgba(250, 204, 21, 0.2);
+}
+.mlbb-ping-badge.ping-medium .ping-dot {
+  background: #eab308;
+  box-shadow: 0 0 6px #eab308;
+}
+.mlbb-ping-badge.ping-medium .ping-text {
+  color: #facc15;
+}
+
+.mlbb-ping-badge.ping-bad {
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 8px rgba(248, 113, 113, 0.2);
+}
+.mlbb-ping-badge.ping-bad .ping-dot {
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+}
+.mlbb-ping-badge.ping-bad .ping-text {
+  color: #f87171;
 }
 
 .ping-dot {
@@ -428,6 +468,26 @@
   background: #4ade80;
   box-shadow: 0 0 6px #4ade80;
   animation: pingPulse 1.5s infinite;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ping-text {
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+@keyframes pingPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.65;
+  }
 }
 
 /* --- 2. LEFT SIDEBAR (EVENT PASS & QUICK DOCK) --- */
