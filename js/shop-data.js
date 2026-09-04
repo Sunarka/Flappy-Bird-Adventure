@@ -150,6 +150,7 @@
     epic:{ name:'HEROIC ADVENTURE', desc:'Orkestra petualangan megah bertempo cepat', cost:400, currency:'coin', rarity:'epic', color:'#ef4444' },
     cyberbeat:{ name:'CYBERPUNK BEAT', desc:'Electro synthwave tempo cepat cyber futuristik', cost:450, currency:'coin', rarity:'epic', color:'#06b6d4' },
     // Anime Special Soundtracks - Diamond
+    mendaki_semeru:{ name:'MENDAKI SEMERU (KESSOKU BAND)', desc:'Lagu viral Kessoku Band parody Pak Vramroro mendaki Semeru', cost:100, currency:'diamond', rarity:'mythic', color:'#ec4899' },
     gurenge:{ name:'ANIME: GURENGE (DEMON SLAYER)', desc:'Theme song pemburu iblis melodi J-Rock energetik', cost:30, currency:'diamond', rarity:'mythic', color:'#ef4444' },
     blue_bird:{ name:'ANIME: BLUE BIRD (NARUTO)', desc:'Lagu ikonik melodi seruling & gitar bersemangat', cost:30, currency:'diamond', rarity:'mythic', color:'#38bdf8' },
     we_are:{ name:'ANIME: WE ARE! (ONE PIECE)', desc:'Melodi petualangan bajak laut riang & megah', cost:30, currency:'diamond', rarity:'mythic', color:'#facc15' },

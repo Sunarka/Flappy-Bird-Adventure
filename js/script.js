@@ -580,6 +580,7 @@
     epic:{ name:'HEROIC ADVENTURE', desc:'Orkestra petualangan megah & heroik', cost:400, currency:'coin', rarity:'epic', color:'#ef4444' },
     cyberbeat:{ name:'CYBERPUNK BEAT', desc:'Electro synthwave tempo cepat energetik', cost:450, currency:'coin', rarity:'epic', color:'#06b6d4' },
     // Anime Special Soundtracks - Diamond
+    mendaki_semeru:{ name:'MENDAKI SEMERU (KESSOKU BAND)', desc:'Lagu viral Kessoku Band parody Pak Vramroro mendaki Semeru', cost:100, currency:'diamond', rarity:'mythic', color:'#ec4899' },
     gurenge:{ name:'ANIME: GURENGE (DEMON SLAYER)', desc:'Theme song pemburu iblis melodi J-Rock energetik', cost:30, currency:'diamond', rarity:'mythic', color:'#ef4444' },
     blue_bird:{ name:'ANIME: BLUE BIRD (NARUTO)', desc:'Lagu ikonik melodi seruling & gitar bersemangat', cost:30, currency:'diamond', rarity:'mythic', color:'#38bdf8' },
     we_are:{ name:'ANIME: WE ARE! (ONE PIECE)', desc:'Melodi petualangan bajak laut riang & megah', cost:30, currency:'diamond', rarity:'mythic', color:'#facc15' },
@@ -1421,6 +1422,7 @@
       this.init();
 
       const animeAudioMap = {
+        'mendaki_semeru': 'mendaki_semeru.mp3',
         'gurenge': 'gurenge.wav',
         'blue_bird': 'blue_bird.wav',
         'we_are': 'we_are.wav',
@@ -1618,6 +1620,27 @@
           if(step % 3 === 0) this.playTone(note * 2, .18, 'sine', .012);
           step++;
         }, 190);
+      } else if(trackId === 'mendaki_semeru') {
+        // Kessoku Band - Mendaki Semeru (Pak Vramroro): Energetic Fast Anime J-Rock
+        const melody = [
+          330, 0, 392, 440, 494, 0, 440, 392, 330, 0, 392, 0, 440, 440, 392, 0,
+          494, 0, 587, 0, 659, 659, 587, 0, 494, 0, 440, 0, 392, 440, 330, 0,
+          659, 0, 587, 0, 494, 0, 440, 0, 392, 0, 440, 0, 494, 494, 587, 0,
+          659, 0, 784, 0, 659, 0, 587, 0, 494, 0, 440, 0, 392, 0, 330, 0
+        ];
+        const bass = [82, 82, 110, 110, 123, 123, 110, 98, 82, 82, 110, 110, 123, 123, 147, 131];
+        this.musicTimer = setInterval(() => {
+          if(state !== State.PLAYING && state !== State.READY) return;
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          if(note) {
+            this.playTone(note, .14, 'sawtooth', .028, 0);
+            this.playTone(note * 0.5, .12, 'square', .02, 0);
+          }
+          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .038, -25);
+          if(step % 2 === 1) this.playTone(1350, .032, 'square', .014);
+          if(step % 4 === 0) this.playTone(85, .09, 'sawtooth', .038, -45);
+          step++;
+        }, 125);
       }
     },
 
@@ -1706,6 +1729,7 @@
       }
 
       const animeAudioMap = {
+        'mendaki_semeru': 'mendaki_semeru.mp3',
         'gurenge': 'gurenge.wav',
         'blue_bird': 'blue_bird.wav',
         'we_are': 'we_are.wav',
@@ -1863,6 +1887,22 @@
           if(step % 3 === 0) this.playTone(note * 2, .18, 'sine', .016);
           step++;
         }, 190);
+      } else if(trackId === 'mendaki_semeru') {
+        const melody = [
+          330, 0, 392, 440, 494, 0, 440, 392, 330, 0, 392, 0, 440, 440, 392, 0,
+          494, 0, 587, 0, 659, 659, 587, 0, 494, 0, 440, 0, 392, 440, 330, 0
+        ];
+        const bass = [82, 82, 110, 110, 123, 123, 110, 98];
+        this.previewTimer = setInterval(() => {
+          const note = melody[step % melody.length], low = bass[Math.floor(step / 2) % bass.length];
+          if(note) {
+            this.playTone(note, .14, 'sawtooth', .034, 0);
+            this.playTone(note * 0.5, .12, 'square', .022, 0);
+          }
+          if(low && step % 2 === 0) this.playTone(low, .22, 'triangle', .042, -20);
+          if(step % 2 === 1) this.playTone(1350, .032, 'square', .016);
+          step++;
+        }, 125);
       }
     },
     stopPreview() {
