@@ -1466,6 +1466,45 @@ button.close:active,
   transform: translateX(20px) !important;
 }
 
+/* Language Switcher Segmented Pills */
+.lang-switch-group {
+  display: inline-flex !important;
+  background: rgba(30, 41, 59, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 8px !important;
+  padding: 2px !important;
+  gap: 2px !important;
+}
+
+.lang-btn {
+  border: none !important;
+  background: transparent !important;
+  padding: 4px 9px !important;
+  border-radius: 6px !important;
+  font: 900 11px/1 'Trebuchet MS', Arial, sans-serif !important;
+  color: #94a3b8 !important;
+  cursor: pointer !important;
+  transition: all 0.18s ease !important;
+  min-height: 24px !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  box-shadow: none !important;
+}
+
+.lang-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f1f5f9 !important;
+}
+
+.lang-btn.active {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.45) !important;
+}
+
 /* Difficulty Segmented Buttons */
 .difficulty-segmented {
   display: inline-flex !important;

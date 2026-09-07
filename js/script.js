@@ -146,6 +146,97 @@
       music: 'Musik Latar',
       difficulty: 'Tingkat Kesulitan',
       okBtn: 'SIMPAN / OK',
+      donateBadge: 'DUKUNG PENGEMBANG',
+      donateDesc: 'Suka dengan game Feather Rush? Dukung Sunarka di Saweria agar game terus berkembang!',
+      donateSaweria: 'DUKUNG VIA SAWERIA',
+      privacyPolicy: 'Kebijakan Privasi',
+      termsOfService: 'Ketentuan Layanan',
+
+      // Lobby Side Buttons & Tooltips
+      sideDaily: 'DAILY',
+      sideDailyTip: 'Hadiah Login Harian - Klaim Diamond & Koin!',
+      sideGacha: 'GACHA',
+      sideGachaTip: 'Lucky Bird Gacha - Tarik Hadiah Langka!',
+      sidePet: 'PETS',
+      sidePetTip: 'Pet Companion - Pendamping Setia',
+      sideShop: 'TOKO',
+      sideShopTip: 'Toko Skin & Koleksi',
+      sideRewardAd: '+25 KOIN',
+      sideRewardAdTip: 'Tonton Iklan Dapat +25 Koin Gratis!',
+      sideFeedback: 'PENGADUAN',
+      sideFeedbackTip: 'Pengaduan & Masukan Game',
+      sideDonate: 'DONASI',
+      sideDonateTip: 'Dukung Sunarka di Saweria!',
+
+      // Lobby Friends & Chat
+      friendsTitle: 'TEMAN',
+      friendsTip: 'Buka Daftar Teman & Chat',
+      friendsEmpty: 'Belum ada teman',
+      chatLabel: 'CHAT',
+      chatTip: 'Chat Global & Teman',
+      chatSnippetDefault: '[Global] Memuat obrolan...',
+
+      // Lobby Mode Pill & Start Button
+      modeTagSub: 'MODE GAME (TARIK KE ATAS ▲)',
+      modeCycleTip: 'Klik atau Tarik ke Atas untuk Pilih Mode',
+      startBtnLabel: 'MULAI',
+      heroSpeech: '"Ayo kepakkan sayap dan taklukkan langit!"',
+      dashSkillTip: 'Skill Dash (Tekan SHIFT atau D)',
+
+      // Mode Selection Drawer
+      modeDrawerTitle: 'PILIH MODE PERMAINAN',
+      modeClassicBadge: 'CASUAL',
+      modeClassicDesc: 'Mode santai latihan terbang tanpa tekanan peringkat. Kumpulkan koin dan rekor tertinggi!',
+      modeClassicBest: 'Rekor:',
+      modeRankedBadge: 'EXTREME RANK',
+      modeRankedDesc: 'Kompetisi peringkat global dengan rintangan ekstrem pipa bergerak, cuaca badai, dan poin tier!',
+      modeRankedPts: 'Poin Rank:',
+      modeMpBadge: '1v1 BATTLE',
+      modeMpDesc: 'Tanding duel 1 lawan 1 langsung (real-time) dengan teman atau rival acak di seluruh dunia!',
+      modeMpConn: 'Koneksi: <b>Server Arena</b>',
+      modeSelectBtn: 'PILIH MODE',
+
+      // Daily Login Rewards Modal
+      dailyTitle: 'HADIAH LOGIN HARIAN',
+      dailySub: 'Login 7 hari berturut-turut untuk klaim Koin Emas & Diamond Melimpah!',
+      dailyStreakPrefix: 'STREAK:',
+      dailyStreakSuffix: 'HARI',
+      dailyClaimBtn: 'KLAIM HADIAH HARI INI',
+      dailyClaimedBtn: 'SUDAH DIKLAIM HARI INI ✓',
+      dailyFooterTip: 'Reset hadiah setiap pukul 00:00 waktu setempat',
+
+      // Lucky Gacha Modal
+      gachaTitle: 'LUCKY BIRD GACHA',
+      gachaSub: 'Tarik Hadiah Skin Mythic, Aura Jejak & Koin Emas!',
+      gachaPull1: 'TARIK 1X',
+      gachaPull10: 'TARIK 10X',
+      gachaDiscount: 'DISKON 10%',
+      gachaPullFree: 'GRATIS 1X',
+      gachaWatchAd: 'TONTON IKLAN',
+      gachaClaimAll: 'AMBIL SEMUA',
+      gachaResultTitle: 'SELAMAT! HADIAH DIPEROLEH',
+      gachaResultSub: 'Item otomatis tersimpan di inventori & profil Anda',
+
+      // Pet Companion Sanctuary Modal
+      petTitle: 'PET COMPANION',
+      petSub: 'Duo Pelindung Imut dengan Skill Pasif Unik (Hanya di Lucky Gacha)',
+      petEquipBtn: 'GUNAKAN PET INI',
+      petUnequipBtn: 'LEPAS PET',
+      petLockedBtn: 'BELUM DIMILIKI',
+      petGachaCta: 'TARIK DI LUCKY GACHA ▶',
+
+      // Ranked Leaderboard & Profiles
+      rankedLeaderboard: 'RANKED LEADERBOARD',
+      lbTabGlobal: 'TOP 25 POIN',
+      lbTabTiers: 'TOP 25 RANK',
+      viewProfileBtn: 'PROFIL ↗',
+      profTabOverview: 'RINGKASAN',
+      profTabStats: 'STATISTIK',
+      profTabAccount: 'AKUN & LOGIN',
+      saveBtn: 'SIMPAN',
+      nameCostHint: 'Biaya Ganti Nama: 50 Koin',
+
+      // Standard Gameplay Texts
       playClassic: 'PLAY CLASSIC',
       playRanked: 'PLAY RANKED (EXTREME)',
       playMp: 'BUKA LOBI MULTIPLAYER',
@@ -175,6 +266,7 @@
       reviveCoinBtn: 'REVIVE SEKARANG',
       giveUpBtn: 'LEWATKAN (GAME OVER)',
       rewardAdBtn: '+25 KOIN',
+
       // Shop categories
       catBird: 'BURUNG',
       catPet: 'PETS',
@@ -188,6 +280,7 @@
       equip: 'EQUIP',
       equipped: 'TERPASANG',
       buy: 'BELI',
+
       // Multiplayer
       mpLobbyTitle: 'LOBI MULTIPLAYER',
       mpQuickMatch: 'CARI LAWAN',
@@ -201,6 +294,7 @@
       mpVictory: 'VICTORY',
       mpDefeat: 'KALAH',
       mpFallen: 'TERJATUH',
+
       // Google / Account
       signInGoogle: 'MASUK DENGAN GOOGLE',
       signInFb: 'MASUK DENGAN FACEBOOK',
@@ -209,6 +303,7 @@
       gpSignOut: 'KELUAR / GANTI AKUN',
       gpStatus: 'LOGIN AKUN GOOGLE & FACEBOOK',
       gpLoginDesc: 'Hubungkan akun Anda untuk menyimpan Rank, Skor Tertinggi, dan bertanding di Leaderboard Global!',
+
       // How to play instructions
       inst1Title: 'KONTROL KEYBOARD & DASH',
       inst1Desc: '<b>SPACE / PANAH ATAS</b> untuk Flap.<br><b>SHIFT / D / E / F</b> untuk Skill Dash!',
@@ -226,6 +321,97 @@
       music: 'Background Music',
       difficulty: 'Difficulty',
       okBtn: 'SAVE / OK',
+      donateBadge: 'SUPPORT DEVELOPER',
+      donateDesc: 'Enjoying Feather Rush? Support Sunarka on Saweria to keep the game growing!',
+      donateSaweria: 'DONATE VIA SAWERIA',
+      privacyPolicy: 'Privacy Policy',
+      termsOfService: 'Terms of Service',
+
+      // Lobby Side Buttons & Tooltips
+      sideDaily: 'DAILY',
+      sideDailyTip: 'Daily Login Reward - Claim Diamonds & Coins!',
+      sideGacha: 'GACHA',
+      sideGachaTip: 'Lucky Bird Gacha - Pull Rare Rewards!',
+      sidePet: 'PETS',
+      sidePetTip: 'Pet Companion - Faithful Companion',
+      sideShop: 'SHOP',
+      sideShopTip: 'Skin & Collection Shop',
+      sideRewardAd: '+25 COINS',
+      sideRewardAdTip: 'Watch Ad for +25 Free Coins!',
+      sideFeedback: 'FEEDBACK',
+      sideFeedbackTip: 'Game Feedback & Support',
+      sideDonate: 'DONATE',
+      sideDonateTip: 'Support Sunarka on Saweria!',
+
+      // Lobby Friends & Chat
+      friendsTitle: 'FRIENDS',
+      friendsTip: 'Open Friends List & Chat',
+      friendsEmpty: 'No friends online',
+      chatLabel: 'CHAT',
+      chatTip: 'Global & Friends Chat',
+      chatSnippetDefault: '[Global] Loading chat...',
+
+      // Lobby Mode Pill & Start Button
+      modeTagSub: 'GAME MODE (SWIPE UP ▲)',
+      modeCycleTip: 'Click or Swipe Up to Select Mode',
+      startBtnLabel: 'START',
+      heroSpeech: '"Flap your wings and conquer the skies!"',
+      dashSkillTip: 'Dash Skill (Press SHIFT or D)',
+
+      // Mode Selection Drawer
+      modeDrawerTitle: 'SELECT GAME MODE',
+      modeClassicBadge: 'CASUAL',
+      modeClassicDesc: 'Casual flying practice with no rank pressure. Collect coins and hit high scores!',
+      modeClassicBest: 'Best:',
+      modeRankedBadge: 'EXTREME RANK',
+      modeRankedDesc: 'Global ranked competition with moving pipes, stormy weather, and tier points!',
+      modeRankedPts: 'Rank Points:',
+      modeMpBadge: '1v1 BATTLE',
+      modeMpDesc: 'Real-time 1v1 duel against friends or random rivals worldwide!',
+      modeMpConn: 'Connection: <b>Arena Server</b>',
+      modeSelectBtn: 'SELECT MODE',
+
+      // Daily Login Rewards Modal
+      dailyTitle: 'DAILY LOGIN REWARDS',
+      dailySub: 'Log in 7 consecutive days to claim abundant Gold Coins & Diamonds!',
+      dailyStreakPrefix: 'STREAK:',
+      dailyStreakSuffix: 'DAYS',
+      dailyClaimBtn: 'CLAIM TODAY\'S REWARD',
+      dailyClaimedBtn: 'ALREADY CLAIMED TODAY ✓',
+      dailyFooterTip: 'Rewards reset daily at 00:00 local time',
+
+      // Lucky Gacha Modal
+      gachaTitle: 'LUCKY BIRD GACHA',
+      gachaSub: 'Pull Mythic Bird Skins, Trail Auras & Gold Coins!',
+      gachaPull1: 'PULL 1X',
+      gachaPull10: 'PULL 10X',
+      gachaDiscount: '10% OFF',
+      gachaPullFree: 'FREE 1X',
+      gachaWatchAd: 'WATCH AD',
+      gachaClaimAll: 'CLAIM ALL',
+      gachaResultTitle: 'CONGRATULATIONS! REWARDS OBTAINED',
+      gachaResultSub: 'Items are automatically saved to your inventory & profile',
+
+      // Pet Companion Sanctuary Modal
+      petTitle: 'PET COMPANION',
+      petSub: 'Cute Guardian Duos with Unique Passive Skills (Only in Lucky Gacha)',
+      petEquipBtn: 'EQUIP THIS PET',
+      petUnequipBtn: 'UNEQUIP PET',
+      petLockedBtn: 'NOT OWNED',
+      petGachaCta: 'PULL IN LUCKY GACHA ▶',
+
+      // Ranked Leaderboard & Profiles
+      rankedLeaderboard: 'RANKED LEADERBOARD',
+      lbTabGlobal: 'TOP 25 POINTS',
+      lbTabTiers: 'TOP 25 RANK',
+      viewProfileBtn: 'PROFILE ↗',
+      profTabOverview: 'OVERVIEW',
+      profTabStats: 'STATS',
+      profTabAccount: 'ACCOUNT & LOGIN',
+      saveBtn: 'SAVE',
+      nameCostHint: 'Name Change Cost: 50 Coins',
+
+      // Standard Gameplay Texts
       playClassic: 'PLAY CLASSIC',
       playRanked: 'PLAY RANKED (EXTREME)',
       playMp: 'OPEN MULTIPLAYER LOBBY',
@@ -255,6 +441,7 @@
       reviveCoinBtn: 'REVIVE NOW',
       giveUpBtn: 'GIVE UP (GAME OVER)',
       rewardAdBtn: '+25 COINS',
+
       // Shop categories
       catBird: 'BIRD',
       catPet: 'PETS',
@@ -268,6 +455,7 @@
       equip: 'EQUIP',
       equipped: 'EQUIPPED',
       buy: 'BUY',
+
       // Multiplayer
       mpLobbyTitle: 'MULTIPLAYER LOBBY',
       mpQuickMatch: 'QUICK MATCH',
@@ -281,6 +469,7 @@
       mpVictory: 'VICTORY',
       mpDefeat: 'DEFEATED',
       mpFallen: 'FALLEN',
+
       // Google / Account
       signInGoogle: 'SIGN IN WITH GOOGLE',
       signInFb: 'SIGN IN WITH FACEBOOK',
@@ -289,6 +478,7 @@
       gpSignOut: 'SIGN OUT / SWITCH ACCOUNT',
       gpStatus: 'SIGN IN WITH GOOGLE & FACEBOOK',
       gpLoginDesc: 'Connect your account to save your Rank, High Scores, and compete on the Global Leaderboards!',
+
       // How to play instructions
       inst1Title: 'KEYBOARD & DASH CONTROLS',
       inst1Desc: '<b>SPACE / UP ARROW</b> to Flap wings.<br><b>SHIFT / D / E / F</b> for Warp Dash Skill!',
@@ -303,6 +493,9 @@
 
   function applyLanguage(lang) {
     const t = i18n[lang] || i18n.id;
+    try {
+      document.documentElement.lang = lang;
+    } catch (_) {}
     
     // Settings Modal
     if(el.settingsModalTitle) el.settingsModalTitle.textContent = t.settingsTitle;
@@ -311,11 +504,60 @@
     if(el.txtSettingMusic) el.txtSettingMusic.textContent = t.music;
     if(el.txtSettingDifficulty) el.txtSettingDifficulty.textContent = t.difficulty;
     if(el.settingsOkBtn) el.settingsOkBtn.textContent = t.okBtn;
+    const donateBadge = document.querySelector('.settings-donate-box .donate-badge');
+    if(donateBadge) {
+      donateBadge.innerHTML = `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="vertical-align:middle;margin-right:3px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>${t.donateBadge}`;
+    }
+    const donateDesc = document.querySelector('.settings-donate-box .donate-desc');
+    if(donateDesc) donateDesc.textContent = t.donateDesc;
+    const saweriaLink = document.querySelector('.saweria-donate-link');
+    if(saweriaLink) {
+      saweriaLink.innerHTML = `<svg viewBox="0 0 24 24" width="13" height="13" fill="#ffffff"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>${t.donateSaweria}`;
+    }
+    const privacyLink = document.querySelector('.settings-legal-links a[href="privacy.html"]');
+    if(privacyLink) privacyLink.textContent = t.privacyPolicy;
+    const termsLink = document.querySelector('.settings-legal-links a[href="terms.html"]');
+    if(termsLink) termsLink.textContent = t.termsOfService;
     
-    // Main Menu Buttons & Badges (Only update label, preserve SVG icons)
+    // Main Menu / Lobby Sidebar Buttons (Preserve SVGs, update labels & tooltips)
+    const sideDailyBtn = $('lobbyDailyBtn');
+    if(sideDailyBtn) {
+      const span = sideDailyBtn.querySelector('.side-btn-label');
+      if(span) span.textContent = t.sideDaily;
+      sideDailyBtn.setAttribute('title', t.sideDailyTip);
+    }
+    const sideGachaBtn = $('lobbyGachaBtn');
+    if(sideGachaBtn) {
+      const span = sideGachaBtn.querySelector('.side-btn-label');
+      if(span) span.textContent = t.sideGacha;
+      sideGachaBtn.setAttribute('title', t.sideGachaTip);
+    }
+    const sidePetBtn = $('lobbyPetBtn');
+    if(sidePetBtn) {
+      const span = sidePetBtn.querySelector('.side-btn-label');
+      if(span) span.textContent = t.sidePet;
+      sidePetBtn.setAttribute('title', t.sidePetTip);
+    }
     if(el.shopBtn) {
       const span = el.shopBtn.querySelector('.side-btn-label') || el.shopBtn.querySelector('span:last-child');
-      if(span) span.textContent = t.shopBtn;
+      if(span) span.textContent = t.sideShop;
+      el.shopBtn.setAttribute('title', t.sideShopTip);
+    }
+    if(el.lobbyAdmobRewardBtn) {
+      const span = el.lobbyAdmobRewardBtn.querySelector('.side-btn-label') || el.lobbyAdmobRewardBtn.querySelector('span:last-child');
+      if(span) span.textContent = t.sideRewardAd;
+      el.lobbyAdmobRewardBtn.setAttribute('title', t.sideRewardAdTip);
+    }
+    if(el.lobbyFeedbackBtn) {
+      const span = el.lobbyFeedbackBtn.querySelector('.side-btn-label') || el.lobbyFeedbackBtn.querySelector('span:last-child');
+      if(span) span.textContent = t.sideFeedback;
+      el.lobbyFeedbackBtn.setAttribute('title', t.sideFeedbackTip);
+    }
+    const sideDonateBtn = $('lobbyDonateBtn');
+    if(sideDonateBtn) {
+      const span = sideDonateBtn.querySelector('.side-btn-label');
+      if(span) span.textContent = t.sideDonate;
+      sideDonateBtn.setAttribute('title', t.sideDonateTip);
     }
     if(el.howBtn) el.howBtn.textContent = t.howTitle;
     if(el.settingsBtn) el.settingsBtn.setAttribute('title', t.settingsBtn);
@@ -323,14 +565,129 @@
       const span = el.rankedLeaderboardBtn.querySelector('.side-btn-label') || el.rankedLeaderboardBtn.querySelector('span:last-child');
       if(span) span.textContent = t.rankings;
     }
-    if(el.lobbyFeedbackBtn) {
-      const span = el.lobbyFeedbackBtn.querySelector('.side-btn-label') || el.lobbyFeedbackBtn.querySelector('span:last-child');
-      if(span) span.textContent = t.feedbackBtn;
+
+    // Right Dock & Chat Nav
+    const rightHeaderTitle = document.querySelector('.right-header-title');
+    if(rightHeaderTitle) rightHeaderTitle.textContent = t.friendsTitle;
+    const socialBtn = $('socialBtn');
+    if(socialBtn) socialBtn.setAttribute('title', t.friendsTip);
+    const quickFriendsEmpty = document.querySelector('.mlbb-quick-friends-empty');
+    if(quickFriendsEmpty) quickFriendsEmpty.textContent = t.friendsEmpty;
+    const lobbyChatBtn = $('lobbyChatBtn');
+    if(lobbyChatBtn) {
+      const label = lobbyChatBtn.querySelector('.nav-label');
+      if(label) label.textContent = t.chatLabel;
+      lobbyChatBtn.setAttribute('title', t.chatTip);
     }
-    if(el.lobbyAdmobRewardBtn) {
-      const span = el.lobbyAdmobRewardBtn.querySelector('.side-btn-label') || el.lobbyAdmobRewardBtn.querySelector('span:last-child');
-      if(span) span.textContent = t.rewardAdBtn;
+
+    // Lobby Bottom Bar & Mode Controls
+    const modeTagSub = document.querySelector('.mode-tag-sub');
+    if(modeTagSub) modeTagSub.textContent = t.modeTagSub;
+    const cycleModeBtn = $('mlbbCycleModeBtn');
+    if(cycleModeBtn) cycleModeBtn.setAttribute('title', t.modeCycleTip);
+    const startBtnLabel = document.querySelector('.start-btn-label');
+    if(startBtnLabel) startBtnLabel.textContent = t.startBtnLabel;
+    const heroSpeech = $('mlbbHeroSpeech');
+    if(heroSpeech) heroSpeech.textContent = t.heroSpeech;
+    const dashBtn = $('dashBtn');
+    if(dashBtn) dashBtn.setAttribute('title', t.dashSkillTip);
+
+    // Mode Selection Drawer
+    const drawerTitle = document.querySelector('.mlbb-drawer-title');
+    if(drawerTitle) drawerTitle.textContent = t.modeDrawerTitle;
+    const cardClassic = $('cardModeClassic');
+    if(cardClassic) {
+      const badge = cardClassic.querySelector('.mlbb-mc-badge');
+      if(badge) badge.textContent = t.modeClassicBadge;
+      const desc = cardClassic.querySelector('.mlbb-mc-desc');
+      if(desc) desc.textContent = t.modeClassicDesc;
+      const btn = cardClassic.querySelector('.mlbb-mc-select-btn');
+      if(btn) btn.textContent = t.modeSelectBtn;
     }
+    const cardRanked = $('cardModeRanked');
+    if(cardRanked) {
+      const badge = cardRanked.querySelector('.mlbb-mc-badge');
+      if(badge) badge.textContent = t.modeRankedBadge;
+      const desc = cardRanked.querySelector('.mlbb-mc-desc');
+      if(desc) desc.textContent = t.modeRankedDesc;
+      const btn = cardRanked.querySelector('.mlbb-mc-select-btn');
+      if(btn) btn.textContent = t.modeSelectBtn;
+    }
+    const cardMp = $('cardModeMultiplayer');
+    if(cardMp) {
+      const badge = cardMp.querySelector('.mlbb-mc-badge');
+      if(badge) badge.textContent = t.modeMpBadge;
+      const desc = cardMp.querySelector('.mlbb-mc-desc');
+      if(desc) desc.textContent = t.modeMpDesc;
+      const stats = cardMp.querySelector('.mlbb-mc-stats');
+      if(stats) stats.innerHTML = t.modeMpConn;
+      const btn = cardMp.querySelector('.mlbb-mc-select-btn');
+      if(btn) btn.textContent = t.modeSelectBtn;
+    }
+
+    // Daily Modal
+    const dailyH2 = document.querySelector('.daily-title-wrap h2');
+    if(dailyH2) dailyH2.textContent = t.dailyTitle;
+    const dailySub = document.querySelector('.daily-subtitle');
+    if(dailySub) dailySub.textContent = t.dailySub;
+    const dailyTip = $('dailyFooterTip');
+    if(dailyTip) dailyTip.textContent = t.dailyFooterTip;
+
+    // Lucky Gacha Modal
+    const gachaH2 = document.querySelector('.gacha-title-wrap h2');
+    if(gachaH2) gachaH2.textContent = t.gachaTitle;
+    const gachaSub = document.querySelector('.gacha-subtitle');
+    if(gachaSub) gachaSub.textContent = t.gachaSub;
+    const g1Title = document.querySelector('#gachaPull1Btn .pull-btn-title');
+    if(g1Title) g1Title.textContent = t.gachaPull1;
+    const g10Title = document.querySelector('#gachaPull10Btn .pull-btn-title');
+    if(g10Title) g10Title.textContent = t.gachaPull10;
+    const g10Badge = document.querySelector('#gachaPull10Btn .pull-discount-badge');
+    if(g10Badge) g10Badge.textContent = t.gachaDiscount;
+    const gFreeTitle = document.querySelector('#gachaPullFreeBtn .pull-btn-title');
+    if(gFreeTitle) gFreeTitle.textContent = t.gachaPullFree;
+    const gFreeCost = document.querySelector('#gachaPullFreeBtn .pull-btn-cost');
+    if(gFreeCost) {
+      gFreeCost.innerHTML = `<svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:middle;margin-right:2px;"><path d="M8 5v14l11-7z"/></svg>${t.gachaWatchAd}`;
+    }
+    const gClaimBtn = $('gachaClaimBtn');
+    if(gClaimBtn) gClaimBtn.textContent = t.gachaClaimAll;
+    const gResTitle = $('gachaResultTitle');
+    if(gResTitle) gResTitle.textContent = t.gachaResultTitle;
+    const gResSub = $('gachaResultSub');
+    if(gResSub) gResSub.textContent = t.gachaResultSub;
+
+    // Pet Companion Sanctuary Modal
+    const petH2 = document.querySelector('.pet-title-wrap h2');
+    if(petH2) petH2.textContent = t.petTitle;
+    const petSub = document.querySelector('.pet-subtitle');
+    if(petSub) petSub.textContent = t.petSub;
+    const petGachaCta = document.querySelector('#petGachaCtaBtn span');
+    if(petGachaCta) petGachaCta.textContent = t.petGachaCta;
+
+    // Ranked Leaderboard
+    const rankedH2 = document.querySelector('.ranked-modal-top-bar h2');
+    if(rankedH2) {
+      rankedH2.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="#facc15" style="vertical-align:middle;margin-right:5px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>${t.rankedLeaderboard}`;
+    }
+    const lbTabGlobal = document.querySelector('#lbTabGlobalBtn span');
+    if(lbTabGlobal) lbTabGlobal.textContent = t.lbTabGlobal;
+    const lbTabTiers = document.querySelector('#lbTabTiersBtn span');
+    if(lbTabTiers) lbTabTiers.textContent = t.lbTabTiers;
+    const champProfBtn = $('championViewProfileBtn');
+    if(champProfBtn) champProfBtn.textContent = t.viewProfileBtn;
+
+    // Profile & Google Account Tabs
+    const profTabOverview = document.querySelector('#profileTabOverviewBtn span');
+    if(profTabOverview) profTabOverview.textContent = t.profTabOverview;
+    const profTabStats = document.querySelector('#profileTabStatsBtn span');
+    if(profTabStats) profTabStats.textContent = t.profTabStats;
+    const profTabAccount = document.querySelector('#profileTabAccountBtn span');
+    if(profTabAccount) profTabAccount.textContent = t.profTabAccount;
+    const confirmNameBtn = $('gpConfirmNameBtn');
+    if(confirmNameBtn) confirmNameBtn.textContent = t.saveBtn;
+    const nameCostHint = $('gpNameCostHint');
+    if(nameCostHint) nameCostHint.textContent = t.nameCostHint;
 
     // Ready Screen
     const readyH2 = document.querySelector('#ready h2');
@@ -398,7 +755,11 @@
     // Google Play / Account Modal
     if(el.googleSignInBtnText) el.googleSignInBtnText.textContent = t.signInGoogle;
     if(el.facebookSignInBtnText) el.facebookSignInBtnText.textContent = t.signInFb;
-    if(el.guestSignInBtn) el.guestSignInBtn.textContent = t.playGuest;
+    if(el.guestSignInBtn) {
+      const span = el.guestSignInBtn.querySelector('span');
+      if(span) span.textContent = t.playGuest;
+      else el.guestSignInBtn.textContent = t.playGuest;
+    }
     if(el.gpAuthActionBtn) el.gpAuthActionBtn.textContent = t.gpSavePlay;
     if(el.gpSignOutBtn) el.gpSignOutBtn.textContent = t.gpSignOut;
     if(el.gpOnlineStatus) el.gpOnlineStatus.textContent = t.gpStatus;
@@ -15442,10 +15803,17 @@
   function renderDailyCheckinGrid() {
     const grid = $('dailyGrid');
     const streakCount = $('dailyStreakCount');
+    const streakBadge = $('dailyStreakBadge');
     const claimBtn = $('dailyClaimBtn');
     const status = getDailyCheckinStatus();
+    const isEn = settings.language === 'en';
 
-    if (streakCount) streakCount.textContent = status.streak;
+    if (streakBadge) {
+      const span = streakBadge.querySelector('span:last-child');
+      if (span) span.innerHTML = isEn ? `STREAK: <strong id="dailyStreakCount">${status.streak}</strong> DAYS` : `STREAK: <strong id="dailyStreakCount">${status.streak}</strong> HARI`;
+    } else if (streakCount) {
+      streakCount.textContent = status.streak;
+    }
 
     if (grid) {
       grid.innerHTML = '';
@@ -15466,7 +15834,7 @@
           : `<svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="6" fill="#fbbf24"/><text x="12" y="15.5" font-size="10" font-weight="900" text-anchor="middle" fill="#78350f" font-family="Arial">G</text></svg>`;
 
         card.innerHTML = `
-          <div class="daily-card-day">HARI ${cfg.day}</div>
+          <div class="daily-card-day">${isEn ? 'DAY ' + cfg.day : 'HARI ' + cfg.day}</div>
           <div class="daily-card-icon">${iconSvg}</div>
           <div class="daily-card-reward ${cfg.type === 'diamonds' ? 'diamond' : 'coins'}">${cfg.label}</div>
           ${isPastClaimed ? '<div class="daily-card-status-badge">✓</div>' : ''}
@@ -15478,12 +15846,12 @@
     if (claimBtn) {
       if (status.canClaim) {
         claimBtn.disabled = false;
-        claimBtn.textContent = 'KLAIM HADIAH HARI INI';
+        claimBtn.textContent = isEn ? "CLAIM TODAY'S REWARD" : 'KLAIM HADIAH HARI INI';
         claimBtn.style.opacity = '1';
         claimBtn.style.cursor = 'pointer';
       } else {
         claimBtn.disabled = true;
-        claimBtn.textContent = 'SUDAH DIKLAIM HARI INI ✓';
+        claimBtn.textContent = isEn ? 'ALREADY CLAIMED TODAY ✓' : 'SUDAH DIKLAIM HARI INI ✓';
         claimBtn.style.opacity = '0.65';
         claimBtn.style.cursor = 'default';
       }
@@ -15491,10 +15859,11 @@
   }
 
   function claimDailyReward() {
+    const isEn = settings.language === 'en';
     const status = getDailyCheckinStatus();
     if (!status.canClaim) {
       if (audio) audio.click();
-      if (typeof showToast === 'function') showToast('Hadiah hari ini sudah diklaim! Kembali lagi besok.');
+      if (typeof showToast === 'function') showToast(isEn ? 'Today\'s reward is already claimed! Come back tomorrow.' : 'Hadiah hari ini sudah diklaim! Kembali lagi besok.');
       return;
     }
 
@@ -15520,7 +15889,7 @@
 
     if (audio) audio.win();
     if (typeof showToast === 'function') {
-      showToast(`Berhasil klaim Hadiah Hari ke-${status.targetDay}: ${cfg.label}! 🎉`, 'success');
+      showToast(isEn ? `Successfully claimed Day ${status.targetDay} Reward: ${cfg.label}! 🎉` : `Berhasil klaim Hadiah Hari ke-${status.targetDay}: ${cfg.label}! 🎉`, 'success');
     }
 
     renderDailyCheckinGrid();
