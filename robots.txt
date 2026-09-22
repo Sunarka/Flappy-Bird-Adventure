@@ -1,5 +1,10 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://feather-rush.my.id/sitemap.xml
+User-agent: Mediapartners-Google
+Allow: /
 
+User-agent: Googlebot
+Allow: /
+
+Sitemap: https://feather-rush.my.id/sitemap.xml

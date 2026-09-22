@@ -1,0 +1,65 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 1. Leaderboard Global & Rank Poin
+    match /flappy_leaderboard/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // 2. Cloud Save Data Profil & Progres Pemain
+    match /flappy_cloud_saves/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // 3. Obrolan Publik Lobi (Global Chat)
+    match /flappy_global_chat/{docId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if false;
+    }
+
+    // 4. Chat Langsung Antar Teman (Direct Chat & Sub-messages)
+    match /flappy_direct_chats/{channelId} {
+      allow read, write: if true;
+
+      match /messages/{messageId} {
+        allow read, create: if true;
+        allow update, delete: if false;
+      }
+    }
+
+    // 5. Sistem Pertemanan & Permintaan Teman
+    match /flappy_friend_requests/{docId} {
+      allow read, write: if true;
+    }
+    match /flappy_friends/{docId} {
+      allow read, write: if true;
+    }
+
+    // 6. Undangan Mabar (Room Invites)
+    match /flappy_invites/{docId} {
+      allow read, write: if true;
+    }
+    match /flappy_game_invites/{docId} {
+      allow read, write: if true;
+    }
+
+    // 7. Lobi & Matchmaking Room Multiplayer
+    match /flappy_mp_rooms/{docId} {
+      allow read, write: if true;
+    }
+    match /flappy_matchmaking_pool/{docId} {
+      allow read, write: if true;
+    }
+
+    // Default Fallback Rule
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+

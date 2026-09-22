@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panduan Cara Bermain & Strategi - Feather Rush</title>
+  <meta name="description" content="Pelajari panduan lengkap cara bermain Feather Rush: kontrol keyboard & layar sentuh, mekanik Dash, penjelasan item power-up, sistem Ranked Tier, dan tips pro.">
+  <link rel="canonical" href="https://feather-rush.my.id/how-to-play.html">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      color: #334155;
+      background: #f1f5f9;
+      margin: 0;
+      padding: 24px 16px;
+    }
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 36px 32px;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .nav-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e2e8f0;
+      align-items: center;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: #0284c7;
+      color: #fff;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+    .back-btn:hover { background: #0369a1; }
+    .nav-link {
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #0284c7;
+      background: #e0f2fe;
+    }
+    h1 { color: #0f172a; font-size: 28px; margin-top: 0; margin-bottom: 12px; line-height: 1.3; }
+    h2 { color: #1e293b; font-size: 20px; margin-top: 32px; margin-bottom: 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; }
+    h3 { color: #0369a1; font-size: 16px; margin-top: 20px; margin-bottom: 8px; }
+    p, li { font-size: 15px; color: #475569; }
+    ul, ol { padding-left: 22px; }
+    li { margin-bottom: 6px; }
+    .kbd {
+      display: inline-block;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-bottom: 2px solid #94a3b8;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-family: monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .table-responsive {
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      background: #f8fafc;
+      color: #0f172a;
+      font-weight: 700;
+    }
+    .tip-box {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 18px 0;
+    }
+    .tip-box strong { color: #166534; display: block; margin-bottom: 4px; }
+    .tip-box p { margin: 0; color: #15803d; font-size: 14px; }
+    .footer-links {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      font-size: 13.5px;
+    }
+    .footer-links a { color: #0284c7; text-decoration: none; }
+    .footer-links a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="nav-bar">
+      <a href="/" class="back-btn">← Main Game</a>
+      <a href="about.html" class="nav-link">Tentang Kami</a>
+      <a href="how-to-play.html" class="nav-link active">Panduan Main</a>
+      <a href="faq.html" class="nav-link">FAQ</a>
+      <a href="contact.html" class="nav-link">Kontak</a>
+      <a href="privacy.html" class="nav-link">Privasi</a>
+      <a href="terms.html" class="nav-link">Ketentuan</a>
+    </nav>
+
+    <h1>Panduan Lengkap Cara Bermain Feather Rush</h1>
+    <p>Pelajari semua mekanisme kontrol, strategi bertahan hidup, item power-up, dan cara mendaki tangga peringkat hingga rank tertinggi di Feather Rush.</p>
+
+    <h2>1. Kontrol Permainan (Controls)</h2>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Perangkat</th>
+            <th>Aksi Terbang (Flap)</th>
+            <th>Skill Warp Dash</th>
+            <th>Jeda (Pause)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Komputer / PC / Laptop</b></td>
+            <td>Tekan <span class="kbd">SPASI</span> atau <span class="kbd">PANAH ATAS</span> atau <span class="kbd">W</span> atau Klik Kiri Mouse</td>
+            <td>Tekan <span class="kbd">SHIFT</span> atau <span class="kbd">D</span> atau <span class="kbd">E</span> atau <span class="kbd">F</span></td>
+            <td>Tekan <span class="kbd">ESC</span> atau <span class="kbd">P</span></td>
+          </tr>
+          <tr>
+            <td><b>Ponsel / HP / Tablet</b></td>
+            <td>Ketuk (Tap) di mana saja pada layar</td>
+            <td>Tekan tombol skill bulat di pojok kiri bawah</td>
+            <td>Tekan ikon Pause di pojok kanan atas</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>2. Mode Permainan</h2>
+    <h3>A. Mode Classic (Santai & Latihan)</h3>
+    <p>Mode permainan standar tanpa batasan waktu dan tanpa tekanan peringkat. Cocok untuk melatih ritme ketukan sayap burung, membiasakan diri dengan fisika gravitasi, dan mengumpulkan koin emas sebanyak-banyaknya.</p>
+
+    <h3>B. Mode Ranked Extreme (Kompetisi Global)</h3>
+    <p>Mode kompetitif tingkat tinggi dengan tingkat kesulitan bertahap, tiang pipa bergerak, cuaca badai petir, dan burung musuh yang melintas. Setiap tiang yang berhasil dilewati memberikan poin rank untuk menaikkan Tier Anda.</p>
+    <ul>
+      <li><b>Bronze I - III:</b> Kecepatan santai, tiang pipa statis.</li>
+      <li><b>Silver I - III:</b> Tiang mulai bergerak naik-turun perlahan.</li>
+      <li><b>Gold I - III:</b> Kecepatan meningkat, celah tiang menyempit.</li>
+      <li><b>Platinum I - III:</b> Kemunculan burung musuh dan awan badai.</li>
+      <li><b>Diamond I - III:</b> Rintangan cepat dan cuaca ekstrem.</li>
+      <li><b>Master & Grandmaster:</b> Arena bagi pemain terhebat di Leaderboard Global.</li>
+    </ul>
+
+    <h3>C. Mode 1v1 Real-Time Multiplayer</h3>
+    <p>Tanding duel langsung secara online melawan pemain lain di arena yang sama dengan benih rintangan (seed) yang identik. Pemain yang bertahan paling lama atau mencetak skor tertinggi saat lawan jatuh keluar sebagai pemenang (*Victory*).</p>
+
+    <h2>3. Ensiklopedia Power-Up</h2>
+    <p>Saat terbang, Anda akan menemukan berbagai bola energi power-up yang dapat diambil:</p>
+    <ul>
+      <li><b>🛡️ Shield (Perisai Pelindung):</b> Memberikan kekebalan dari 1 kali benturan tiang atau rintangan.</li>
+      <li><b>🧲 Magnet (Penarik Koin):</b> Menarik semua koin emas dan diamond di sekitar secara otomatis.</li>
+      <li><b>❄️ Freeze (Pembeku Waktu):</b> Memperlambat pergerakan tiang pipa dan rintangan untuk beberapa detik.</li>
+      <li><b>⭐ Star (Bintang Skor x2):</b> Menggandakan poin skor yang diperoleh selama durasi aktif.</li>
+      <li><b>🚀 Rocket (Kecepatan Supersonik):</b> Menerobos maju menghancurkan rintangan di depan secara instan.</li>
+    </ul>
+
+    <div class="tip-box">
+      <strong>💡 Tips Pro untuk Rekor Tinggi:</strong>
+      <p>Gunakan ritme ketukan kecil dan teratur daripada menunggu burung jatuh terlalu rendah. Simpan skill Warp Dash untuk situasi darurat saat celah pipa bergerak terlalu cepat!</p>
+    </div>
+
+    <h2>4. Pet Companion & Buff Pasif</h2>
+    <p>Pet Companion dapat diperoleh melalui Lucky Gacha dan dibawa terbang untuk memberikan kemampuan pasif:</p>
+    <ul>
+      <li><b>Pip & Peep (Canary Duo):</b> Bodyguard intercept yang menghancurkan musuh terdekat.</li>
+      <li><b>Kitsune Ember (Fox Fire):</b> Magnet koin otomatis dengan jangkauan luas.</li>
+      <li><b>Frost Pengu (Ice Bird):</b> Mengurangi kecepatan jatuh saat berada di dekat rintangan.</li>
+    </ul>
+
+    <div class="footer-links">
+      <a href="/">Main Game</a> •
+      <a href="about.html">Tentang Kami</a> •
+      <a href="faq.html">FAQ</a> •
+      <a href="contact.html">Kontak</a> •
+      <a href="privacy.html">Kebijakan Privasi</a> •
+      <a href="terms.html">Ketentuan Layanan</a>
+    </div>
+  </div>
+</body>
+</html>
+
