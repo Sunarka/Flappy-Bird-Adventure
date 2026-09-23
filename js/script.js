@@ -918,18 +918,18 @@
 
   // 6. Backgrounds (Nama Lengkap) - ALL FREE FOR TESTING
   const backgrounds = {
-    sky:{ name:'CLEAR BLUE SKY', desc:'Langit siang biru cerah', cost:0, top:'#72caed', bottom:'#d3f3f4', hill:'#75bb9b' },
-    sunset:{ name:'WARM SUNSET', desc:'Senja jingga hangat romantis', cost:0, top:'#f89b75', bottom:'#ffe5a6', hill:'#c47772' },
-    space:{ name:'DEEP COSMIC SPACE', desc:'Luar angkasa kosmik gelap', cost:0, top:'#182858', bottom:'#4c4a8c', hill:'#393c77' },
-    forest:{ name:'MISTY GREEN FOREST', desc:'Hutan rimbun hijau asri', cost:0, top:'#2d6a4f', bottom:'#b7e4c7', hill:'#1b4332' },
-    jungle:{ name:'TROPICAL JUNGLE SAFARI', desc:'Rimba belantara tropis kanopi rimbun & sulur purba', cost:0, top:'#064e3b', bottom:'#a7f3d0', hill:'#065f46' },
-    ocean:{ name:'DEEP OCEAN CORAL', desc:'Kedalaman laut biru & terumbu karang', cost:0, top:'#0369a1', bottom:'#0891b2', hill:'#0e7490' },
-    volcano:{ name:'VOLCANIC LAVA', desc:'Kawah gunung berapi malam bara panas', cost:0, top:'#2e1065', bottom:'#7f1d1d', hill:'#450a0a' },
-    synthwave:{ name:'80S SYNTHWAVE GRID', desc:'Grid neon ungu & matahari senja retro', cost:0, top:'#3b0764', bottom:'#ec4899', hill:'#831843' },
+    sky:{ name:'CLEAR BLUE SKY', desc:'Langit siang biru cerah', cost:0, top:'#72caed', bottom:'#d3f3f4', hill:'#75bb9b', groundBase:'#b57a45', groundTop:'#46b65c', groundStripe:'#e6ad5a' },
+    sunset:{ name:'WARM SUNSET', desc:'Senja jingga hangat romantis', cost:0, top:'#f89b75', bottom:'#ffe5a6', hill:'#c47772', groundBase:'#9a3412', groundTop:'#f97316', groundStripe:'#fdba74' },
+    space:{ name:'DEEP COSMIC SPACE', desc:'Luar angkasa kosmik gelap', cost:0, top:'#182858', bottom:'#4c4a8c', hill:'#393c77', groundBase:'#1e1b4b', groundTop:'#6366f1', groundStripe:'#a5b4fc' },
+    forest:{ name:'MISTY GREEN FOREST', desc:'Hutan rimbun hijau asri', cost:0, top:'#2d6a4f', bottom:'#b7e4c7', hill:'#1b4332', groundBase:'#3f2e18', groundTop:'#22c55e', groundStripe:'#86efac' },
+    jungle:{ name:'TROPICAL JUNGLE SAFARI', desc:'Rimba belantara tropis kanopi rimbun & sulur purba', cost:0, top:'#064e3b', bottom:'#a7f3d0', hill:'#065f46', groundBase:'#271c0c', groundTop:'#10b981', groundStripe:'#6ee7b7' },
+    ocean:{ name:'DEEP OCEAN CORAL', desc:'Kedalaman laut biru & terumbu karang', cost:0, top:'#0369a1', bottom:'#0891b2', hill:'#0e7490', groundBase:'#0c4a6e', groundTop:'#06b6d4', groundStripe:'#67e8f9' },
+    volcano:{ name:'VOLCANIC LAVA', desc:'Kawah gunung berapi malam bara panas', cost:0, top:'#2e1065', bottom:'#7f1d1d', hill:'#450a0a', groundBase:'#450a0a', groundTop:'#ef4444', groundStripe:'#fca5a5' },
+    synthwave:{ name:'80S SYNTHWAVE GRID', desc:'Grid neon ungu & matahari senja retro', cost:0, top:'#3b0764', bottom:'#ec4899', hill:'#831843', groundBase:'#4c0519', groundTop:'#f43f5e', groundStripe:'#fda4af' },
     // Anime Special Backgrounds
-    hidden_leaf:{ name:'HIDDEN LEAF VILLAGE', desc:'Desa Konoha dengan patung monumen Hokage senja', cost:0, top:'#f97316', bottom:'#fed7aa', hill:'#15803d' },
-    wano_sakura:{ name:'WANO SAKURA FUJI', desc:'Negeri Wano berlatar Gunung Fuji & kelopak sakura', cost:0, top:'#ec4899', bottom:'#fbcfe8', hill:'#be185d' },
-    namek_green:{ name:'PLANET NAMEK SKY', desc:'Langit hijau Namek dengan matahari kembar bersinar', cost:0, top:'#059669', bottom:'#a7f3d0', hill:'#047857' }
+    hidden_leaf:{ name:'HIDDEN LEAF VILLAGE', desc:'Desa Konoha dengan patung monumen Hokage senja', cost:0, top:'#f97316', bottom:'#fed7aa', hill:'#15803d', groundBase:'#78350f', groundTop:'#22c55e', groundStripe:'#fde047' },
+    wano_sakura:{ name:'WANO SAKURA FUJI', desc:'Negeri Wano berlatar Gunung Fuji & kelopak sakura', cost:0, top:'#ec4899', bottom:'#fbcfe8', hill:'#be185d', groundBase:'#831843', groundTop:'#f472b6', groundStripe:'#fce7f3' },
+    namek_green:{ name:'PLANET NAMEK SKY', desc:'Langit hijau Namek dengan matahari kembar bersinar', cost:0, top:'#059669', bottom:'#a7f3d0', hill:'#047857', groundBase:'#064e3b', groundTop:'#10b981', groundStripe:'#6ee7b7' }
   };
 
   // 7. Musik (Synthesizer Melodies & Anime Themes)
@@ -6380,12 +6380,13 @@
     if(progress.selectedPet === 'blaze_ember') {
       gap += 16; // Phoenix pipe gap expander
     }
-    const margin = isRanked ? 40 : 48;
-    const max = H - GROUND - gap - margin;
+    const margin = isRanked ? 38 : 45;
+    const max = Math.max(margin + 30, H - GROUND - gap - margin);
     let y = margin + getRandomFloat() * (max - margin);
-    y = Math.max(margin, Math.min(max, (y + lastGapY) / 2 + (getRandomFloat() - .5) * (isRanked ? 75 : 55)));
+    y = Math.max(margin, Math.min(max, (y + lastGapY) / 2 + (getRandomFloat() - .5) * (isRanked ? 65 : 45)));
     lastGapY = y;
-    const pipe = { x: W + 28, gapY: y, gapSize: gap, w: 56, passed: false };
+    const safeGapY = Math.max(margin, Math.min(H - GROUND - gap - 15, y));
+    const pipe = { x: W + 28, gapY: safeGapY, gapSize: gap, w: 56, passed: false };
     pipes.push(pipe);
 
     // Cek apakah Skill Power-up muncul di celah tiang ini (Di mode Multiplayer hampir tiap pipa selalu ada item!)
@@ -7954,15 +7955,17 @@
 
   // Draw Tail Aura Particles
   function drawAuraParticle(q, targetCtx = ctx) {
+    if(!q || !Number.isFinite(q.x) || !Number.isFinite(q.y)) return;
     const alpha = Math.max(0, Math.min(1, q.life / (q.maxLife || 0.5)));
+    const qSize = Math.max(0.2, Number.isFinite(q.size) ? q.size : 3);
     targetCtx.save();
     targetCtx.globalAlpha = alpha;
-    targetCtx.fillStyle = q.color;
+    targetCtx.fillStyle = q.color || '#fff';
 
     if(q.type === 'flame') {
       targetCtx.translate(q.x, q.y);
       targetCtx.rotate(q.rot || 0);
-      const s = q.size * (0.6 + alpha * 0.4);
+      const s = Math.max(0.2, qSize * (0.6 + alpha * 0.4));
       targetCtx.beginPath();
       targetCtx.moveTo(0, -s * 1.5);
       targetCtx.bezierCurveTo(s * 0.9, -s * 0.5, s * 0.9, s * 0.8, 0, s);
@@ -7975,18 +7978,18 @@
       targetCtx.bezierCurveTo(-s * 0.45, s * 0.5, -s * 0.45, -s * 0.2, 0, -s * 0.8);
       targetCtx.fill();
     } else if(q.type === 'lightning') {
-      targetCtx.strokeStyle = q.color;
+      targetCtx.strokeStyle = q.color || '#fde047';
       targetCtx.lineWidth = 2.2;
-      targetCtx.shadowColor = q.color;
+      targetCtx.shadowColor = q.color || '#fde047';
       targetCtx.shadowBlur = 6;
       targetCtx.beginPath();
       targetCtx.moveTo(q.x, q.y);
-      if(q.pts) {
-        for(let i = 1; i < q.pts.length; i++) targetCtx.lineTo(q.x + q.pts[i].dx, q.y + q.pts[i].dy);
+      if(q.pts && q.pts.length > 0) {
+        for(let i = 1; i < q.pts.length; i++) targetCtx.lineTo(q.x + (q.pts[i].dx || 0), q.y + (q.pts[i].dy || 0));
       }
       targetCtx.stroke();
     } else if(q.type === 'bubble') {
-      const wobbleR = q.size * (1 + Math.sin(q.wobble || 0) * 0.12);
+      const wobbleR = Math.max(0.2, qSize * (1 + Math.sin(q.wobble || 0) * 0.12));
       targetCtx.translate(q.x, q.y);
       targetCtx.beginPath();
       targetCtx.arc(0, 0, wobbleR, 0, Math.PI * 2);
@@ -7997,7 +8000,7 @@
       targetCtx.fill();
       targetCtx.fillStyle = '#ffffff';
       targetCtx.beginPath();
-      targetCtx.arc(-wobbleR * 0.35, -wobbleR * 0.35, wobbleR * 0.3, 0, Math.PI * 2);
+      targetCtx.arc(-wobbleR * 0.35, -wobbleR * 0.35, Math.max(0.1, wobbleR * 0.3), 0, Math.PI * 2);
       targetCtx.fill();
       if(q.life < 0.12) {
         targetCtx.strokeStyle = '#fff';
@@ -8009,7 +8012,7 @@
     } else if(q.type === 'heart') {
       targetCtx.translate(q.x, q.y);
       targetCtx.rotate(q.rot || 0);
-      const s = q.size * (0.8 + Math.sin(performance.now() / 80) * 0.15);
+      const s = Math.max(0.2, qSize * (0.8 + Math.sin(performance.now() / 80) * 0.15));
       targetCtx.beginPath();
       targetCtx.moveTo(0, s * 0.3);
       targetCtx.bezierCurveTo(-s * 0.8, -s * 0.4, -s * 0.8, -s * 1.1, 0, -s * 0.5);
@@ -8017,14 +8020,14 @@
       targetCtx.fill();
       targetCtx.fillStyle = 'rgba(255,255,255,0.45)';
       targetCtx.beginPath();
-      targetCtx.arc(-s * 0.3, -s * 0.6, s * 0.2, 0, Math.PI * 2);
+      targetCtx.arc(-s * 0.3, -s * 0.6, Math.max(0.1, s * 0.2), 0, Math.PI * 2);
       targetCtx.fill();
     } else if(q.type === 'coin') {
       targetCtx.translate(q.x, q.y);
       const spinScale = Math.cos(q.spin || 0);
       targetCtx.scale(spinScale, 1);
       targetCtx.beginPath();
-      targetCtx.arc(0, 0, q.size, 0, Math.PI * 2);
+      targetCtx.arc(0, 0, qSize, 0, Math.PI * 2);
       targetCtx.fillStyle = '#fbbf24';
       targetCtx.fill();
       targetCtx.strokeStyle = '#d97706';
@@ -8032,7 +8035,7 @@
       targetCtx.stroke();
       if(Math.abs(spinScale) > 0.4) {
         targetCtx.fillStyle = '#92400e';
-        targetCtx.font = 'bold ' + Math.floor(q.size * 1.2) + 'px sans-serif';
+        targetCtx.font = 'bold ' + Math.max(3, Math.floor(qSize * 1.2)) + 'px sans-serif';
         targetCtx.textAlign = 'center';
         targetCtx.textBaseline = 'middle';
         targetCtx.fillText('$', 0, 0);
@@ -8040,38 +8043,38 @@
     } else if(q.type === 'planet') {
       targetCtx.translate(q.x, q.y);
       targetCtx.beginPath();
-      targetCtx.arc(0, 0, q.size * 0.7, 0, Math.PI * 2);
+      targetCtx.arc(0, 0, Math.max(0.1, qSize * 0.7), 0, Math.PI * 2);
       targetCtx.fill();
       targetCtx.strokeStyle = '#c084fc';
       targetCtx.lineWidth = 1.2;
       targetCtx.beginPath();
-      targetCtx.ellipse(0, 0, q.size * 1.4, q.size * 0.4, -0.4, 0, Math.PI * 2);
+      targetCtx.ellipse(0, 0, Math.max(0.2, qSize * 1.4), Math.max(0.1, qSize * 0.4), -0.4, 0, Math.PI * 2);
       targetCtx.stroke();
     } else if(q.type === 'feather') {
       targetCtx.translate(q.x, q.y);
       targetCtx.rotate(q.rot || 0);
       targetCtx.beginPath();
-      targetCtx.ellipse(0, 0, q.size * 1.3, q.size * 0.55, 0, 0, Math.PI * 2);
+      targetCtx.ellipse(0, 0, Math.max(0.2, qSize * 1.3), Math.max(0.1, qSize * 0.55), 0, 0, Math.PI * 2);
       targetCtx.fill();
       targetCtx.strokeStyle = '#ffffff88';
       targetCtx.lineWidth = 1;
       targetCtx.beginPath();
-      targetCtx.moveTo(-q.size * 1.2, 0);
-      targetCtx.lineTo(q.size * 1.2, 0);
+      targetCtx.moveTo(-qSize * 1.2, 0);
+      targetCtx.lineTo(qSize * 1.2, 0);
       targetCtx.stroke();
     } else if(q.type === 'rainbow_ribbon') {
       targetCtx.translate(q.x, q.y);
       targetCtx.rotate(q.rot || 0);
       targetCtx.beginPath();
-      targetCtx.ellipse(0, 0, q.size * 1.2, q.size * 0.6, 0, 0, Math.PI * 2);
+      targetCtx.ellipse(0, 0, Math.max(0.2, qSize * 1.2), Math.max(0.1, qSize * 0.6), 0, 0, Math.PI * 2);
       targetCtx.fill();
     } else if(q.type === 'star' || q.type === 'sparkle') {
       targetCtx.translate(q.x, q.y);
       targetCtx.rotate(q.rot || 0);
-      drawCanvasSparkle(targetCtx, 0, 0, q.size * 1.4);
+      drawCanvasSparkle(targetCtx, 0, 0, Math.max(0.2, qSize * 1.4));
     } else {
       targetCtx.beginPath();
-      targetCtx.arc(q.x, q.y, q.size, 0, Math.PI * 2);
+      targetCtx.arc(q.x, q.y, qSize, 0, Math.PI * 2);
       targetCtx.fill();
     }
     targetCtx.restore();
@@ -9216,48 +9219,51 @@
   // Massive Fire Effects for Phoenix Sparks (Blaze & Ember)
   function drawPhoenixFlames() {
     if(progress.selectedPet !== 'blaze_ember' || state !== State.PLAYING) return;
+    if(!bird || !Number.isFinite(bird.x) || !Number.isFinite(bird.y)) return;
     const now = performance.now();
     
     ctx.save();
     const bx = bird.x, by = bird.y;
-    const flameReach = 190 + Math.sin(now / 50) * 22;
-    const flameSpread = 46 + Math.sin(now / 70) * 10;
+    const flameReach = Math.max(10, 190 + Math.sin(now / 50) * 22);
+    const flameSpread = Math.max(5, 46 + Math.sin(now / 70) * 10);
 
     ctx.shadowColor = '#f97316';
     ctx.shadowBlur = 22;
 
     // Layer 1: Crimson & Scarlet Outer Roaring Dragon Fire Plume
-    const fireGrad1 = ctx.createRadialGradient(bx + 20, by, 10, bx + 110, by, flameReach);
-    fireGrad1.addColorStop(0, 'rgba(239, 68, 68, 0.95)');
-    fireGrad1.addColorStop(0.4, 'rgba(249, 115, 22, 0.75)');
-    fireGrad1.addColorStop(0.85, 'rgba(234, 88, 12, 0.4)');
-    fireGrad1.addColorStop(1, 'rgba(239, 68, 68, 0)');
-    ctx.fillStyle = fireGrad1;
-    ctx.beginPath();
-    ctx.moveTo(bx + 14, by - 14);
-    ctx.bezierCurveTo(bx + 80, by - flameSpread, bx + flameReach * 0.7, by - flameSpread * 0.9, bx + flameReach, by);
-    ctx.bezierCurveTo(bx + flameReach * 0.7, by + flameSpread * 0.9, bx + 80, by + flameSpread, bx + 14, by + 14);
-    ctx.closePath();
-    ctx.fill();
+    try {
+      const fireGrad1 = ctx.createRadialGradient(bx + 20, by, 10, bx + 110, by, flameReach);
+      fireGrad1.addColorStop(0, 'rgba(239, 68, 68, 0.95)');
+      fireGrad1.addColorStop(0.4, 'rgba(249, 115, 22, 0.75)');
+      fireGrad1.addColorStop(0.85, 'rgba(234, 88, 12, 0.4)');
+      fireGrad1.addColorStop(1, 'rgba(239, 68, 68, 0)');
+      ctx.fillStyle = fireGrad1;
+      ctx.beginPath();
+      ctx.moveTo(bx + 14, by - 14);
+      ctx.bezierCurveTo(bx + 80, by - flameSpread, bx + flameReach * 0.7, by - flameSpread * 0.9, bx + flameReach, by);
+      ctx.bezierCurveTo(bx + flameReach * 0.7, by + flameSpread * 0.9, bx + 80, by + flameSpread, bx + 14, by + 14);
+      ctx.closePath();
+      ctx.fill();
 
-    // Layer 2: Radiant Orange & Blazing Yellow Mid Flame
-    const fireGrad2 = ctx.createLinearGradient(bx + 14, by, bx + flameReach * 0.85, by);
-    fireGrad2.addColorStop(0, '#ffffff');
-    fireGrad2.addColorStop(0.2, '#fde047');
-    fireGrad2.addColorStop(0.65, '#f97316');
-    fireGrad2.addColorStop(1, 'rgba(249, 115, 22, 0)');
-    ctx.fillStyle = fireGrad2;
-    ctx.beginPath();
-    ctx.moveTo(bx + 18, by - 8);
-    ctx.bezierCurveTo(bx + 65, by - flameSpread * 0.6, bx + flameReach * 0.55, by - flameSpread * 0.5, bx + flameReach * 0.8, by);
-    ctx.bezierCurveTo(bx + flameReach * 0.55, by + flameSpread * 0.5, bx + 65, by + flameSpread * 0.6, bx + 18, by + 8);
-    ctx.closePath();
-    ctx.fill();
+      // Layer 2: Radiant Orange & Blazing Yellow Mid Flame
+      const fireGrad2 = ctx.createLinearGradient(bx + 14, by, bx + flameReach * 0.85, by);
+      fireGrad2.addColorStop(0, '#ffffff');
+      fireGrad2.addColorStop(0.2, '#fde047');
+      fireGrad2.addColorStop(0.65, '#f97316');
+      fireGrad2.addColorStop(1, 'rgba(249, 115, 22, 0)');
+      ctx.fillStyle = fireGrad2;
+      ctx.beginPath();
+      ctx.moveTo(bx + 18, by - 8);
+      ctx.bezierCurveTo(bx + 65, by - flameSpread * 0.6, bx + flameReach * 0.55, by - flameSpread * 0.5, bx + flameReach * 0.8, by);
+      ctx.bezierCurveTo(bx + flameReach * 0.55, by + flameSpread * 0.5, bx + 65, by + flameSpread * 0.6, bx + 18, by + 8);
+      ctx.closePath();
+      ctx.fill();
+    } catch(_) {}
 
     // Layer 3: White-Hot Ignition Core Jet Tip
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.ellipse(bx + 26, by, 14 + Math.sin(now / 35) * 4, 6, 0, 0, Math.PI * 2);
+    ctx.ellipse(bx + 26, by, Math.max(1, 14 + Math.sin(now / 35) * 4), 6, 0, 0, Math.PI * 2);
     ctx.fill();
 
     // 2. Swirling Fiery Sparks, Burning Embers & Fireballs
@@ -9291,23 +9297,26 @@
   // Divine Golden Light Beam for Aero & Lumos
   function drawHolyAura() {
     if(progress.selectedPet !== 'aero_lumos' || state !== State.PLAYING) return;
+    if(!bird || !Number.isFinite(bird.x) || !Number.isFinite(bird.y) || bird.y <= 0) return;
     const now = performance.now();
     ctx.save();
     const bx = bird.x, by = bird.y;
 
     // Golden Ray of Light descending from sky onto bird
-    const rayAlpha = 0.22 + Math.sin(now / 140) * 0.1;
-    const rayGrad = ctx.createLinearGradient(0, 0, 0, by);
-    rayGrad.addColorStop(0, `rgba(254, 240, 138, ${rayAlpha * 1.6})`);
-    rayGrad.addColorStop(1, 'rgba(254, 240, 138, 0)');
-    ctx.fillStyle = rayGrad;
-    ctx.beginPath();
-    ctx.moveTo(bx - 36, 0);
-    ctx.lineTo(bx + 36, 0);
-    ctx.lineTo(bx + 20, by);
-    ctx.lineTo(bx - 20, by);
-    ctx.closePath();
-    ctx.fill();
+    try {
+      const rayAlpha = 0.22 + Math.sin(now / 140) * 0.1;
+      const rayGrad = ctx.createLinearGradient(0, 0, 0, Math.max(1, by));
+      rayGrad.addColorStop(0, `rgba(254, 240, 138, ${rayAlpha * 1.6})`);
+      rayGrad.addColorStop(1, 'rgba(254, 240, 138, 0)');
+      ctx.fillStyle = rayGrad;
+      ctx.beginPath();
+      ctx.moveTo(bx - 36, 0);
+      ctx.lineTo(bx + 36, 0);
+      ctx.lineTo(bx + 20, by);
+      ctx.lineTo(bx - 20, by);
+      ctx.closePath();
+      ctx.fill();
+    } catch(_) {}
 
     // Holy Halo Ring above head
     ctx.strokeStyle = '#fde047';
@@ -9334,6 +9343,7 @@
   // Void Shadow Nebula & Dark Runes for Kuro & Void
   function drawShadowVortex() {
     if(progress.selectedPet !== 'kuro_void' || state !== State.PLAYING) return;
+    if(!bird || !Number.isFinite(bird.x) || !Number.isFinite(bird.y)) return;
     const now = performance.now();
     ctx.save();
     const bx = bird.x, by = bird.y;
@@ -9349,7 +9359,7 @@
     ctx.beginPath();
     for(let i = 0; i < 3; i++) {
       const a = (i * Math.PI * 2) / 3;
-      const sr = 23 + Math.sin(now / 110 + i) * 3.5;
+      const sr = Math.max(1, 23 + Math.sin(now / 110 + i) * 3.5);
       ctx.arc(Math.cos(a) * 6, Math.sin(a) * 6, sr, a, a + Math.PI * 0.7);
     }
     ctx.stroke();
@@ -9384,186 +9394,214 @@
 
       const bg = backgrounds[progress.selectedBackground] || backgrounds.sky;
       const sky = ctx.createLinearGradient(0, 0, 0, H);
-      sky.addColorStop(0, bg.top);
-      sky.addColorStop(1, bg.bottom);
+      sky.addColorStop(0, bg.top || '#72caed');
+      sky.addColorStop(1, bg.bottom || '#d3f3f4');
       ctx.fillStyle = sky;
       ctx.fillRect(0, 0, W, H);
 
       _step = 'clouds';
-      // Multi-layer Volumetric Fluffy Clouds with Realistic Parallax
-      const bgW = W + 240;
-      drawFluffyCloud(((cloudX * 0.35 + 20) % bgW) - 120, 68, 0.65, 0.48);
-      drawFluffyCloud(((cloudX * 0.35 + 195) % bgW) - 120, 96, 0.55, 0.42);
-      drawFluffyCloud(((cloudX * 0.75 + 0) % bgW) - 120, 118, 0.95, 0.88);
-      drawFluffyCloud(((cloudX * 0.75 + 175) % bgW) - 120, 178, 0.82, 0.84);
-      drawFluffyCloud(((cloudX * 1.1 + 85) % bgW) - 120, 235, 0.7, 0.38);
+      try {
+        const bgW = W + 240;
+        drawFluffyCloud(((cloudX * 0.35 + 20) % bgW) - 120, 68, 0.65, 0.48);
+        drawFluffyCloud(((cloudX * 0.35 + 195) % bgW) - 120, 96, 0.55, 0.42);
+        drawFluffyCloud(((cloudX * 0.75 + 0) % bgW) - 120, 118, 0.95, 0.88);
+        drawFluffyCloud(((cloudX * 0.75 + 175) % bgW) - 120, 178, 0.82, 0.84);
+        drawFluffyCloud(((cloudX * 1.1 + 85) % bgW) - 120, 235, 0.7, 0.38);
+      } catch(_) {}
 
       _step = 'hills';
-      drawHills();
+      try { drawHills(); } catch(_) {}
 
       _step = 'speedlines';
-      drawSupersonicSpeedlines();
+      try { drawSupersonicSpeedlines(); } catch(_) {}
 
       _step = 'holyAura';
-      drawHolyAura();
+      try { drawHolyAura(); } catch(_) {}
 
       _step = 'shadowVortex';
-      drawShadowVortex();
+      try { drawShadowVortex(); } catch(_) {}
 
       _step = 'stormClouds';
-      for(const c of stormClouds) drawStormCloud(c);
+      try { for(const c of stormClouds) drawStormCloud(c); } catch(_) {}
 
       _step = 'pipes';
-      for(const p of pipes) drawPipe(p);
+      for(const p of pipes) {
+        try { drawPipe(p); } catch(_) {}
+      }
+
       _step = 'coins';
-      for(const coin of coins) drawCoin(coin);
+      for(const coin of coins) {
+        try { drawCoin(coin); } catch(_) {}
+      }
+
       _step = 'powerups';
-      for(const p of powerups) drawPowerup(p);
+      for(const p of powerups) {
+        try { drawPowerup(p); } catch(_) {}
+      }
+
       _step = 'flyers';
-      for(const flyer of flyers) drawFlyer(flyer);
+      for(const flyer of flyers) {
+        try { drawFlyer(flyer); } catch(_) {}
+      }
+
       _step = 'enemies';
       for(const e of enemies) {
-        if(e.type === 'bird') drawEnemyBird(e);
-        else if(e.type === 'bee_swarm') drawBeeSwarm(e);
+        try {
+          if(e.type === 'bird') drawEnemyBird(e);
+          else if(e.type === 'bee_swarm') drawBeeSwarm(e);
+        } catch(_) {}
       }
 
       _step = 'shockwaves';
-      drawShockwaves();
+      try { drawShockwaves(); } catch(_) {}
 
       _step = 'phoenixFlames';
-      drawPhoenixFlames();
+      try { drawPhoenixFlames(); } catch(_) {}
 
       _step = 'laserBeams';
-      drawLaserBeams();
+      try { drawLaserBeams(); } catch(_) {}
 
       _step = 'lightningBolts';
-      drawLightningBolts();
+      try { drawLightningBolts(); } catch(_) {}
 
       _step = 'particles';
-      for(const q of particles) drawAuraParticle(q);
+      try {
+        for(const q of particles) drawAuraParticle(q);
+      } catch(_) {}
       ctx.globalAlpha = 1;
 
       _step = 'slowOverlay';
-      if(activePowerups.slow > 0) {
-        const frost = ctx.createRadialGradient(W / 2, H / 2, 100, W / 2, H / 2, 320);
-        frost.addColorStop(0, 'rgba(103, 232, 249, 0)');
-        frost.addColorStop(1, 'rgba(103, 232, 249, 0.22)');
-        ctx.fillStyle = frost;
-        ctx.fillRect(0, 0, W, H);
-      }
+      try {
+        if(activePowerups.slow > 0) {
+          const frost = ctx.createRadialGradient(W / 2, H / 2, 100, W / 2, H / 2, 320);
+          frost.addColorStop(0, 'rgba(103, 232, 249, 0)');
+          frost.addColorStop(1, 'rgba(103, 232, 249, 0.22)');
+          ctx.fillStyle = frost;
+          ctx.fillRect(0, 0, W, H);
+        }
+      } catch(_) {}
 
       _step = 'ground';
       drawGround();
 
       if(state !== State.MENU) {
         _step = 'afterimages';
-        for(const img of dashAfterimages) {
-          renderCustomBird(ctx, {
-            x: img.x, y: img.y, angle: img.angle, wing: img.wing,
-            skinId: progress.selected || 'classic',
-            hatId: progress.selectedHat || 'none',
-            outfitId: progress.selectedOutfit || 'none',
-            opacity: img.alpha * 0.55
-          });
-        }
+        try {
+          for(const img of dashAfterimages) {
+            renderCustomBird(ctx, {
+              x: img.x, y: img.y, angle: img.angle, wing: img.wing,
+              skinId: progress.selected || 'classic',
+              hatId: progress.selectedHat || 'none',
+              outfitId: progress.selectedOutfit || 'none',
+              opacity: img.alpha * 0.55
+            });
+          }
+        } catch(_) {}
 
         _step = 'drawBird';
         drawBird();
 
         if(currentMode === 'multiplayer' && window.multiplayerEngine) {
           _step = 'renderOpponents';
-          window.multiplayerEngine.renderOpponents(ctx, bird.x);
+          try { window.multiplayerEngine.renderOpponents(ctx, bird.x); } catch(_) {}
         }
 
         _step = 'babyBirds';
-        for(const baby of babyBirds) {
-          drawBabyBird(baby);
-        }
+        try {
+          for(const baby of babyBirds) drawBabyBird(baby);
+        } catch(_) {}
 
         // Draw Active Race Missiles
-        for(const m of raceMissiles) {
-          ctx.save();
-          ctx.translate(m.x, m.y);
-          ctx.rotate((m.angle !== undefined ? m.angle : 0) + Math.PI / 2);
-          ctx.fillStyle = '#dc2626';
-          ctx.beginPath();
-          ctx.arc(0, -4, 6, Math.PI, 0);
-          ctx.lineTo(6, 8); ctx.lineTo(-6, 8); ctx.closePath();
-          ctx.fill();
-          ctx.fillStyle = '#ffffff';
-          ctx.beginPath();
-          ctx.arc(0, 1, 2.5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = '#f97316';
-          ctx.fillRect(-4, 8, 8, 3);
-          ctx.restore();
-        }
+        try {
+          for(const m of raceMissiles) {
+            ctx.save();
+            ctx.translate(m.x, m.y);
+            ctx.rotate((m.angle !== undefined ? m.angle : 0) + Math.PI / 2);
+            ctx.fillStyle = '#dc2626';
+            ctx.beginPath();
+            ctx.arc(0, -4, 6, Math.PI, 0);
+            ctx.lineTo(6, 8); ctx.lineTo(-6, 8); ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(0, 1, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#f97316';
+            ctx.fillRect(-4, 8, 8, 3);
+            ctx.restore();
+          }
+        } catch(_) {}
 
         // Draw Active Race Banana / Oil Traps
-        for(const t of raceTraps) {
-          ctx.save();
-          ctx.translate(t.x, t.y);
-          ctx.rotate(t.rot || 0);
-          ctx.fillStyle = '#facc15';
-          ctx.beginPath();
-          ctx.arc(0, 2, 8, 0, Math.PI);
-          ctx.bezierCurveTo(-10, -6, -5, -11, 0, -3);
-          ctx.bezierCurveTo(5, -11, 10, -6, 0, 2);
-          ctx.fill();
-          ctx.strokeStyle = '#a16207';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-          ctx.restore();
-        }
+        try {
+          for(const t of raceTraps) {
+            ctx.save();
+            ctx.translate(t.x, t.y);
+            ctx.rotate(t.rot || 0);
+            ctx.fillStyle = '#facc15';
+            ctx.beginPath();
+            ctx.arc(0, 2, 8, 0, Math.PI);
+            ctx.bezierCurveTo(-10, -6, -5, -11, 0, -3);
+            ctx.bezierCurveTo(5, -11, 10, -6, 0, 2);
+            ctx.fill();
+            ctx.strokeStyle = '#a16207';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.restore();
+          }
+        } catch(_) {}
 
         // Draw Active Mega Fire Bombs
-        for(const b of raceBombs) {
-          ctx.save();
-          ctx.translate(b.x, b.y);
-          ctx.rotate(b.rot || 0);
-          ctx.fillStyle = '#1e293b';
-          ctx.beginPath();
-          ctx.arc(0, 0, b.r || 15, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = '#ef4444';
-          ctx.beginPath();
-          ctx.arc(b.r * 0.4, -b.r * 0.4, 4, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = '#fde047';
-          ctx.beginPath();
-          ctx.arc(b.r * 0.45, -b.r * 0.45, 2, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        }
+        try {
+          for(const b of raceBombs) {
+            ctx.save();
+            ctx.translate(b.x, b.y);
+            ctx.rotate(b.rot || 0);
+            ctx.fillStyle = '#1e293b';
+            ctx.beginPath();
+            ctx.arc(0, 0, b.r || 15, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc((b.r || 15) * 0.4, -(b.r || 15) * 0.4, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fde047';
+            ctx.beginPath();
+            ctx.arc((b.r || 15) * 0.45, -(b.r || 15) * 0.45, 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+        } catch(_) {}
 
         // Draw Active Tornado Cyclones
-        for(const tn of raceTornadoes) {
-          ctx.save();
-          ctx.translate(tn.x, tn.y);
-          ctx.rotate(tn.rot || 0);
-          ctx.strokeStyle = '#38bdf8';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.ellipse(0, -12, 16, 5, 0, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.ellipse(0, -3, 12, 4, 0, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.ellipse(0, 6, 8, 3, 0, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.ellipse(0, 13, 4, 1.8, 0, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.restore();
-        }
+        try {
+          for(const tn of raceTornadoes) {
+            ctx.save();
+            ctx.translate(tn.x, tn.y);
+            ctx.rotate(tn.rot || 0);
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.ellipse(0, -12, 16, 5, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.ellipse(0, -3, 12, 4, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.ellipse(0, 6, 8, 3, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.ellipse(0, 13, 4, 1.8, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+          }
+        } catch(_) {}
 
         // Draw 3-Second Race Respawn Overlay
         if(isRespawningRace) {
           ctx.save();
           ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
-          ctx.beginPath();
-          ctx.roundRect(W/2 - 110, 130, 220, 50, 12);
+          _rrPath(ctx, W/2 - 110, 130, 220, 50, 12);
           ctx.fill();
           ctx.strokeStyle = '#f87171';
           ctx.lineWidth = 2;
@@ -9581,7 +9619,7 @@
         }
 
         _step = 'floatingTexts';
-        drawFloatingTexts();
+        try { drawFloatingTexts(); } catch(_) {}
       }
     } catch(err) {
       // Tampilkan error step + pesan ke layar
