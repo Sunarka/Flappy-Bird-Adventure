@@ -1092,19 +1092,18 @@
     Number(progress.rankedScore) || 0
   );
   let best = classicBest, state = State.MENU, last = 0, started = false, score = 0,
-      pipes = [], coins = [], flyers = [], particles = [],
+      pipes = [], coins = [], particles = [],
       powerups = [], enemies = [], stormClouds = [],
       shockwaves = [], floatingTexts = [], lightningBolts = [],
       raceMissiles = [], raceTraps = [], raceBombs = [], raceTornadoes = [],
       isRespawningRace = false, raceRespawnTimer = 0,
-      spawn = 0, flyerSpawn = 0, trailSpawn = 0,
+      spawn = 0, trailSpawn = 0,
       powerupSpawnTimer = 0, enemySpawnTimer = 0, cloudSpawnTimer = 0,
       groundX = 0, cloudX = 0, shake = 0, overTimer = 0, lastGapY = 150, graceTimer = 0;
   let lives = 1, maxLives = 5, reviveCount = 0, reviveTimerInterval = null, reviveSecondsLeft = 5;
 
   // Active Dash Skill state
   let dashCooldown = 0, dashTimer = 0, dashAfterimages = [];
-  const DASH_COOLDOWN_MAX = 4.5;
 
   // 2 Anak Burung Pelindung Imut (Baby Guardian Birds)
   const babyBirds = [
@@ -5658,7 +5657,7 @@
   // Auto detects new versions deployed on GitHub Pages.
   // NEVER refreshes during active gameplay (only in Lobby/Menu).
   // =========================================================
-  const GAME_VERSION = '20.86';
+  const GAME_VERSION = '20.93';
   let pendingUpdateAvailable = false;
   let isUpdatingNow = false;
 
@@ -6029,12 +6028,6 @@
         e.x = -999;
       }
     });
-    flyers.forEach(f => {
-      if(f.x > bird.x - 100 && f.x < bird.x + 360) {
-        f.dead = true;
-        f.x = -999;
-      }
-    });
     stormClouds.forEach(c => {
       c.phase = 'fade';
       c.timer = 0.01;
@@ -6082,7 +6075,7 @@
     if(score > 0) {
       recordCurrentScore(score);
     }
-    score = 0; pipes = []; coins = []; flyers = []; particles = [];
+    score = 0; pipes = []; coins = []; particles = [];
     powerups = []; enemies = []; stormClouds = [];
     shockwaves = []; floatingTexts = [];
     raceMissiles = []; raceTraps = []; raceBombs = []; raceTornadoes = [];
@@ -6096,7 +6089,7 @@
     dashTimer = 0;
     dashAfterimages = [];
     graceTimer = 0;
-    spawn = 0; flyerSpawn = 0; trailSpawn = 0;
+    spawn = 0; trailSpawn = 0;
     powerupSpawnTimer = 0; enemySpawnTimer = 0; cloudSpawnTimer = 0;
     groundX = 0; shake = 0; started = false; lastGapY = 150;
     if(el.over) { el.over.classList.add('hidden'); el.over.classList.remove('visible'); }
@@ -6231,8 +6224,7 @@
       const shadowReach = 160;
       let closestTarget = null;
       let closestDist = shadowReach;
-      const allEnemies = [...enemies, ...flyers];
-      for(const e of allEnemies) {
+      for(const e of enemies) {
         if(!e.dead) {
           const dist = Math.hypot(e.x - bird.x, e.y - bird.y);
           if(dist < closestDist) { closestDist = dist; closestTarget = e; }
@@ -6438,7 +6430,7 @@
       });
     }
   }
-  function makeFlyer() { flyers.push({ x: W + 35, y: 125 + Math.random() * (H - GROUND - 205), r: 15, wing: Math.random() * 6, speed: 1.05 + Math.random() * .18 }); }
+
   function recordCurrentScore(s) {
     if(typeof s !== 'number' || s <= 0) return;
     if(currentMode === 'ranked') {
@@ -7763,23 +7755,6 @@
       }
     }
 
-    // Update Flyers (AABB Broadphase early-exit + In-place cleanup)
-    for(let i = flyers.length - 1; i >= 0; i--) {
-      const flyer = flyers[i];
-      flyer.x -= (speed * flyer.speed + 45 * slowFactor) * dt;
-      flyer.wing += dt * 12;
-      const dx = bird.x - flyer.x;
-      if(Math.abs(dx) < 32) {
-        const dy = bird.y - flyer.y;
-        if(Math.abs(dy) < 32 && !flyer.dead && Math.hypot(dx, dy) < bird.r * .72 + flyer.r * .72) {
-          handleHit(flyer);
-        }
-      }
-      if(flyer.x + flyer.r <= -10 || flyer.dead) {
-        flyers.splice(i, 1);
-      }
-    }
-
     // Update Enemies (Enemy Bird & Bee Swarm with randomized trajectory + In-place cleanup)
     for(let i = enemies.length - 1; i >= 0; i--) {
       const e = enemies[i];
@@ -7936,11 +7911,6 @@
     tc.arcTo(x,     y + h, x,     y,     rx);
     tc.arcTo(x,     y,     x + w, y,     rx);
     tc.closePath();
-  }
-
-  function rr(x, y, w, h, r, targetCtx = ctx) {
-    _rrPath(targetCtx, x, y, w, h, r);
-    targetCtx.fill();
   }
 
   function rrTo(targetCtx, x, y, w, h, r) {
@@ -8663,7 +8633,6 @@
       petSkillTimer += dt;
       if(petSkillTimer >= (petData.laserCooldown || 3.0)) {
         const laserTarget = enemies.find(e => !e.dead && e.x > bird.x + 10 && e.x < bird.x + 280) ||
-                            flyers.find(f => !f.dead && f.x > bird.x + 10 && f.x < bird.x + 280) ||
                             stormClouds.find(c => (c.phase === 'warn' || c.phase === 'strike') && c.targetX > bird.x + 10 && c.targetX < bird.x + 280);
         if(laserTarget) {
           petSkillTimer = 0;
@@ -8724,20 +8693,6 @@
             shake = 0.22;
           }
         }
-        for(const f of flyers) {
-          if(killCount >= maxKillPerBurst) break;
-          if(!f.dead && f.x > bird.x - 15 && f.x < bird.x + burnReach && Math.abs(f.y - bird.y) < 55) {
-            f.dead = true; f.x = -999;
-            killCount++;
-            audio.rocketSmash();
-            addScore();
-            floatingTexts.push({ x: f.x, y: f.y - 18, text: 'INCINERATED! +1', color: '#f97316', vy: -65, life: 0.8, maxLife: 0.8 });
-            makeParticles(f.x, f.y, 28, '#f97316');
-            makeParticles(f.x, f.y, 20, '#fde047');
-            shockwaves.push({ x: f.x, y: f.y, r: 8, maxR: 65, color: '#f97316', life: 0.35, maxLife: 0.35 });
-            shake = 0.22;
-          }
-        }
         for(const c of stormClouds) {
           if(killCount >= maxKillPerBurst) break;
           if((c.phase === 'warn' || c.phase === 'strike') && c.targetX > bird.x - 15 && c.targetX < bird.x + burnReach && Math.abs(c.y + 15 - bird.y) < 65) {
@@ -8765,11 +8720,6 @@
       for(const e of enemies) {
         if(!e.dead && e.x > bird.x - 25 && e.x < bird.x + 280) {
           activeTargets.push(e);
-        }
-      }
-      for(const f of flyers) {
-        if(!f.dead && f.x > bird.x - 25 && f.x < bird.x + 280) {
-          activeTargets.push(f);
         }
       }
       for(const c of stormClouds) {
@@ -9437,11 +9387,6 @@
       _step = 'powerups';
       for(const p of powerups) {
         try { drawPowerup(p); } catch(_) {}
-      }
-
-      _step = 'flyers';
-      for(const flyer of flyers) {
-        try { drawFlyer(flyer); } catch(_) {}
       }
 
       _step = 'enemies';
@@ -10499,38 +10444,6 @@
       }
     }
 
-    ctx.restore();
-  }
-
-  function drawFlyer(flyer) {
-    ctx.save();
-    ctx.translate(flyer.x, flyer.y);
-    ctx.scale(-1, 1);
-    ctx.fillStyle = '#e85d50';
-    ctx.beginPath();
-    ctx.ellipse(0, 0, flyer.r, flyer.r * .72, 0, 0, 7);
-    ctx.fill();
-    ctx.fillStyle = '#c83f43';
-    ctx.save();
-    ctx.rotate(Math.sin(flyer.wing || 0) * .55);
-    ctx.beginPath();
-    ctx.ellipse(-4, -8, 10, 5, -.45, 0, 7);
-    ctx.fill();
-    ctx.restore();
-    ctx.fillStyle = '#fff';
-    ctx.beginPath();
-    ctx.arc(6, -5, 4, 0, 7);
-    ctx.fill();
-    ctx.fillStyle = '#16365d';
-    ctx.beginPath();
-    ctx.arc(7, -5, 1.5, 0, 7);
-    ctx.fill();
-    ctx.fillStyle = '#ffbe45';
-    ctx.beginPath();
-    ctx.moveTo(14, 0);
-    ctx.lineTo(23, 4);
-    ctx.lineTo(14, 7);
-    ctx.fill();
     ctx.restore();
   }
 
