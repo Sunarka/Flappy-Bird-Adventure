@@ -69,18 +69,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.99">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.99">
-  <link rel="stylesheet" href="css/shop.css?v=20.99">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.99">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.99">
-  <link rel="stylesheet" href="css/store.css?v=20.99">
-  <link rel="stylesheet" href="css/ranked.css?v=20.99">
-  <link rel="stylesheet" href="css/social.css?v=20.99">
-  <link rel="stylesheet" href="css/splash.css?v=20.99">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.99">
+  <link rel="stylesheet" href="css/style.css?v=21.00">
+  <link rel="stylesheet" href="css/modern-icons.css?v=21.00">
+  <link rel="stylesheet" href="css/shop.css?v=21.00">
+  <link rel="stylesheet" href="css/shop-extra.css?v=21.00">
+  <link rel="stylesheet" href="css/mode-picker.css?v=21.00">
+  <link rel="stylesheet" href="css/store.css?v=21.00">
+  <link rel="stylesheet" href="css/ranked.css?v=21.00">
+  <link rel="stylesheet" href="css/social.css?v=21.00">
+  <link rel="stylesheet" href="css/splash.css?v=21.00">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=21.00">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.99">
+  <link rel="stylesheet" href="css/multiplayer.css?v=21.00">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -1043,19 +1043,19 @@
                 </button>
               </div>
 
-              <!-- Right Column: Cloud Save Benefits Card -->
+              <!-- Right Column: Benefits Card -->
               <div class="gp-auth-col-right">
                 <div class="gp-auth-benefits-card">
                   <div class="benefits-badge">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="vertical-align:middle;margin-right:3px;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
-                    KEUNTUNGAN CLOUD SAVE
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="vertical-align:middle;margin-right:3px;"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/></svg>
+                    MANFAAT HUBUNGKAN AKUN
                   </div>
                   <ul class="benefits-list">
-                    <li><span class="b-icon">🛡️</span> <span>Koin, Skin & Pet aman tersimpan permanen.</span></li>
+                    <li><span class="b-icon">🛡️</span> <span>Koin, Skin & Pet tersimpan permanen.</span></li>
                     <li><span class="b-icon">🏆</span> <span>Skor otomatis masuk ke Leaderboard Global.</span></li>
                     <li><span class="b-icon">⚔️</span> <span>Bisa duel 1v1 Mabar dan Chat komunitas.</span></li>
                   </ul>
-                  <div class="benefits-status-tag">Status saat ini: <b style="color:#fbbf24;">Mode Tamu (Lokal)</b></div>
+                  <div class="benefits-status-tag">Status saat ini: <b style="color:#fbbf24;">Mode Tamu (Belum Login)</b></div>
                 </div>
               </div>
             </div>
@@ -1064,11 +1064,11 @@
             <div id="googleProfileCard" class="gp-profile-card-grid hidden">
               <!-- Left Column: Connected Account Info -->
               <div class="gp-logged-info-card">
-                <div class="friend-section-title" style="margin:0 0 6px 0;">STATUS KONEKSI AKUN</div>
+                <div class="friend-section-title" style="margin:0 0 6px 0;">INFORMASI AKUN PEMAIN</div>
                 <div class="gp-logged-header">
-                  <span class="gp-cloud-icon">☁️</span>
+                  <span class="gp-cloud-icon">🛡️</span>
                   <div class="gp-logged-meta">
-                    <span class="gp-logged-title">TERHUBUNG KE CLOUD</span>
+                    <span class="gp-logged-title">AKUN TERHUBUNG</span>
                     <span class="gp-logged-email" id="gpUserEmail">user@gmail.com</span>
                   </div>
                 </div>
@@ -1078,16 +1078,16 @@
                     <span class="val green">✓ TERVERIFIKASI</span>
                   </div>
                   <div class="gp-logged-stat">
-                    <span class="lbl">PENYIMPANAN</span>
-                    <span class="val blue">REAL-TIME CLOUD</span>
+                    <span class="lbl">DATA GAME</span>
+                    <span class="val blue">TERSIMPAN AMAN</span>
                   </div>
                 </div>
-                <div class="gp-sync-hint">Semua progres bermain, skor ranked, skin & inventori tersimpan aman di Google Firebase Cloud.</div>
+                <div class="gp-sync-hint">Semua progres bermain, koin, skin & rekor skor Anda tersimpan aman secara otomatis.</div>
               </div>
 
               <!-- Right Column: Account Management Actions -->
               <div class="gp-logged-actions-card">
-                <div class="friend-section-title" style="margin:0 0 6px 0;">TINDAKAN AKUN</div>
+                <div class="friend-section-title" style="margin:0 0 6px 0;">PENGATURAN AKUN</div>
                 <button class="primary gp-btn-sync" id="gpAuthActionBtn" type="button">
                   <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0 0 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 0 0 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
                   SIMPAN PERUBAHAN
@@ -1999,13 +1999,13 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.99"></script>
-  <script src="js/admob-config.js?v=20.99"></script>
-  <script src="js/shop-data.js?v=20.99"></script>
-  <script src="js/profanity-filter.js?v=20.99"></script>
-  <script src="js/audio.js?v=20.99"></script>
-  <script src="js/multiplayer.js?v=20.99"></script>
-  <script src="js/social.js?v=20.99"></script>
-  <script src="js/script.js?v=20.99"></script>
+  <script src="js/firebase-config.js?v=21.00"></script>
+  <script src="js/admob-config.js?v=21.00"></script>
+  <script src="js/shop-data.js?v=21.00"></script>
+  <script src="js/profanity-filter.js?v=21.00"></script>
+  <script src="js/audio.js?v=21.00"></script>
+  <script src="js/multiplayer.js?v=21.00"></script>
+  <script src="js/social.js?v=21.00"></script>
+  <script src="js/script.js?v=21.00"></script>
 </body>
 </html>

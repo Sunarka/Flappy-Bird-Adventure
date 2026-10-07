@@ -13241,22 +13241,21 @@
     if(!err) return;
     console.warn(`[${providerName} Sign-In notice]:`, err.code, err.message);
     if(err.code === 'auth/unauthorized-domain') {
-      const currentDomain = window.location.hostname || '127.0.0.1';
       showGameDialog({
-        title: 'Domain Belum Diizinkan',
-        html: `<p>Domain <b>"${currentDomain}"</b> belum terdaftar di Authorized Domains Firebase.</p><div class="dialog-info-card"><div class="dialog-info-row"><span>Solusi:</span><b>Tambah Domain di Console</b></div></div><p style="font-size:11px;color:#94a3b8;">Tips: Anda juga bisa klik <b>MASUK SEBAGAI TAMU</b> untuk langsung bermain sekarang!</p>`,
+        title: 'Layanan Login',
+        html: `<p>Layanan login sedang tidak tersedia pada domain/jaringan ini.</p><p style="font-size:11px;color:#94a3b8;margin-top:6px;">Tips: Anda tetap bisa bermain dengan lancar melalui <b>MODE TAMU</b>!</p>`,
         type: 'warning'
       });
     } else if(err.code === 'auth/configuration-not-found' || err.code === 'auth/operation-not-allowed') {
       showGameDialog({
         title: 'Metode Login Belum Aktif',
-        html: `<p>Login ${providerName} belum diaktifkan di Firebase Console.</p><p style="font-size:11px;color:#94a3b8;margin-top:6px;">Tips: Anda juga bisa klik <b>MASUK SEBAGAI TAMU</b> untuk langsung bermain sekarang!</p>`,
+        html: `<p>Login ${providerName} sedang dalam pemeliharaan.</p><p style="font-size:11px;color:#94a3b8;margin-top:6px;">Tips: Anda tetap bisa bermain dengan lancar melalui <b>MODE TAMU</b>!</p>`,
         type: 'warning'
       });
     } else if(err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
       showGameDialog({
         title: 'Gagal Terhubung',
-        html: `<p>${err.message || `Gagal terhubung ke akun ${providerName}. Pastikan koneksi internet aktif.`}</p>`,
+        html: `<p>${err.message || `Gagal terhubung ke akun ${providerName}. Pastikan koneksi internet Anda aktif.`}</p>`,
         type: 'warning'
       });
     }
