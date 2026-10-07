@@ -111,7 +111,11 @@ canvas {
 .game-dialog-modal.hidden,
 .gacha-modal.hidden,
 .gacha-result-modal.hidden,
-.mp-over-modal.hidden {
+.mp-over-modal.hidden,
+.settings-modal-card.hidden,
+#settingsModal.hidden,
+[id].modal.hidden,
+section.modal.hidden {
   display: none !important;
 }
 
@@ -1331,8 +1335,8 @@ button.close:active,
 /* =========================================================
    SETTINGS MODAL: COMPACT LANDSCAPE 2-COLUMN NO-SCROLL
    ========================================================= */
-#settingsModal.modal,
-.settings-modal-card {
+#settingsModal.modal:not(.hidden),
+.settings-modal-card:not(.hidden) {
   position: relative !important;
   width: min(560px, 94vw) !important;
   max-width: 560px !important;
@@ -1351,6 +1355,11 @@ button.close:active,
   box-sizing: border-box !important;
   display: flex !important;
   flex-direction: column !important;
+}
+
+#settingsModal.hidden,
+.settings-modal-card.hidden {
+  display: none !important;
 }
 
 #settingsModal .close {

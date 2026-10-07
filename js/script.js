@@ -5608,7 +5608,7 @@
     const layer = el.layer || $('modalLayer');
     if(layer) {
       layer.classList.remove('hidden');
-      document.querySelectorAll('.modal').forEach(x => {
+      document.querySelectorAll('.modal, .modal-layer > section, .modal-layer > div').forEach(x => {
         x.classList.add('hidden');
         x.style.display = 'none';
       });
@@ -5624,7 +5624,7 @@
     const layer = el.layer || $('modalLayer');
     if(layer) {
       layer.classList.add('hidden');
-      document.querySelectorAll('.modal').forEach(x => {
+      document.querySelectorAll('.modal, .modal-layer > section, .modal-layer > div').forEach(x => {
         x.classList.add('hidden');
         x.style.display = 'none';
       });
@@ -5635,6 +5635,8 @@
     if(mpModal) { mpModal.classList.add('hidden'); mpModal.style.display = 'none'; }
     const reviveModal = el.reviveModal || $('reviveModal');
     if(reviveModal) { reviveModal.classList.add('hidden'); reviveModal.style.display = 'none'; }
+    const settingsModal = el.settings || $('settingsModal');
+    if(settingsModal) { settingsModal.classList.add('hidden'); settingsModal.style.display = 'none'; }
 
     if (activeDialogResolver) {
       const res = activeDialogResolver;
