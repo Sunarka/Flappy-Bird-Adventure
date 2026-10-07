@@ -1670,20 +1670,30 @@
 
         <!-- WhatsApp-Style Bottom Chat Container -->
         <div class="mlbb-wa-bottom-container">
-          <!-- Quick Presets Drawer (Pop-up above input) -->
+          <!-- Drawer (Pop-up above input: Emotes / Presets) -->
           <div class="mlbb-wa-drawer hidden" id="mlbbEmojiDrawer">
             <div class="mlbb-wa-drawer-header">
-              <div class="mlbb-wa-drawer-title">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="#38bdf8"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
-                <span>PESAN CEPAT</span>
+              <div class="mlbb-wa-drawer-tabs">
+                <button type="button" class="mlbb-wa-drawer-tab active" id="mlbbDrawerTabEmotes">
+                  <span>🐥 STIKER EMOTE</span>
+                </button>
+                <button type="button" class="mlbb-wa-drawer-tab" id="mlbbDrawerTabPresets">
+                  <span>⚡ PESAN CEPAT</span>
+                </button>
               </div>
               <button type="button" class="mlbb-wa-drawer-close" id="mlbbDrawerCloseBtn" title="Tutup">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
               </button>
             </div>
 
-            <!-- Quick Preset Replies Panel with Vector Icons -->
-            <div class="mlbb-wa-drawer-panel" id="mlbbPresetsTabContent">
+            <!-- Panel 1: Cute Bird Emotes & Reactions -->
+            <div class="mlbb-wa-drawer-panel" id="mlbbEmotesTabContent">
+              <div class="mlbb-wa-emotes-grid" id="mlbbCuteEmotesGrid"></div>
+              <div class="mlbb-wa-emoji-quick-bar" id="mlbbPopularEmojiBar"></div>
+            </div>
+
+            <!-- Panel 2: Quick Preset Replies Panel with Vector Icons -->
+            <div class="mlbb-wa-drawer-panel hidden" id="mlbbPresetsTabContent">
               <div class="mlbb-wa-presets-grid" id="mlbbQuickPresetsGrid"></div>
             </div>
           </div>
@@ -1695,9 +1705,14 @@
               <!-- Text Input Field -->
               <input type="text" id="mlbbChatInput" class="mlbb-wa-text-input" placeholder="Ketik pesan..." maxlength="120" autocomplete="off">
 
-              <!-- Quick Presets Button inside pill (Right) -->
+              <!-- Emote / Sticker Button inside pill -->
+              <button type="button" class="mlbb-wa-btn-icon mlbb-wa-emote-btn" id="mlbbChatEmoteBtn" title="Stiker & Emote">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="#facc15"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
+              </button>
+
+              <!-- Quick Presets Button inside pill -->
               <button type="button" class="mlbb-wa-btn-icon mlbb-wa-quick-btn" id="mlbbChatQuickBtn" title="Pesan Cepat">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="#38bdf8"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="#38bdf8"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
               </button>
             </div>
 

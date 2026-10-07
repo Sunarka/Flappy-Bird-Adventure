@@ -4115,12 +4115,15 @@
   function saveGPProfile() {
     gpProfile.primaryKey = getPrimaryAccountKey();
     gpProfile.id = gpProfile.primaryKey;
+    const tierObj = typeof getRankTier === 'function' ? getRankTier(rankedBest) : { name: 'BRONZE I' };
+    gpProfile.tier = tierObj.name || 'BRONZE I';
+    gpProfile.rankedBest = rankedBest || 0;
+    gpProfile.score = rankedBest || 0;
     storage.set('skyFlappyGPProfile', gpProfile);
 
     const primaryKey = gpProfile.primaryKey;
     if(gpProfile.googleUid || gpProfile.email) {
       const accountsMap = storage.get('skyFlappyAccountsMap', {});
-      const tierObj = typeof getRankTier === 'function' ? getRankTier(rankedBest) : { name: 'BRONZE I' };
       const accData = {
         primaryKey: primaryKey,
         uid: gpProfile.googleUid || '',
@@ -4548,6 +4551,8 @@
     };
   }
   window.getRankTier = getRankTier;
+  window.getRankedBestScore = () => typeof rankedBest !== 'undefined' ? (rankedBest || 0) : (storage.get('skyFlappyRankedBest', 0));
+  window.getCurrentRankTier = () => typeof getRankTier === 'function' ? getRankTier(typeof rankedBest !== 'undefined' ? (rankedBest || 0) : 0) : { name: 'BRONZE I', id: 'bronze' };
 
   function getAvatarRankBorderClass(scoreOrTier) {
     if(!scoreOrTier) return 'rank-border-bronze';

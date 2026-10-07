@@ -543,10 +543,96 @@
       this.bindChatEvents();
     }
 
+    getMyLiveTierName() {
+      try {
+        let score = 0;
+        if (typeof window.getRankedBestScore === 'function') {
+          score = window.getRankedBestScore();
+        } else if (this.myProfile && (typeof this.myProfile.rankedBest === 'number' || typeof this.myProfile.score === 'number')) {
+          score = this.myProfile.rankedBest || this.myProfile.score || 0;
+        }
+        if (typeof window.getRankTier === 'function') {
+          const tierObj = window.getRankTier(score);
+          if (tierObj && tierObj.name) return tierObj.name;
+        }
+        if (this.myProfile && this.myProfile.tier) return this.myProfile.tier;
+      } catch(_) {}
+      return 'BRONZE I';
+    }
+
     initWhatsAppEmojiDrawer() {
       const presetsGrid = document.getElementById('mlbbQuickPresetsGrid');
+      const emotesGrid = document.getElementById('mlbbCuteEmotesGrid');
+      const emojiBar = document.getElementById('mlbbPopularEmojiBar');
+      const tabEmotes = document.getElementById('mlbbDrawerTabEmotes');
+      const tabPresets = document.getElementById('mlbbDrawerTabPresets');
+      const panelEmotes = document.getElementById('mlbbEmotesTabContent');
+      const panelPresets = document.getElementById('mlbbPresetsTabContent');
 
-      // Populate Quick Presets Grid with crisp vector SVG icons
+      // 1. Populate Cute Bird Stickers Grid
+      if (emotesGrid && !emotesGrid.hasChildNodes()) {
+        CUTE_BIRD_EMOTES.forEach(emote => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'mlbb-wa-sticker-item';
+          btn.title = emote.title;
+          btn.innerHTML = emote.render(30);
+          btn.onclick = (e) => {
+            e.preventDefault();
+            if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+            this.sendCurrentChatMessage(`[BIRD_EMOTE:${emote.id}]`);
+            this.togglePresetsDrawer(false);
+          };
+          emotesGrid.appendChild(btn);
+        });
+      }
+
+      // 2. Populate Popular Reactions Bar
+      if (emojiBar && !emojiBar.hasChildNodes()) {
+        const EMOJIS = ['🔥', '❤️', '👍', '😂', '😎', '🎉', '💀', '✨', '😭', '👏', '🚀', '⚔️'];
+        EMOJIS.forEach(emo => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'mlbb-wa-emoji-item';
+          btn.textContent = emo;
+          btn.onclick = (e) => {
+            e.preventDefault();
+            if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+            const input = document.getElementById('mlbbChatInput');
+            if (input) {
+              input.value += emo;
+              input.focus();
+            }
+          };
+          emojiBar.appendChild(btn);
+        });
+      }
+
+      // 3. Tab switching
+      const switchDrawerTab = (targetTab) => {
+        const isEmotes = targetTab === 'emotes';
+        if (tabEmotes) tabEmotes.classList.toggle('active', isEmotes);
+        if (tabPresets) tabPresets.classList.toggle('active', !isEmotes);
+        if (panelEmotes) panelEmotes.classList.toggle('hidden', !isEmotes);
+        if (panelPresets) panelPresets.classList.toggle('hidden', isEmotes);
+      };
+
+      if (tabEmotes) {
+        tabEmotes.onclick = (e) => {
+          e.preventDefault();
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+          switchDrawerTab('emotes');
+        };
+      }
+      if (tabPresets) {
+        tabPresets.onclick = (e) => {
+          e.preventDefault();
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+          switchDrawerTab('presets');
+        };
+      }
+
+      // 4. Populate Quick Presets Grid with crisp vector SVG icons
       if (presetsGrid && !presetsGrid.hasChildNodes()) {
         const PRESETS = [
           {
@@ -615,11 +701,22 @@
       }
     }
 
-    togglePresetsDrawer(forceState) {
+    togglePresetsDrawer(forceState, initialTab = null) {
       const drawer = document.getElementById('mlbbEmojiDrawer');
       if (!drawer) return;
       const shouldOpen = typeof forceState === 'boolean' ? forceState : drawer.classList.contains('hidden');
       drawer.classList.toggle('hidden', !shouldOpen);
+      if (shouldOpen && initialTab) {
+        const isEmotes = initialTab === 'emotes';
+        const tabEmotes = document.getElementById('mlbbDrawerTabEmotes');
+        const tabPresets = document.getElementById('mlbbDrawerTabPresets');
+        const panelEmotes = document.getElementById('mlbbEmotesTabContent');
+        const panelPresets = document.getElementById('mlbbPresetsTabContent');
+        if (tabEmotes) tabEmotes.classList.toggle('active', isEmotes);
+        if (tabPresets) tabPresets.classList.toggle('active', !isEmotes);
+        if (panelEmotes) panelEmotes.classList.toggle('hidden', !isEmotes);
+        if (panelPresets) panelPresets.classList.toggle('hidden', isEmotes);
+      }
     }
 
     toggleEmojiDrawer(forceState) {
@@ -662,13 +759,23 @@
         };
       }
 
+      // Emote / Stickers Button (inside pill)
+      const emoteBtn = document.getElementById('mlbbChatEmoteBtn');
+      if (emoteBtn) {
+        emoteBtn.onclick = (e) => {
+          e.preventDefault();
+          if (window.audio && typeof window.audio.click === 'function') window.audio.click();
+          this.togglePresetsDrawer(undefined, 'emotes');
+        };
+      }
+
       // Quick Presets Button (inside pill)
       const quickBtn = document.getElementById('mlbbChatQuickBtn');
       if (quickBtn) {
         quickBtn.onclick = (e) => {
           e.preventDefault();
           if (window.audio && typeof window.audio.click === 'function') window.audio.click();
-          this.togglePresetsDrawer();
+          this.togglePresetsDrawer(undefined, 'presets');
         };
       }
 
@@ -678,6 +785,10 @@
           const text = input ? input.value.trim() : '';
           if (!text) return;
           if (input) input.value = '';
+          this.togglePresetsDrawer(false);
+          this.sendCurrentChatMessage(text);
+        };
+      }
           this.togglePresetsDrawer(false);
           this.sendCurrentChatMessage(text);
         };
@@ -838,14 +949,15 @@
                 let safeSenderName = msg.senderName || 'Pemain';
                 if (typeof window.sanitizePlayerName === 'function') safeSenderName = window.sanitizePlayerName(safeSenderName);
 
+                const senderTier = isMe ? this.getMyLiveTierName() : (msg.senderTier || 'BRONZE I');
+                const borderClass = typeof window.getAvatarRankBorderClass === 'function' ? window.getAvatarRankBorderClass(senderTier) : 'rank-border-bronze';
+
                 const row = document.createElement('div');
                 row.className = `mlbb-gm-row ${isMe ? 'is-me' : ''}`;
                 
                 const avSvg = typeof window.getCuteAvatarSvg === 'function'
                   ? window.getCuteAvatarSvg(msg.senderAvatar || 'chick_yellow', 24)
                   : '<svg viewBox="0 0 24 24" width="24" height="24" fill="#38bdf8"><circle cx="12" cy="12" r="10"/></svg>';
-
-                const borderClass = typeof window.getAvatarRankBorderClass === 'function' ? window.getAvatarRankBorderClass(msg.senderTier || 'bronze') : 'rank-border-bronze';
 
                 row.innerHTML = `
                   <div class="mlbb-gm-avatar ${borderClass}" title="Lihat Profil ${this.escapeHtml(safeSenderName)}">
@@ -854,7 +966,7 @@
                   <div class="mlbb-gm-content">
                     <div class="mlbb-gm-meta">
                       <span class="mlbb-gm-name">${this.escapeHtml(safeSenderName)}</span>
-                      <span class="mlbb-gm-tier">${this.escapeHtml(msg.senderTier || 'BRONZE')}</span>
+                      <span class="mlbb-gm-tier">${this.escapeHtml(senderTier)}</span>
                       <span class="mlbb-gm-time">${timeStr}</span>
                     </div>
                     <div class="mlbb-gm-bubble">${contentHtml}</div>
@@ -1112,11 +1224,12 @@
       } else {
         // Send to GLOBAL chat
         try {
+          const liveTier = this.getMyLiveTierName();
           await this.db.collection('flappy_global_chat').add({
             senderKey: this.myKey,
             senderName: myCleanName,
             senderAvatar: this.myProfile.avatar || 'chick_yellow',
-            senderTier: this.myProfile.tier || 'BRONZE I',
+            senderTier: liveTier,
             text: cleanText,
             timestamp: Date.now()
           });
@@ -1143,6 +1256,9 @@
       }
       this.myKey = primaryKey;
       this.myProfile = profile || {};
+      if (this.myProfile) {
+        this.myProfile.tier = this.myProfile.tier || this.getMyLiveTierName();
+      }
       this.startListeners();
       this.refreshRequests();
       this.initLobbyChat();

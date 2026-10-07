@@ -1491,12 +1491,8 @@
 }
 
 .mlbb-gm-row.is-me .mlbb-gm-time::after {
-  content: '✓✓';
-  color: #53bdeb;
-  font-size: 9px;
-  letter-spacing: -1.5px;
-  font-weight: 900;
-  margin-left: 2px;
+  content: '';
+  display: none !important;
 }
 
 .mlbb-gm-bubble {
@@ -1630,19 +1626,42 @@
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  padding: 4px 10px !important;
+  padding: 3px 8px !important;
   background: #182229 !important;
   border-bottom: 1px solid #223547 !important;
   flex-shrink: 0 !important;
+  gap: 6px !important;
 }
 
-.mlbb-wa-drawer-title {
+.mlbb-wa-drawer-tabs {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.mlbb-wa-drawer-tab {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: #8696a0 !important;
+  font: 800 10px/1 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 6px !important;
-  font: 900 10.5px/1 'Trebuchet MS', Arial, sans-serif !important;
+  gap: 4px !important;
+  transition: all 0.15s ease !important;
+}
+
+.mlbb-wa-drawer-tab:hover {
+  color: #e9edef !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.mlbb-wa-drawer-tab.active {
   color: #38bdf8 !important;
-  letter-spacing: 0.5px !important;
+  background: rgba(56, 189, 248, 0.15) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
 }
 
 .mlbb-wa-drawer-close {
@@ -1658,6 +1677,7 @@
   border-radius: 50% !important;
   transition: all 0.15s !important;
   padding: 0 !important;
+  margin-left: auto !important;
 }
 
 .mlbb-wa-drawer-close:hover {
@@ -1668,13 +1688,74 @@
 .mlbb-wa-drawer-panel {
   padding: 6px 8px !important;
   overflow-y: auto !important;
-  max-height: 88px !important;
+  max-height: 105px !important;
   scrollbar-width: thin !important;
   scrollbar-color: #2a3942 transparent !important;
 }
 
 .mlbb-wa-drawer-panel.hidden {
   display: none !important;
+}
+
+/* Cute Emotes & Stickers Grid */
+.mlbb-wa-emotes-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.mlbb-wa-sticker-item {
+  width: 38px !important;
+  height: 38px !important;
+  background: #182229 !important;
+  border: 1.5px solid #2a3942 !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: transform 0.15s ease, border-color 0.15s, background 0.15s !important;
+  padding: 2px !important;
+  box-sizing: border-box !important;
+}
+
+.mlbb-wa-sticker-item:hover {
+  transform: scale(1.15) translateY(-2px) !important;
+  border-color: #38bdf8 !important;
+  background: #202c33 !important;
+  box-shadow: 0 4px 10px rgba(56, 189, 248, 0.3) !important;
+}
+
+.mlbb-wa-sticker-item:active {
+  transform: scale(0.95) !important;
+}
+
+.mlbb-wa-emoji-quick-bar {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+  margin-top: 6px !important;
+  padding-top: 6px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  width: 100% !important;
+}
+
+.mlbb-wa-emoji-item {
+  background: #182229 !important;
+  border: 1px solid #2a3942 !important;
+  border-radius: 8px !important;
+  font-size: 16px !important;
+  line-height: 1 !important;
+  padding: 4px 7px !important;
+  cursor: pointer !important;
+  transition: all 0.12s ease !important;
+}
+
+.mlbb-wa-emoji-item:hover {
+  transform: scale(1.18) !important;
+  border-color: #38bdf8 !important;
+  background: #202c33 !important;
 }
 
 /* Quick Presets Grid */
