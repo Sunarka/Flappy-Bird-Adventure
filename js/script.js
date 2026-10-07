@@ -2493,7 +2493,6 @@
   function shopCatalog() {
     switch(shopCategory) {
       case 'bird': return skins;
-      case 'pet': return petsCatalog;
       case 'booster': return boosters;
       case 'aura': return auras;
       case 'hat': return hats;
@@ -13620,7 +13619,15 @@
     });
   }
   bindClick('settingsBtn', () => { audio.click(); showModal(el.settings); });
-  bindClick('shopBtn', () => { audio.click(); syncPreviewLoadout(); updateCoins(); renderShop(); showModal(el.shop); startShopShowcase(); });
+  bindClick('shopBtn', () => {
+    audio.click();
+    if (shopCategory === 'pet') shopCategory = 'bird';
+    syncPreviewLoadout();
+    updateCoins();
+    renderShop();
+    showModal(el.shop);
+    startShopShowcase();
+  });
   document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => { audio.click(); closeModal(); });
   document.addEventListener('click', e => {
     const closeBtn = e.target.closest('[data-close]');
@@ -15635,16 +15642,160 @@
   }
   window.openDailyCheckinModal = openDailyCheckinModal;
 
+  let selectedPetDetailId = 'none';
+
+  function renderPetCompanionModal() {
+    const grid = $('petListGrid');
+    if (!grid) return;
+
+    if (!selectedPetDetailId || !petsCatalog[selectedPetDetailId]) {
+      selectedPetDetailId = progress.selectedPet || 'none';
+    }
+
+    const currentEquipped = progress.selectedPet || 'none';
+    const unlockedList = Array.isArray(progress.petUnlocked) ? progress.petUnlocked : ['none'];
+
+    grid.innerHTML = Object.entries(petsCatalog).map(([id, item]) => {
+      const isOwned = (id === 'none') || unlockedList.includes(id);
+      const isEquipped = currentEquipped === id;
+      const isSelected = selectedPetDetailId === id;
+      const iconSvg = getShopItemSvg('pet', id, item);
+      const statusText = isEquipped ? 'TERPASANG' : (isOwned ? 'MILIK' : 'GACHA');
+      const statusClass = isEquipped ? 'equipped' : (isOwned ? 'owned' : 'locked');
+
+      return `
+        <div class="pet-grid-card ${isSelected ? 'active' : ''} ${isEquipped ? 'equipped-now' : ''}" data-pet-id="${id}">
+          <div class="pet-grid-card-icon">${iconSvg}</div>
+          <div class="pet-grid-card-name" title="${item.name}">${item.name.split(' (')[0]}</div>
+          <div class="pet-grid-card-status ${statusClass}">${statusText}</div>
+        </div>
+      `;
+    }).join('');
+
+    // Attach click listeners to grid cards
+    grid.querySelectorAll('.pet-grid-card').forEach(card => {
+      card.addEventListener('click', () => {
+        if (audio) audio.click();
+        selectedPetDetailId = card.dataset.petId;
+        updatePetDetailCard();
+        grid.querySelectorAll('.pet-grid-card').forEach(c => {
+          c.classList.toggle('active', c.dataset.petId === selectedPetDetailId);
+        });
+      });
+    });
+
+    updatePetDetailCard();
+  }
+
+  function updatePetDetailCard() {
+    const item = petsCatalog[selectedPetDetailId] || petsCatalog.none;
+    const currentEquipped = progress.selectedPet || 'none';
+    const unlockedList = Array.isArray(progress.petUnlocked) ? progress.petUnlocked : ['none'];
+    const isOwned = (selectedPetDetailId === 'none') || unlockedList.includes(selectedPetDetailId);
+    const isEquipped = currentEquipped === selectedPetDetailId;
+
+    const elName = $('petDetailName');
+    const elRarity = $('petRarityBadge');
+    const elSkillName = $('petSkillName');
+    const elSkillDesc = $('petSkillDesc');
+    const elEquipBtn = $('petEquipBtn');
+    const elGachaBtn = $('petGachaCtaBtn');
+
+    if (elName) elName.textContent = item.name;
+    if (elRarity) {
+      const rarity = item.rarity || 'common';
+      elRarity.textContent = rarity.toUpperCase();
+      elRarity.className = 'pet-rarity-badge ' + rarity.toLowerCase();
+    }
+    if (elSkillName) elSkillName.textContent = item.skillName || 'TANPA SKILL';
+    if (elSkillDesc) elSkillDesc.textContent = item.skillDesc || item.desc || 'Bermain kasual tanpa pet pendamping.';
+
+    if (elEquipBtn) {
+      if (isEquipped) {
+        elEquipBtn.style.display = 'block';
+        elEquipBtn.disabled = true;
+        elEquipBtn.textContent = 'TERPASANG';
+      } else if (isOwned) {
+        elEquipBtn.style.display = 'block';
+        elEquipBtn.disabled = false;
+        elEquipBtn.textContent = 'GUNAKAN PET INI';
+      } else {
+        elEquipBtn.style.display = 'none';
+      }
+    }
+
+    if (elGachaBtn) {
+      elGachaBtn.style.display = isOwned ? 'none' : 'block';
+    }
+
+    drawPetDetailShowcase(selectedPetDetailId, item);
+  }
+
+  function drawPetDetailShowcase(id, item) {
+    const cvs = $('petShowcaseCanvas');
+    if (!cvs) return;
+    const sCtx = cvs.getContext('2d');
+    sCtx.clearRect(0, 0, cvs.width, cvs.height);
+
+    if (id === 'none' || !item || !item.baby1) {
+      sCtx.font = '900 11px Trebuchet MS, Arial, sans-serif';
+      sCtx.fillStyle = '#94a3b8';
+      sCtx.textAlign = 'center';
+      sCtx.fillText('TANPA PET PENDAMPING', cvs.width / 2, cvs.height / 2 + 4);
+      return;
+    }
+
+    const bX = cvs.width / 2, bY = cvs.height / 2;
+    drawBabyBird({
+      x: bX - 22,
+      y: bY - 4,
+      r: 8.5,
+      wing: 0,
+      angle: 0,
+      state: 'follow',
+      color: item.baby1.color,
+      wingColor: item.baby1.wingColor,
+      blushColor: item.baby1.blushColor,
+      accessory: item.baby1.accessory
+    }, sCtx);
+
+    drawBabyBird({
+      x: bX + 22,
+      y: bY + 4,
+      r: 8,
+      wing: 0,
+      angle: 0,
+      state: 'follow',
+      color: item.baby2.color,
+      wingColor: item.baby2.wingColor,
+      blushColor: item.baby2.blushColor,
+      accessory: item.baby2.accessory
+    }, sCtx);
+  }
+
   function openPetModal() {
     if (audio) audio.click();
-    shopCategory = 'pet';
-    syncPreviewLoadout();
-    updateCoins();
-    renderShop();
-    if (el.shop) showModal(el.shop);
-    startShopShowcase();
+    selectedPetDetailId = progress.selectedPet || 'none';
+    renderPetCompanionModal();
+    const modal = $('petCompanionModal');
+    if (modal) showModal(modal);
   }
   window.openPetModal = openPetModal;
+
+  bindClick('petEquipBtn', () => {
+    if (audio) audio.click();
+    const unlockedList = Array.isArray(progress.petUnlocked) ? progress.petUnlocked : ['none'];
+    if (selectedPetDetailId === 'none' || unlockedList.includes(selectedPetDetailId)) {
+      progress.selectedPet = selectedPetDetailId;
+      persistProgress();
+      applyPetSkin();
+      renderPetCompanionModal();
+      if (typeof showToast === 'function') {
+        const pName = (petsCatalog[selectedPetDetailId] ? petsCatalog[selectedPetDetailId].name : 'Tanpa Pet');
+        showToast(`Pet Terpasang: ${pName.split(' (')[0]} ✨`, 'success');
+      }
+    }
+  });
 
   // Bind side buttons explicitly
   bindClick('lobbyDailyBtn', openDailyCheckinModal);
