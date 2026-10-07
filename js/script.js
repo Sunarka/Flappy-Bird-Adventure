@@ -13321,6 +13321,7 @@
 
   function resetLocalUserState() {
     progress.coins = 0;
+    progress.diamonds = 0;
     progress.coinsUpdatedAt = Date.now();
     progress.unlocked = ['classic'];
     progress.petUnlocked = ['pip_peep'];
@@ -13351,6 +13352,7 @@
     storage.set('skyFlappyRankedBest', 0);
     storage.set('skyFlappyBest', 0);
     storage.set('skyFlappyMpWins', 0);
+    storage.set('skyFlappyDiamonds', 0);
     storage.set('skyFlappyProgress', progress);
 
     gpProfile.isLoggedIn = false;
