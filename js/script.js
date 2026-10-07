@@ -15643,6 +15643,7 @@
   window.openDailyCheckinModal = openDailyCheckinModal;
 
   let selectedPetDetailId = 'none';
+  let petShowcaseAnimId = null;
 
   function renderPetCompanionModal() {
     const grid = $('petListGrid');
@@ -15666,8 +15667,10 @@
       return `
         <div class="pet-grid-card ${isSelected ? 'active' : ''} ${isEquipped ? 'equipped-now' : ''}" data-pet-id="${id}">
           <div class="pet-grid-card-icon">${iconSvg}</div>
-          <div class="pet-grid-card-name" title="${item.name}">${item.name.split(' (')[0]}</div>
-          <div class="pet-grid-card-status ${statusClass}">${statusText}</div>
+          <div class="pet-grid-card-info">
+            <div class="pet-grid-card-name" title="${item.name}">${item.name.split(' (')[0]}</div>
+            <div class="pet-grid-card-status ${statusClass}">${statusText}</div>
+          </div>
         </div>
       `;
     }).join('');
@@ -15685,6 +15688,7 @@
     });
 
     updatePetDetailCard();
+    startPetShowcaseLoop();
   }
 
   function updatePetDetailCard() {
@@ -15731,6 +15735,20 @@
     drawPetDetailShowcase(selectedPetDetailId, item);
   }
 
+  function startPetShowcaseLoop() {
+    if (petShowcaseAnimId) cancelAnimationFrame(petShowcaseAnimId);
+    function petLoop() {
+      const modal = $('petCompanionModal');
+      if (modal && !modal.classList.contains('hidden')) {
+        drawPetDetailShowcase(selectedPetDetailId, petsCatalog[selectedPetDetailId] || petsCatalog.none);
+        petShowcaseAnimId = requestAnimationFrame(petLoop);
+      } else {
+        petShowcaseAnimId = null;
+      }
+    }
+    petShowcaseAnimId = requestAnimationFrame(petLoop);
+  }
+
   function drawPetDetailShowcase(id, item) {
     const cvs = $('petShowcaseCanvas');
     if (!cvs) return;
@@ -15745,13 +15763,49 @@
       return;
     }
 
+    const t = performance.now();
     const bX = cvs.width / 2, bY = cvs.height / 2;
+
+    // Pedestal glow
+    sCtx.save();
+    sCtx.translate(bX, bY + 22);
+    const grad = sCtx.createRadialGradient(0, 0, 4, 0, 0, 40);
+    grad.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
+    grad.addColorStop(0.5, 'rgba(56, 189, 248, 0.15)');
+    grad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+    sCtx.fillStyle = grad;
+    sCtx.beginPath();
+    sCtx.ellipse(0, 0, 45, 10, 0, 0, Math.PI * 2);
+    sCtx.fill();
+
+    // Orbiting sparkles
+    const p1x = Math.sin(t * 0.002) * 32;
+    const p1y = Math.cos(t * 0.003) * 6 - 8;
+    sCtx.fillStyle = 'rgba(250, 204, 21, 0.75)';
+    sCtx.beginPath();
+    sCtx.arc(p1x, p1y, 1.5, 0, Math.PI * 2);
+    sCtx.fill();
+
+    const p2x = Math.sin(t * 0.0025 + 2) * 26;
+    const p2y = Math.cos(t * 0.002 + 1) * 7 - 12;
+    sCtx.fillStyle = 'rgba(56, 189, 248, 0.85)';
+    sCtx.beginPath();
+    sCtx.arc(p2x, p2y, 1.3, 0, Math.PI * 2);
+    sCtx.fill();
+    sCtx.restore();
+
+    // Floating bobbing and wing flapping
+    const float1 = Math.sin(t * 0.004) * 4;
+    const wing1 = Math.sin(t * 0.015);
+    const float2 = Math.sin(t * 0.004 + 1.5) * 4;
+    const wing2 = Math.sin(t * 0.015 + 1.5);
+
     drawBabyBird({
       x: bX - 22,
-      y: bY - 4,
+      y: bY - 3 + float1,
       r: 8.5,
-      wing: 0,
-      angle: 0,
+      wing: wing1,
+      angle: float1 * 0.02,
       state: 'follow',
       color: item.baby1.color,
       wingColor: item.baby1.wingColor,
@@ -15761,10 +15815,10 @@
 
     drawBabyBird({
       x: bX + 22,
-      y: bY + 4,
+      y: bY + 3 + float2,
       r: 8,
-      wing: 0,
-      angle: 0,
+      wing: wing2,
+      angle: -float2 * 0.02,
       state: 'follow',
       color: item.baby2.color,
       wingColor: item.baby2.wingColor,

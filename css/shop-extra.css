@@ -756,7 +756,7 @@
 }
 
 /* =========================================================
-   DEDICATED PET COMPANION MODAL (UI PET KHUSUS)
+   DEDICATED PET COMPANION MODAL (HIGH-TIER RPG SANCTUARY)
    ========================================================= */
 .pet-modal {
   width: min(560px, 94vw) !important;
@@ -764,12 +764,12 @@
   height: min(320px, 92vh) !important;
   min-height: min(320px, 92vh) !important;
   max-height: min(320px, 92vh) !important;
-  background: linear-gradient(180deg, #0d172a 0%, #070e1c 100%) !important;
-  border: 2px solid #38bdf8 !important;
+  background: linear-gradient(180deg, #0f1c34 0%, #081022 100%) !important;
+  border: 2px solid #254a78 !important;
   border-radius: 18px !important;
   padding: 10px 14px 10px !important;
   color: #f1f5f9 !important;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.85), 0 0 25px rgba(56, 189, 248, 0.25) !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.85), 0 0 25px rgba(56, 189, 248, 0.2) !important;
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden !important;
@@ -784,8 +784,8 @@
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  border-bottom: 1.5px solid rgba(56, 189, 248, 0.3) !important;
-  padding-bottom: 6px !important;
+  border-bottom: 1.5px solid rgba(56, 189, 248, 0.25) !important;
+  padding-bottom: 5px !important;
   padding-right: 32px !important;
   flex-shrink: 0 !important;
 }
@@ -796,12 +796,23 @@
   gap: 8px !important;
 }
 
+.pet-header-icon {
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 8px !important;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4) !important;
+}
+
 .pet-modal-header h2 {
-  font: 900 13px/1 'Trebuchet MS', Arial, sans-serif !important;
+  font: 900 12px/1 'Trebuchet MS', Arial, sans-serif !important;
   color: #38bdf8 !important;
   margin: 0 !important;
   letter-spacing: 0.5px !important;
-  text-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.5) !important;
 }
 
 .pet-subtitle {
@@ -815,86 +826,86 @@
   flex: 1 !important;
   min-height: 0 !important;
   display: grid !important;
-  grid-template-columns: 210px 1fr !important;
+  grid-template-columns: 215px 1fr !important;
   gap: 10px !important;
-  margin-top: 8px !important;
+  margin-top: 6px !important;
   overflow: hidden !important;
 }
 
-@media (max-width: 480px) {
-  .pet-modal-body {
-    grid-template-columns: 1fr !important;
-  }
-}
-
+/* Left Showcase & Skill Details */
 .pet-detail-card {
   background: rgba(15, 23, 42, 0.75) !important;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  border-radius: 10px !important;
-  padding: 6px !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.3) !important;
+  border-radius: 12px !important;
+  padding: 8px !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 6px !important;
+  justify-content: space-between !important;
   min-height: 0 !important;
-  overflow: hidden !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
 }
 
 .pet-showcase-box {
   position: relative !important;
-  height: 85px !important;
-  background: radial-gradient(circle at center, rgba(56, 189, 248, 0.2) 0%, rgba(9, 20, 39, 0.9) 75%) !important;
-  border: 1px solid #1e3a5f !important;
-  border-radius: 8px !important;
+  height: 80px !important;
+  background: radial-gradient(circle at center, rgba(56, 189, 248, 0.25) 0%, rgba(8, 15, 30, 0.95) 75%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  border-radius: 9px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   overflow: hidden !important;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7) !important;
 }
 
 .pet-showcase-glow {
   position: absolute !important;
   inset: 0 !important;
   pointer-events: none !important;
-  opacity: 0.6 !important;
-  transition: background 0.3s !important;
+  background: radial-gradient(circle at 50% 60%, rgba(56, 189, 248, 0.3) 0%, transparent 65%) !important;
+  opacity: 0.8 !important;
 }
 
 .pet-rarity-badge {
   position: absolute !important;
-  top: 4px !important;
-  right: 4px !important;
+  top: 5px !important;
+  right: 5px !important;
   font: 900 7px/1 'Trebuchet MS', Arial, sans-serif !important;
-  padding: 2px 5px !important;
-  border-radius: 4px !important;
+  padding: 2.5px 6px !important;
+  border-radius: 5px !important;
   text-transform: uppercase !important;
-  background: rgba(0,0,0,0.6) !important;
+  background: rgba(0,0,0,0.7) !important;
   border: 1px solid currentColor !important;
+  letter-spacing: 0.5px !important;
 }
 
-.pet-rarity-badge.legendary { color: #facc15 !important; border-color: #facc15 !important; }
-.pet-rarity-badge.epic { color: #c084fc !important; border-color: #c084fc !important; }
-.pet-rarity-badge.rare { color: #38bdf8 !important; border-color: #38bdf8 !important; }
+.pet-rarity-badge.legendary { color: #facc15 !important; border-color: #facc15 !important; text-shadow: 0 0 6px rgba(250, 204, 21, 0.6) !important; }
+.pet-rarity-badge.epic { color: #c084fc !important; border-color: #c084fc !important; text-shadow: 0 0 6px rgba(192, 132, 252, 0.6) !important; }
+.pet-rarity-badge.rare { color: #38bdf8 !important; border-color: #38bdf8 !important; text-shadow: 0 0 6px rgba(56, 189, 248, 0.6) !important; }
 .pet-rarity-badge.common { color: #94a3b8 !important; border-color: #94a3b8 !important; }
 
 .pet-info-box {
   display: flex !important;
   flex-direction: column !important;
   gap: 4px !important;
+  margin-top: 4px !important;
 }
 
 .pet-name {
-  font: 900 9.5px/1.2 'Trebuchet MS', Arial, sans-serif !important;
+  font: 900 10.5px/1.2 'Trebuchet MS', Arial, sans-serif !important;
   color: #ffffff !important;
   margin: 0 !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6) !important;
 }
 
 .pet-skill-card {
-  background: rgba(8, 14, 28, 0.8) !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  border-radius: 6px !important;
+  background: rgba(8, 14, 28, 0.85) !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  border-radius: 7px !important;
   padding: 4px 6px !important;
 }
 
@@ -902,51 +913,64 @@
   display: flex !important;
   align-items: center !important;
   gap: 4px !important;
-  font: 900 8px/1 'Trebuchet MS', Arial, sans-serif !important;
+  font: 900 8.5px/1 'Trebuchet MS', Arial, sans-serif !important;
   color: #facc15 !important;
   margin-bottom: 2px !important;
 }
 
 .pet-skill-desc {
-  font: 600 7.5px/1.2 'Trebuchet MS', Arial, sans-serif !important;
+  font: 600 7.5px/1.25 'Trebuchet MS', Arial, sans-serif !important;
   color: #cbd5e1 !important;
   margin: 0 !important;
 }
 
 .pet-actions-row {
-  margin-top: auto !important;
+  margin-top: 4px !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 4px !important;
 }
 
 .pet-equip-btn {
-  font: 900 8.5px/1 'Trebuchet MS', Arial, sans-serif !important;
-  padding: 5px 8px !important;
-  border-radius: 6px !important;
-  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%) !important;
-  border: 1px solid #4ade80 !important;
+  font: 900 9.5px/1 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 6px 10px !important;
+  border-radius: 7px !important;
+  background: linear-gradient(180deg, #16a34a 0%, #15803d 100%) !important;
+  border: 1.5px solid #4ade80 !important;
   color: #ffffff !important;
   cursor: pointer !important;
-  transition: transform 0.1s !important;
+  transition: transform 0.15s, filter 0.15s !important;
+  box-shadow: 0 3px 8px rgba(22, 163, 74, 0.4) !important;
+}
+
+.pet-equip-btn:hover {
+  transform: translateY(-1px) !important;
+  filter: brightness(1.1) !important;
 }
 
 .pet-equip-btn:disabled {
-  background: #334155 !important;
-  border-color: #475569 !important;
-  color: #94a3b8 !important;
+  background: rgba(30, 41, 59, 0.9) !important;
+  border-color: rgba(74, 222, 128, 0.4) !important;
+  color: #4ade80 !important;
   cursor: default !important;
+  box-shadow: none !important;
+  font-weight: 900 !important;
 }
 
 .pet-gacha-cta-btn {
-  font: 900 8px/1 'Trebuchet MS', Arial, sans-serif !important;
-  padding: 4px 8px !important;
-  border-radius: 6px !important;
+  font: 900 9px/1 'Trebuchet MS', Arial, sans-serif !important;
+  padding: 6px 10px !important;
+  border-radius: 7px !important;
   background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%) !important;
-  border: 1px solid #fbbf24 !important;
-  color: #fef08a !important;
+  border: 1.5px solid #f59e0b !important;
+  color: #ffffff !important;
   cursor: pointer !important;
   animation: petGachaGlow 2s infinite ease-in-out !important;
+  transition: transform 0.15s !important;
+}
+
+.pet-gacha-cta-btn:hover {
+  transform: translateY(-1px) !important;
 }
 
 @keyframes petGachaGlow {
@@ -954,90 +978,116 @@
   50% { box-shadow: 0 0 12px rgba(251, 191, 36, 0.7); }
 }
 
+/* Right Grid Selection */
 .pet-list-wrapper {
   flex: 1 !important;
   min-height: 0 !important;
   overflow-y: auto !important;
-  padding-right: 2px !important;
+  padding-right: 3px !important;
+}
+
+.pet-list-wrapper::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+.pet-list-wrapper::-webkit-scrollbar-thumb {
+  background: #254a78 !important;
+  border-radius: 4px !important;
 }
 
 .pet-list-grid {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)) !important;
+  grid-template-columns: repeat(2, 1fr) !important;
   gap: 6px !important;
 }
 
 .pet-grid-card {
-  background: rgba(15, 23, 42, 0.85) !important;
-  border: 1.5px solid #1e3a5f !important;
-  border-radius: 8px !important;
-  padding: 6px 4px !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1.5px solid rgba(37, 74, 120, 0.6) !important;
+  border-radius: 9px !important;
+  padding: 5px 6px !important;
   display: flex !important;
-  flex-direction: column !important;
+  flex-direction: row !important;
   align-items: center !important;
-  text-align: center !important;
+  gap: 6px !important;
   cursor: pointer !important;
-  transition: transform 0.15s, border-color 0.15s !important;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s !important;
   position: relative !important;
+  box-sizing: border-box !important;
+  min-height: 48px !important;
 }
 
 .pet-grid-card:hover {
-  transform: translateY(-2px) !important;
+  transform: translateY(-1px) !important;
   border-color: #38bdf8 !important;
+  background: rgba(30, 58, 138, 0.3) !important;
 }
 
 .pet-grid-card.active {
   border-color: #38bdf8 !important;
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4), inset 0 0 8px rgba(56, 189, 248, 0.15) !important;
   background: rgba(14, 165, 233, 0.15) !important;
 }
 
 .pet-grid-card.equipped-now {
-  border-color: #22c55e !important;
+  border-color: #4ade80 !important;
 }
 
 .pet-grid-card-icon {
-  width: 38px !important;
-  height: 38px !important;
+  width: 32px !important;
+  height: 32px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  position: relative !important;
+  flex-shrink: 0 !important;
+  background: rgba(8, 15, 30, 0.6) !important;
+  border-radius: 7px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.pet-grid-card-info {
+  flex: 1 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
 }
 
 .pet-grid-card-name {
-  font: 900 7.5px/1.1 'Trebuchet MS', Arial, sans-serif !important;
+  font: 900 8px/1.1 'Trebuchet MS', Arial, sans-serif !important;
   color: #f1f5f9 !important;
-  margin-top: 3px !important;
-  max-width: 100% !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
+  text-align: left !important;
 }
 
 .pet-grid-card-status {
   font: 900 6.5px/1 'Trebuchet MS', Arial, sans-serif !important;
-  padding: 2px 4px !important;
+  padding: 2px 5px !important;
   border-radius: 4px !important;
-  margin-top: 3px !important;
   text-transform: uppercase !important;
+  display: inline-block !important;
+  align-self: flex-start !important;
+  letter-spacing: 0.3px !important;
 }
 
 .pet-grid-card-status.equipped {
-  background: #22c55e !important;
-  color: #ffffff !important;
+  background: rgba(34, 197, 94, 0.25) !important;
+  border: 1px solid #22c55e !important;
+  color: #4ade80 !important;
 }
 
 .pet-grid-card-status.owned {
   background: rgba(56, 189, 248, 0.2) !important;
-  color: #38bdf8 !important;
-  border: 1px solid rgba(56, 189, 248, 0.4) !important;
+  border: 1px solid #38bdf8 !important;
+  color: #7dd3fc !important;
 }
 
 .pet-grid-card-status.locked {
   background: rgba(234, 88, 12, 0.2) !important;
-  color: #fb923c !important;
-  border: 1px solid rgba(234, 88, 12, 0.4) !important;
+  border: 1px solid #f97316 !important;
+  color: #fdba74 !important;
 }
 
 /* =========================================================
