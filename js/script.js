@@ -2086,12 +2086,20 @@
   }
   function updateMusicUI() {
     const button = el.musicBtn;
-    if(!button) return;
-    button.classList.toggle('muted', !settings.music);
-    button.innerHTML = settings.music ? 
-      '<svg class="btn-svg music-svg" viewBox="0 0 24 24" width="19" height="19"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h6V3h-8z" fill="currentColor"/><circle cx="10" cy="17" r="3" fill="currentColor"/></svg>' : 
-      '<svg class="btn-svg music-svg" viewBox="0 0 24 24" width="19" height="19"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h6V3h-8z" fill="currentColor"/><circle cx="10" cy="17" r="3" fill="currentColor"/><path d="m4 4 16 16" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/></svg>';
-    button.setAttribute('aria-label', settings.music ? 'Matikan musik' : 'Nyalakan musik');
+    const mpMusic = $('mpMusicBtn');
+    const musicSvgActive = '<svg class="btn-svg music-svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h6V3h-8z" fill="currentColor"/><circle cx="10" cy="17" r="3" fill="currentColor"/></svg>';
+    const musicSvgMuted = '<svg class="btn-svg music-svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h6V3h-8z" fill="currentColor"/><circle cx="10" cy="17" r="3" fill="currentColor"/><path d="m4 4 16 16" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/></svg>';
+
+    if(button) {
+      button.classList.toggle('muted', !settings.music);
+      button.innerHTML = settings.music ? musicSvgActive : musicSvgMuted;
+      button.setAttribute('aria-label', settings.music ? 'Matikan musik' : 'Nyalakan musik');
+    }
+    if(mpMusic) {
+      mpMusic.classList.toggle('muted', !settings.music);
+      mpMusic.innerHTML = settings.music ? musicSvgActive : musicSvgMuted;
+      mpMusic.setAttribute('aria-label', settings.music ? 'Matikan musik' : 'Nyalakan musik');
+    }
   }
 
   // ==========================================
@@ -5503,12 +5511,14 @@
     const leftDock = $('mlbbLeftDock');
     const rightDock = $('mlbbRightDock');
     const coinPill = $('topCoinPill');
+    const diamondPill = $('topDiamondPill');
     const rankPill = $('topRankPill');
     const lbBtn = $('rankedLeaderboardBtn');
 
     if(leftDock) leftDock.classList.toggle('hidden', next !== State.MENU);
     if(rightDock) rightDock.classList.toggle('hidden', next !== State.MENU);
     if(coinPill) coinPill.classList.toggle('hidden', next !== State.MENU);
+    if(diamondPill) diamondPill.classList.toggle('hidden', next !== State.MENU);
     if(rankPill) rankPill.classList.toggle('hidden', next !== State.MENU);
     if(lbBtn) lbBtn.classList.toggle('hidden', next !== State.MENU);
 
@@ -6284,6 +6294,8 @@
     }
   }
   function makeParticles(x, y, count, color) {
+    if(particles.length > 180) count = Math.min(count, 4);
+    if(particles.length > 260) return;
     for(let i = 0; i < count; i++) {
       const life = .55 + Math.random() * .35;
       particles.push({ x, y, vx: (Math.random() - .5) * 100, vy: (Math.random() - .8) * 100, life, maxLife: life, color, size: 2 + Math.random() * 3, type: 'dot' });
@@ -13724,17 +13736,19 @@
     audio.click();
     persist();
   });
-  bindClick(el.mpAudioToggleBtn, () => {
+  bindClick('mpSoundBtn', () => {
     settings.sound = !settings.sound;
-    settings.music = settings.sound;
     if(el.soundToggle) el.soundToggle.checked = settings.sound;
-    if(el.musicToggle) el.musicToggle.checked = settings.music;
     syncSettings();
     if(settings.sound) audio.click();
     persist();
-    if(el.mpAudioToggleBtn) {
-      el.mpAudioToggleBtn.classList.toggle('muted', !settings.sound);
-    }
+  });
+  bindClick('mpMusicBtn', () => {
+    settings.music = !settings.music;
+    if(el.musicToggle) el.musicToggle.checked = settings.music;
+    syncSettings();
+    audio.click();
+    persist();
   });
 
   // =========================================================
@@ -14274,12 +14288,19 @@
         button.classList.toggle('active', button.dataset.difficulty === settings.difficulty);
       });
     }
+    const soundSvgActive = '<svg class="btn-svg sound-svg" viewBox="0 0 24 24" width="18" height="18"><path d="M3 9.5v5h4l5 4.5v-14l-5 4.5H3z" fill="currentColor"/><path class="sound-wave w1" d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="sound-wave w2" d="M18.5 5.5a9 9 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    const soundSvgMuted = '<svg class="btn-svg sound-svg" viewBox="0 0 24 24" width="18" height="18"><path d="M3 9.5v5h4l5 4.5v-14l-5 4.5H3z" fill="currentColor"/><path d="m16 9 5 5m0-5-5 5" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/></svg>';
+
     if(el.sound) {
       el.sound.classList.toggle('muted', !settings.sound);
-      el.sound.innerHTML = settings.sound ? 
-        '<svg class="btn-svg sound-svg" viewBox="0 0 24 24" width="19" height="19"><path d="M3 9.5v5h4l5 4.5v-14l-5 4.5H3z" fill="currentColor"/><path class="sound-wave w1" d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="sound-wave w2" d="M18.5 5.5a9 9 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' : 
-        '<svg class="btn-svg sound-svg" viewBox="0 0 24 24" width="19" height="19"><path d="M3 9.5v5h4l5 4.5v-14l-5 4.5H3z" fill="currentColor"/><path d="m16 9 5 5m0-5-5 5" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/></svg>';
+      el.sound.innerHTML = settings.sound ? soundSvgActive : soundSvgMuted;
       el.sound.setAttribute('aria-label', settings.sound ? 'Matikan suara' : 'Nyalakan suara');
+    }
+    const mpSound = $('mpSoundBtn');
+    if(mpSound) {
+      mpSound.classList.toggle('muted', !settings.sound);
+      mpSound.innerHTML = settings.sound ? soundSvgActive : soundSvgMuted;
+      mpSound.setAttribute('aria-label', settings.sound ? 'Matikan suara' : 'Nyalakan suara');
     }
     applyLanguage(settings.language || 'id');
     updateMusicUI();
