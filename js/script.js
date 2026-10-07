@@ -14172,7 +14172,7 @@
               this.log('Reward ad completed: adViewed event received from Google!');
               rewardGivenInBreak = true;
               if(this.currentSessionToken === sessionToken && !this.rewardGrantedForSession) {
-                this.handleReward(25, sessionToken);
+                this.handleReward(50, sessionToken);
               }
             },
             adDismissed: () => {
@@ -14209,7 +14209,7 @@
                 window.googletag.pubads().addEventListener('rewardedSlotGranted', (event) => {
                   this.log('Reward granted: GPT rewardedSlotGranted event received from Google!', event);
                   if(this.currentSessionToken === sessionToken && !this.rewardGrantedForSession) {
-                    this.handleReward(25, sessionToken);
+                    this.handleReward(50, sessionToken);
                   }
                 });
                 window.googletag.pubads().addEventListener('rewardedSlotClosed', () => {
@@ -14313,7 +14313,7 @@
         btn.disabled = false;
         btn.style.opacity = '1';
         btn.style.pointerEvents = 'auto';
-        if(label) label.textContent = isIndo ? '+25 KOIN' : '+25 COINS';
+        if(label) label.textContent = isIndo ? '+50 KOIN' : '+50 COINS';
       }
     },
 

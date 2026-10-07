@@ -28,7 +28,7 @@
     AD_UNIT_PATH: '/21775744923/example/rewarded',
 
     // Nilai Koin Hadiah:
-    REWARD_COIN_AMOUNT: 25,
+    REWARD_COIN_AMOUNT: 50,
 
     // State
     isRewardedReady: false,
