@@ -789,10 +789,6 @@
           this.sendCurrentChatMessage(text);
         };
       }
-          this.togglePresetsDrawer(false);
-          this.sendCurrentChatMessage(text);
-        };
-      }
 
       // Fallback for any legacy preset chips
       const presetsBar = document.getElementById('mlbbChatPresetsBar');
