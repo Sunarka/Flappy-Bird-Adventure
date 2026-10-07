@@ -6,7 +6,7 @@
 .coin-hud b,.home-wallet b,.shop-balance b{color:#facc15;font-size:1.25em}
 .home-wallet{margin-top:7px;padding:7px 13px;border-radius:99px;background:rgba(9,20,39,0.85);border:1.5px solid #facc15;color:#fef08a;font-size:12px;font-weight:900;letter-spacing:1px;box-shadow:0 3px 8px rgba(0,0,0,0.4)}
 
-.shop-modal{position:relative;padding:10px 14px 8px !important;width:min(560px,94vw) !important;height:min(340px,94vh) !important;max-height:min(340px,94vh) !important;box-sizing:border-box;overflow:hidden !important;border:2px solid #254a78 !important;border-radius:18px;background:linear-gradient(180deg,#142442 0%,#0c172c 100%) !important;color:#f1f5f9;box-shadow:0 18px 45px rgba(0,0,0,0.65),inset 0 1.5px 0 rgba(255,255,255,0.15)}
+.shop-modal{position:relative;padding:10px 14px 8px !important;width:min(560px,94vw) !important;max-width:560px !important;height:min(320px,92vh) !important;min-height:min(320px,92vh) !important;max-height:min(320px,92vh) !important;box-sizing:border-box;overflow:hidden !important;border:2px solid #254a78 !important;border-radius:18px;background:linear-gradient(180deg,#142442 0%,#0c172c 100%) !important;color:#f1f5f9;box-shadow:0 18px 45px rgba(0,0,0,0.65),inset 0 1.5px 0 rgba(255,255,255,0.15)}
 .shop-modal.hidden{display:none !important}
 .shop-modal:not(.hidden){display:flex !important;flex-direction:column !important}
 .shop-modal .close {
