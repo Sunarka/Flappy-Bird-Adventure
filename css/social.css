@@ -1994,155 +1994,324 @@
 }
 
 /* =========================================================
-   INDIE PROFILE & ACCOUNT TAB 3 STYLES
+   INDIE PROFILE & ACCOUNT TAB 3 STYLES (LANDSCAPE NO-SCROLL)
    ========================================================= */
-.gp-cloud-card, .gp-guest-box {
-  background: rgba(15, 23, 42, 0.85) !important;
-  border: 1.5px solid rgba(56, 189, 248, 0.3) !important;
+#profileTabAccount {
+  overflow: hidden !important;
+  max-height: 232px !important;
+  height: 232px !important;
+  padding: 0 !important;
+}
+
+.account-tab-content {
+  overflow: hidden !important;
+  max-height: 230px !important;
+  height: 100% !important;
+  padding: 2px 4px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.gp-auth-prompt-grid,
+.gp-profile-card-grid {
+  display: grid !important;
+  grid-template-columns: 1.15fr 1fr !important;
+  gap: 10px !important;
+  height: 100% !important;
+  max-height: 224px !important;
+  align-items: stretch !important;
+  box-sizing: border-box !important;
+}
+
+.gp-auth-col-left,
+.gp-auth-col-right,
+.gp-logged-info-card,
+.gp-logged-actions-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  background: rgba(15, 23, 42, 0.75) !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.25) !important;
   border-radius: 12px !important;
   padding: 8px 10px !important;
-  margin-bottom: 8px !important;
+  box-sizing: border-box !important;
+  min-height: 0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
-.gp-card-top-row {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  margin-bottom: 6px !important;
-}
-
-.gp-status-pill {
-  font: 900 8px/1 'Trebuchet MS', Arial, sans-serif !important;
-  padding: 3px 8px !important;
-  border-radius: 8px !important;
-}
-
-.gp-status-pill.online {
-  background: rgba(34, 197, 94, 0.2) !important;
-  border: 1px solid #22c55e !important;
-  color: #4ade80 !important;
-}
-
-.gp-status-pill.offline {
-  background: rgba(148, 163, 184, 0.2) !important;
-  border: 1px solid #94a3b8 !important;
-  color: #cbd5e1 !important;
-}
-
-.gp-sync-badge {
-  font: 800 7px/1 'Trebuchet MS', Arial, sans-serif !important;
+/* Auth Left Column Buttons */
+.gp-auth-col-left .friend-section-title,
+.gp-logged-info-card .friend-section-title,
+.gp-logged-actions-card .friend-section-title {
+  font-size: 9.5px !important;
+  font-weight: 900 !important;
   color: #38bdf8 !important;
-  letter-spacing: 0.3px !important;
+  letter-spacing: 0.5px !important;
+  margin: 0 0 6px 0 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
 }
 
-.gp-sync-badge.warn {
-  color: #fbbf24 !important;
-}
-
-.gp-account-info-box {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  background: rgba(8, 15, 30, 0.7) !important;
-  border-radius: 8px !important;
-  padding: 6px 8px !important;
-}
-
-.gp-account-avatar-mini {
-  width: 28px !important;
-  height: 28px !important;
-  border-radius: 50% !important;
-  background: #1e293b !important;
-  border: 1px solid #38bdf8 !important;
+.google-sign-in-btn {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  padding: 4px 10px !important;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  border: 1.5px solid #d1d5db !important;
+  border-radius: 8px !important;
+  font: 900 10.5px 'Trebuchet MS', Arial, sans-serif !important;
+  letter-spacing: 0.3px !important;
+  cursor: pointer !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25) !important;
+  transition: transform 0.15s ease, filter 0.15s ease !important;
+  margin-bottom: 5px !important;
+}
+
+.google-sign-in-btn:hover {
+  transform: translateY(-1px) !important;
+  filter: brightness(1.05) !important;
+}
+
+.facebook-sign-in-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  padding: 4px 10px !important;
+  background: linear-gradient(135deg, #1877f2 0%, #0d65d9 100%) !important;
+  color: #ffffff !important;
+  border: 1.5px solid #60a5fa !important;
+  border-radius: 8px !important;
+  font: 900 10.5px 'Trebuchet MS', Arial, sans-serif !important;
+  letter-spacing: 0.3px !important;
+  cursor: pointer !important;
+  box-shadow: 0 3px 8px rgba(24, 119, 242, 0.35) !important;
+  transition: transform 0.15s ease, filter 0.15s ease !important;
+  margin-bottom: 5px !important;
+}
+
+.facebook-sign-in-btn:hover {
+  transform: translateY(-1px) !important;
+  filter: brightness(1.1) !important;
+}
+
+.guest-sign-in-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+  min-height: 28px !important;
+  height: 28px !important;
+  padding: 3px 8px !important;
+  background: rgba(30, 41, 59, 0.85) !important;
+  color: #cbd5e1 !important;
+  border: 1px solid rgba(148, 163, 184, 0.3) !important;
+  border-radius: 8px !important;
+  font: 800 9.5px 'Trebuchet MS', Arial, sans-serif !important;
+  cursor: pointer !important;
+  transition: transform 0.15s ease, background 0.15s ease !important;
+  margin-bottom: 0 !important;
+}
+
+.guest-sign-in-btn:hover {
+  background: rgba(51, 65, 85, 0.9) !important;
+  color: #ffffff !important;
+}
+
+/* Auth Right Column Benefits */
+.gp-auth-benefits-card {
+  background: linear-gradient(145deg, rgba(14, 165, 233, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.35) !important;
+  border-radius: 12px !important;
+  padding: 8px 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.benefits-badge {
+  font-size: 9.5px !important;
+  font-weight: 900 !important;
+  color: #38bdf8 !important;
+  letter-spacing: 0.4px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  text-transform: uppercase !important;
+  margin-bottom: 3px !important;
+}
+
+.benefits-list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+.benefits-list li {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 9px !important;
+  color: #e2e8f0 !important;
+  line-height: 1.25 !important;
+  font-weight: 700 !important;
+}
+
+.benefits-list li .b-icon {
+  font-size: 11px !important;
   flex-shrink: 0 !important;
 }
 
-.gp-account-texts {
-  flex: 1 !important;
-  min-width: 0 !important;
+.benefits-status-tag {
+  background: rgba(8, 15, 30, 0.7) !important;
+  border: 1px solid rgba(251, 191, 36, 0.3) !important;
+  border-radius: 6px !important;
+  padding: 3px 6px !important;
+  font-size: 8.5px !important;
+  color: #94a3b8 !important;
+  text-align: center !important;
+  margin-top: 2px !important;
 }
 
-.gp-email-display {
-  font: 900 9.5px/1.2 'Trebuchet MS', Arial, sans-serif !important;
+/* Logged In Info Card Styles */
+.gp-logged-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: rgba(8, 15, 30, 0.6) !important;
+  border-radius: 8px !important;
+  padding: 5px 8px !important;
+  border: 1px solid rgba(56, 189, 248, 0.2) !important;
+}
+
+.gp-cloud-icon {
+  font-size: 18px !important;
+  line-height: 1 !important;
+}
+
+.gp-logged-meta {
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.gp-logged-title {
+  font-size: 8.5px !important;
+  font-weight: 900 !important;
+  color: #38bdf8 !important;
+  letter-spacing: 0.4px !important;
+}
+
+.gp-logged-email {
+  font-size: 10.5px !important;
+  font-weight: 900 !important;
   color: #ffffff !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
 
-.gp-sync-desc, .gp-guest-desc {
-  font: 700 7.5px/1.2 'Trebuchet MS', Arial, sans-serif !important;
+.gp-logged-stats-row {
+  display: flex !important;
+  gap: 6px !important;
+  margin: 3px 0 !important;
+}
+
+.gp-logged-stat {
+  flex: 1 !important;
+  background: rgba(8, 15, 30, 0.5) !important;
+  border-radius: 6px !important;
+  padding: 3px 5px !important;
+  text-align: center !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.gp-logged-stat .lbl {
+  display: block !important;
+  font-size: 7.5px !important;
+  font-weight: 800 !important;
   color: #94a3b8 !important;
-  margin-top: 2px !important;
 }
 
-.gp-login-btns-grid {
-  display: flex !important;
-  gap: 6px !important;
-  margin-top: 6px !important;
+.gp-logged-stat .val.green {
+  font-size: 8.5px !important;
+  font-weight: 900 !important;
+  color: #4ade80 !important;
 }
 
-.gp-provider-btn {
-  flex: 1 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 6px !important;
-  padding: 6px !important;
-  border-radius: 8px !important;
-  border: none !important;
-  cursor: pointer !important;
-  font: 900 8.5px/1 'Trebuchet MS', Arial, sans-serif !important;
-  transition: all 0.15s ease !important;
+.gp-logged-stat .val.blue {
+  font-size: 8.5px !important;
+  font-weight: 900 !important;
+  color: #38bdf8 !important;
 }
 
-.gp-provider-btn.google {
-  background: #ffffff !important;
-  color: #1e293b !important;
+.gp-sync-hint {
+  font-size: 8px !important;
+  font-weight: 600 !important;
+  color: #94a3b8 !important;
+  line-height: 1.2 !important;
+  margin-top: 1px !important;
 }
 
-.gp-provider-btn.facebook {
-  background: #1877f2 !important;
-  color: #ffffff !important;
-}
-
-.gp-actions-row {
-  display: flex !important;
-  gap: 8px !important;
-  margin-top: 6px !important;
-}
-
-.gp-btn {
-  flex: 1 !important;
+/* Logged In Actions */
+.gp-btn-sync {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 6px !important;
-  padding: 8px 10px !important;
-  border-radius: 8px !important;
-  font: 900 9px/1 'Trebuchet MS', Arial, sans-serif !important;
-  cursor: pointer !important;
-  border: none !important;
-  transition: all 0.15s ease !important;
-}
-
-.gp-btn.primary.save {
+  width: 100% !important;
+  min-height: 38px !important;
+  height: 38px !important;
   background: linear-gradient(180deg, #16a34a 0%, #15803d 100%) !important;
-  border: 1px solid #4ade80 !important;
-  box-shadow: 0 2px 0 #14532d !important;
+  border: 1.5px solid #4ade80 !important;
+  border-radius: 8px !important;
   color: #ffffff !important;
+  font: 900 11px 'Trebuchet MS', Arial, sans-serif !important;
+  cursor: pointer !important;
+  box-shadow: 0 3px 8px rgba(22, 163, 74, 0.4) !important;
+  transition: transform 0.15s ease, filter 0.15s ease !important;
 }
 
-.gp-btn.secondary.signout {
-  background: rgba(30, 41, 59, 0.9) !important;
-  border: 1px solid #ef4444 !important;
-  color: #fca5a5 !important;
-}
-
-.gp-btn:hover {
+.gp-btn-sync:hover {
   transform: translateY(-1px) !important;
   filter: brightness(1.1) !important;
+}
+
+.gp-btn-signout {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  background: rgba(30, 41, 59, 0.9) !important;
+  border: 1px solid #ef4444 !important;
+  border-radius: 8px !important;
+  color: #fca5a5 !important;
+  font: 900 10.5px 'Trebuchet MS', Arial, sans-serif !important;
+  cursor: pointer !important;
+  transition: transform 0.15s ease, background 0.15s ease !important;
+}
+
+.gp-btn-signout:hover {
+  background: rgba(239, 68, 68, 0.25) !important;
+  color: #ffffff !important;
 }

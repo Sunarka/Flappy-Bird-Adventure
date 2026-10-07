@@ -69,18 +69,18 @@
   <meta name="x5-orientation" content="landscape">
   <meta name="x5-fullscreen" content="true">
   <meta name="full-screen" content="yes">
-  <link rel="stylesheet" href="css/style.css?v=20.98">
-  <link rel="stylesheet" href="css/modern-icons.css?v=20.98">
-  <link rel="stylesheet" href="css/shop.css?v=20.98">
-  <link rel="stylesheet" href="css/shop-extra.css?v=20.98">
-  <link rel="stylesheet" href="css/mode-picker.css?v=20.98">
-  <link rel="stylesheet" href="css/store.css?v=20.98">
-  <link rel="stylesheet" href="css/ranked.css?v=20.98">
-  <link rel="stylesheet" href="css/social.css?v=20.98">
-  <link rel="stylesheet" href="css/splash.css?v=20.98">
-  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.98">
+  <link rel="stylesheet" href="css/style.css?v=20.99">
+  <link rel="stylesheet" href="css/modern-icons.css?v=20.99">
+  <link rel="stylesheet" href="css/shop.css?v=20.99">
+  <link rel="stylesheet" href="css/shop-extra.css?v=20.99">
+  <link rel="stylesheet" href="css/mode-picker.css?v=20.99">
+  <link rel="stylesheet" href="css/store.css?v=20.99">
+  <link rel="stylesheet" href="css/ranked.css?v=20.99">
+  <link rel="stylesheet" href="css/social.css?v=20.99">
+  <link rel="stylesheet" href="css/splash.css?v=20.99">
+  <link rel="stylesheet" href="css/mlbb-lobby.css?v=20.99">
   <!-- Must load last: multiplayer panel overrides the shared lobby theme. -->
-  <link rel="stylesheet" href="css/multiplayer.css?v=20.98">
+  <link rel="stylesheet" href="css/multiplayer.css?v=20.99">
 
   <!-- ========================================================= -->
   <!-- 1. GOOGLE ADSENSE SITE VERIFICATION (STANDARD CRAWLER TAG)-->
@@ -1020,37 +1020,85 @@
           </div>
         </div>
 
-        <!-- TAB 3: AKUN & LOGIN -->
+        <!-- TAB 3: AKUN & LOGIN (LANDSCAPE 2-COLUMN NO-SCROLL) -->
         <div class="profile-tab-panel hidden" id="profileTabAccount">
-          <div class="profile-scrollable-content">
-            <div class="friend-section-title" style="margin-top:4px;">STATUS KONEKSI AKUN</div>
-            <div id="googleSignInPrompt" class="gp-google-login-box" style="margin-top:6px;background:rgba(15,23,42,0.7);padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);">
-              <p class="gp-login-desc" style="font-size:0.82rem;margin-bottom:10px;color:#cbd5e1;">Hubungkan akun Google / Facebook untuk menyimpan progres, koin, skin & rank ke Cloud secara permanen:</p>
-              <button id="googleSignInBtn" class="google-sign-in-btn" type="button" style="margin-bottom:8px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;">
-                <svg class="google-icon" viewBox="0 0 48 48" width="18" height="18"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-                <span id="googleSignInBtnText">LOGIN DENGAN GOOGLE</span>
-              </button>
-              <button id="facebookSignInBtn" class="facebook-sign-in-btn" type="button" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;">
-                <svg class="facebook-icon" viewBox="0 0 24 24" width="18" height="18"><path fill="#ffffff" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                <span id="facebookSignInBtnText">LOGIN DENGAN FACEBOOK</span>
-              </button>
-              <!-- Guest Login -->
-              <div style="display:flex;align-items:center;gap:8px;margin-top:10px;">
-                <div style="flex:1;height:1px;background:rgba(255,255,255,0.15);"></div>
-                <span style="font-size:0.72rem;color:#64748b;white-space:nowrap;">atau lanjut tanpa akun</span>
-                <div style="flex:1;height:1px;background:rgba(255,255,255,0.15);"></div>
+          <div class="profile-scrollable-content account-tab-content">
+            
+            <!-- STATE A: PROMPT LOGIN (Saat Belum Login / Mode Tamu) -->
+            <div id="googleSignInPrompt" class="gp-auth-prompt-grid">
+              <!-- Left Column: Login Options -->
+              <div class="gp-auth-col-left">
+                <div class="friend-section-title" style="margin:0 0 6px 0;">PILIH METODE LOGIN</div>
+                <button id="googleSignInBtn" class="google-sign-in-btn" type="button">
+                  <svg class="google-icon" viewBox="0 0 48 48" width="16" height="16"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                  <span id="googleSignInBtnText">LOGIN DENGAN GOOGLE</span>
+                </button>
+                <button id="facebookSignInBtn" class="facebook-sign-in-btn" type="button">
+                  <svg class="facebook-icon" viewBox="0 0 24 24" width="16" height="16"><path fill="#ffffff" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  <span id="facebookSignInBtnText">LOGIN DENGAN FACEBOOK</span>
+                </button>
+                <button id="guestSignInBtn" class="guest-sign-in-btn" type="button">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                  <span>LANJUT SEBAGAI TAMU (GUEST)</span>
+                </button>
               </div>
-              <button id="guestSignInBtn" class="secondary" type="button" style="width:100%;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(30,41,59,0.8);border:1px solid rgba(148,163,184,0.3);color:#94a3b8;">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                <span>MAIN SEBAGAI TAMU</span>
-              </button>
+
+              <!-- Right Column: Cloud Save Benefits Card -->
+              <div class="gp-auth-col-right">
+                <div class="gp-auth-benefits-card">
+                  <div class="benefits-badge">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="vertical-align:middle;margin-right:3px;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                    KEUNTUNGAN CLOUD SAVE
+                  </div>
+                  <ul class="benefits-list">
+                    <li><span class="b-icon">🛡️</span> <span>Koin, Skin & Pet aman tersimpan permanen.</span></li>
+                    <li><span class="b-icon">🏆</span> <span>Skor otomatis masuk ke Leaderboard Global.</span></li>
+                    <li><span class="b-icon">⚔️</span> <span>Bisa duel 1v1 Mabar dan Chat komunitas.</span></li>
+                  </ul>
+                  <div class="benefits-status-tag">Status saat ini: <b style="color:#fbbf24;">Mode Tamu (Lokal)</b></div>
+                </div>
+              </div>
             </div>
 
-            <!-- Action Buttons for Account Management -->
-            <div class="gp-buttons" style="margin-top:10px;">
-              <button class="primary gp-btn" id="gpAuthActionBtn" type="button">SIMPAN PERUBAHAN</button>
-              <button class="secondary" id="gpSignOutBtn" type="button">KELUAR / GANTI AKUN</button>
+            <!-- STATE B: LOGGED IN PROFILE CARD (Saat Sudah Login Akun) -->
+            <div id="googleProfileCard" class="gp-profile-card-grid hidden">
+              <!-- Left Column: Connected Account Info -->
+              <div class="gp-logged-info-card">
+                <div class="friend-section-title" style="margin:0 0 6px 0;">STATUS KONEKSI AKUN</div>
+                <div class="gp-logged-header">
+                  <span class="gp-cloud-icon">☁️</span>
+                  <div class="gp-logged-meta">
+                    <span class="gp-logged-title">TERHUBUNG KE CLOUD</span>
+                    <span class="gp-logged-email" id="gpUserEmail">user@gmail.com</span>
+                  </div>
+                </div>
+                <div class="gp-logged-stats-row">
+                  <div class="gp-logged-stat">
+                    <span class="lbl">STATUS</span>
+                    <span class="val green">✓ TERVERIFIKASI</span>
+                  </div>
+                  <div class="gp-logged-stat">
+                    <span class="lbl">PENYIMPANAN</span>
+                    <span class="val blue">REAL-TIME CLOUD</span>
+                  </div>
+                </div>
+                <div class="gp-sync-hint">Semua progres bermain, skor ranked, skin & inventori tersimpan aman di Google Firebase Cloud.</div>
+              </div>
+
+              <!-- Right Column: Account Management Actions -->
+              <div class="gp-logged-actions-card">
+                <div class="friend-section-title" style="margin:0 0 6px 0;">TINDAKAN AKUN</div>
+                <button class="primary gp-btn-sync" id="gpAuthActionBtn" type="button">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0 0 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 0 0 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+                  SIMPAN PERUBAHAN
+                </button>
+                <button class="secondary gp-btn-signout" id="gpSignOutBtn" type="button">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+                  KELUAR / GANTI AKUN
+                </button>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
@@ -1951,13 +1999,13 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js?v=20.98"></script>
-  <script src="js/admob-config.js?v=20.98"></script>
-  <script src="js/shop-data.js?v=20.98"></script>
-  <script src="js/profanity-filter.js?v=20.98"></script>
-  <script src="js/audio.js?v=20.98"></script>
-  <script src="js/multiplayer.js?v=20.98"></script>
-  <script src="js/social.js?v=20.98"></script>
-  <script src="js/script.js?v=20.98"></script>
+  <script src="js/firebase-config.js?v=20.99"></script>
+  <script src="js/admob-config.js?v=20.99"></script>
+  <script src="js/shop-data.js?v=20.99"></script>
+  <script src="js/profanity-filter.js?v=20.99"></script>
+  <script src="js/audio.js?v=20.99"></script>
+  <script src="js/multiplayer.js?v=20.99"></script>
+  <script src="js/social.js?v=20.99"></script>
+  <script src="js/script.js?v=20.99"></script>
 </body>
 </html>
