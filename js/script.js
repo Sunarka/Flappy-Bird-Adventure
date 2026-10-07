@@ -9727,14 +9727,36 @@
     if(lobbyChick2Bounce > 0) lobbyChick2Bounce = Math.max(0, lobbyChick2Bounce - dt);
 
     // 9. CUTE ANIMATED BIRDS & COMPANIONS (HAPPY LOBBY MASCOTS)
-    // --- Mascot 1: Main Custom Player Bird (Cheering on the ground) ---
+    // 9. CUTE ANIMATED BIRDS & COMPANIONS (HAPPY LOBBY MASCOTS)
+    // --- Mascot 1: Main Custom Player Bird (Floating Center Hero Showcase) ---
     const mainBirdX = W / 2;
-    const birdInteractiveHop = Math.sin((1 - lobbyBirdBounce / 0.5) * Math.PI) * 24;
-    const mainBirdHop = Math.abs(Math.sin(lobbyTime * 3.5)) * 14 + (lobbyBirdBounce > 0 ? birdInteractiveHop : 0);
-    const mainBirdY = H - GROUND - 22 - mainBirdHop;
-    const mainBirdAngle = Math.sin(lobbyTime * 3.5) * 0.12 + (lobbyBirdBounce > 0 ? Math.sin(lobbyBirdBounce * 25) * 0.22 : 0);
-    const mainBirdWing = (lobbyBirdBounce > 0 ? 14 : Math.sin(lobbyTime * 10) * 8);
+    const mainBirdCenterY = 196;
+    const birdInteractiveHop = Math.sin((1 - lobbyBirdBounce / 0.5) * Math.PI) * 20;
+    const mainBirdHop = Math.sin(lobbyTime * 2.8) * 8 + (lobbyBirdBounce > 0 ? birdInteractiveHop : 0);
+    const mainBirdY = mainBirdCenterY - mainBirdHop;
+    const mainBirdAngle = Math.sin(lobbyTime * 2.8) * 0.08 + (lobbyBirdBounce > 0 ? Math.sin(lobbyBirdBounce * 25) * 0.2 : 0);
+    const mainBirdWing = (lobbyBirdBounce > 0 ? 14 : Math.sin(lobbyTime * 8) * 6);
 
+    // Glowing Magical Pedestal / Platform beneath the hero
+    ctx.save();
+    ctx.translate(mainBirdX, 246);
+    const pedGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, 75);
+    pedGrad.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
+    pedGrad.addColorStop(0.45, 'rgba(56, 189, 248, 0.18)');
+    pedGrad.addColorStop(0.8, 'rgba(56, 189, 248, 0.05)');
+    pedGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+    ctx.fillStyle = pedGrad;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 75, 18, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.35)';
+    ctx.beginPath();
+    ctx.ellipse(0, 2, 48, 10, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Render Custom Bird
     renderCustomBird(ctx, {
       x: mainBirdX,
       y: mainBirdY,
@@ -9746,12 +9768,12 @@
       opacity: 1
     });
 
-    // Main bird shadow on ground
+    // Main bird shadow on floating pedestal
     ctx.save();
     ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-    const shadowScale = 1 - (mainBirdHop / 35);
+    const shadowScale = Math.max(0.6, 1 - (mainBirdHop / 40));
     ctx.beginPath();
-    ctx.ellipse(mainBirdX, H - GROUND + 3, 16 * shadowScale, 5 * shadowScale, 0, 0, Math.PI * 2);
+    ctx.ellipse(mainBirdX, 238, 18 * shadowScale, 6 * shadowScale, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 
@@ -9788,32 +9810,58 @@
       ctx.restore();
     }
 
-    // --- Mascot 2 & 3: Equipped Pet Companion Duo Waddling & Hopping ---
-    const activePetId = progress.selectedPet || 'pip_peep';
+    // --- Mascot 2 & 3: Equipped Pet Companion Duo Orbiting & Flapping ---
+    const activePetId = progress.selectedPet || 'none';
     if(activePetId !== 'none') {
-      const pData = petsCatalog[activePetId] || petsCatalog.pip_peep;
+      const pData = petsCatalog[activePetId] || (window.petsCatalog ? window.petsCatalog[activePetId] : null);
       if(pData && pData.baby1 && pData.baby2) {
         // Pet Baby 1 (Left pet)
-        const chick1InteractiveHop = Math.sin((1 - lobbyChick1Bounce / 0.5) * Math.PI) * 18;
-        const chick1X = mainBirdX - 52 + Math.sin(lobbyTime * 2) * 8;
-        const chick1Hop = Math.abs(Math.sin(lobbyTime * 4 + 1)) * 9 + (lobbyChick1Bounce > 0 ? chick1InteractiveHop : 0);
-        const chick1Y = H - GROUND - 14 - chick1Hop;
-        const chick1Angle = lobbyChick1Bounce > 0 ? (1 - lobbyChick1Bounce / 0.5) * Math.PI * 2 : Math.sin(lobbyTime * 4) * 0.1;
-        drawCuteLobbyChick(ctx, chick1X, chick1Y, pData.baby1.color, pData.baby1.wingColor, chick1Angle, 1, pData.baby1.accessory);
+        const chick1InteractiveHop = Math.sin((1 - lobbyChick1Bounce / 0.5) * Math.PI) * 16;
+        const chick1X = mainBirdX - 56 + Math.sin(lobbyTime * 2) * 6;
+        const chick1Hop = Math.sin(lobbyTime * 3.2) * 7 + (lobbyChick1Bounce > 0 ? chick1InteractiveHop : 0);
+        const chick1Y = mainBirdY - 8 - chick1Hop;
+        const chick1Angle = lobbyChick1Bounce > 0 ? (1 - lobbyChick1Bounce / 0.5) * Math.PI * 2 : Math.sin(lobbyTime * 3) * 0.1;
+        const chick1Wing = (lobbyChick1Bounce > 0 ? 12 : Math.sin(lobbyTime * 12) * 7);
+
+        drawBabyBird({
+          x: chick1X,
+          y: chick1Y,
+          r: 9.5,
+          wing: chick1Wing,
+          angle: chick1Angle,
+          state: 'follow',
+          color: pData.baby1.color,
+          wingColor: pData.baby1.wingColor,
+          blushColor: pData.baby1.blushColor,
+          accessory: pData.baby1.accessory
+        }, ctx);
 
         // Pet Baby 2 (Right pet)
-        const chick2InteractiveHop = Math.sin((1 - lobbyChick2Bounce / 0.5) * Math.PI) * 18;
-        const chick2X = mainBirdX + 54 + Math.sin(lobbyTime * 2 + 2) * 8;
-        const chick2Hop = Math.abs(Math.sin(lobbyTime * 4 + 2.5)) * 9 + (lobbyChick2Bounce > 0 ? chick2InteractiveHop : 0);
-        const chick2Y = H - GROUND - 14 - chick2Hop;
-        const chick2Angle = lobbyChick2Bounce > 0 ? -(1 - lobbyChick2Bounce / 0.5) * Math.PI * 2 : Math.sin(lobbyTime * 4 + 2) * 0.1;
-        drawCuteLobbyChick(ctx, chick2X, chick2Y, pData.baby2.color, pData.baby2.wingColor, chick2Angle, -1, pData.baby2.accessory);
+        const chick2InteractiveHop = Math.sin((1 - lobbyChick2Bounce / 0.5) * Math.PI) * 16;
+        const chick2X = mainBirdX + 56 + Math.sin(lobbyTime * 2 + 2) * 6;
+        const chick2Hop = Math.sin(lobbyTime * 3.2 + 1.8) * 7 + (lobbyChick2Bounce > 0 ? chick2InteractiveHop : 0);
+        const chick2Y = mainBirdY + 8 - chick2Hop;
+        const chick2Angle = lobbyChick2Bounce > 0 ? -(1 - lobbyChick2Bounce / 0.5) * Math.PI * 2 : Math.sin(lobbyTime * 3 + 2) * 0.1;
+        const chick2Wing = (lobbyChick2Bounce > 0 ? 12 : Math.sin(lobbyTime * 12 + 1.5) * 7);
+
+        drawBabyBird({
+          x: chick2X,
+          y: chick2Y,
+          r: 9,
+          wing: chick2Wing,
+          angle: chick2Angle,
+          state: 'follow',
+          color: pData.baby2.color,
+          wingColor: pData.baby2.wingColor,
+          blushColor: pData.baby2.blushColor,
+          accessory: pData.baby2.accessory
+        }, ctx);
       }
     }
 
     // --- Mascot 4: Fluttering Golden Butterfly ---
-    const bfX = mainBirdX + Math.cos(lobbyTime * 2.2) * 75;
-    const bfY = H - GROUND - 65 + Math.sin(lobbyTime * 3.8) * 22;
+    const bfX = mainBirdX + Math.cos(lobbyTime * 1.8) * 85;
+    const bfY = mainBirdY - 45 + Math.sin(lobbyTime * 3.2) * 18;
     drawCuteButterfly(ctx, bfX, bfY, lobbyTime);
 
     // 10. Drifting Floating Sakura Petals, Sparkles & Dandelion Seeds
@@ -14422,11 +14470,11 @@
       const clickY = (e.clientY - rect.top) * scaleY;
 
       const mainBirdX = W / 2;
-      const mainBirdY = H - GROUND - 22;
-      const chick1X = mainBirdX - 52;
-      const chick1Y = H - GROUND - 14;
-      const chick2X = mainBirdX + 54;
-      const chick2Y = H - GROUND - 14;
+      const mainBirdY = 196;
+      const chick1X = mainBirdX - 56;
+      const chick1Y = mainBirdY - 8;
+      const chick2X = mainBirdX + 56;
+      const chick2Y = mainBirdY + 8;
 
       // 1. Klik Burung Utama di Lobi -> Lompat Gembira, Keluar Hati & Sparkles, Mainkan Bunyi Imut
       if(Math.hypot(clickX - mainBirdX, clickY - mainBirdY) < 45) {
