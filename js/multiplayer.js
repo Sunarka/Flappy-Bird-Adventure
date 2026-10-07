@@ -1136,20 +1136,16 @@
         // Cumulative Relative Horizontal Physics (X-Axis Speed Differential)
         // =========================================================
         const mySpeed = myIsRocket ? 540 : (myIsDashing ? 460 : 140);
-        const opSpeed = op.isRocket ? 540 : (op.isDashing ? 280 : 135);
+        const opSpeed = op.isRocket ? 540 : (op.isDashing ? 300 : 135);
         const speedDelta = opSpeed - mySpeed; // When player dashes (460), speedDelta is -325 px/s!
 
         if (op.relX === undefined) op.relX = baseBirdX;
         
-        // Continuously integrate relative velocity
+        // Continuously integrate relative velocity without aggressive teleport snap
         op.relX += speedDelta * dt;
 
-        // When neither is boosting, gently pull towards pipe distance offset
-        if (!myIsDashing && !myIsRocket && !op.isDashing && !op.isRocket) {
-          const targetBaseX = baseBirdX + Math.max(-200, Math.min(200, ((op.score || 0) - myScore) * 120));
-          op.relX += (targetBaseX - op.relX) * Math.min(1, dt * 3.5);
-        }
-
+        // Smooth boundary clamping so opponent doesn't drift infinitely
+        op.relX = Math.max(-360, Math.min(420, op.relX));
         op.curX = op.relX;
 
         // If simulated bot, simulate intelligent human-like flapping with mistake chance & 3 lives
@@ -1157,14 +1153,30 @@
           op.wing = (op.wing || 0) + dt * 14;
           op.graceTimer = Math.max(0, (op.graceTimer || 0) - dt);
 
-          // Find next approaching pipe
+          // Simulated Bot AI Dash/NOS: If bot falls far behind in race, occasionally use dash to catch up smoothly!
+          op.botDashCooldown = (op.botDashCooldown || 5.0) - dt;
+          if (op.botDashCooldown <= 0 && op.relX < baseBirdX - 90 && !op.isDashing && Math.random() < 0.45) {
+            op.isDashing = true;
+            op.dashTimer = 0.85;
+            op.botDashCooldown = 7.0 + Math.random() * 4.0;
+          }
+          if (op.isDashing) {
+            op.dashTimer = (op.dashTimer || 0.85) - dt;
+            if (op.dashTimer <= 0) {
+              op.isDashing = false;
+            }
+          }
+
+          const botX = (typeof op.curX === 'number' && Number.isFinite(op.curX)) ? op.curX : 90;
+
+          // Find next approaching pipe for bot based on its actual position
           let nextPipe = null;
           if (activePipes && activePipes.length > 0) {
-            nextPipe = activePipes.find(p => p.x + p.w >= 70);
+            nextPipe = activePipes.find(p => p.x + p.w >= botX - 20);
             
-            // Bot Score tracking when passing pipe
+            // Bot Score tracking when passing pipe at bot's position
             activePipes.forEach(p => {
-              if (p.x + p.w < 90 && !p[`_botScored_${op.id}`]) {
+              if (p.x + p.w < botX && !p[`_botScored_${op.id}`]) {
                 p[`_botScored_${op.id}`] = true;
                 op.score = (op.score || 0) + 1;
               }
@@ -1201,7 +1213,6 @@
           op.y = op.targetY;
 
           // 1. PIPE COLLISION DETECTION FOR BOT (Shield & 3 Lives System)
-          const botX = 90;
           const botR = 12;
           if (activePipes && activePipes.length > 0 && op.graceTimer <= 0) {
             for (const p of activePipes) {
@@ -1371,7 +1382,7 @@
           }
 
           // Turunkan opacity lawan agar mudah dibedakan dengan pemain sendiri (HD Ghost Rival)
-          const rivalOpacity = op.isAlive ? 1.0 : 0.4;
+          const rivalOpacity = op.isAlive ? 0.55 : 0.25;
 
           // 1. Render Opponent Baby Birds (100% HD identik dengan pemain tapi dengan opacity lawan)
           if (op.babyBirds && op.babyBirds.length > 0 && op.isAlive) {

@@ -5762,13 +5762,16 @@
       if(el.rankTierHud) el.rankTierHud.classList.add('hidden');
       if(el.mpBattleHud) el.mpBattleHud.classList.add('hidden');
     }
+    const topActions = $('topActions');
+    const isMpInGame = currentMode === 'multiplayer' && (next === State.PLAYING || next === State.READY);
+    if(topActions) topActions.classList.toggle('hidden', next !== State.MENU || isMpInGame);
     if(el.pause) {
       const showPause = (next === State.PLAYING || next === State.READY) && currentMode !== 'multiplayer';
       el.pause.style.display = showPause ? 'flex' : 'none';
       el.pause.classList.toggle('hidden', !showPause);
     }
     if(el.sound) {
-      el.sound.style.display = (next === State.MENU || next === State.PLAYING || next === State.READY) ? 'flex' : 'none';
+      el.sound.style.display = (next === State.MENU || ((next === State.PLAYING || next === State.READY) && currentMode !== 'multiplayer')) ? 'flex' : 'none';
     }
     updateDashUI();
     updateMenuRankedUI();
@@ -5792,6 +5795,8 @@
     if(!el.mpBattleHud) return;
     const isMpActive = currentMode === 'multiplayer' && (state === State.PLAYING || state === State.READY);
     el.mpBattleHud.classList.toggle('hidden', !isMpActive);
+    const topActions = $('topActions');
+    if(topActions && isMpActive) topActions.classList.add('hidden');
     
     const mp = window.multiplayerEngine;
     if(!isMpActive || !mp) {
@@ -9448,13 +9453,13 @@
           }
         } catch(_) {}
 
-        _step = 'drawBird';
-        drawBird();
-
         if(currentMode === 'multiplayer' && window.multiplayerEngine) {
           _step = 'renderOpponents';
           try { window.multiplayerEngine.renderOpponents(ctx, bird.x); } catch(_) {}
         }
+
+        _step = 'drawBird';
+        drawBird();
 
         _step = 'babyBirds';
         try {

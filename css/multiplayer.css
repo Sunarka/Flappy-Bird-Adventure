@@ -670,6 +670,14 @@
   display: none !important;
 }
 
+/* Sembunyikan top-actions lobby agar tidak saling timpa dengan rival HUD card saat mabar */
+.game-shell:has(.mp-battle-hud:not(.hidden)) .top-actions,
+.game-shell:has(.mp-battle-hud:not(.hidden)) .mlbb-header,
+.mp-battle-hud:not(.hidden) ~ .mlbb-header,
+.mp-battle-hud:not(.hidden) ~ .top-actions {
+  display: none !important;
+}
+
 .mp-hud-card {
   display: flex !important;
   align-items: center !important;
